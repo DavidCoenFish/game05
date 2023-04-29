@@ -1,0 +1,7 @@
+axis 1 [move forward, back, left, right]
+axis 2 [reach up/climb/jump, crounch/descend, turn left, turn right]
+
+application setup
+d3dx12 draw
+sphere represetnting character controller 
+move sphere on plane

@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{f221ad8c-4b19-4ba9-9918-3a82fcec6f8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="props">
+      <UniqueIdentifier>{49943ef7-b846-4d99-a1a0-13eaf0d9b7ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="notes">
+      <UniqueIdentifier>{aa072994-490d-4546-96e8-762e53adcf5a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="notes\notes.txt">
+      <Filter>notes</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="props\default.props">
+      <Filter>props</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\pch.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\main.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\IApplication.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\WindowHelper.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Utf8.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ApplicationTriangle.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\pch.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\main.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\IApplication.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\WindowHelper.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Utf8.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Log.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ApplicationTriangle.h">
+      <Filter>source</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
