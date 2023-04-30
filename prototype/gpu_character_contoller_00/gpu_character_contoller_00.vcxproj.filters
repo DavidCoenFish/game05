@@ -28,6 +28,9 @@
     <Filter Include="source\DirectXTK12">
       <UniqueIdentifier>{465c9a56-193a-4e62-af96-e5b06f8223fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\Shader">
+      <UniqueIdentifier>{d35ddf2f-142b-465e-ba7e-83e91028af6f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="notes\notes.txt">
@@ -252,5 +255,13 @@
     <ClInclude Include="source\DirectXTK12\DirectXHelpers.h">
       <Filter>source\DirectXTK12</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="source\Shader\TrianglePixelShader.hlsl">
+      <Filter>source\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="source\Shader\TriangleVertexShader.hlsl">
+      <Filter>source\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

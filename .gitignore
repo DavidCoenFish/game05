@@ -36,5 +36,5 @@
 
 # Visual studio
 .vs/
-Build/
+build/
 
