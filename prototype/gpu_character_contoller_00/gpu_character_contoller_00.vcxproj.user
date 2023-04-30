@@ -6,4 +6,10 @@
     <LocalDebuggerWorkingDirectory>$(BuildPath)output\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LocalDebuggerCommandArguments />
+    <RemoteDebuggerCommandArguments />
+    <LocalDebuggerWorkingDirectory>$(BuildPath)output\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
 </Project>

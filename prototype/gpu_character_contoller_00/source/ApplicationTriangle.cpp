@@ -1,51 +1,12 @@
 #include "pch.h"
 #include "ApplicationTriangle.h"
 #include "Log.h"
+#include "FileSystem.h"
 #include "DrawSystemD12/DrawSystem.h"
 #include "DrawSystemD12/Shader/Shader.h"
 #include "DrawSystemD12/Geometry/GeometryGeneric.h"
 #include "DrawSystemD12/DrawSystemFrame.h"
 #include "DrawSystemD12/CustomCommandList.h"
-
-namespace
-{
-	// based on code Copyright (c) Microsoft Corporation. All rights reserved. ReadData.h
-	const std::shared_ptr<std::vector< uint8_t >> SyncReadFile(const std::filesystem::path& absolutePath)
-	{
-	   std::ifstream inFile(absolutePath, std::ios::in | std::ios::binary | std::ios::ate);
-	   auto pBlob = std::make_shared< std::vector< uint8_t > >();
-   
-	   if ((!inFile) || (inFile.fail()))
-	   {
-		  throw std::exception("SyncReadFile");
-		  //return pBlob;
-	   }
-
-	   std::streampos len = inFile.tellg();
-	   if (!inFile)
-	   {
-		  throw std::exception("SyncReadFile");
-	   }
-
-	   pBlob->resize(size_t(len));
-
-	   inFile.seekg(0, std::ios::beg);
-	   if (!inFile)
-	   {
-		  throw std::exception("SyncReadFile");
-	   }
-
-	   inFile.read(reinterpret_cast<char*>(pBlob->data()), len);
-	   if (!inFile)
-	   {
-		  throw std::exception("SyncReadFile");
-	   }
-
-	   inFile.close();
-
-	   return pBlob;
-	}
-}
 
 IApplication* const ApplicationTriangle::Factory(
 	const HWND hWnd, 
@@ -110,8 +71,8 @@ ApplicationTriangle::ApplicationTriangle(
 
 	
 	{
-		auto pVertexShaderData = SyncReadFile("TriangleVertexShader.cso");
-		auto pPixelShaderData = SyncReadFile("TrianglePixelShader.cso");
+		auto pVertexShaderData = FileSystem::SyncReadFile("TriangleVertexShader.cso");
+		auto pPixelShaderData = FileSystem::SyncReadFile("TrianglePixelShader.cso");
 		std::vector<DXGI_FORMAT> renderTargetFormat;
 		renderTargetFormat.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
 

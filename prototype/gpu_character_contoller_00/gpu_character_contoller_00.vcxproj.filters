@@ -145,6 +145,9 @@
     <ClCompile Include="source\DirectXTK12\DirectXHelpers.cpp">
       <Filter>source\DirectXTK12</Filter>
     </ClCompile>
+    <ClCompile Include="source\FileSystem.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\pch.h">
@@ -254,6 +257,9 @@
     </ClInclude>
     <ClInclude Include="source\DirectXTK12\DirectXHelpers.h">
       <Filter>source\DirectXTK12</Filter>
+    </ClInclude>
+    <ClInclude Include="source\FileSystem.h">
+      <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

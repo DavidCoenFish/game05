@@ -114,6 +114,7 @@
     <ClCompile Include="source\DrawSystemD12\Shader\ShaderResourceInfo.cpp" />
     <ClCompile Include="source\DrawSystemD12\Shader\UnorderedAccess.cpp" />
     <ClCompile Include="source\DrawSystemD12\Shader\UnorderedAccessInfo.cpp" />
+    <ClCompile Include="source\FileSystem.cpp" />
     <ClCompile Include="source\IApplication.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\pch.cpp" />
@@ -151,6 +152,7 @@
     <ClInclude Include="source\DrawSystemD12\Shader\ShaderResourceInfo.h" />
     <ClInclude Include="source\DrawSystemD12\Shader\UnorderedAccess.h" />
     <ClInclude Include="source\DrawSystemD12\Shader\UnorderedAccessInfo.h" />
+    <ClInclude Include="source\FileSystem.h" />
     <ClInclude Include="source\IApplication.h" />
     <ClInclude Include="source\Log.h" />
     <ClInclude Include="source\main.h" />
