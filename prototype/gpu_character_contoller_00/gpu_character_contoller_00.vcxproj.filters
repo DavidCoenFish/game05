@@ -10,6 +10,24 @@
     <Filter Include="notes">
       <UniqueIdentifier>{aa072994-490d-4546-96e8-762e53adcf5a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\DrawSystemD12">
+      <UniqueIdentifier>{74c28cb8-9c31-4391-83ad-e0b7bdf7c186}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\DrawSystemD12\Geometry">
+      <UniqueIdentifier>{8b6cd2a8-5742-4bd4-8f7e-bc6abf2396aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\DrawSystemD12\HeapWrapper">
+      <UniqueIdentifier>{ec7c4306-7cf6-4fa2-aa4b-c0d9787078c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\DrawSystemD12\RenderTarget">
+      <UniqueIdentifier>{93e7a006-8a64-4f25-b7fc-716d6ef738fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\DrawSystemD12\Shader">
+      <UniqueIdentifier>{f373e4ca-b73a-4ea1-8aa3-6d82ce60f53d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\DirectXTK12">
+      <UniqueIdentifier>{465c9a56-193a-4e62-af96-e5b06f8223fd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="notes\notes.txt">
@@ -40,6 +58,90 @@
     <ClCompile Include="source\ApplicationTriangle.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="source\DrawSystemD12\DeviceResources.cpp">
+      <Filter>source\DrawSystemD12</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DrawSystemD12\DrawSystem.cpp">
+      <Filter>source\DrawSystemD12</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DrawSystemD12\DrawSystemFrame.cpp">
+      <Filter>source\DrawSystemD12</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DrawSystemD12\IResource.cpp">
+      <Filter>source\DrawSystemD12</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DrawSystemD12\ScreenSizeResources.cpp">
+      <Filter>source\DrawSystemD12</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DrawSystemD12\CustomCommandList.cpp">
+      <Filter>source\DrawSystemD12</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DrawSystemD12\Geometry\GeometryGeneric.cpp">
+      <Filter>source\DrawSystemD12\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DrawSystemD12\Geometry\IGeometry.cpp">
+      <Filter>source\DrawSystemD12\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DrawSystemD12\HeapWrapper\HeapWrapperItem.cpp">
+      <Filter>source\DrawSystemD12\HeapWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DrawSystemD12\HeapWrapper\HeapWrapperPage.cpp">
+      <Filter>source\DrawSystemD12\HeapWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DrawSystemD12\HeapWrapper\HeapWrapper.cpp">
+      <Filter>source\DrawSystemD12\HeapWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DrawSystemD12\RenderTarget\IRenderTarget.cpp">
+      <Filter>source\DrawSystemD12\RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DrawSystemD12\RenderTarget\RenderTargetBackbuffer.cpp">
+      <Filter>source\DrawSystemD12\RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DrawSystemD12\RenderTarget\RenderTargetDepthData.cpp">
+      <Filter>source\DrawSystemD12\RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DrawSystemD12\RenderTarget\RenderTargetFormatData.cpp">
+      <Filter>source\DrawSystemD12\RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DrawSystemD12\RenderTarget\RenderTargetTexture.cpp">
+      <Filter>source\DrawSystemD12\RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DrawSystemD12\Shader\ConstantBufferInfo.cpp">
+      <Filter>source\DrawSystemD12\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DrawSystemD12\Shader\Shader.cpp">
+      <Filter>source\DrawSystemD12\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DrawSystemD12\Shader\ShaderPipelineStateData.cpp">
+      <Filter>source\DrawSystemD12\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DrawSystemD12\Shader\ShaderResource.cpp">
+      <Filter>source\DrawSystemD12\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DrawSystemD12\Shader\ShaderResourceInfo.cpp">
+      <Filter>source\DrawSystemD12\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DrawSystemD12\Shader\UnorderedAccess.cpp">
+      <Filter>source\DrawSystemD12\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DrawSystemD12\Shader\UnorderedAccessInfo.cpp">
+      <Filter>source\DrawSystemD12\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DrawSystemD12\Shader\ConstantBuffer.cpp">
+      <Filter>source\DrawSystemD12\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="source\VectorFloat4.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DirectXTK12\GraphicsMemory.cpp">
+      <Filter>source\DirectXTK12</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DirectXTK12\LinearAllocator.cpp">
+      <Filter>source\DirectXTK12</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DirectXTK12\DirectXHelpers.cpp">
+      <Filter>source\DirectXTK12</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\pch.h">
@@ -62,6 +164,93 @@
     </ClInclude>
     <ClInclude Include="source\ApplicationTriangle.h">
       <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\CustomCommandList.h">
+      <Filter>source\DrawSystemD12</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\d3dx12.h">
+      <Filter>source\DrawSystemD12</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\DeviceResources.h">
+      <Filter>source\DrawSystemD12</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\DrawSystem.h">
+      <Filter>source\DrawSystemD12</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\DrawSystemFrame.h">
+      <Filter>source\DrawSystemD12</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\IResource.h">
+      <Filter>source\DrawSystemD12</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\ScreenSizeResources.h">
+      <Filter>source\DrawSystemD12</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\Geometry\GeometryGeneric.h">
+      <Filter>source\DrawSystemD12\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\Geometry\IGeometry.h">
+      <Filter>source\DrawSystemD12\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\HeapWrapper\HeapWrapperItem.h">
+      <Filter>source\DrawSystemD12\HeapWrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\HeapWrapper\HeapWrapperPage.h">
+      <Filter>source\DrawSystemD12\HeapWrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\HeapWrapper\HeapWrapper.h">
+      <Filter>source\DrawSystemD12\HeapWrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\RenderTarget\IRenderTarget.h">
+      <Filter>source\DrawSystemD12\RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\RenderTarget\RenderTargetBackbuffer.h">
+      <Filter>source\DrawSystemD12\RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\RenderTarget\RenderTargetDepthData.h">
+      <Filter>source\DrawSystemD12\RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\RenderTarget\RenderTargetFormatData.h">
+      <Filter>source\DrawSystemD12\RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\RenderTarget\RenderTargetTexture.h">
+      <Filter>source\DrawSystemD12\RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\Shader\ConstantBufferInfo.h">
+      <Filter>source\DrawSystemD12\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\Shader\Shader.h">
+      <Filter>source\DrawSystemD12\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\Shader\ShaderPipelineStateData.h">
+      <Filter>source\DrawSystemD12\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\Shader\ShaderResource.h">
+      <Filter>source\DrawSystemD12\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\Shader\ShaderResourceInfo.h">
+      <Filter>source\DrawSystemD12\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\Shader\UnorderedAccess.h">
+      <Filter>source\DrawSystemD12\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\Shader\UnorderedAccessInfo.h">
+      <Filter>source\DrawSystemD12\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DrawSystemD12\Shader\ConstantBuffer.h">
+      <Filter>source\DrawSystemD12\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="source\VectorFloat4.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DirectXTK12\GraphicsMemory.h">
+      <Filter>source\DirectXTK12</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DirectXTK12\LinearAllocator.h">
+      <Filter>source\DirectXTK12</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DirectXTK12\DirectXHelpers.h">
+      <Filter>source\DirectXTK12</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

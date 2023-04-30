@@ -1,7 +1,6 @@
 #pragma once
 
 #include "IApplication.h"
-//#include "Common/DrawSystem/Geometry/Geometry.h"
 class DrawSystem;
 class Shader;
 class GeometryGeneric;
@@ -31,13 +30,8 @@ private:
 	virtual void OnDestroy(const int exitCode);
 
 private:
-   //std::unique_ptr< DrawSystem > m_pDrawSystem;
-   //std::shared_ptr< Shader > m_pShader;
-   //struct Vertex
-   //{
-   //   DirectX::XMFLOAT2 m_position;
-   //   DirectX::XMFLOAT4 m_color;
-   //};
-   //std::shared_ptr< Geometry< Vertex > > m_pGeometry;
+	std::unique_ptr< DrawSystem > m_pDrawSystem;
+	std::shared_ptr< Shader > m_pShader;
+	std::shared_ptr< GeometryGeneric > m_pGeometry;
 
 };

@@ -11,9 +11,21 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 {
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
+	IApplication* pApplication = nullptr;
+
+	TApplicationFactory applicationFactory = [&](
+		const HWND hWnd, 
+		const bool bFullScreen,
+		const int defaultWidth,
+		const int defaultHeight
+		)
+	{
+		pApplication = ApplicationTriangle::Factory(hWnd, bFullScreen, defaultWidth, defaultHeight);
+		return pApplication;
+	};
 
 	WindowHelper(
-		ApplicationTriangle::Factory,
+		applicationFactory,
 		hInstance,
 		"GpuCharacterController00",
 		false,
@@ -25,21 +37,25 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
 	const int result = 0; //RunTask(hInstance, nCmdShow);
 
-   MSG msg = {};
-   int exitCode = 0;
-   while (true)
-   {
-      if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
-      {
-         if (WM_QUIT == msg.message)
-         {
-             exitCode = (int)msg.wParam;
-             break;
-         }
-         TranslateMessage(&msg);
-         DispatchMessage(&msg);
-      }
-   }
+	MSG msg = {};
+	int exitCode = 0;
+	while (true)
+	{
+		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+		{
+			if (WM_QUIT == msg.message)
+			{
+				exitCode = (int)msg.wParam;
+				break;
+			}
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		else if (nullptr != pApplication)
+		{
+			pApplication->Update();
+		}
+	}
 
 	return result;
 }

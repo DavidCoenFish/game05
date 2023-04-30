@@ -1,6 +1,10 @@
 #include "pch.h"
 #include "ApplicationTriangle.h"
 #include "Log.h"
+#include "DrawSystemD12/DrawSystem.h"
+#include "DrawSystemD12/Shader/Shader.h"
+#include "DrawSystemD12/Geometry/GeometryGeneric.h"
+#include "DrawSystemD12/DrawSystemFrame.h"
 
 IApplication* const ApplicationTriangle::Factory(
 	const HWND hWnd, 
@@ -26,7 +30,7 @@ ApplicationTriangle::ApplicationTriangle(
    : IApplication(hWnd, bFullScreen, defaultWidth, defaultHeight)
 {
    LOG_MESSAGE("ApplicationTriangle  ctor %p", this);
-   //m_pDrawSystem = std::make_unique< DrawSystem>(hWnd);
+   m_pDrawSystem = std::make_unique< DrawSystem>(hWnd);
 
    //std::vector< D3D12_INPUT_ELEMENT_DESC > inputElementDescArray;
    //inputElementDescArray.push_back(D3D12_INPUT_ELEMENT_DESC{
@@ -91,38 +95,38 @@ ApplicationTriangle::ApplicationTriangle(
 
 ApplicationTriangle ::~ApplicationTriangle ()
 {
-   //if (m_pDrawSystem)
-   //{
-   //   m_pDrawSystem->WaitForGpu();
-   //}
+   if (m_pDrawSystem)
+   {
+      m_pDrawSystem->WaitForGpu();
+   }
    //m_pShader.reset();
    //m_pGeometry.reset();
-   //m_pDrawSystem.reset();
+   m_pDrawSystem.reset();
 
    LOG_MESSAGE("ApplicationTriangle  dtor %p", this);
 }
 
 void ApplicationTriangle ::Update()
 {
-   BaseType::Update();
-   //if (m_pDrawSystem)
-   //{
-   //   auto pFrame = m_pDrawSystem->CreateNewFrame();
-   //   pFrame->SetRenderTarget(m_pDrawSystem->GetRenderTargetBackBuffer());
-   //   pFrame->SetShader(m_pShader.get());
-   //   pFrame->Draw(m_pGeometry.get());
-   //}
+	BaseType::Update();
+	if (m_pDrawSystem)
+	{
+		auto pFrame = m_pDrawSystem->CreateNewFrame();
+		pFrame->SetRenderTarget(m_pDrawSystem->GetRenderTargetBackBuffer());
+	//   pFrame->SetShader(m_pShader.get());
+	//   pFrame->Draw(m_pGeometry.get());
+	}
 }
 
 void ApplicationTriangle ::OnWindowSizeChanged(const int width, const int height)
 {
-   BaseType::OnWindowSizeChanged(width, height);
-   //if (m_pDrawSystem)
-   //{
-   //   m_pDrawSystem->OnResize();
-   //}
+	BaseType::OnWindowSizeChanged(width, height);
+	if (m_pDrawSystem)
+	{
+		m_pDrawSystem->OnResize();
+	}
 
-   return;
+	return;
 }
 
 void ApplicationTriangle::OnDestroy(const int exitCode)
