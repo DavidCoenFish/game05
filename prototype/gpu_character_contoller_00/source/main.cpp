@@ -2,6 +2,7 @@
 #include "main.h"
 #include "WindowHelper.h"
 #include "IApplication.h"
+#include "ApplicationEmptyScene.h"
 #include "ApplicationTriangle.h"
 
 
@@ -20,7 +21,8 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 		const int defaultHeight
 		)
 	{
-		pApplication = ApplicationTriangle::Factory(hWnd, bFullScreen, defaultWidth, defaultHeight);
+		pApplication = ApplicationEmptyScene::Factory(hWnd, bFullScreen, defaultWidth, defaultHeight);
+		//pApplication = ApplicationTriangle::Factory(hWnd, bFullScreen, defaultWidth, defaultHeight);
 		return pApplication;
 	};
 
@@ -34,8 +36,6 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 		nCmdShow
 		);
 
-
-	const int result = 0; //RunTask(hInstance, nCmdShow);
 
 	MSG msg = {};
 	int exitCode = 0;
@@ -57,5 +57,5 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 		}
 	}
 
-	return result;
+	return exitCode;
 }

@@ -31,9 +31,18 @@
     <Filter Include="source\Shader">
       <UniqueIdentifier>{d35ddf2f-142b-465e-ba7e-83e91028af6f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\DAG2">
+      <UniqueIdentifier>{08fc1430-8a27-406f-ba38-e29a36b862ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\DAGRender">
+      <UniqueIdentifier>{d8ae63a2-5dfe-4877-95f1-2e57728f7a1a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="notes\notes.txt">
+      <Filter>notes</Filter>
+    </Text>
+    <Text Include="notes\physics.txt">
       <Filter>notes</Filter>
     </Text>
   </ItemGroup>
@@ -148,6 +157,42 @@
     <ClCompile Include="source\FileSystem.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="source\ApplicationEmptyScene.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DAG2\Dag2NodeVariable.cpp">
+      <Filter>source\DAG2</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DAG2\Dag2Value.cpp">
+      <Filter>source\DAG2</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DAG2\iDag2Node.cpp">
+      <Filter>source\DAG2</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DAG2\iDag2Value.cpp">
+      <Filter>source\DAG2</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DAG2\Dag2.cpp">
+      <Filter>source\DAG2</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DAG2\Dag2Collection.cpp">
+      <Filter>source\DAG2</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DAG2\Dag2NodeCalculate.cpp">
+      <Filter>source\DAG2</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ID.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DAGRender\DagCalculateCameraRayTexture.cpp">
+      <Filter>source\DAGRender</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DAGRender\DagCalculateDisplayTexture.cpp">
+      <Filter>source\DAGRender</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DAG2\Dag2NodeCalculateBase.cpp">
+      <Filter>source\DAG2</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\pch.h">
@@ -261,12 +306,60 @@
     <ClInclude Include="source\FileSystem.h">
       <Filter>source</Filter>
     </ClInclude>
+    <ClInclude Include="source\ApplicationEmptyScene.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DAG2\Dag2NodeVariable.h">
+      <Filter>source\DAG2</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DAG2\Dag2Value.h">
+      <Filter>source\DAG2</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DAG2\Dag2ValueHelper.h">
+      <Filter>source\DAG2</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DAG2\iDag2Node.h">
+      <Filter>source\DAG2</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DAG2\iDag2Value.h">
+      <Filter>source\DAG2</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DAG2\Dag2.h">
+      <Filter>source\DAG2</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DAG2\Dag2Collection.h">
+      <Filter>source\DAG2</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DAG2\Dag2NodeCalculate.h">
+      <Filter>source\DAG2</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DAG2\Dag2NodeHelper.h">
+      <Filter>source\DAG2</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ID.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DAGRender\DagCalculateCameraRayTexture.h">
+      <Filter>source\DAGRender</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DAGRender\DagCalculateDisplayTexture.h">
+      <Filter>source\DAGRender</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DAG2\Dag2NodeCalculateBase.h">
+      <Filter>source\DAG2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="source\Shader\TrianglePixelShader.hlsl">
       <Filter>source\Shader</Filter>
     </FxCompile>
     <FxCompile Include="source\Shader\TriangleVertexShader.hlsl">
+      <Filter>source\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="source\Shader\CameraRayPixelShader.hlsl">
+      <Filter>source\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="source\Shader\CameraRayVertexShader.hlsl">
       <Filter>source\Shader</Filter>
     </FxCompile>
   </ItemGroup>

@@ -1,0 +1,10 @@
+A. master_pos_texture: a texture for position, orientation, bounding sphere radius 
+B. object_texture: reference A, other data for instance? rbga?
+
+texture A, and uspport data B is handed off to renderer
+for physics step, we want to generate a new master_pos_texture, frame or time plus one
+collect forces on objects, track collision pairs? forces[gravity, intersection push out, maintain link lengths, springs, player controller hover height]
+
+position could make a hash, but how to collect items in position bucket?
+can you additivly render to a float texture
+

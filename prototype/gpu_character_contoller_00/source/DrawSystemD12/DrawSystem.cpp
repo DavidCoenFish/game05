@@ -13,7 +13,7 @@
 #include "DrawSystemD12/RenderTarget/RenderTargetTexture.h"
 #include "DrawSystemD12/Geometry/GeometryGeneric.h"
 #include "DirectXTK12/GraphicsMemory.h"
-//#include "Common/JSON/JSONDrawSystem.h"
+//#include "JSON/JSONDrawSystem.h"
 
 std::unique_ptr< DrawSystem > DrawSystem::Factory(const HWND hWnd)
 {
@@ -248,15 +248,6 @@ void DrawSystem::Prepare(
 
 	return;
 }
-
-//void DrawSystem::Clear()
-//{
-//   if (nullptr == m_pDeviceResources)
-//   {
-//      return;
-//   }
-//   m_pDeviceResources->Clear();
-//}
 
 void DrawSystem::Present()
 {
