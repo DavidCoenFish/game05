@@ -8,9 +8,11 @@ class RenderTargetTexture;
 
 /*
 input index
-	width
-	height
-	fov width
+	0 width
+	1 height
+	2 fov width
+output
+	RenderTargetTexture*
 */
 class DagCalculateCameraRayTexture : public Dag2NodeCalculateBase
 {

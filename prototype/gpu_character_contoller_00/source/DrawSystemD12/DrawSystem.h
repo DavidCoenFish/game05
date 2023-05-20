@@ -102,6 +102,13 @@ public:
       const bool bResizeWithScreen = false
       );
 
+   void ResizeRenderTargetTexture(
+      std::shared_ptr< RenderTargetTexture >& pRenderTargetTexture,
+      ID3D12GraphicsCommandList* const pCommandList,
+      const int width,
+      const int height
+      );
+
    std::shared_ptr<CustomCommandList> CreateCustomCommandList();
    void CustomCommandListFinish(ID3D12GraphicsCommandList* pCommandList);
 

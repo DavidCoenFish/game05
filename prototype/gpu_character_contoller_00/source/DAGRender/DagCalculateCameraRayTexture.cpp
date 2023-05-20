@@ -1,9 +1,12 @@
 #include "pch.h"
 #include "DAGRender/DagCalculateCameraRayTexture.h"
-#include "DrawSystemD12/DrawSystem.h"
-#include "DrawSystemD12/Shader/Shader.h"
-#include "DrawSystemD12/Geometry/GeometryGeneric.h"
+#include "DAG2/Dag2Value.h"
+#include "DAG2/Dag2ValueHelper.h"
 #include "DrawSystemD12/CustomCommandList.h"
+#include "DrawSystemD12/DrawSystem.h"
+#include "DrawSystemD12/Geometry/GeometryGeneric.h"
+#include "DrawSystemD12/RenderTarget/RenderTargetTexture.h"
+#include "DrawSystemD12/Shader/Shader.h"
 #include "FileSystem.h"
 
 std::shared_ptr<DagCalculateCameraRayTexture> DagCalculateCameraRayTexture::Factory(
@@ -65,6 +68,12 @@ std::shared_ptr<DagCalculateCameraRayTexture> DagCalculateCameraRayTexture::Fact
 			CD3DX12_DEPTH_STENCIL_DESC() //CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT)
 			);
 
+		std::vector< std::shared_ptr< ConstantBufferInfo > > arrayShaderConstantsInfo;// = std::vector< std::shared_ptr< ConstantBufferInfo > >(),
+		arrayShaderConstantsInfo.push_back(std::make_shared<ConstantBufferInfo>(
+			std::vector<uint8_t>({0,0,0,0, 0,0,0,0}), 
+			D3D12_SHADER_VISIBILITY_PIXEL
+			));
+
 		pShader = drawSystem.MakeShader(
 			pCommandList->GetCommandList(),
 			shaderPipelineStateData,
@@ -98,12 +107,58 @@ DagCalculateCameraRayTexture::~DagCalculateCameraRayTexture()
 {
 }
 
+struct ConstantBuffer
+{
+	float m_fovHorizontalVerticalRadian[2];
+};
+
 void DagCalculateCameraRayTexture::OnCalculate(
 	std::shared_ptr< iDag2Value >& pValue,
 	const std::vector< iDag2Value* >& arrayInputStack, 
 	const std::vector< iDag2Value* >& arrayInputIndex
 	)
 {
+	const int width = Dag2ValueHelper::Get<int>(arrayInputIndex[0], 0);
+	const int height = Dag2ValueHelper::Get<int>(arrayInputIndex[1], 0);
+	const float fovhradian = Dag2ValueHelper::Get<float>(arrayInputIndex[2], 0.0f);
 
+	auto pCommandList = m_drawSystem.CreateCustomCommandList();
+
+	//make or resize the render target
+	IRenderTarget* pIRenderTarget = m_pRenderTargetTexture.get();
+	if (nullptr == m_pRenderTargetTexture)
+	{
+		std::vector< RenderTargetFormatData > targetFormatDataArray({
+			RenderTargetFormatData(DXGI_FORMAT_R32G32B32_FLOAT, true, VectorFloat4(0.0f,0.0f,0.0f,0.0f))
+			});
+		RenderTargetDepthData targetDepthData;
+
+		m_pRenderTargetTexture = m_drawSystem.MakeRenderTargetTexture(
+			pCommandList->GetCommandList(),
+			targetFormatDataArray,
+			targetDepthData,
+			width,
+			height
+			);
+		pIRenderTarget = m_pRenderTargetTexture.get();
+	}
+	else if ((width != pIRenderTarget->GetWidth()) ||
+		(height != pIRenderTarget->GetHeight()))
+	{
+		m_drawSystem.ResizeRenderTargetTexture(
+			m_pRenderTargetTexture,
+			pCommandList->GetCommandList(),
+			width,
+			height
+			);
+	}
+
+	//render the texture
+	pIRenderTarget->StartRender(pCommandList->GetCommandList());
+	ConstantBuffer& constants = m_pShader->GetConstant<ConstantBuffer>(0);
+	m_pShader->SetActivate(pCommandList->GetCommandList(), 0);
+
+
+	Dag2ValueHelper::Assign(pValue, m_pRenderTargetTexture.get(), Dag2::None);
 }
 

@@ -54,6 +54,8 @@ private:
 		const D3D12_RESOURCE_STATES newStateDepthResource
 	);
 
+	virtual const int GetWidth() const override;
+	virtual const int GetHeight() const override;
 	//D3D12_RESOURCE_STATE_DEPTH_WRITE	= 0x10,
 	//D3D12_RESOURCE_STATE_DEPTH_READ	= 0x20,
 
@@ -63,9 +65,6 @@ private:
 		int& renderTargetViewFormatCount,
 		const DXGI_FORMAT*& pRenderTargetViewFormat
 	) const override;
-
-	virtual const int GetWidth() const override;
-	virtual const int GetHeight() const override;
 
 private:
 	int m_width;
