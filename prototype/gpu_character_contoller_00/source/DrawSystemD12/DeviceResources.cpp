@@ -158,7 +158,7 @@ DeviceResources::DeviceResources(
 		throw std::exception("CustomCommandFence");
 	}
 
-#if 0
+#if 1
 	D3D12_FEATURE_DATA_SHADER_MODEL shaderModel = { D3D_SHADER_MODEL_6_5 };
 	if (FAILED(m_pDevice->CheckFeatureSupport(D3D12_FEATURE_SHADER_MODEL, &shaderModel, sizeof(shaderModel)))
 		|| (shaderModel.HighestShaderModel < D3D_SHADER_MODEL_6_5))
@@ -172,6 +172,24 @@ DeviceResources::DeviceResources(
 	{
 		LOG_MESSAGE_WARNING("WARNING: Mesh Shaders aren't supported");
 	}
+
+	{
+		D3D12_FEATURE_DATA_FORMAT_SUPPORT formatSupport = { DXGI_FORMAT_R32G32B32A32_FLOAT, D3D12_FORMAT_SUPPORT1_RENDER_TARGET, D3D12_FORMAT_SUPPORT2_NONE };
+		if (FAILED(m_pDevice->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &formatSupport, sizeof(formatSupport))))
+		{
+			LOG_MESSAGE_WARNING("WARNING: formatSupport check failed DXGI_FORMAT_R32G32B32A32_FLOAT");
+		}
+	}
+
+	{
+		D3D12_FEATURE_DATA_FORMAT_SUPPORT formatSupport = { DXGI_FORMAT_R32G32B32_FLOAT, D3D12_FORMAT_SUPPORT1_RENDER_TARGET, D3D12_FORMAT_SUPPORT2_NONE };
+		if (FAILED(m_pDevice->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &formatSupport, sizeof(formatSupport))))
+		{
+			LOG_MESSAGE_WARNING("WARNING: formatSupport check failed DXGI_FORMAT_R32G32B32_FLOAT");
+		}
+	}
+
+
 #endif
 }
 

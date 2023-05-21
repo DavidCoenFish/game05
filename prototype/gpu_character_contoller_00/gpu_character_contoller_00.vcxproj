@@ -99,6 +99,7 @@
     <ClCompile Include="source\DAG2\iDag2Value.cpp" />
     <ClCompile Include="source\DAGRender\DagCalculateCameraRayTexture.cpp" />
     <ClCompile Include="source\DAGRender\DagCalculateDisplayTexture.cpp" />
+    <ClCompile Include="source\DAGRender\DagCalculatePresent.cpp" />
     <ClCompile Include="source\DirectXTK12\DirectXHelpers.cpp" />
     <ClCompile Include="source\DirectXTK12\GraphicsMemory.cpp" />
     <ClCompile Include="source\DirectXTK12\LinearAllocator.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="source\DAG2\iDag2Value.h" />
     <ClInclude Include="source\DAGRender\DagCalculateCameraRayTexture.h" />
     <ClInclude Include="source\DAGRender\DagCalculateDisplayTexture.h" />
+    <ClInclude Include="source\DAGRender\DagCalculatePresent.h" />
     <ClInclude Include="source\DirectXTK12\DirectXHelpers.h" />
     <ClInclude Include="source\DirectXTK12\GraphicsMemory.h" />
     <ClInclude Include="source\DirectXTK12\LinearAllocator.h" />
@@ -194,6 +196,14 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="source\Shader\CameraRayVertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="source\Shader\PresentPixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="source\Shader\PresentVertexShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>

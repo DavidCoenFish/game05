@@ -12,10 +12,12 @@
 #include "DAG2/Dag2NodeVariable.h"
 #include "DAG2/Dag2NodeHelper.h"
 #include "DAGRender/DagCalculateCameraRayTexture.h"
+#include "DAGRender/DagCalculatePresent.h"
 
 constexpr std::string_view s_dagNodeWidth = "Width";
 constexpr std::string_view s_dagNodeHeight = "Height";
 constexpr std::string_view s_dagNodeCameraRenderTarget = "CameraRenderTarget";
+constexpr std::string_view s_dagNodePersent = "Persent";
 
 IApplication* const ApplicationEmptyScene::Factory(
 	const HWND hWnd, 
@@ -58,28 +60,37 @@ ApplicationEmptyScene::ApplicationEmptyScene(
 	Dag2Collection::SetLinkIndex(m_pDagWidth, 0, m_pDagCameraRenderTarget);
 	Dag2Collection::SetLinkIndex(m_pDagHeight, 1, m_pDagCameraRenderTarget);
 	Dag2Collection::SetLinkIndex(m_pDagFovWidthRadian, 2, m_pDagCameraRenderTarget);
+
+	m_pDagPresent = DagCalculatePresent::Factory(*m_pDrawSystem);
+	Dag2Collection::SetLinkIndex(m_pDagCameraRenderTarget, 0, m_pDagPresent);
 }
 
 ApplicationEmptyScene ::~ApplicationEmptyScene ()
 {
-   if (m_pDrawSystem)
-   {
-      m_pDrawSystem->WaitForGpu();
-   }
+	if (m_pDrawSystem)
+	{
+		m_pDrawSystem->WaitForGpu();
+	}
 
-   m_pDrawSystem.reset();
+	m_pDagWidth.reset();
+	m_pDagHeight.reset();
+	m_pDagFovWidthRadian.reset();  
+	m_pDagCameraRenderTarget.reset();
+	m_pDagPresent.reset();
+	m_pDagCollection.reset();
 
-   LOG_MESSAGE("ApplicationEmptyScene  dtor %p", this);
+	m_pDrawSystem.reset();
+
+	LOG_MESSAGE("ApplicationEmptyScene  dtor %p", this);
 }
 
 void ApplicationEmptyScene ::Update()
 {
 	BaseType::Update();
-	if (m_pDrawSystem)
+	if (nullptr != m_pDagPresent)
 	{
-		auto pFrame = m_pDrawSystem->CreateNewFrame();
-		pFrame->SetRenderTarget(m_pDrawSystem->GetRenderTargetBackBuffer());
-
+		m_pDagPresent->MarkDirty();
+		m_pDagPresent->GetValue();
 	}
 }
 

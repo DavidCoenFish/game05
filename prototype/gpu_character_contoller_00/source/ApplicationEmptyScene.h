@@ -34,9 +34,11 @@ private:
 	std::unique_ptr< DrawSystem > m_pDrawSystem;
 	std::unique_ptr< Dag2Collection > m_pDagCollection;
 
-	std::shared_ptr< iDag2Node > m_pDagWidth; //Dag2NodeVariable > m_pDagWidth; 
-	std::shared_ptr< iDag2Node > m_pDagHeight; //Dag2NodeVariable > m_pDagHeight; 
+	std::shared_ptr< iDag2Node > m_pDagWidth;
+	std::shared_ptr< iDag2Node > m_pDagHeight;
 	std::shared_ptr< iDag2Node > m_pDagFovWidthRadian;  
 	std::shared_ptr< iDag2Node > m_pDagCameraRenderTarget;
+
+	std::shared_ptr< iDag2Node > m_pDagPresent;
 
 };

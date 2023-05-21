@@ -56,7 +56,7 @@ std::shared_ptr<DagCalculateCameraRayTexture> DagCalculateCameraRayTexture::Fact
 		auto pVertexShaderData = FileSystem::SyncReadFile("CameraRayVertexShader.cso");
 		auto pPixelShaderData = FileSystem::SyncReadFile("CameraRayPixelShader.cso");
 		std::vector<DXGI_FORMAT> renderTargetFormat;
-		renderTargetFormat.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
+		renderTargetFormat.push_back(DXGI_FORMAT_R32G32B32A32_FLOAT);
 
 		ShaderPipelineStateData shaderPipelineStateData(
 			inputElementDescArray,
@@ -73,13 +73,16 @@ std::shared_ptr<DagCalculateCameraRayTexture> DagCalculateCameraRayTexture::Fact
 			std::vector<uint8_t>({0,0,0,0, 0,0,0,0}), 
 			D3D12_SHADER_VISIBILITY_PIXEL
 			));
+		std::vector< std::shared_ptr< ShaderResourceInfo > > arrayShaderResourceInfo;
 
 		pShader = drawSystem.MakeShader(
 			pCommandList->GetCommandList(),
 			shaderPipelineStateData,
 			pVertexShaderData,
 			nullptr,
-			pPixelShaderData
+			pPixelShaderData,
+			arrayShaderResourceInfo,
+			arrayShaderConstantsInfo
 			);
 	}
 
@@ -120,6 +123,12 @@ void DagCalculateCameraRayTexture::OnCalculate(
 {
 	const int width = Dag2ValueHelper::Get<int>(arrayInputIndex[0], 0);
 	const int height = Dag2ValueHelper::Get<int>(arrayInputIndex[1], 0);
+
+	if ((0 == width) || (0 == height))
+	{
+		return;
+	}
+
 	const float fovhradian = Dag2ValueHelper::Get<float>(arrayInputIndex[2], 0.0f);
 
 	auto pCommandList = m_drawSystem.CreateCustomCommandList();
@@ -129,7 +138,9 @@ void DagCalculateCameraRayTexture::OnCalculate(
 	if (nullptr == m_pRenderTargetTexture)
 	{
 		std::vector< RenderTargetFormatData > targetFormatDataArray({
-			RenderTargetFormatData(DXGI_FORMAT_R32G32B32_FLOAT, true, VectorFloat4(0.0f,0.0f,0.0f,0.0f))
+			RenderTargetFormatData(DXGI_FORMAT_R32G32B32A32_FLOAT, true, VectorFloat4(0.0f,0.0f,0.0f,0.0f))
+			                     //DXGI_FORMAT_R32G32B32_FLOAT
+			                     //DXGI_FORMAT_R32G32B32A32_FLOAT
 			});
 		RenderTargetDepthData targetDepthData;
 
@@ -156,8 +167,14 @@ void DagCalculateCameraRayTexture::OnCalculate(
 	//render the texture
 	pIRenderTarget->StartRender(pCommandList->GetCommandList());
 	ConstantBuffer& constants = m_pShader->GetConstant<ConstantBuffer>(0);
-	m_pShader->SetActivate(pCommandList->GetCommandList(), 0);
+	constants.m_fovHorizontalVerticalRadian[0] = fovhradian;
+	const float fovvradian = fovhradian * ((float)height) / ((float)width);
+	constants.m_fovHorizontalVerticalRadian[1] = fovvradian; 
 
+	m_pShader->SetActivate(pCommandList->GetCommandList(), 0);
+	m_pGeometry->Draw(pCommandList->GetCommandList());
+
+	pIRenderTarget->EndRender(pCommandList->GetCommandList());
 
 	Dag2ValueHelper::Assign(pValue, m_pRenderTargetTexture.get(), Dag2::None);
 }

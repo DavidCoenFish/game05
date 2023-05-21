@@ -193,6 +193,9 @@
     <ClCompile Include="source\DAG2\Dag2NodeCalculateBase.cpp">
       <Filter>source\DAG2</Filter>
     </ClCompile>
+    <ClCompile Include="source\DAGRender\DagCalculatePresent.cpp">
+      <Filter>source\DAGRender</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\pch.h">
@@ -348,6 +351,9 @@
     <ClInclude Include="source\DAG2\Dag2NodeCalculateBase.h">
       <Filter>source\DAG2</Filter>
     </ClInclude>
+    <ClInclude Include="source\DAGRender\DagCalculatePresent.h">
+      <Filter>source\DAGRender</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="source\Shader\TrianglePixelShader.hlsl">
@@ -360,6 +366,12 @@
       <Filter>source\Shader</Filter>
     </FxCompile>
     <FxCompile Include="source\Shader\CameraRayVertexShader.hlsl">
+      <Filter>source\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="source\Shader\PresentVertexShader.hlsl">
+      <Filter>source\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="source\Shader\PresentPixelShader.hlsl">
       <Filter>source\Shader</Filter>
     </FxCompile>
   </ItemGroup>
