@@ -158,19 +158,47 @@ DeviceResources::DeviceResources(
 		throw std::exception("CustomCommandFence");
 	}
 
-#if 1
-	D3D12_FEATURE_DATA_SHADER_MODEL shaderModel = { D3D_SHADER_MODEL_6_5 };
-	if (FAILED(m_pDevice->CheckFeatureSupport(D3D12_FEATURE_SHADER_MODEL, &shaderModel, sizeof(shaderModel)))
-		|| (shaderModel.HighestShaderModel < D3D_SHADER_MODEL_6_5))
+#if defined(_DEBUG)
 	{
-		LOG_MESSAGE_WARNING("WARNING: Shader Model 6.5 is not supported");
+		static const D3D_FEATURE_LEVEL s_featureLevels[] =
+		{
+			D3D_FEATURE_LEVEL_12_1,
+			D3D_FEATURE_LEVEL_12_0,
+			D3D_FEATURE_LEVEL_11_1,
+			D3D_FEATURE_LEVEL_11_0,
+			D3D_FEATURE_LEVEL_10_1,
+			D3D_FEATURE_LEVEL_10_0
+		};
+
+		D3D12_FEATURE_DATA_FEATURE_LEVELS featLevels =
+		{
+			_countof(s_featureLevels), s_featureLevels, D3D_FEATURE_LEVEL_11_0
+		};
+
+		if (FAILED(m_pDevice->CheckFeatureSupport(D3D12_FEATURE_FEATURE_LEVELS, &featLevels, sizeof(featLevels)))
+			|| (featLevels.MaxSupportedFeatureLevel < D3D_FEATURE_LEVEL_11_0))
+		{
+			LOG_MESSAGE_WARNING("WARNING: Feature level not supported D3D_FEATURE_LEVEL_11_0");
+		}
+		LOG_MESSAGE("%d", featLevels.MaxSupportedFeatureLevel);
 	}
 
-	D3D12_FEATURE_DATA_D3D12_OPTIONS7 features = {};
-	if (FAILED(m_pDevice->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS7, &features, sizeof(features)))
-		|| (features.MeshShaderTier == D3D12_MESH_SHADER_TIER_NOT_SUPPORTED))
 	{
-		LOG_MESSAGE_WARNING("WARNING: Mesh Shaders aren't supported");
+		D3D12_FEATURE_DATA_SHADER_MODEL shaderModel = { D3D_SHADER_MODEL_6_5 };
+		if (FAILED(m_pDevice->CheckFeatureSupport(D3D12_FEATURE_SHADER_MODEL, &shaderModel, sizeof(shaderModel)))
+			|| (shaderModel.HighestShaderModel < D3D_SHADER_MODEL_6_5))
+		{
+			LOG_MESSAGE_WARNING("WARNING: Shader Model 6.5 is not supported");
+		}
+	}
+
+	{
+		D3D12_FEATURE_DATA_D3D12_OPTIONS7 features = {};
+		if (FAILED(m_pDevice->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS7, &features, sizeof(features)))
+			|| (features.MeshShaderTier == D3D12_MESH_SHADER_TIER_NOT_SUPPORTED))
+		{
+			LOG_MESSAGE_WARNING("WARNING: Mesh Shaders aren't supported");
+		}
 	}
 
 	{
@@ -188,6 +216,7 @@ DeviceResources::DeviceResources(
 			LOG_MESSAGE_WARNING("WARNING: formatSupport check failed DXGI_FORMAT_R32G32B32_FLOAT");
 		}
 	}
+
 
 
 #endif

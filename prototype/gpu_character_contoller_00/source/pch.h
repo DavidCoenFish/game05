@@ -93,3 +93,5 @@ namespace DX
 }
 
 #define PI 3.14159265359f
+
+#define DSC_ASSERT(condition) assert(condition)

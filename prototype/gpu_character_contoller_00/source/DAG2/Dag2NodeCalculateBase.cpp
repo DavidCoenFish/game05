@@ -13,7 +13,7 @@ Dag2NodeCalculateBase::Dag2NodeCalculateBase()
 Dag2NodeCalculateBase::~Dag2NodeCalculateBase()
 {
 	//so, do we enforce safe teardown of dag collection?
-	assert(0 == m_arrayOutput.size());
+	DSC_ASSERT(0 == m_arrayOutput.size());
 	return;
 }
 

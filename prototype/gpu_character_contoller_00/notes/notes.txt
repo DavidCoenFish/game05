@@ -1,3 +1,6 @@
+https://github.com/microsoft/Xbox-ATG-Samples/tree/main/PCSamples/IntroGraphics/SimpleComputePC12
+
+
 axis 1 [move forward, back, left, right]
 axis 2 [reach up/climb/jump, crounch/descend, turn left, turn right]
 

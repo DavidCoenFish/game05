@@ -76,15 +76,10 @@ ApplicationEmptyScene ::~ApplicationEmptyScene ()
 		m_pDrawSystem->WaitForGpu();
 	}
 
-	//m_pDagWidth->Unlink();
 	m_pDagWidth.reset();
-	//m_pDagHeight->Unlink();
 	m_pDagHeight.reset();
-	//m_pDagFovWidthRadian->Unlink();
 	m_pDagFovWidthRadian.reset();  
-	//m_pDagCameraRenderTarget->Unlink();
 	m_pDagCameraRenderTarget.reset();
-	//m_pDagPresent->Unlink();
 	m_pDagPresent.reset();
 	m_pDagCollection.reset();
 

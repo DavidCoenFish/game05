@@ -37,7 +37,7 @@ public:
    DrawSystem(
       const HWND hWnd,
       const unsigned int backBufferCount = 2,
-      const D3D_FEATURE_LEVEL d3dFeatureLevel = D3D_FEATURE_LEVEL_11_0,
+      const D3D_FEATURE_LEVEL d3dFeatureLevel = D3D_FEATURE_LEVEL_11_0, //D3D_FEATURE_LEVEL_12_0, //
       const unsigned int options = 0,
       const RenderTargetFormatData& targetFormatData = RenderTargetFormatData(DXGI_FORMAT_B8G8R8A8_UNORM),
       const RenderTargetDepthData& targetDepthData = RenderTargetDepthData()
