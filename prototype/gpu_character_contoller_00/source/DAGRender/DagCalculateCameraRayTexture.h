@@ -23,6 +23,7 @@ public:
 
 	DagCalculateCameraRayTexture(
 		DrawSystem& drawSystem,
+		const DXGI_FORMAT format,
 		const std::shared_ptr< Shader >& pShader,
 		const std::shared_ptr< GeometryGeneric >& pGeometry
 		);
@@ -37,6 +38,7 @@ private:
 
 private:
 	DrawSystem& m_drawSystem;
+	DXGI_FORMAT m_format;
 	std::shared_ptr< Shader > m_pShader;
 	std::shared_ptr< GeometryGeneric > m_pGeometry;
 	std::shared_ptr< RenderTargetTexture > m_pRenderTargetTexture;

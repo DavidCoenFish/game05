@@ -16,6 +16,7 @@
 
 constexpr std::string_view s_dagNodeWidth = "Width";
 constexpr std::string_view s_dagNodeHeight = "Height";
+constexpr std::string_view s_dagNodeFovWidthRadian = "FovWidthRadian";
 constexpr std::string_view s_dagNodeCameraRenderTarget = "CameraRenderTarget";
 constexpr std::string_view s_dagNodePersent = "Persent";
 
@@ -55,14 +56,17 @@ ApplicationEmptyScene::ApplicationEmptyScene(
 	m_pDagHeight = Dag2NodeVariable::Factory<int>(height, Dag2::ValueChanged);
 	m_pDagCollection->AddNode(std::string(s_dagNodeHeight), m_pDagHeight);
 	m_pDagFovWidthRadian = Dag2NodeVariable::Factory<float>(120.0f * (PI / 180.0f), Dag2::ValueChanged);
+	m_pDagCollection->AddNode(std::string(s_dagNodeFovWidthRadian), m_pDagFovWidthRadian);
 
 	m_pDagCameraRenderTarget = DagCalculateCameraRayTexture::Factory(*m_pDrawSystem);
 	Dag2Collection::SetLinkIndex(m_pDagWidth, 0, m_pDagCameraRenderTarget);
 	Dag2Collection::SetLinkIndex(m_pDagHeight, 1, m_pDagCameraRenderTarget);
 	Dag2Collection::SetLinkIndex(m_pDagFovWidthRadian, 2, m_pDagCameraRenderTarget);
+	m_pDagCollection->AddNode(std::string(s_dagNodeCameraRenderTarget), m_pDagCameraRenderTarget);
 
 	m_pDagPresent = DagCalculatePresent::Factory(*m_pDrawSystem);
 	Dag2Collection::SetLinkIndex(m_pDagCameraRenderTarget, 0, m_pDagPresent);
+	m_pDagCollection->AddNode(std::string(s_dagNodePersent), m_pDagPresent);
 }
 
 ApplicationEmptyScene ::~ApplicationEmptyScene ()
@@ -72,10 +76,15 @@ ApplicationEmptyScene ::~ApplicationEmptyScene ()
 		m_pDrawSystem->WaitForGpu();
 	}
 
+	//m_pDagWidth->Unlink();
 	m_pDagWidth.reset();
+	//m_pDagHeight->Unlink();
 	m_pDagHeight.reset();
+	//m_pDagFovWidthRadian->Unlink();
 	m_pDagFovWidthRadian.reset();  
+	//m_pDagCameraRenderTarget->Unlink();
 	m_pDagCameraRenderTarget.reset();
+	//m_pDagPresent->Unlink();
 	m_pDagPresent.reset();
 	m_pDagCollection.reset();
 

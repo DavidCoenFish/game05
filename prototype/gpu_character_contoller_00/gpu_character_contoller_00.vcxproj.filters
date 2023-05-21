@@ -196,6 +196,9 @@
     <ClCompile Include="source\DAGRender\DagCalculatePresent.cpp">
       <Filter>source\DAGRender</Filter>
     </ClCompile>
+    <ClCompile Include="source\Log.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\pch.h">

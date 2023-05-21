@@ -125,6 +125,7 @@ void Dag2NodeCalculateBase::Unlink()
 			iter->RemoveOutput(this);
 		}
 	}
+	m_arrayInputStack.clear();
 	for(auto iter: m_arrayInputIndex)
 	{
 		if (nullptr != iter)
@@ -132,5 +133,6 @@ void Dag2NodeCalculateBase::Unlink()
 			iter->RemoveOutput(this);
 		}
 	}
+	m_arrayInputIndex.clear();
 }
 

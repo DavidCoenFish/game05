@@ -52,11 +52,12 @@ std::shared_ptr<DagCalculateCameraRayTexture> DagCalculateCameraRayTexture::Fact
 			4);
 	}
 
+	const DXGI_FORMAT format = DXGI_FORMAT_R32G32B32A32_FLOAT; //DXGI_FORMAT_R32G32B32_FLOAT; //DXGI_FORMAT_R32G32B32A32_FLOAT;
 	{
 		auto pVertexShaderData = FileSystem::SyncReadFile("CameraRayVertexShader.cso");
 		auto pPixelShaderData = FileSystem::SyncReadFile("CameraRayPixelShader.cso");
 		std::vector<DXGI_FORMAT> renderTargetFormat;
-		renderTargetFormat.push_back(DXGI_FORMAT_R32G32B32A32_FLOAT);
+		renderTargetFormat.push_back(format);
 
 		ShaderPipelineStateData shaderPipelineStateData(
 			inputElementDescArray,
@@ -88,6 +89,7 @@ std::shared_ptr<DagCalculateCameraRayTexture> DagCalculateCameraRayTexture::Fact
 
 	return std::make_shared<DagCalculateCameraRayTexture>(
 		drawSystem,
+		format,
 		pShader,
 		pGeometry
 		);
@@ -95,10 +97,12 @@ std::shared_ptr<DagCalculateCameraRayTexture> DagCalculateCameraRayTexture::Fact
 
 DagCalculateCameraRayTexture::DagCalculateCameraRayTexture(
 	DrawSystem& drawSystem,
+	const DXGI_FORMAT format,
 	const std::shared_ptr< Shader >& pShader,
 	const std::shared_ptr< GeometryGeneric >& pGeometry
 	)
 	: m_drawSystem(drawSystem)
+	, m_format(format)
 	, m_pShader(pShader)
 	, m_pGeometry(pGeometry)
 	, m_pRenderTargetTexture()
@@ -138,9 +142,7 @@ void DagCalculateCameraRayTexture::OnCalculate(
 	if (nullptr == m_pRenderTargetTexture)
 	{
 		std::vector< RenderTargetFormatData > targetFormatDataArray({
-			RenderTargetFormatData(DXGI_FORMAT_R32G32B32A32_FLOAT, true, VectorFloat4(0.0f,0.0f,0.0f,0.0f))
-			                     //DXGI_FORMAT_R32G32B32_FLOAT
-			                     //DXGI_FORMAT_R32G32B32A32_FLOAT
+			RenderTargetFormatData(m_format, true, VectorFloat4(0.0f,0.0f,0.0f,0.0f))
 			});
 		RenderTargetDepthData targetDepthData;
 
