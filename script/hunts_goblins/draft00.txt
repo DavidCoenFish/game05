@@ -1,4 +1,5 @@
 	summary:
+	Act 1 Warcamp
 A001_S001 ambush [chief, complains], group of goblins ambush two adventures
 A001_S002 warcamp [teller, chief], group goblins return to camp, tellers vision
 A001_S003 graveyard [chief, complains]
@@ -22,15 +23,23 @@ A001_S020 regret [forgraph, goblins] thaco falls, begs rescue of complains, fogr
 A001_S021 graveyard3 [minmax, complains] minmax pov, knocks over statue to stop complains, hits sheild, then fograph, goblins arive
 A001_S022 after [goblins] cheif talking to thaco, fumbles gained level, become adventures
 
+	Act 2 Brassmoon 1
 A002_S001 new arm [dies horribly, click] dies horribly new arm
 A002_S002 elf ambush [fumbles, goblins]
 
 
 
 	random:
-is the broken sword that complains uses, and the guard and tip chief has, the sword that killed chief kills-a-werebear?
+is the broken sword that complains uses, and the guard and tip chief has, the sword that killed chief kills-a-werebear? only metal in camp? other than thaco's weapon (which he could be hiding)
 all other equipment is stone/ wood. potato sacks converted to cloths [pants], some palm frons weaving, feathers.
 delay using complain's name untill the minmax/complains of names payoff
+not that many goblins:?
+[chief, complains, thaco, fumbles, big ears, one eye, dies horibly, teller, red shirt, yeet, 2 other killed by drow mage which may include yeet
+initial ambush:
+[chief, complains, redshirt, yeet, + four] //how may to carry fallen goblin and two adventures. 
+chief draging sled with redshirt, compains caryying both severed heads, a pair of goblins for each adventuer, yeet limping along, arm nursing side
+remaining in camp
+[big ears, one eye, teller, thaco, fumbles? dies horribly, more injured in tent~ but healing magic.. taps? asks questions?]
 
 	A001_S001 ambush [chief, complains], group of goblins ambush two adventures
 	//open scubland
@@ -62,16 +71,18 @@ cheif: three should be fine, try to get some rest //[before tomorrow]
 teller: <healing yeet> minor healing <moves to close red shirt's eyes> this one is beyond my care, we shall honour his name, 
 teller: <address chief as he walks closer> chief
 cheif: teller, any news from the village, any new recruits?
-teller: no, no my little chief. <looks around at piled adventures veing stripped of armour> so smart. your success is a curse, may you afford the price to learn resileance when you fail, 
+teller: no, no my little chief. <looks around at piled adventures veing stripped of armour> so smart, so bright. your success is a curse, [may you afford the price to learn resileance when you fail,] 
 //[to learn how to keep going when things don't go perfectly
-and you, your strength is a curse, the price to learn teamwork may be imposible. 
+and you, your strength is a curse, [the price to learn teamwork may be imposible.] 
 <complains starts to answer but is stoped by thaco jumping down and stopping him by pushing his head down>
-cheif: enough! <sharply at thaco and complains>
+cheif: stop it! <sharply at thaco and complains>
 teller: We are goblins, we run, we hide, we hunt. 
 but you never really learnt to run away. 
 <most addressed at chief>
 <pause as chief spread arms wide at teller to invite a blow, instead teller beckonds him forward and wispers something to him and chief closes eye and retuns to head bow>
-teller: your choice is made, this war camp will be no more after tommorow. an attack here by three adventures, and now I see another two adventueres attacking from the north by the lake,
+inaudiable [thaco and complains will guard me tomorrow]
+<teller striagtens up
+teller: you made your choice, this war camp will be no more after tommorow. an attack here by three adventures, and now I see another two adventueres attacking from the north by the lake,
 beware the dwarf, beware kore, beware the white terror, when love turns to hate and the serpent....
 <teller rants skywards, thaco painfully climbs up to her aid, guides her away, goblins return to tasks, carry off red shirt on streacher>
 
@@ -80,33 +91,41 @@ beware the dwarf, beware kore, beware the white terror, when love turns to hate 
 	// introduce magic sword in treasure chest, chief father's sword?
 	// chief's uncertainty, self doubt at being chief
 	// chief carving a totem pole of red shit's face, lots of totem poles in background, some with many faces
+	// lots of goblin bones
 	// one stone statue, chief's father kills-a-werebear with representation of the magic short sword, or the actual short sword?
-complains: did you hear how that human screamed, ahhhh. <pause> you're getting good at carving
+complains: did you hear how that human screamed, ahhhh. 
+<pause> you're getting good at carving
+
 chief: i didn't see that the archer was left handed
 complains: what
 chief: red shirt died because i had him too far around in the ambush, had i known...
 complains: we won, we killed two adventures
 chief: there wasn't space to runaway, we were already so close to camp...
 complains: almost eveyone survived...
+<complains puts hand on chief should to console him, chief looks up from carving to address directly
 chief: the teller wants you and your father guarding her tomorrow
+complains: why do we keep doing what the teller says
+//chief: i think it's more like she sees the best future for the clan, 
+chief: she can see the future, even if we didn't do what she said, the future is still going to happen just with a lot more pain
 complains: that's stupid
 chief: and the end of the warcamp, this camp is where my father died [, i've never even been over the horizon from here]
 complains: chief kills a werebear
-chief: his sword is in the treasure chest, the teller told me any goblin would be banished if they ever touched it
+chief: his sword is in the treasure chest, the teller told me any goblin would be banished if they touched it
 complains: his magic sword?
 chief: i don't even have any memories of him, my whole life has been this warcamp, and stories about my father
 complains: want to swap? all my father does is train me or hit me
 <offscreen parrot screams>
 chief: hawl is here
-<compains pauses to look at totem before following after resting hand on the totem? rage at loss?>
+<compains pauses to look at totem before following after resting hand on the totem? rage at death of goblin by adventuere?>
 
 	A001_S004 trade [chief, hawl] 
 <hawl pulling giant parrot to stop, putting on hood, hands dwarf child down to play with fumbles
-hawl: hey, it's the world greatest chief
-chief: hawl, the smartest ork i know
-hawl: i'm the only ork you know? what you got for me, two pigs?
-chief: yup, what do you have
-hawl: a sack of potatoes, and something that looks like a magical device
+//hawl: hey, it's the world greatest chief
+//chief: hawl, the smartest ork i know
+//hawl: i'm the only ork you know? what you got for me, two pigs?
+hawl: damn this place is hard to find chief
+chief: gobin magic. what do you have, hawl?
+hawl: for the two pigs you've got? a sack of potatoes, and something that looks like a magical device
 complains: that looks like rubish
 chief: it looks like it could be magic, deal
 <fumbles playing with dwarf, peakaboo, tries to give him a carved wood sword, dwarf calls out "daa" hawl sees and hands mustach to dwarf to trade for sword
@@ -114,69 +133,120 @@ chief: it looks like it could be magic, deal
 	A001_S005 bonfire [fumbles] anounce kickasso [not going to tell you how red shirt died, but how i lived]
 	//embers flying to sky, flames of bonfire flicker around camp
 fumbles: not going to tell you how red shirt died, but how i lived, an adventuer by the name of senoir vorpal kickasso
-rasied as an orphan by swamp files after my mother ran away before i was born and ogres killed my father...
+rasied as an orphan by swamp files after my mother ran away before i was born and ogres killed my parents... a fighter, a mage, a rouge, a bard, a bouncer, a monk, a barbarian, a witch, a wizard, a cook, a theif
 
 	A001_S006 lake camp [minmax, foregraph] 
 	//minmax sleeping, forgraph crouched over fire, mage smoking a hooka while waiting? others lazying about?
 minmax: <waking up, starts scratching himself then realises multiple people standing infront of him, stops, stands up> whatsup?
 forgaph: ahh, your up. lets get this started, 
-<cast, white glow from eyes>oh herbet, he who dwells in his mothers basment, the last adventure was a cake walk, give us something spicy with some hefty xp
+<cast, white glow from eyes>oh herbet, he who dwells in his mothers basment, the last adventure was a cake walk, give us something hot and spicy with some hefty xp
 female drow: who does the dwarf worship? 
 minmax: the game master
 forgraph: herbet's bless, ok, we're ready
 minmax: what about my plan
-forgraph: what plan
-minmax: my plan to single handedly walk into the goblin war camp, swing the best critical hit ever, killing everyone
-forgraph: what plan
+forgraph: your plan?
+minmax: my plan to single handedly walk into the goblin war camp, swing the best critical hit ever and kill everyone
+forgraph: ...
 minmax: and then the king of everything that was walking by
 king of everything: i saw that crit hit, and i want to give you my crown and name you the king of everything
 forgarph: you done?
 minmax: and then all these girls turn up
 forgarph: ok?
 girls: oh we love you so much, lets us start smoochie smoochie
-forgarph: right, are you done now?
-minmax: and then the girls <girls fade, minmax making his hands make out with each other> oh, were did the drow go?
-forgarph: they started off to go attach the goblins, we have a few more minutes before we start our attack.
-<minmax wanders off>
+forgarph: are you done?
+minmax: and then the girls <girls fade, minmax making his hands make out with each other, grunting> oh, were did the drow go?
+forgarph: they started off for the attack, we have a few more minutes before we start from this end.
+minmax: oh
+<minmax shrugs, wanders off, draws sword and start poking things>
 
 	A001_S007 lake monster [minmax, foregraph]
 <minmax crouched by bush, holding rope>
-minmax: oh, hey, was anyone fishing? 
+minmax: hey, was anyone fishing? 
 <picks up rope tied to stake next to camp, follows it though bush
-<draws sword, follows rope into water, slips and falls, sword stuck into mud, sits on bottom, elbows in mud
+<sword still drawn, follows rope into water, slips and falls, sword stuck into mud, sits on bottom, elbows in mud
 minmax: hey, get in, the water is fine
-forgraph: <tank walks through bush, flinches as minmax stands> are your cloths disolving?
-minmax: oh yeah, it's spicy as hell <hellecoptors groin at fograph, hand holds rope in other hand
-forgraph: <shielding eyes, start looking behind, preps mace> ahhh...
-<minmax turns to see the two heads tied to the end of the rope which he has been lifting up
+forgraph: <tank walks through bush, almost falls in, flinches as minmax stands> are your cloths disolving?
+minmax: oh yeah, it's spicy as hell <hellecoptors groin at fograph, hand holds rope, in other hand sword, starts pulling in rope
+forgraph: <shielding eyes, start looking behind, preps mace> ahhh... //first in mental pain, then alarm
+<minmax turns to see the two heads tied to the end of the rope which he has been lifting up, tenticles pull back from the second head
 <minmax pulled into water, forgarph battles through the bushes to help, tumbles into water>
 <minmax pulled into air by tenticles over surfacing giant mouth>
 forgraph: hold on
 minmax: my sword
-<over fograph sholder, lowwking towards minmax, minmax plunged into mouth, minmax a bit dispondent then starts truging forward
+<over fograph sholder, looking towards minmax, breaths fire? then minmax plunged into mouth, forgraph a bit dispondent then starts truging forward
 <surface of lake, some swirls, bubbles, then forgraph leaves lake dragging minmax out to tree, cast heal minor wounds>
 <min max wakes up screaming, flails arms>
 minmax: ahhhh, why are you touching me
 forgraph: i'm healing you
 minmax: gay
-forgraph: grow up
+forgraph: grow up, hey were is you sword
 <minmax stands, groin at fographs eye level, forgraph flinches>
-minmax: i need a sword
+minmax: i need no sword, i know 37 ways to kill someone with my thumbs
 
 	A001_S008 tent [complains, thaco]
+	// thaco training complains by hitting him with a stick to corect possition, teller meditating
+<complains getting annoyed at not being able to stop thaco's stick hitting him as he holds attack poses
+complains: why am i here
+thaco: we are protecting the teller
+complains: we're fighting 5 adventures, we need everyone fighting
+thaco: the teller is valuable for the clan, and she said there was a future where all three of us live if we stay in the tent
+complains: futures again, what's the point if eveyone else is dead
+<thaco and complains glare at each other for a bit, thaco slumps>
+thaco: fine, go help, but someone need to stay
+<complains runs off/ out of tent, away from camera, drift to infront of tent A001_S009>
 
 	A001_S009 south camp attack [drow3, bigears] bigears charges mage, cut down
+	//6? goblins standing by switches, take two to thow switch? big lever. want enough for a good amount to be shot down by mage, or does big ears need to race around and hit the switches after most fall
+<goblin offscreen contact
+<3 drow striding into camp confidently, mage hang back, others speeding up, strike down spears, spear bounces off mage shield
+<trap doors open to pits with ants under 2 drow, tall one disapears, short one avoids
+<mage fires off ray of cold? ray of cone? magic missle targeting 3 goblins, killing each
+<ambush wave behind the mage, but spears inefficient, short drow pivotes to start cutting them down
+<bigears lets go of fallen one eye and charges with axe, knocks short dow down and goes after mage
+<mage stabs big ears and continues>
 
 	A001_S010 north camp [minmax, goblins] minmax into goblin ambush
+	//from goblins pov or minmax, minmax leaves cover behind tree
+<min max pov as he walks around tree and sees chief rise and open arms 
+minmax: ohhh, goblins <starts to charge forward
+<ambush triggered and goblins rise and take throw, minmax gets back behind tree with 3 spears stuck in arms/ torso
+minmax: owie, owie, owie, heal!
+<minmax sticks out head, more spears, 
+minmax: hey, this dead tree is made of wood isn't it
+forgraph: what would i know of trees
 
 	A001_S011 treefall [chief, forgraph] chief runs
-	// your the chief? bonous xp
+<change to chief reloading with spear, holding aim waiting, tree starts to move, starts to call out 
+chief: fall back
+<tree crashes down around chief, goblin next to chief dead, chief pulling himself free, finds spear
+fograph: hah, you're the chief, bonus xp
+<chief starts to set but of spear in ground, a few spears bounce ineffectivly off forgraph armour
+<fograph almost reaches cheif, complains sprinting from behind chief to stab fograph, kicked away by min max behind orgraph, fograph grabs spear and clubs chief
+<chief scrambling back, fograph smashes chiefs spear
+chief: fall back
+goblins offscreen: save chief
+<forgraph swining and connecting, spears bouncing off, covering gauntleted hand over face to protect against spears
+chief: fall back!
+<cheif into shadows, forgraph draging away a goblin that was reaching for chief in pain
+goblin: chief!
 
 	A001_S012 names [minmax, complains] minmax guesses complains of names name
+<complains rolls along ground through bushes, recovering from thow, worm eye camera show toweing minmax folowing swinging branch
+minmax: Taste my branch, for I am minmax the greatest
+<complains knocking a ew of the swings aside but not having reach to strike back
+complains: thats your name, that's stupid
+minmax: what
+complains: roleplaying with that is an oxymoron
+minmax: well, what are you, complainer of names
+<trade blows, both draw blood
+<minmax pushes back, complains starts using around tree, but then just climbs
+<minmax tests tree i it can be pushed over, but start to pulls back after a few pinecones thrown
+minmax: ohh, i'll get you latter monkey
 
 	A001_S013 massacre [tall drow, goblins] dig self out of ground and ants, enters tent
 
 	A001_S014 tent [tall drow, thaco] tall drow incapacitated, then female drow sleep, then bigears exit, young and beautify wakes up, leaves
+thaco: bet you can't stabalise in seven rounds
 
 	A001_S015 dies horribly vrs short drow
 
@@ -191,18 +261,79 @@ teller: killing people that are hunting you sounds like self defense to me.
 teller: interesting, i can see you are killed by kore
 <chief spear ineffective against armour
 teller: strike me down, and my chief will become the strongest ever, run away my chief. beware kore, beware the white terror, when the serpent...
-<forgraph casts cause minor wounds. takes another spear, looks around for chief
+forgraph: creppy, cause minor wounds...
+<forgraph casts. another spear bounces off, looks around for chief
 
 	A001_S017 cleanup [minmax, fumbles]
 <fograph bursts through bushes/ no attempt to go around
 minmax: hey, buddy
+<minmax clubing wounded goblins to ensure dead, forgraph winces
+forgaph: you ready?
+minmax: one got away
+forgaph: a few have, lets head into the camp
+<forgarph doing a lot of looking around, minmax just going ahead
+fumbles: i am senor vorpal kickasso
+<fumbles tries to charge, gets horribly tangles, minmax picks him up but fumbles just climbs around him
+minmax: stay still
+<minmax finially grabing one then the other of fumbles legs and elevating him infront
+fumbles: die, purple worm
+<minmax down, fumbles runs away
+forgaph: i'm not healing you there
+minmax: trying .. not ..  to .. throw .. up
 
 	A001_S018 treasure chest [minmax, fograph]
+forgaph: here's the treasure chest
+<minmax back to standing imediatly
+minmax: ohhh, it's a think of beauty
+forgaph: should we check for traps?
+<forgraph looking at 20? adventurer's skulls tied to ropes on pole like the pair in the lake
+minmax: it's a first level adventure, there are no traps
+<chest burst open with complains swiping minmax with magic sword and shield, punched away by minmax
+thaco: No! 
+<forgraph gets hit by multiple spears, one grasing face, others still bouncing off armour/ helmut
+<forgraph engages thaco and big ears in mellee
 
 	A001_S019 graveyard2 [minmax, complains] minmax using totems as weapons, complains hesitation complains pov
+<complains start to hold ground but is kicked by minmax, minmax continues to charge
+<ends up in graveyard, minmax branch destoyed by complains magic sword, so start using totems
+<complains hesitates to destroy totems, but ends up slicing them and pressing minmax
+<complains starts toying with minmax
+complains: how do you like it when it's your turn to be hunted
+minmax: complaines!
+<another pass at battle, minmax trying to crawl away, blood in eyes
+<minmax crawls back into chief kills a werebears statue, swings it into complains, pinning him, sword knocked away
+<complains frantically trying to reach sword, minmax rises with redshirts unfinished totem
 
 	A001_S020 regret [forgraph, goblins] thaco falls, begs rescue of complains, fograph heals
+<fumbles and chief trying to use spear at range but difficult to take shot with goblins not that much shorter than forgraph
+<thaco and bigears trying to engage in mellee, spears thrown as they disengage, then press again
+<forgraph trying to close distance to spear throwers, reaches fumbles
+thaco: pull back fumbles
+<big ears thrown at chief, fumbles knocked down, thaco attempts grapple to save fumbles
+<thaco punched into tree
+thaco: run, forget me, go save my son //how does he know complains has problem? unless A001_S019 ends latter, or just fear of shield
+<fograph push though to heal thaco
+forgraph: that the last of my magic, i think we have made a terible mistake
 
 	A001_S021 graveyard3 [minmax, complains] minmax pov, knocks over statue to stop complains, hits sheild, then fograph, goblins arive
+<complains unable to reach sword, sword deactivates, see minmax swing and complains blocks with shield
+<totem hits shield, magic flash, totem knocked back, turns into tenticles pulling/ entangling minmax
+<forgraph arrives carying thaco, other goblins at side
+thaco: oh no, we need to get them out of here
+forgraph: tenticles again?
+thaco: the shield, look out for the shield
+<chief helping thaco
+<forgraph forward to help minmax, 
+<fumbles, big ears try to free complains 
+<complains free, grabs sword
+<tenticles have spread, forgraphs mouth covered
+minmax: Complains!
+complains: Minmax, i'll kill you!
+chief: Fall back
+<complains punches big ears as he tries to stop him, big ears grapples him back, fumble pullin
+fumbles: the tenticle things are spreading
+<withdraw, carrying complains
+complains: i'll kill you minmax, i'll kill you
+minmax: <screams>
 
 	A001_S022 after [goblins] cheif talking to thaco, fumbles gained level, become adventures
