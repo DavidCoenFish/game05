@@ -28,8 +28,11 @@ public:
 
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandle(const int index);
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandleFrame(const int index, const int frameIndex);
+
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUHandle(const int index);
-	D3D12_GPU_VIRTUAL_ADDRESS GetGPUAddress(const int index);
+	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUHandleFrame(const int index, const int frameIndex);
+
+	//D3D12_GPU_VIRTUAL_ADDRESS GetGPUAddress(const int index);
 
 	ID3D12DescriptorHeap* const GetHeap(const int index);
 

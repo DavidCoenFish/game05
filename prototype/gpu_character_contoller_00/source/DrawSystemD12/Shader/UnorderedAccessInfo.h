@@ -18,6 +18,7 @@ public:
 	void Activate( 
 		ID3D12GraphicsCommandList* const pCommandList,
 		const int rootParamIndex,
+		const int frameIndex,
 		const bool computeShader
 		);
 

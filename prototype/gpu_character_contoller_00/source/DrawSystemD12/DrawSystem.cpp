@@ -225,11 +225,13 @@ void DrawSystem::ResizeRenderTargetTexture(
 	}
 }
 
-std::shared_ptr<CustomCommandList> DrawSystem::CreateCustomCommandList()
+std::shared_ptr<CustomCommandList> DrawSystem::CreateCustomCommandList(
+	ID3D12PipelineState* const pPipelineStateObjectOrNull
+	)
 {
 	if (m_pDeviceResources)
 	{
-		auto pCommandList = m_pDeviceResources->GetCustomCommandList();
+		auto pCommandList = m_pDeviceResources->GetCustomCommandList(pPipelineStateObjectOrNull);
 		return std::make_shared< CustomCommandList>(
 			*this,
 			pCommandList

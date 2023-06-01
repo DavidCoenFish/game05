@@ -40,8 +40,13 @@ D3D12_CPU_DESCRIPTOR_HANDLE HeapWrapper::GetCPUHandleFrame(const int index, cons
 
 D3D12_GPU_DESCRIPTOR_HANDLE HeapWrapper::GetGPUHandle(const int index)
 {
-	assert(m_desc.Flags & D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE); 
 	const int frameIndex = m_pDrawSystem ? m_pDrawSystem->GetBackBufferIndex() : 0;
+	return GetGPUHandleFrame(index, frameIndex); 
+}
+
+D3D12_GPU_DESCRIPTOR_HANDLE HeapWrapper::GetGPUHandleFrame(const int index, const int frameIndex)
+{
+	assert(m_desc.Flags & D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE); 
 	const int pageIndex = index / m_desc.NumDescriptors;
 	if ((0 <= pageIndex) && (pageIndex < (int)m_arrayPage.size()))
 	{

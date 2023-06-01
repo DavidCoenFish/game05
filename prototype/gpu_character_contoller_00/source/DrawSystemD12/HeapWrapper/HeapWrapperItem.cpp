@@ -64,14 +64,23 @@ D3D12_GPU_DESCRIPTOR_HANDLE HeapWrapperItem::GetGPUHandle()
 	return D3D12_GPU_DESCRIPTOR_HANDLE();
 }
 
-D3D12_GPU_VIRTUAL_ADDRESS HeapWrapperItem::GetGPUAddress()
+D3D12_GPU_DESCRIPTOR_HANDLE HeapWrapperItem::GetGPUHandleFrame(const int frameIndex)
 {
 	if (m_pHeapWrapper)
 	{
-		return m_pHeapWrapper->GetGPUAddress( m_index );
+		return m_pHeapWrapper->GetGPUHandleFrame( m_index, frameIndex );
 	}
-	return D3D12_GPU_VIRTUAL_ADDRESS();
+	return D3D12_GPU_DESCRIPTOR_HANDLE();
 }
+
+//D3D12_GPU_VIRTUAL_ADDRESS HeapWrapperItem::GetGPUAddress()
+//{
+//	if (m_pHeapWrapper)
+//	{
+//		return m_pHeapWrapper->GetGPUAddress( m_index );
+//	}
+//	return D3D12_GPU_VIRTUAL_ADDRESS();
+//}
 
 ID3D12DescriptorHeap* const HeapWrapperItem::GetHeap()
 {

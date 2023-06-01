@@ -37,9 +37,6 @@
     <Filter Include="source\DAGRender">
       <UniqueIdentifier>{d8ae63a2-5dfe-4877-95f1-2e57728f7a1a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\DrawSystemD12\Compute">
-      <UniqueIdentifier>{edefd438-158b-479a-a0a6-308d295cc3ca}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="notes\notes.txt">
@@ -202,8 +199,11 @@
     <ClCompile Include="source\Log.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="source\DrawSystemD12\Compute\Compute.cpp">
-      <Filter>source\DrawSystemD12\Compute</Filter>
+    <ClCompile Include="source\ApplicationTexture.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ApplicationCompute.cpp">
+      <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -363,8 +363,11 @@
     <ClInclude Include="source\DAGRender\DagCalculatePresent.h">
       <Filter>source\DAGRender</Filter>
     </ClInclude>
-    <ClInclude Include="source\DrawSystemD12\Compute\Compute.h">
-      <Filter>source\DrawSystemD12\Compute</Filter>
+    <ClInclude Include="source\ApplicationTexture.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ApplicationCompute.h">
+      <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -384,6 +387,15 @@
       <Filter>source\Shader</Filter>
     </FxCompile>
     <FxCompile Include="source\Shader\PresentPixelShader.hlsl">
+      <Filter>source\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="source\Shader\TexturePixelShader.hlsl">
+      <Filter>source\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="source\Shader\TextureVertexShader.hlsl">
+      <Filter>source\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="source\Shader\ComputeShader.hlsl">
       <Filter>source\Shader</Filter>
     </FxCompile>
   </ItemGroup>

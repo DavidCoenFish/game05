@@ -434,14 +434,14 @@ void Shader::SetActivate(
 	//u0,u1,u2,...
 	for(const auto& iter : m_arrayUnorderedAccessInfo)
 	{
-		iter->Activate(pCommandList, rootParamterIndex, m_pipelineStateData.m_computeShader);
+		iter->Activate(pCommandList, rootParamterIndex, frameIndex, m_pipelineStateData.m_computeShader);
 		rootParamterIndex += 1;
 	}
 
 	//t0,t1,t2,...
 	for(const auto& iter : m_arrayShaderResourceInfo)
 	{
-		iter->Activate(pCommandList, rootParamterIndex, m_pipelineStateData.m_computeShader);
+		iter->Activate(pCommandList, rootParamterIndex, frameIndex, m_pipelineStateData.m_computeShader);
 		rootParamterIndex += 1;
 	}
 
@@ -456,6 +456,17 @@ void Shader::SetActivate(
 	//   rootParamterIndex += 1;
 	//}
 }
+
+
+//void Shader::Dispatch(
+//	ID3D12GraphicsCommandList* const pCommandList,
+//	const int threadGroupX,
+//	const int threadGroupY,
+//	const int threadGroupZ
+//	)
+//{
+//	pCommandList->Dispatch(threadGroupX, threadGroupY, threadGroupZ);
+//}
 
 void Shader::SetShaderResourceViewHandle( const int index, const std::shared_ptr< HeapWrapperItem >& pShaderResourceViewHandle )
 {
@@ -489,7 +500,7 @@ void Shader::SetConstantBufferData( const int index, const std::vector<float>& d
 void Shader::OnDeviceLost()
 {
 	m_rootSignature.Reset();
-	m_pipelineState.Reset();
+	m_pipelineStateObject.Reset();
 
 	for( auto& pConstantBuffer : m_arrayConstantBuffer )
 	{

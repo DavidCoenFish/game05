@@ -22,6 +22,7 @@ void UnorderedAccessInfo::SetUnorderedAccessViewHandle(const std::shared_ptr< He
 void UnorderedAccessInfo::Activate( 
 	ID3D12GraphicsCommandList* const pCommandList,
 	const int rootParamIndex,
+	const int frameIndex,
 	const bool computeShader
 	)
 {
@@ -33,14 +34,14 @@ void UnorderedAccessInfo::Activate(
 		{
 			pCommandList->SetComputeRootDescriptorTable(
 				rootParamIndex, 
-				m_pUnorderedAccessViewHandle->GetGPUHandle()
+				m_pUnorderedAccessViewHandle->GetGPUHandleFrame(frameIndex)
 				);
 		}
 		else
 		{
 			pCommandList->SetGraphicsRootDescriptorTable(
 				rootParamIndex, 
-				m_pUnorderedAccessViewHandle->GetGPUHandle()
+				m_pUnorderedAccessViewHandle->GetGPUHandleFrame(frameIndex)
 				);
 		}
 	}

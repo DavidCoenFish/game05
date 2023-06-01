@@ -87,7 +87,9 @@
     <None Include="props\default.props" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\ApplicationCompute.cpp" />
     <ClCompile Include="source\ApplicationEmptyScene.cpp" />
+    <ClCompile Include="source\ApplicationTexture.cpp" />
     <ClCompile Include="source\ApplicationTriangle.cpp" />
     <ClCompile Include="source\DAG2\Dag2.cpp" />
     <ClCompile Include="source\DAG2\Dag2Collection.cpp" />
@@ -103,7 +105,6 @@
     <ClCompile Include="source\DirectXTK12\DirectXHelpers.cpp" />
     <ClCompile Include="source\DirectXTK12\GraphicsMemory.cpp" />
     <ClCompile Include="source\DirectXTK12\LinearAllocator.cpp" />
-    <ClCompile Include="source\DrawSystemD12\Compute\Compute.cpp" />
     <ClCompile Include="source\DrawSystemD12\CustomCommandList.cpp" />
     <ClCompile Include="source\DrawSystemD12\DeviceResources.cpp" />
     <ClCompile Include="source\DrawSystemD12\DrawSystem.cpp" />
@@ -139,7 +140,9 @@
     <ClCompile Include="source\WindowHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\ApplicationCompute.h" />
     <ClInclude Include="source\ApplicationEmptyScene.h" />
+    <ClInclude Include="source\ApplicationTexture.h" />
     <ClInclude Include="source\ApplicationTriangle.h" />
     <ClInclude Include="source\DAG2\Dag2.h" />
     <ClInclude Include="source\DAG2\Dag2Collection.h" />
@@ -157,7 +160,6 @@
     <ClInclude Include="source\DirectXTK12\DirectXHelpers.h" />
     <ClInclude Include="source\DirectXTK12\GraphicsMemory.h" />
     <ClInclude Include="source\DirectXTK12\LinearAllocator.h" />
-    <ClInclude Include="source\DrawSystemD12\Compute\Compute.h" />
     <ClInclude Include="source\DrawSystemD12\CustomCommandList.h" />
     <ClInclude Include="source\DrawSystemD12\d3dx12.h" />
     <ClInclude Include="source\DrawSystemD12\DeviceResources.h" />
@@ -202,11 +204,25 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
+    <FxCompile Include="source\Shader\ComputeShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.1</ShaderModel>
+    </FxCompile>
     <FxCompile Include="source\Shader\PresentPixelShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="source\Shader\PresentVertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="source\Shader\TexturePixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="source\Shader\TextureVertexShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>

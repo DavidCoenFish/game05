@@ -4,6 +4,7 @@
 #include "IApplication.h"
 #include "ApplicationEmptyScene.h"
 #include "ApplicationTriangle.h"
+#include "ApplicationTexture.h"
 
 
 
@@ -21,8 +22,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 		const int defaultHeight
 		)
 	{
-		pApplication = ApplicationEmptyScene::Factory(hWnd, bFullScreen, defaultWidth, defaultHeight);
+		//pApplication = ApplicationEmptyScene::Factory(hWnd, bFullScreen, defaultWidth, defaultHeight);
 		//pApplication = ApplicationTriangle::Factory(hWnd, bFullScreen, defaultWidth, defaultHeight);
+		pApplication = ApplicationTexture::Factory(hWnd, bFullScreen, defaultWidth, defaultHeight);
 		return pApplication;
 	};
 

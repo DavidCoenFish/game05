@@ -32,7 +32,7 @@ public:
 		const unsigned int options,
 		const RenderTargetFormatData& targetFormatData,
 		const RenderTargetDepthData& targetDepthData
-	);
+		);
 	~DeviceResources();
 	void WaitForGpu() noexcept;
 
@@ -41,13 +41,13 @@ public:
 		const HWND hWnd,
 		int& out_width,
 		int& out_height
-	);
+		);
 	const int GetBackBufferIndex() const;
 	DirectX::GraphicsResource AllocateUpload(const std::size_t size, void* const pDataOrNullptr, size_t alignment = 16);
 
 	void Prepare(
 		ID3D12GraphicsCommandList*& pCommandList
-	);
+		);
 	//void Clear();
 	const bool Present();
 	IRenderTarget* GetRenderTargetBackBuffer();
@@ -55,7 +55,9 @@ public:
 	ID3D12Device2* const GetD3dDevice();
 	//ID3D12CommandQueue* const GetCommandQueue();
 
-	ID3D12GraphicsCommandList* GetCustomCommandList();
+	ID3D12GraphicsCommandList* GetCustomCommandList(
+		ID3D12PipelineState* const pPipelineStateObjectOrNull
+		);
 	void CustomCommandListFinish(ID3D12GraphicsCommandList* pCommandList);
 
 	//return true if size changed

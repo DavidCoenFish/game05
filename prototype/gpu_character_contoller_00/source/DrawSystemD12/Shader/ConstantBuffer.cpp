@@ -75,12 +75,11 @@ void ConstantBuffer::Activate(
 	pCommandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
 	if (true == computeShader)
 	{
-		//pCommandList->SetComputeRootDescriptorTable(rootParamIndex, m_pHeapWrapperItem->GetGPUHandle() );
-		pCommandList->SetComputeRootConstantBufferView(rootParamIndex, m_pHeapWrapperItem->GetGPUAddress() );
+		pCommandList->SetComputeRootDescriptorTable(rootParamIndex, m_pHeapWrapperItem->GetGPUHandle() );
+		//pCommandList->SetComputeRootConstantBufferView(rootParamIndex, m_pHeapWrapperItem->GetGPUAddress() );
 	}
 	else
 	{
-		//pCommandList->SetGraphicsRootDescriptorTable(rootParamIndex, m_pHeapWrapperItem->GetGPUHandle() );
 		pCommandList->SetGraphicsRootDescriptorTable(rootParamIndex, m_pHeapWrapperItem->GetGPUHandle() );
 	}
 

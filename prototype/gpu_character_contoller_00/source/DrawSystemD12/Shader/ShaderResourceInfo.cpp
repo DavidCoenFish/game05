@@ -86,6 +86,7 @@ ShaderResourceInfo::ShaderResourceInfo(
 void ShaderResourceInfo::Activate( 
 	ID3D12GraphicsCommandList* const pCommandList,
 	const int rootParamIndex,
+	const int frameIndex,
 	const bool computeShader
 	)
 {
@@ -97,14 +98,14 @@ void ShaderResourceInfo::Activate(
 		{
 			pCommandList->SetComputeRootDescriptorTable(
 				rootParamIndex, 
-				m_pShaderResourceViewHandle->GetGPUHandle()
+				m_pShaderResourceViewHandle->GetGPUHandleFrame(frameIndex)
 				);
 		}
 		else
 		{
 			pCommandList->SetGraphicsRootDescriptorTable(
 				rootParamIndex, 
-				m_pShaderResourceViewHandle->GetGPUHandle()
+				m_pShaderResourceViewHandle->GetGPUHandleFrame(frameIndex)
 				);
 		}
 	}

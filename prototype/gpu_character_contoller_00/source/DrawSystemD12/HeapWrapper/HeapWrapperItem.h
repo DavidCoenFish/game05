@@ -20,8 +20,12 @@ public:
 
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandle();
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandleFrame(const int frameIndex);
+
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUHandle();
-	D3D12_GPU_VIRTUAL_ADDRESS GetGPUAddress();
+	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUHandleFrame(const int frameIndex);
+
+	//D3D12_GPU_VIRTUAL_ADDRESS GetGPUAddress();
+
 	ID3D12DescriptorHeap* const GetHeap();
 	const int GetLength() const { return m_length; };
 
