@@ -71,7 +71,7 @@ private:
 
    std::vector< std::shared_ptr< ConstantBuffer > > m_arrayConstantBuffer;
    Microsoft::WRL::ComPtr<ID3D12RootSignature> m_rootSignature;
-   Microsoft::WRL::ComPtr<ID3D12PipelineState> m_pipelineState;
+   Microsoft::WRL::ComPtr<ID3D12PipelineState> m_pipelineStateObject;
 
    std::string m_debugName;
 };

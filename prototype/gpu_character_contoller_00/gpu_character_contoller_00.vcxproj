@@ -103,6 +103,7 @@
     <ClCompile Include="source\DirectXTK12\DirectXHelpers.cpp" />
     <ClCompile Include="source\DirectXTK12\GraphicsMemory.cpp" />
     <ClCompile Include="source\DirectXTK12\LinearAllocator.cpp" />
+    <ClCompile Include="source\DrawSystemD12\Compute\Compute.cpp" />
     <ClCompile Include="source\DrawSystemD12\CustomCommandList.cpp" />
     <ClCompile Include="source\DrawSystemD12\DeviceResources.cpp" />
     <ClCompile Include="source\DrawSystemD12\DrawSystem.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="source\DirectXTK12\DirectXHelpers.h" />
     <ClInclude Include="source\DirectXTK12\GraphicsMemory.h" />
     <ClInclude Include="source\DirectXTK12\LinearAllocator.h" />
+    <ClInclude Include="source\DrawSystemD12\Compute\Compute.h" />
     <ClInclude Include="source\DrawSystemD12\CustomCommandList.h" />
     <ClInclude Include="source\DrawSystemD12\d3dx12.h" />
     <ClInclude Include="source\DrawSystemD12\DeviceResources.h" />
