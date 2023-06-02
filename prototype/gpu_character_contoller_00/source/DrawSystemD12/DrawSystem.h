@@ -90,7 +90,9 @@ public:
 		ID3D12GraphicsCommandList* const pCommandList,
 		const std::shared_ptr< HeapWrapperItem >& pHeapWrapperItem,
 		const D3D12_RESOURCE_DESC& desc, 
-		const D3D12_UNORDERED_ACCESS_VIEW_DESC& unorderedAccessViewDesc
+		const D3D12_UNORDERED_ACCESS_VIEW_DESC& unorderedAccessViewDesc,
+		const std::shared_ptr< HeapWrapperItem >& pShaderViewHeapWrapperOrNull = nullptr,
+		const D3D12_SHADER_RESOURCE_VIEW_DESC& shaderResourceViewDesc = D3D12_SHADER_RESOURCE_VIEW_DESC()
 		);
 
 	std::shared_ptr< RenderTargetTexture > MakeRenderTargetTexture(

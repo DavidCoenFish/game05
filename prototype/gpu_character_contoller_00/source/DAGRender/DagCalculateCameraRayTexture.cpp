@@ -114,7 +114,7 @@ DagCalculateCameraRayTexture::~DagCalculateCameraRayTexture()
 {
 }
 
-struct ConstantBuffer
+struct LocalConstantBuffer
 {
 	float m_fovHorizontalVerticalRadian[2];
 };
@@ -168,7 +168,7 @@ void DagCalculateCameraRayTexture::OnCalculate(
 
 	//render the texture
 	pIRenderTarget->StartRender(pCommandList->GetCommandList());
-	ConstantBuffer& constants = m_pShader->GetConstant<ConstantBuffer>(0);
+	LocalConstantBuffer& constants = m_pShader->GetConstant<LocalConstantBuffer>(0);
 	constants.m_fovHorizontalVerticalRadian[0] = fovhradian;
 	const float fovvradian = fovhradian * ((float)height) / ((float)width);
 	constants.m_fovHorizontalVerticalRadian[1] = fovvradian; 

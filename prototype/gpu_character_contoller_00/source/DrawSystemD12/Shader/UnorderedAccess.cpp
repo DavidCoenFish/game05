@@ -8,51 +8,93 @@
 //#include "DirectXTK12/GraphicsMemory.h"
 
 UnorderedAccess::UnorderedAccess(
-   DrawSystem* const pDrawSystem,
-   const std::shared_ptr< HeapWrapperItem >& pHeapWrapperItem,
-   const D3D12_RESOURCE_DESC& desc, 
-   const D3D12_UNORDERED_ACCESS_VIEW_DESC& unorderedAccessViewDesc
-   )
-   : IResource( pDrawSystem )
-   , m_pHeapWrapperItem(pHeapWrapperItem)
-   , m_desc(desc)
-   , m_unorderedAccessViewDesc(unorderedAccessViewDesc)
+	DrawSystem* const pDrawSystem,
+	const std::shared_ptr< HeapWrapperItem >& pHeapWrapperItem,
+	const D3D12_RESOURCE_DESC& desc, 
+	const D3D12_UNORDERED_ACCESS_VIEW_DESC& unorderedAccessViewDesc,
+	const std::shared_ptr< HeapWrapperItem >& pShaderViewHeapWrapperOrNull,
+	const D3D12_SHADER_RESOURCE_VIEW_DESC& shaderResourceViewDesc
+	)
+	: IResource( pDrawSystem )
+	, m_pHeapWrapperItem(pHeapWrapperItem)
+	, m_desc(desc)
+	, m_unorderedAccessViewDesc(unorderedAccessViewDesc)
+	, m_currentState(D3D12_RESOURCE_STATE_COMMON)
+	, m_pShaderViewHeapWrapperItem(pShaderViewHeapWrapperOrNull)
+	, m_shaderResourceViewDesc(shaderResourceViewDesc)
 {
-   return;
+	return;
 }
 
 void UnorderedAccess::OnDeviceLost()
 {
-   m_pResource.Reset();
+	m_pResource.Reset();
 }
 
 std::shared_ptr< HeapWrapperItem > UnorderedAccess::GetHeapWrapperItem() const
 {
-   return m_pHeapWrapperItem;
+	return m_pHeapWrapperItem;
+}
+
+std::shared_ptr< HeapWrapperItem > UnorderedAccess::GetShaderViewHeapWrapperItem() const
+{
+	return m_pShaderViewHeapWrapperItem;
+}
+
+void UnorderedAccess::OnResourceBarrier(
+	ID3D12GraphicsCommandList* const pCommandList,
+	D3D12_RESOURCE_STATES newState
+	)
+{
+	if (newState == m_currentState)
+	{
+		return;
+	}
+
+	D3D12_RESOURCE_BARRIER barrierDesc = {};
+
+	barrierDesc.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	barrierDesc.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	barrierDesc.Transition.pResource = m_pResource.Get();
+	barrierDesc.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+	barrierDesc.Transition.StateBefore = m_currentState;
+	barrierDesc.Transition.StateAfter = newState;
+
+	pCommandList->ResourceBarrier(1, &barrierDesc);
+	m_currentState = newState;
+
 }
 
 void UnorderedAccess::OnDeviceRestored(
-   ID3D12GraphicsCommandList* const,
-   ID3D12Device2* const pDevice
-   )
+	ID3D12GraphicsCommandList* const,
+	ID3D12Device2* const pDevice
+	)
 {
-   CD3DX12_HEAP_PROPERTIES heapDefault(D3D12_HEAP_TYPE_DEFAULT);
-   pDevice->CreateCommittedResource(
-      &heapDefault,
-      D3D12_HEAP_FLAG_NONE,
-      &m_desc,
-      D3D12_RESOURCE_STATE_COMMON,
-      nullptr,
-      IID_PPV_ARGS(m_pResource.ReleaseAndGetAddressOf())
-      );
+	m_currentState = D3D12_RESOURCE_STATE_COMMON;
 
-   pDevice->CreateUnorderedAccessView( 
-      m_pResource.Get(), 
-      nullptr, 
-      &m_unorderedAccessViewDesc, 
-      m_pHeapWrapperItem->GetCPUHandleFrame(0)
-      );
+	CD3DX12_HEAP_PROPERTIES heapDefault(D3D12_HEAP_TYPE_DEFAULT);
+	pDevice->CreateCommittedResource(
+		&heapDefault,
+		D3D12_HEAP_FLAG_NONE,
+		&m_desc,
+		m_currentState,
+		nullptr,
+		IID_PPV_ARGS(m_pResource.ReleaseAndGetAddressOf())
+		);
 
-   return;
+	pDevice->CreateUnorderedAccessView( 
+		m_pResource.Get(), 
+		nullptr, 
+		&m_unorderedAccessViewDesc, 
+		m_pHeapWrapperItem->GetCPUHandleFrame(0)
+		);
+
+	pDevice->CreateShaderResourceView(
+		m_pResource.Get(), 
+		nullptr, //&m_shaderResourceViewDesc,
+		m_pShaderViewHeapWrapperItem->GetCPUHandleFrame(0)
+		);
+
+	return;
 }
 

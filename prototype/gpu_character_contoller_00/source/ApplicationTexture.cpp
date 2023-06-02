@@ -77,7 +77,7 @@ ApplicationTexture::ApplicationTexture(
 			DXGI_SAMPLE_DESC{ 1, 0 }, //DXGI_SAMPLE_DESC SampleDesc;
 			D3D12_TEXTURE_LAYOUT_UNKNOWN, //D3D12_TEXTURE_LAYOUT Layout;
 			D3D12_RESOURCE_FLAG_NONE //D3D12_RESOURCE_FLAGS Flags;
-		};
+			};
 		// Describe and create a SRV for the texture.
 		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 		srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
@@ -87,38 +87,44 @@ ApplicationTexture::ApplicationTexture(
 		std::vector<uint8_t> data;
 		for (int y = 0; y < 256; ++y)
 		{
-		for (int x = 0; x < 256; ++x)
-		{
-			uint8_t red = (uint8_t)x;
-			uint8_t green = (uint8_t)y;
-			uint8_t blue = (uint8_t)((0 != (y & 0x10)) == (0 != (x & 0x10)) ? 255 : 0);
-			uint8_t alpha = (uint8_t)255;
-			data.push_back(red);
-			data.push_back(green);
-			data.push_back(blue);
-			data.push_back(alpha);
-		}
+			for (int x = 0; x < 256; ++x)
+			{
+				uint8_t red = (uint8_t)x;
+				uint8_t green = (uint8_t)y;
+				uint8_t blue = (uint8_t)((0 != (y & 0x10)) == (0 != (x & 0x10)) ? 255 : 0);
+				uint8_t alpha = (uint8_t)255;
+				data.push_back(red);
+				data.push_back(green);
+				data.push_back(blue);
+				data.push_back(alpha);
+			}
 		}
 
 		m_pTexture = m_pDrawSystem->MakeShaderResource(
-		pCommandList->GetCommandList(),
-		pShaderHeapWrapper,
-		desc,
-		srvDesc,
-		data
-		);
+			pCommandList->GetCommandList(),
+			pShaderHeapWrapper,
+			desc,
+			srvDesc,
+			data
+			);
 	}
 
 
 	{
 		m_pGeometry = m_pDrawSystem->MakeGeometryGeneric(
 			pCommandList->GetCommandList(),
-			D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
+			D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP,
 			inputElementDescArray,
+			//std::vector<float>({
+			//	0.0f,0.5f, 1.0f, 0.5f, 
+			//	0.5f,-0.5f, 0.0f, 1.0f,
+			//	-0.5f,-0.5f, 0.0f, 0.0f
+			//	}),
 			std::vector<float>({
-				0.0f,0.5f, 1.0f, 0.5f, 
-				0.5f,-0.5f, 0.0f, 1.0f,
-				-0.5f,-0.5f, 0.0f, 0.0f
+				-1.0f,1.0f, 0.0f, 1.0f, 
+				1.0f,1.0f, 1.0f, 1.0f,
+				-1.0f,-1.0f, 0.0f, 0.0f,
+				1.0f,-1.0f, 1.0f, 0.0f
 				}),
 			4);
 	}

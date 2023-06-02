@@ -71,3 +71,7 @@ void DrawSystemFrame::Dispatch(uint32_t numGroupsX, uint32_t numGroupsY, uint32_
    m_pCommandList->Dispatch(numGroupsX, numGroupsY, numGroupsZ);
 }
 
+void DrawSystemFrame::ResourceBarrier(IResource* const pResource, D3D12_RESOURCE_STATES afterState)
+{
+	pResource->OnResourceBarrier(m_pCommandList, afterState);
+}

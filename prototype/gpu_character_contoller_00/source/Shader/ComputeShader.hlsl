@@ -17,15 +17,16 @@
 //    )\
 //]
 
-RWTexture2D<float4> OutputTexture : register(u0);
-Texture2D ColorMapTexture : register(t0);
-SamplerState ColorMapSampler : register(s0);
-
-cbuffer cb0
+cbuffer Constants : register(b0)
 {
 	float4 g_MaxThreadIter : packoffset(c0);
-	float4 g_Window : packoffset(c1);
-}
+	float4 g_Window : packoffset(c1); //4.0f, 2.25f, -0.65f, 0.0f
+};
+
+RWTexture2D<float4> OutputTexture : register(u0);
+
+//Texture2D ColorMapTexture : register(t0);
+//SamplerState ColorMapSampler : register(s0);
 
 [numthreads(8, 8, 1)]
 //RS
@@ -50,6 +51,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
 
 	float col = length(sq);
 	float4 SampledColor = float4(col, col, col, 0);
+	SampledColor = float4(0, 1.0, 0, 1.0);
 
 	OutputTexture[DTid.xy] = SampledColor;
 }
