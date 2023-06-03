@@ -35,7 +35,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
 	float2 WindowLocal = ((float2)DTid.xy / g_MaxThreadIter.xy) * float2(1, -1) + float2(-0.5f, 0.5f);
 	float2 coord = WindowLocal.xy * g_Window.xy + g_Window.zw;
 
-	uint maxiter = (uint)g_MaxThreadIter.z * 4;
+	uint maxiter = (uint)g_MaxThreadIter.z;
 	uint iter = 0;
 	float2 constant = coord;
 	float2 sq;

@@ -135,6 +135,7 @@
     <ClCompile Include="source\Log.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\pch.cpp" />
+    <ClCompile Include="source\Timer.cpp" />
     <ClCompile Include="source\Utf8.cpp" />
     <ClCompile Include="source\VectorFloat4.cpp" />
     <ClCompile Include="source\WindowHelper.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="source\Log.h" />
     <ClInclude Include="source\main.h" />
     <ClInclude Include="source\pch.h" />
+    <ClInclude Include="source\Timer.h" />
     <ClInclude Include="source\Utf8.h" />
     <ClInclude Include="source\VectorFloat4.h" />
     <ClInclude Include="source\WindowHelper.h" />

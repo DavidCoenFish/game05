@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IApplication.h"
+#include "Timer.h"
 class DrawSystem;
 class Shader;
 class GeometryGeneric;
@@ -49,8 +50,7 @@ private:
 		std::shared_ptr< GeometryGeneric > m_pGeometry;
 	};
 	std::unique_ptr< DrawResources > m_pDrawResources;
-	int m_ThreadGroupX;
-	int m_ThreadGroupY;
-
+	Timer m_timer;
+	float m_timeAccumulation;
 
 };

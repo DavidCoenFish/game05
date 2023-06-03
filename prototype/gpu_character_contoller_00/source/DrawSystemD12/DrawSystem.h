@@ -88,11 +88,9 @@ public:
 
 	std::shared_ptr< UnorderedAccess > MakeUnorderedAccess(
 		ID3D12GraphicsCommandList* const pCommandList,
-		const std::shared_ptr< HeapWrapperItem >& pHeapWrapperItem,
 		const D3D12_RESOURCE_DESC& desc, 
 		const D3D12_UNORDERED_ACCESS_VIEW_DESC& unorderedAccessViewDesc,
-		const std::shared_ptr< HeapWrapperItem >& pShaderViewHeapWrapperOrNull = nullptr,
-		const D3D12_SHADER_RESOURCE_VIEW_DESC& shaderResourceViewDesc = D3D12_SHADER_RESOURCE_VIEW_DESC()
+		const bool makeShaderViewHeapWrapperItem
 		);
 
 	std::shared_ptr< RenderTargetTexture > MakeRenderTargetTexture(

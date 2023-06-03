@@ -18,6 +18,7 @@ namespace
 	const uint32_t s_numShaderThreads = 8;		// make sure to update value in shader if this changes
 	const uint32_t s_texWidth = 1920;
 	const uint32_t s_texHeight = 1080;
+	const float s_aspect = ((float)s_texHeight/(float)s_texWidth);
 
 }
 
@@ -43,6 +44,7 @@ ApplicationCompute::ApplicationCompute(
 	const int defaultHeight
 	)
 	: IApplication(hWnd, bFullScreen, defaultWidth, defaultHeight)
+	, m_timeAccumulation(0.0f)
 {
 	LOG_MESSAGE("ApplicationCompute  ctor %p", this);
 
@@ -55,23 +57,29 @@ ApplicationCompute::ApplicationCompute(
 		);
 
 	m_constantBuffer = ACConstantBuffer({
-		{static_cast<float>(s_texWidth), static_cast<float>(s_texHeight), 10.0f, 0.0f}, 
+		{static_cast<float>(s_texWidth), static_cast<float>(s_texHeight), 40.0f, 0.0f}, 
 		{4.0f, 2.25f, -0.65f, 0.0f}});
+		//{2.0f, 1.125f, -0.65f, 0.0f}});
 
 	auto pCommandList = m_pDrawSystem->CreateCustomCommandList();
 
-	m_ThreadGroupX = s_texWidth / s_numShaderThreads;
-	m_ThreadGroupY = s_texHeight / s_numShaderThreads;
 	m_pDrawResources = std::make_unique<DrawResources>();
 
 	//compute render target (UnorderedAccess)
 	{
-		auto pHeapWrapperItem = m_pDrawSystem->MakeHeapWrapperCbvSrvUav();
-		auto pShaderHeapWrapperItem = m_pDrawSystem->MakeHeapWrapperCbvSrvUav();
 		std::vector< RenderTargetFormatData > targetFormatDataArray;
 		targetFormatDataArray.push_back(RenderTargetFormatData(DXGI_FORMAT_B8G8R8A8_UNORM));
 
-		const D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_R8G8B8A8_UNORM, s_texWidth, s_texHeight, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+		const D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(
+			DXGI_FORMAT_R8G8B8A8_UNORM, 
+			s_texWidth, 
+			s_texHeight, 
+			1, 
+			1, 
+			1, 
+			0, 
+			D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS
+			);
 
 		D3D12_UNORDERED_ACCESS_VIEW_DESC unorderedAccessViewDesc({});
 		unorderedAccessViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -79,18 +87,11 @@ ApplicationCompute::ApplicationCompute(
 		unorderedAccessViewDesc.Texture2D.MipSlice = 0;
 		unorderedAccessViewDesc.Texture2D.PlaneSlice = 0;
 
-		D3D12_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
-		//shaderResourceViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		//shaderResourceViewDesc.
-
-		//D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS
 		m_pDrawResources->m_pComputeOutputTexture = m_pDrawSystem->MakeUnorderedAccess(
 			pCommandList->GetCommandList(),
-			pHeapWrapperItem, //const std::shared_ptr< HeapWrapperItem >& pHeapWrapperItem,
-			desc, //const D3D12_RESOURCE_DESC& desc, 
-			unorderedAccessViewDesc,//const D3D12_UNORDERED_ACCESS_VIEW_DESC& unorderedAccessViewDesc
-			pShaderHeapWrapperItem,
-			shaderResourceViewDesc
+			desc, 
+			unorderedAccessViewDesc,
+			true
 			);
 	}
 
@@ -217,6 +218,17 @@ ApplicationCompute ::~ApplicationCompute ()
 
 void ApplicationCompute ::Update()
 {
+	const float timeDelta = m_timer.GetDeltaSeconds();
+	m_timeAccumulation += timeDelta * 0.25f;
+	{
+		const float value = cos(m_timeAccumulation);
+		const float tempWidth = 2.01f + (2.0f * value);
+		const float tempHeight = tempWidth * s_aspect;
+		m_constantBuffer.m_Window[0] = tempWidth;
+		m_constantBuffer.m_Window[1] = tempHeight;
+		m_constantBuffer.m_Window[3] = -0.25f + (value * 0.25f);
+	}
+
 	BaseType::Update();
 	if (m_pDrawSystem)
 	{
@@ -231,11 +243,17 @@ void ApplicationCompute ::Update()
 
 				pFrame->SetShader(pShader);
 			}
-			pFrame->Dispatch(m_ThreadGroupX, m_ThreadGroupY, 1);
+
+			const int threadGroupX = s_texWidth / s_numShaderThreads;
+			const int threadGroupY = s_texHeight / s_numShaderThreads;
+
+			pFrame->Dispatch(threadGroupX, threadGroupY, 1);
 		}
+
 		pFrame->SetRenderTarget(m_pDrawSystem->GetRenderTargetBackBuffer());
 		{
 			pFrame->ResourceBarrier(m_pDrawResources->m_pComputeOutputTexture.get(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+			//pFrame->GenerateMips(m_pDrawResources->m_pComputeOutputTexture->GetShaderViewHeapWrapperItem());
 			auto pShader = m_pDrawResources->m_pPresentShader.get();
 			if (pShader)
 			{

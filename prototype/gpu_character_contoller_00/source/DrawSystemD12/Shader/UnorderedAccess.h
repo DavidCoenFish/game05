@@ -13,8 +13,7 @@ public:
 		const D3D12_RESOURCE_DESC& desc, 
 		const D3D12_UNORDERED_ACCESS_VIEW_DESC& unorderedAccessViewDesc,
 
-		const std::shared_ptr< HeapWrapperItem >& pShaderViewHeapWrapperOrNull = nullptr,
-		const D3D12_SHADER_RESOURCE_VIEW_DESC& shaderResourceViewDesc = D3D12_SHADER_RESOURCE_VIEW_DESC()
+		const std::shared_ptr< HeapWrapperItem >& pShaderViewHeapWrapperOrNull = nullptr
 		);
 
 	std::shared_ptr< HeapWrapperItem > GetHeapWrapperItem() const;
@@ -39,6 +38,5 @@ private:
 	D3D12_RESOURCE_STATES m_currentState;
 
 	std::shared_ptr< HeapWrapperItem > m_pShaderViewHeapWrapperItem;
-	D3D12_SHADER_RESOURCE_VIEW_DESC m_shaderResourceViewDesc;
 
 };

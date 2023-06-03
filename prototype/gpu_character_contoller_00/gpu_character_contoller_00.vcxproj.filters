@@ -205,6 +205,9 @@
     <ClCompile Include="source\ApplicationCompute.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="source\Timer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\pch.h">
@@ -367,6 +370,9 @@
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="source\ApplicationCompute.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Timer.h">
       <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>

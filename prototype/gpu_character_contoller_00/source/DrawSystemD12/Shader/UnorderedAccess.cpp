@@ -12,8 +12,7 @@ UnorderedAccess::UnorderedAccess(
 	const std::shared_ptr< HeapWrapperItem >& pHeapWrapperItem,
 	const D3D12_RESOURCE_DESC& desc, 
 	const D3D12_UNORDERED_ACCESS_VIEW_DESC& unorderedAccessViewDesc,
-	const std::shared_ptr< HeapWrapperItem >& pShaderViewHeapWrapperOrNull,
-	const D3D12_SHADER_RESOURCE_VIEW_DESC& shaderResourceViewDesc
+	const std::shared_ptr< HeapWrapperItem >& pShaderViewHeapWrapperOrNull
 	)
 	: IResource( pDrawSystem )
 	, m_pHeapWrapperItem(pHeapWrapperItem)
@@ -21,7 +20,6 @@ UnorderedAccess::UnorderedAccess(
 	, m_unorderedAccessViewDesc(unorderedAccessViewDesc)
 	, m_currentState(D3D12_RESOURCE_STATE_COMMON)
 	, m_pShaderViewHeapWrapperItem(pShaderViewHeapWrapperOrNull)
-	, m_shaderResourceViewDesc(shaderResourceViewDesc)
 {
 	return;
 }
@@ -91,7 +89,7 @@ void UnorderedAccess::OnDeviceRestored(
 
 	pDevice->CreateShaderResourceView(
 		m_pResource.Get(), 
-		nullptr, //&m_shaderResourceViewDesc,
+		nullptr,
 		m_pShaderViewHeapWrapperItem->GetCPUHandleFrame(0)
 		);
 

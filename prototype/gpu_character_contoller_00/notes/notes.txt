@@ -6,6 +6,7 @@ axis 2 [reach up/climb/jump, crounch/descend, turn left, turn right]
 
 x	application setup
 x	d3dx12 draw
+x	compute shader
 	camera texture and empty scene
 	sphere represetnting character controller 
 	input
