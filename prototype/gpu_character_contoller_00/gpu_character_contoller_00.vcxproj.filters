@@ -157,7 +157,7 @@
     <ClCompile Include="source\FileSystem.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="source\ApplicationEmptyScene.cpp">
+    <ClCompile Include="source\ApplicationDAG.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="source\DAG2\Dag2NodeVariable.cpp">
@@ -206,6 +206,9 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="source\Timer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ApplicationWorldGrid.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -321,7 +324,7 @@
     <ClInclude Include="source\FileSystem.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="source\ApplicationEmptyScene.h">
+    <ClInclude Include="source\ApplicationDAG.h">
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="source\DAG2\Dag2NodeVariable.h">
@@ -373,6 +376,9 @@
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="source\Timer.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ApplicationWorldGrid.h">
       <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>

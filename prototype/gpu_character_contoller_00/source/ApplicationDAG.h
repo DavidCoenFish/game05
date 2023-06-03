@@ -6,7 +6,7 @@ class Dag2Collection;
 class Dag2NodeVariable;
 class iDag2Node;
 
-class ApplicationEmptyScene : public IApplication
+class ApplicationDAG : public IApplication
 {
    typedef IApplication BaseType;
 public:
@@ -17,13 +17,13 @@ public:
 		const int defaultHeight
 		);
 
-   ApplicationEmptyScene (
+   ApplicationDAG (
 		const HWND hWnd, 
 		const bool bFullScreen,
 		const int defaultWidth,
 		const int defaultHeight
 		);
-   virtual ~ApplicationEmptyScene ();
+   virtual ~ApplicationDAG ();
 
 private:
 	virtual void Update() override;

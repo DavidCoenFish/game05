@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "ApplicationEmptyScene.h"
+#include "ApplicationDAG.h"
 #include "Log.h"
 #include "FileSystem.h"
 #include "DrawSystemD12/DrawSystem.h"
@@ -20,14 +20,14 @@ constexpr std::string_view s_dagNodeFovWidthRadian = "FovWidthRadian";
 constexpr std::string_view s_dagNodeCameraRenderTarget = "CameraRenderTarget";
 constexpr std::string_view s_dagNodePersent = "Persent";
 
-IApplication* const ApplicationEmptyScene::Factory(
+IApplication* const ApplicationDAG::Factory(
 	const HWND hWnd, 
 	const bool bFullScreen,
 	const int defaultWidth,
 	const int defaultHeight
 	)
 {
-   return new ApplicationEmptyScene(
+   return new ApplicationDAG(
 		hWnd,
 		bFullScreen,
 		defaultWidth,
@@ -35,7 +35,7 @@ IApplication* const ApplicationEmptyScene::Factory(
 	   );
 }
 
-ApplicationEmptyScene::ApplicationEmptyScene(
+ApplicationDAG::ApplicationDAG(
 	const HWND hWnd, 
 	const bool bFullScreen,
 	const int defaultWidth,
@@ -43,7 +43,7 @@ ApplicationEmptyScene::ApplicationEmptyScene(
 	)
    : IApplication(hWnd, bFullScreen, defaultWidth, defaultHeight)
 {
-	LOG_MESSAGE("ApplicationEmptyScene  ctor %p", this);
+	LOG_MESSAGE("ApplicationDAG  ctor %p", this);
 
 	m_pDrawSystem = std::make_unique<DrawSystem>(hWnd);
 	const int width = m_pDrawSystem->GetRenderTargetBackBuffer()->GetWidth();
@@ -69,7 +69,7 @@ ApplicationEmptyScene::ApplicationEmptyScene(
 	m_pDagCollection->AddNode(std::string(s_dagNodePersent), m_pDagPresent);
 }
 
-ApplicationEmptyScene ::~ApplicationEmptyScene ()
+ApplicationDAG ::~ApplicationDAG ()
 {
 	if (m_pDrawSystem)
 	{
@@ -85,10 +85,10 @@ ApplicationEmptyScene ::~ApplicationEmptyScene ()
 
 	m_pDrawSystem.reset();
 
-	LOG_MESSAGE("ApplicationEmptyScene  dtor %p", this);
+	LOG_MESSAGE("ApplicationDAG  dtor %p", this);
 }
 
-void ApplicationEmptyScene ::Update()
+void ApplicationDAG ::Update()
 {
 	BaseType::Update();
 	if (nullptr != m_pDagPresent)
@@ -98,7 +98,7 @@ void ApplicationEmptyScene ::Update()
 	}
 }
 
-void ApplicationEmptyScene ::OnWindowSizeChanged(const int width, const int height)
+void ApplicationDAG ::OnWindowSizeChanged(const int width, const int height)
 {
 	BaseType::OnWindowSizeChanged(width, height);
 	if (m_pDrawSystem)
@@ -118,7 +118,7 @@ void ApplicationEmptyScene ::OnWindowSizeChanged(const int width, const int heig
 	return;
 }
 
-void ApplicationEmptyScene::OnDestroy(const int exitCode)
+void ApplicationDAG::OnDestroy(const int exitCode)
 {
 	PostQuitMessage(exitCode);
 }

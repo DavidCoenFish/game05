@@ -88,9 +88,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\ApplicationCompute.cpp" />
-    <ClCompile Include="source\ApplicationEmptyScene.cpp" />
+    <ClCompile Include="source\ApplicationDAG.cpp" />
     <ClCompile Include="source\ApplicationTexture.cpp" />
     <ClCompile Include="source\ApplicationTriangle.cpp" />
+    <ClCompile Include="source\ApplicationWorldGrid.cpp" />
     <ClCompile Include="source\DAG2\Dag2.cpp" />
     <ClCompile Include="source\DAG2\Dag2Collection.cpp" />
     <ClCompile Include="source\DAG2\Dag2NodeCalculate.cpp" />
@@ -142,9 +143,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\ApplicationCompute.h" />
-    <ClInclude Include="source\ApplicationEmptyScene.h" />
+    <ClInclude Include="source\ApplicationDAG.h" />
     <ClInclude Include="source\ApplicationTexture.h" />
     <ClInclude Include="source\ApplicationTriangle.h" />
+    <ClInclude Include="source\ApplicationWorldGrid.h" />
     <ClInclude Include="source\DAG2\Dag2.h" />
     <ClInclude Include="source\DAG2\Dag2Collection.h" />
     <ClInclude Include="source\DAG2\Dag2NodeCalculate.h" />

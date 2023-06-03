@@ -2,7 +2,7 @@
 #include "main.h"
 #include "WindowHelper.h"
 #include "IApplication.h"
-#include "ApplicationEmptyScene.h"
+#include "ApplicationDAG.h"
 #include "ApplicationTriangle.h"
 #include "ApplicationTexture.h"
 #include "ApplicationCompute.h"
@@ -23,7 +23,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 		const int defaultHeight
 		)
 	{
-		//pApplication = ApplicationEmptyScene::Factory(hWnd, bFullScreen, defaultWidth, defaultHeight);
+		//pApplication = ApplicationDAG::Factory(hWnd, bFullScreen, defaultWidth, defaultHeight);
 		//pApplication = ApplicationTriangle::Factory(hWnd, bFullScreen, defaultWidth, defaultHeight);
 		//pApplication = ApplicationTexture::Factory(hWnd, bFullScreen, defaultWidth, defaultHeight);
 		pApplication = ApplicationCompute::Factory(hWnd, bFullScreen, defaultWidth, defaultHeight);
