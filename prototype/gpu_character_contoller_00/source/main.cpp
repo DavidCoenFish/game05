@@ -25,8 +25,8 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	{
 		//pApplication = ApplicationEmptyScene::Factory(hWnd, bFullScreen, defaultWidth, defaultHeight);
 		//pApplication = ApplicationTriangle::Factory(hWnd, bFullScreen, defaultWidth, defaultHeight);
-		pApplication = ApplicationTexture::Factory(hWnd, bFullScreen, defaultWidth, defaultHeight);
-		//pApplication = ApplicationCompute::Factory(hWnd, bFullScreen, defaultWidth, defaultHeight);
+		//pApplication = ApplicationTexture::Factory(hWnd, bFullScreen, defaultWidth, defaultHeight);
+		pApplication = ApplicationCompute::Factory(hWnd, bFullScreen, defaultWidth, defaultHeight);
 		return pApplication;
 	};
 

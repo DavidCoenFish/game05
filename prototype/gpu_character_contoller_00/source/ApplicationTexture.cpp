@@ -64,6 +64,7 @@ ApplicationTexture::ApplicationTexture(
 		});
 
 	auto pCommandList = m_pDrawSystem->CreateCustomCommandList();
+	//texture
 	{
 		auto pShaderHeapWrapper = m_pDrawSystem->MakeHeapWrapperCbvSrvUav(m_pDrawSystem->GetBackBufferCount());
 		D3D12_RESOURCE_DESC desc = {
@@ -73,7 +74,7 @@ ApplicationTexture::ApplicationTexture(
 			256, //UINT Height;
 			1, //UINT16 DepthOrArraySize;
 			1, //UINT16 MipLevels;
-			DXGI_FORMAT_B8G8R8A8_UNORM, //DXGI_FORMAT Format;
+			DXGI_FORMAT_R8G8B8A8_UNORM, //DXGI_FORMAT_B8G8R8A8_UNORM, //DXGI_FORMAT Format;
 			DXGI_SAMPLE_DESC{ 1, 0 }, //DXGI_SAMPLE_DESC SampleDesc;
 			D3D12_TEXTURE_LAYOUT_UNKNOWN, //D3D12_TEXTURE_LAYOUT Layout;
 			D3D12_RESOURCE_FLAG_NONE //D3D12_RESOURCE_FLAGS Flags;
@@ -109,7 +110,14 @@ ApplicationTexture::ApplicationTexture(
 			);
 	}
 
+	//screen space geometry (-1 ... +1)
+	//texture (0 ... +1)
+	//		+y
+	//		|
+	//	----+---- +x
+	//		|
 
+	//geometry
 	{
 		m_pGeometry = m_pDrawSystem->MakeGeometryGeneric(
 			pCommandList->GetCommandList(),
@@ -129,7 +137,7 @@ ApplicationTexture::ApplicationTexture(
 			4);
 	}
 
-	
+	//shader
 	{
 		auto pVertexShaderData = FileSystem::SyncReadFile("TextureVertexShader.cso");
 		auto pPixelShaderData = FileSystem::SyncReadFile("TexturePixelShader.cso");

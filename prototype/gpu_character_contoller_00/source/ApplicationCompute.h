@@ -39,13 +39,18 @@ private:
 	};
 
 	ACConstantBuffer m_constantBuffer;
-
 	std::unique_ptr< DrawSystem > m_pDrawSystem;
 
-	std::shared_ptr< Shader > m_pComputeShader;
+	struct DrawResources
+	{
+		std::shared_ptr< Shader > m_pComputeShader;
+		std::shared_ptr< UnorderedAccess > m_pComputeOutputTexture;
+		std::shared_ptr< Shader > m_pPresentShader;
+		std::shared_ptr< GeometryGeneric > m_pGeometry;
+	};
+	std::unique_ptr< DrawResources > m_pDrawResources;
+	int m_ThreadGroupX;
+	int m_ThreadGroupY;
 
-	std::shared_ptr< UnorderedAccess > m_pComputeOutputTexture;
-	std::shared_ptr< Shader > m_pPresentShader;
-	std::shared_ptr< GeometryGeneric > m_pGeometry;
 
 };

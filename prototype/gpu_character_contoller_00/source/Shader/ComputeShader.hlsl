@@ -51,7 +51,10 @@ void main(uint3 DTid : SV_DispatchThreadID)
 
 	float col = length(sq);
 	float4 SampledColor = float4(col, col, col, 0);
-	SampledColor = float4(0, 1.0, 0, 1.0);
+	//SampledColor = float4(0, 1.0, 0, 1.0);
+	//float checker = ((0 != (DTid.y & 0x10)) == (0 != (DTid.x & 0x10)) ? 1.0 : 0.0);
+
+	//SampledColor = float4(checker, checker, checker, 1.0);
 
 	OutputTexture[DTid.xy] = SampledColor;
 }

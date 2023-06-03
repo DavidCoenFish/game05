@@ -13,6 +13,14 @@
 #include "DrawSystemD12/DrawSystemFrame.h"
 #include "DrawSystemD12/CustomCommandList.h"
 
+namespace
+{
+	const uint32_t s_numShaderThreads = 8;		// make sure to update value in shader if this changes
+	const uint32_t s_texWidth = 1920;
+	const uint32_t s_texHeight = 1080;
+
+}
+
 IApplication* const ApplicationCompute::Factory(
 	const HWND hWnd, 
 	const bool bFullScreen,
@@ -47,11 +55,14 @@ ApplicationCompute::ApplicationCompute(
 		);
 
 	m_constantBuffer = ACConstantBuffer({
-		{static_cast<float>(defaultWidth), static_cast<float>(defaultHeight), 10.0f, 0.0f}, 
+		{static_cast<float>(s_texWidth), static_cast<float>(s_texHeight), 10.0f, 0.0f}, 
 		{4.0f, 2.25f, -0.65f, 0.0f}});
 
 	auto pCommandList = m_pDrawSystem->CreateCustomCommandList();
 
+	m_ThreadGroupX = s_texWidth / s_numShaderThreads;
+	m_ThreadGroupY = s_texHeight / s_numShaderThreads;
+	m_pDrawResources = std::make_unique<DrawResources>();
 
 	//compute render target (UnorderedAccess)
 	{
@@ -60,7 +71,7 @@ ApplicationCompute::ApplicationCompute(
 		std::vector< RenderTargetFormatData > targetFormatDataArray;
 		targetFormatDataArray.push_back(RenderTargetFormatData(DXGI_FORMAT_B8G8R8A8_UNORM));
 
-		const D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_R8G8B8A8_UNORM, 1920, 1080, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+		const D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_R8G8B8A8_UNORM, s_texWidth, s_texHeight, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 
 		D3D12_UNORDERED_ACCESS_VIEW_DESC unorderedAccessViewDesc({});
 		unorderedAccessViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -73,7 +84,7 @@ ApplicationCompute::ApplicationCompute(
 		//shaderResourceViewDesc.
 
 		//D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS
-		m_pComputeOutputTexture = m_pDrawSystem->MakeUnorderedAccess(
+		m_pDrawResources->m_pComputeOutputTexture = m_pDrawSystem->MakeUnorderedAccess(
 			pCommandList->GetCommandList(),
 			pHeapWrapperItem, //const std::shared_ptr< HeapWrapperItem >& pHeapWrapperItem,
 			desc, //const D3D12_RESOURCE_DESC& desc, 
@@ -96,10 +107,10 @@ ApplicationCompute::ApplicationCompute(
 			
 		std::vector< std::shared_ptr< UnorderedAccessInfo > > arrayUnorderedAccessInfo;
 		arrayUnorderedAccessInfo.push_back( std::make_shared< UnorderedAccessInfo>(
-			m_pComputeOutputTexture->GetHeapWrapperItem()
+			m_pDrawResources->m_pComputeOutputTexture->GetHeapWrapperItem()
 			));
 
-		m_pComputeShader = m_pDrawSystem->MakeShader(
+		m_pDrawResources->m_pComputeShader = m_pDrawSystem->MakeShader(
 			pCommandList->GetCommandList(),
 			computePipelineStateData,
 			nullptr,
@@ -135,21 +146,24 @@ ApplicationCompute::ApplicationCompute(
 
 	// Geometry
 	{
-		m_pGeometry = m_pDrawSystem->MakeGeometryGeneric(
+		m_pDrawResources->m_pGeometry = m_pDrawSystem->MakeGeometryGeneric(
 			pCommandList->GetCommandList(),
 			D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP,
 			inputElementDescArray,
-			//std::vector<float>({
-			//	0.0f,0.5f, 1.0f, 0.5f, 
-			//	0.5f,-0.5f, 0.0f, 1.0f,
-			//	-0.5f,-0.5f, 0.0f, 0.0f
-			//	}),
+#if 0
+			std::vector<float>({
+				0.0f,0.5f, 1.0f, 0.5f, 
+				0.5f,-0.5f, 0.0f, 1.0f,
+				-0.5f,-0.5f, 0.0f, 0.0f
+				}),
+#else
 			std::vector<float>({
 				-1.0f,1.0f, 0.0f, 1.0f, 
 				1.0f,1.0f, 1.0f, 1.0f,
 				-1.0f,-1.0f, 0.0f, 0.0f,
 				1.0f,-1.0f, 1.0f, 0.0f
 				}),
+#endif
 			4);
 	}
 
@@ -161,7 +175,11 @@ ApplicationCompute::ApplicationCompute(
 		renderTargetFormat.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
 
 		std::vector< std::shared_ptr< ShaderResourceInfo > > arrayTexture;
-		arrayTexture.push_back( ShaderResourceInfo::FactorySampler( m_pComputeOutputTexture->GetShaderViewHeapWrapperItem(), D3D12_SHADER_VISIBILITY_PIXEL ) );
+		arrayTexture.push_back( ShaderResourceInfo::FactorySampler( 
+			m_pDrawResources->m_pComputeOutputTexture->GetShaderViewHeapWrapperItem(), 
+			D3D12_SHADER_VISIBILITY_PIXEL,
+			true
+			) );
 
 		ShaderPipelineStateData shaderPipelineStateData(
 			inputElementDescArray,
@@ -173,7 +191,7 @@ ApplicationCompute::ApplicationCompute(
 			CD3DX12_DEPTH_STENCIL_DESC() //CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT)
 			);
 
-		m_pPresentShader = m_pDrawSystem->MakeShader(
+		m_pDrawResources->m_pPresentShader = m_pDrawSystem->MakeShader(
 			pCommandList->GetCommandList(),
 			shaderPipelineStateData,
 			pVertexShaderData,
@@ -192,6 +210,9 @@ ApplicationCompute ::~ApplicationCompute ()
 	}
 
 	LOG_MESSAGE("ApplicationCompute  dtor %p", this);
+
+	m_pDrawResources.reset();
+	m_pDrawSystem.reset();
 }
 
 void ApplicationCompute ::Update()
@@ -201,8 +222,8 @@ void ApplicationCompute ::Update()
 	{
 		auto pFrame = m_pDrawSystem->CreateNewFrame();
 		{
-			pFrame->ResourceBarrier(m_pComputeOutputTexture.get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-			auto pShader = m_pComputeShader.get();
+			pFrame->ResourceBarrier(m_pDrawResources->m_pComputeOutputTexture.get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+			auto pShader = m_pDrawResources->m_pComputeShader.get();
 			if (pShader)
 			{
 				auto& buffer = pShader->GetConstant<ACConstantBuffer>(0);// = m_constantBuffer;
@@ -210,17 +231,17 @@ void ApplicationCompute ::Update()
 
 				pFrame->SetShader(pShader);
 			}
-			pFrame->Dispatch(8, 8, 1);
+			pFrame->Dispatch(m_ThreadGroupX, m_ThreadGroupY, 1);
 		}
 		pFrame->SetRenderTarget(m_pDrawSystem->GetRenderTargetBackBuffer());
 		{
-			pFrame->ResourceBarrier(m_pComputeOutputTexture.get(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-			auto pShader = m_pPresentShader.get();
+			pFrame->ResourceBarrier(m_pDrawResources->m_pComputeOutputTexture.get(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+			auto pShader = m_pDrawResources->m_pPresentShader.get();
 			if (pShader)
 			{
 				pFrame->SetShader(pShader);
 			}
-			auto pGeometry = m_pGeometry.get();
+			auto pGeometry = m_pDrawResources->m_pGeometry.get();
 			if (pGeometry)
 			{
 				pFrame->Draw(pGeometry);
@@ -237,8 +258,8 @@ void ApplicationCompute ::OnWindowSizeChanged(const int width, const int height)
 		m_pDrawSystem->OnResize();
 	}
 
-	m_constantBuffer.m_MaxThreadIter[0] = static_cast<float>(width);
-	m_constantBuffer.m_MaxThreadIter[1] = static_cast<float>(height);
+	//m_constantBuffer.m_MaxThreadIter[0] = static_cast<float>(width);
+	//m_constantBuffer.m_MaxThreadIter[1] = static_cast<float>(height);
 
 	return;
 }
