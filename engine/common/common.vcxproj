@@ -20,15 +20,23 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="source\common\dag_threaded\dag_threaded_calculate.cpp" />
     <ClCompile Include="source\common\dag_threaded\dag_threaded_collection.cpp" />
+    <ClCompile Include="source\common\dag_threaded\dag_threaded_variable.cpp" />
+    <ClCompile Include="source\common\dag_threaded\i_dag_threaded_node.cpp" />
+    <ClCompile Include="source\common\dag_threaded\i_dag_threaded_value.cpp" />
     <ClCompile Include="source\common\platform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\common.h" />
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h" />
+    <ClInclude Include="include\common\dag_threaded\i_dag_threaded_value.h" />
     <ClInclude Include="include\common\macro.h" />
     <ClInclude Include="include\common\platform.h" />
     <ClInclude Include="source\common\common_pch.h" />
+    <ClInclude Include="source\common\dag_threaded\dag_threaded_calculate.h" />
+    <ClInclude Include="source\common\dag_threaded\dag_threaded_variable.h" />
+    <ClInclude Include="source\common\dag_threaded\i_dag_threaded_node.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="props\common.props" />
