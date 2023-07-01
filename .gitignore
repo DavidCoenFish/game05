@@ -9,6 +9,7 @@
 
 # python
 *.spec
+dist/
 
 # Precompiled Headers
 *.gch
