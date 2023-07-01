@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="source\common\dag_threaded\dag_threaded_collection.cpp">
+      <Filter>souce\common\dag_threaded</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\common_pch.cpp">
+      <Filter>souce\common</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\platform.cpp">
+      <Filter>souce\common</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
+      <Filter>include\common\dag_threaded</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\common_pch.h">
+      <Filter>souce\common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\common.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\platform.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\macro.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="souce">
+      <UniqueIdentifier>{3f2b52a2-3564-433a-99d0-aebceeca2003}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common">
+      <UniqueIdentifier>{66487263-154c-46d3-9252-7dd8e90ddccd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\dag_threaded">
+      <UniqueIdentifier>{8675f3fd-2713-475b-87e6-a4996d1f1e15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="props">
+      <UniqueIdentifier>{fd8283c2-2d3b-4ebd-8a47-48da937382ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{f5ac17de-530c-4479-9e0d-3925e5e37f33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common">
+      <UniqueIdentifier>{8df0200f-419f-4049-a30a-59b591fd2d02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\dag_threaded">
+      <UniqueIdentifier>{15396a69-74b3-45ba-889a-b56cf99f64d6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="props\common.props">
+      <Filter>props</Filter>
+    </None>
+  </ItemGroup>
+</Project>

@@ -80,6 +80,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Text Include="..\..\script\hunts_goblins\draft01.txt" />
     <Text Include="notes\notes.txt" />
     <Text Include="notes\physics.txt" />
   </ItemGroup>

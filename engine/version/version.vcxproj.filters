@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="script\script_to_exe.cmd">
+      <Filter>script</Filter>
+    </None>
+    <None Include="Script\build.cmd">
+      <Filter>script</Filter>
+    </None>
+    <None Include="Script\version.py">
+      <Filter>script</Filter>
+    </None>
+    <None Include="props\version.props">
+      <Filter>props</Filter>
+    </None>
+    <None Include=".gitignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="output">
+      <UniqueIdentifier>{4afd1f23-271f-4218-bc1a-6ed3884f00b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="props">
+      <UniqueIdentifier>{2eb776b3-2c1c-4c26-8737-283e650be322}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="script">
+      <UniqueIdentifier>{c932c423-b8a7-4952-9ac9-d106f4210c82}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="output\build_hash.txt">
+      <Filter>output</Filter>
+    </Text>
+    <Text Include="output\build_host.txt">
+      <Filter>output</Filter>
+    </Text>
+    <Text Include="output\build_version.txt">
+      <Filter>output</Filter>
+    </Text>
+    <Text Include="output\build_version_comma.txt">
+      <Filter>output</Filter>
+    </Text>
+    <Text Include="output\build_version_major.txt">
+      <Filter>output</Filter>
+    </Text>
+    <Text Include="output\build_version_minor.txt">
+      <Filter>output</Filter>
+    </Text>
+    <Text Include="output\build_version_patch.txt">
+      <Filter>output</Filter>
+    </Text>
+    <Text Include="output\build_version_store.txt">
+      <Filter>output</Filter>
+    </Text>
+  </ItemGroup>
+</Project>

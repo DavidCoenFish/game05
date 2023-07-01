@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{54d83fb8-d7c0-4db4-ac78-3ebb15ac2a86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="props">
+      <UniqueIdentifier>{ce011f48-e490-4a22-9393-8ed33441e881}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\unit_test_pch.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common_dag_threaded.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\unit_test_pch.h">
+      <Filter>source</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="props\unit_test.props">
+      <Filter>props</Filter>
+    </None>
+  </ItemGroup>
+</Project>

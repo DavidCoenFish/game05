@@ -1,0 +1,14 @@
+{
+  "FileVersion": 2,
+  "Id": "0e7baa08-0101-4ad0-99d7-8341374e48fa",
+  "Items": [
+    {
+      "Id": "b129ad91-e3e7-4747-a368-80cda57703ec",
+      "Command": "C:\\development\\game04 C:\\development\\game04\\support\\s01_d3dx12_engine\\Application02\\TasksTest"
+    },
+    {
+      "Id": "6aaf0536-9d08-4348-b024-6c40baac03f3",
+      "Command": "$(SolutionDir)..\\.. $(SolutionDir)Automatron03\\TasksTest"
+    }
+  ]
+}

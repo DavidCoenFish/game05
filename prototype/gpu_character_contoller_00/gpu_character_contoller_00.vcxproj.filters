@@ -45,6 +45,9 @@
     <Text Include="notes\physics.txt">
       <Filter>notes</Filter>
     </Text>
+    <Text Include="..\..\script\hunts_goblins\draft01.txt">
+      <Filter>notes</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="props\default.props">

@@ -1,0 +1,14 @@
+<Project>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>$(SolutionDir)..\..\build\$(SolutionName)\Automatron03\Debug\bin\</OutputPath>
+    <BaseIntermediateOutputPath>$(SolutionDir)..\..\build\$(SolutionName)\Automatron03\Debug\obj\</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)\</IntermediateOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>$(SolutionDir)..\..\build\$(SolutionName)\Automatron03\Release\bin\</OutputPath>
+    <BaseIntermediateOutputPath>$(SolutionDir)..\..\build\$(SolutionName)\Automatron03\Release\obj\</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)\</IntermediateOutputPath>
+  </PropertyGroup>
+
+</Project>

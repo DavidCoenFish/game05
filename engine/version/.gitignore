@@ -1,0 +1,9 @@
+# version
+build_hash.txt
+build_host.txt
+build_version.txt
+build_version_comma.txt
+build_version_major.txt
+build_version_minor.txt
+build_version_patch.txt
+build_version_store.txt

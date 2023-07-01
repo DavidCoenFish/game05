@@ -1,0 +1,7 @@
+{
+   "Factory": "TaskGitCommit",
+   "Skip": false,
+   "Priority": 0,
+   "Dependency": [],
+   "Git": "git.exe"
+}
