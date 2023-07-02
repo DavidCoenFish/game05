@@ -1,4 +1,4 @@
-﻿namespace Automatron03
+﻿namespace Automatron
 {
    class Task
    {

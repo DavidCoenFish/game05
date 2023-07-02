@@ -1,40 +1,40 @@
-﻿namespace Automatron03
+﻿namespace Automatron
 {
    class Program
    {
-      private static bool DealTask(ITask task, System.Collections.Generic.Dictionary<string, ITask> taskMap)
+      private static bool DealTask(ITask in_task, System.Collections.Generic.Dictionary<string, ITask> in_task_map)
       {
-         if (true == task.HasRun)
+         if (true == in_task.HasRun)
          {
             return true;
          }
-         else if (true == task.Skip)
+         else if (true == in_task.Skip)
          {
-            System.Console.WriteLine(string.Format("Skip task:{0}", task.Name));
-            task.HasRun = true;
+            System.Console.WriteLine(string.Format("Skip task:{0}", in_task.Name));
+            in_task.HasRun = true;
             return true;
          }
 
-         var dependencyTask = new System.Collections.Generic.List<ITask>();
-         foreach (var dependancyName in task.Dependency)
+         var dependency_task = new System.Collections.Generic.List<ITask>();
+         foreach (var dependancy_name in in_task.Dependency)
          {
-            if (false == taskMap.ContainsKey(dependancyName))
+            if (false == in_task_map.ContainsKey(dependancy_name))
             {
-               System.Console.Error.WriteLine(string.Format("Dependancy task:{0} not found for:{1}", dependancyName, task.Name));
+               System.Console.Error.WriteLine(string.Format("Dependancy task:{0} not found for:{1}", dependancy_name, in_task.Name));
                return false;
             }
-            var dependancy = taskMap[dependancyName];
-            dependencyTask.Add(dependancy);
-            if (false == DealTask(dependancy, taskMap))
+            var dependancy = in_task_map[dependancy_name];
+            dependency_task.Add(dependancy);
+            if (false == DealTask(dependancy, in_task_map))
             {
                return false;
             }
          }
 
          System.Console.WriteLine();
-         System.Console.WriteLine(string.Format("Run task:{0}", task.Name));
-         var result = task.Run(dependencyTask);
-         task.HasRun = true;
+         System.Console.WriteLine(string.Format("Run task:{0}", in_task.Name));
+         var result = in_task.Run(dependency_task);
+         in_task.HasRun = true;
          return result;
       }
 
@@ -42,7 +42,7 @@
       {
          if (args.Length < 2)
          {
-            System.Console.WriteLine(string.Format("Usage:{0}   Automatron03 \"root path\" \"abs path to task json\"  [\"commit message\"]", System.Environment.NewLine));
+            System.Console.WriteLine(string.Format("Usage:{0}   Automatron \"root path\" \"abs path to task json\"  [\"commit message\"]", System.Environment.NewLine));
             return -1;
          }
          //var rootPath = args[0];
@@ -87,7 +87,7 @@
       //C:\development\game04\support\s01_d3dx12_engine\Automatron03\TasksTest
       static int Main(string[] args)
       {
-         System.Console.WriteLine("Automatron03 Start:" + System.DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"));
+         System.Console.WriteLine("Automatron Start:" + System.DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"));
          foreach (var arg in args)
          {
             System.Console.WriteLine(arg);
@@ -95,7 +95,7 @@
 
          int result = Run(args);
 
-         System.Console.WriteLine("Automatron03 End:" + System.DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"));
+         System.Console.WriteLine("Automatron End:" + System.DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"));
          return result;
       }
    }

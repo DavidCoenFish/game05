@@ -2,7 +2,7 @@
   "profiles": {
     "Automatron03": {
       "commandName": "Project",
-      "commandLineArgs": "C:\\development\\game04\\support\\s01_d3dx12_engine\\..\\.. C:\\development\\game04\\support\\s01_d3dx12_engine\\Automatron03\\TasksTest"
+      "commandLineArgs": "C:\\development\\game05\\engine\\.. C:\\development\\game05\\engine\\automatron\\tasks_commit_only"
     }
   }
 }

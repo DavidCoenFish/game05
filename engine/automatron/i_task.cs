@@ -1,4 +1,4 @@
-﻿namespace Automatron03
+﻿namespace Automatron
 {
    interface ITask
    {
@@ -25,7 +25,7 @@
       }
 
       //void Run(System.Collections.Generic.Dictionary<string, ITask> taskCollection);
-      bool Run(System.Collections.Generic.List<ITask> taskDependency);
+      bool Run(System.Collections.Generic.List<ITask> in_task_dependency);
       //void Run();
    }
 }

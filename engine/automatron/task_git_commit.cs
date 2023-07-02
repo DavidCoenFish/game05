@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Automatron03
+namespace Automatron
 {
    class TaskGitCommit : ITask
    {
@@ -106,7 +106,7 @@ namespace Automatron03
          return true;
       }
 
-      public bool Run(System.Collections.Generic.List<ITask> taskDependants)
+      public bool Run(System.Collections.Generic.List<ITask> in_task_dependency)
       {
          //git pull <REMOTE> <name-of-branch [master]>
          //git pull origin master
