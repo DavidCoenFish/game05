@@ -1,5 +1,6 @@
 #pragma once
 
+#include "common/dag_threaded/dag_threaded.h"
 #include "common/dag_threaded/i_dag_threaded_node.h"
 
 class IDagThreadedNode;
@@ -8,21 +9,28 @@ class IDagThreadedValue;
 class DagThreadedVariable : public IDagThreadedNode
 {
 public:
-	DagThreadedVariable();
+	DagThreadedVariable(
+		const std::string& in_name,
+		const DagThreaded::DirtyCase in_dirty_case
+		);
 	virtual ~DagThreadedVariable();
 
+	void SetValue(const std::shared_ptr<IDagThreadedValue>& in_value);
+
 private:
-	void SetOutput(IDagThreadedNode* const pNode) override;
-	void RemoveOutput(IDagThreadedNode* const pNode) override;
-	void AddInputStack(IDagThreadedNode* const pNode) override;
-	void RemoveInputStack(IDagThreadedNode* const pNode) override;
-	void SetInputIndex(IDagThreadedNode* const pNode, const int index) override;
+	const std::string& GetName() const override { return _name; }
+	void SetOutput(IDagThreadedNode* const in_node) override;
+	void RemoveOutput(IDagThreadedNode* const in_node) override;
 	std::shared_ptr<IDagThreadedValue> GetValue() override;
 	void MarkDirty() override;
 
 private:
-	//Dag2::DirtyCase m_dirtyCase;
+	//const DagThreadedCollection& _collection;
+	const DagThreaded::DirtyCase _dirty_case;
+	const std::string _name;
 	std::vector< IDagThreadedNode* > _array_output;
+
+	std::mutex _value_mutex;
 	std::shared_ptr< IDagThreadedValue > _value;
 
 };

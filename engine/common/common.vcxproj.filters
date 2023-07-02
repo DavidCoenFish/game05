@@ -22,6 +22,15 @@
     <ClCompile Include="source\common\dag_threaded\dag_threaded_variable.cpp">
       <Filter>souce\common\dag_threaded</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\dag_threaded\dag_threaded_value.cpp">
+      <Filter>souce\common\dag_threaded</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\util\utf8.cpp">
+      <Filter>souce\common\util</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\util\id.cpp">
+      <Filter>souce\common\util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -51,6 +60,21 @@
     <ClInclude Include="include\common\dag_threaded\i_dag_threaded_value.h">
       <Filter>include\common\dag_threaded</Filter>
     </ClInclude>
+    <ClInclude Include="include\common\dag_threaded\dag_threaded.h">
+      <Filter>include\common\dag_threaded</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\dag_threaded\dag_threaded_value.h">
+      <Filter>souce\common\dag_threaded</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\util\id.h">
+      <Filter>souce\common\util</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\util\utf8.h">
+      <Filter>souce\common\util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\dag_threaded\dag_threaded_helper.h">
+      <Filter>include\common\dag_threaded</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="souce">
@@ -73,6 +97,9 @@
     </Filter>
     <Filter Include="include\common\dag_threaded">
       <UniqueIdentifier>{15396a69-74b3-45ba-889a-b56cf99f64d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\util">
+      <UniqueIdentifier>{b4c697ce-4861-4158-a8b0-4fbb4939c1d1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

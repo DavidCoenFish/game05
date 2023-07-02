@@ -8,27 +8,33 @@ class DagThreadedCollection;
 class DagThreadedCalculate : public IDagThreadedNode
 {
 public:
-	typedef std::function< void (
-		const DagThreadedCollection& in_collection,
-		std::shared_ptr< IDagThreadedValue >& in_out_value,
+	typedef std::function< std::shared_ptr< IDagThreadedValue > (
 		const std::vector< std::shared_ptr< IDagThreadedValue > >& in_array_stack, 
 		const std::vector< std::shared_ptr< IDagThreadedValue > >& in_array_indexed
 		) > CalculateFunction;
 
-	DagThreadedCalculate(const DagThreadedCollection& in_out_collection, const CalculateFunction& in_calculate_function);
+	DagThreadedCalculate(
+		//const DagThreadedCollection& in_collection, 
+		const std::string& in_name,
+		const CalculateFunction& in_calculate_function
+		);
 	virtual ~DagThreadedCalculate();
 
+	void AddInputStack(IDagThreadedNode* const pNode);
+	void RemoveInputStack(IDagThreadedNode* const pNode);
+	void SetInputIndex(IDagThreadedNode* const pNode, const int index);
+	void Unlink();
+
 private:
+	const std::string& GetName() const override { return _name; }
 	void SetOutput(IDagThreadedNode* const pNode) override;
 	void RemoveOutput(IDagThreadedNode* const pNode) override;
-	void AddInputStack(IDagThreadedNode* const pNode) override;
-	void RemoveInputStack(IDagThreadedNode* const pNode) override;
-	void SetInputIndex(IDagThreadedNode* const pNode, const int index) override;
 	std::shared_ptr<IDagThreadedValue> GetValue() override;
 	void MarkDirty() override;
 
 private:
-	const DagThreadedCollection& _collection;
+	//const DagThreadedCollection& _collection;
+	const std::string _name;
 	const CalculateFunction _calculate_function;
 	std::vector< IDagThreadedNode* > _array_input_stack;
 	std::vector< IDagThreadedNode* > _array_input_index;
