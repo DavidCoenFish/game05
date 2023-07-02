@@ -5,6 +5,14 @@
     {
       "Id": "6aaf0536-9d08-4348-b024-6c40baac03f3",
       "Command": "$(SolutionDir).. $(SolutionDir)automatron\\tasks_commit_only"
+    },
+    {
+      "Id": "ffd4daeb-c808-46de-a18b-0c067d0166f8",
+      "Command": "$(SolutionDir).. $(SolutionDir)automatron\\tasks_test"
+    },
+    {
+      "Id": "0e7fe368-2c99-4257-977e-c2f71a89a4ce",
+      "Command": "$(SolutionDir).. $(SolutionDir)automatron\\tasks_test_commit"
     }
   ]
 }

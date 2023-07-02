@@ -2,7 +2,7 @@
   "profiles": {
     "Automatron03": {
       "commandName": "Project",
-      "commandLineArgs": "C:\\development\\game05\\engine\\.. C:\\development\\game05\\engine\\automatron\\tasks_commit_only"
+      "commandLineArgs": "C:\\development\\game05\\engine\\.. C:\\development\\game05\\engine\\automatron\\tasks_test_commit"
     }
   }
 }

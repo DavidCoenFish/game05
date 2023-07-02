@@ -1,0 +1,13 @@
+{
+	"Factory": "TaskFileDevenv",
+	"Skip": false,
+	"Priority": 0,
+	"Dependency": [],
+	"DevEnv": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\Common7\\IDE\\devenv.com",
+	"Clean": false,
+	"FilePath": "build\\engine\\unit_test\\x64\\Debug\\output\\unit_test.dll",
+	"Solution": "engine\\engine.sln",
+	"Project": "unit_test",
+	"Configuration": "Debug",
+	"Platform": "x64"
+}
