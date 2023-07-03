@@ -1,7 +1,8 @@
-_ thread safe dag node
+X thread safe dag node
+X autotron
+_ application framework
 _ setup d3dx12 application
- X autotron
- _ application framework
+_ draw d3dx12 triangle
 _ draw line d3dx12 defered renderer
 _ draw sphere d3dx12 defered renderer
 _ draw grid

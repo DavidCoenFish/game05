@@ -1,0 +1,9 @@
+0:Build 0.0.273.0 Oct 31 2022 01:05:53 DESKTOP-LD41L9F DEBUG
+0:CommandLine:
+0: C:\development\game04\build\s01_d3dx12_engine\Application02\x64\Debug\output\Application02.exe
+0: DisplayListGrid
+0:IApplication ctor 000001FB29809B50
+0:ApplicationDisplayList ctor 000001FB29809B50
+0:Direct3D Adapter (0): VID:1002, PID:98E4 - AMD Radeon(TM) R4 Graphics
+0:ApplicationDisplayList dtor 000001FB29809B50
+0:IApplication dtor 000001FB29809B50

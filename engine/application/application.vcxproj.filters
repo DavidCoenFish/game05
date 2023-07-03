@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="props">
+      <UniqueIdentifier>{b8495a78-76c3-4960-9723-1c9713c1c4b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources">
+      <UniqueIdentifier>{a217fd68-01c9-41ae-8acd-36897b45e594}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="script">
+      <UniqueIdentifier>{251025ba-0929-4245-84c8-de481526a6b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{e51b3a04-7e10-40dc-8f83-928a5c99f307}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Script\util_make_host_define.cmd">
+      <Filter>script</Filter>
+    </None>
+    <None Include="Script\util_make_resource.cmd">
+      <Filter>script</Filter>
+    </None>
+    <None Include="Script\util_search_replace.cmd">
+      <Filter>script</Filter>
+    </None>
+    <None Include="Script\prebuild.cmd">
+      <Filter>script</Filter>
+    </None>
+    <None Include="Script\replace_if_different.ps1">
+      <Filter>script</Filter>
+    </None>
+    <None Include="props\application.props">
+      <Filter>props</Filter>
+    </None>
+    <None Include="resources\application.rc.template">
+      <Filter>resources</Filter>
+    </None>
+    <None Include=".gitignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Build.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Main.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\application_pch.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Build.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\resource.h">
+      <Filter>resources</Filter>
+    </ClInclude>
+    <ClInclude Include="source\application_pch.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\host_define.h">
+      <Filter>source</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\cut.ico">
+      <Filter>resources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources\application.rc">
+      <Filter>resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

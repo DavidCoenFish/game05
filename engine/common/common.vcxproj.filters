@@ -28,6 +28,9 @@
     <ClCompile Include="source\common\util\utf8.cpp">
       <Filter>souce\common\util</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\util\command_line.cpp">
+      <Filter>souce\common\util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -67,6 +70,9 @@
       <Filter>include\common\dag_threaded</Filter>
     </ClInclude>
     <ClInclude Include="include\common\util\utf8.h">
+      <Filter>include\common\util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\util\command_line.h">
       <Filter>include\common\util</Filter>
     </ClInclude>
   </ItemGroup>
