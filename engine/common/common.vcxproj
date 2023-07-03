@@ -26,9 +26,16 @@
     <ClCompile Include="source\common\dag_threaded\dag_threaded_variable.cpp" />
     <ClCompile Include="source\common\dag_threaded\i_dag_threaded_node.cpp" />
     <ClCompile Include="source\common\dag_threaded\i_dag_threaded_value.cpp" />
+    <ClCompile Include="source\common\log\i_log_consumer.cpp" />
+    <ClCompile Include="source\common\log\log.cpp" />
+    <ClCompile Include="source\common\log\log_consumer_console.cpp" />
+    <ClCompile Include="source\common\log\log_consumer_output_debug_string.cpp" />
+    <ClCompile Include="source\common\log\log_consumer_write_to_file.cpp" />
+    <ClCompile Include="source\common\log\log_enum.cpp" />
     <ClCompile Include="source\common\platform.cpp" />
     <ClCompile Include="source\common\util\command_line.cpp" />
     <ClCompile Include="source\common\util\utf8.cpp" />
+    <ClCompile Include="source\common\worker\worker_task.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\common.h" />
@@ -36,15 +43,22 @@
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h" />
     <ClInclude Include="include\common\dag_threaded\dag_threaded_helper.h" />
     <ClInclude Include="include\common\dag_threaded\i_dag_threaded_value.h" />
+    <ClInclude Include="include\common\log\log.h" />
+    <ClInclude Include="include\common\log\log_enum.h" />
     <ClInclude Include="include\common\macro.h" />
     <ClInclude Include="include\common\platform.h" />
     <ClInclude Include="include\common\util\command_line.h" />
     <ClInclude Include="include\common\util\utf8.h" />
+    <ClInclude Include="include\common\worker\worker_task.h" />
     <ClInclude Include="source\common\common_pch.h" />
     <ClInclude Include="source\common\dag_threaded\dag_threaded_calculate.h" />
     <ClInclude Include="source\common\dag_threaded\dag_threaded_value.h" />
     <ClInclude Include="source\common\dag_threaded\dag_threaded_variable.h" />
     <ClInclude Include="source\common\dag_threaded\i_dag_threaded_node.h" />
+    <ClInclude Include="source\common\log\i_log_consumer.h" />
+    <ClInclude Include="source\common\log\log_consumer_console.h" />
+    <ClInclude Include="source\common\log\log_consumer_output_debug_string.h" />
+    <ClInclude Include="source\common\log\log_consumer_write_to_file.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="props\common.props" />

@@ -31,6 +31,27 @@
     <ClCompile Include="source\common\util\command_line.cpp">
       <Filter>souce\common\util</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\log\log.cpp">
+      <Filter>souce\common\log</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\log\log_enum.cpp">
+      <Filter>souce\common\log</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\worker\worker_task.cpp">
+      <Filter>souce\common\worker</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\log\i_log_consumer.cpp">
+      <Filter>souce\common\log</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\log\log_consumer_console.cpp">
+      <Filter>souce\common\log</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\log\log_consumer_write_to_file.cpp">
+      <Filter>souce\common\log</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\log\log_consumer_output_debug_string.cpp">
+      <Filter>souce\common\log</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -75,6 +96,27 @@
     <ClInclude Include="include\common\util\command_line.h">
       <Filter>include\common\util</Filter>
     </ClInclude>
+    <ClInclude Include="include\common\log\log.h">
+      <Filter>include\common\log</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\log\log_enum.h">
+      <Filter>include\common\log</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\worker\worker_task.h">
+      <Filter>include\common\worker</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\log\i_log_consumer.h">
+      <Filter>souce\common\log</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\log\log_consumer_console.h">
+      <Filter>souce\common\log</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\log\log_consumer_write_to_file.h">
+      <Filter>souce\common\log</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\log\log_consumer_output_debug_string.h">
+      <Filter>souce\common\log</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="souce">
@@ -103,6 +145,18 @@
     </Filter>
     <Filter Include="include\common\util">
       <UniqueIdentifier>{3b4a41bd-daee-4f92-ae08-61200815ea79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\log">
+      <UniqueIdentifier>{3db2a7f5-3cf6-4007-8037-38ad5468bf1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\log">
+      <UniqueIdentifier>{e484b86d-8ab2-4874-bc0a-497fbf83c124}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\worker">
+      <UniqueIdentifier>{b8d05727-4158-4b45-b449-ae6f3ec9c591}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\worker">
+      <UniqueIdentifier>{34d3dd85-c34c-4a45-ac7b-a778497ba488}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

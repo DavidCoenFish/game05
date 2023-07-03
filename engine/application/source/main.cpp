@@ -4,38 +4,38 @@
 
 #include "application_pch.h"
 #include "build.h"
+#include "common/log/log.h"
 #include "common/util/command_line.h"
 #include "common/util/utf8.h"
 //#include "json/json.hpp"
 
-static const int RunTask(HINSTANCE hInstance, int nCmdShow)
+static const int RunTask(HINSTANCE in_instance, int in_cmd_show)
 {
-	hInstance;
-	nCmdShow;
-	//auto pLog = Log::Factory(std::vector< std::shared_ptr< ILogConsumer >>({ 
-	//   std::make_shared< LogConsumerConsole >(),
-	//   std::make_shared< LogConsumerWriteToFile >("log.txt")
-	//   }));
+	in_instance;
+	in_cmd_show;
 
-	//LOG_MESSAGE("Build %s %s %s", Build::GetBuildVersion(), Build::GetBuildTime(), Build::GetBuildDescription());
-
-	auto pCommandLine = CommandLine::Factory(Utf8::Utf16ToUtf8(GetCommandLineW()));
-	if (nullptr == pCommandLine)
+	auto command_line = CommandLine::Factory(Utf8::Utf16ToUtf8(GetCommandLineW()));
+	if (nullptr == command_line)
 	{
 		return -1;
 	}
 
-	int result = 0;
-	std::string taskName("Empty");
+	auto log = Log::FactoryCommandLine(command_line);
 
-	if (2 <= pCommandLine->GetParamCount())
+	LOG_MESSAGE("Build %s %s %s", Build::GetBuildVersion(), Build::GetBuildTime(), Build::GetBuildDescription());
+
+
+	int result = 0;
+	std::string task_name("Empty");
+
+	if (2 <= command_line->GetParamCount())
 	{
-		taskName = pCommandLine->GetParam(1);
+		task_name = command_line->GetParam(1);
 	}
-	//else
-	//{
-	//   LOG_MESSAGE_ERROR("Only got [%d] param, want at least a task name", pCommandLine->GetParamCount());
-	//}
+	else
+	{
+		LOG_MESSAGE_ERROR("Only got [%d] param, want at least a task name", command_line->GetParamCount());
+	}
 
 	//{
 	//   std::filesystem::path path = FileSystem::GetModualDir(hInstance) / "Task" / taskName;
@@ -64,12 +64,12 @@ static const int RunTask(HINSTANCE hInstance, int nCmdShow)
 }
 
 // Entry point
-int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
+int WINAPI wWinMain(_In_ HINSTANCE in_instance, _In_opt_ HINSTANCE in_prev_instance, _In_ LPWSTR in_cmd_line, _In_ int in_cmd_show)
 {
-	UNREFERENCED_PARAMETER(hPrevInstance);
-	UNREFERENCED_PARAMETER(lpCmdLine);
+	UNREFERENCED_PARAMETER(in_prev_instance);
+	UNREFERENCED_PARAMETER(in_cmd_line);
 
-	const int result = RunTask(hInstance, nCmdShow);
+	const int result = RunTask(in_instance, in_cmd_show);
 
 	return result;
 }

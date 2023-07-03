@@ -1,10 +1,10 @@
 #include "common/common_pch.h"
 #include "common/util/command_line.h"
-//#include "Common/Log/Log.h"
+#include "common/log/log.h"
 
 std::shared_ptr< CommandLine > CommandLine::Factory( const std::string& in_command_line )
 {
-	//LOG_MESSAGE("CommandLine:");
+	LOG_CONSOLE("CommandLine:");
 	std::vector< std::shared_ptr< IToken > > token_array;
 	{
 		Tokeniser tokeniser(token_array);
@@ -205,17 +205,17 @@ void CommandLine::Tokeniser::Flush()
 		int number = 0;
 		if (true == _value.empty())
 		{
-			//LOG_MESSAGE(" %s", _token.c_str());
+			LOG_CONSOLE(" %s", _token.c_str());
 			_token_array.push_back(std::make_shared< TokenFlag >( _token ));
 		}
 		else if (true == IsNumber(_value, number))
 		{
-			//LOG_MESSAGE(" %s=%d", _token.c_str(), number);
+			LOG_CONSOLE(" %s=%d", _token.c_str(), number);
 			_token_array.push_back(std::make_shared< TokenValueInt >( _token, number ));
 		}
 		else
 		{
-			//LOG_MESSAGE(" %s=%s", _token.c_str(), _value.c_str());
+			LOG_CONSOLE(" %s=%s", _token.c_str(), _value.c_str());
 			_token_array.push_back(std::make_shared< TokenValueString >( _token, _value ));
 		}
 	}
