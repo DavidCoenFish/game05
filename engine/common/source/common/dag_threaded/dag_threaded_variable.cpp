@@ -4,10 +4,12 @@
 #include "common/dag_threaded/i_dag_threaded_value.h"
 
 DagThreadedVariable::DagThreadedVariable(
-	const std::string& in_name,
+	const std::string& in_name, 
+	const std::shared_ptr< IDagThreadedValue >& in_value,
 	const DagThreaded::DirtyCase in_dirty_case
 	)
 	: _name(in_name)
+	, _value(in_value)
 	, _dirty_case(in_dirty_case)
 {
 	//nop
@@ -26,14 +28,14 @@ void DagThreadedVariable::SetValue(const std::shared_ptr<IDagThreadedValue>& in_
 		
 		if (0 != (_dirty_case & DagThreaded::DirtyCase::ValueChanged))
 		{
-			if (nullptr != _value)
-			{
-				mark_dirty = false == _value->Comparison(in_value.get());
-			} 
-			else if (nullptr != in_value)
+			if ((nullptr == _value) != (nullptr == in_value))
 			{
 				mark_dirty = true;
 			}
+			else if (nullptr != _value)
+			{
+				mark_dirty = false == _value->Comparison(in_value.get());
+			} 
 		}
 
 		_value = in_value;

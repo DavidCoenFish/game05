@@ -4,6 +4,12 @@
 
 namespace DagThreadedHelper
 {
+	// Design: CreateDagValue should be able to be created on any thread
+	template <typename TYPE>
+	std::shared_ptr<IDagThreadedValue> CreateDagValue(const TYPE in_value)
+	{
+		return std::make_shared< DagThreadedValue< TYPE > >(in_value);
+	}
 
 	template <typename TYPE>
 	const TYPE GetValue(const std::shared_ptr< IDagThreadedValue >& in_dag_value)

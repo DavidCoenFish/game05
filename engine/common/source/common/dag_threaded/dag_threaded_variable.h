@@ -10,7 +10,8 @@ class DagThreadedVariable : public IDagThreadedNode
 {
 public:
 	DagThreadedVariable(
-		const std::string& in_name,
+		const std::string& in_name, 
+		const std::shared_ptr< IDagThreadedValue >& in_value,
 		const DagThreaded::DirtyCase in_dirty_case
 		);
 	virtual ~DagThreadedVariable();

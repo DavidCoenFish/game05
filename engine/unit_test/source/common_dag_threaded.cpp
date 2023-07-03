@@ -12,47 +12,96 @@ namespace CommonDagThreaded
 		TEST_METHOD(DagThreadedCollectionCreation)
 		{
 			//Logger::WriteMessage(L"Hello world");
-			auto pCollection = DagThreadedCollection::Factory();
-			Assert::IsNotNull( pCollection.get() );
-			pCollection->SetMultiThreadedMode(true);
-			pCollection->SetMultiThreadedMode(false);
-			pCollection.reset();
+			auto collection = DagThreadedCollection::Factory();
+			Assert::IsNotNull( collection.get() );
+			collection->SetMultiThreadedMode(true);
+			collection->SetMultiThreadedMode(false);
+			collection.reset();
 		}
 		TEST_METHOD(DagThreadedExceptionOnCreateCalculate)
 		{
 			auto lambda = []()
 			{
-				DagThreadedCollection* pCollection = new DagThreadedCollection();
-				Assert::IsNotNull( pCollection );
-				pCollection->SetMultiThreadedMode(true);
-				pCollection->CreateNodeCalculate(std::string("foo"), nullptr);
+				DagThreadedCollection* collection = new DagThreadedCollection();
+				Assert::IsNotNull( collection );
+				collection->SetMultiThreadedMode(true);
+				collection->CreateNodeCalculate(std::string("foo"), nullptr);
 			};
 
 			Assert::ExpectException<std::exception>(lambda);
 		}
 		TEST_METHOD(DagThreadedFindNull)
 		{
-			auto pCollection = DagThreadedCollection::Factory();
-			Assert::IsNotNull( pCollection.get() );
-			auto node_found = pCollection->FindNode("bar");
+			auto collection = DagThreadedCollection::Factory();
+			Assert::IsNotNull( collection.get() );
+			auto node_found = collection->FindNode("bar");
 			Assert::IsNull(node_found);
 		}
 
 		TEST_METHOD(DagThreadedCreateVariable)
 		{
-			auto pCollection = DagThreadedCollection::Factory();
-			Assert::IsNotNull( pCollection.get() );
-			auto node = pCollection->CreateNodeVariable("foo");
+			auto collection = DagThreadedCollection::Factory();
+			Assert::IsNotNull( collection.get() );
+			auto node = collection->CreateNodeVariable("foo");
 			Assert::IsNotNull(node);
-			auto node_found = pCollection->FindNode("foo");
+			auto node_found = collection->FindNode("foo");
 			Assert::AreEqual(node, node_found);
-			auto dag_value = pCollection->CreateDagValue<int>(3);
-			pCollection->SetDagValue(node, dag_value);
+			auto dag_value = DagThreadedHelper::CreateDagValue<int>(3);
+			collection->SetDagValue(node, dag_value);
 
-			auto found_dag_value = pCollection->GetDagValue(node);
+			auto found_dag_value = collection->GetDagValue(node);
 			Assert::IsNotNull(found_dag_value.get());
 			const int value_out = DagThreadedHelper::GetValue<int>(found_dag_value);
 			Assert::AreEqual(value_out, 3);
+		}
+
+		TEST_METHOD(DagThreadedCreateCalculate)
+		{
+			auto collection = DagThreadedCollection::Factory();
+			Assert::IsNotNull( collection.get() );
+
+			auto node_input_0 = collection->CreateNodeVariable("i0", DagThreadedHelper::CreateDagValue<int>(3));
+			auto node_input_1 = collection->CreateNodeVariable("i1", DagThreadedHelper::CreateDagValue<int>(4));
+
+			auto node_calculate = collection->CreateNodeCalculate("c", [](
+				const std::vector< std::shared_ptr< IDagThreadedValue > >& in_array_stack, 
+				const std::vector< std::shared_ptr< IDagThreadedValue > >&
+				)-> std::shared_ptr< IDagThreadedValue > {
+				int sum = 0;
+				for (auto iter: in_array_stack)
+				{
+					sum += DagThreadedHelper::GetValue<int>(iter);
+				}
+				return DagThreadedHelper::CreateDagValue<int>(sum);
+			});
+
+			{
+				const int value_out = DagThreadedHelper::GetValue<int>(collection->GetDagValue(node_calculate));
+				Assert::AreEqual(value_out, 0);
+			}
+
+			collection->AddNodeLinkStack(node_calculate, node_input_0);
+			collection->AddNodeLinkStack(node_calculate, node_input_1);
+
+			{
+				const int value_out = DagThreadedHelper::GetValue<int>(collection->GetDagValue(node_calculate));
+				Assert::AreEqual(value_out, 7);
+			}
+			return;
+		}
+
+
+		TEST_METHOD(DagThreadedExceptionOnDuplicateNameNode)
+		{
+			auto lambda = []()
+			{
+				DagThreadedCollection* collection = new DagThreadedCollection();
+				Assert::IsNotNull( collection );
+				collection->CreateNodeCalculate(std::string("foo"), nullptr);
+				collection->CreateNodeCalculate(std::string("foo"), nullptr);
+			};
+
+			Assert::ExpectException<std::exception>(lambda);
 		}
 	};
 }

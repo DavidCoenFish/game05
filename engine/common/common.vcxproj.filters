@@ -28,9 +28,6 @@
     <ClCompile Include="source\common\util\utf8.cpp">
       <Filter>souce\common\util</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\util\id.cpp">
-      <Filter>souce\common\util</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -66,14 +63,11 @@
     <ClInclude Include="source\common\dag_threaded\dag_threaded_value.h">
       <Filter>souce\common\dag_threaded</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\util\id.h">
-      <Filter>souce\common\util</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\util\utf8.h">
-      <Filter>souce\common\util</Filter>
-    </ClInclude>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_helper.h">
       <Filter>include\common\dag_threaded</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\util\utf8.h">
+      <Filter>include\common\util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -100,6 +94,9 @@
     </Filter>
     <Filter Include="souce\common\util">
       <UniqueIdentifier>{b4c697ce-4861-4158-a8b0-4fbb4939c1d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\util">
+      <UniqueIdentifier>{3b4a41bd-daee-4f92-ae08-61200815ea79}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -27,7 +27,6 @@
     <ClCompile Include="source\common\dag_threaded\i_dag_threaded_node.cpp" />
     <ClCompile Include="source\common\dag_threaded\i_dag_threaded_value.cpp" />
     <ClCompile Include="source\common\platform.cpp" />
-    <ClCompile Include="source\common\util\id.cpp" />
     <ClCompile Include="source\common\util\utf8.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -38,13 +37,12 @@
     <ClInclude Include="include\common\dag_threaded\i_dag_threaded_value.h" />
     <ClInclude Include="include\common\macro.h" />
     <ClInclude Include="include\common\platform.h" />
+    <ClInclude Include="include\common\util\utf8.h" />
     <ClInclude Include="source\common\common_pch.h" />
     <ClInclude Include="source\common\dag_threaded\dag_threaded_calculate.h" />
     <ClInclude Include="source\common\dag_threaded\dag_threaded_value.h" />
     <ClInclude Include="source\common\dag_threaded\dag_threaded_variable.h" />
     <ClInclude Include="source\common\dag_threaded\i_dag_threaded_node.h" />
-    <ClInclude Include="source\common\util\id.h" />
-    <ClInclude Include="source\common\util\utf8.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="props\common.props" />
