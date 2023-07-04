@@ -25,7 +25,7 @@ SET _minute=%_minute:~-2%
 SET _second=%_second:~-2%
 
 SET TIMESTAMP=%_yyyy%-%_mm%-%_dd%T%_hour%%_minute%%_second%
-SET DESTINATION=E:\backup\%TIMESTAMP%_game05
+SET DESTINATION=D:\backup\%TIMESTAMP%_game05
 
 ::/L list and dont copy
 ::/NJH no job header
