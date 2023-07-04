@@ -199,13 +199,15 @@ std::shared_ptr< Log > Log::FactoryCommandLine(const std::shared_ptr< CommandLin
 			array_consumer.push_back(std::make_shared< LogConsumerWriteToFile >(file_path));
 		}
 	}
-	if (true == in_command_line->GetFlag("LogOutputDebugString"))
-	{
-		array_consumer.push_back(std::make_shared< LogConsumerOutputDebugString >());
-	}
 	if (true == in_command_line->GetFlag("LogConsole"))
 	{
 		array_consumer.push_back(std::make_shared< LogConsumerConsole>());
+	}
+
+	if ((true == in_command_line->GetFlag("LogOutputDebugString")) ||
+		(((0 == array_consumer.size()) && (1 == in_command_line->GetParamCount()))))
+	{
+		array_consumer.push_back(std::make_shared< LogConsumerOutputDebugString >());
 	}
 
 	auto log = Log::Factory(array_consumer);

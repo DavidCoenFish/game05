@@ -4,7 +4,11 @@
   "Items": [
     {
       "Id": "3bf71329-47eb-448a-a043-f1975e7a08ec",
-      "Command": "Empty LogOutputDebugString"
+      "Command": "empty LogOutputDebugString"
+    },
+    {
+      "Id": "227ff93b-7cfb-4955-bfe0-fc5f6eb9ee27",
+      "Command": "empty"
     }
   ]
 }

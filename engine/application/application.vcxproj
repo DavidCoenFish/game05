@@ -84,6 +84,9 @@
     <None Include="script\util_make_host_define.cmd" />
     <None Include="script\util_make_resource.cmd" />
     <None Include="script\util_search_replace.cmd" />
+    <CopyFileToFolders Include="task\empty\application.json">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\application.rc" />

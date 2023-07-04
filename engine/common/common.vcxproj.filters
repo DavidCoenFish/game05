@@ -52,6 +52,24 @@
     <ClCompile Include="source\common\log\log_consumer_output_debug_string.cpp">
       <Filter>souce\common\log</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\file_system\file_system.cpp">
+      <Filter>souce\common\file_system</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\task\i_task.cpp">
+      <Filter>souce\common\task</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\task\task_window.cpp">
+      <Filter>souce\common\task</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\window\window_helper.cpp">
+      <Filter>souce\common\window</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\window\i_window_application.cpp">
+      <Filter>souce\common\window</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\window\window_application_param.cpp">
+      <Filter>souce\common\window</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -117,6 +135,24 @@
     <ClInclude Include="source\common\log\log_consumer_output_debug_string.h">
       <Filter>souce\common\log</Filter>
     </ClInclude>
+    <ClInclude Include="include\common\file_system\file_system.h">
+      <Filter>include\common\file_system</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\task\i_task.h">
+      <Filter>include\common\task</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\task\task_window.h">
+      <Filter>include\common\task</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\window\window_helper.h">
+      <Filter>souce\common\window</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\window\i_window_application.h">
+      <Filter>souce\common\window</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\window\window_application_param.h">
+      <Filter>souce\common\window</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="souce">
@@ -157,6 +193,24 @@
     </Filter>
     <Filter Include="include\common\worker">
       <UniqueIdentifier>{34d3dd85-c34c-4a45-ac7b-a778497ba488}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\file_system">
+      <UniqueIdentifier>{5e8f77bc-fa86-4671-962e-83b24c2778c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\file_system">
+      <UniqueIdentifier>{6da2c55b-2292-45f6-b5af-f096d0192bbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\task">
+      <UniqueIdentifier>{8cd8a765-20ef-449b-b63b-4a55b40a4dec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\task">
+      <UniqueIdentifier>{13d2da23-209a-4839-8bcb-9c5397e13de2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\window">
+      <UniqueIdentifier>{3fec1d3a-74b5-4e6c-abd7-4d876c2f35ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\window">
+      <UniqueIdentifier>{3ee5eb4a-cbec-4fe8-82d5-b253552e45e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

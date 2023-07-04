@@ -5,9 +5,42 @@
 #include "application_pch.h"
 #include "build.h"
 #include "common/log/log.h"
+#include "common/file_system/file_system.h"
+#include "common/task/i_task.h"
+#include "common/task/task_window.h"
 #include "common/util/command_line.h"
 #include "common/util/utf8.h"
-//#include "json/json.hpp"
+#include <json/json.hpp>
+
+struct JSONApplication
+{
+	std::vector< JSONTask > _tasks;
+};
+
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
+	JSONApplication, 
+	_tasks
+	);
+
+static std::map< std::string, TTaskFactory >& GetTaskFactoryMap()
+{
+	static std::map< std::string, TTaskFactory > s_map(
+	{
+		{"Window", TaskWindow::Factory}
+	});
+	return s_map;
+}
+
+static const TTaskFactory GetTaskFactory(const std::string& in_task_factory_key)
+{
+	const auto& factoryMap = GetTaskFactoryMap();
+	auto found = factoryMap.find(in_task_factory_key);
+	if (found != factoryMap.end())
+	{
+		return found->second;
+	}
+	return nullptr;
+}
 
 static const int RunTask(HINSTANCE in_instance, int in_cmd_show)
 {
@@ -26,7 +59,7 @@ static const int RunTask(HINSTANCE in_instance, int in_cmd_show)
 
 
 	int result = 0;
-	std::string task_name("Empty");
+	std::string task_name("empty");
 
 	if (2 <= command_line->GetParamCount())
 	{
@@ -35,30 +68,31 @@ static const int RunTask(HINSTANCE in_instance, int in_cmd_show)
 	else
 	{
 		LOG_MESSAGE_ERROR("Only got [%d] param, want at least a task name", command_line->GetParamCount());
+		return -1;
 	}
 
-	//{
-	//   std::filesystem::path path = FileSystem::GetModualDir(hInstance) / "Task" / taskName;
-	//   std::filesystem::path applicationPath = path / "Application.json";
-	//   auto fileString = FileSystem::DataToString(FileSystem::SyncReadFile(applicationPath));
-	//   auto json = nlohmann::json::parse( fileString );
-	//   JSONApplication applicationData;
-	//   json.get_to(applicationData);
+	{
+		std::filesystem::path path = FileSystem::GetModualDir(in_instance) / "task" / task_name;
+		std::filesystem::path application_path = path / "application.json";
+		auto file_string = FileSystem::DataToString(FileSystem::SyncReadFile(application_path));
+		auto json = nlohmann::json::parse(file_string);
+		JSONApplication application_data;
+		json.get_to(application_data);
 
-	//   for (const auto& item: applicationData.tasks)
-	//   {
-	//      auto taskFactory = GetTaskFactory(item.factory);
-	//      auto pTask = (nullptr != taskFactory) ? taskFactory(hInstance, nCmdShow, pCommandLine, path, item.data) : nullptr;
-	//      if (pTask)
-	//      {
-	//         result = pTask->Run();
-	//      }
-	//      if (result < 0)
-	//      {
-	//         LOG_MESSAGE_ERROR("task returner [%d], abort run", result);
-	//      }
-	//   }
-	//}
+		for (const auto& item: application_data._tasks)
+		{
+			auto task_factory = GetTaskFactory(item._factory);
+			auto task = (nullptr != task_factory) ? task_factory(in_instance, in_cmd_show, command_line, path, item._data) : nullptr;
+			if (task)
+			{
+				result = task->Run();
+			}
+			if (result < 0)
+			{
+				LOG_MESSAGE_ERROR("task returner [%d], abort run", result);
+			}
+		}
+	}
 
 	return result;
 }

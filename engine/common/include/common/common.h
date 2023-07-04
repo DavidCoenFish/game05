@@ -42,8 +42,8 @@
 //#include <array>
 //#include <bitset>
 //#include <cstdint>
-//#include <exception>
-//#include <filesystem>
+#include <exception>
+#include <filesystem>
 #include <fstream>
 #include <functional>
 #include <future>

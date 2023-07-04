@@ -1,0 +1,37 @@
+If all the above options fail, try installing it from the VS Developer command-line. Here's how (on StackOverflow):
+
+How to install Visual Studio Gallery extensions from command line
+
+VSIXInstaller.exe /quiet some_extension.vsix
+
+You can find VSIXInstaller here (on your local PC - depending on the Visual Studio version replace 14.0 by the version you're using):
+
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE
+
+To display the installer dialog(s), remove the /quiet option.
+
+Note:
+
+To uninstall a VSIX extension, you need to know its vsixID (here is described how to get it), then you can use
+
+VSIXInstaller.exe /uninstall:vsixID
+
+To install/uninstall VSIX files for a specific Visual Studio version, use the switches /skuName:name and /skuVersion:version; you can see all options of the command line tool if you type VSIXInstaller.exe /? in the developer command prompt.
+
+
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\VSIXInstaller.exe" /a /q /f C:\development\game05\build\tools\visual_studio_extension\Debug\bin\visual_studio_extension.vsix
+
+
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\VSIXInstaller.exe" /u:40c85963-4ec1-42f9-a67d-109f8773921f
+
+visual studio experimental instance
+
+C:\Users\David\AppData\Local\Microsoft\VisualStudio\16.0_8b26072aExp\Extensions\David Coen\visual_studio_extension\1.0
+
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VSSDK\VisualStudioIntegration\Tools\Bin\CreateExpInstance.exe" /Reset /VSInstance=16.0_8b26072a /RootSuffix=Exp && PAUSE
+
+
+HKEY_CURRENT_USER\Software\Microsoft\VisualStudio\12.0Exp\ExtensionManager\
+    EnabledExtensions
+    ExtensionTypes
+

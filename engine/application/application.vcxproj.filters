@@ -13,6 +13,12 @@
     <Filter Include="source">
       <UniqueIdentifier>{e51b3a04-7e10-40dc-8f83-928a5c99f307}</UniqueIdentifier>
     </Filter>
+    <Filter Include="task">
+      <UniqueIdentifier>{6bd0fbb0-d0c0-4368-ba39-02b3f630d11a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="task\empty">
+      <UniqueIdentifier>{8bb9a223-423f-43ba-a030-ccd65706e6ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Script\util_make_host_define.cmd">
@@ -72,5 +78,10 @@
     <ResourceCompile Include="resources\application.rc">
       <Filter>resources</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="task\empty\application.json">
+      <Filter>task\empty</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>
