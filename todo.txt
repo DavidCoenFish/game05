@@ -1,5 +1,7 @@
 X thread safe dag node
 X autotron
+_ drag drop file rename snake case
+_ vsix document
 _ application framework
 _ setup d3dx12 application
 _ draw d3dx12 triangle

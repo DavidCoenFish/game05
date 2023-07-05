@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+  </PropertyGroup>
+  <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)microsoft.visualstudio.threading.analyzers\17.0.46-alpha\build\Microsoft.VisualStudio.Threading.Analyzers.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.visualstudio.threading.analyzers\17.0.46-alpha\build\Microsoft.VisualStudio.Threading.Analyzers.targets')" />
+    <Import Project="$(NuGetPackageRoot)microsoft.codeanalysis.bannedapianalyzers\3.3.2\build\Microsoft.CodeAnalysis.BannedApiAnalyzers.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.bannedapianalyzers\3.3.2\build\Microsoft.CodeAnalysis.BannedApiAnalyzers.targets')" />
+    <Import Project="$(NuGetPackageRoot)microsoft.visualstudio.sdk.analyzers\16.10.10\build\Microsoft.VisualStudio.SDK.Analyzers.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.visualstudio.sdk.analyzers\16.10.10\build\Microsoft.VisualStudio.SDK.Analyzers.targets')" />
+    <Import Project="$(NuGetPackageRoot)microsoft.vssdk.buildtools\16.11.71\build\Microsoft.VSSDK.BuildTools.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.vssdk.buildtools\16.11.71\build\Microsoft.VSSDK.BuildTools.targets')" />
+    <Import Project="$(NuGetPackageRoot)community.visualstudio.vsct\16.0.29.6\build\Community.VisualStudio.VSCT.targets" Condition="Exists('$(NuGetPackageRoot)community.visualstudio.vsct\16.0.29.6\build\Community.VisualStudio.VSCT.targets')" />
+    <Import Project="$(NuGetPackageRoot)community.visualstudio.toolkit\17.0.76.303\build\Community.VisualStudio.Toolkit.targets" Condition="Exists('$(NuGetPackageRoot)community.visualstudio.toolkit\17.0.76.303\build\Community.VisualStudio.Toolkit.targets')" />
+  </ImportGroup>
+</Project>

@@ -1,0 +1,21 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "Python: drag_drop_ww_cpp_style",
+            "type": "python",
+            "request": "launch",
+            "program": "tools\\python\\drag_drop_ww_cpp_style\\drag_drop_ww_cpp_style.py",
+            "console": "integratedTerminal",
+            "args": [
+                "C:\\development\\game05\\engine\\common\\source\\common\\draw_system\\custom_command_list.h",
+                "C:\\development\\game05\\engine\\common\\source\\common\\draw_system\\custom_command_list.cpp"
+                ],
+            "justMyCode": true
+        }
+    ]
+}

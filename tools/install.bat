@@ -1,0 +1,1 @@
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\VSIXInstaller.exe" /a /f C:\development\game05\tools\wicked_workshop_dsc\bin\Debug\wicked_workshop_dsc.vsix
