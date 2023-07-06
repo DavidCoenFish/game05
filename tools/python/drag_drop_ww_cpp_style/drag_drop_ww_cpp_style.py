@@ -3,10 +3,15 @@ import sys
 import os
 import abstract_syntax_tree.parse_file
 import abstract_syntax_tree.export
+import abstract_syntax_tree.transform_ast
 
 def DealFile(in_file_path):
     ast = abstract_syntax_tree.parse_file.LoadFile(in_file_path)
+
+    abstract_syntax_tree.transform_ast.TransformAst(ast)
+
     abstract_syntax_tree.export.SaveFile(ast, in_file_path + ".out")
+
     return
 
 def Main(*in_args):
