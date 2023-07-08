@@ -17,6 +17,9 @@ class OutputFile:
         return
 
     def GetData(self):
+        if "" != self._current_line:
+            self._data += self._current_line
+            self._current_line = ""
         return self._data
 
     def NewLineIfNeeded(self):
@@ -28,37 +31,38 @@ class OutputFile:
             self._current_line = ""
         self._current_line += self._new_line
         self._data += self._current_line
-        self._current_line = "" + (self._tab * self._depth)
+        self._current_line = ""
         return
 
     # We add tokens 
     def AddTokkenToCurrent(self, in_token_text): 
+        if self._current_line == "":
+            self._current_line = (self._tab * self._depth)
+
         if self._max_line_length < len(self._current_line) + len(in_token_text):
             self.IncrementDepth()
             self.NewLine()
-            self._current_line += in_token_text
+            self._current_line = (self._tab * self._depth) + in_token_text
             self.DecrementDepth()
         else:
             self._current_line += in_token_text
 
     def AddEndLineComment(self, in_comment_text):
-        text = "// " + in_comment_text
-        self.AddTokkenToCurrent(text)
-        self.NewLine()
+        self.AddTokkenToCurrent(in_comment_text)
 
     def AddMultiLineComment(self, in_multiline_comment_text):
-        if "\n" in in_multiline_comment_text:
-            self.NewLine()
+        data = in_multiline_comment_text[2:]
+        data = data[:-2]
+        if "\n" in data:
             self.AddTokkenToCurrent("/*")
             self.IncrementDepth()
-            split_line = in_multiline_comment_text.split("\n") 
+            split_line = data.split("\n") 
             for line in split_line:
                 self.NewLine()
                 self.AddTokkenToCurrent(line)
             self.DecrementDepth()
             self.NewLine()
             self.AddTokkenToCurrent("*/")
-            self.NewLine()
 
         else:
             text = "/*" + in_multiline_comment_text + "*/"

@@ -46,7 +46,7 @@ class Token:
 
     def __str__(self):
         data = self._data.replace("\n", "\\n")
-        return f"The token data is ({data}) for type ({self._type.name})"
+        return f"Token data ({data}) type ({self._type.name})"
 
     def __repr__(self):
         data = self._data.replace("\n", "\\n")
@@ -72,24 +72,25 @@ class Token:
             trace_self._data += in_prev_c
             if True == IsEscapedStringComplete(trace_self._data):
                 #trim off the quotes
-                trace_self._data = trace_self._data[1:]
-                trace_self._data = trace_self._data[:-1]
+                #trace_self._data = trace_self._data[1:]
+                #trace_self._data = trace_self._data[:-1]
                 in_array_tokens.append(Token())
             return
 
         could_be_include_path_spec = CalculateCouldBeIncludePathSpec(in_array_tokens, in_prev_c)
         if True == could_be_include_path_spec:
             if trace_self._data != "":
-                in_array_tokens.append(Token("", TokenType.INCLUDE_PATH_SPEC))
+                in_array_tokens.append(Token(in_prev_c, TokenType.INCLUDE_PATH_SPEC))
             else:
+                trace_self._data += in_prev_c
                 trace_self._type = TokenType.INCLUDE_PATH_SPEC
             return
         
         if trace_self._type == TokenType.INCLUDE_PATH_SPEC:
+            trace_self._data += in_prev_c
             if in_prev_c == ">":
                 in_array_tokens.append(Token())
                 return
-            trace_self._data += in_prev_c
 
         char_pair = in_prev_c + in_c
 

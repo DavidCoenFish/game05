@@ -12,12 +12,14 @@ def DealFile(in_file_path, in_debug):
     return
 
 def Main(*in_args):
+    debug = True
     if 0 == len(in_args):
         print("usage drag_drop_ww_cpp_style.py: drag and drop files to convert style")
         return
     for iter in in_args[1:]:
-        DealFile(iter, True)
-        break
+        DealFile(iter, debug)
+        if True == debug:
+            break
     return
 
 if __name__ == "__main__":

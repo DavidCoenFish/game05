@@ -1,7 +1,6 @@
 import enum
 import copy
 from . import dsc_token_cpp
-from . import output_file
 
 class AstAccess(enum.Enum):
     NONE = 0
@@ -40,6 +39,10 @@ class AstType(enum.Enum):
     STATEMENT_FORWARD_DECLARATION = 26
 
     ACCESS_SPECIFIER = 27
+    NEW_LINE = 28
+    OUTPUT_DEPTH_INCREMENT = 29
+    OUTPUT_DEPTH_DECREMENT = 30
+
 
 def CreateNewNode(in_stack, in_child_array, in_type, in_token, in_access):
     node = AST(in_type, in_token, in_access)
@@ -132,37 +135,21 @@ def RecalculateStatementType(in_ast_node, in_stack):
 
     return AstType.STATEMENT
 
-def BuildOutput(in_ast_node, in_output):
-    if in_ast_node._type == AstType.COMMENT:
-        if in_ast_node._token._type == dsc_token_cpp.TokenType.COMMENT_END_LINE:
-            in_output.AddEndLineComment(in_ast_node._token._data)
-        if in_ast_node._token._type == dsc_token_cpp.TokenType.COMMENT_MULTI_LINE:
-            in_output.AddMultiLineComment(in_ast_node._token._data)
-    elif in_ast_node._type == AstType.SCOPE:
-        in_output.NewLineIfNeeded()
-        in_output.AddTokkenToCurrent(in_ast_node._token._data)
-        in_output.IncrementDepth()
-        in_output.NewLine()
-    elif in_ast_node._type == AstType.SCOPE_END:
-        in_output.DecrementDepth()
-        in_output.NewLine()
-        in_output.AddTokkenToCurrent(in_ast_node._token._data)
-        in_output.NewLine()
-    elif in_ast_node._type == AstType.STATEMENT_END:
-        in_output.AddTokkenToCurrent(in_ast_node._token._data)
-        in_output.NewLine()
-    elif in_ast_node._token:
-        in_output.AddTokkenToCurrent(in_ast_node._token._data)
-
-    for child in in_ast_node._children:
-        BuildOutput(child, in_output)
-
 class AST:
     def __init__(self, in_type = AstType.NONE, in_token = None, in_access = AstAccess.NONE):
         self._type = in_type
         self._token = in_token
         self._access = in_access
         self._children = []
+
+    def __str__(self):
+        line = f"AST type ({self._type.name}) token ({self._token})"
+        if self._access != AstAccess.NONE:
+            line += f" access ({self._access.name})"
+        return line
+
+    def __repr__(self):
+        return f"AST(\'{self._type.name}\', \'{self._token}\', \'{self._access}\', \'{self._children}\')"
 
     def AddToken(self, in_stack, in_token):
         if in_token._data == "#pragma":
@@ -245,12 +232,7 @@ class AST:
         return
 
     def Dump(self, in_depth = 0):
-        line = ("    " * in_depth) + f"type:\"{self._type.name}\""
-        if self._access != AstAccess.NONE:
-            line += f" access:\"{self._access.name}\""
-        if self._token and self._token._data != "":
-            data = self._token._data.replace("\n","\\n")
-            line += f" data:\"{data}\""
+        line = ("    " * in_depth) + str(self)
         print(line)
         for child in self._children:
             child.Dump(in_depth + 1)
@@ -262,17 +244,11 @@ class AST:
             return keep_going
         in_stack.append(self)
         for child in self._children:
-            child_data = copy.deepcopy(in_data)
-            keep_going = child.Visit(in_visitor, in_stack, child_data)
+            keep_going = child.Visit(in_visitor, in_stack, in_data)
             if False == keep_going:
                 break
         in_stack.pop()
         return keep_going
-
-    def MakeString(self):
-        output = output_file.OutputFile()
-        BuildOutput(self, output)
-        return output.GetData()
 
 def DoctorType(in_ast_node, in_stack = []):
     if in_ast_node._type == AstType.STATEMENT:
