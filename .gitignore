@@ -10,6 +10,7 @@
 # python
 *.spec
 dist/
+__pycache__/
 
 # Precompiled Headers
 *.gch
