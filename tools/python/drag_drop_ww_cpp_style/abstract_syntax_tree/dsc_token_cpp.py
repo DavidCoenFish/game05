@@ -5,14 +5,14 @@ class TokenType(enum.Enum):
     COMMENT_END_LINE = 1
     COMMENT_MULTI_LINE = 2
     SPECIAL_SYMBOL = 3
-    STRING = 4
+    STRING = 4 #don't have the lead and follow " in the data
     TOKEN = 5
     STATEMENT_END = 6
     WHITE_SPACE = 7
     SCOPE_RESOLUTION_OPERATOR = 8
-    INCLUDE_PATH_SPEC = 9
+    INCLUDE_PATH_SPEC = 9 # don't have the "<",">" in the data
 
-#s_special_symbols = set(("[","]","(",")","{","}",",","#","*","~",".", "'","?","<",">",";","&","/","+","-", "!", "%", "^", "|","=",":", "\\"))
+# ("#", ":") current not in special symbol set
 s_special_symbols = set(("[","]","(",")","{","}",",","*","~",".", "'","?","<",">",";","&","/","+","-", "!", "%", "^", "|","=", "\\"))
 
 def IsEscapedStringComplete(in_string):
@@ -49,7 +49,15 @@ class Token:
         return f"The token data is ({data}) for type ({self._type.name})"
 
     def __repr__(self):
-        return f"Token(\'{self._data}\', \'{self._type.name}\')"
+        data = self._data.replace("\n", "\\n")
+        return f"Token(\'{data}\', \'{self._type.name}\')"
+
+    def GetData(self):
+        return self._data
+
+    def SetData(self, in_data):
+        self._data = in_data
+        return
 
     def IsComment(self):
         return self._type == TokenType.COMMENT_END_LINE or self._type == TokenType.COMMENT_MULTI_LINE
@@ -75,7 +83,6 @@ class Token:
                 in_array_tokens.append(Token("", TokenType.INCLUDE_PATH_SPEC))
             else:
                 trace_self._type = TokenType.INCLUDE_PATH_SPEC
-                trace_self._data = in_prev_c
             return
         
         if trace_self._type == TokenType.INCLUDE_PATH_SPEC:
@@ -96,6 +103,7 @@ class Token:
 
         if trace_self._type == TokenType.COMMENT_END_LINE:
             if in_prev_c == "\n":
+                #trace_self._data = trace_self._data[2:].strip()
                 in_array_tokens.append(Token("\n", TokenType.WHITE_SPACE))
                 return
             trace_self._data += in_prev_c
@@ -112,6 +120,19 @@ class Token:
         if trace_self._type == TokenType.COMMENT_MULTI_LINE:
             trace_self._data += in_prev_c
             if trace_self._data[-2:] == "*/":
+                #trace_self._data = trace_self._data[2:]
+                #trace_self._data = trace_self._data[:-2]
+
+                #new_data = ""
+                #line_array = trace_self._data.split("\n")
+                #for line in line_array:
+                #    if "" == line:
+                #        continue
+                #    if new_data != "":
+                #        new_data += "\n"
+                #    new_data += line.strip()
+
+                #trace_self._data = new_data
                 in_array_tokens.append(Token())
             return
         
@@ -166,25 +187,30 @@ class Token:
 
         return
 
-# def CleanUp(in_token_array):
-#     token_array = [in_token_array[:1]]
-#     for token in in_token_array[1:]:
-
-def TokenizeData(in_data):
+def TokenizeData(in_data, in_debug = False):
     token_array = [Token()]
     data = in_data + "\n"
 
-    prev_c = in_data[:1]
-    for c in in_data[1:]:
+    prev_c = data[:1]
+    for c in data[1:]:
         token_array[-1].DealChar(token_array, prev_c, c)
         prev_c = c
 
     if token_array[-1]._data == "":
-        token_array.pop() #[:-1]
+        token_array.pop()
 
-    #token_array = CleanUp(token_array)
+    if True == in_debug:
+        reassembled_data = ""
+        for token in token_array:
+            print(str(token))
+            reassembled_data += token._data
 
-    #for token in token_array:
-    #    print(str(token))
+        if reassembled_data != in_data:
+            print("==============( in_data )==========================")
+            print(in_data)
+            print("==============( reassembled data )=================")
+            print(reassembled_data)
+            print("===================================================")
+            raise Exception("reassembled data from token array doesn't match the input data")
 
     return token_array

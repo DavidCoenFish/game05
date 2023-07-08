@@ -3,23 +3,21 @@ import sys
 import os
 import abstract_syntax_tree.parse_file
 import abstract_syntax_tree.export
-import abstract_syntax_tree.transform_ast
+import abstract_syntax_tree.transform_ast_cpp
 
-def DealFile(in_file_path):
-    ast = abstract_syntax_tree.parse_file.LoadFile(in_file_path)
-
-    abstract_syntax_tree.transform_ast.TransformAst(ast)
-
+def DealFile(in_file_path, in_debug):
+    ast = abstract_syntax_tree.parse_file.LoadFile(in_file_path, in_debug)
+    abstract_syntax_tree.transform_ast_cpp.TransformAst(ast)
     abstract_syntax_tree.export.SaveFile(ast, in_file_path + ".out")
-
     return
 
 def Main(*in_args):
     if 0 == len(in_args):
-        print("usage drag_drop_file_rename_snake_case.py: drag and drop files to rename")
+        print("usage drag_drop_ww_cpp_style.py: drag and drop files to convert style")
         return
     for iter in in_args[1:]:
-        DealFile(iter)
+        DealFile(iter, True)
+        break
     return
 
 if __name__ == "__main__":
