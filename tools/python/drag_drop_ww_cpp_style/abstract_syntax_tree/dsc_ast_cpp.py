@@ -1,6 +1,4 @@
 import enum
-import copy
-from . import dsc_token_cpp
 
 class AstAccess(enum.Enum):
     NONE = 0
@@ -39,9 +37,9 @@ class AstType(enum.Enum):
     STATEMENT_FORWARD_DECLARATION = 26
 
     ACCESS_SPECIFIER = 27
-    NEW_LINE = 28
-    OUTPUT_DEPTH_INCREMENT = 29
-    OUTPUT_DEPTH_DECREMENT = 30
+    #NEW_LINE = 28
+    #OUTPUT_DEPTH_INCREMENT = 29
+    #OUTPUT_DEPTH_DECREMENT = 30
 
 
 def CreateNewNode(in_stack, in_child_array, in_type, in_token, in_access):
@@ -141,6 +139,9 @@ class AST:
         self._token = in_token
         self._access = in_access
         self._children = []
+        self._export_pre_token_format = []
+        self._export_post_token_format = []
+        self._export_post_children_format = []
 
     def __str__(self):
         line = f"AST type ({self._type.name}) token ({self._token})"
@@ -222,6 +223,9 @@ class AST:
             if self._type == AstType.STATEMENT:
                 CreateNewChild(self._children, AstType.WHITE_SPACE, in_token)
             return
+        
+        if in_token._data == "ID3D12GraphicsCommandList":
+            print("found")
 
         #start a statement if we get this far, but
         if self._type == AstType.STATEMENT:

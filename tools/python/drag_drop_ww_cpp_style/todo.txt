@@ -1,0 +1,2 @@
+move output formatting to arrays in AST node, rather than make new ast nodes for formatting,
+ie, new line, depth, whitespace

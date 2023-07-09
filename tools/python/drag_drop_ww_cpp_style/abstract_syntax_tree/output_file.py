@@ -22,10 +22,6 @@ class OutputFile:
             self._current_line = ""
         return self._data
 
-    def NewLineIfNeeded(self):
-        if False == self._current_line.isspace():
-            self.NewLine()
-
     def NewLine(self):
         if self._current_line.isspace():
             self._current_line = ""
@@ -40,10 +36,8 @@ class OutputFile:
             self._current_line = (self._tab * self._depth)
 
         if self._max_line_length < len(self._current_line) + len(in_token_text):
-            self.IncrementDepth()
             self.NewLine()
-            self._current_line = (self._tab * self._depth) + in_token_text
-            self.DecrementDepth()
+            self._current_line = (self._tab * (self._depth + 1)) + in_token_text
         else:
             self._current_line += in_token_text
 
@@ -63,8 +57,7 @@ class OutputFile:
             self.DecrementDepth()
             self.NewLine()
             self.AddTokkenToCurrent("*/")
-
         else:
-            text = "/*" + in_multiline_comment_text + "*/"
+            text = "/* " + in_multiline_comment_text.strip() + " */"
             self.AddTokkenToCurrent(text)
 
