@@ -82,14 +82,15 @@ def RecalculateStatementType(in_ast_node, in_stack):
     parent_class_struct_name_found = False
     destructr_found = False
 
-    if in_ast_node._token._data == "class":
-        class_keyword_found = True
-    if in_ast_node._token._data == "struct":
-        struct_keyword_found = True
-    if in_ast_node._token._data == parent_class_struct_name:
-        parent_class_struct_name_found = True
-    if in_ast_node._token._data == "~":
-        destructr_found = True
+    if in_ast_node._token:
+        if in_ast_node._token._data == "class":
+            class_keyword_found = True
+        if in_ast_node._token._data == "struct":
+            struct_keyword_found = True
+        if in_ast_node._token._data == parent_class_struct_name:
+            parent_class_struct_name_found = True
+        if in_ast_node._token._data == "~":
+            destructr_found = True
 
     for child in in_ast_node._children:
         if child._token._data == "class" and False == struct_keyword_found:
@@ -122,16 +123,27 @@ def RecalculateStatementType(in_ast_node, in_stack):
     if True == parent_class_struct_name_found and True == destructr_found and True == parenthesist_found:
         return AstType.STATEMENT_DESTRUCTOR
 
-    if True == parenthesist_found and True == child_scope_found and  "" != parent_class_struct_name:
+    if True == parenthesist_found and True == child_scope_found: # and  "" != parent_class_struct_name:
         return AstType.STATEMENT_METHOD_DEFINITION
 
-    if True == parenthesist_found and False == child_scope_found and  "" != parent_class_struct_name:
+    if True == parenthesist_found and False == child_scope_found: # and  "" != parent_class_struct_name:
         return AstType.STATEMENT_METHOD_DECLARATION
 
     if "" != parent_class_struct_name:
         return AstType.STATEMENT_MEMBER
 
     return AstType.STATEMENT
+
+def DoWePopStackTwiceOnScopeEnd(in_stack):
+    temp = in_stack
+    if 0 == len(temp):
+        return False
+    node = temp[-1]
+    temp = temp[:-1]
+    state = RecalculateStatementType(node, temp)
+    if state == AstType.STATEMENT_METHOD_DEFINITION:
+        return True
+    return False
 
 class AST:
     def __init__(self, in_type = AstType.NONE, in_token = None, in_access = AstAccess.NONE):
@@ -177,6 +189,11 @@ class AST:
         if in_token._data == "}":
             CreateNewChild(self._children, AstType.SCOPE_END, in_token)
             in_stack.pop()
+            if True == DoWePopStackTwiceOnScopeEnd(in_stack):
+                in_stack.pop()
+            #in_stack.pop()
+            #if 0 < len(in_stack):
+            #    in_stack.pop()
             #if in_stack[-1]._type == AstType.STATEMENT:
             #    in_stack.pop()
             return
@@ -223,9 +240,6 @@ class AST:
             if self._type == AstType.STATEMENT:
                 CreateNewChild(self._children, AstType.WHITE_SPACE, in_token)
             return
-        
-        if in_token._data == "ID3D12GraphicsCommandList":
-            print("found")
 
         #start a statement if we get this far, but
         if self._type == AstType.STATEMENT:

@@ -23,7 +23,6 @@ def PerformFormatting(in_array_format, in_output):
         elif item == ExportFormat.WHITE_SPACE:
              in_output.AddTokkenToCurrent(" ")
 
-
 def BuildOutput(in_ast_node, in_output):
     PerformFormatting(in_ast_node._export_pre_token_format, in_output)
 
@@ -33,7 +32,8 @@ def BuildOutput(in_ast_node, in_output):
         if in_ast_node._token._type == dsc_token_cpp.TokenType.COMMENT_MULTI_LINE:
            in_output.AddMultiLineComment(in_ast_node._token._data)
     elif in_ast_node._type == dsc_ast_cpp.AstType.WHITE_SPACE:
-        in_output.AddTokkenToCurrent(" ")
+        pass
+        #    in_output.AddTokkenToCurrent(" ")
     elif in_ast_node._token != None:
         in_output.AddTokkenToCurrent(in_ast_node._token._data)
 

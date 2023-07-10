@@ -6,16 +6,21 @@ from . import transform_ast_cpp_rename_pch
 from . import transform_ast_cpp_rename_variables
 from . import transform_ast_cpp_sort_class_struct_methods_members
 from . import transform_ast_cpp_sort_include
+from . import transform_ast_cpp_white_space
 
-def TransformAst(in_ast):
+def TransformAst(in_ast, in_debug):
     in_ast.Visit(transform_ast_cpp_comment_style.AstTransformCommentStyle)
     in_ast.Visit(transform_ast_cpp_rename_pch.AstTransformRenamePCH)
     in_ast.Visit(transform_ast_cpp_include.AstTransformInclude)
     in_ast.Visit(transform_ast_cpp_sort_include.AstTransformSortInclude)
     in_ast.Visit(transform_ast_cpp_sort_class_struct_methods_members.AstTransformSortClassStructMethodsMembers)
     in_ast.Visit(transform_ast_cpp_rename_variables.AstTransformRenameVariables)
+    in_ast.Visit(transform_ast_cpp_white_space.AstTransformWhiteSpace, [], {"history":[]})
     in_ast.Visit(transform_ast_cpp_add_new_line.AstTransformAddNewLine)
     in_ast.Visit(transform_ast_cpp_add_depth.AstTransformAddDepth)
 
-    print("post transform abstract syntax tree")
-    in_ast.Dump()
+    # if True == in_debug:
+    #     print("==========(post transform abstract syntax tree)===========")
+    #     in_ast.Dump()
+
+    return

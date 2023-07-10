@@ -2,9 +2,9 @@ from . import dsc_token_cpp
 from . import dsc_ast_cpp
 
 def CalculateIsCandidateForClassStructReorder(in_ast_node, in_stack_ast_node):
+    if in_ast_node._type != dsc_ast_cpp.AstType.SCOPE:
+        return False
     for item in reversed(in_stack_ast_node):
-        if item._type == dsc_ast_cpp.AstType.SCOPE:
-            continue
         if item._type == dsc_ast_cpp.AstType.STATEMENT_CLASS:
             return True
         elif item._type == dsc_ast_cpp.AstType.STATEMENT_STRUCT:
