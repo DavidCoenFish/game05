@@ -2,7 +2,7 @@ from . import dsc_token_cpp
 from . import dsc_ast_cpp
 
 def GetIncludePathSpec(in_ast_node):
-    if in_ast_node._type != dsc_ast_cpp.AstType.PREPROCESSOR_INCLUDE:
+    if in_ast_node._type != dsc_ast_cpp.AstType.PREPROCESSOR and in_ast_node._sub_type != dsc_ast_cpp.SubType.PREPROCESSOR_INCLUDE:
         return ""
     for child in in_ast_node._children:
         if child._type != dsc_ast_cpp.AstType.TOKEN:
@@ -11,7 +11,7 @@ def GetIncludePathSpec(in_ast_node):
     return ""
 
 def SetIncludePathSpec(in_ast_node, in_path_spec):
-    if in_ast_node._type != dsc_ast_cpp.AstType.PREPROCESSOR_INCLUDE:
+    if in_ast_node._type != dsc_ast_cpp.AstType.PREPROCESSOR and in_ast_node._sub_type != dsc_ast_cpp.SubType.PREPROCESSOR_INCLUDE:
         return ""
     for child in in_ast_node._children:
         if child._type != dsc_ast_cpp.AstType.TOKEN:
@@ -34,20 +34,7 @@ def AstTransformSortInclude(in_ast_node, in_stack_ast_node, in_data):
 
     first_char = ""
     for child in array_to_sort:
-        # new_first_char = GetIncludePathSpec(child)[:1]
-        # if first_char != new_first_char:
-        #     first_char = new_first_char
-        #     new_child_array.append(dsc_ast_cpp.AST(
-        #         dsc_ast_cpp.AstType.WHITE_SPACE, 
-        #         dsc_token_cpp.Token("\n", dsc_token_cpp.TokenType.WHITE_SPACE)
-        #         ))
         new_child_array.append(child)
-
-    # if 0 != len(array_to_sort):
-    #     new_child_array.append(dsc_ast_cpp.AST(
-    #         dsc_ast_cpp.AstType.WHITE_SPACE, 
-    #         dsc_token_cpp.Token("\n", dsc_token_cpp.TokenType.WHITE_SPACE)
-    #         ))
 
     for child in in_ast_node._children:
         path_spec = GetIncludePathSpec(child)

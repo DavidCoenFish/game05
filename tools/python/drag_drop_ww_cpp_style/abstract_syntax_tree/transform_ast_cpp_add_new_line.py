@@ -3,7 +3,7 @@ from . import dsc_ast_cpp
 from . import export
 
 def GetIncludePathSpec(in_ast_node):
-    if in_ast_node._type != dsc_ast_cpp.AstType.PREPROCESSOR_INCLUDE:
+    if in_ast_node._sub_type != dsc_ast_cpp.SubType.PREPROCESSOR_INCLUDE:
         return ""
     for child in in_ast_node._children:
         if child._type != dsc_ast_cpp.AstType.TOKEN:
@@ -34,24 +34,24 @@ def AstTransformAddNewLine(in_ast_node, in_stack_ast_node, in_data):
         ):
         in_ast_node._export_post_children_format.append(export.ExportFormat.NEW_LINE)
     elif (
-        in_ast_node._type == dsc_ast_cpp.AstType.PREPROCESSOR_INCLUDE or
-        in_ast_node._type == dsc_ast_cpp.AstType.ACCESS_SPECIFIER or
         in_ast_node._type == dsc_ast_cpp.AstType.COMMENT or
         in_ast_node._type == dsc_ast_cpp.AstType.STATEMENT or
-        in_ast_node._type == dsc_ast_cpp.AstType.STATEMENT_CLASS or
-        in_ast_node._type == dsc_ast_cpp.AstType.STATEMENT_STRUCT or
-        in_ast_node._type == dsc_ast_cpp.AstType.STATEMENT_CONSTRUCTOR or
-        in_ast_node._type == dsc_ast_cpp.AstType.STATEMENT_DESTRUCTOR or
-        in_ast_node._type == dsc_ast_cpp.AstType.STATEMENT_METHOD_DECLARATION or
-        in_ast_node._type == dsc_ast_cpp.AstType.STATEMENT_METHOD_DEFINITION or
-        in_ast_node._type == dsc_ast_cpp.AstType.STATEMENT_MEMBER or
-        in_ast_node._type == dsc_ast_cpp.AstType.STATEMENT_FORWARD_DECLARATION
+        in_ast_node._sub_type == dsc_ast_cpp.SubType.PREPROCESSOR_INCLUDE or
+        in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_ACCESS or
+        in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_CLASS or
+        in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_STRUCT or
+        in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_CONSTRUCTOR or
+        in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_DESTRUCTOR or
+        in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_METHOD_DECLARATION or
+        in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_METHOD_DEFINITION or
+        in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_MEMBER or
+        in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_FORWARD_DECLARATION
         ):
         in_ast_node._export_post_children_format.append(export.ExportFormat.NEW_LINE)
     elif (
         in_ast_node._type == dsc_ast_cpp.AstType.SCOPE_END
         ):
-        if grand_parent and grand_parent._type == dsc_ast_cpp.AstType.STATEMENT_METHOD_DEFINITION:
+        if grand_parent and grand_parent._sub_type == dsc_ast_cpp.SubType.STATEMENT_METHOD_DEFINITION:
             in_ast_node._export_post_token_format.append(export.ExportFormat.NEW_LINE)
         else:
             in_ast_node._export_pre_token_format.append(export.ExportFormat.NEW_LINE)
@@ -75,20 +75,20 @@ def AstTransformAddNewLine(in_ast_node, in_stack_ast_node, in_data):
             prev_include._export_post_children_format.append(export.ExportFormat.NEW_LINE)
 
     # if i am not the first ACCESS_SPECIFIER of the parent scope, add a blank line above
-    if in_ast_node._type == dsc_ast_cpp.AstType.ACCESS_SPECIFIER and parent is not None:
+    if in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_ACCESS and parent is not None:
         is_first_accessor = True
         for child in parent._children:
-            if child._type == dsc_ast_cpp.AstType.ACCESS_SPECIFIER:
+            if child._sub_type == dsc_ast_cpp.SubType.STATEMENT_ACCESS:
                 is_first_accessor = id(in_ast_node) == id(child)
                 break
         if False == is_first_accessor:
             in_ast_node._export_pre_token_format.append(export.ExportFormat.NEW_LINE)
 
     # a blank line after forward declarations
-    if in_ast_node._type == dsc_ast_cpp.AstType.STATEMENT_FORWARD_DECLARATION and parent is not None:
+    if in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_FORWARD_DECLARATION and parent is not None:
         is_last = False
         for child in reversed(parent._children):
-            if child._type == dsc_ast_cpp.AstType.STATEMENT_FORWARD_DECLARATION:
+            if child._sub_type == dsc_ast_cpp.SubType.STATEMENT_FORWARD_DECLARATION:
                 is_last = id(in_ast_node) == id(child)
                 break
         if True == is_last:
@@ -99,9 +99,9 @@ def AstTransformAddNewLine(in_ast_node, in_stack_ast_node, in_data):
         in_ast_node._type == dsc_ast_cpp.AstType.SCOPE and
         parent is not None and
         (
-            parent._type == dsc_ast_cpp.AstType.STATEMENT_CLASS or
-            parent._type == dsc_ast_cpp.AstType.STATEMENT_STRUCT or
-            parent._type == dsc_ast_cpp.AstType.STATEMENT_METHOD_DEFINITION 
+            parent._sub_type == dsc_ast_cpp.SubType.STATEMENT_CLASS or
+            parent._sub_type == dsc_ast_cpp.SubType.STATEMENT_STRUCT or
+            parent._sub_type == dsc_ast_cpp.SubType.STATEMENT_METHOD_DEFINITION 
         )):
         in_ast_node._export_pre_token_format.append(export.ExportFormat.NEW_LINE)
         in_ast_node._export_post_token_format.append(export.ExportFormat.NEW_LINE)
@@ -116,7 +116,7 @@ def AstTransformAddNewLine(in_ast_node, in_stack_ast_node, in_data):
                 child._export_pre_token_format.append(export.ExportFormat.NEW_LINE)
 
     # Deal formal paramater list
-    if in_ast_node._type == dsc_ast_cpp.AstType.STATEMENT_METHOD_DEFINITION:
+    if in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_METHOD_DEFINITION:
         depth_incremented = False
         for child in in_ast_node._children:
             if child._token and child._token._data == ":":

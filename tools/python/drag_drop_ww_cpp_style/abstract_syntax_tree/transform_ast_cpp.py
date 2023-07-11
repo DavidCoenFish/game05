@@ -19,8 +19,8 @@ def TransformAst(in_ast, in_debug):
     in_ast.Visit(transform_ast_cpp_add_new_line.AstTransformAddNewLine)
     in_ast.Visit(transform_ast_cpp_add_depth.AstTransformAddDepth)
 
-    # if True == in_debug:
-    #     print("==========(post transform abstract syntax tree)===========")
-    #     in_ast.Dump()
+    if True == in_debug:
+        print("==========(post transform abstract syntax tree)===========")
+        in_ast.Dump()
 
     return

@@ -27,9 +27,9 @@ def BuildOutput(in_ast_node, in_output):
     PerformFormatting(in_ast_node._export_pre_token_format, in_output)
 
     if in_ast_node._type == dsc_ast_cpp.AstType.COMMENT:
-        if in_ast_node._token._type == dsc_token_cpp.TokenType.COMMENT_END_LINE:
+        if in_ast_node._token._sub_type == dsc_token_cpp.CommentType.END_OF_LINE:
             in_output.AddEndLineComment(in_ast_node._token._data)
-        if in_ast_node._token._type == dsc_token_cpp.TokenType.COMMENT_MULTI_LINE:
+        if in_ast_node._token._sub_type == dsc_token_cpp.CommentType.MULTI_LINE:
            in_output.AddMultiLineComment(in_ast_node._token._data)
     elif in_ast_node._type == dsc_ast_cpp.AstType.WHITE_SPACE:
         pass

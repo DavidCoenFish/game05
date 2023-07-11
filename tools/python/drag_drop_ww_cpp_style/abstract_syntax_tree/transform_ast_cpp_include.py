@@ -19,7 +19,7 @@ def AdjustInclude(in_path_spec):
     return result
 
 def GetIncludePathSpec(in_ast_node):
-    if in_ast_node._type != dsc_ast_cpp.AstType.PREPROCESSOR_INCLUDE:
+    if in_ast_node._type != dsc_ast_cpp.AstType.PREPROCESSOR and in_ast_node._sub_type != dsc_ast_cpp.SubType.PREPROCESSOR_INCLUDE:
         return ""
     for child in in_ast_node._children:
         if child._type != dsc_ast_cpp.AstType.TOKEN:
@@ -28,7 +28,7 @@ def GetIncludePathSpec(in_ast_node):
     return ""
 
 def SetIncludePathSpec(in_ast_node, in_path_spec):
-    if in_ast_node._type != dsc_ast_cpp.AstType.PREPROCESSOR_INCLUDE:
+    if in_ast_node._type != dsc_ast_cpp.AstType.PREPROCESSOR and in_ast_node._sub_type != dsc_ast_cpp.SubType.PREPROCESSOR_INCLUDE:
         return ""
     for child in in_ast_node._children:
         if child._type != dsc_ast_cpp.AstType.TOKEN:

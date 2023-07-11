@@ -2,6 +2,10 @@ from . import dsc_token_cpp
 from . import dsc_ast_cpp
 
 def RenameMemeber(in_name, in_visit_data):
+    #first letter is capitol, is a class name or function name?
+    if in_name[:1].isupper():
+        return
+
     new_name = in_name
     if "m_" == new_name[:2]:
         new_name = new_name[2:]
@@ -54,19 +58,30 @@ def RenameParameter(in_name, in_visit_data):
 # rename local members "swapChainDesc" => "swap_chain_desc"
 # for (auto pIter : m_listResource) => for (auto iter : _list_resource)
 def AstTransformRenameVariables(in_ast_node, in_stack_ast_node, in_visit_data):
-    # Rename member 
-    if (
-        in_ast_node._type == dsc_ast_cpp.AstType.STATEMENT_MEMBER or
-        in_ast_node._type == dsc_ast_cpp.AstType.STATEMENT
-        ):
+    # Rename member, the last token
+    if in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_MEMBER:
         for child in reversed(in_ast_node._children):
             if child._type == dsc_ast_cpp.AstType.STATEMENT_END:
                 continue
             if child._type == dsc_ast_cpp.AstType.TOKEN:
                 child._token._data = RenameMemeber(child._token._data, in_visit_data)
                 break
+
+    # rename tokens in statement which are not keywords or operators
+    if (
+        in_ast_node._sub_type == dsc_ast_cpp.SubType.NONE and
+        in_ast_node._type == dsc_ast_cpp.AstType.STATEMENT
+        ):
+        for child in in_ast_node._children:
+            if (
+                child._type == dsc_ast_cpp.AstType.TOKEN and
+                child._token._type == dsc_token_cpp.TokenType.TOKEN
+                ):
+                child._token._data = RenameMemeber(child._token._data, in_visit_data)
+                break
+
     # rename formal paramater list
-    if in_ast_node._type == dsc_ast_cpp.AstType.STATEMENT_METHOD_DEFINITION:
+    if in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_METHOD_DEFINITION:
         found_colin = False
         for child in in_ast_node._children:
             if child._token:
@@ -77,10 +92,10 @@ def AstTransformRenameVariables(in_ast_node, in_stack_ast_node, in_visit_data):
 
     # Rename method param
     if (
-        in_ast_node._type == dsc_ast_cpp.AstType.STATEMENT_CONSTRUCTOR or
-        in_ast_node._type == dsc_ast_cpp.AstType.STATEMENT_DESTRUCTOR or
-        in_ast_node._type == dsc_ast_cpp.AstType.STATEMENT_METHOD_DECLARATION or
-        in_ast_node._type == dsc_ast_cpp.AstType.STATEMENT_METHOD_DEFINITION
+        in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_CONSTRUCTOR or
+        in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_DESTRUCTOR or
+        in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_METHOD_DECLARATION or
+        in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_METHOD_DEFINITION
         ):
         for child in in_ast_node._children:
             if child._type == dsc_ast_cpp.AstType.PARENTHESIS:
