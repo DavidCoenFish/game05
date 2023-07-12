@@ -1,0 +1,18 @@
+#include "common/draw_system/i_resource.h"
+
+#pragma once
+class GeometryGeneric : public IResource
+{
+public::
+    void Draw(ID3D12GraphicsCommandList* const in_command_list);
+
+private::
+    virtual void OnDeviceRestored(ID3D12GraphicsCommandList* const pCommandList, ID3D12Device2* const in_device)override
+        ;
+    const std::vector < D3D12_INPUT_ELEMENT_DESC > _input_element_desc_array;
+    std::vector < float > _vertex_raw_data;
+    int _float_per_vertex;
+    Microsoft::WRL::ComPtr < ID3D12Resource > _vertex_buffer;
+    D3D12_VERTEX_BUFFER_VIEW _vertex_buffer_view;
+
+};

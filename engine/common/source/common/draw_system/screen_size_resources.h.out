@@ -1,0 +1,55 @@
+#pragma once
+struct CD3DX12_CPU_DESCRIPTOR_HANDLE;
+class RenderTargetBackBuffer;
+class DrawSystem;
+class IRenderTarget;
+struct RenderTargetFormatData;
+struct RenderTargetDepthData;
+
+class ScreenSizeResources
+{
+public::
+    ~ScreenSizeResources();
+    const UINT64 GetFenceValue();
+    void SetFenceValue(const UINT64 in_value);
+    void Prepare(ID3D12GraphicsCommandList*& in_command_list);
+    // Void Clear();
+
+    const bool Present(HRESULT& hr, const Microsoft::WRL::ComPtr < ID3D12CommandQueue > & in_command_queue);
+    IRenderTarget* GetRenderTargetBackBuffer();
+    void UpdateBackBufferIndex();
+    const int GetBackBufferIndex()const
+    {
+        return _back_buffer_index;
+    }
+
+    const int GetWidth()const
+    {
+        return _width;
+    }
+
+    const int GetHeight()const
+    {
+        return _height;
+    }
+
+    void WaitForGpu(const Microsoft::WRL::ComPtr < ID3D12CommandQueue > & in_command_queue)noexcept;
+    void MoveToNextFrame(const Microsoft::WRL::ComPtr < ID3D12CommandQueue > & in_command_queue);
+    // Void Clear();
+
+
+private::
+    int _width;
+    int _height;
+    bool _allow_tearing;
+    int _back_buffer_count;
+    int _back_buffer_index;
+    Microsoft::WRL::ComPtr < ID3D12GraphicsCommandList > _command_list;
+    Microsoft::WRL::ComPtr < ID3D12CommandAllocator > _command_allocators[MAX_BACK_BUFFER_COUNT];
+    UINT64 _fence_values[MAX_BACK_BUFFER_COUNT];
+    Microsoft::WRL::ComPtr < ID3D12Fence > _fence;
+    Microsoft::WRL::Wrappers::Event _fence_event;
+    Microsoft::WRL::ComPtr < IDXGISwapChain3 > _swap_chain;
+    std::unique_ptr < RenderTargetBackBuffer > _render_target_back_buffer[MAX_BACK_BUFFER_COUNT];
+
+};

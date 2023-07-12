@@ -1,0 +1,84 @@
+#include "common/draw_system/render_target/render_target_depth_data.h"
+#include "common/draw_system/render_target/render_target_format_data.h"
+
+#pragma once
+// Enum class DeviceResourcesOptions
+// {
+// None = 0,
+// AllowTearing = 0x1,
+// EnableHDR = 0x2
+// };
+class DrawSystem;
+class IResource;
+class ScreenSizeResources;
+class IRenderTarget;
+struct RenderTargetFormatData;
+struct RenderTargetDepthData;
+
+namespace DirectX{class GraphicsMemory;
+class GraphicsResource;
+
+
+}
+class DeviceResources
+{
+public::
+    DeviceResources(const unsigned int backBufferCount, const D3D_FEATURE_LEVEL d3dFeatureLevel, const unsigned int 
+            options, const RenderTargetFormatData& targetFormatData, const RenderTargetDepthData& in_target_depth_data);
+    ~DeviceResources();
+    void WaitForGpu()noexcept;
+    const bool OnResize(DrawSystem* const pDrawSystem, const HWND hWnd, int & out_width, int & in_out_height);
+    const int GetBackBufferIndex()const;
+    DirectX::GraphicsResource AllocateUpload(const std::size_t size, void * const pDataOrNullptr, size_t alignment = 16)
+        ;
+    void Prepare(ID3D12GraphicsCommandList*& in_command_list);
+    // Void Clear();
+
+    const bool Present();
+    IRenderTarget* GetRenderTargetBackBuffer();
+    ID3D12Device2* const GetD3dDevice();
+    // ID3D12CommandQueue* const GetCommandQueue();
+
+    ID3D12GraphicsCommandList* GetCustomCommandList();
+    void CustomCommandListFinish(ID3D12GraphicsCommandList* in_command_list);
+    // Return true if size changed
+
+    const bool CreateWindowSizeDependentResources(
+    DrawSystem* const pDrawSystem, const HWND hWnd, int * out_pWidth = in_nullptr ,
+    int * out_pHeight = in_nullptr
+    );
+
+private::
+    void MoveToNextFrame();
+    // Void UpdateColorSpace();
+
+    void WaitForCustomCommand();
+
+public::
+    static const unsigned int c_EnableHDR = _0x2;
+    // Void Clear();
+
+    // ID3D12CommandQueue* const GetCommandQueue();
+
+    // Return true if size changed
+
+
+private::
+    // Void UpdateColorSpace();
+
+    unsigned int _options;
+    RenderTargetFormatData _target_format_data;
+    RenderTargetDepthData _target_depth_data;
+    Microsoft::WRL::ComPtr < IDXGIFactory6 > _d_x_g_i_factory;
+    DWORD _dxgi_factory_flags;
+    Microsoft::WRL::ComPtr < ID3D12Device2 > _device;
+    Microsoft::WRL::ComPtr < ID3D12CommandQueue > _command_queue;
+    UINT64 _custom_command_list_fence_value;
+    Microsoft::WRL::ComPtr < ID3D12Fence > _custom_command_fence;
+    Microsoft::WRL::Wrappers::Event _custom_command_fence_event;
+    Microsoft::WRL::ComPtr < ID3D12CommandAllocator > _custom_command_allocator;
+    Microsoft::WRL::ComPtr < ID3D12GraphicsCommandList > _custom_command_list;
+    std::unique_ptr < ScreenSizeResources > _screen_size_resources;
+    std::unique_ptr < DirectX::GraphicsMemory > _graphics_memory;
+
+};

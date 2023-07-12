@@ -142,6 +142,9 @@ class KeywordType(enum.Enum):
     WCHAR_T = 73 # wchar_t
     WHILE = 74 # while
 
+    DEFINED = 75 # defined
+
+
 class PreprocessorType(enum.Enum):
     NONE = 0
     INCLUDE = 1 
@@ -156,6 +159,10 @@ class PreprocessorType(enum.Enum):
     LINE = 10
     ERROR = 11
 
+def SaveTextFile(in_file_path, in_data):
+    text_file = open(in_file_path, "w")
+    n = text_file.write(in_data)
+    text_file.close()
 
 # ("#", ":") current not in special symbol set
 #s_special_symbols = set(("[","]","(",")","{","}",",","*","~",".", "'","?","<",">",";","&","/","+","-", "!", "%", "^", "|","=", "\\"))
@@ -283,6 +290,8 @@ s_keyword_dict = {
     "volatile" : KeywordType.VOLATILE,
     "wchar_t" : KeywordType.WCHAR_T,
     "while" : KeywordType.WHILE,
+
+    "defined" : KeywordType.DEFINED
 }
 
 s_preprocessor_dict = {
@@ -303,7 +312,10 @@ s_preprocessor_dict = {
 def IsEscapedStringComplete(in_data):
     prev_was_escape = False
     last_was_true_quote = False
-    for c in in_data[1:]:
+    start = 1
+    if in_data.startswith("L\""):
+        start = 2
+    for c in in_data[start:]:
         if True == prev_was_escape:
             prev_was_escape = False
         elif c == "\\":
@@ -338,18 +350,34 @@ def CalculateCouldBeIncludePathSpec(in_array_tokens, in_c):
     return False
 
 def ConsumeDict(in_trace_self, in_array_tokens, in_forward_string, in_dict, in_token_type):
+    found_length = 0
+    found_key = ""
+    found_value = ""
     for key in in_dict.keys():
         if in_forward_string.startswith(key):
-            value = in_dict[key]
-            if in_trace_self._data != "":
-                in_array_tokens.append(Token(key, in_token_type, value))
-            else:
-                in_trace_self._type = in_token_type
-                in_trace_self._sub_type = value
-                in_trace_self._data = key
-            return len(key)
-    return 0
+            length = len(key)
+            if length <= found_length:
+                continue
+            found_length = length
+            found_key = key
+            found_value = in_dict[key]
+    if 0 == found_length:
+        return 0
+    if in_trace_self._data != "":
+        in_array_tokens.append(Token(found_key, in_token_type, found_value))
+    else:
+        in_trace_self._type = in_token_type
+        in_trace_self._sub_type = found_value
+        in_trace_self._data = found_key
+    in_array_tokens.append(Token())
+    return found_length
 
+def IsStringKeywordThatBreaksToken(in_forward_string):
+    keywords_set = set({".","(",")","[","]","::","->","<",">",";"})
+    for key in keywords_set:
+        if in_forward_string.startswith(key):
+            return True
+    return False
 
 class Token:
     def __init__(self, in_data = "", in_type = TokenType.NONE, in_sub_type = KeywordType.NONE):
@@ -358,7 +386,9 @@ class Token:
         self._sub_type = in_sub_type
 
     def __str__(self):
-        data = self._data.replace("\n", "\\n")
+        data = "<None>"
+        if self._data:
+            data = self._data.replace("\n", "\\n")
         return f"Token data ({data}) type ({self._type.name}) sub type ({self._sub_type.name})"
 
     def __repr__(self):
@@ -381,6 +411,35 @@ class Token:
     def DealChar(self, in_array_tokens, in_c, in_forward_string):
         trace_self = self
 
+        # Comment end of line contents
+        if trace_self._type == TokenType.COMMENT and trace_self._sub_type == CommentType.END_OF_LINE:
+            if in_c == "\n":
+                in_array_tokens.append(Token("\n", TokenType.WHITE_SPACE))
+                return 1
+            trace_self._data += in_c
+            return 1
+
+        # Comment multi line contents
+        if trace_self._type == TokenType.COMMENT and trace_self._sub_type == CommentType.MULTI_LINE:
+            trace_self._data += in_c
+            if trace_self._data[-2:] == "*/":
+                in_array_tokens.append(Token())
+            return 1
+
+        # include path spec contents
+        if trace_self._type == TokenType.INCLUDE_PATH_SPEC:
+            trace_self._data += in_c
+            if in_c == ">" or in_c == "\"":
+                in_array_tokens.append(Token())
+            return 1
+
+        # String literal contents
+        if trace_self._type == TokenType.STRING_LITERAL:
+            trace_self._data += in_c
+            if True == IsEscapedStringComplete(trace_self._data):
+                in_array_tokens.append(Token())
+            return 1
+
         # include path spec
         could_be_include_path_spec = CalculateCouldBeIncludePathSpec(in_array_tokens, in_c)
         if True == could_be_include_path_spec:
@@ -391,20 +450,22 @@ class Token:
                 trace_self._type = TokenType.INCLUDE_PATH_SPEC
             return 1
 
-        # include path spec contents
-        if trace_self._type == TokenType.INCLUDE_PATH_SPEC:
-            trace_self._data += in_c
-            if in_c == ">" or in_c == "\"":
-                in_array_tokens.append(Token())
-            return 1
-
         # String literal
-        if trace_self._data[:1] == "\"":
-            trace_self._type = TokenType.STRING_LITERAL
-            trace_self._data += in_c
-            if True == IsEscapedStringComplete(trace_self._data):
-                in_array_tokens.append(Token())
-            return 1
+        if trace_self._type != TokenType.STRING_LITERAL:
+            if in_forward_string[:2] == "L\"":
+                if trace_self._data != "":
+                    trace_self = Token()
+                    in_array_tokens.append(trace_self)
+                trace_self._type = TokenType.STRING_LITERAL
+                trace_self._data += "L\""
+                return 2
+            if in_forward_string[:1] == "\"":
+                if trace_self._data != "":
+                    trace_self = Token()
+                    in_array_tokens.append(trace_self)
+                trace_self._type = TokenType.STRING_LITERAL
+                trace_self._data += in_c
+                return 1
 
         # Character literal
         if trace_self._data[:1] == "\'":
@@ -425,14 +486,6 @@ class Token:
                 trace_self._data = data
             return 2
 
-        # Comment end of line contents
-        if trace_self._type == TokenType.COMMENT and trace_self._sub_type == CommentType.END_OF_LINE:
-            if in_c == "\n":
-                in_array_tokens.append(Token("\n", TokenType.WHITE_SPACE))
-                return 1
-            trace_self._data += in_c
-            return 1
-
         # Comment multi line
         if in_forward_string.startswith("/*"):
             data = in_forward_string[:2]
@@ -444,22 +497,21 @@ class Token:
                 trace_self._data = data
             return 2
 
-        # Comment multi line contents
-        if trace_self._type == TokenType.COMMENT and trace_self._sub_type == CommentType.MULTI_LINE:
-            trace_self._data += in_c
-            if trace_self._data[-2:] == "*/":
-                in_array_tokens.append(Token())
-            return 1
-
-        step = ConsumeDict(trace_self, in_array_tokens, in_forward_string, s_preprocessor_dict, TokenType.PREPROCESSOR)
-        if 0 != step:
-            return step
-        step = ConsumeDict(trace_self, in_array_tokens, in_forward_string, s_operator_dict, TokenType.OPERATOR)
-        if 0 != step:
-            return step
-        step = ConsumeDict(trace_self, in_array_tokens, in_forward_string, s_keyword_dict, TokenType.KEYWORD)
-        if 0 != step:
-            return step
+        # only allow keyword detection from the start of a token, ie, sprint_f was making "spr", "int", "_f"
+        if (
+            trace_self._data == "" or 
+            trace_self._type == TokenType.WHITE_SPACE or
+            True == IsStringKeywordThatBreaksToken(in_forward_string)
+            ):
+            step = ConsumeDict(trace_self, in_array_tokens, in_forward_string, s_preprocessor_dict, TokenType.PREPROCESSOR)
+            if 0 != step:
+                return step
+            step = ConsumeDict(trace_self, in_array_tokens, in_forward_string, s_operator_dict, TokenType.OPERATOR)
+            if 0 != step:
+                return step
+            step = ConsumeDict(trace_self, in_array_tokens, in_forward_string, s_keyword_dict, TokenType.KEYWORD)
+            if 0 != step:
+                return step
 
         # Deal whitespace
         c_is_space = in_c.isspace()
@@ -501,16 +553,21 @@ def TokenizeData(in_data, in_debug = False):
 
     if True == in_debug:
         reassembled_data = ""
+        debug_file_data = ""
         for token in token_array:
-            print(str(token))
+            debug_file_data += str(token) + "\n"
             reassembled_data += token._data
 
+        SaveTextFile("build\\debug_tokens.txt", debug_file_data)
+
         if reassembled_data != in_data:
-            print("==============( in_data )==========================")
-            print(in_data)
-            print("==============( reassembled data )=================")
-            print(reassembled_data)
-            print("===================================================")
+            #print("==============( in_data )==========================")
+            #print(in_data)
+            SaveTextFile("build\\debug_tokens_source.txt", in_data)
+            #print("==============( reassembled data )=================")
+            #print(reassembled_data)
+            #print("===================================================")
+            SaveTextFile("build\\debug_tokens_reassembled.txt", reassembled_data)
             raise Exception("reassembled data from token array doesn't match the input data")
 
     return token_array

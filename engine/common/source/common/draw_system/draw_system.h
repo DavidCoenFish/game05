@@ -28,7 +28,7 @@ namespace DirectX
 {
    class GraphicsMemory;
    class GraphicsResource;
-};
+}
 
 class DrawSystem
 {

@@ -17,7 +17,9 @@ def CollectChildren(in_children, in_output, in_focus_set, out_comment_list = [],
     for child in in_children:
         if child._sub_type in in_focus_set:
             if in_output:
-                in_output[child._access] = in_output[child._access] + comment_list + [child]
+                for item in comment_list:
+                    in_output[child._access].append(item)
+                in_output[child._access].append(child)
                 comment_list.clear()
             out_comment_list.clear()
         elif child._type == dsc_ast_cpp.AstType.COMMENT:

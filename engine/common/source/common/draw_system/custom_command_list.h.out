@@ -1,0 +1,18 @@
+#pragma once
+/*
+    multiline comment
+    and some more
+*/
+class DrawSystem;
+
+// Comment test
+class CustomCommandList
+{
+public::
+    ~CustomCommandList();
+    ID3D12GraphicsCommandList* GetCommandList();
+
+private::
+    DrawSystem& _draw_system;
+
+};

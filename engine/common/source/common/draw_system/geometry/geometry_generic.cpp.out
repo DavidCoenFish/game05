@@ -1,0 +1,40 @@
+#include "common/common_pch.h"
+
+#include "common/draw_system/geometry/geometry_generic.h"
+#include "common/draw_system/geometry/i_geometry.h"
+
+GeometryGeneric::GeometryGeneric(DrawSystem* const pDrawSystem, const D3D_PRIMITIVE_TOPOLOGY primitiveTopology, const 
+        std::vector < D3D12_INPUT_ELEMENT_DESC > & inputElementDescArray, const std::vector < float > & vertexDataRaw, 
+        const int float in_per_vertex)
+    : IResource(in_draw_system)
+    , _primitive_topology(in_primitive_topology)
+    , _input_element_desc_array(in_input_element_desc_array)
+    , _vertex_raw_data(in_vertex_data_raw)
+    , _float_per_vertex(float in_per_vertex)
+    , _vertex_buffer()
+    , _vertex_buffer_view{}
+{
+    // Nop
+}
+
+void GeometryGeneric::Draw(ID3D12GraphicsCommandList* const in_command_list)
+{
+    IGeometry::DrawImplementation(
+    in_command_list,(UINT)(m_vertexRawData.size()/ m_floatPerVertex),
+    m_primitiveTopology, _vertex_buffer_view
+    );
+}
+
+void GeometryGeneric::OnDeviceLost()
+{
+    IGeometry::DeviceLostImplementation(_vertex_buffer);
+}
+
+void GeometryGeneric::OnDeviceRestored(ID3D12GraphicsCommandList* const pCommandList, ID3D12Device2* const in_device)
+{
+    IGeometry::DeviceRestoredImplementation(
+    m_pDrawSystem, pCommandList, in_device,(int)(m_vertexRawData.size()/ m_floatPerVertex),
+    sizeof(float)* m_floatPerVertex, m_pVertexBuffer, m_vertexBufferView, m_vertexRawData.in_data()
+    );
+}
+

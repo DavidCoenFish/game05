@@ -4,7 +4,9 @@ from . import dsc_ast_cpp
 def RenameMemeber(in_name, in_visit_data):
     #first letter is capitol, is a class name or function name?
     if in_name[:1].isupper():
-        return
+        return in_name
+    if in_name.isdigit():
+        return in_name
 
     new_name = in_name
     if "m_" == new_name[:2]:
@@ -31,6 +33,9 @@ def RenameMemeber(in_name, in_visit_data):
     return new_name
 
 def RenameParameter(in_name, in_visit_data):
+    if in_name.isdigit():
+        return in_name
+
     #if in_name in in_visit_data:
     #    return in_visit_data[in_name]
     if "m_p" == in_name[:3] or "m_" == in_name[:2]:

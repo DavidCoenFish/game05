@@ -36,7 +36,8 @@ def AstTransformAddNewLine(in_ast_node, in_stack_ast_node, in_data):
     elif (
         in_ast_node._type == dsc_ast_cpp.AstType.COMMENT or
         in_ast_node._type == dsc_ast_cpp.AstType.STATEMENT or
-        in_ast_node._sub_type == dsc_ast_cpp.SubType.PREPROCESSOR_INCLUDE or
+        in_ast_node._type == dsc_ast_cpp.AstType.PREPROCESSOR or
+        #in_ast_node._sub_type == dsc_ast_cpp.SubType.PREPROCESSOR_INCLUDE or
         in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_ACCESS or
         in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_CLASS or
         in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_STRUCT or

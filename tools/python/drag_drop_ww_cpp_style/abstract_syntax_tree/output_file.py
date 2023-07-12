@@ -32,12 +32,15 @@ class OutputFile:
 
     # We add tokens, but we don't add white space to the start of a line
     def AddTokkenToCurrent(self, in_token_text): 
+        if None == in_token_text or "" == in_token_text:
+            return
+
         token_copy = in_token_text
         if self._current_line == "":
             self._current_line = (self._tab * self._depth)
             token_copy = token_copy.strip()
 
-        if self._max_line_length < len(self._current_line) + len(in_token_text):
+        if self._max_line_length < len(self._current_line) + len(token_copy):
             self.NewLine()
             self._current_line = (self._tab * (self._depth + 1)) + token_copy.strip()
         else:
@@ -60,6 +63,6 @@ class OutputFile:
             self.NewLine()
             self.AddTokkenToCurrent("*/")
         else:
-            text = "/* " + in_multiline_comment_text.strip() + " */"
+            text = "/* " + data.strip() + " */"
             self.AddTokkenToCurrent(text)
 

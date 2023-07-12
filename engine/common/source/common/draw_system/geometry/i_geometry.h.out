@@ -1,0 +1,14 @@
+#pragma once
+// #include "Common/DrawSystem/IResource.h"
+class DrawSystem;
+
+class IGeometry // : public IResource
+
+{
+public::
+    static void DeviceLostImplementation(Microsoft::WRL::ComPtr < ID3D12Resource > & in_vertex_buffer);
+    static void DeviceRestoredImplementation(DrawSystem* const pDrawSystem, ID3D12GraphicsCommandList* const 
+        pCommandList, ID3D12Device* const pDevice, const int vertexCount, const int byteVertexSize, Microsoft::WRL::
+        ComPtr < ID3D12Resource > & pVertexBuffer, D3D12_VERTEX_BUFFER_VIEW& vertexBufferView, void * in_raw_data);
+
+};

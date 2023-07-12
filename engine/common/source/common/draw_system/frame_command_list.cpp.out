@@ -1,0 +1,68 @@
+#include "common/common_pch.h"
+
+#include "common/draw_system/d3dx12.h"
+#include "common/draw_system/frame_command_list.h"
+
+CustomCommandList::CustomCommandList(ID3D12Device* const pDevice, ID3D12CommandQueue* const pCommandQueue, 
+        ID3D12GraphicsCommandList* const in_command_list)
+    : _device(in_device)
+    , _command_queue(in_command_queue)
+    , _command_list(in_command_list)
+{
+    return;
+}
+
+CustomCommandList::~CustomCommandList()
+{
+    // Send the command list off to the GPU for processing.
+    if(_command_list)
+    {
+        DX::ThrowIfFailed(m_pCommandList -> in_close());
+    }
+
+    if(_command_queue)
+    {
+        m_pCommandQueue -> ExecuteCommandLists(1, in_command_list_cast(& m_pCommandList));
+    }
+
+    return;
+}
+
+void CustomCommandList::UpdateSubresourcesMethod(ID3D12Resource* pDestinationResource, ID3D12Resource* pIntermediate, 
+        UINT64 IntermediateOffset, UINT FirstSubresource, UINT NumSubresources, D3D12_SUBRESOURCE_DATA* pSrcData, 
+        D3D12_BOX* in_dest_box_or_null)
+{
+    UpdateSubresources(m_pCommandList, pDestinationResource, pIntermediate, IntermediateOffset, FirstSubresource, 
+        NumSubresources, in_src_data);
+    pDestBoxOrNull;
+    // UpdateSubresources(
+    // M_pCommandList,
+    // PDestinationResource,
+    // PIntermediate,
+    // _In_range_(0,D3D12_REQ_SUBRESOURCES) UINT FirstSubresource,
+    // _In_range_(0,D3D12_REQ_SUBRESOURCES-FirstSubresource) UINT NumSubresources,
+    // UINT64 RequiredSize,
+    // _In_reads_(NumSubresources) const D3D12_PLACED_SUBRESOURCE_FOOTPRINT* pLayouts,
+    // _In_reads_(NumSubresources) const UINT* pNumRows,
+    // _In_reads_(NumSubresources) const UINT64* pRowSizesInBytes,
+    // _In_reads_(NumSubresources) const D3D12_SUBRESOURCE_DATA* pSrcData);
+    // UpdateSubresources(
+    // M_pCommandList,
+    // PDestinationResource,
+    // PIntermediate,
+    // IntermediateOffset,
+    // FirstSubresource,
+    // NumSubresources,
+    // PSrcData,
+    // PDestBoxOrNull
+    // );
+    return;
+}
+
+void CustomCommandList::ResourceBarrier(ID3D12Resource* const pResource, D3D12_RESOURCE_STATES stateBefore, 
+        D3D12_RESOURCE_STATES in_state_after)
+{
+    auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(pResource, stateBefore, in_state_after);
+    m_pCommandList -> ResourceBarrier(1, & in_barrier);
+}
+

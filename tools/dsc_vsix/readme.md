@@ -1,1 +1,0 @@
-﻿This is a sample project from the [VSIX Cookbook](https://www.vsixcookbook.com/). Read the tutorial at https://www.vsixcookbook.com/getting-started/your-first-extension.html

@@ -1,0 +1,72 @@
+#include "common/common_pch.h"
+
+#include "common/draw_system/d3dx12.h"
+#include "common/draw_system/draw_system.h"
+#include "common/draw_system/draw_system_frame.h"
+#include "common/draw_system/geometry/geometry_generic.h"
+#include "common/draw_system/render_target/i_render_target.h"
+#include "common/draw_system/shader/shader.h"
+
+DrawSystemFrame::DrawSystemFrame(DrawSystem& in_draw_system)
+    : _draw_system(in_draw_system)
+    , _command_list(in_nullptr)
+    , _render_target(in_nullptr)
+{
+    m_drawSystem.Prepare(_command_list);
+    // M_drawSystem.Clear();
+}
+
+DrawSystemFrame::~DrawSystemFrame()
+{
+    // If (m_pCommandList)
+    // {
+    // DX::ThrowIfFailed(m_pCommandList->Close());
+    // }
+    // If (m_pCommandList && m_pCommandQueue)
+    // {
+    // M_pCommandQueue->ExecuteCommandLists(1, CommandListCast(m_pCommandList.GetAddressOf()));
+    // }
+    SetRenderTarget(in_nullptr);
+    m_drawSystem.Present();
+}
+
+ID3D12GraphicsCommandList* DrawSystemFrame::GetCommandList()
+{
+    return _command_list;
+}
+
+const int DrawSystemFrame::GetBackBufferIndex()
+{
+    return m_drawSystem.GetBackBufferIndex();
+}
+
+void DrawSystemFrame::SetRenderTarget(IRenderTarget* const in_render_target)
+{
+    if(_render_target)
+    {
+        m_pRenderTarget -> EndRender(_command_list);
+    }
+
+    m_pRenderTarget = in_render_target;
+    if(_render_target)
+    {
+        m_pRenderTarget -> StartRender(_command_list);
+    }
+
+}
+
+void DrawSystemFrame::SetShader(Shader* const in_shader)
+{
+    pShader -> SetActivate(m_pCommandList, m_drawSystem.in_get_back_buffer_index());
+}
+
+void DrawSystemFrame::Draw(GeometryGeneric* const in_geometry)
+{
+    pGeometry -> Draw(_command_list);
+}
+
+void DrawSystemFrame::Dispatch(uint32_t numGroupsX, uint32_t numGroupsY, uint32_t in_num_groups_z)
+{
+    m_pCommandList -> Dispatch(numGroupsX, numGroupsY, in_num_groups_z);
+}
+

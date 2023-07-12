@@ -1,0 +1,21 @@
+#pragma once
+class iRenderTarget;
+class Geometry;
+class Shader;
+class ShaderTexture2D;
+
+class CustomCommandList
+{
+public::
+    ~CustomCommandList();
+    void UpdateSubresourcesMethod(ID3D12Resource* pDestinationResource, ID3D12Resource* pIntermediate, UINT64 
+        IntermediateOffset, UINT FirstSubresource, UINT NumSubresources, D3D12_SUBRESOURCE_DATA* pSrcData, D3D12_BOX* 
+        pDestBoxOrNull = in_nullptr);
+    void ResourceBarrier(ID3D12Resource* const pResource, D3D12_RESOURCE_STATES stateBefore, D3D12_RESOURCE_STATES 
+        in_state_after);
+
+private::
+    ID3D12CommandQueue* _command_queue;
+    ID3D12GraphicsCommandList* _command_list;
+
+};

@@ -41,6 +41,11 @@ class SubType(enum.Enum):
     STATEMENT_FORWARD_DECLARATION = 26
     STATEMENT_ACCESS = 27
 
+def SaveTextFile(in_file_path, in_data):
+    text_file = open(in_file_path, "w")
+    n = text_file.write(in_data)
+    text_file.close()
+
 def CreateNewNode(in_stack, in_child_array, in_type, in_token, in_access = AstAccess.NONE, in_sub_type = SubType.NONE):
     node = AST(in_type, in_token, in_access, in_sub_type)
     in_stack.append(node)
@@ -143,6 +148,48 @@ def RecalculateStatementType(in_ast_node, in_stack):
 
     return SubType.NONE
 
+def CalculateColonLable(in_parent):
+    class_or_struct_found = False
+    parenthesis_found = False
+    if in_parent._token and ( in_parent._token._data == "class" or in_parent._token._data == "struct"):
+        class_or_struct_found = True
+    for child in in_parent._children:
+        if child._token and ( child._token._data == "class" or child._token._data == "struct"):
+            class_or_struct_found = True
+        if child._token and child._token._data == "(":
+            parenthesis_found = True
+    if True == class_or_struct_found or True == parenthesis_found:
+        # case 3, "class Foo : public Bar
+        # case 4, "ctor(int in_a) : m_a(in_a), m_b() {}
+        return False
+
+    # case 1, "public:" access specifier
+    # case 2, "default:" switch lable, goto lable
+    return True
+
+
+def CalculateScopeStatementEnd(in_stack):
+    if len(in_stack) <= 0:
+        return False
+    parent = in_stack[-1]
+    if parent._type != AstType.STATEMENT:
+        return False
+
+    # If we find the class or struct keyword, the scope end is not the statemenet end
+    if parent._token._sub_type == dsc_token_cpp.KeywordType.CLASS:
+        return False
+    elif parent._token._sub_type == dsc_token_cpp.KeywordType.STRUCT:
+        return False
+    for child in parent._children:
+        if child._token._sub_type == dsc_token_cpp.KeywordType.CLASS:
+            return False
+        elif child._token._sub_type == dsc_token_cpp.KeywordType.STRUCT:
+            return False
+        elif child._token._sub_type == dsc_token_cpp.OperatorType.ASSIGNMENT:
+            return False
+
+    return True
+
 class AST:
     def __init__(self, in_type = AstType.NONE, in_token = None, in_access = AstAccess.NONE, in_sub_type = SubType.NONE):
         self._type = in_type
@@ -202,6 +249,8 @@ class AST:
             elif in_token._sub_type == dsc_token_cpp.OperatorType.SCOPE_END:
                 CreateNewChild(self._children, AstType.SCOPE_END, in_token, self._access)
                 in_stack.pop()
+                if True == CalculateScopeStatementEnd(in_stack):
+                    in_stack.pop()
 
             elif in_token._sub_type == dsc_token_cpp.OperatorType.PARENTHISIS_START:
                 CreateNewNode(in_stack, self._children, AstType.PARENTHESIS, in_token, self._access)
@@ -219,12 +268,21 @@ class AST:
                 CreateNewChild(self._children, AstType.STATEMENT_END, in_token, self._access)
                 in_stack.pop()
 
-            elif in_token._sub_type == dsc_token_cpp.OperatorType.COLON and in_stack[-1]._type == AstType.STATEMENT:
-                CreateNewChild(self._children, AstType.STATEMENT_END, in_token, self._access)
-                in_stack.pop()
+            elif in_token._sub_type == dsc_token_cpp.OperatorType.COLON:
+                # case 1, "public:" access specifier
+                # case 2, "default:" switch lable, goto lable
+                if True == CalculateColonLable(in_stack[-1]):
+                    CreateNewNode(in_stack, self._children, AstType.STATEMENT_END, in_token, self._access)
+                    in_stack.pop()
+
+                # case 3, "class Foo : public Bar
+                # case 4, "ctor(int in_a) : m_a(in_a), m_b() {}
+                else:
+                    CreateNewChild(self._children, AstType.TOKEN, in_token, self._access)
 
             else:
                 CreateNewChild(self._children, AstType.TOKEN, in_token, self._access)
+
         elif in_token._type == dsc_token_cpp.TokenType.KEYWORD:
             if token_or_statement == AstType.STATEMENT:
                 if in_token._sub_type == dsc_token_cpp.KeywordType.PUBLIC:
@@ -266,10 +324,11 @@ class AST:
         return
 
     def Dump(self, in_depth = 0):
-        line = ("    " * in_depth) + str(self)
-        print(line)
+        data = ("    " * in_depth) + str(self) + "\n"
+        #print(data)
         for child in self._children:
-            child.Dump(in_depth + 1)
+            data += child.Dump(in_depth + 1)
+        return data
 
     # The visitor should return False to stop visiting each ast node
     def Visit(self, in_visitor, in_stack = [], in_data = {}):
@@ -298,19 +357,23 @@ def MakeAst(in_token_array, in_debug = False):
     stack = [result]
     for token in in_token_array:
         if len(stack) <= 0:
-            print("==============WARNING================")
-            print("why did the MakeAst::stack reach zero size")
-            print("Dump:")
-            result.Dump()
-            print("End Dump:")
+            #print("==============WARNING================")
+            #print("why did the MakeAst::stack reach zero size")
+            #print("Dump:")
+            #result.Dump()
+            #print("End Dump:")
+            debug_file_data = result.Dump()
+            SaveTextFile("build\\debug_ast_exception.txt", debug_file_data)
 
-            stack.append(result)
+            raise Exception("MakeAst::stack reach zero size")
+
         stack[-1].AddToken(stack, token)
 
     DoctorType(result)
 
     if True == in_debug:
-        result.Dump()
+        debug_file_data = result.Dump()
+        SaveTextFile("build\\debug_ast.txt", debug_file_data)
 
     return result
 

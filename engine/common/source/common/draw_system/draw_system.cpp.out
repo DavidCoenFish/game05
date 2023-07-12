@@ -1,0 +1,367 @@
+#include "common/common_pch.h"
+
+#include "common/direct_x_t_k12/graphics_memory.h"
+#include "common/draw_system/custom_command_list.h"
+#include "common/draw_system/device_resources.h"
+#include "common/draw_system/draw_system.h"
+#include "common/draw_system/draw_system_frame.h"
+#include "common/draw_system/geometry/geometry_generic.h"
+#include "common/draw_system/heap_wrapper/heap_wrapper.h"
+#include "common/draw_system/heap_wrapper/heap_wrapper_item.h"
+#include "common/draw_system/render_target/render_target_texture.h"
+#include "common/draw_system/shader/shader.h"
+#include "common/draw_system/shader/shader_resource.h"
+#include "common/draw_system/shader/unordered_access.h"
+#include "common/draw_system/shader/unordered_access_info.h"
+#include "common/j_s_o_n/j_s_o_n_draw_system.h"
+
+std::unique_ptr < DrawSystem > DrawSystem::Factory(const HWND hWnd, const JSONDrawSystem& in_json)
+{
+    return std::make_unique < DrawSystem >(hWnd, json.backBufferCount, json.d3dFeatureLevel, json.options, json.
+        targetFormatData, json.in_target_depth_data);
+}
+
+DrawSystem::DrawSystem(const HWND hWnd, const unsigned int backBufferCount, const D3D_FEATURE_LEVEL d3dFeatureLevel, 
+        const unsigned int options, const RenderTargetFormatData& targetFormatData, const RenderTargetDepthData& 
+        in_target_depth_data)
+    : _hwnd(in_hwnd)
+    , _back_buffer_count(in_back_buffer_count)
+    , _d3d_feature_level(in_d3d_feature_level)
+    , _options(in_options)
+    , _target_format_data(in_target_format_data)
+    , _target_depth_data(in_target_depth_data)
+{
+    m_pHeapWrapperCbvSrvUav = std::make_shared < HeapWrapper >(
+    in_this ,
+    D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, backBufferCount, in_true
+    );
+    m_pHeapWrapperSampler = std::make_shared < HeapWrapper >(
+    in_this ,
+    in_d3_d12__d_e_s_c_r_i_p_t_o_r__h_e_a_p__t_y_p_e__s_a_m_p_l_e_r
+    );
+    m_pHeapWrapperRenderTargetView = std::make_shared < HeapWrapper >(
+    in_this ,
+    in_d3_d12__d_e_s_c_r_i_p_t_o_r__h_e_a_p__t_y_p_e__r_t_v
+    );
+    m_pHeapWrapperDepthStencilView = std::make_shared < HeapWrapper >(
+    in_this ,
+    in_d3_d12__d_e_s_c_r_i_p_t_o_r__h_e_a_p__t_y_p_e__d_s_v
+    );
+    CreateDeviceResources();
+}
+
+DrawSystem::~DrawSystem()
+{
+    WaitForGpu();
+    for(auto pIter:_list_resource)
+    {
+        pIter -> OnDeviceLost();
+    }
+
+    m_listResource.clear();
+    m_pDeviceResources.reset();
+}
+
+DirectX::GraphicsResource DrawSystem::AllocateConstant(const std::size_t size, void * const in_constants)
+{
+    return AllocateUpload(size, pConstants, 
+        in_d3_d12__c_o_n_s_t_a_n_t__b_u_f_f_e_r__d_a_t_a__p_l_a_c_e_m_e_n_t__a_l_i_g_n_m_e_n_t);
+}
+
+DirectX::GraphicsResource DrawSystem::AllocateUpload(const std::size_t size, void * const pDataOrNullptr, size_t 
+        in_alignment)
+{
+    if(_device_resources)
+    {
+        return m_pDeviceResources -> AllocateUpload(size, pDataOrNullptr, in_alignment);
+    }
+
+    return DirectX::GraphicsResource();
+}
+
+std::shared_ptr < Shader > DrawSystem::MakeShader(ID3D12GraphicsCommandList* const pCommandList, const 
+        ShaderPipelineStateData& pipelineStateData, const std::shared_ptr < std::vector < uint8_t > > & 
+        pVertexShaderData, const std::shared_ptr < std::vector < uint8_t > > & pGeometryShaderData, const std::
+        shared_ptr < std::vector < uint8_t > > & pPixelShaderData, const std::vector < std::shared_ptr < 
+        ShaderResourceInfo > > & arrayShaderResourceInfo, const std::vector < std::shared_ptr < ConstantBufferInfo > > &
+        arrayShaderConstantsInfo, const std::shared_ptr < std::vector < uint8_t > > & pComputeShaderData, const std::
+        vector < std::shared_ptr < UnorderedAccessInfo > > & in_array_unordered_access_info)
+{
+    auto pResult = std::make_shared < Shader >(
+    in_this ,
+    pipelineStateData, pVertexShaderData, pGeometryShaderData, pPixelShaderData, arrayShaderResourceInfo, 
+        arrayShaderConstantsInfo, pComputeShaderData, in_array_unordered_access_info
+    );
+    if(pResult && _device_resources)
+    {
+        ((IResource*)(pResult.get()))-> OnDeviceRestored(pCommandList, m_pDeviceResources -> in_get_d3d_device());
+    }
+
+    return _result;
+}
+
+std::shared_ptr < GeometryGeneric > DrawSystem::MakeGeometryGeneric(ID3D12GraphicsCommandList* const pCommandList, const
+        D3D_PRIMITIVE_TOPOLOGY primitiveTopology, const std::vector < D3D12_INPUT_ELEMENT_DESC > & 
+        inputElementDescArray, const std::vector < float > & vertexDataRaw, const int float in_per_vertex)
+{
+    auto pResult = std::make_shared < GeometryGeneric >(
+    in_this ,
+    primitiveTopology, inputElementDescArray, vertexDataRaw, float in_per_vertex
+    );
+    if(pResult && _device_resources)
+    {
+        ((IResource*)(pResult.get()))-> OnDeviceRestored(pCommandList, m_pDeviceResources -> in_get_d3d_device());
+    }
+
+    return _result;
+}
+
+std::shared_ptr < ShaderResource > DrawSystem::MakeShaderResource(ID3D12GraphicsCommandList* const pCommandList, const 
+        std::shared_ptr < HeapWrapperItem > & shaderResource, const D3D12_RESOURCE_DESC& desc, const 
+        D3D12_SHADER_RESOURCE_VIEW_DESC& shaderResourceViewDesc, const std::vector < uint8_t > & in_data)
+{
+    auto pResult = std::make_shared < ShaderResource >(
+    in_this ,
+    shaderResource, desc, shaderResourceViewDesc, in_data
+    );
+    if(pResult && _device_resources)
+    {
+        ((IResource*)(pResult.get()))-> OnDeviceRestored(pCommandList, m_pDeviceResources -> in_get_d3d_device());
+    }
+
+    return _result;
+}
+
+std::shared_ptr < UnorderedAccess > DrawSystem::MakeUnorderedAccess(ID3D12GraphicsCommandList* const pCommandList, const
+        std::shared_ptr < HeapWrapperItem > & pHeapWrapperItem, const D3D12_RESOURCE_DESC& desc, const 
+        D3D12_UNORDERED_ACCESS_VIEW_DESC& in_unordered_access_view_desc)
+{
+    auto pResult = std::make_shared < UnorderedAccess >(
+    in_this ,
+    pHeapWrapperItem, desc, in_unordered_access_view_desc
+    );
+    if(pResult && _device_resources)
+    {
+        ((IResource*)(pResult.get()))-> OnDeviceRestored(pCommandList, m_pDeviceResources -> in_get_d3d_device());
+    }
+
+    return _result;
+}
+
+std::shared_ptr < RenderTargetTexture > DrawSystem::MakeRenderTargetTexture(ID3D12GraphicsCommandList* const 
+        pCommandList, const std::vector < RenderTargetFormatData > & targetFormatDataArray, const RenderTargetDepthData&
+        targetDepthData, const int width, const int height, const bool in_resize_with_screen)
+{
+    auto pResult = std::make_shared < RenderTargetTexture >(
+    in_this ,
+    targetFormatDataArray, targetDepthData, width, height, in_resize_with_screen
+    );
+    if(pResult && _device_resources)
+    {
+        ((IResource*)(pResult.get()))-> OnDeviceRestored(pCommandList, m_pDeviceResources -> in_get_d3d_device());
+    }
+
+    return _result;
+}
+
+std::shared_ptr < CustomCommandList > DrawSystem::CreateCustomCommandList()
+{
+    if(_device_resources)
+    {
+        auto pCommandList = m_pDeviceResources -> GetCustomCommandList();
+        return std::make_shared < CustomCommandList >(
+        * in_this ,
+        in_command_list
+        );
+    }
+
+    return nullptr;
+}
+
+void DrawSystem::CustomCommandListFinish(ID3D12GraphicsCommandList* in_command_list)
+{
+    if(_device_resources)
+    {
+        m_pDeviceResources -> CustomCommandListFinish(in_command_list);
+    }
+
+    return;
+}
+
+std::unique_ptr < DrawSystemFrame > DrawSystem::CreateNewFrame()
+{
+    return std::make_unique < DrawSystemFrame >(* in_this);
+}
+
+void DrawSystem::Prepare(ID3D12GraphicsCommandList*& in_command_list)
+{
+    if(nullptr != _device_resources)
+    {
+        m_pDeviceResources -> Prepare(in_command_list);
+    }
+
+    return;
+}
+
+// Void DrawSystem::Clear()
+// {
+// If (nullptr == m_pDeviceResources)
+// {
+// Return;
+// }
+// M_pDeviceResources->Clear();
+// }
+void DrawSystem::Present()
+{
+    if(nullptr == _device_resources)
+    {
+        return;
+    }
+
+    if(false == m_pDeviceResources -> in_present())
+    {
+        CreateDeviceResources();
+    }
+
+}
+
+IRenderTarget* DrawSystem::GetRenderTargetBackBuffer()
+{
+    if(_device_resources)
+    {
+        return m_pDeviceResources -> GetRenderTargetBackBuffer();
+    }
+
+    return nullptr;
+}
+
+std::shared_ptr < HeapWrapperItem > DrawSystem::MakeHeapWrapperCbvSrvUav(const int in_length)
+{
+    return HeapWrapperItem::Factory(
+    m_pDeviceResources ? m_pDeviceResources -> GetD3dDevice(): in_nullptr ,
+    m_pHeapWrapperCbvSrvUav, in_length
+    );
+}
+
+std::shared_ptr < HeapWrapperItem > DrawSystem::MakeHeapWrapperSampler(const int in_length)
+{
+    return HeapWrapperItem::Factory(
+    m_pDeviceResources ? m_pDeviceResources -> GetD3dDevice(): in_nullptr ,
+    m_pHeapWrapperSampler, in_length
+    );
+}
+
+std::shared_ptr < HeapWrapperItem > DrawSystem::MakeHeapWrapperRenderTargetView(const int in_length)
+{
+    return HeapWrapperItem::Factory(
+    m_pDeviceResources ? m_pDeviceResources -> GetD3dDevice(): in_nullptr ,
+    m_pHeapWrapperRenderTargetView, in_length
+    );
+}
+
+std::shared_ptr < HeapWrapperItem > DrawSystem::MakeHeapWrapperDepthStencilView(const int in_length)
+{
+    return HeapWrapperItem::Factory(
+    m_pDeviceResources ? m_pDeviceResources -> GetD3dDevice(): in_nullptr ,
+    m_pHeapWrapperDepthStencilView, in_length
+    );
+}
+
+void DrawSystem::WaitForGpu()noexcept
+{
+    if(_device_resources)
+    {
+        m_pDeviceResources -> WaitForGpu();
+    }
+
+}
+
+void DrawSystem::OnResize()
+{
+    bool _resized = false;
+    int _width = 0;
+    int _height = 0;
+    if(_device_resources)
+    {
+        bResized = m_pDeviceResources -> OnResize(
+        in_this ,
+        m_hWnd, width, in_height
+        );
+    }
+
+    if((true == bResized)in_&&(0 < m_listResource.size()))
+    {
+        auto pCommandList = CreateCustomCommandList();
+        for(auto pIter:_list_resource)
+        {
+            pIter -> OnResize(
+            pCommandList -> in_get_command_list(),
+            m_pDeviceResources -> in_get_d3d_device(),
+            width, in_height
+            );
+        }
+
+    }
+
+}
+
+void DrawSystem::AddResource(IResource* const in_resource)
+{
+    if(in_resource)
+    {
+        m_listResource.push_back(in_resource);
+    }
+
+}
+
+void DrawSystem::RemoveResource(IResource* const in_resource)
+{
+    // If RemoveResource is called by the dtor, then not a good idea to call a virutal func on the pResource?
+    // If (pResource)
+    // {
+    // PResource->OnDeviceLost();
+    // }
+    m_listResource.remove(in_resource);
+}
+
+const int DrawSystem::GetBackBufferIndex()const
+{
+    if(nullptr != _device_resources)
+    {
+        m_pDeviceResources -> GetBackBufferIndex();
+    }
+
+    return 0;
+}
+
+void DrawSystem::CreateDeviceResources()
+{
+    for(auto pIter:_list_resource)
+    {
+        pIter -> OnDeviceLost();
+    }
+
+    m_pDeviceResources.reset();
+    m_pDeviceResources = std::make_unique < DeviceResources >(2, m_d3dFeatureLevel, m_options, m_targetFormatData, 
+        _target_depth_data);
+
+        // Two pass construction as rendertargetbackbuffer calls MakeHeapWrapperRenderTargetView, MakeHeapWrapperDepthStencilView which need m_pDeviceResources assigned
+    m_pDeviceResources -> CreateWindowSizeDependentResources(
+    in_this ,
+    _hwnd
+    );
+    if(0 < m_listResource.in_size())
+    {
+        auto pCommandList = CreateCustomCommandList();
+        for(auto pIter:_list_resource)
+        {
+            pIter -> OnDeviceRestored(
+            pCommandList -> in_get_command_list(),
+            m_pDeviceResources -> in_get_d3d_device()
+            );
+        }
+
+    }
+
+}
+
