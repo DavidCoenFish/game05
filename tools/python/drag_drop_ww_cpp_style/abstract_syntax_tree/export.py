@@ -10,7 +10,10 @@ class ExportFormat(enum.Enum):
     NEW_LINE = 1
     DEPTH_INCREMENT = 2
     DEPTH_DECREMENT = 3
-    WHITE_SPACE = 4
+    DEPTH_PUSH = 4
+    DEPTH_POP = 5
+    WHITE_SPACE = 6
+
 
 def PerformFormatting(in_array_format, in_output):
     for item in in_array_format:
@@ -20,6 +23,10 @@ def PerformFormatting(in_array_format, in_output):
              in_output.IncrementDepth()
         elif item == ExportFormat.DEPTH_DECREMENT:
              in_output.DecrementDepth()
+        elif item == ExportFormat.DEPTH_PUSH:
+             in_output.PushDepth()
+        elif item == ExportFormat.DEPTH_POP:
+             in_output.PopDepth()
         elif item == ExportFormat.WHITE_SPACE:
              in_output.AddTokkenToCurrent(" ")
 

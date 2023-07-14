@@ -20,7 +20,7 @@ def CollectChildren(in_children, in_output, in_focus_set, out_comment_list = [],
                 for item in comment_list:
                     in_output[child._access].append(item)
                 in_output[child._access].append(child)
-                comment_list.clear()
+            comment_list.clear()
             out_comment_list.clear()
         elif child._type == dsc_ast_cpp.AstType.COMMENT:
             comment_list.append(child)
@@ -33,6 +33,7 @@ def CollectChildren(in_children, in_output, in_focus_set, out_comment_list = [],
         else:
             #if in_output:
             comment_list.clear()
+            out_comment_list.clear()
             in_left_over.append(child)
 
 def AddChildren(in_new_children, in_data_array, in_access_type, in_access_name, in_last_access, in_token_keyword_type):
@@ -77,7 +78,7 @@ def AstTransformSortClassStructMethodsMembers(in_ast_node, in_stack_ast_node, in
     CollectChildren(in_ast_node._children, methods, set({ dsc_ast_cpp.SubType.STATEMENT_METHOD_DECLARATION, dsc_ast_cpp.SubType.STATEMENT_METHOD_DEFINITION}))
 
     # Collect members
-    CollectChildren(in_ast_node._children, members, set({ dsc_ast_cpp.SubType.STATEMENT_MEMBER, dsc_ast_cpp.SubType.NONE}))
+    CollectChildren(in_ast_node._children, members, set({ dsc_ast_cpp.SubType.STATEMENT_MEMBER}))
 
     # get comments at end of class not collected by the above
     comment_list = []
@@ -90,8 +91,7 @@ def AstTransformSortClassStructMethodsMembers(in_ast_node, in_stack_ast_node, in
             dsc_ast_cpp.SubType.STATEMENT_DESTRUCTOR,
             dsc_ast_cpp.SubType.STATEMENT_METHOD_DECLARATION, 
             dsc_ast_cpp.SubType.STATEMENT_METHOD_DEFINITION,
-            dsc_ast_cpp.SubType.STATEMENT_MEMBER, 
-            dsc_ast_cpp.SubType.NONE
+            dsc_ast_cpp.SubType.STATEMENT_MEMBER
         }),
         comment_list,
         left_over
@@ -103,6 +103,8 @@ def AstTransformSortClassStructMethodsMembers(in_ast_node, in_stack_ast_node, in
     last_access = AddChildren(new_children, methods[dsc_ast_cpp.AstAccess.PUBLIC], dsc_ast_cpp.AstAccess.PUBLIC, "public", last_access, dsc_token_cpp.KeywordType.PUBLIC)
     last_access = AddChildren(new_children, methods[dsc_ast_cpp.AstAccess.PROTECTED], dsc_ast_cpp.AstAccess.PROTECTED, "protected", last_access, dsc_token_cpp.KeywordType.PROTECTED)
     last_access = AddChildren(new_children, methods[dsc_ast_cpp.AstAccess.PRIVATE], dsc_ast_cpp.AstAccess.PRIVATE, "private", last_access, dsc_token_cpp.KeywordType.PRIVATE)
+
+    last_access = dsc_ast_cpp.AstAccess.NONE
     last_access = AddChildren(new_children, members[dsc_ast_cpp.AstAccess.PUBLIC], dsc_ast_cpp.AstAccess.PUBLIC, "public", last_access, dsc_token_cpp.KeywordType.PUBLIC)
     last_access = AddChildren(new_children, members[dsc_ast_cpp.AstAccess.PROTECTED], dsc_ast_cpp.AstAccess.PROTECTED, "protected", last_access, dsc_token_cpp.KeywordType.PROTECTED)
     last_access = AddChildren(new_children, members[dsc_ast_cpp.AstAccess.PRIVATE], dsc_ast_cpp.AstAccess.PRIVATE, "private", last_access, dsc_token_cpp.KeywordType.PRIVATE)

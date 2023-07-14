@@ -83,6 +83,7 @@ def RecalculateStatementType(in_ast_node, in_stack):
     parent_class_struct_name = FindClassStructName(in_stack)
     class_keyword_found = False
     struct_keyword_found = False
+    other_keyword_found = False
     parenthesist_found = False
     child_scope_found = False
     assignment_found = False
@@ -95,6 +96,8 @@ def RecalculateStatementType(in_ast_node, in_stack):
             class_keyword_found = True
         elif in_ast_node._token._sub_type == dsc_token_cpp.KeywordType.STRUCT:
             struct_keyword_found = True
+        elif in_ast_node._token._sub_type in set({ dsc_token_cpp.KeywordType.FOR, dsc_token_cpp.KeywordType.WHILE, dsc_token_cpp.KeywordType.IF }):
+            other_keyword_found = True
         elif (
             in_ast_node._token._sub_type == dsc_token_cpp.KeywordType.PUBLIC or
             in_ast_node._token._sub_type == dsc_token_cpp.KeywordType.PROTECTED or
@@ -111,6 +114,8 @@ def RecalculateStatementType(in_ast_node, in_stack):
             class_keyword_found = True
         if child._token._sub_type == dsc_token_cpp.KeywordType.STRUCT and False == class_keyword_found:
             struct_keyword_found = True
+        if in_ast_node._token._sub_type in set({ dsc_token_cpp.KeywordType.FOR, dsc_token_cpp.KeywordType.WHILE, dsc_token_cpp.KeywordType.IF }):
+            other_keyword_found = True
         if child._type == AstType.PARENTHESIS:
             parenthesist_found = True
         if child._type == AstType.SCOPE:
@@ -139,10 +144,10 @@ def RecalculateStatementType(in_ast_node, in_stack):
     if True == parent_class_struct_name_found and True == destructr_found and True == parenthesist_found:
         return SubType.STATEMENT_DESTRUCTOR
 
-    if True == parenthesist_found and True == child_scope_found: # and  "" != parent_class_struct_name:
+    if True == parenthesist_found and True == child_scope_found and False == other_keyword_found: # and  "" != parent_class_struct_name:
         return SubType.STATEMENT_METHOD_DEFINITION
 
-    if True == parenthesist_found and False == child_scope_found: # and  "" != parent_class_struct_name:
+    if True == parenthesist_found and False == child_scope_found and False == other_keyword_found: # and  "" != parent_class_struct_name:
         return SubType.STATEMENT_METHOD_DECLARATION
 
     if "" != parent_class_struct_name:
@@ -154,6 +159,10 @@ def CalculateColonLable(in_parent):
     class_or_struct_found = False
     parenthesis_found = False
     questionmark_found = False
+    if in_parent._type == AstType.PARENTHESIS:
+        # case 5, for (auto iter : m_arrayPage)
+        return False
+
     if in_parent._token and ( in_parent._token._data == "class" or in_parent._token._data == "struct"):
         class_or_struct_found = True
     for child in in_parent._children:
@@ -238,13 +247,24 @@ class AST:
     def AddTokenToChildren(self, in_token, in_stack, in_forward_tokens):
         token_or_statement = AstType.TOKEN
         parent = None
+        grand_parent = None
         if 0 < len(in_stack):
             parent = in_stack[-1]
+        if 1 < len(in_stack):
+            grand_parent = in_stack[-2]
         if parent and parent._type in set({
             AstType.DOCUMENT,
             AstType.SCOPE
             }):
             token_or_statement = AstType.STATEMENT
+
+            # assignment to array
+            if parent._type == AstType.SCOPE and grand_parent:
+                for child in grand_parent._children:
+                    if "=" == child._token._data:
+                        token_or_statement = AstType.TOKEN
+
+
 
         if in_token._type == dsc_token_cpp.TokenType.COMMENT:
             CreateNewChild(self._children, AstType.COMMENT, in_token, self._access)
@@ -298,6 +318,7 @@ class AST:
 
                 # case 3, "class Foo : public Bar
                 # case 4, "ctor(int in_a) : m_a(in_a), m_b() {}
+                # case 5, "for (auto iter : m_arrayPage)
                 else:
                     CreateNewChild(self._children, AstType.TOKEN, in_token, self._access)
 
@@ -305,14 +326,18 @@ class AST:
                 if token_or_statement == AstType.STATEMENT:
                     CreateNewNode(in_stack, self._children, AstType.STATEMENT, in_token, self._access)
                 else:
-                    CreateNewChild(self._children, AstType.WHITE_SPACE, in_token, self._access)
+                    CreateNewChild(self._children, AstType.TOKEN, in_token, self._access)
 
             else:
                 CreateNewChild(self._children, AstType.TOKEN, in_token, self._access)
 
         elif in_token._type == dsc_token_cpp.TokenType.KEYWORD:
             if token_or_statement == AstType.STATEMENT:
-                if in_token._sub_type == dsc_token_cpp.KeywordType.PUBLIC:
+                if in_token._sub_type == dsc_token_cpp.KeywordType.CLASS:
+                    self._access = AstAccess.PRIVATE
+                elif in_token._sub_type == dsc_token_cpp.KeywordType.STRUCT:
+                    self._access = AstAccess.PUBLIC
+                elif in_token._sub_type == dsc_token_cpp.KeywordType.PUBLIC:
                     self._access = AstAccess.PUBLIC
                     CreateNewNode(in_stack, self._children, token_or_statement, in_token, self._access)
                     return
@@ -326,7 +351,7 @@ class AST:
                     return
             self.CreateTokenOrStatement(in_stack, token_or_statement, in_token)
         elif in_token._type == dsc_token_cpp.TokenType.NUMERIC:
-            self.CreateTokenOrStatement(in_stack, token_or_statement, in_token)
+            self.CreateTokenOrStatement(in_stack, AstType.TOKEN, in_token)
         elif in_token._type == dsc_token_cpp.TokenType.TOKEN:
             self.CreateTokenOrStatement(in_stack, token_or_statement, in_token)
         else:

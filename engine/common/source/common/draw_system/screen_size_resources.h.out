@@ -11,9 +11,9 @@ class ScreenSizeResources
 public:
     ScreenSizeResources(
         DrawSystem* const in_draw_system,
-        const Microsoft::WRL::ComPtr < ID3D12Device > & in_device,
-        const Microsoft::WRL::ComPtr < IDXGIFactory6 > & in_d_x_g_i_factory,
-        const Microsoft::WRL::ComPtr < ID3D12CommandQueue > & in_command_queue,
+        const Microsoft::WRL::ComPtr < ID3D12Device >&in_device,
+        const Microsoft::WRL::ComPtr < IDXGIFactory6 >&in_dxgi_factory,
+        const Microsoft::WRL::ComPtr < ID3D12CommandQueue >&in_command_queue,
         const HWND in_hwnd,
         const UINT64 in_fence_value,
         const unsigned int in_back_buffer_count,
@@ -22,40 +22,37 @@ public:
         const bool in_allow_tearing,
         // Const DXGI_FORMAT backBufferFormat = DXGI_FORMAT_B8G8R8A8_UNORM,
         // Const DXGI_FORMAT depthBufferFormat = DXGI_FORMAT_D32_FLOAT
-        const RenderTargetFormatData& in_target_format_data,
-        const RenderTargetDepthData& in_target_depth_data
+        const RenderTargetFormatData&in_target_format_data,
+        const RenderTargetDepthData&in_target_depth_data
         );
     ~ScreenSizeResources();
     const UINT64 GetFenceValue();
     void SetFenceValue(const UINT64 in_value);
-    void Prepare(ID3D12GraphicsCommandList*& in_command_list);
+    void Prepare(ID3D12GraphicsCommandList*&in_command_list);
     // Void Clear();
-
     const bool Present(
-    HRESULT& in_hr,
-    const Microsoft::WRL::ComPtr < ID3D12CommandQueue > & in_command_queue
-    );
+        HRESULT&in_hr,
+        const Microsoft::WRL::ComPtr < ID3D12CommandQueue >&in_command_queue
+        );
     IRenderTarget* GetRenderTargetBackBuffer();
     void UpdateBackBufferIndex();
-    const int GetBackBufferIndex()const
+    const int GetBackBufferIndex() const
     {
         return _back_buffer_index;
     }
 
-    const int GetWidth()const
+    const int GetWidth() const
     {
         return _width;
     }
 
-    const int GetHeight()const
+    const int GetHeight() const
     {
         return _height;
     }
 
-    void WaitForGpu(const Microsoft::WRL::ComPtr < ID3D12CommandQueue > & in_command_queue)noexcept;
-    void MoveToNextFrame(const Microsoft::WRL::ComPtr < ID3D12CommandQueue > & in_command_queue);
-    // Void Clear();
-
+    void WaitForGpu(const Microsoft::WRL::ComPtr < ID3D12CommandQueue >&in_command_queue) noexcept;
+    void MoveToNextFrame(const Microsoft::WRL::ComPtr < ID3D12CommandQueue >&in_command_queue);
 
 private:
     // CD3DX12_CPU_DESCRIPTOR_HANDLE GetRenderTargetView() const;
@@ -72,5 +69,5 @@ private:
     Microsoft::WRL::ComPtr < ID3D12Fence > _fence;
     Microsoft::WRL::Wrappers::Event _fence_event;
     Microsoft::WRL::ComPtr < IDXGISwapChain3 > _swap_chain;
-    std::unique_ptr < RenderTargetBackBuffer > _render_target_back_buffer[MAX_BACK_BUFFER_COUNT];
+    std::_unique_ptr < RenderTargetBackBuffer > _render_target_back_buffer[MAX_BACK_BUFFER_COUNT];
 };

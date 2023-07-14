@@ -5,30 +5,29 @@
 #include "common/draw_system/heap_wrapper/heap_wrapper_page.h"
 
 HeapWrapper::HeapWrapper(
-    DrawSystem * const in_draw_system,
+    DrawSystem* const in_draw_system,
     const D3D12_DESCRIPTOR_HEAP_TYPE in_type,
     const int in_frame_count,
     const bool in_shader_visible,
     const UINT in_num_descriptors
-    )
+    ) 
     : IResource(in_draw_system)
     , _frame_count(in_frame_count)
     , _desc()
 {
-    m_desc.Type = type;
-    m_desc.NumDescriptors = numDescriptors;
-    m_desc.Flags =(bShaderVisible ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : 
-        in_d3_d12__d_e_s_c_r_i_p_t_o_r__h_e_a_p__f_l_a_g__n_o_n_e);
+    _desc.Type = in_type;
+    _desc.NumDescriptors = in_num_descriptors;
+    _desc.Flags = (in_shader_visible ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE);
     return;
 }
 
 D3D12_CPU_DESCRIPTOR_HANDLE HeapWrapper::GetCPUHandle(const int in_index)
 {
-    const int frameIndex = m_pDrawSystem ? m_pDrawSystem->GetBackBufferIndex(): 0;
+    const int frame_index = _draw_system ? _draw_system->GetBackBufferIndex() : 0;
     return GetCPUHandleFrame(
-    in_index,
-    in_frame_index
-    );
+        in_index,
+        frame_index
+        );
 }
 
 D3D12_CPU_DESCRIPTOR_HANDLE HeapWrapper::GetCPUHandleFrame(
@@ -36,14 +35,14 @@ D3D12_CPU_DESCRIPTOR_HANDLE HeapWrapper::GetCPUHandleFrame(
     const int in_frame_index
     )
 {
-    const int _page_index = index / m_desc.NumDescriptors;
-    if((0 <= pageIndex)in_&&(pageIndex <(int)m_arrayPage.size()))
+    const int page_index = in_index / _desc.NumDescriptors;
+    if ((0 <= page_index) && (page_index < (int) _array_page.size()))
     {
-        const int localIndex = index -(m_desc.NumDescriptors * in_page_index);
-        return m_arrayPage[pageIndex]->GetCPUHandle(
-        in_local_index,
-        in_frame_index
-        );
+        const int local_index = in_index - (_desc.NumDescriptors* page_index);
+        return _array_page[page_index]->GetCPUHandle(
+            local_index,
+            in_frame_index
+            );
     }
 
     return D3D12_CPU_DESCRIPTOR_HANDLE();
@@ -51,60 +50,60 @@ D3D12_CPU_DESCRIPTOR_HANDLE HeapWrapper::GetCPUHandleFrame(
 
 D3D12_GPU_DESCRIPTOR_HANDLE HeapWrapper::GetGPUHandle(const int in_index)
 {
-    assert(m_desc.Flags & in_d3_d12__d_e_s_c_r_i_p_t_o_r__h_e_a_p__f_l_a_g__s_h_a_d_e_r__v_i_s_i_b_l_e);
-    const int frameIndex = m_pDrawSystem ? m_pDrawSystem->GetBackBufferIndex(): 0;
-    const int in_page_index = index / m_desc.NumDescriptors;
-    if((0 <= pageIndex)in_&&(pageIndex <(int)m_arrayPage.size()))
+    assert(_desc.Flags&D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE);
+    const int frame_index = _draw_system ? _draw_system->GetBackBufferIndex() : 0;
+    const int page_index = in_index / _desc.NumDescriptors;
+    if ((0 <= page_index) && (page_index < (int) _array_page.size()))
     {
-        const int localIndex = index -(m_desc.NumDescriptors * in_page_index);
-        return m_arrayPage[pageIndex]->GetGPUHandle(
-        in_local_index,
-        in_frame_index
-        );
+        const int local_index = in_index - (_desc.NumDescriptors* page_index);
+        return _array_page[page_index]->GetGPUHandle(
+            local_index,
+            frame_index
+            );
     }
 
     return D3D12_GPU_DESCRIPTOR_HANDLE();
 }
 
-ID3D12DescriptorHeap * const HeapWrapper::GetHeap(const int in_index)
+ID3D12DescriptorHeap* const HeapWrapper::GetHeap(const int in_index)
 {
-    const int frameIndex = m_pDrawSystem ? m_pDrawSystem->GetBackBufferIndex(): 0;
-    const int in_page_index = index / m_desc.NumDescriptors;
-    if((0 <= pageIndex)in_&&(pageIndex <(int)m_arrayPage.size()))
+    const int frame_index = _draw_system ? _draw_system->GetBackBufferIndex() : 0;
+    const int page_index = in_index / _desc.NumDescriptors;
+    if ((0 <= page_index) && (page_index < (int) _array_page.size()))
     {
-        return m_arrayPage[pageIndex]->GetHeap(in_frame_index);
+        return _array_page[page_index]->GetHeap(frame_index);
     }
 
     return nullptr;
 }
 
 const int HeapWrapper::GetFreeIndex(
-    ID3D12Device2 * const in_device,
+    ID3D12Device2* const in_device,
     const int in_length
     )
 {
-    int _trace = 0;
-    for(auto in_iter:m_arrayPage)
+    int trace = 0;
+    for (auto iter : _array_page)
+    {
+        const int result = iter->GetFreeIndex(in_length);
+        if (- 1 != result)
+        {
+            return result + trace;
+        }
 
-    {
-    const int result = iter->GetFreeIndex(in_length);
-    if(- 1 != in_result)
-    {
-        return in_result + trace;
+        trace += _desc.NumDescriptors;
     }
 
-    trace += _desc.NumDescriptors;
-    }
 
     {
-    auto pPage = HeapWrapperPage::Factory(
-    _frame_count,
-    _desc,
-    in_device
-    );
-    const int result = pPage->GetFreeIndex(in_length);
-    m_arrayPage.push_back(in_page);
-    return in_result + trace;
+        auto page = HeapWrapperPage::Factory(
+            _frame_count,
+            _desc,
+            in_device
+            );
+        const int result = page->GetFreeIndex(in_length);
+        _array_page.push_back(page);
+        return result + trace;
     }
 }
 
@@ -113,14 +112,14 @@ void HeapWrapper::FreeIndex(
     const int in_length
     )
 {
-    const int in_page_index = index / m_desc.NumDescriptors;
-    if((0 <= pageIndex)in_&&(pageIndex <(int)m_arrayPage.size()))
+    const int page_index = in_index / _desc.NumDescriptors;
+    if ((0 <= page_index) && (page_index < (int) _array_page.size()))
     {
-        const int localIndex = index -(m_desc.NumDescriptors * in_page_index);
-        m_arrayPage[pageIndex]->FreeIndex(
-        in_local_index,
-        in_length
-        );
+        const int local_index = in_index - (_desc.NumDescriptors* page_index);
+        _array_page[page_index]->FreeIndex(
+            local_index,
+            in_length
+            );
     }
 
     return;
@@ -128,27 +127,27 @@ void HeapWrapper::FreeIndex(
 
 void HeapWrapper::OnDeviceLost()
 {
-    for(auto in_iter:m_arrayPage)
-
+    for (auto iter : _array_page)
     {
-    iter->OnDeviceLost();
+        iter->OnDeviceLost();
     }
+
     return;
 }
 
 void HeapWrapper::OnDeviceRestored(
-    ID3D12GraphicsCommandList * in_const,
-    ID3D12Device2 * const in_device
+    ID3D12GraphicsCommandList* const,
+    ID3D12Device2* const in_device
     )
 {
-    for(auto in_iter:m_arrayPage)
-
+    for (auto iter : _array_page)
     {
-    iter->OnDeviceRestored(
-    _desc,
-    in_device
-    );
+        iter->OnDeviceRestored(
+            _desc,
+            in_device
+            );
     }
+
     return;
 }
 

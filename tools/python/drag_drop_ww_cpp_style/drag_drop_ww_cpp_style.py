@@ -21,7 +21,7 @@ def DealFile(in_file_path, in_debug):
     return
 
 def Main(*in_args):
-    debug = True #False #
+    debug = False #True #
     if 0 == len(in_args):
         print("usage drag_drop_ww_cpp_style.py: drag and drop files to convert style")
         return

@@ -7,7 +7,7 @@ CustomCommandList::CustomCommandList(
     ID3D12Device* const in_device,
     ID3D12CommandQueue* const in_command_queue,
     ID3D12GraphicsCommandList* const in_command_list
-    )
+    ) 
     : _device(in_device)
     , _command_queue(in_command_queue)
     , _command_list(in_command_list)
@@ -15,20 +15,20 @@ CustomCommandList::CustomCommandList(
     return;
 }
 
-CustomCommandList::CustomCommandList()
+CustomCommandList::~CustomCommandList()
 {
     // Send the command list off to the GPU for processing.
-    if(_command_list)
+    if (_command_list)
     {
-        DX::ThrowIfFailed(m_pCommandList -> in_close());
+        DX::ThrowIfFailed(_command_list->Close());
     }
 
-    if(_command_queue)
+    if (_command_queue)
     {
-        m_pCommandQueue -> ExecuteCommandLists(
-        1,
-        in_command_list_cast(& m_pCommandList)
-        );
+        _command_queue->ExecuteCommandLists(
+            1,
+            CommandListCast(&_command_list)
+            );
     }
 
     return;
@@ -37,23 +37,23 @@ CustomCommandList::CustomCommandList()
 void CustomCommandList::UpdateSubresourcesMethod(
     ID3D12Resource* in_destination_resource,
     ID3D12Resource* in_intermediate,
-    UINT64 in_intermediate_offset,
-    UINT in_first_subresource,
-    UINT in_num_subresources,
+    UINT64 IntermediateOffset,
+    UINT FirstSubresource,
+    UINT NumSubresources,
     D3D12_SUBRESOURCE_DATA* in_src_data,
     D3D12_BOX* in_dest_box_or_null
     )
 {
     UpdateSubresources(
-    _command_list,
-    in_destination_resource,
-    in_intermediate,
-    in_intermediate_offset,
-    in_first_subresource,
-    in_num_subresources,
-    in_src_data
-    );
-    pDestBoxOrNull;
+        _command_list,
+        in_destination_resource,
+        in_intermediate,
+        IntermediateOffset,
+        FirstSubresource,
+        NumSubresources,
+        in_src_data
+        );
+    in_dest_box_or_null;
     // UpdateSubresources(
     // M_pCommandList,
     // PDestinationResource,
@@ -85,13 +85,13 @@ void CustomCommandList::ResourceBarrier(
     )
 {
     auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-    in_resource,
-    in_state_before,
-    in_state_after
-    );
-    m_pCommandList -> ResourceBarrier(
-    1,
-    & in_barrier
-    );
+        in_resource,
+        in_state_before,
+        in_state_after
+        );
+    _command_list->ResourceBarrier(
+        1,
+        &barrier
+        );
 }
 

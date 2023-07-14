@@ -6,6 +6,7 @@ class OutputFile:
         self._depth = in_depth
         self._data = ""
         self._current_line = ""
+        self._depth_stack = []
         return
 
     def IncrementDepth(self):
@@ -14,6 +15,15 @@ class OutputFile:
 
     def DecrementDepth(self):
         self._depth -= 1
+        return
+
+    def PushDepth(self):
+        self._depth_stack.append(self._depth)
+        self._depth = 0
+        return
+
+    def PopDepth(self):
+        self._depth = self._depth_stack.pop()
         return
 
     def GetData(self):

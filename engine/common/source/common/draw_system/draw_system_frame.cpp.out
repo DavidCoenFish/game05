@@ -7,16 +7,16 @@
 #include "common/draw_system/render_target/i_render_target.h"
 #include "common/draw_system/shader/shader.h"
 
-DrawSystemFrame::DrawSystemFrame(DrawSystem& in_draw_system)
+DrawSystemFrame::DrawSystemFrame(DrawSystem&in_draw_system) 
     : _draw_system(in_draw_system)
-    , _command_list(in_nullptr)
-    , _render_target(in_nullptr)
+    , _command_list(nullptr)
+    , _render_target(nullptr)
 {
-    m_drawSystem.Prepare(_command_list);
+    _draw_system.Prepare(_command_list);
     // M_drawSystem.Clear();
 }
 
-DrawSystemFrame::DrawSystemFrame()
+DrawSystemFrame::~DrawSystemFrame()
 {
     // If (m_pCommandList)
     // {
@@ -26,8 +26,8 @@ DrawSystemFrame::DrawSystemFrame()
     // {
     // M_pCommandQueue->ExecuteCommandLists(1, CommandListCast(m_pCommandList.GetAddressOf()));
     // }
-    SetRenderTarget(in_nullptr);
-    m_drawSystem.Present();
+    SetRenderTarget(nullptr);
+    _draw_system.Present();
 }
 
 ID3D12GraphicsCommandList* DrawSystemFrame::GetCommandList()
@@ -37,35 +37,35 @@ ID3D12GraphicsCommandList* DrawSystemFrame::GetCommandList()
 
 const int DrawSystemFrame::GetBackBufferIndex()
 {
-    return m_drawSystem.GetBackBufferIndex();
+    return _draw_system.GetBackBufferIndex();
 }
 
 void DrawSystemFrame::SetRenderTarget(IRenderTarget* const in_render_target)
 {
-    if(_render_target)
+    if (_render_target)
     {
-        m_pRenderTarget -> EndRender(_command_list);
+        _render_target->EndRender(_command_list);
     }
 
-    m_pRenderTarget = in_render_target;
-    if(_render_target)
+    _render_target = in_render_target;
+    if (_render_target)
     {
-        m_pRenderTarget -> StartRender(_command_list);
+        _render_target->StartRender(_command_list);
     }
 
 }
 
 void DrawSystemFrame::SetShader(Shader* const in_shader)
 {
-    pShader -> SetActivate(
-    _command_list,
-    m_drawSystem.in_get_back_buffer_index()
-    );
+    in_shader->SetActivate(
+        _command_list,
+        _draw_system.GetBackBufferIndex()
+        );
 }
 
 void DrawSystemFrame::Draw(GeometryGeneric* const in_geometry)
 {
-    pGeometry -> Draw(_command_list);
+    in_geometry->Draw(_command_list);
 }
 
 void DrawSystemFrame::Dispatch(
@@ -74,10 +74,10 @@ void DrawSystemFrame::Dispatch(
     uint32_t in_num_groups_z
     )
 {
-    m_pCommandList -> Dispatch(
-    in_num_groups_x,
-    in_num_groups_y,
-    in_num_groups_z
-    );
+    _command_list->Dispatch(
+        in_num_groups_x,
+        in_num_groups_y,
+        in_num_groups_z
+        );
 }
 

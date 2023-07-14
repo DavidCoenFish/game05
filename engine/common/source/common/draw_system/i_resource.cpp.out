@@ -3,31 +3,31 @@
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/i_resource.h"
 
-IResource::IResource(DrawSystem* const in_draw_system)
+IResource::IResource(DrawSystem* const in_draw_system) 
     : _draw_system(in_draw_system)
 {
-    if(nullptr != _draw_system)
+    if (nullptr != _draw_system)
     {
-        m_pDrawSystem -> AddResource(in_this);
+        _draw_system->AddResource(this);
     }
 
     return;
 }
 
-IResource::IResource()
+IResource::~IResource()
 {
-    if(nullptr != _draw_system)
+    if (nullptr != _draw_system)
     {
-        m_pDrawSystem -> RemoveResource(in_this);
+        _draw_system->RemoveResource(this);
     }
 
 }
 
 void IResource::OnResize(
-    ID3D12GraphicsCommandList* in_const,
-    ID3D12Device2* in_const,
-    const in_int,
-    const in_int
+    ID3D12GraphicsCommandList* const,
+    ID3D12Device2* const,
+    const int,
+    const int
     )
 {
     return;

@@ -10,7 +10,7 @@ class CustomCommandList
 {
 public:
     CustomCommandList(
-        DrawSystem& in_draw_system,
+        DrawSystem&in_draw_system,
         ID3D12GraphicsCommandList* in_command_list
         );
     ~CustomCommandList();
@@ -18,5 +18,5 @@ public:
 
 private:
     ID3D12GraphicsCommandList* _command_list;
-    DrawSystem& _draw_system;
+    DrawSystem&_draw_system;
 };

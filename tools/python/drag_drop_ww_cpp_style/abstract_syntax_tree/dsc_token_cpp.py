@@ -66,6 +66,7 @@ class OperatorType(enum.Enum):
     COLON = 44 # :
     HASH = 45 # #
     TILDA = 46 # ~
+    SPACESHIP = 47 # <=>
 
 class KeywordType(enum.Enum):
     NONE = 0
@@ -150,15 +151,16 @@ class PreprocessorType(enum.Enum):
     NONE = 0
     INCLUDE = 1 
     IFDEF = 2
-    IF = 3
-    ELIF = 4
-    ELSE = 5
-    ENDIF = 6
-    PRAGMA = 7
-    DEFINE = 8
-    UNDEF = 9
-    LINE = 10
-    ERROR = 11
+    IFNDEF = 3
+    IF = 4
+    ELIF = 5
+    ELSE = 6
+    ENDIF = 7
+    PRAGMA = 8
+    DEFINE = 9
+    UNDEF = 10
+    LINE = 11
+    ERROR = 12
 
 def SaveTextFile(in_file_path, in_data):
     text_file = open(in_file_path, "w")
@@ -190,6 +192,7 @@ s_operator_dict = {
     ">=" : OperatorType.GREATER_THAN_EQ,
     "++" : OperatorType.INCREMENT,
     "+=" : OperatorType.INCREMENT_EQ,
+    "?" : OperatorType.INLINE_CONDITIONAL,
     "<<=" : OperatorType.LEFT_EQ,
     "<<" : OperatorType.LEFT_SHIFT,
     "<" : OperatorType.LESS_THAN,
@@ -215,6 +218,7 @@ s_operator_dict = {
     ":" : OperatorType.COLON,
     "#" : OperatorType.HASH,
     "~" : OperatorType.TILDA,
+    "<=>" : OperatorType.SPACESHIP,
 }
 
 s_keyword_dict = {
@@ -262,7 +266,7 @@ s_keyword_dict = {
     "namespace" : KeywordType.NAMESPACE,
     "new" : KeywordType.NEW,
     "nullptr" : KeywordType.NULLPTR,
-    "noexept" : KeywordType.NOEXCEPT,
+    "noexcept" : KeywordType.NOEXCEPT,
     "operator" : KeywordType.OPERATOR,
     "private" : KeywordType.PRIVATE,
     "protected" : KeywordType.PROTECTED,
@@ -287,6 +291,10 @@ s_keyword_dict = {
     "union" : KeywordType.UNION,
     "unsigned" : KeywordType.UNSIGNED,
     "using" : KeywordType.USING,
+    "uint16_t" : KeywordType.INT,
+    "uint32_t" : KeywordType.INT,
+    "uint64_t" : KeywordType.INT,
+    "uint8_t" : KeywordType.INT,
     "virtual" : KeywordType.VIRTUAL,
     "void" : KeywordType.VOID,
     "volatile" : KeywordType.VOLATILE,
@@ -299,6 +307,7 @@ s_keyword_dict = {
 s_preprocessor_dict = {
     "#include" : PreprocessorType.INCLUDE,
     "#ifdef" : PreprocessorType.IFDEF,
+    "#ifndef" : PreprocessorType.IFNDEF,
     "#if" : PreprocessorType.IF,
     "#elif" : PreprocessorType.ELIF,
     "#else" : PreprocessorType.ELSE,
@@ -310,6 +319,11 @@ s_preprocessor_dict = {
     "#error" : PreprocessorType.ERROR,
     
 }
+
+s_setOfStringsToTreatAsBreak = set({
+    ".", "(", ")", "[", "]", "::", "->", "<", ">", ";", ",", "+", "-", "%", "*", "&", "/", " ", "\n", "\t", "\\", "\*", ":","~","!"
+})
+
 
 def IsEscapedStringComplete(in_data):
     prev_was_escape = False
@@ -399,12 +413,12 @@ def IsIntegerLiteral(in_forward_sting):
     #suffix
     while index < len(in_forward_sting):
         found = False
-        for key in ("u","U","l","L","z","Z","ll","LL"):
+        for key in ("ll","LL","u","U","l","L","z","Z"):
             if in_forward_sting[index:].startswith(key):
                 value += key
-                index + len(key)
+                index += len(key)
                 found = True
-            break
+                break
         if False == found:
             break
 
@@ -448,8 +462,8 @@ def IsFloatingPointLiteral(in_forward_sting):
             return ""
 
     elif in_forward_sting[index] in set({"1","2","3","4","5","6","7","8","9"}):
-        index += 1
         value += in_forward_sting[index]
+        index += 1
         while index < len(in_forward_sting):
             c = in_forward_sting[index]
             if c in set({"0","1","2","3","4","5","6","7","8","9", "'"}):
@@ -541,6 +555,9 @@ def ConsumeDict(in_trace_self, in_array_tokens, in_forward_string, in_dict, in_t
     for key in in_dict.keys():
         if in_forward_string.startswith(key):
             length = len(key)
+            if key not in s_setOfStringsToTreatAsBreak:
+                if False == IsStringKeywordThatBreaksToken(in_forward_string[length:]):
+                    continue
             if length <= found_length:
                 continue
             found_length = length
@@ -558,8 +575,7 @@ def ConsumeDict(in_trace_self, in_array_tokens, in_forward_string, in_dict, in_t
     return found_length
 
 def IsStringKeywordThatBreaksToken(in_forward_string):
-    keywords_set = set({".", "(", ")", "[", "]", "::", "->", "<", ">", ";", ",", "+", "-", "%", "*", "/"})
-    for key in keywords_set:
+    for key in s_setOfStringsToTreatAsBreak:
         if in_forward_string.startswith(key):
             return True
     return False

@@ -1,32 +1,39 @@
+#pragma once
 #include "common/draw_system/geometry/i_geometry.h"
 #include "common/draw_system/i_resource.h"
 
-#pragma once
 template < typename TypeVertex > class Geometry : public IResource
 {
 public:
     Geometry(
         DrawSystem* const in_draw_system,
         const D3D_PRIMITIVE_TOPOLOGY in_primitive_topology,
-        const std::vector < D3D12_INPUT_ELEMENT_DESC > & in_input_element_desc_array,
-        const std::vector < TypeVertex > & in_vertex_data
-        ): IResource(in_draw_system), m_primitiveTopology(in_primitive_topology), m_inputElementDescArray(
-            in_input_element_desc_array), m_vertexData(in_vertex_data), m_pVertexBuffer(), m_vertexBufferView(){// Nop
+        const std::vector < D3D12_INPUT_ELEMENT_DESC >&in_input_element_desc_array,
+        const std::vector < TypeVertex >&in_vertex_data
+        ) 
+        : IResource(in_draw_system)
+        , _primitive_topology(in_primitive_topology)
+        , _input_element_desc_array(in_input_element_desc_array)
+        , _vertex_data(in_vertex_data)
+        , _vertex_buffer()
+        , _vertex_buffer_view()
+    {
+        // Nop
     }
 
     void Draw(ID3D12GraphicsCommandList* const in_command_list)
     {
         IGeometry::DrawImplementation(
-        in_command_list,
-        (int)m_vertexData.in_size(),
-        _primitive_topology,
-        _vertex_buffer_view
-        );
+            in_command_list,
+            (int) _vertex_data.in_size(),
+            _primitive_topology,
+            _vertex_buffer_view
+            );
     }
 
 
 private:
-    virtual void OnDeviceLost()override
+    virtual void OnDeviceLost() override
     {
         IGeometry::DeviceLostImplementation(_vertex_buffer);
     }
@@ -34,20 +41,22 @@ private:
     virtual void OnDeviceRestored(
         ID3D12GraphicsCommandList* const in_command_list,
         ID3D12Device2* const in_device
-        )override
+        ) override
     {
         IGeometry::DeviceRestoredImplementation(
-        _draw_system,
-        in_command_list,
-        in_device,
-        (int)m_vertexData.in_size(),
-        in_sizeof(TypeVertex),
-        _vertex_buffer,
-        _vertex_buffer_view,
-        m_vertexData.in_data()
-        );
+            _draw_system,
+            in_command_list,
+            in_device,
+            (int) _vertex_data.in_size(),
+            sizeof (TypeVertex),
+            _vertex_buffer,
+            _vertex_buffer_view,
+            _vertex_data.in_data()
+            );
     }
 
+
+private:
     const D3D_PRIMITIVE_TOPOLOGY _primitive_topology;
     const std::vector < D3D12_INPUT_ELEMENT_DESC > _input_element_desc_array;
     std::vector < TypeVertex > _vertex_data;

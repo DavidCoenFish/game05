@@ -16,26 +16,53 @@ from . import dsc_token_cpp
 #     dsc_ast_cpp.AstType.TOKEN,
 #     })
 
-s_thingsWePutASpaceAfter = set({
+s_thingsWePutASpaceBefore = set({
     dsc_ast_cpp.AstType.STATEMENT,
     dsc_ast_cpp.AstType.TOKEN,
     dsc_ast_cpp.AstType.COMMENT,
     dsc_ast_cpp.AstType.PREPROCESSOR,
 })
 
+# s_thingsWePutASpaceAfter = set({
+#     "for",
+#     "while",
+#     "if"
+# })
+
 def AstTransformWhiteSpace(in_ast_node, in_stack_ast_node, in_data):
     history = in_data["history"]
+    prev_node = None
+    if 0 < len(history):
+        prev_node = history[-1]
 
-    if in_ast_node._type in s_thingsWePutASpaceAfter:
-        if 0 < len(history) and history[-1]._type in s_thingsWePutASpaceAfter:
-            prev_node = history[-1]
+    if in_ast_node._type in s_thingsWePutASpaceBefore and prev_node:
+        if prev_node._type in s_thingsWePutASpaceBefore:
             if (
-                prev_node._token and prev_node._token._data in set({"~", "::", ".", "->"}) or
-                in_ast_node._token and in_ast_node._token._data in set({"~", "::", ".", ",", "->"})
+                prev_node._token and prev_node._token._data in set({"!", "~", "::", ".", "->", "&"}) or
+                in_ast_node._token and in_ast_node._token._data in set({"::", ".", ",", "->", "*", "&"})
                 ):
                 pass
             else:
                 in_ast_node._export_pre_token_format.append(export.ExportFormat.WHITE_SPACE)
+
+    if prev_node:
+        # if prev_node._token._data == "&&":
+        #     print("found")
+        if prev_node._type == dsc_ast_cpp.AstType.PARENTHESIS_END and in_ast_node._type == dsc_ast_cpp.AstType.TOKEN:
+            if in_ast_node._token._data not in set({","}):
+                in_ast_node._export_pre_token_format.append(export.ExportFormat.WHITE_SPACE)
+        if (
+            (
+                prev_node._type == dsc_ast_cpp.AstType.STATEMENT or
+                prev_node._type == dsc_ast_cpp.AstType.TOKEN
+            ) and
+            prev_node._token._sub_type != dsc_token_cpp.KeywordType.NONE and 
+            in_ast_node._type == dsc_ast_cpp.AstType.PARENTHESIS
+            ):
+            in_ast_node._export_pre_token_format.append(export.ExportFormat.WHITE_SPACE)
+
+    # if in_ast_node._token and in_ast_node._token._data in s_thingsWePutASpaceAfter:
+    #     in_ast_node._export_post_token_format.append(export.ExportFormat.WHITE_SPACE)
 
     if in_ast_node._type not in set({ dsc_ast_cpp.AstType.WHITE_SPACE, dsc_ast_cpp.AstType.DOCUMENT}):
         history.append(in_ast_node)

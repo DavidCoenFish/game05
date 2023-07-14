@@ -1,5 +1,6 @@
 from . import dsc_token_cpp
 from . import dsc_ast_cpp
+from . import common
 
 def AdjustInclude(in_path_spec):
     in_path_spec = in_path_spec.replace("\\", "/")
@@ -7,14 +8,16 @@ def AdjustInclude(in_path_spec):
     last = in_path_spec[-1:]
     data = in_path_spec[1:]
     data = data[:-1]
-    prev_c = "/"
-    for c in data:
-        if c.isupper():
-            if prev_c != "/":
-                result += "_"
-            c = c.lower()
-        result += c
-        prev_c = c
+
+    first = True
+    array_step = data.split("/")
+    for step in array_step:
+        if True == first:
+            first = False
+        else:
+            result += "/"
+        result += common.SnakeCase(step)
+
     result += last
     return result
 

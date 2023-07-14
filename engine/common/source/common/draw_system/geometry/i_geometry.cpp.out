@@ -1,6 +1,6 @@
 #include "common/common_pch.h"
 
-#include "common/direct_x_t_k12/graphics_memory.h"
+#include "common/direct_xtk12/graphics_memory.h"
 #include "common/draw_system/custom_command_list.h"
 #include "common/draw_system/d3dx12.h"
 #include "common/draw_system/draw_system.h"
@@ -10,32 +10,32 @@ void IGeometry::DrawImplementation(
     ID3D12GraphicsCommandList* const in_command_list,
     const UINT in_vertex_count,
     const D3D_PRIMITIVE_TOPOLOGY in_primitive_topology,
-    D3D12_VERTEX_BUFFER_VIEW& in_vertex_buffer_view
+    D3D12_VERTEX_BUFFER_VIEW&in_vertex_buffer_view
     )
 {
     PIXBeginEvent(
-    in_command_list,
-    in_p_i_x__c_o_l_o_r__d_e_f_a_u_l_t,
-    in_l"_draw"
-    );
-    pCommandList -> IASetPrimitiveTopology(in_primitive_topology);
-    pCommandList -> IASetVertexBuffers(
-    0,
-    1,
-    & in_vertex_buffer_view
-    );
-    pCommandList -> DrawInstanced(
-    in_vertex_count,
-    1,
-    0,
-    0
-    );
+        in_command_list,
+        PIX_COLOR_DEFAULT,
+        L"Draw"
+        );
+    in_command_list->IASetPrimitiveTopology(in_primitive_topology);
+    in_command_list->IASetVertexBuffers(
+        0,
+        1,
+        &in_vertex_buffer_view
+        );
+    in_command_list->DrawInstanced(
+        in_vertex_count,
+        1,
+        0,
+        0
+        );
     PIXEndEvent(in_command_list);
 }
 
-void IGeometry::DeviceLostImplementation(Microsoft::WRL::ComPtr < ID3D12Resource > & in_vertex_buffer)
+void IGeometry::DeviceLostImplementation(Microsoft::WRL::ComPtr < ID3D12Resource >&in_vertex_buffer)
 {
-    pVertexBuffer.Reset();
+    in_vertex_buffer.Reset();
 }
 
 void IGeometry::DeviceRestoredImplementation(
@@ -44,62 +44,67 @@ void IGeometry::DeviceRestoredImplementation(
     ID3D12Device* const in_device,
     const int in_vertex_count,
     const int in_byte_vertex_size,
-    Microsoft::WRL::ComPtr < ID3D12Resource > & in_vertex_buffer,
-    D3D12_VERTEX_BUFFER_VIEW& in_vertex_buffer_view,
-    void * in_raw_data
+    Microsoft::WRL::ComPtr < ID3D12Resource >&in_vertex_buffer,
+    D3D12_VERTEX_BUFFER_VIEW&in_vertex_buffer_view,
+    void* in_raw_data
     )
 {
-    const int _byte_total_size = byteVertexSize * vertexCount;
-    auto bufferResourceDesc = CD3DX12_RESOURCE_DESC::Buffer(in_byte_total_size);
-    auto pUploadMemory = pDrawSystem -> AllocateUpload(in_byte_total_size);
+    const int byte_total_size = in_byte_vertex_size* in_vertex_count;
+    auto buffer_resource_desc = CD3DX12_RESOURCE_DESC::Buffer(byte_total_size);
+    auto upload_memory = in_draw_system->AllocateUpload(byte_total_size);
     // Create memory on gpu for vertex buffer
-    {auto heapProperties = CD3DX12_HEAP_PROPERTIES(in_d3_d12__h_e_a_p__t_y_p_e__d_e_f_a_u_l_t);
-    pDevice -> CreateCommittedResource(
-    & in_heap_properties,
-    // A default heap
-    in_d3_d12__h_e_a_p__f_l_a_g__n_o_n_e,
-    // No flags
-    & in_buffer_resource_desc,
-    // Resource description for a buffer
-    in_d3_d12__r_e_s_o_u_r_c_e__s_t_a_t_e__c_o_p_y__d_e_s_t,
-    // We will start this heap in the copy destination state since we will copy data
-    // From the upload heap to this heap
-    in_nullptr,
-    // Optimized clear value must be null for this type of resource. used for render targets and depth/stencil buffers
-    in_i_i_d__p_p_v__a_r_g_s(pVertexBuffer.ReleaseAndGetAddressOf())
-    );
-    pVertexBuffer -> SetName(in_l"_geometry_vertex_buffer");
-    }
-    {if(in_command_list)
+
     {
-        D3D12_SUBRESOURCE_DATA in_vertex_data ={};
-        vertexData._data = pRawData;
-        vertexData.RowPitch = byteTotalSize;
-        vertexData.SlicePitch = byteTotalSize;
-        UpdateSubresources(
-        in_command_list,
-        pVertexBuffer.in_get(),
-        pUploadMemory.in_resource(),
-        pUploadMemory.in_resource_offset(),
-        0,
-        1,
-        & in_vertex_data
-        );
+        auto heap_properties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+        in_device->CreateCommittedResource(
+            &heap_properties,
+            // A default heap
+            D3D12_HEAP_FLAG_NONE,
+            // No flags
+            &buffer_resource_desc,
+            // Resource description for a buffer
+            D3D12_RESOURCE_STATE_COPY_DEST,
+            // We will start this heap in the copy destination state since we will copy data
+            // From the upload heap to this heap
+            nullptr,
+
+                // Optimized clear value must be null for this type of resource. used for render targets and depth/stencil buffers
+            IID_PPV_ARGS(in_vertex_buffer.ReleaseAndGetAddressOf())
+            );
+        in_vertex_buffer->SetName(L"GeometryVertexBuffer");
     }
 
-    auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-    pVertexBuffer.in_get(),
-    in_d3_d12__r_e_s_o_u_r_c_e__s_t_a_t_e__c_o_p_y__d_e_s_t,
-    in_d3_d12__r_e_s_o_u_r_c_e__s_t_a_t_e__p_i_x_e_l__s_h_a_d_e_r__r_e_s_o_u_r_c_e
-    );
-    pCommandList -> ResourceBarrier(
-    1,
-    & in_barrier
-    );
+    {
+        if (in_command_list)
+        {
+            D3D12_SUBRESOURCE_DATA vertex_data = {};
+            vertex_data._data = in_raw_data;
+            vertex_data.RowPitch = byte_total_size;
+            vertex_data.SlicePitch = byte_total_size;
+            UpdateSubresources(
+                in_command_list,
+                in_vertex_buffer.Get(),
+                upload_memory.Resource(),
+                upload_memory.ResourceOffset(),
+                0,
+                1,
+                &vertex_data
+                );
+        }
+
+        auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+            in_vertex_buffer.Get(),
+            D3D12_RESOURCE_STATE_COPY_DEST,
+            D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE
+            );
+        in_command_list->ResourceBarrier(
+            1,
+            &barrier
+            );
     }
-    vertexBufferView.BufferLocation = pVertexBuffer -> GetGPUVirtualAddress();
-    vertexBufferView.StrideInBytes = byteVertexSize;
-    vertexBufferView.SizeInBytes = byteTotalSize;
+    in_vertex_buffer_view.BufferLocation = in_vertex_buffer->GetGPUVirtualAddress();
+    in_vertex_buffer_view.StrideInBytes = in_byte_vertex_size;
+    in_vertex_buffer_view.SizeInBytes = byte_total_size;
     return;
 }
 

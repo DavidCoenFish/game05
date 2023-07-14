@@ -97,14 +97,6 @@ def AstTransformAddNewLine(in_ast_node, in_stack_ast_node, in_data):
             in_ast_node._export_post_children_format.append(export.ExportFormat.NEW_LINE)
 
     # put the { on a new line
-    # if (
-    #     in_ast_node._type == dsc_ast_cpp.AstType.SCOPE and
-    #     parent is not None and
-    #     (
-    #         parent._sub_type == dsc_ast_cpp.SubType.STATEMENT_CLASS or
-    #         parent._sub_type == dsc_ast_cpp.SubType.STATEMENT_STRUCT or
-    #         parent._sub_type == dsc_ast_cpp.SubType.STATEMENT_METHOD_DEFINITION 
-    #     )):
     if (
         in_ast_node._type == dsc_ast_cpp.AstType.SCOPE and
         1 < len(in_ast_node._children)
@@ -122,7 +114,10 @@ def AstTransformAddNewLine(in_ast_node, in_stack_ast_node, in_data):
                 child._export_pre_token_format.append(export.ExportFormat.NEW_LINE)
 
     # Deal formal paramater list
-    if in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_METHOD_DEFINITION:
+    if (
+        in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_METHOD_DEFINITION or
+        in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_CONSTRUCTOR
+        ):
         depth_incremented = False
         for child in in_ast_node._children:
             if child._token and child._token._data == ":":
