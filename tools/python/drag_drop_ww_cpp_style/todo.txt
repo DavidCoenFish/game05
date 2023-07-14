@@ -3,3 +3,5 @@ ie, new line, depth, whitespace
 
 return ast type to just statement, and add a subtype "constructor, detructor, member, method, ..."
 
+
+scope after for loop is not child of for statement

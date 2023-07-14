@@ -21,7 +21,7 @@ def TransformAst(in_ast, in_debug):
     in_ast.Visit(transform_ast_cpp_sort_class_struct_methods_members.AstTransformSortClassStructMethodsMembers)
     in_ast.Visit(transform_ast_cpp_rename_variables.AstTransformRenameVariables)
     in_ast.Visit(transform_ast_cpp_white_space.AstTransformWhiteSpace, [], {"history":[]})
-    in_ast.Visit(transform_ast_cpp_add_new_line.AstTransformAddNewLine)
+    in_ast.Visit(transform_ast_cpp_add_new_line.AstTransformAddNewLine, [], {"last":None})
     in_ast.Visit(transform_ast_cpp_add_depth.AstTransformAddDepth)
 
     if True == in_debug:

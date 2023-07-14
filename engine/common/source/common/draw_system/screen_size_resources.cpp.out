@@ -11,60 +11,79 @@ static const DXGI_FORMAT NoSRGB(DXGI_FORMAT in_fmt)noexcept
         case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB: return DXGI_FORMAT_R8G8B8A8_UNORM;
         case DXGI_FORMAT_B8G8R8A8_UNORM_SRGB: return DXGI_FORMAT_B8G8R8A8_UNORM;
         case DXGI_FORMAT_B8G8R8X8_UNORM_SRGB: return DXGI_FORMAT_B8G8R8X8_UNORM;
-        default:return in_fmt;
+        default:
+        return in_fmt;
     }
 
 }
 
-ScreenSizeResources::ScreenSizeResources(DrawSystem* const pDrawSystem, const Microsoft::WRL::ComPtr < ID3D12Device > & 
-        pDevice, const Microsoft::WRL::ComPtr < IDXGIFactory6 > & pDXGIFactory, const Microsoft::WRL::ComPtr < 
-        ID3D12CommandQueue > & pCommandQueue, const HWND hWnd, const UINT64 fenceValue, const unsigned int 
-        backBufferCount, const int width, const int height, const bool bAllowTearing, const RenderTargetFormatData& 
-        targetFormatData, const RenderTargetDepthData& in_target_depth_data)
+ScreenSizeResources::ScreenSizeResources(
+    DrawSystem* const in_draw_system,
+    const Microsoft::WRL::ComPtr < ID3D12Device > & in_device,
+    const Microsoft::WRL::ComPtr < IDXGIFactory6 > & in_d_x_g_i_factory,
+    const Microsoft::WRL::ComPtr < ID3D12CommandQueue > & in_command_queue,
+    const HWND in_hwnd,
+    const UINT64 in_fence_value,
+    const unsigned int in_back_buffer_count,
+    const int in_width,
+    const int in_height,
+    const bool in_allow_tearing,
+    const RenderTargetFormatData& in_target_format_data,
+    const RenderTargetDepthData& in_target_depth_data
+    )
     : _back_buffer_count(in_back_buffer_count)
     , _back_buffer_index(0)
     , _allow_tearing(in_allow_tearing)
-    , _width(std::in_max(width, 1))
-    , _height(std::in_max(height, 1))
+    , _width(std::in_max(
+        width,
+        1
+        ))
+    , _height(std::in_max(
+        height,
+        1
+        ))
 {
-    for(unsigned int index = 0;index < MAX_BACK_BUFFER_COUNT;
+    for(unsigned int in_index = 0;index < MAX_BACK_BUFFER_COUNT;
     ++ index)
-    {m_fenceValues[index]= _fence_value;
-
-    }// Create a command allocator for each back buffer that will be rendered to.
-    for(int n = 0;n < m_backBufferCount;
+    {m_fenceValues[index]= in_fence_value;
+    }
+    // Create a command allocator for each back buffer that will be rendered to.
+    for(int in_n = 0;n < m_backBufferCount;
     n++)
-    {DX::ThrowIfFailed(pDevice -> in_create_command_allocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(
-        m_pCommandAllocators[n].ReleaseAndGetAddressOf())));
-    wchar_t in_name[25]={
-    };
+    {DX::ThrowIfFailed(pDevice -> in_create_command_allocator(
+    D3D12_COMMAND_LIST_TYPE_DIRECT,
+    IID_PPV_ARGS(m_pCommandAllocators[n].ReleaseAndGetAddressOf())
+    ));
+    wchar_t in_name[25]={};
     swprintf_s(
-    name, in_l"_command _allocators %u" ,
+    in_name,
+    in_l"_command _allocators %u",
     in_n
     );
     m_pCommandAllocators[n]-> SetName(in_name);
-
-    }// Create a command list for recording graphics commands.
+    }
+    // Create a command list for recording graphics commands.
     DX::ThrowIfFailed(pDevice -> in_create_command_list(
-    0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_pCommandAllocators[0].Get(),
-    nullptr ,
+    0,
+    D3D12_COMMAND_LIST_TYPE_DIRECT,
+    m_pCommandAllocators[0].Get(),
+    nullptr,
     IID_PPV_ARGS(m_pCommandList.ReleaseAndGetAddressOf())
     ));
     DX::ThrowIfFailed(m_pCommandList -> in_close());
     {static int _count = - 1;
     count += 1;
-    wchar_t in_name[25]={
-    };
+    wchar_t in_name[25]={};
     swprintf_s(
-    name, in_l"_command_list:%d" ,
+    in_name,
+    in_l"_command_list:%d",
     in_count
     );
     m_pCommandList -> SetName(in_name);
-
-    }const DXGI_FORMAT backBufferFormat = NoSRGB(targetFormatData.for in_mat);
+    }
+    const DXGI_FORMAT backBufferFormat = NoSRGB(targetFormatData.for in_mat);
     {// Create a descriptor for the swap chain.
-    DXGI_SWAP_CHAIN_DESC1 _swap_chain_desc ={
-    };
+    DXGI_SWAP_CHAIN_DESC1 _swap_chain_desc ={};
     swapChainDesc.Width = m_width;
     swapChainDesc.Height = m_height;
     swapChainDesc.Format = backBufferFormat;
@@ -75,48 +94,63 @@ ScreenSizeResources::ScreenSizeResources(DrawSystem* const pDrawSystem, const Mi
     swapChainDesc.Scaling = DXGI_SCALING_STRETCH;
     swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
     swapChainDesc.AlphaMode = DXGI_ALPHA_MODE_IGNORE;
-    swapChainDesc.Flags = m_bAllowTearing ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING:0u;
-    DXGI_SWAP_CHAIN_FULLSCREEN_DESC _fs_swap_chain_desc ={
-    };
+    swapChainDesc.Flags = m_bAllowTearing ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING:
+    0u;
+    DXGI_SWAP_CHAIN_FULLSCREEN_DESC _fs_swap_chain_desc ={};
     fsSwapChainDesc.Windowed = TRUE;
     // Create a swap chain for the window.
     Microsoft::WRL::ComPtr < IDXGISwapChain1 > swapChain;
     DX::ThrowIfFailed(pDXGIFactory -> in_create_swap_chain_for_hwnd(
     pCommandQueue.Get(),
-    hWnd, & swapChainDesc, & fsSwapChainDesc, nullptr ,
+    hWnd,
+    & swapChainDesc,
+    & fsSwapChainDesc,
+    nullptr,
     swapChain.GetAddressOf()
     ));
     DX::ThrowIfFailed(swapChain.in_as(& m_pSwapChain));
 
         // This class does not support exclusive full-screen mode and prevents DXGI from responding to the ALT+ENTER shortcut
-    DX::ThrowIfFailed(pDXGIFactory -> in_make_window_association(hWnd, DXGI_MWA_NO_ALT_ENTER));
-
-    }// Handle color space settings for HDR
+    DX::ThrowIfFailed(pDXGIFactory -> in_make_window_association(
+    hWnd,
+    DXGI_MWA_NO_ALT_ENTER
+    ));
+    }
+    // Handle color space settings for HDR
     // UpdateColorSpace();
     // Obtain the back buffers for this window which will be the final render targets
     // And create render target views for each of them.
     // RenderTargetFormatData targetFormatData(_backBufferFormat, true, VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f));
     // RenderTargetDepthData targetDepthData(depthBufferFormat, true, 1.0f);
-    for(int n = 0;n < m_backBufferCount;
+    for(int in_n = 0;n < m_backBufferCount;
     n++)
     {m_pRenderTargetBackBuffer[n]= std::make_unique < RenderTargetBackBuffer >(
-    pDrawSystem, pDevice.in_get(),
-    n, targetFormatData, targetDepthData, m_pSwapChain.in_get(),
-    m_width, _height
+    in_draw_system,
+    pDevice.in_get(),
+    in_n,
+    in_target_format_data,
+    in_target_depth_data,
+    m_pSwapChain.in_get(),
+    _width,
+    _height
     );
-
-    }// Reset the index to the current back buffer.
+    }
+    // Reset the index to the current back buffer.
     m_backBufferIndex = m_pSwapChain -> GetCurrentBackBufferIndex();
     {// Create a fence for tracking GPU execution progress.
-    DX::ThrowIfFailed(pDevice -> in_create_fence(fenceValue, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(m_pFence.
-        ReleaseAndGetAddressOf())));
+    DX::ThrowIfFailed(pDevice -> in_create_fence(
+    fenceValue,
+    D3D12_FENCE_FLAG_NONE,
+    IID_PPV_ARGS(m_pFence.ReleaseAndGetAddressOf())
+    ));
     SetFenceValue(fenceValue + 1);
     m_pFence -> SetName(in_l"_fence");
-
-    }m_fenceEvent.Attach(in_create_event_ex(
-    nullptr ,
-    nullptr ,
-    0, EVENT_MODIFY_STATE | SYNCHRONIZE
+    }
+    m_fenceEvent.Attach(in_create_event_ex(
+    nullptr,
+    nullptr,
+    0,
+    EVENT_MODIFY_STATE | SYNCHRONIZE
     ));
     if(! m_fenceEvent.in_is_valid())
     {
@@ -125,7 +159,7 @@ ScreenSizeResources::ScreenSizeResources(DrawSystem* const pDrawSystem, const Mi
 
 }
 
-ScreenSizeResources::~ScreenSizeResources()
+ScreenSizeResources::ScreenSizeResources()
 {
 }
 
@@ -164,11 +198,15 @@ void ScreenSizeResources::WaitForGpu(const Microsoft::WRL::ComPtr < ID3D12Comman
             )))
         {
             // Wait until the Signal has been processed.
-            if(in_s_u_c_c_e_e_d_e_d(m_pFence -> SetEventOnCompletion(fenceValue, m_fenceEvent.Get())))
+            if(in_s_u_c_c_e_e_d_e_d(m_pFence -> SetEventOnCompletion(
+                fenceValue,
+                m_fenceEvent.Get()
+                )))
             {
                 WaitForSingleObjectEx(
                 m_fenceEvent.in_get(),
-                INFINITE, in_f_a_l_s_e
+                in_i_n_f_i_n_i_t_e,
+                in_f_a_l_s_e
                 );
                 // Increment the fence value for the current frame.
                 SetFenceValue(fenceValue + 1);
@@ -181,26 +219,37 @@ void ScreenSizeResources::WaitForGpu(const Microsoft::WRL::ComPtr < ID3D12Comman
     return;
 }
 
-const bool ScreenSizeResources::Present(HRESULT& hr, const Microsoft::WRL::ComPtr < ID3D12CommandQueue > & 
-        in_command_queue)
+const bool ScreenSizeResources::Present(
+    HRESULT& in_hr,
+    const Microsoft::WRL::ComPtr < ID3D12CommandQueue > & in_command_queue
+    )
 {
     ((IRenderTarget*)m_pRenderTargetBackBuffer[m_backBufferIndex].get())-> EndRender(m_pCommandList.in_get());
     // Send the command list off to the GPU for processing.
     DX::ThrowIfFailed(m_pCommandList -> in_close());
-    pCommandQueue -> ExecuteCommandLists(1, in_command_list_cast(m_pCommandList.GetAddressOf()));
+    pCommandQueue -> ExecuteCommandLists(
+    1,
+    in_command_list_cast(m_pCommandList.GetAddressOf())
+    );
     if(_allow_tearing)
     {
         // Recommended to always use tearing if supported when using a sync interval of 0.
         // Note this will fail if in true 'fullscreen' mode.
-        hr = m_pSwapChain -> Present(0, in_d_x_g_i__p_r_e_s_e_n_t__a_l_l_o_w__t_e_a_r_i_n_g);
+        hr = m_pSwapChain -> Present(
+        0,
+        in_d_x_g_i__p_r_e_s_e_n_t__a_l_l_o_w__t_e_a_r_i_n_g
+        );
     }
 
     else{// The first argument instructs DXGI to block until VSync, putting the application
     // To sleep until the next VSync. This ensures we don't waste any cycles rendering
     // Frames that will never be displayed to the screen.
-    hr = m_pSwapChain -> Present(1, 0);
-
+    hr = m_pSwapChain -> Present(
+    1,
+    0
+    );
     }
+
     // If the device was reset we must completely reinitialize the renderer.
     if(hr == DXGI_ERROR_DEVICE_REMOVED || hr == in_d_x_g_i__e_r_r_o_r__d_e_v_i_c_e__r_e_s_e_t)
     {
@@ -208,8 +257,8 @@ const bool ScreenSizeResources::Present(HRESULT& hr, const Microsoft::WRL::ComPt
     }
 
     else{DX::ThrowIfFailed(in_hr);
-
     }
+
     return true;
 }
 
@@ -237,10 +286,14 @@ void ScreenSizeResources::MoveToNextFrame(const Microsoft::WRL::ComPtr < ID3D12C
     // If the next frame is not ready to be rendered yet, wait until it is ready.
     if(m_pFence -> GetCompletedValue()< in_next_back_buffer_fence_value)
     {
-        DX::ThrowIfFailed(m_pFence -> in_set_event_on_completion(nextBackBufferFenceValue, m_fenceEvent.Get()));
+        DX::ThrowIfFailed(m_pFence -> in_set_event_on_completion(
+        nextBackBufferFenceValue,
+        m_fenceEvent.Get()
+        ));
         WaitForSingleObjectEx(
         m_fenceEvent.in_get(),
-        INFINITE, in_f_a_l_s_e
+        in_i_n_f_i_n_i_t_e,
+        in_f_a_l_s_e
         );
     }
 

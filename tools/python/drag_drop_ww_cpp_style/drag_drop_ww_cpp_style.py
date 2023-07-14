@@ -2,6 +2,8 @@
 #"C:\\development\\game05\\engine\\common\\source\\common\\draw_system\\custom_command_list.cpp",
 #"C:\\development\\game05\\engine\\common\\source\\common\\draw_system\\custom_command_list.h"
 #"C:\\development\\game05\\engine\\common\\source\\common\\draw_system\\d3dx12 - Copy.h"
+#"C:\\development\\game05\\engine\\common\\source\\common\\draw_system\\heap_wrapper\\heap_wrapper_item.h"
+#"C:\\development\\game05\\engine\\common\\source\\common\\draw_system\\heap_wrapper\\heap_wrapper_item.cpp"
 
 import sys
 import os
@@ -10,14 +12,16 @@ import abstract_syntax_tree.export
 import abstract_syntax_tree.transform_ast_cpp
 
 def DealFile(in_file_path, in_debug):
-
+    if in_file_path.endswith(".out"):
+        print(f"Skip file:{in_file_path}")
+        return
     ast = abstract_syntax_tree.parse_file.LoadFile(in_file_path, in_debug)
     abstract_syntax_tree.transform_ast_cpp.TransformAst(ast, in_debug)
     abstract_syntax_tree.export.SaveFile(ast, in_file_path + ".out")
     return
 
 def Main(*in_args):
-    debug = False #True #
+    debug = True #False #
     if 0 == len(in_args):
         print("usage drag_drop_ww_cpp_style.py: drag and drop files to convert style")
         return

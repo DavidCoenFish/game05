@@ -81,6 +81,7 @@ def AstTransformRenameVariables(in_ast_node, in_stack_ast_node, in_visit_data):
             if (
                 child._type == dsc_ast_cpp.AstType.TOKEN and
                 child._token._type == dsc_token_cpp.TokenType.TOKEN
+
                 ):
                 child._token._data = RenameMemeber(child._token._data, in_visit_data)
                 break
@@ -111,7 +112,10 @@ def AstTransformRenameVariables(in_ast_node, in_stack_ast_node, in_visit_data):
                         sub_child._type == dsc_ast_cpp.AstType.WHITE_SPACE
                         ):
                         continue
-                    if sub_child._type == dsc_ast_cpp.AstType.TOKEN and sub_child._token._data == ",":
+                    if (
+                        sub_child._token._data == "," or
+                        sub_child._token._data == "="
+                        ):
                         trigger = True
                     elif sub_child._type == dsc_ast_cpp.AstType.TOKEN and True == trigger:
                         sub_child._token._data = RenameParameter(sub_child._token._data, in_visit_data)

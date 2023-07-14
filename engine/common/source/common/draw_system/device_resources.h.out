@@ -18,19 +18,32 @@ struct RenderTargetDepthData;
 namespace DirectX{class GraphicsMemory;
 class GraphicsResource;
 
-
 }
+
 class DeviceResources
 {
-public::
-    DeviceResources(const unsigned int backBufferCount, const D3D_FEATURE_LEVEL d3dFeatureLevel, const unsigned int 
-            options, const RenderTargetFormatData& targetFormatData, const RenderTargetDepthData& in_target_depth_data);
+public:
+    DeviceResources(
+        const unsigned int in_back_buffer_count,
+        const D3D_FEATURE_LEVEL in_d3d_feature_level,
+        const unsigned int in_options,
+        const RenderTargetFormatData& in_target_format_data,
+        const RenderTargetDepthData& in_target_depth_data
+        );
     ~DeviceResources();
     void WaitForGpu()noexcept;
-    const bool OnResize(DrawSystem* const pDrawSystem, const HWND hWnd, int & out_width, int & in_out_height);
+    const bool OnResize(
+    DrawSystem* const in_draw_system,
+    const HWND in_hwnd,
+    int & in_out_width,
+    int & in_out_height
+    );
     const int GetBackBufferIndex()const;
-    DirectX::GraphicsResource AllocateUpload(const std::size_t size, void * const pDataOrNullptr, size_t alignment = 16)
-        ;
+    DirectX::GraphicsResource AllocateUpload(
+    const std::size_t in_size,
+    void * const in_data_or_nullptr,
+    size_t in_alignment = 16
+    );
     void Prepare(ID3D12GraphicsCommandList*& in_command_list);
     // Void Clear();
 
@@ -44,17 +57,24 @@ public::
     // Return true if size changed
 
     const bool CreateWindowSizeDependentResources(
-    DrawSystem* const pDrawSystem, const HWND hWnd, int * out_pWidth = in_nullptr ,
-    int * out_pHeight = in_nullptr
+    DrawSystem* const in_draw_system,
+    const HWND in_hwnd,
+    int * in_out_p_width = in_nullptr,
+    int * in_out_p_height = in_nullptr
     );
 
-private::
+private:
+    void GetAdapter(
+    IDXGIAdapter1** in_pp_adapter,
+    const D3D_FEATURE_LEVEL in_d3d_feature_level
+    );
     void MoveToNextFrame();
     // Void UpdateColorSpace();
 
     void WaitForCustomCommand();
 
-public::
+public:
+    static const unsigned int c_AllowTearing = _0x1;
     static const unsigned int c_EnableHDR = _0x2;
     // Void Clear();
 
@@ -63,9 +83,10 @@ public::
     // Return true if size changed
 
 
-private::
+private:
     // Void UpdateColorSpace();
 
+    unsigned int _back_buffer_count;
     unsigned int _options;
     RenderTargetFormatData _target_format_data;
     RenderTargetDepthData _target_depth_data;
@@ -80,5 +101,4 @@ private::
     Microsoft::WRL::ComPtr < ID3D12GraphicsCommandList > _custom_command_list;
     std::unique_ptr < ScreenSizeResources > _screen_size_resources;
     std::unique_ptr < DirectX::GraphicsMemory > _graphics_memory;
-
 };

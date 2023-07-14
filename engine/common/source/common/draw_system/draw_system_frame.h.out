@@ -8,23 +8,28 @@ class GeometryGeneric;
 
 class DrawSystemFrame
 {
-public::
+public:
+    DrawSystemFrame(DrawSystem& in_draw_system);
     ~DrawSystemFrame();
     ID3D12GraphicsCommandList* GetCommandList();
     const int GetBackBufferIndex();
     void SetRenderTarget(IRenderTarget* const in_render_target);
     void SetShader(Shader* const in_shader);
     void Draw(GeometryGeneric* const in_geometry);
-    void Dispatch(uint32_t numGroupsX, uint32_t numGroupsY = 1, uint32_t numGroupsZ = 1);
+    void Dispatch(
+    uint32_t in_num_groups_x,
+    uint32_t in_num_groups_y = 1,
+    uint32_t in_num_groups_z = 1
+    );
     template < typename TypeVertex > void Draw(Geometry < TypeVertex > * const in_geometry)
     {
         pGeometry -> Draw(_command_list);
     }
 
 
-private::
+private:
+    DrawSystem& _draw_system;
     ID3D12GraphicsCommandList* _command_list;
     ID3D12CommandQueue* _command_queue;
     IRenderTarget* _render_target;
-
 };

@@ -100,12 +100,12 @@ def AstTransformSortClassStructMethodsMembers(in_ast_node, in_stack_ast_node, in
     new_children = []
 
     last_access = dsc_ast_cpp.AstAccess.NONE
-    last_access = AddChildren(new_children, methods[dsc_ast_cpp.AstAccess.PUBLIC], dsc_ast_cpp.AstAccess.PUBLIC, "public:", last_access, dsc_token_cpp.KeywordType.PUBLIC)
-    last_access = AddChildren(new_children, methods[dsc_ast_cpp.AstAccess.PROTECTED], dsc_ast_cpp.AstAccess.PROTECTED, "protected:", last_access, dsc_token_cpp.KeywordType.PROTECTED)
-    last_access = AddChildren(new_children, methods[dsc_ast_cpp.AstAccess.PRIVATE], dsc_ast_cpp.AstAccess.PRIVATE, "private:", last_access, dsc_token_cpp.KeywordType.PRIVATE)
-    last_access = AddChildren(new_children, members[dsc_ast_cpp.AstAccess.PUBLIC], dsc_ast_cpp.AstAccess.PUBLIC, "public:", last_access, dsc_token_cpp.KeywordType.PUBLIC)
-    last_access = AddChildren(new_children, members[dsc_ast_cpp.AstAccess.PROTECTED], dsc_ast_cpp.AstAccess.PROTECTED, "protected:", last_access, dsc_token_cpp.KeywordType.PROTECTED)
-    last_access = AddChildren(new_children, members[dsc_ast_cpp.AstAccess.PRIVATE], dsc_ast_cpp.AstAccess.PRIVATE, "private:", last_access, dsc_token_cpp.KeywordType.PRIVATE)
+    last_access = AddChildren(new_children, methods[dsc_ast_cpp.AstAccess.PUBLIC], dsc_ast_cpp.AstAccess.PUBLIC, "public", last_access, dsc_token_cpp.KeywordType.PUBLIC)
+    last_access = AddChildren(new_children, methods[dsc_ast_cpp.AstAccess.PROTECTED], dsc_ast_cpp.AstAccess.PROTECTED, "protected", last_access, dsc_token_cpp.KeywordType.PROTECTED)
+    last_access = AddChildren(new_children, methods[dsc_ast_cpp.AstAccess.PRIVATE], dsc_ast_cpp.AstAccess.PRIVATE, "private", last_access, dsc_token_cpp.KeywordType.PRIVATE)
+    last_access = AddChildren(new_children, members[dsc_ast_cpp.AstAccess.PUBLIC], dsc_ast_cpp.AstAccess.PUBLIC, "public", last_access, dsc_token_cpp.KeywordType.PUBLIC)
+    last_access = AddChildren(new_children, members[dsc_ast_cpp.AstAccess.PROTECTED], dsc_ast_cpp.AstAccess.PROTECTED, "protected", last_access, dsc_token_cpp.KeywordType.PROTECTED)
+    last_access = AddChildren(new_children, members[dsc_ast_cpp.AstAccess.PRIVATE], dsc_ast_cpp.AstAccess.PRIVATE, "private", last_access, dsc_token_cpp.KeywordType.PRIVATE)
     for item in comment_list:
         new_children.append(item)
     for item in left_over:

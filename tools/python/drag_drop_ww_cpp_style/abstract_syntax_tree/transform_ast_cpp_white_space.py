@@ -30,8 +30,8 @@ def AstTransformWhiteSpace(in_ast_node, in_stack_ast_node, in_data):
         if 0 < len(history) and history[-1]._type in s_thingsWePutASpaceAfter:
             prev_node = history[-1]
             if (
-                prev_node._token and prev_node._token._data in set({"~", "::", "."}) or
-                in_ast_node._token and in_ast_node._token._data in set({"~", "::", "."})
+                prev_node._token and prev_node._token._data in set({"~", "::", ".", "->"}) or
+                in_ast_node._token and in_ast_node._token._data in set({"~", "::", ".", ",", "->"})
                 ):
                 pass
             else:

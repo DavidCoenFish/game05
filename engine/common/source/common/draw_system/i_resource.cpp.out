@@ -14,7 +14,7 @@ IResource::IResource(DrawSystem* const in_draw_system)
     return;
 }
 
-IResource::~IResource()
+IResource::IResource()
 {
     if(nullptr != _draw_system)
     {
@@ -24,9 +24,9 @@ IResource::~IResource()
 }
 
 void IResource::OnResize(
-    ID3D12GraphicsCommandList* in_const ,
-    ID3D12Device2* in_const ,
-    const in_int ,
+    ID3D12GraphicsCommandList* in_const,
+    ID3D12Device2* in_const,
+    const in_int,
     const in_int
     )
 {

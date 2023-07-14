@@ -11,6 +11,7 @@ class TokenType(enum.Enum):
     OPERATOR = 7 # [ "->", "<<=", "+", ".", ",", ...
     PREPROCESSOR = 8 # [ #include, #ifdef, #if, #else, #endif, #pragma, #define, ...
     TOKEN = 9 # class name, function name, member name
+    NUMERIC = 10 # int, float, double, hex
 
 class CommentType(enum.Enum):
     NONE = 0
@@ -64,6 +65,7 @@ class OperatorType(enum.Enum):
     XOR_EQ = 43 # ^=
     COLON = 44 # :
     HASH = 45 # #
+    TILDA = 46 # ~
 
 class KeywordType(enum.Enum):
     NONE = 0
@@ -144,7 +146,6 @@ class KeywordType(enum.Enum):
 
     DEFINED = 75 # defined
 
-
 class PreprocessorType(enum.Enum):
     NONE = 0
     INCLUDE = 1 
@@ -213,6 +214,7 @@ s_operator_dict = {
     "^=" : OperatorType.XOR_EQ,
     ":" : OperatorType.COLON,
     "#" : OperatorType.HASH,
+    "~" : OperatorType.TILDA,
 }
 
 s_keyword_dict = {
@@ -338,6 +340,189 @@ def IsEscapedCharacterComplete(in_data):
 
     return last_was_true_quote
 
+# https://en.cppreference.com/w/cpp/language/integer_literal
+def IsIntegerLiteral(in_forward_sting):
+    value = ""
+    index = 0
+    # decimal-literal
+    if in_forward_sting[index] in set({"1","2","3","4","5","6","7","8","9"}):
+        value += in_forward_sting[index]
+        index += 1
+        in_digits = True
+        while index < len(in_forward_sting):
+            c = in_forward_sting[index]
+            if c in set({"0","1","2","3","4","5","6","7","8","9","'"}):
+                index += 1
+                value += c
+            else:
+                break
+
+    # hex
+    elif in_forward_sting[index:].startswith("0x") or in_forward_sting[index:].startswith("0X"):
+        value += in_forward_sting[:2]
+        index += 2
+        while index < len(in_forward_sting):
+            c = in_forward_sting[index]
+            if c in set({"0","1","2","3","4","5","6","7","8","9","a","A","b","B","c","C","d","D","e","E","f","F", "'"}):
+                index += 1
+                value += c
+            else:
+                break
+
+    # binary
+    elif in_forward_sting[index:].startswith("0b") or in_forward_sting[index:].startswith("0B"):
+        value += in_forward_sting[:2]
+        index += 2
+        while index < len(in_forward_sting):
+            c = in_forward_sting[index]
+            if c in set({"0","1","'"}):
+                index += 1
+                value += c
+            else:
+                break
+
+    # octal
+    elif in_forward_sting[index:].startswith("0"):
+        value += in_forward_sting[:1]
+        index += 1
+        while index < len(in_forward_sting):
+            c = in_forward_sting[index]
+            if c in set({"0","1","2","3","4","5","6","7","8", "'"}):
+                index += 1
+                value += c
+            else:
+                break
+
+    else:
+        return ""
+
+    #suffix
+    while index < len(in_forward_sting):
+        found = False
+        for key in ("u","U","l","L","z","Z","ll","LL"):
+            if in_forward_sting[index:].startswith(key):
+                value += key
+                index + len(key)
+                found = True
+            break
+        if False == found:
+            break
+
+    return value
+
+# https://en.cppreference.com/w/cpp/language/floating_literal
+def IsFloatingPointLiteral(in_forward_sting):
+    value = ""
+    index = 0
+    has_decimal_point = False
+    has_exponent = False
+    exponent = set({"e","E"})
+    must_have_exponent = False
+    # decimal-literal
+    if in_forward_sting.startswith("0."):
+        has_decimal_point = True
+        index += 2
+        value += "0."
+        while index < len(in_forward_sting):
+            c = in_forward_sting[index]
+            if c in set({"0","1","2","3","4","5","6","7","8","9", "'"}):
+                index += 1
+                value += c
+            else:
+                break
+
+    elif in_forward_sting.startswith("."):
+        has_decimal_point = True
+        index += 1
+        value += "."
+        valid = False
+        while index < len(in_forward_sting):
+            c = in_forward_sting[index]
+            if c in set({"0","1","2","3","4","5","6","7","8","9", "'"}):
+                index += 1
+                value += c
+                valid = True
+            else:
+                break
+        if False == valid:
+            return ""
+
+    elif in_forward_sting[index] in set({"1","2","3","4","5","6","7","8","9"}):
+        index += 1
+        value += in_forward_sting[index]
+        while index < len(in_forward_sting):
+            c = in_forward_sting[index]
+            if c in set({"0","1","2","3","4","5","6","7","8","9", "'"}):
+                index += 1
+                value += c
+            elif has_decimal_point == False and c == ".":
+                index += 1
+                value += c
+                has_decimal_point = True
+            else:
+                break
+        if False == has_decimal_point:
+            must_have_exponent = True
+
+    elif in_forward_sting[index:].startswith("0x") or in_forward_sting.startswith("0X"):
+        exponent = set({"p","P"})
+        must_have_exponent = True
+        valid = False
+        while index < len(in_forward_sting):
+            c = in_forward_sting[index]
+            if c in set({"0","1","2","3","4","5","6","7","8","9","a","A","b","B","c","C","d","D","e","E","f","F", "'"}):
+                index += 1
+                value += c
+                valid = True
+            elif has_decimal_point == False and c == ".":
+                index += 1
+                value += c
+                has_decimal_point = True
+            else:
+                break
+        if False == valid:
+            return ""
+
+    else:
+        return ""
+
+    # exponent
+    if in_forward_sting[index] in exponent:
+        has_exponent = True
+        value += in_forward_sting[index]
+        index += 1
+        if in_forward_sting[index] in set({"-","+"}):
+            value += in_forward_sting[index]
+            index += 1
+        valid = False
+        while in_forward_sting[index].isdigit() and index < len(in_forward_sting):
+            valid = True
+            value += in_forward_sting[index]
+            index += 1
+        if False == valid:
+            return ""
+
+    # is valid floating point literal
+    if True == must_have_exponent and False == has_exponent:
+        return ""
+    
+    # suffix
+    if index < len(in_forward_sting):
+        for key in ("f", "F", "l", "L", "f16", "f32", "f64", "f128", "bf16", "F16", "F32", "F64", "F128", "BF16"):
+            if in_forward_sting[index:].startswith(key):
+                value += key
+                index + len(key)
+                break
+
+    return value
+
+def IsNumeric(in_forward_string):
+    integer_literal = IsIntegerLiteral(in_forward_string)
+    floating_point_literal = IsFloatingPointLiteral(in_forward_string)
+    if len(integer_literal) < len(floating_point_literal):
+        return floating_point_literal
+    return integer_literal
+
 def CalculateCouldBeIncludePathSpec(in_array_tokens, in_c):
     if in_c != "<" and in_c != "\"":
         return False
@@ -373,7 +558,7 @@ def ConsumeDict(in_trace_self, in_array_tokens, in_forward_string, in_dict, in_t
     return found_length
 
 def IsStringKeywordThatBreaksToken(in_forward_string):
-    keywords_set = set({".","(",")","[","]","::","->","<",">",";"})
+    keywords_set = set({".", "(", ")", "[", "]", "::", "->", "<", ">", ";", ",", "+", "-", "%", "*", "/"})
     for key in keywords_set:
         if in_forward_string.startswith(key):
             return True
@@ -503,6 +688,18 @@ class Token:
             trace_self._type == TokenType.WHITE_SPACE or
             True == IsStringKeywordThatBreaksToken(in_forward_string)
             ):
+            # gather numeric literal
+            value = IsNumeric(in_forward_string)
+            if value != "":
+                if trace_self._data != "":
+                    trace_self = Token()
+                    in_array_tokens.append(trace_self)
+                trace_self._type = TokenType.NUMERIC
+                trace_self._data = value
+                trace_self = Token()
+                in_array_tokens.append(trace_self)
+                return len(value)
+
             step = ConsumeDict(trace_self, in_array_tokens, in_forward_string, s_preprocessor_dict, TokenType.PREPROCESSOR)
             if 0 != step:
                 return step
@@ -561,12 +758,7 @@ def TokenizeData(in_data, in_debug = False):
         SaveTextFile("build\\debug_tokens.txt", debug_file_data)
 
         if reassembled_data != in_data:
-            #print("==============( in_data )==========================")
-            #print(in_data)
             SaveTextFile("build\\debug_tokens_source.txt", in_data)
-            #print("==============( reassembled data )=================")
-            #print(reassembled_data)
-            #print("===================================================")
             SaveTextFile("build\\debug_tokens_reassembled.txt", reassembled_data)
             raise Exception("reassembled data from token array doesn't match the input data")
 

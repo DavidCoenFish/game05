@@ -4,14 +4,17 @@
 #include "common/draw_system/d3dx12.h"
 #include "common/draw_system/draw_system.h"
 
-CustomCommandList::CustomCommandList(DrawSystem& drawSystem, ID3D12GraphicsCommandList* in_command_list)
+CustomCommandList::CustomCommandList(
+    DrawSystem& in_draw_system,
+    ID3D12GraphicsCommandList* in_command_list
+    )
     : _draw_system(in_draw_system)
     , _command_list(in_command_list)
 {
     // Nop
 }
 
-CustomCommandList::~CustomCommandList()
+CustomCommandList::CustomCommandList()
 {
     m_drawSystem.CustomCommandListFinish(_command_list);
 }

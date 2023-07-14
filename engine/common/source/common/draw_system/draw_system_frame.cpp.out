@@ -16,7 +16,7 @@ DrawSystemFrame::DrawSystemFrame(DrawSystem& in_draw_system)
     // M_drawSystem.Clear();
 }
 
-DrawSystemFrame::~DrawSystemFrame()
+DrawSystemFrame::DrawSystemFrame()
 {
     // If (m_pCommandList)
     // {
@@ -57,7 +57,10 @@ void DrawSystemFrame::SetRenderTarget(IRenderTarget* const in_render_target)
 
 void DrawSystemFrame::SetShader(Shader* const in_shader)
 {
-    pShader -> SetActivate(m_pCommandList, m_drawSystem.in_get_back_buffer_index());
+    pShader -> SetActivate(
+    _command_list,
+    m_drawSystem.in_get_back_buffer_index()
+    );
 }
 
 void DrawSystemFrame::Draw(GeometryGeneric* const in_geometry)
@@ -65,8 +68,16 @@ void DrawSystemFrame::Draw(GeometryGeneric* const in_geometry)
     pGeometry -> Draw(_command_list);
 }
 
-void DrawSystemFrame::Dispatch(uint32_t numGroupsX, uint32_t numGroupsY, uint32_t in_num_groups_z)
+void DrawSystemFrame::Dispatch(
+    uint32_t in_num_groups_x,
+    uint32_t in_num_groups_y,
+    uint32_t in_num_groups_z
+    )
 {
-    m_pCommandList -> Dispatch(numGroupsX, numGroupsY, in_num_groups_z);
+    m_pCommandList -> Dispatch(
+    in_num_groups_x,
+    in_num_groups_y,
+    in_num_groups_z
+    );
 }
 

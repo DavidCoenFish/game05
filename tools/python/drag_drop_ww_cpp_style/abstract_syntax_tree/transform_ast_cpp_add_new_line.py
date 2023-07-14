@@ -21,12 +21,10 @@ def DoesParenthesisChildrenNeedNewline(in_ast_node, in_stack_ast_node):
     return False
 
 def AstTransformAddNewLine(in_ast_node, in_stack_ast_node, in_data):
+    prev_node = in_data["last"]
     parent = None
     if 0 < len(in_stack_ast_node):
         parent = in_stack_ast_node[-1]
-    grand_parent = None
-    if 1 < len(in_stack_ast_node):
-        grand_parent = in_stack_ast_node[-2]
 
     if (
         parent is not None and
@@ -52,10 +50,13 @@ def AstTransformAddNewLine(in_ast_node, in_stack_ast_node, in_data):
     elif (
         in_ast_node._type == dsc_ast_cpp.AstType.SCOPE_END
         ):
-        if grand_parent and grand_parent._sub_type == dsc_ast_cpp.SubType.STATEMENT_METHOD_DEFINITION:
-            in_ast_node._export_post_token_format.append(export.ExportFormat.NEW_LINE)
-        else:
-            in_ast_node._export_pre_token_format.append(export.ExportFormat.NEW_LINE)
+        in_ast_node._export_post_token_format.append(export.ExportFormat.NEW_LINE)
+    elif (
+        in_ast_node._type == dsc_ast_cpp.AstType.STATEMENT_END and
+        prev_node and prev_node._type == dsc_ast_cpp.AstType.SCOPE_END
+        ):
+        # remove the newline if there was a "};"
+        prev_node._export_post_token_format.remove(export.ExportFormat.NEW_LINE)
 
     # extra newline for include groups
     if in_ast_node._type == dsc_ast_cpp.AstType.DOCUMENT:
@@ -96,14 +97,18 @@ def AstTransformAddNewLine(in_ast_node, in_stack_ast_node, in_data):
             in_ast_node._export_post_children_format.append(export.ExportFormat.NEW_LINE)
 
     # put the { on a new line
+    # if (
+    #     in_ast_node._type == dsc_ast_cpp.AstType.SCOPE and
+    #     parent is not None and
+    #     (
+    #         parent._sub_type == dsc_ast_cpp.SubType.STATEMENT_CLASS or
+    #         parent._sub_type == dsc_ast_cpp.SubType.STATEMENT_STRUCT or
+    #         parent._sub_type == dsc_ast_cpp.SubType.STATEMENT_METHOD_DEFINITION 
+    #     )):
     if (
         in_ast_node._type == dsc_ast_cpp.AstType.SCOPE and
-        parent is not None and
-        (
-            parent._sub_type == dsc_ast_cpp.SubType.STATEMENT_CLASS or
-            parent._sub_type == dsc_ast_cpp.SubType.STATEMENT_STRUCT or
-            parent._sub_type == dsc_ast_cpp.SubType.STATEMENT_METHOD_DEFINITION 
-        )):
+        1 < len(in_ast_node._children)
+        ):
         in_ast_node._export_pre_token_format.append(export.ExportFormat.NEW_LINE)
         in_ast_node._export_post_token_format.append(export.ExportFormat.NEW_LINE)
 
@@ -129,5 +134,9 @@ def AstTransformAddNewLine(in_ast_node, in_stack_ast_node, in_data):
         if True == depth_incremented:
             in_ast_node._children[-1]._export_pre_token_format.append(export.ExportFormat.DEPTH_DECREMENT)
 
-
+    if (
+        in_ast_node._type != dsc_ast_cpp.AstType.WHITE_SPACE and
+        in_ast_node._type != dsc_ast_cpp.AstType.COMMENT
+        ):
+        in_data["last"] = in_ast_node
     return True

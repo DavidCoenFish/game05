@@ -7,9 +7,13 @@
 #include "common/log/log.h"
 #include "common/util/utf8.h"
 
-DeviceResources::DeviceResources(const unsigned int backBufferCount, const D3D_FEATURE_LEVEL d3dFeatureLevel, const 
-        unsigned int options, const RenderTargetFormatData& targetFormatData, const RenderTargetDepthData& 
-        in_target_depth_data)
+DeviceResources::DeviceResources(
+    const unsigned int in_back_buffer_count,
+    const D3D_FEATURE_LEVEL in_d3d_feature_level,
+    const unsigned int in_options,
+    const RenderTargetFormatData& in_target_format_data,
+    const RenderTargetDepthData& in_target_depth_data
+    )
     : _options(in_options)
     , _back_buffer_count(in_back_buffer_count)
     , _dxgi_factory_flags(0)
@@ -30,38 +34,55 @@ DeviceResources::DeviceResources(const unsigned int backBufferCount, const D3D_F
     }
 
     else{LOG_MESSAGE_WARNING(in_"_w_a_r_n_i_n_g: _direct3_d _debug _device is not available\n");
-
     }
+
     Microsoft::WRL::ComPtr < IDXGIInfoQueue > dxgiInfoQueue;
-    if(in_s_u_c_c_e_e_d_e_d(DXGIGetDebugInterface1(0, IID_PPV_ARGS(dxgiInfoQueue.GetAddressOf()))))
+    if(in_s_u_c_c_e_e_d_e_d(DXGIGetDebugInterface1(
+        0,
+        IID_PPV_ARGS(dxgiInfoQueue.GetAddressOf())
+        )))
     {
         m_dxgiFactoryFlags = DXGI_CREATE_FACTORY_DEBUG;
-        dxgiInfoQueue -> SetBreakOnSeverity(DXGI_DEBUG_ALL, DXGI_INFO_QUEUE_MESSAGE_SEVERITY_ERROR, in_true);
-        dxgiInfoQueue -> SetBreakOnSeverity(DXGI_DEBUG_ALL, DXGI_INFO_QUEUE_MESSAGE_SEVERITY_CORRUPTION, in_true);
+        dxgiInfoQueue -> SetBreakOnSeverity(
+        in_d_x_g_i__d_e_b_u_g__a_l_l,
+        in_d_x_g_i__i_n_f_o__q_u_e_u_e__m_e_s_s_a_g_e__s_e_v_e_r_i_t_y__e_r_r_o_r,
+        in_true
+        );
+        dxgiInfoQueue -> SetBreakOnSeverity(
+        in_d_x_g_i__d_e_b_u_g__a_l_l,
+        in_d_x_g_i__i_n_f_o__q_u_e_u_e__m_e_s_s_a_g_e__s_e_v_e_r_i_t_y__c_o_r_r_u_p_t_i_o_n,
+        in_true
+        );
         DXGI_INFO_QUEUE_MESSAGE_ID _hide[]={80 
             /* IDXGISwapChain::GetContainingOutput: The swapchain's adapter does not control the output on which the swapchain's window resides. */
-        ,
-        }
-        ;DXGI_INFO_QUEUE_FILTER filter ={
-        };
+        ,}
+        ;DXGI_INFO_QUEUE_FILTER filter ={};
         filter.DenyList.NumIDs = _countof(in_hide);
         filter.DenyList.pIDList = hide;
-        dxgiInfoQueue -> AddStorageFilterEntries(DXGI_DEBUG_DXGI, & in_filter);
+        dxgiInfoQueue -> AddStorageFilterEntries(
+        in_d_x_g_i__d_e_b_u_g__d_x_g_i,
+        & in_filter
+        );
     }
 
-
-    }#endif
-    DX::ThrowIfFailed(in_create_d_x_g_i_factory2(m_dxgiFactoryFlags, IID_PPV_ARGS(m_pDXGIFactory.ReleaseAndGetAddressOf(
-        ))));
+    }
+    #endif
+    DX::ThrowIfFailed(in_create_d_x_g_i_factory2(
+    m_dxgiFactoryFlags,
+    IID_PPV_ARGS(m_pDXGIFactory.ReleaseAndGetAddressOf())
+    ));
     // Determines whether tearing support is available for fullscreen borderless windows.
     if(m_options & in_c__allow_tearing)
     {
         BOOL _allow_tearing = FALSE;
-        HRESULT hr = m_pDXGIFactory -> CheckFeatureSupport(DXGI_FEATURE_PRESENT_ALLOW_TEARING, & allowTearing, in_sizeof
-            (allowTearing));
+        HRESULT hr = m_pDXGIFactory -> CheckFeatureSupport(
+        in_d_x_g_i__f_e_a_t_u_r_e__p_r_e_s_e_n_t__a_l_l_o_w__t_e_a_r_i_n_g,
+        & in_allow_tearing,
+        in_sizeof(allowTearing)
+        );
         if(FAILED(hr)|| ! in_allow_tearing)
         {
-            m_options &= _~c__allow_tearing;
+            m_options &= in_c__allow_tearing;
             LOG_MESSAGE_WARNING(in_"_w_a_r_n_i_n_g: _variable refresh rate displays not supported");
         }
 
@@ -75,31 +96,36 @@ DeviceResources::DeviceResources(const unsigned int backBufferCount, const D3D_F
     // Create the DX12 API device object.
     HRESULT hr = D3D12CreateDevice(
     adapter.in_get(),
-    d3dFeatureLevel, in_i_i_d__p_p_v__a_r_g_s(m_pDevice.ReleaseAndGetAddressOf())
+    in_d3d_feature_level,
+    in_i_i_d__p_p_v__a_r_g_s(m_pDevice.ReleaseAndGetAddressOf())
     );
     DX::ThrowIfFailed(in_hr);
-    {wchar_t _name[64]={
-    };
+    {wchar_t _name[64]={};
     swprintf_s(
-    name, in_l"_device:%d" ,
+    in_name,
+    in_l"_device:%d",
     in_s_count
     );
     m_pDevice -> SetName(in_name);
-
-    }#if ndef NDEBUG
+    }
+    #if ndef NDEBUG
     // Configure debug device (if active).
     Microsoft::WRL::ComPtr < ID3D12InfoQueue > d3dInfoQueue;
     if(in_s_u_c_c_e_e_d_e_d(m_pDevice.As(& d3dInfoQueue)))
     {
         #ifdef _DEBUG
-        d3dInfoQueue -> SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, in_true);
-        d3dInfoQueue -> SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, in_true);
+        d3dInfoQueue -> SetBreakOnSeverity(
+        in_d3_d12__m_e_s_s_a_g_e__s_e_v_e_r_i_t_y__c_o_r_r_u_p_t_i_o_n,
+        in_true
+        );
+        d3dInfoQueue -> SetBreakOnSeverity(
+        in_d3_d12__m_e_s_s_a_g_e__s_e_v_e_r_i_t_y__e_r_r_o_r,
+        in_true
+        );
         #endif
         D3D12_MESSAGE_ID in_hide[]={D3D12_MESSAGE_ID_MAP_INVALID_NULLRANGE, D3D12_MESSAGE_ID_UNMAP_INVALID_NULLRANGE, 
-            D3D12_MESSAGE_ID_EXECUTECOMMANDLISTS_WRONGSWAPCHAINBUFFERREFERENCE
-        }
-        ;D3D12_INFO_QUEUE_FILTER filter ={
-        };
+            D3D12_MESSAGE_ID_EXECUTECOMMANDLISTS_WRONGSWAPCHAINBUFFERREFERENCE}
+        ;D3D12_INFO_QUEUE_FILTER filter ={};
         filter.DenyList.NumIDs = _countof(in_hide);
         filter.DenyList.pIDList = hide;
         d3dInfoQueue -> AddStorageFilterEntries(& in_filter);
@@ -107,21 +133,22 @@ DeviceResources::DeviceResources(const unsigned int backBufferCount, const D3D_F
 
     #endif
     // Create the command queue.
-    D3D12_COMMAND_QUEUE_DESC _queue_desc ={
-    };
+    D3D12_COMMAND_QUEUE_DESC _queue_desc ={};
     queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
     queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
-    DX::ThrowIfFailed(m_pDevice -> in_create_command_queue(& queueDesc, IID_PPV_ARGS(m_pCommandQueue.
-        ReleaseAndGetAddressOf())));
-    {wchar_t in_name[64]={
-    };
+    DX::ThrowIfFailed(m_pDevice -> in_create_command_queue(
+    & queueDesc,
+    IID_PPV_ARGS(m_pCommandQueue.ReleaseAndGetAddressOf())
+    ));
+    {wchar_t in_name[64]={};
     swprintf_s(
-    name, in_l"_command_queue:%d" ,
+    in_name,
+    in_l"_command_queue:%d",
     in_s_count
     );
     m_pCommandQueue -> SetName(in_name);
-
-    }// CreateWindowSizeDependentResources(pDrawSystem, hWnd);
+    }
+    // CreateWindowSizeDependentResources(pDrawSystem, hWnd);
     m_pGraphicsMemory = std::make_unique < DirectX::GraphicsMemory >(m_pDevice.in_get());
     if(nullptr == _graphics_memory)
     {
@@ -132,36 +159,44 @@ DeviceResources::DeviceResources(const unsigned int backBufferCount, const D3D_F
     // Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> m_pCustomCommandList;
     // Microsoft::WRL::ComPtr<ID3D12Fence> m_pCustomCommandFence;
     // Microsoft::WRL::Wrappers::Event m_customCommandFenceEvent;
-    DX::ThrowIfFailed(m_pDevice -> in_create_command_allocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(
-        m_pCustomCommandAllocator.ReleaseAndGetAddressOf())));
-    {wchar_t in_name[64]={
-    };
+    DX::ThrowIfFailed(m_pDevice -> in_create_command_allocator(
+    D3D12_COMMAND_LIST_TYPE_DIRECT,
+    IID_PPV_ARGS(m_pCustomCommandAllocator.ReleaseAndGetAddressOf())
+    ));
+    {wchar_t in_name[64]={};
     swprintf_s(
-    name, in_l"_custom_command_allocator:%d" ,
+    in_name,
+    in_l"_custom_command_allocator:%d",
     in_s_count
     );
     m_pCustomCommandAllocator -> SetName(in_name);
-
-    }DX::ThrowIfFailed(m_pDevice -> in_create_command_list(
-    0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_pCustomCommandAllocator.Get(),
-    nullptr ,
+    }
+    DX::ThrowIfFailed(m_pDevice -> in_create_command_list(
+    0,
+    D3D12_COMMAND_LIST_TYPE_DIRECT,
+    m_pCustomCommandAllocator.Get(),
+    nullptr,
     IID_PPV_ARGS(m_pCustomCommandList.ReleaseAndGetAddressOf())
     ));
-    {wchar_t in_name[64]={
-    };
+    {wchar_t in_name[64]={};
     swprintf_s(
-    name, in_l"_custom_command_list:%d" ,
+    in_name,
+    in_l"_custom_command_list:%d",
     in_s_count
     );
     m_pCustomCommandList -> SetName(in_name);
-
-    }m_pCustomCommandList -> Close();
-    DX::ThrowIfFailed(m_pDevice -> in_create_fence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(m_pCustomCommandFence.
-        ReleaseAndGetAddressOf())));
+    }
+    m_pCustomCommandList -> Close();
+    DX::ThrowIfFailed(m_pDevice -> in_create_fence(
+    0,
+    D3D12_FENCE_FLAG_NONE,
+    IID_PPV_ARGS(m_pCustomCommandFence.ReleaseAndGetAddressOf())
+    ));
     m_customCommandFenceEvent.Attach(in_create_event_ex(
-    nullptr ,
-    nullptr ,
-    0, EVENT_MODIFY_STATE | SYNCHRONIZE
+    nullptr,
+    nullptr,
+    0,
+    EVENT_MODIFY_STATE | SYNCHRONIZE
     ));
     if(! m_customCommandFenceEvent.in_is_valid())
     {
@@ -171,19 +206,23 @@ DeviceResources::DeviceResources(const unsigned int backBufferCount, const D3D_F
     #if 0
     D3D12_FEATURE_DATA_SHADER_MODEL shaderModel =
     {
-        D3D_SHADER_MODEL_6_5
-        }
-        ;if(FAILED(m_pDevice -> CheckFeatureSupport(D3D12_FEATURE_SHADER_MODEL, & shaderModel, sizeof(shaderModel)))
-                in_||(shaderModel.HighestShaderModel < D3D_SHADER_MODEL_6_5))
+        D3D_SHADER_MODEL_6_5}
+        ;if(FAILED(m_pDevice -> CheckFeatureSupport(
+            D3D12_FEATURE_SHADER_MODEL,
+            & shaderModel,
+            sizeof(shaderModel)
+            ))in_||(shaderModel.HighestShaderModel < D3D_SHADER_MODEL_6_5))
         {
             LOG_MESSAGE_WARNING(in_"_w_a_r_n_i_n_g: _shader _model 6.5 is not supported");
         }
         D3D12_FEATURE_DATA_D3D12_OPTIONS7 features =
         {
-        }
-        ;
-        if(FAILED(m_pDevice -> CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS7, & features, sizeof(features)))in_||(
-                features.MeshShaderTier == D3D12_MESH_SHADER_TIER_NOT_SUPPORTED))
+        };
+        if(FAILED(m_pDevice -> CheckFeatureSupport(
+            D3D12_FEATURE_D3D12_OPTIONS7,
+            & features,
+            sizeof(features)
+            ))in_||(features.MeshShaderTier == D3D12_MESH_SHADER_TIER_NOT_SUPPORTED))
         {
             LOG_MESSAGE_WARNING(in_"_w_a_r_n_i_n_g: _mesh _shaders aren't supported");
         }
@@ -191,7 +230,7 @@ DeviceResources::DeviceResources(const unsigned int backBufferCount, const D3D_F
         #endif
     }
 
-    DeviceResources::~DeviceResources()
+    DeviceResources::DeviceResources()
     {
         WaitForGpu();
         // Can go accross frames
@@ -207,14 +246,19 @@ DeviceResources::DeviceResources(const unsigned int backBufferCount, const D3D_F
         m_pDXGIFactory.Reset();
         #ifdef _DEBUG
         {Microsoft::WRL::ComPtr < IDXGIDebug1 > dxgiDebug;
-        if(in_s_u_c_c_e_e_d_e_d(DXGIGetDebugInterface1(0, IID_PPV_ARGS(& dxgiDebug))))
+        if(in_s_u_c_c_e_e_d_e_d(DXGIGetDebugInterface1(
+            0,
+            IID_PPV_ARGS(& dxgiDebug)
+            )))
         {
-            dxgiDebug -> ReportLiveObjects(DXGI_DEBUG_ALL, in_d_x_g_i__d_e_b_u_g__r_l_o__f_l_a_g_s(
-                DXGI_DEBUG_RLO_SUMMARY | DXGI_DEBUG_RLO_IGNORE_INTERNAL));
+            dxgiDebug -> ReportLiveObjects(
+            in_d_x_g_i__d_e_b_u_g__a_l_l,
+            in_d_x_g_i__d_e_b_u_g__r_l_o__f_l_a_g_s(DXGI_DEBUG_RLO_SUMMARY | DXGI_DEBUG_RLO_IGNORE_INTERNAL)
+            );
         }
 
-
-        }#endif
+        }
+        #endif
     }
 
     void DeviceResources::WaitForGpu()noexcept
@@ -238,12 +282,15 @@ DeviceResources::DeviceResources(const unsigned int backBufferCount, const D3D_F
                 )))
             {
                 // Wait until the Signal has been processed.
-                if(in_s_u_c_c_e_e_d_e_d(m_pCustomCommandFence -> SetEventOnCompletion(m_customCommandListFenceValue, 
-                        m_customCommandFenceEvent.Get())))
+                if(in_s_u_c_c_e_e_d_e_d(m_pCustomCommandFence -> SetEventOnCompletion(
+                    m_customCommandListFenceValue,
+                    m_customCommandFenceEvent.Get()
+                    )))
                 {
                     WaitForSingleObjectEx(
                     m_customCommandFenceEvent.in_get(),
-                    INFINITE, in_f_a_l_s_e
+                    in_i_n_f_i_n_i_t_e,
+                    in_f_a_l_s_e
                     );
                     // Increment the fence value for the current frame.
                     m_customCommandListFenceValue += 1;
@@ -255,10 +302,19 @@ DeviceResources::DeviceResources(const unsigned int backBufferCount, const D3D_F
 
     }
 
-    const bool DeviceResources::OnResize(DrawSystem* const pDrawSystem, const HWND hWnd, int & out_width, int & 
-            in_out_height)
+    const bool DeviceResources::OnResize(
+        DrawSystem* const in_draw_system,
+        const HWND in_hwnd,
+        int & in_out_width,
+        int & in_out_height
+        )
     {
-        return CreateWindowSizeDependentResources(pDrawSystem, hWnd, & out_width, & in_out_height);
+        return CreateWindowSizeDependentResources(
+        in_draw_system,
+        in_hwnd,
+        & in_out_width,
+        & in_out_height
+        );
     }
 
     const int DeviceResources::GetBackBufferIndex()const
@@ -271,28 +327,41 @@ DeviceResources::DeviceResources(const unsigned int backBufferCount, const D3D_F
         return 0;
     }
 
-    DirectX::GraphicsResource DeviceResources::AllocateUpload(const std::size_t size, void * const pDataOrNullptr, 
-            size_t in_alignment)
+    DirectX::GraphicsResource DeviceResources::AllocateUpload(
+        const std::size_t in_size,
+        void * const in_data_or_nullptr,
+        size_t in_alignment
+        )
     {
-        const size_t alignedSize =(size + alignment - 1)&~(alignment - 1);
-        auto graphicsResource = m_pGraphicsMemory -> Allocate(alignedSize, in_alignment);
+        const size_t alignedSize =(size + alignment - 1)&(alignment - 1);
+        auto graphicsResource = m_pGraphicsMemory -> Allocate(
+        in_aligned_size,
+        in_alignment
+        );
         if(in_data_or_nullptr)
         {
             memcpy(
             graphicsResource.in_memory(),
-            pDataOrNullptr, in_size
+            in_data_or_nullptr,
+            in_size
             );
         }
 
         return _graphics_resource;
     }
 
-    void DeviceResources::GetAdapter(IDXGIAdapter1** ppAdapter, const D3D_FEATURE_LEVEL in_d3d_feature_level)
+    void DeviceResources::GetAdapter(
+        IDXGIAdapter1** in_pp_adapter,
+        const D3D_FEATURE_LEVEL in_d3d_feature_level
+        )
     {
         * ppAdapter = nullptr;
         Microsoft::WRL::ComPtr < IDXGIAdapter1 > adapter;
-        for(UINT adapterIndex = 0;SUCCEEDED(m_pDXGIFactory -> in_enum_adapter_by_gpu_preference(adapterIndex, 
-            DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE, IID_PPV_ARGS(adapter.ReleaseAndGetAddressOf())));
+        for(UINT in_adapter_index = 0;SUCCEEDED(m_pDXGIFactory -> in_enum_adapter_by_gpu_preference(
+        adapterIndex,
+        DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE,
+        IID_PPV_ARGS(adapter.ReleaseAndGetAddressOf())
+        ));
         adapterIndex++)
         {DXGI_ADAPTER_DESC1 _desc;
         DX::ThrowIfFailed(adapter -> in_get_desc1(& desc));
@@ -305,21 +374,25 @@ DeviceResources::DeviceResources(const unsigned int backBufferCount, const D3D_F
         // Check to see if the adapter supports Direct3D 12, but don't create the actual device yet.
         if(in_s_u_c_c_e_e_d_e_d(D3D12CreateDevice(
             adapter.Get(),
-            d3dFeatureLevel, _uuidof(ID3D12Device),
+            d3dFeatureLevel,
+            _uuidof(ID3D12Device),
             nullptr
             )))
         {
             #ifdef _DEBUG
             LOG_MESSAGE(
-            in_"_direct3_d _adapter (%u): _v_i_d:%04_x, _p_i_d:%04_x - %s" ,
-            adapterIndex, desc.VendorId, desc.DeviceId, Utf8::Utf16ToUtf8(desc.Description).in_c_str()
+            in_"_direct3_d _adapter (%u): _v_i_d:%04_x, _p_i_d:%04_x - %s",
+            in_adapter_index,
+            desc.in_vendor_id,
+            desc.in_device_id,
+            Utf8::Utf16ToUtf8(desc.Description).in_c_str()
             );
             #endif
             break;
         }
 
-
-        }#if ! defined(NDEBUG)
+        }
+        #if ! defined(NDEBUG)
         if(! in_adapter)
         {
             // Try WARP12 instead
@@ -341,11 +414,18 @@ DeviceResources::DeviceResources(const unsigned int backBufferCount, const D3D_F
     }
 
     // Return true if size changed
-    const bool DeviceResources::CreateWindowSizeDependentResources(DrawSystem* const pDrawSystem, const HWND hWnd, int *
-            out_pWidth, int * in_out_p_height)
+    const bool DeviceResources::CreateWindowSizeDependentResources(
+        DrawSystem* const in_draw_system,
+        const HWND in_hwnd,
+        int * in_out_p_width,
+        int * in_out_p_height
+        )
     {
         RECT _rc;
-        GetClientRect(hWnd, & in_rc);
+        GetClientRect(
+        in_hwnd,
+        & in_rc
+        );
         const int _width = rc.right - rc.left;
         const int _height = rc.bottom - rc.top;
         if(nullptr != in_out_p_width)
@@ -374,9 +454,20 @@ DeviceResources::DeviceResources(const unsigned int backBufferCount, const D3D_F
 
         m_pScreenSizeResources.reset();
         const unsigned int swapFlag =(m_options & in_c__allow_tearing)? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0u;
-        m_pScreenSizeResources = std::make_unique < ScreenSizeResources >(pDrawSystem, m_pDevice, m_pDXGIFactory, 
-            m_pCommandQueue, hWnd, fenceValue, m_backBufferCount, width, height, swapFlag, m_targetFormatData, 
-            _target_depth_data);
+        m_pScreenSizeResources = std::make_unique < ScreenSizeResources >(
+        in_draw_system,
+        _device,
+        _d_x_g_i_factory,
+        _command_queue,
+        in_hwnd,
+        in_fence_value,
+        _back_buffer_count,
+        in_width,
+        in_height,
+        in_swap_flag,
+        _target_format_data,
+        _target_depth_data
+        );
         return true;
     }
 
@@ -422,11 +513,14 @@ DeviceResources::DeviceResources(const unsigned int backBufferCount, const D3D_F
         ));
         if(m_pCustomCommandFence -> GetCompletedValue()< _custom_command_list_fence_value)
         {
-            DX::ThrowIfFailed(m_pCustomCommandFence -> in_set_event_on_completion(m_customCommandListFenceValue, 
-                m_customCommandFenceEvent.Get()));
+            DX::ThrowIfFailed(m_pCustomCommandFence -> in_set_event_on_completion(
+            m_customCommandListFenceValue,
+            m_customCommandFenceEvent.Get()
+            ));
             WaitForSingleObjectEx(
             m_customCommandFenceEvent.in_get(),
-            INFINITE, in_f_a_l_s_e
+            in_i_n_f_i_n_i_t_e,
+            in_f_a_l_s_e
             );
         }
 
@@ -438,7 +532,10 @@ DeviceResources::DeviceResources(const unsigned int backBufferCount, const D3D_F
     void DeviceResources::CustomCommandListFinish(ID3D12GraphicsCommandList* in_command_list)
     {
         pCommandList -> Close();
-        m_pCommandQueue -> ExecuteCommandLists(1, in_command_list_cast(& pCommandList));
+        m_pCommandQueue -> ExecuteCommandLists(
+        1,
+        in_command_list_cast(& pCommandList)
+        );
     }
 
     // Void DeviceResources::Clear()
@@ -457,13 +554,16 @@ DeviceResources::DeviceResources(const unsigned int backBufferCount, const D3D_F
         }
 
         HRESULT in_hr = SEVERITY_SUCCESS;
-        if(false == m_pScreenSizeResources -> in_present(hr, m_pCommandQueue))
+        if(false == m_pScreenSizeResources -> in_present(
+            hr,
+            m_pCommandQueue
+            ))
         {
             #ifdef _DEBUG
-            char _buff[64]={
-            };
+            char _buff[64]={};
             sprintf_s(
-            buff, in_"_device _lost on _present: _reason code 0x%08_x\n" ,
+            in_buff,
+            in_"_device _lost on _present: _reason code 0x%08_x\n",
             static_cast < unsigned int in_>((hr == DXGI_ERROR_DEVICE_REMOVED)? m_pDevice -> GetDeviceRemovedReason(): hr
                 )
             );
@@ -476,8 +576,10 @@ DeviceResources::DeviceResources(const unsigned int backBufferCount, const D3D_F
         if(! m_pDXGIFactory -> in_is_current())
         {
             // Output information is cached on the DXGI Factory. If it is stale we need to create a new factory.
-            DX::ThrowIfFailed(in_create_d_x_g_i_factory2(m_dxgiFactoryFlags, IID_PPV_ARGS(m_pDXGIFactory.
-                ReleaseAndGetAddressOf())));
+            DX::ThrowIfFailed(in_create_d_x_g_i_factory2(
+            m_dxgiFactoryFlags,
+            IID_PPV_ARGS(m_pDXGIFactory.ReleaseAndGetAddressOf())
+            ));
         }
 
         if(_graphics_memory)
