@@ -3,6 +3,8 @@ from . import dsc_ast_cpp
 from . import common
 
 def AdjustInclude(in_path_spec):
+    if "<" == in_path_spec[:1]:
+        return in_path_spec
     in_path_spec = in_path_spec.replace("\\", "/")
     result = in_path_spec[:1]
     last = in_path_spec[-1:]
@@ -22,12 +24,14 @@ def AdjustInclude(in_path_spec):
     return result
 
 def GetIncludePathSpec(in_ast_node):
-    if in_ast_node._type != dsc_ast_cpp.AstType.PREPROCESSOR and in_ast_node._sub_type != dsc_ast_cpp.SubType.PREPROCESSOR_INCLUDE:
-        return ""
-    for child in in_ast_node._children:
-        if child._type != dsc_ast_cpp.AstType.TOKEN:
-            continue
-        return child._token._data
+    if (
+        in_ast_node._type == dsc_ast_cpp.AstType.PREPROCESSOR and 
+        in_ast_node._sub_type == dsc_ast_cpp.SubType.PREPROCESSOR_INCLUDE
+        ):
+        for child in in_ast_node._children:
+            if child._type != dsc_ast_cpp.AstType.TOKEN:
+                continue
+            return child._token._data
     return ""
 
 def SetIncludePathSpec(in_ast_node, in_path_spec):

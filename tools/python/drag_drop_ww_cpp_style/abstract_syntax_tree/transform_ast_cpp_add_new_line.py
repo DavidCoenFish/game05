@@ -13,6 +13,11 @@ def GetIncludePathSpec(in_ast_node):
 
 
 def DoesParenthesisChildrenNeedNewline(in_ast_node, in_stack_ast_node):
+    # skip parenthesis under a preprocessor statement
+    for child in in_stack_ast_node:
+        if child._type == dsc_ast_cpp.AstType.PREPROCESSOR:
+            return False
+
     if in_ast_node._type != dsc_ast_cpp.AstType.PARENTHESIS:
         return False
     for item in in_ast_node._children:
@@ -42,6 +47,7 @@ def AstTransformAddNewLine(in_ast_node, in_stack_ast_node, in_data):
         in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_ACCESS or
         in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_CLASS or
         in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_STRUCT or
+        in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_ENUM or
         in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_CONSTRUCTOR or
         in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_DESTRUCTOR or
         in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_METHOD_DECLARATION or
@@ -60,6 +66,12 @@ def AstTransformAddNewLine(in_ast_node, in_stack_ast_node, in_data):
             }) or
             grand_parent._type == dsc_ast_cpp.AstType.SCOPE
             )
+        ):
+        in_ast_node._export_post_token_format.append(export.ExportFormat.NEW_LINE)
+    elif (
+        in_ast_node._token and in_ast_node._token._data == "," and
+        parent._type == dsc_ast_cpp.AstType.SCOPE and
+        grand_parent._sub_type == dsc_ast_cpp.SubType.STATEMENT_ENUM
         ):
         in_ast_node._export_post_token_format.append(export.ExportFormat.NEW_LINE)
     elif (
@@ -141,9 +153,15 @@ def AstTransformAddNewLine(in_ast_node, in_stack_ast_node, in_data):
         if True == depth_incremented:
             in_ast_node._children[-1]._export_pre_token_format.append(export.ExportFormat.DEPTH_DECREMENT)
 
+    # add a newline after each #endif
+    if in_ast_node._type == dsc_ast_cpp.AstType.PREPROCESSOR:
+        if in_ast_node._token._sub_type == dsc_token_cpp.PreprocessorType.ENDIF:
+            in_ast_node._export_post_token_format.append(export.ExportFormat.NEW_LINE)
+
     if (
         in_ast_node._type != dsc_ast_cpp.AstType.WHITE_SPACE and
         in_ast_node._type != dsc_ast_cpp.AstType.COMMENT
         ):
         in_data["last"] = in_ast_node
+
     return True

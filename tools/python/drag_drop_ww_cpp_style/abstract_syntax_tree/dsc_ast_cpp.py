@@ -40,6 +40,7 @@ class SubType(enum.Enum):
     STATEMENT_MEMBER = 25
     STATEMENT_FORWARD_DECLARATION = 26
     STATEMENT_ACCESS = 27
+    STATEMENT_ENUM = 28
     # STATEMENT_IF
     # STATEMENT_ELSE
 
@@ -83,6 +84,7 @@ def RecalculateStatementType(in_ast_node, in_stack):
     parent_class_struct_name = FindClassStructName(in_stack)
     class_keyword_found = False
     struct_keyword_found = False
+    enum_keyword_found = False
     other_keyword_found = False
     parenthesist_found = False
     child_scope_found = False
@@ -96,6 +98,8 @@ def RecalculateStatementType(in_ast_node, in_stack):
             class_keyword_found = True
         elif in_ast_node._token._sub_type == dsc_token_cpp.KeywordType.STRUCT:
             struct_keyword_found = True
+        elif in_ast_node._token._sub_type == dsc_token_cpp.KeywordType.ENUM:
+            enum_keyword_found = True
         elif in_ast_node._token._sub_type in set({ dsc_token_cpp.KeywordType.FOR, dsc_token_cpp.KeywordType.WHILE, dsc_token_cpp.KeywordType.IF }):
             other_keyword_found = True
         elif (
@@ -114,6 +118,8 @@ def RecalculateStatementType(in_ast_node, in_stack):
             class_keyword_found = True
         if child._token._sub_type == dsc_token_cpp.KeywordType.STRUCT and False == class_keyword_found:
             struct_keyword_found = True
+        if child._token._sub_type == dsc_token_cpp.KeywordType.ENUM:
+            enum_keyword_found = True
         if in_ast_node._token._sub_type in set({ dsc_token_cpp.KeywordType.FOR, dsc_token_cpp.KeywordType.WHILE, dsc_token_cpp.KeywordType.IF }):
             other_keyword_found = True
         if child._type == AstType.PARENTHESIS:
@@ -138,6 +144,8 @@ def RecalculateStatementType(in_ast_node, in_stack):
         return SubType.STATEMENT_CLASS
     if False == parenthesist_found and True == child_scope_found and True == struct_keyword_found:
         return SubType.STATEMENT_STRUCT
+    if True == enum_keyword_found:
+        return SubType.STATEMENT_ENUM
     
     if True == parent_class_struct_name_found and False == destructr_found and True == parenthesist_found:
         return SubType.STATEMENT_CONSTRUCTOR
@@ -159,12 +167,15 @@ def CalculateColonLable(in_parent):
     class_or_struct_found = False
     parenthesis_found = False
     questionmark_found = False
+    bool_found = False
     if in_parent._type == AstType.PARENTHESIS:
         # case 5, for (auto iter : m_arrayPage)
         return False
 
     if in_parent._token and ( in_parent._token._data == "class" or in_parent._token._data == "struct"):
         class_or_struct_found = True
+    if in_parent._token and in_parent._token._data == "bool":
+        bool_found = True
     for child in in_parent._children:
         if child._token and ( child._token._data == "class" or child._token._data == "struct"):
             class_or_struct_found = True
@@ -175,6 +186,9 @@ def CalculateColonLable(in_parent):
     if True == class_or_struct_found or True == parenthesis_found or True == questionmark_found:
         # case 3, "class Foo : public Bar
         # case 4, "ctor(int in_a) : m_a(in_a), m_b() {}
+        return False
+    if True == bool_found and False == parenthesis_found:
+        # case 6, "bool Reserved0 : 8;"    
         return False
 
     # case 1, "public:" access specifier
@@ -260,11 +274,14 @@ class AST:
 
             # assignment to array
             if parent._type == AstType.SCOPE and grand_parent:
-                for child in grand_parent._children:
-                    if "=" == child._token._data:
+                if grand_parent._token._data == "enum":
                         token_or_statement = AstType.TOKEN
-
-
+                else:
+                    for child in grand_parent._children:
+                        if "=" == child._token._data:
+                            token_or_statement = AstType.TOKEN
+                        if "enum" == child._token._data:
+                            token_or_statement = AstType.TOKEN
 
         if in_token._type == dsc_token_cpp.TokenType.COMMENT:
             CreateNewChild(self._children, AstType.COMMENT, in_token, self._access)
@@ -325,6 +342,7 @@ class AST:
                 # case 3, "class Foo : public Bar
                 # case 4, "ctor(int in_a) : m_a(in_a), m_b() {}
                 # case 5, "for (auto iter : m_arrayPage)
+                # case 6, "bool Reserved0 : 8;"
                 else:
                     CreateNewChild(self._children, AstType.TOKEN, in_token, self._access)
 

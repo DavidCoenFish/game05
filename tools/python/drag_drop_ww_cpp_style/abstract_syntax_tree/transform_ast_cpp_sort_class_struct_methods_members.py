@@ -14,15 +14,36 @@ def CalculateIsCandidateForClassStructReorder(in_ast_node, in_stack_ast_node):
 
 def CollectChildren(in_children, in_output, in_focus_set, out_comment_list = [], in_left_over = []):
     comment_list = []
+    depth = 0
     for child in in_children:
-        if child._sub_type in in_focus_set:
+        if child._token._sub_type in set({
+            dsc_token_cpp.PreprocessorType.IF,
+            dsc_token_cpp.PreprocessorType.IFDEF,
+            dsc_token_cpp.PreprocessorType.IFNDEF,
+            }):
+            depth += 1
+            in_left_over.append(child)
+        elif child._token._sub_type in set({dsc_token_cpp.PreprocessorType.ENDIF}):
+            depth -= 1
+            in_left_over.append(child)
+        elif child._token._sub_type in set({
+            dsc_token_cpp.PreprocessorType.ELIF,
+            dsc_token_cpp.PreprocessorType.ELSE,
+            }):
+            in_left_over.append(child)
+        elif 0 != depth:
+            in_left_over.append(child)
+        elif child._sub_type in in_focus_set:
             if in_output:
                 for item in comment_list:
                     in_output[child._access].append(item)
                 in_output[child._access].append(child)
             comment_list.clear()
             out_comment_list.clear()
-        elif child._type == dsc_ast_cpp.AstType.COMMENT:
+        elif (
+            child._type == dsc_ast_cpp.AstType.COMMENT or
+            child._token._sub_type == dsc_token_cpp.PreprocessorType.PRAGMA
+            ):
             comment_list.append(child)
             out_comment_list.append(child)
         elif (
@@ -66,7 +87,7 @@ def AstTransformSortClassStructMethodsMembers(in_ast_node, in_stack_ast_node, in
         }
 
     # Collect forward declarations, classes, structs
-    CollectChildren(in_ast_node._children, methods, set({ dsc_ast_cpp.SubType.STATEMENT_FORWARD_DECLARATION, dsc_ast_cpp.SubType.STATEMENT_CLASS, dsc_ast_cpp.SubType.STATEMENT_STRUCT }))
+    CollectChildren(in_ast_node._children, methods, set({ dsc_ast_cpp.SubType.STATEMENT_FORWARD_DECLARATION, dsc_ast_cpp.SubType.STATEMENT_CLASS, dsc_ast_cpp.SubType.STATEMENT_STRUCT, dsc_ast_cpp.SubType.STATEMENT_ENUM }))
 
     # Collect ctor
     CollectChildren(in_ast_node._children, methods, set({ dsc_ast_cpp.SubType.STATEMENT_CONSTRUCTOR }))
@@ -87,6 +108,7 @@ def AstTransformSortClassStructMethodsMembers(in_ast_node, in_stack_ast_node, in
             dsc_ast_cpp.SubType.STATEMENT_FORWARD_DECLARATION, 
             dsc_ast_cpp.SubType.STATEMENT_CLASS, 
             dsc_ast_cpp.SubType.STATEMENT_STRUCT,
+            dsc_ast_cpp.SubType.STATEMENT_ENUM,
             dsc_ast_cpp.SubType.STATEMENT_CONSTRUCTOR,
             dsc_ast_cpp.SubType.STATEMENT_DESTRUCTOR,
             dsc_ast_cpp.SubType.STATEMENT_METHOD_DECLARATION, 

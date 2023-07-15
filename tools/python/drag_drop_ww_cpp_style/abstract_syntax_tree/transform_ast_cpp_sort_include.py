@@ -24,7 +24,31 @@ def AstTransformSortInclude(in_ast_node, in_stack_ast_node, in_data):
     remaining = []
     array_to_sort = []
     before_includes = True
+    depth = 0
     for child in in_ast_node._children:
+
+        found = True
+        if child._type == dsc_ast_cpp.AstType.PREPROCESSOR:
+            if child._token._sub_type == dsc_token_cpp.PreprocessorType.IF:
+                depth += 1
+            elif child._token._sub_type == dsc_token_cpp.PreprocessorType.IFDEF:
+                depth += 1
+            elif child._token._sub_type == dsc_token_cpp.PreprocessorType.IFNDEF:
+                depth += 1
+            elif child._token._sub_type == dsc_token_cpp.PreprocessorType.ENDIF:
+                depth -= 1
+            else:
+                found = False
+        else:
+            found = False
+
+        if depth != 0 or found == True:
+            if True == before_includes:
+                new_child_array.append(child)
+            else:
+                remaining.append(child) 
+            continue
+
         path_spec = GetIncludePathSpec(child)
         if "" == path_spec:
             if True == before_includes:

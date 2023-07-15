@@ -116,9 +116,9 @@ def Cleanup(in_data): # remove m_, in_, out_, "m" then upper, "mp" then upper, "
     result = in_data
     if result.startswith("m_"):
         result = result[2:]
-    elif result.startswith("m") and result[1].isupper():
+    elif result.startswith("m") and 1 < len(result) and result[1].isupper():
         result = result[1:]
-    elif result.startswith("mp") and result[2].isupper():
+    elif result.startswith("mp") and 2 < len(result) and result[2].isupper():
         result = result[2:]
     elif result.startswith("_"):
         result = result[1:]
@@ -130,11 +130,11 @@ def Cleanup(in_data): # remove m_, in_, out_, "m" then upper, "mp" then upper, "
             result = result[3:]
         if result.startswith("out_"):
             result = result[4:]
-        if result.startswith("p") and result[1].isupper():
+        if result.startswith("p") and 1 < len(result) and result[1].isupper():
             result = result[1:]
-        if result.startswith("b") and result[1].isupper():
+        if result.startswith("b") and 1 < len(result) and result[1].isupper():
             result = result[1:]
-        if result.startswith("pb") and result[2].isupper():
+        if result.startswith("pb") and 2 < len(result) and result[2].isupper():
             result = result[2:]
 
     result = result.replace("hWnd", "Hwnd")
@@ -146,6 +146,12 @@ def Cleanup(in_data): # remove m_, in_, out_, "m" then upper, "mp" then upper, "
 # rename local members "swapChainDesc" => "swap_chain_desc"
 # for (auto pIter : m_listResource) => for (auto iter : _list_resource)
 def AstTransformRenameVariables(in_ast_node, in_stack_ast_node, in_visit_data):
+
+    # don't rename tokens under a preprocessor statement
+    for child in in_stack_ast_node:
+        if child._type == dsc_ast_cpp.AstType.PREPROCESSOR:
+            return True
+
     if (
         in_ast_node._token and
         in_ast_node._token._type == dsc_token_cpp.TokenType.TOKEN

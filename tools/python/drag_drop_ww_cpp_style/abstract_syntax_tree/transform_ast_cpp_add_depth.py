@@ -52,7 +52,26 @@ def AstTransformAddDepth(in_ast_node, in_stack_ast_node, in_data):
             dsc_token_cpp.PreprocessorType.ENDIF,
         })
         ):
+
+        if in_ast_node._token._sub_type == dsc_token_cpp.PreprocessorType.ELIF:
+            in_ast_node._export_post_children_format.append(export.ExportFormat.DEPTH_INCREMENT)
+        elif in_ast_node._token._sub_type == dsc_token_cpp.PreprocessorType.ELSE:
+            in_ast_node._export_post_children_format.append(export.ExportFormat.DEPTH_INCREMENT)
+        elif in_ast_node._token._sub_type == dsc_token_cpp.PreprocessorType.ENDIF:
+            in_ast_node._export_pre_token_format.append(export.ExportFormat.DEPTH_DECREMENT)
+
         in_ast_node._export_pre_token_format.append(export.ExportFormat.DEPTH_PUSH)
         in_ast_node._export_post_children_format.append(export.ExportFormat.DEPTH_POP)
+
+        if in_ast_node._token._sub_type == dsc_token_cpp.PreprocessorType.IF:
+            in_ast_node._export_post_children_format.append(export.ExportFormat.DEPTH_INCREMENT)
+        elif in_ast_node._token._sub_type == dsc_token_cpp.PreprocessorType.IFDEF:
+            in_ast_node._export_post_children_format.append(export.ExportFormat.DEPTH_INCREMENT)
+        elif in_ast_node._token._sub_type == dsc_token_cpp.PreprocessorType.IFNDEF:
+            in_ast_node._export_post_children_format.append(export.ExportFormat.DEPTH_INCREMENT)
+        elif in_ast_node._token._sub_type == dsc_token_cpp.PreprocessorType.ELIF:
+            in_ast_node._export_pre_token_format.append(export.ExportFormat.DEPTH_DECREMENT)
+        elif in_ast_node._token._sub_type == dsc_token_cpp.PreprocessorType.ELSE:
+            in_ast_node._export_pre_token_format.append(export.ExportFormat.DEPTH_DECREMENT)
 
     return True
