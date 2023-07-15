@@ -1,16 +1,17 @@
-#include "CommonPCH.h"
+#include "common/common_pch.h"
 
-#include "Common/DrawSystem/RenderTarget/IRenderTarget.h"
-//#include "Common/DrawSystem/IResource.h"
+#include "common/draw_system/render_target/i_render_target.h"
 
-IRenderTarget::IRenderTarget() //DrawSystem* const pDrawSystem)
-   //: IResource(pDrawSystem)
+// #include "Common/DrawSystem/IResource.h"
+IRenderTarget::IRenderTarget()// DrawSystem* const pDrawSystem)
+// : IResource(pDrawSystem)
+
 {
-   return;
+    return;
 }
 
 IRenderTarget::~IRenderTarget()
 {
-   return;
+    return;
 }
 

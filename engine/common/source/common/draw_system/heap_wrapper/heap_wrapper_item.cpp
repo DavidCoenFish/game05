@@ -1,74 +1,85 @@
-#include "CommonPCH.h"
+#include "common/common_pch.h"
 
-#include "Common/DrawSystem/HeapWrapper/HeapWrapperItem.h"
-#include "Common/DrawSystem/HeapWrapper/HeapWrapper.h"
+#include "common/draw_system/heap_wrapper/heap_wrapper.h"
+#include "common/draw_system/heap_wrapper/heap_wrapper_item.h"
 
-std::shared_ptr<HeapWrapperItem> HeapWrapperItem::Factory(
-   ID3D12Device2* const pDevice,
-   const std::shared_ptr<HeapWrapper>& pHeapWrapper,
-   const int length
-   )
+std::shared_ptr < HeapWrapperItem > HeapWrapperItem::Factory(
+    ID3D12Device2* const in_device,
+    const std::shared_ptr < HeapWrapper >&in_heap_wrapper,
+    const int in_length
+    )
 {
-   const int index = pHeapWrapper->GetFreeIndex(pDevice, length );
-   return std::make_shared< HeapWrapperItem >(
-      pHeapWrapper,
-      index,
-      length
-      );
+    const int in_index = in_heap_wrapper->GetFreeIndex(
+        in_device,
+        in_length
+        );
+    return std::make_shared < HeapWrapperItem > (
+        in_heap_wrapper,
+        in_index,
+        in_length
+        );
 }
 
 HeapWrapperItem::HeapWrapperItem(
-   const std::shared_ptr<HeapWrapper>& pHeapWrapper,
-   const int index,
-   const int length
-   )
-   : m_pHeapWrapper( pHeapWrapper )
-   , m_index( index )
-   , m_length( length )
+    const std::shared_ptr < HeapWrapper >&in_heap_wrapper,
+    const int in_index,
+    const int in_length
+    ) 
+    : heap_wrapper(in_heap_wrapper)
+    , index(in_index)
+    , length(in_length)
 {
-   return;
+    return;
 }
 
 HeapWrapperItem::~HeapWrapperItem()
 {
-   if (m_pHeapWrapper)
-   {
-      m_pHeapWrapper->FreeIndex( m_index, m_length );
-   }
-   return;
+    if (heap_wrapper)
+    {
+        heap_wrapper->FreeIndex(
+            in_index,
+            in_length
+            );
+    }
+    return;
 }
 
 D3D12_CPU_DESCRIPTOR_HANDLE HeapWrapperItem::GetCPUHandle()
 {
-   if (m_pHeapWrapper)
-   {
-      return m_pHeapWrapper->GetCPUHandle( m_index );
-   }
-   return D3D12_CPU_DESCRIPTOR_HANDLE();
+    if (heap_wrapper)
+    {
+        return heap_wrapper->GetCPUHandle(in_index);
+    }
+    return D3D12_CPU_DESCRIPTOR_HANDLE();
 }
-D3D12_CPU_DESCRIPTOR_HANDLE HeapWrapperItem::GetCPUHandleFrame(const int frameIndex)
+
+D3D12_CPU_DESCRIPTOR_HANDLE HeapWrapperItem::GetCPUHandleFrame(const int in_frame_index)
 {
-   if (m_pHeapWrapper)
-   {
-      return m_pHeapWrapper->GetCPUHandleFrame( m_index, frameIndex );
-   }
-   return D3D12_CPU_DESCRIPTOR_HANDLE();
+    if (heap_wrapper)
+    {
+        return heap_wrapper->GetCPUHandleFrame(
+            in_index,
+            in_frame_index
+            );
+    }
+    return D3D12_CPU_DESCRIPTOR_HANDLE();
 }
 
 D3D12_GPU_DESCRIPTOR_HANDLE HeapWrapperItem::GetGPUHandle()
 {
-   if (m_pHeapWrapper)
-   {
-      return m_pHeapWrapper->GetGPUHandle( m_index );
-   }
-   return D3D12_GPU_DESCRIPTOR_HANDLE();
+    if (heap_wrapper)
+    {
+        return heap_wrapper->GetGPUHandle(in_index);
+    }
+    return D3D12_GPU_DESCRIPTOR_HANDLE();
 }
 
 ID3D12DescriptorHeap* const HeapWrapperItem::GetHeap()
 {
-   if (m_pHeapWrapper)
-   {
-      return m_pHeapWrapper->GetHeap( m_index );
-   }
-   return nullptr;
+    if (heap_wrapper)
+    {
+        return heap_wrapper->GetHeap(in_index);
+    }
+    return nullptr;
 }
+

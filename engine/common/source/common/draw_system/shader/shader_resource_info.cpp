@@ -1,114 +1,118 @@
-#include "CommonPCH.h"
+#include "common/common_pch.h"
 
-#include "Common/DrawSystem/Shader/ShaderResourceInfo.h"
-#include "Common/DrawSystem/HeapWrapper/HeapWrapperItem.h"
+#include "common/draw_system/heap_wrapper/heap_wrapper_item.h"
+#include "common/draw_system/shader/shader_resource_info.h"
 
-std::shared_ptr< ShaderResourceInfo > ShaderResourceInfo::FactorySampler(
-   const std::shared_ptr< HeapWrapperItem >& pShaderResourceViewHandle,
-   const D3D12_SHADER_VISIBILITY visiblity,
-   const bool bMipMap
-   )
+std::shared_ptr < ShaderResourceInfo > ShaderResourceInfo::FactorySampler(
+    const std::shared_ptr < HeapWrapperItem >&in_shader_resource_view_handle,
+    const D3D12_SHADER_VISIBILITY in_visiblity,
+    const bool in_mip_map
+    )
 {
-   D3D12_STATIC_SAMPLER_DESC staticSamplerDesc   {
-      bMipMap ? D3D12_FILTER_ANISOTROPIC : D3D12_FILTER_MIN_MAG_MIP_LINEAR, //D3D12_FILTER Filter;
-      D3D12_TEXTURE_ADDRESS_MODE_WRAP, //D3D12_TEXTURE_ADDRESS_MODE AddressU;
-      D3D12_TEXTURE_ADDRESS_MODE_WRAP, //D3D12_TEXTURE_ADDRESS_MODE AddressV;
-      D3D12_TEXTURE_ADDRESS_MODE_WRAP, //D3D12_TEXTURE_ADDRESS_MODE AddressW;
-      0, //FLOAT MipLODBias;
-      16, //UINT MaxAnisotropy;
-      D3D12_COMPARISON_FUNC_LESS_EQUAL, //D3D12_COMPARISON_FUNC ComparisonFunc;
-      D3D12_STATIC_BORDER_COLOR_OPAQUE_WHITE, //D3D12_STATIC_BORDER_COLOR BorderColor;
-      0, //FLOAT MinLOD;
-      bMipMap ? D3D12_FLOAT32_MAX : 0, //FLOAT MaxLOD;
-      0, //UINT ShaderRegister;
-      0, //UINT RegisterSpace;
-      visiblity      //D3D12_SHADER_VISIBILITY_PIXEL //D3D12_SHADER_VISIBILITY ShaderVisibility;
-   };
+    D3D12_STATIC_SAMPLER_DESC static_sampler_desc
+    {
+        in_mip_map ? D3D12_FILTER_ANISOTROPIC : D3D12_FILTER_MIN_MAG_MIP_LINEAR, // D3D12_FILTER Filter;
+        D3D12_TEXTURE_ADDRESS_MODE_WRAP, // D3D12_TEXTURE_ADDRESS_MODE AddressU;
+        D3D12_TEXTURE_ADDRESS_MODE_WRAP, // D3D12_TEXTURE_ADDRESS_MODE AddressV;
+        D3D12_TEXTURE_ADDRESS_MODE_WRAP, // D3D12_TEXTURE_ADDRESS_MODE AddressW;
+        0, // FLOAT MipLODBias;
+        16, // UINT MaxAnisotropy;
+        D3D12_COMPARISON_FUNC_LESS_EQUAL, // D3D12_COMPARISON_FUNC ComparisonFunc;
+        D3D12_STATIC_BORDER_COLOR_OPAQUE_WHITE, // D3D12_STATIC_BORDER_COLOR BorderColor;
+        0, // FLOAT MinLOD;
+        in_mip_map ? D3D12_FLOAT32_MAX : 0, // FLOAT MaxLOD;
+        0, // UINT ShaderRegister;
+        0, // UINT RegisterSpace;
+        in_visiblity // D3D12_SHADER_VISIBILITY_PIXEL //D3D12_SHADER_VISIBILITY ShaderVisibility;
+        }
+        ; return std::make_shared < ShaderResourceInfo > (
+            in_shader_resource_view_handle,
+            static_sampler_desc
+            );
+    }
 
-   return std::make_shared< ShaderResourceInfo >(
-      pShaderResourceViewHandle,
-      staticSamplerDesc
-      );
-}
+    std::shared_ptr < ShaderResourceInfo > ShaderResourceInfo::FactoryDataSampler(
+        const std::shared_ptr < HeapWrapperItem >&in_shader_resource_view_handle,
+        const D3D12_SHADER_VISIBILITY in_visiblity
+        )
+    {
+        D3D12_STATIC_SAMPLER_DESC static_sampler_desc
+        {
+            D3D12_FILTER_MIN_MAG_MIP_POINT, // D3D12_FILTER Filter;
+            D3D12_TEXTURE_ADDRESS_MODE_WRAP, // D3D12_TEXTURE_ADDRESS_MODE AddressU;
+            D3D12_TEXTURE_ADDRESS_MODE_WRAP, // D3D12_TEXTURE_ADDRESS_MODE AddressV;
+            D3D12_TEXTURE_ADDRESS_MODE_WRAP, // D3D12_TEXTURE_ADDRESS_MODE AddressW;
+            0, // FLOAT MipLODBias;
+            16, // UINT MaxAnisotropy;
+            D3D12_COMPARISON_FUNC_LESS_EQUAL, // D3D12_COMPARISON_FUNC ComparisonFunc;
+            D3D12_STATIC_BORDER_COLOR_OPAQUE_WHITE, // D3D12_STATIC_BORDER_COLOR BorderColor;
+            0, // FLOAT MinLOD;
+            0, // FLOAT MaxLOD;
+            0, // UINT ShaderRegister;
+            0, // UINT RegisterSpace;
+            in_visiblity // D3D12_SHADER_VISIBILITY_PIXEL //D3D12_SHADER_VISIBILITY ShaderVisibility;
+            }
+            ; return std::make_shared < ShaderResourceInfo > (
+                in_shader_resource_view_handle,
+                static_sampler_desc
+                );
+        }
 
-std::shared_ptr< ShaderResourceInfo > ShaderResourceInfo::FactoryDataSampler(
-   const std::shared_ptr< HeapWrapperItem >& pShaderResourceViewHandle,
-   const D3D12_SHADER_VISIBILITY visiblity
-   )
-{
-   D3D12_STATIC_SAMPLER_DESC staticSamplerDesc   {
-      D3D12_FILTER_MIN_MAG_MIP_POINT, //D3D12_FILTER Filter;
-      D3D12_TEXTURE_ADDRESS_MODE_WRAP, //D3D12_TEXTURE_ADDRESS_MODE AddressU;
-      D3D12_TEXTURE_ADDRESS_MODE_WRAP, //D3D12_TEXTURE_ADDRESS_MODE AddressV;
-      D3D12_TEXTURE_ADDRESS_MODE_WRAP, //D3D12_TEXTURE_ADDRESS_MODE AddressW;
-      0, //FLOAT MipLODBias;
-      16, //UINT MaxAnisotropy;
-      D3D12_COMPARISON_FUNC_LESS_EQUAL, //D3D12_COMPARISON_FUNC ComparisonFunc;
-      D3D12_STATIC_BORDER_COLOR_OPAQUE_WHITE, //D3D12_STATIC_BORDER_COLOR BorderColor;
-      0, //FLOAT MinLOD;
-      0, //FLOAT MaxLOD;
-      0, //UINT ShaderRegister;
-      0, //UINT RegisterSpace;
-      visiblity      //D3D12_SHADER_VISIBILITY_PIXEL //D3D12_SHADER_VISIBILITY ShaderVisibility;
-   };
-   return std::make_shared< ShaderResourceInfo >(
-      pShaderResourceViewHandle,
-      staticSamplerDesc
-      );
-}
+        std::shared_ptr < ShaderResourceInfo > ShaderResourceInfo::FactoryNoSampler(
+            const std::shared_ptr < HeapWrapperItem >&in_shader_resource_view_handle,
+            const D3D12_SHADER_VISIBILITY in_visiblity
+            )
+        {
+            D3D12_STATIC_SAMPLER_DESC static_sampler_desc {};
+            static_sampler_desc.ShaderVisibility = in_visiblity;
+            return std::make_shared < ShaderResourceInfo > (
+                in_shader_resource_view_handle,
+                static_sampler_desc,
+                false
+                );
+        }
 
-std::shared_ptr< ShaderResourceInfo > ShaderResourceInfo::FactoryNoSampler(
-   const std::shared_ptr< HeapWrapperItem >& pShaderResourceViewHandle,
-   const D3D12_SHADER_VISIBILITY visiblity
-   )
-{
-   D3D12_STATIC_SAMPLER_DESC staticSamplerDesc   {};
-   staticSamplerDesc.ShaderVisibility = visiblity;
-   return std::make_shared< ShaderResourceInfo >(
-      pShaderResourceViewHandle,
-      staticSamplerDesc,
-      false
-      );
-}
+        ShaderResourceInfo::ShaderResourceInfo(
+            const std::shared_ptr < HeapWrapperItem >&in_shader_resource_view_handle,
+            const D3D12_STATIC_SAMPLER_DESC&in_static_sampler_desc,
+            const bool in_use_sampler
+            ) 
+            : shader_resource_view_handle(in_shader_resource_view_handle)
+            , static_sampler_desc(in_static_sampler_desc)
+            , use_sampler(in_use_sampler)
+        {
+            return;
+        }
 
-ShaderResourceInfo::ShaderResourceInfo(
-   const std::shared_ptr< HeapWrapperItem >& pShaderResourceViewHandle,
-   const D3D12_STATIC_SAMPLER_DESC& staticSamplerDesc,
-   const bool bUseSampler
-   )
-   : m_pShaderResourceViewHandle(pShaderResourceViewHandle)
-   , m_staticSamplerDesc(staticSamplerDesc)
-   , m_bUseSampler(bUseSampler)
-{
-   return;
-}
+        void ShaderResourceInfo::Activate(
+            ID3D12GraphicsCommandList* const in_command_list,
+            const int in_root_param_index
+            )
+        {
+            if (shader_resource_view_handle)
+            {
+                auto heap = shader_resource_view_handle->GetHeap();
+                in_command_list->SetDescriptorHeaps(
+                    1,
+                    &heap
+                    );
+                in_command_list->SetGraphicsRootDescriptorTable(
+                    in_root_param_index,
+                    shader_resource_view_handle->GetGPUHandle()
+                    );
+            }
+            return;
+        }
 
-void ShaderResourceInfo::Activate( 
-   ID3D12GraphicsCommandList* const pCommandList,
-   const int rootParamIndex
-   )
-{
-   if (m_pShaderResourceViewHandle)
-   {
-      auto heap = m_pShaderResourceViewHandle->GetHeap();
-      pCommandList->SetDescriptorHeaps(1, &heap);
-      pCommandList->SetGraphicsRootDescriptorTable(
-         rootParamIndex, 
-         m_pShaderResourceViewHandle->GetGPUHandle()
-         );
-   }
+        void ShaderResourceInfo::SetShaderResourceViewHandle(const std::shared_ptr < HeapWrapperItem >&
+            in_shader_resource_view_handle)
+        {
+            shader_resource_view_handle = in_shader_resource_view_handle;
+            return;
+        }
 
-   return;
-}
+        const D3D12_SHADER_VISIBILITY ShaderResourceInfo::GetVisiblity() const
+        {
+            return static_sampler_desc.ShaderVisibility;
+        }
 
-void ShaderResourceInfo::SetShaderResourceViewHandle(const std::shared_ptr< HeapWrapperItem >& pShaderResourceViewHandle)
-{
-   m_pShaderResourceViewHandle = pShaderResourceViewHandle;
-   return;
-}
-
-
-const D3D12_SHADER_VISIBILITY ShaderResourceInfo::GetVisiblity() const
-{
-   return m_staticSamplerDesc.ShaderVisibility;
-}

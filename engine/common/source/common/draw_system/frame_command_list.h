@@ -1,6 +1,5 @@
 #pragma once
-
-class iRenderTarget;
+class i_render_target;
 class Geometry;
 class Shader;
 class ShaderTexture2D;
@@ -8,32 +7,29 @@ class ShaderTexture2D;
 class CustomCommandList
 {
 public:
-   CustomCommandList(
-      ID3D12Device* const pDevice,
-      ID3D12CommandQueue* const pCommandQueue,
-      ID3D12GraphicsCommandList* const pCommandList
-      );
-   ~CustomCommandList();
-
-   void UpdateSubresourcesMethod(
-      ID3D12Resource* pDestinationResource,
-      ID3D12Resource* pIntermediate,
-      UINT64 IntermediateOffset,
-      UINT FirstSubresource,
-      UINT NumSubresources,
-      D3D12_SUBRESOURCE_DATA* pSrcData,
-      D3D12_BOX* pDestBoxOrNull = nullptr
-      );
-
-   void ResourceBarrier(
-      ID3D12Resource* const pResource,
-      D3D12_RESOURCE_STATES stateBefore,
-      D3D12_RESOURCE_STATES stateAfter
-      );
+    CustomCommandList(
+        ID3D12Device* const in_device,
+        ID3D12CommandQueue* const in_command_queue,
+        ID3D12GraphicsCommandList* const in_command_list
+        );
+    ~CustomCommandList();
+    void UpdateSubresourcesMethod(
+        ID3D12Resource* in_destination_resource,
+        ID3D12Resource* in_intermediate,
+        UINT64 IntermediateOffset,
+        UINT FirstSubresource,
+        UINT NumSubresources,
+        D3D12_SUBRESOURCE_DATA* in_src_data,
+        D3D12_BOX* in_dest_box_or_null = nullptr
+        );
+    void ResourceBarrier(
+        ID3D12Resource* const in_resource,
+        D3D12_RESOURCE_STATES in_state_before,
+        D3D12_RESOURCE_STATES in_state_after
+        );
 
 private:
-   ID3D12Device* m_pDevice;
-   ID3D12CommandQueue* m_pCommandQueue;
-   ID3D12GraphicsCommandList* m_pCommandList;
-
+    ID3D12Device* _device;
+    ID3D12CommandQueue* _command_queue;
+    ID3D12GraphicsCommandList* _command_list;
 };

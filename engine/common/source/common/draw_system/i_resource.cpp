@@ -1,33 +1,33 @@
-#include "CommonPCH.h"
+#include "common/common_pch.h"
 
-#include "Common/DrawSystem/IResource.h"
-#include "Common/DrawSystem/DrawSystem.h"
+#include "common/draw_system/draw_system.h"
+#include "common/draw_system/i_resource.h"
 
-IResource::IResource(DrawSystem* const pDrawSystem)
-: m_pDrawSystem(pDrawSystem)
+IResource::IResource(DrawSystem* const in_draw_system) 
+    : draw_system(in_draw_system)
 {
-   if (nullptr != m_pDrawSystem)
-   {
-      m_pDrawSystem->AddResource(this);
-   }
-   return;
+    if (nullptr != draw_system)
+    {
+        draw_system->AddResource(this);
+    }
+    return;
 }
+
 IResource::~IResource()
 {
-   if (nullptr != m_pDrawSystem)
-   {
-      m_pDrawSystem->RemoveResource(this);
-   }
+    if (nullptr != draw_system)
+    {
+        draw_system->RemoveResource(this);
+    }
 }
 
 void IResource::OnResize(
-   ID3D12GraphicsCommandList* const,
-   ID3D12Device2* const,
-   const int,
-   const int
-   )
+    ID3D12GraphicsCommandList* const,
+    ID3D12Device2* const,
+    const int,
+    const int
+    )
 {
-   return;
+    return;
 }
-
 

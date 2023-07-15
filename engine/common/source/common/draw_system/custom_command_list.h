@@ -4,19 +4,19 @@
     and some more
 */
 class DrawSystem;
-// comment test
+
+// Comment test
 class CustomCommandList
 {
 public:
     CustomCommandList(
-      DrawSystem& drawSystem,
-      ID3D12GraphicsCommandList* pCommandList
-      );
+        DrawSystem&in_draw_system,
+        ID3D12GraphicsCommandList* in_command_list
+        );
     ~CustomCommandList();
     ID3D12GraphicsCommandList* GetCommandList();
 
 private:
-    ID3D12GraphicsCommandList* m_pCommandList;
-    DrawSystem& m_drawSystem;
-
+    ID3D12GraphicsCommandList* _command_list;
+    DrawSystem&_draw_system;
 };

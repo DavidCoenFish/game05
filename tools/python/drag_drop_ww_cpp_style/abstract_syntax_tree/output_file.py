@@ -46,7 +46,7 @@ class OutputFile:
             return
 
         token_copy = in_token_text
-        if self._current_line == "":
+        if self._current_line == "" or self._current_line.isspace():
             self._current_line = (self._tab * self._depth)
             token_copy = token_copy.strip()
 

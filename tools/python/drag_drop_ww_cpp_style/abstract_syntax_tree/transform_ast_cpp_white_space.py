@@ -20,7 +20,16 @@ s_thingsWePutASpaceBefore = set({
     dsc_ast_cpp.AstType.STATEMENT,
     dsc_ast_cpp.AstType.TOKEN,
     dsc_ast_cpp.AstType.COMMENT,
+    dsc_ast_cpp.AstType.PREPROCESSOR
+})
+
+s_thingsBeforeWePutASpaceBefore = set({
+    dsc_ast_cpp.AstType.STATEMENT,
+    dsc_ast_cpp.AstType.TOKEN,
+    dsc_ast_cpp.AstType.COMMENT,
     dsc_ast_cpp.AstType.PREPROCESSOR,
+    dsc_ast_cpp.AstType.STATEMENT_END,
+    dsc_ast_cpp.AstType.ARRAY_INDEX_END
 })
 
 # s_thingsWePutASpaceAfter = set({
@@ -36,18 +45,16 @@ def AstTransformWhiteSpace(in_ast_node, in_stack_ast_node, in_data):
         prev_node = history[-1]
 
     if in_ast_node._type in s_thingsWePutASpaceBefore and prev_node:
-        if prev_node._type in s_thingsWePutASpaceBefore:
+        if prev_node._type in s_thingsBeforeWePutASpaceBefore:
             if (
                 prev_node._token and prev_node._token._data in set({"!", "~", "::", ".", "->", "&"}) or
-                in_ast_node._token and in_ast_node._token._data in set({"::", ".", ",", "->", "*", "&"})
+                in_ast_node._token and in_ast_node._token._data in set({"::", ".", ",", "->", "*", "&", "++"})
                 ):
                 pass
             else:
                 in_ast_node._export_pre_token_format.append(export.ExportFormat.WHITE_SPACE)
 
     if prev_node:
-        # if prev_node._token._data == "&&":
-        #     print("found")
         if prev_node._type == dsc_ast_cpp.AstType.PARENTHESIS_END and in_ast_node._type == dsc_ast_cpp.AstType.TOKEN:
             if in_ast_node._token._data not in set({","}):
                 in_ast_node._export_pre_token_format.append(export.ExportFormat.WHITE_SPACE)

@@ -1,547 +1,540 @@
-#include "CommonPCH.h"
+#include "common/common_pch.h"
 
-#include "Common/DrawSystem/Shader/Shader.h"
-#include "Common/DrawSystem/Shader/ShaderResourceInfo.h"
+#include "common/draw_system/draw_system.h"
+#include "common/draw_system/i_resource.h"
+#include "common/draw_system/shader/constant_buffer.h"
+#include "common/draw_system/shader/constant_buffer_info.h"
+#include "common/draw_system/shader/shader.h"
+#include "common/draw_system/shader/shader_resource_info.h"
+#include "common/draw_system/shader/shader_resource_info.h"
+#include "common/draw_system/shader/unordered_access_info.h"
 
-#include "Common/DrawSystem/DrawSystem.h"
-#include "Common/DrawSystem/IResource.h"
-#include "Common/DrawSystem/Shader/ConstantBuffer.h"
-#include "Common/DrawSystem/Shader/ConstantBufferInfo.h"
-#include "Common/DrawSystem/Shader/ShaderResourceInfo.h"
-#include "Common/DrawSystem/Shader/UnorderedAccessInfo.h"
-
-std::shared_ptr< ConstantBuffer > MakeConstantBuffer(
-   DrawSystem* const pDrawSystem,
-   const std::shared_ptr< ConstantBufferInfo >& pConstantBufferInfo
-   )
+std::shared_ptr < ConstantBuffer > MakeConstantBuffer(
+    DrawSystem* const in_draw_system,
+    const std::shared_ptr < ConstantBufferInfo >&in_constant_buffer_info
+    )
 {
-   if (nullptr == pConstantBufferInfo)
-   {
-      return nullptr;
-   }
-   const size_t constantBufferSize = pConstantBufferInfo->GetBufferSize();
-   const void* const pData = pConstantBufferInfo->GetBufferData();
-   const D3D12_SHADER_VISIBILITY visiblity = pConstantBufferInfo->GetVisiblity();
-   const int frameCount = pDrawSystem->GetBackBufferCount();
-   auto pConstantBuffer = std::make_shared< ConstantBuffer >( 
-      frameCount, 
-      constantBufferSize, 
-      pDrawSystem->MakeHeapWrapperCbvSrvUav(),
-      pData,
-      visiblity
-      );
-   return pConstantBuffer;
+    if (nullptr == in_constant_buffer_info)
+    {
+        return nullptr;
+    }
+    const size_t constant_buffer_size = in_constant_buffer_info->GetBufferSize();
+    const void* const data = in_constant_buffer_info->GetBufferData();
+    const D3D12_SHADER_VISIBILITY visiblity = in_constant_buffer_info->GetVisiblity();
+    const int frame_count = in_draw_system->GetBackBufferCount();
+    auto constant_buffer = std::make_shared < ConstantBuffer > (
+        frame_count,
+        constant_buffer_size,
+        in_draw_system->MakeHeapWrapperCbvSrvUav(),
+        data,
+        visiblity
+        );
+    return constant_buffer;
 }
 
-static Microsoft::WRL::ComPtr<ID3D12RootSignature> MakeRootSignatureLocal(
-   ID3D12Device* const pDevice,
-   const CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC& rootSignatureDesc
-   )
+static Microsoft::WRL::ComPtr < ID3D12RootSignature > MakeRootSignatureLocal(
+    ID3D12Device* const in_device,
+    const CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC&in_root_signature_desc
+    )
 {
-   Microsoft::WRL::ComPtr<ID3D12RootSignature> pRootSignature;
-   {
-      Microsoft::WRL::ComPtr<ID3DBlob> signature;
-      Microsoft::WRL::ComPtr<ID3DBlob> error;
-      DX::ThrowIfFailed(
-         D3D12SerializeVersionedRootSignature(
-            &rootSignatureDesc, 
-            &signature, 
+    Microsoft::WRL::ComPtr < ID3D12RootSignature > root_signature;
+
+    {
+        Microsoft::WRL::ComPtr < ID3DBlob > signature;
+        Microsoft::WRL::ComPtr < ID3DBlob > error;
+        DX::ThrowIfFailed(D3D12SerializeVersionedRootSignature(
+            &in_root_signature_desc,
+            &signature,
             &error
-            )
-         );
-      DX::ThrowIfFailed(
-         pDevice->CreateRootSignature(
-            0, 
-            signature->GetBufferPointer(), 
+            ));
+        DX::ThrowIfFailed(in_device->CreateRootSignature(
+            0,
+            signature->GetBufferPointer(),
             signature->GetBufferSize(),
-            IID_PPV_ARGS(pRootSignature.ReleaseAndGetAddressOf())
-            )
-         );
-   }
-   static int s_trace = 0;
-   const std::wstring name = (std::wstring(L"RootSignature:") + std::to_wstring(s_trace++)).c_str();
-   pRootSignature->SetName(name.c_str());
-
-   return pRootSignature;
+            IID_PPV_ARGS(root_signature.ReleaseAndGetAddressOf())
+            ));
+    }
+    static int s_trace = 0;
+    const std::wstring name = (std::wstring(L"RootSignature:") + std::to_wstring(s_trace++)) .c_str();
+    root_signature->SetName(name.c_str());
+    return root_signature;
 }
 
-static void RemoveDenyFlag(D3D12_ROOT_SIGNATURE_FLAGS& flag, const D3D12_SHADER_VISIBILITY visiblity)
+static void RemoveDenyFlag(
+    D3D12_ROOT_SIGNATURE_FLAGS&in_flag,
+    const D3D12_SHADER_VISIBILITY in_visiblity
+    )
 {
-   switch (visiblity)
-   {
-   default:
-      break;
-   case D3D12_SHADER_VISIBILITY_ALL:
-      flag &= ~(
-         D3D12_ROOT_SIGNATURE_FLAG_DENY_VERTEX_SHADER_ROOT_ACCESS |
-         D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS |
-         D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS |
-         D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS |
-         D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS |
-         D3D12_ROOT_SIGNATURE_FLAG_DENY_AMPLIFICATION_SHADER_ROOT_ACCESS |
-         D3D12_ROOT_SIGNATURE_FLAG_DENY_MESH_SHADER_ROOT_ACCESS
-         );
-      break;
-   case D3D12_SHADER_VISIBILITY_VERTEX:
-      flag &= ~(
-         D3D12_ROOT_SIGNATURE_FLAG_DENY_VERTEX_SHADER_ROOT_ACCESS
-         );
-      break;
-   case D3D12_SHADER_VISIBILITY_HULL:
-      flag &= ~(
-         D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS
-         );
-      break;
-   case D3D12_SHADER_VISIBILITY_DOMAIN:
-      flag &= ~(
-         D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS
-         );
-      break;
-   case D3D12_SHADER_VISIBILITY_GEOMETRY:
-      flag &= ~(
-         D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS
-         );
-      break;
-   case D3D12_SHADER_VISIBILITY_PIXEL:
-      flag &= ~(
-         D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS
-         );
-      break;
-   case D3D12_SHADER_VISIBILITY_AMPLIFICATION:
-      flag &= ~(
-         D3D12_ROOT_SIGNATURE_FLAG_DENY_AMPLIFICATION_SHADER_ROOT_ACCESS
-         );
-      break;
-   case D3D12_SHADER_VISIBILITY_MESH:
-      flag &= ~(
-         D3D12_ROOT_SIGNATURE_FLAG_DENY_MESH_SHADER_ROOT_ACCESS
-         );
-      break;
-   }
-   return;
+    switch (in_visiblity)
+    {
+    default:
+        break;
+    case D3D12_SHADER_VISIBILITY_ALL:
+        in_flag &= ~ (D3D12_ROOT_SIGNATURE_FLAG_DENY_VERTEX_SHADER_ROOT_ACCESS | 
+            D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS | 
+            D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS | 
+            D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS | 
+            D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS | 
+            D3D12_ROOT_SIGNATURE_FLAG_DENY_AMPLIFICATION_SHADER_ROOT_ACCESS | 
+            D3D12_ROOT_SIGNATURE_FLAG_DENY_MESH_SHADER_ROOT_ACCESS);
+        break;
+    case D3D12_SHADER_VISIBILITY_VERTEX:
+        in_flag &= ~ (D3D12_ROOT_SIGNATURE_FLAG_DENY_VERTEX_SHADER_ROOT_ACCESS);
+        break;
+    case D3D12_SHADER_VISIBILITY_HULL:
+        in_flag &= ~ (D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS);
+        break;
+    case D3D12_SHADER_VISIBILITY_DOMAIN:
+        in_flag &= ~ (D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS);
+        break;
+    case D3D12_SHADER_VISIBILITY_GEOMETRY:
+        in_flag &= ~ (D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS);
+        break;
+    case D3D12_SHADER_VISIBILITY_PIXEL:
+        in_flag &= ~ (D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS);
+        break;
+    case D3D12_SHADER_VISIBILITY_AMPLIFICATION:
+        in_flag &= ~ (D3D12_ROOT_SIGNATURE_FLAG_DENY_AMPLIFICATION_SHADER_ROOT_ACCESS);
+        break;
+    case D3D12_SHADER_VISIBILITY_MESH:
+        in_flag &= ~ (D3D12_ROOT_SIGNATURE_FLAG_DENY_MESH_SHADER_ROOT_ACCESS);
+        break;
+    }
+
+    return;
 }
 
-//https://docs.microsoft.com/en-us/windows/win32/direct3d12/creating-a-root-signature
-Microsoft::WRL::ComPtr<ID3D12RootSignature> MakeRootSignature(
-   ID3D12Device* const pDevice,
-   const std::vector< std::shared_ptr< ShaderResourceInfo > >& shaderTextureInfoArray,
-   const std::vector< std::shared_ptr< ConstantBuffer > >& constantBufferArray,
-   const std::vector< std::shared_ptr< UnorderedAccessInfo > >& arrayUnorderedAccessInfo
-   )
+// Https://docs.microsoft.com/en-us/windows/win32/direct3d12/creating-a-root-signature
+Microsoft::WRL::ComPtr < ID3D12RootSignature > MakeRootSignature(
+    ID3D12Device* const in_device,
+    const std::vector < std::shared_ptr < ShaderResourceInfo > >&in_shader_texture_info_array,
+    const std::vector < std::shared_ptr < ConstantBuffer > >&in_constant_buffer_array,
+    const std::vector < std::shared_ptr < UnorderedAccessInfo > >&in_array_unordered_access_info
+    )
 {
-   Microsoft::WRL::ComPtr<ID3D12RootSignature> pRootSignature;
-
-   shaderTextureInfoArray;
-   constantBufferArray;
-   arrayUnorderedAccessInfo;
-
-   D3D12_ROOT_SIGNATURE_FLAGS flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
-         D3D12_ROOT_SIGNATURE_FLAG_DENY_VERTEX_SHADER_ROOT_ACCESS |
-         D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS |
-         D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS |
-         D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS |
-         D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS |
-         D3D12_ROOT_SIGNATURE_FLAG_DENY_MESH_SHADER_ROOT_ACCESS;
-   std::vector<D3D12_ROOT_PARAMETER1> rootParamterArray;
-   std::vector<D3D12_STATIC_SAMPLER_DESC> staticSamplerDescArray;
-   std::vector<std::shared_ptr< D3D12_DESCRIPTOR_RANGE1 >> descriptorRangeArray;
-
-   //b0,b1,b2,...
-   if (0 < constantBufferArray.size())
-   {
-      int offsetTableStart = 0;
-      for(const auto& iter : constantBufferArray)
-      {
-         auto descriptorRange = std::make_shared< D3D12_DESCRIPTOR_RANGE1 >();
-         descriptorRangeArray.push_back(descriptorRange);
-         descriptorRange->BaseShaderRegister = 0;
-         descriptorRange->Flags = D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC_WHILE_SET_AT_EXECUTE;
-         descriptorRange->NumDescriptors = 1;
-         descriptorRange->OffsetInDescriptorsFromTableStart = offsetTableStart;
-         offsetTableStart += descriptorRange->NumDescriptors;
-         descriptorRange->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
-
-         D3D12_ROOT_PARAMETER1 param;
-         param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-         param.ShaderVisibility = iter->GetVisiblity();
-         param.DescriptorTable.NumDescriptorRanges = 1;
-         param.DescriptorTable.pDescriptorRanges = descriptorRange.get();
-         rootParamterArray.push_back(param);
-
-         RemoveDenyFlag(flags, param.ShaderVisibility);
-      }
-   }
-
-   //u0,u1,u2,...
-   if (0 < arrayUnorderedAccessInfo.size())
-   {
-      int offsetTableStart = 0;
-      for(const auto& iter : arrayUnorderedAccessInfo)
-      {
-         auto descriptorRange = std::make_shared< D3D12_DESCRIPTOR_RANGE1 >();
-         descriptorRangeArray.push_back(descriptorRange);
-         descriptorRange->BaseShaderRegister = 0;
-         descriptorRange->Flags = D3D12_DESCRIPTOR_RANGE_FLAG_NONE;
-         descriptorRange->NumDescriptors = 1;
-         descriptorRange->OffsetInDescriptorsFromTableStart = offsetTableStart;
-         offsetTableStart += descriptorRange->NumDescriptors;
-         descriptorRange->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
-
-         D3D12_ROOT_PARAMETER1 param;
-         param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-         param.ShaderVisibility = iter->GetVisiblity();
-         param.DescriptorTable.NumDescriptorRanges = 1;
-         param.DescriptorTable.pDescriptorRanges = descriptorRange.get();
-         rootParamterArray.push_back(param);
-
-         RemoveDenyFlag(flags, param.ShaderVisibility);
-      }
-   }
-
-   //t0,t1,t2,...
-   if (0 < shaderTextureInfoArray.size())
-   {
-      int offsetTableStart = 0;
-      for(const auto& iter : shaderTextureInfoArray)
-      {
-         auto descriptorRange = std::make_shared< D3D12_DESCRIPTOR_RANGE1 >();
-         descriptorRangeArray.push_back(descriptorRange);
-         descriptorRange->BaseShaderRegister = 0;
-         descriptorRange->Flags = D3D12_DESCRIPTOR_RANGE_FLAG_NONE;
-         descriptorRange->NumDescriptors = 1;
-         descriptorRange->OffsetInDescriptorsFromTableStart = offsetTableStart;
-         offsetTableStart += descriptorRange->NumDescriptors;
-         descriptorRange->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-
-         D3D12_ROOT_PARAMETER1 param;
-         param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-         param.ShaderVisibility = iter->GetVisiblity();
-         param.DescriptorTable.NumDescriptorRanges = 1;
-         param.DescriptorTable.pDescriptorRanges = descriptorRange.get();
-         rootParamterArray.push_back(param);
-
-         RemoveDenyFlag(flags, param.ShaderVisibility);
-      }
-   }
-
-   //s0,s1,s2,...
-   if (0 < shaderTextureInfoArray.size())
-   {
+    Microsoft::WRL::ComPtr < ID3D12RootSignature > root_signature;
+    in_shader_texture_info_array;
+    in_constant_buffer_array;
+    in_array_unordered_access_info;
+    D3D12_ROOT_SIGNATURE_FLAGS flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT | 
+        D3D12_ROOT_SIGNATURE_FLAG_DENY_VERTEX_SHADER_ROOT_ACCESS | 
+        D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS | 
+        D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS | 
+        D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS | 
+        D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS | D3D12_ROOT_SIGNATURE_FLAG_DENY_MESH_SHADER_ROOT_ACCESS
+        ;
+    std::vector < D3D12_ROOT_PARAMETER1 > root_paramter_array;
+    std::vector < D3D12_STATIC_SAMPLER_DESC > static_sampler_desc_array;
+    std::vector < std::shared_ptr < D3D12_DESCRIPTOR_RANGE1 >> descriptor_range_array;
+    // B0,b1,b2,...
+    if (0 < in_constant_buffer_array.size())
+    {
+        int offset_table_start = 0;
+        for (const auto&iter : in_constant_buffer_array)
+        {
+            auto descriptor_range = std::make_shared < D3D12_DESCRIPTOR_RANGE1 > ();
+            descriptor_range_array.push_back(descriptor_range);
+            descriptor_range->BaseShaderRegister = 0;
+            descriptor_range->Flags = D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC_WHILE_SET_AT_EXECUTE;
+            descriptor_range->NumDescriptors = 1;
+            descriptor_range->OffsetInDescriptorsFromTableStart = offset_table_start;
+            offset_table_start += descriptor_range->NumDescriptors;
+            descriptor_range->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
+            D3D12_ROOT_PARAMETER1 param;
+            param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+            param.ShaderVisibility = iter->GetVisiblity();
+            param.DescriptorTable.NumDescriptorRanges = 1;
+            param.DescriptorTable._descriptor_ranges = descriptor_range.get();
+            root_paramter_array.push_back(param);
+            RemoveDenyFlag(
+                flags,
+                param.ShaderVisibility
+                );
+        }
+    }
+    // U0,u1,u2,...
+    if (0 < in_array_unordered_access_info.size())
+    {
+        int offset_table_start = 0;
+        for (const auto&iter : in_array_unordered_access_info)
+        {
+            auto descriptor_range = std::make_shared < D3D12_DESCRIPTOR_RANGE1 > ();
+            descriptor_range_array.push_back(descriptor_range);
+            descriptor_range->BaseShaderRegister = 0;
+            descriptor_range->Flags = D3D12_DESCRIPTOR_RANGE_FLAG_NONE;
+            descriptor_range->NumDescriptors = 1;
+            descriptor_range->OffsetInDescriptorsFromTableStart = offset_table_start;
+            offset_table_start += descriptor_range->NumDescriptors;
+            descriptor_range->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
+            D3D12_ROOT_PARAMETER1 param;
+            param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+            param.ShaderVisibility = iter->GetVisiblity();
+            param.DescriptorTable.NumDescriptorRanges = 1;
+            param.DescriptorTable._descriptor_ranges = descriptor_range.get();
+            root_paramter_array.push_back(param);
+            RemoveDenyFlag(
+                flags,
+                param.ShaderVisibility
+                );
+        }
+    }
+    // T0,t1,t2,...
+    if (0 < in_shader_texture_info_array.size())
+    {
+        int offset_table_start = 0;
+        for (const auto&iter : in_shader_texture_info_array)
+        {
+            auto descriptor_range = std::make_shared < D3D12_DESCRIPTOR_RANGE1 > ();
+            descriptor_range_array.push_back(descriptor_range);
+            descriptor_range->BaseShaderRegister = 0;
+            descriptor_range->Flags = D3D12_DESCRIPTOR_RANGE_FLAG_NONE;
+            descriptor_range->NumDescriptors = 1;
+            descriptor_range->OffsetInDescriptorsFromTableStart = offset_table_start;
+            offset_table_start += descriptor_range->NumDescriptors;
+            descriptor_range->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+            D3D12_ROOT_PARAMETER1 param;
+            param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+            param.ShaderVisibility = iter->GetVisiblity();
+            param.DescriptorTable.NumDescriptorRanges = 1;
+            param.DescriptorTable._descriptor_ranges = descriptor_range.get();
+            root_paramter_array.push_back(param);
+            RemoveDenyFlag(
+                flags,
+                param.ShaderVisibility
+                );
+        }
+    }
+    // S0,s1,s2,...
+    if (0 < in_shader_texture_info_array.size())
+    {
 #if 1
-      for(const auto& iter : shaderTextureInfoArray)
-      {
-         if (false == iter->GetUseSampler())
-         {
-            continue;
-         }
-         staticSamplerDescArray.push_back(iter->GetStaticSamplerDesc());
-      }
+        for (const auto&iter : in_shader_texture_info_array)
+        {
+            if (false == iter->GetUseSampler())
+            {
+                continue;
+            }
+            static_sampler_desc_array.push_back(iter->GetStaticSamplerDesc());
+        }
 #else
-      int offsetTableStart = 0;
-      for(const auto& iter : shaderTextureInfoArray)
-      {
-         if (false == iter->GetUseSampler())
-         {
-            continue;
-         }
-
-         auto descriptorRange = std::make_shared< D3D12_DESCRIPTOR_RANGE1 >();
-         descriptorRangeArray.push_back(descriptorRange);
-         descriptorRange->BaseShaderRegister = 0;
-         descriptorRange->Flags = D3D12_DESCRIPTOR_RANGE_FLAG_NONE;
-         descriptorRange->NumDescriptors = 1;
-         descriptorRange->OffsetInDescriptorsFromTableStart = offsetTableStart;
-         offsetTableStart += descriptorRange->NumDescriptors;
-         descriptorRange->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
-
-         D3D12_ROOT_PARAMETER1 param;
-         param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-         param.ShaderVisibility = iter->GetVisiblity();
-         param.DescriptorTable.NumDescriptorRanges = 1;
-         param.DescriptorTable.pDescriptorRanges = descriptorRange.get();
-         rootParamterArray.push_back(param);
-
-         RemoveDenyFlag(flags, param.ShaderVisibility);
-      }
+        int offset_table_start = 0;
+        for (const auto&iter : in_shader_texture_info_array)
+        {
+            if (false == iter->GetUseSampler())
+            {
+                continue;
+            }
+            auto descriptor_range = std::make_shared < D3D12_DESCRIPTOR_RANGE1 > ();
+            descriptor_range_array.push_back(descriptor_range);
+            descriptor_range->BaseShaderRegister = 0;
+            descriptor_range->Flags = D3D12_DESCRIPTOR_RANGE_FLAG_NONE;
+            descriptor_range->NumDescriptors = 1;
+            descriptor_range->OffsetInDescriptorsFromTableStart = offset_table_start;
+            offset_table_start += descriptor_range->NumDescriptors;
+            descriptor_range->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
+            D3D12_ROOT_PARAMETER1 param;
+            param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+            param.ShaderVisibility = iter->GetVisiblity();
+            param.DescriptorTable.NumDescriptorRanges = 1;
+            param.DescriptorTable._descriptor_ranges = descriptor_range.get();
+            root_paramter_array.push_back(param);
+            RemoveDenyFlag(
+                flags,
+                param.ShaderVisibility
+                );
+        }
 #endif
-   }
-
-   CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc(
-      (UINT)rootParamterArray.size(),
-      rootParamterArray.size() ? &rootParamterArray[0] : nullptr,
-      (UINT)staticSamplerDescArray.size(),
-      staticSamplerDescArray.size() ? &staticSamplerDescArray[0] : nullptr,
-      flags
-      );
-   pRootSignature = MakeRootSignatureLocal(pDevice, rootSignatureDesc);
-
-   return pRootSignature;
+    }
+    CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC root_signature_desc(
+        (UINT) root_paramter_array.size(),
+        root_paramter_array.size() ?&root_paramter_array[0] : nullptr,
+        (UINT) static_sampler_desc_array.size(),
+        static_sampler_desc_array.size() ?&static_sampler_desc_array[0] : nullptr,
+        flags
+        );
+    root_signature = MakeRootSignatureLocal(
+        in_device,
+        root_signature_desc
+        );
+    return root_signature;
 }
 
-Microsoft::WRL::ComPtr<ID3D12PipelineState> MakePipelineStateComputeShader(
-   ID3D12Device2* const pDevice,
-   const Microsoft::WRL::ComPtr<ID3D12RootSignature>& pRootSignature,
-   const std::shared_ptr< std::vector<uint8_t>>& pComputeShaderData
-   )
+Microsoft::WRL::ComPtr < ID3D12PipelineState > MakePipelineStateComputeShader(
+    ID3D12Device2* const in_device,
+    const Microsoft::WRL::ComPtr < ID3D12RootSignature >&in_root_signature,
+    const std::shared_ptr < std::vector < uint8_t >>&in_compute_shader_data
+    )
 {
-   Microsoft::WRL::ComPtr<ID3D12PipelineState> pPipelineState;
-   // Create the PSO for GenerateMips shader.
-   struct PipelineStateStream
-   {
-      CD3DX12_PIPELINE_STATE_STREAM_ROOT_SIGNATURE pRootSignature;
-      CD3DX12_PIPELINE_STATE_STREAM_CS CS;
-   } pipelineStateStream;
+    Microsoft::WRL::ComPtr < ID3D12PipelineState > pipeline_state;
+    // Create the PSO for GenerateMips shader.
+    struct PipelineStateStream
+    {
+    public:
+        CD3DX12_PIPELINE_STATE_STREAM_ROOT_SIGNATURE in_root_signature;
+        CD3DX12_PIPELINE_STATE_STREAM_CS CS;
+        }pipeline_state_stream;
+        pipeline_state_stream.in_root_signature = in_root_signature.Get();
+        if (nullptr != in_compute_shader_data)
+        {
+            pipeline_state_stream.CS =
+            {
+                in_compute_shader_data->data(), in_compute_shader_data->size()};
+        }
+        D3D12_PIPELINE_STATE_STREAM_DESC _pipeline_state_stream_desc =
+        {
+            sizeof (PipelineStateStream),&pipeline_state_stream}; DX::ThrowIfFailed(in_device->CreatePipelineState(
+                &pipeline_state_stream_desc,
+                IID_PPV_ARGS(pipeline_state.ReleaseAndGetAddressOf())
+                ));
+            return pipeline_state;
+        }
+        Microsoft::WRL::ComPtr < ID3D12PipelineState > MakePipelineState(
+            ID3D12Device* const in_device,
+            const Microsoft::WRL::ComPtr < ID3D12RootSignature >&in_root_signature,
+            const std::shared_ptr < std::vector < uint8_t >>&in_vertex_shader_data,
+            const std::shared_ptr < std::vector < uint8_t >>&in_geometry_shader_data,
+            const std::shared_ptr < std::vector < uint8_t >>&in_pixel_shader_data,
+            const ShaderPipelineStateData&in_pipeline_state_data
+            )
+        {
+            Microsoft::WRL::ComPtr < ID3D12PipelineState > _pipeline_state;
+            // Describe and create the graphics pipeline state object (PSO).
+            D3D12_GRAPHICS_PIPELINE_STATE_DESC _pso_desc = _{};
+            pso_desc.in_root_signature = in_root_signature.Get();
+            if (nullptr != in_vertex_shader_data)
+            {
+                pso_desc.VS =
+                {
+                    in_vertex_shader_data->data(), in_vertex_shader_data->size()};
+            }
+            if (nullptr != in_pixel_shader_data)
+            {
+                pso_desc.PS =
+                {
+                    in_pixel_shader_data->data(), in_pixel_shader_data->size()};
+            }
+            // D3D12_SHADER_BYTECODE DS;
+            // D3D12_SHADER_BYTECODE HS;
+            if (nullptr != in_geometry_shader_data)
+            {
+                pso_desc.GS =
+                {
+                    in_geometry_shader_data->data(), in_geometry_shader_data->size()};
+            }
+            // D3D12_STREAM_OUTPUT_DESC StreamOutput;
+            pso_desc.BlendState = in_pipeline_state_data._blend_state;
+            // CD3DX12_BLEND_DESC(D3D12_DEFAULT);
+            pso_desc.SampleMask = UINT_MAX;
+            pso_desc.RasterizerState = in_pipeline_state_data._rasterizer_state;
+            // CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+            pso_desc.DepthStencilState = in_pipeline_state_data._depth_stencil_state;
+            // PsoDesc.DepthStencilState.DepthEnable = FALSE;
+            // PsoDesc.DepthStencilState.StencilEnable = FALSE;
+            pso_desc.InputLayout =
+            {
+                &in_pipeline_state_data._input_element_desc_array[0], (UINT) in_pipeline_state_data.
+                    _input_element_desc_array.size()};
+            // D3D12_INDEX_BUFFER_STRIP_CUT_VALUE IBStripCutValue;
+            pso_desc.PrimitiveTopologyType = in_pipeline_state_data._primitive_topology_type;
+            pso_desc.NumRenderTargets = (UINT) in_pipeline_state_data._render_target_format.size();
+            // (UINT)numRenderTargets; //1
+            for (int index = 0; index < (int) pso_desc.NumRenderTargets;++ index)
+            {
+                pso_desc.RTVFormats[index] = in_pipeline_state_data._render_target_format[index];
+                // DXGI_FORMAT_B8G8R8A8_UNORM;
+            }
+            pso_desc.DSVFormat = in_pipeline_state_data._depth_stencil_view_format;
+            // DXGI_FORMAT_UNKNOWN; // m_deviceResources->GetDepthBufferFormat();
+            pso_desc.SampleDesc.Count = 1;
+            // UINT NodeMask;
+            // D3D12_CACHED_PIPELINE_STATE CachedPSO;
+            // D3D12_PIPELINE_STATE_FLAGS Flags;
+            DX::ThrowIfFailed(in_device->CreateGraphicsPipelineState(
+                &pso_desc,
+                IID_PPV_ARGS(pipeline_state.ReleaseAndGetAddressOf())
+                ));
+            pipeline_state->SetName(L"PipelineState");
+            return pipeline_state;
+        }
+        Shader::Shader(
+            DrawSystem* const in_draw_system,
+            const ShaderPipelineStateData&in_pipeline_state_data,
+            const std::shared_ptr < std::vector < uint8_t > >&in_vertex_shader_data,
+            const std::shared_ptr < std::vector < uint8_t > >&in_geometry_shader_data,
+            const std::shared_ptr < std::vector < uint8_t > >&in_pixel_shader_data,
+            const std::vector < std::shared_ptr < ShaderResourceInfo > >&in_array_shader_resource_info,
+            const std::vector < std::shared_ptr < ConstantBufferInfo > >&in_array_shader_constants_info,
+            const std::shared_ptr < std::vector < uint8_t > >&in_compute_shader_data,
+            const std::vector < std::shared_ptr < UnorderedAccessInfo > >&in_array_unordered_access_info
+            ) 
+            : IResource(in_draw_system)
+            , pipeline_state_data(in_pipeline_state_data)
+            , vertex_shader_data(in_vertex_shader_data)
+            , geometry_shader_data(in_geometry_shader_data)
+            , pixel_shader_data(in_pixel_shader_data)
+            , array_shader_resource_info(in_array_shader_resource_info)
+            , array_shader_constants_info(in_array_shader_constants_info)
+            , compute_shader_data(in_compute_shader_data)
+            , array_unordered_access_info(in_array_unordered_access_info)
+            {
+                for (auto&iter : array_shader_constants_info)
+                {
+                    auto result = MakeConstantBuffer(
+                        in_draw_system,
+                        iter
+                        );
+                    if (result)
+                    {
+                        array_constant_buffer.push_back(result);
+                    }
+                }
+                return;
+            }
+            Shader::~Shader()
+            {
+                // Nop
+            }
+            void Shader::SetDebugName(const std::string&in_name)
+            {
+                debug_name = in_name;
+            }
+            void Shader::SetActivate(
+                ID3D12GraphicsCommandList* const in_command_list,
+                const int in_frame_index
+                )
+            {
+                if (false == pipeline_state_data._compute_shader)
+                {
+                    in_command_list->SetGraphicsRootSignature(in_root_signature.Get());
+                }
+                else
+                {
+                    in_command_list->SetComputeRootSignature(in_root_signature.Get());
+                }
+                in_command_list->SetPipelineState(in_pipeline_state.Get());
+                int _root_paramter_index = 0;
+                // B0,b1,b2,...
+                for (const auto&iter : array_constant_buffer)
+                {
+                    iter->Activate(
+                        in_command_list,
+                        in_root_paramter_index,
+                        in_frame_index
+                        );
+                    in_root_paramter_index += 1;
+                }
+                // U0,u1,u2,...
+                for (const auto&iter : array_unordered_access_info)
+                {
+                    iter->Activate(
+                        in_command_list,
+                        in_root_paramter_index
+                        );
+                    in_root_paramter_index += 1;
+                }
+                // T0,t1,t2,...
+                for (const auto&iter : array_shader_resource_info)
+                {
+                    iter->Activate(
+                        in_command_list,
+                        in_root_paramter_index
+                        );
+                    in_root_paramter_index += 1;
+                }
+                // S0,s1,s2,...
+                // For(const auto& iter : m_arrayShaderResourceInfo)
+                // {
+                // If (false == iter->GetUseSampler())
+                // {
+                // Continue;
+                // }
+                // Iter->ActivateSampler(pCommandList, rootParamterIndex);
+                // RootParamterIndex += 1;
+                // }
+            }
+            void Shader::SetShaderResourceViewHandle(
+                const int in_index,
+                const std::shared_ptr < HeapWrapperItem >&in_shader_resource_view_handle
+                )
+            {
+                if ((0 <= in_index) && (in_index < (int) array_shader_resource_info.size()))
+                {
+                    array_shader_resource_info[in_index]->SetShaderResourceViewHandle(in_shader_resource_view_handle);
+                }
+                return;
+            }
+            void Shader::SetUnorderedAccessViewHandle(
+                const int in_index,
+                const std::shared_ptr < HeapWrapperItem >&in_unordered_access_view_handle
+                )
+            {
+                if ((0 <= in_index) && (in_index < (int) array_unordered_access_info.size()))
+                {
+                    array_unordered_access_info[in_index]->SetUnorderedAccessViewHandle(in_unordered_access_view_handle)
+                        ;
+                }
+                return;
+            }
+            void Shader::SetConstantBufferData(
+                const int in_index,
+                const std::vector < float >&in_data
+                )
+            {
+                if ((0 <= in_index) && (in_index < (int) array_shader_constants_info.size()))
+                {
+                    auto&shader_constant_info =* array_shader_constants_info[in_index];
+                    const void* const data =&in_data[0];
+                    shader_constant_info.UpdateData(
+                        data,
+                        sizeof (float) * in_data.size()
+                        );
+                }
+                return;
+            }
+            void Shader::OnDeviceLost()
+            {
+                root_signature.Reset();
+                pipeline_state.Reset();
+                for (auto&constant_buffer : array_constant_buffer)
+                {
+                    constant_buffer->DeviceLost();
+                }
+            }
+            void Shader::OnDeviceRestored(
+                ID3D12GraphicsCommandList* const,
+                ID3D12Device2* const in_device
+                )
+            {
+                for (auto&constant_buffer : array_constant_buffer)
+                {
+                    constant_buffer->DeviceRestored(in_device);
+                }
+                root_signature = MakeRootSignature(
+                    in_device,
+                    in_array_shader_resource_info,
+                    array_constant_buffer,
+                    in_array_unordered_access_info
+                    );
+                if (true == pipeline_state_data._compute_shader)
+                {
+                    pipeline_state = MakePipelineStateComputeShader(
+                        in_device,
+                        root_signature,
+                        in_compute_shader_data
+                        );
+                }
+                else
+                {
+                    pipeline_state = MakePipelineState(
+                        in_device,
+                        root_signature,
+                        in_vertex_shader_data,
+                        in_geometry_shader_data,
+                        in_pixel_shader_data,
+                        pipeline_state_data
+                        );
+                }
+                return;
+            }
 
-   pipelineStateStream.pRootSignature = pRootSignature.Get();
-
-   if (nullptr != pComputeShaderData)
-   {
-      pipelineStateStream.CS = { pComputeShaderData->data(), pComputeShaderData->size() };
-   }
-
-   D3D12_PIPELINE_STATE_STREAM_DESC pipelineStateStreamDesc = {
-      sizeof( PipelineStateStream ), &pipelineStateStream
-   };
-
-   DX::ThrowIfFailed( 
-      pDevice->CreatePipelineState( 
-         &pipelineStateStreamDesc, 
-         IID_PPV_ARGS(pPipelineState.ReleaseAndGetAddressOf()) 
-      ) 
-   );
-
-   return pPipelineState;
-}
-
-Microsoft::WRL::ComPtr<ID3D12PipelineState> MakePipelineState(
-   ID3D12Device* const pDevice,
-   const Microsoft::WRL::ComPtr<ID3D12RootSignature>& pRootSignature,
-   const std::shared_ptr< std::vector<uint8_t>>& pVertexShaderData,
-   const std::shared_ptr< std::vector<uint8_t>>& pGeometryShaderData,
-   const std::shared_ptr< std::vector<uint8_t>>& pPixelShaderData,
-   const ShaderPipelineStateData& pipelineStateData
-   )
-{
-   Microsoft::WRL::ComPtr<ID3D12PipelineState> pPipelineState;
-   // Describe and create the graphics pipeline state object (PSO).
-   D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
-   psoDesc.pRootSignature = pRootSignature.Get();
-   if (nullptr != pVertexShaderData)
-   {
-      psoDesc.VS = { pVertexShaderData->data(), pVertexShaderData->size() };
-   }
-   if (nullptr != pPixelShaderData)
-   {
-      psoDesc.PS = { pPixelShaderData->data(), pPixelShaderData->size() };
-   }
-   //D3D12_SHADER_BYTECODE DS;
-   //D3D12_SHADER_BYTECODE HS;
-   if (nullptr != pGeometryShaderData)
-   {
-      psoDesc.GS = { pGeometryShaderData->data(), pGeometryShaderData->size() };
-   }
-   //D3D12_STREAM_OUTPUT_DESC StreamOutput;
-   psoDesc.BlendState = pipelineStateData.m_blendState; //CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-   psoDesc.SampleMask = UINT_MAX;
-   psoDesc.RasterizerState = pipelineStateData.m_rasterizerState; //CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-   psoDesc.DepthStencilState = pipelineStateData.m_depthStencilState;
-   //psoDesc.DepthStencilState.DepthEnable = FALSE;
-   //psoDesc.DepthStencilState.StencilEnable = FALSE;
-   psoDesc.InputLayout = { &pipelineStateData.m_inputElementDescArray[0], (UINT)pipelineStateData.m_inputElementDescArray.size() };
-   //D3D12_INDEX_BUFFER_STRIP_CUT_VALUE IBStripCutValue;
-   psoDesc.PrimitiveTopologyType = pipelineStateData.m_primitiveTopologyType;
-   psoDesc.NumRenderTargets = (UINT)pipelineStateData.m_renderTargetFormat.size(); // (UINT)numRenderTargets; //1
-   for (int index = 0; index < (int)psoDesc.NumRenderTargets; ++index)
-   {
-      psoDesc.RTVFormats[index] = pipelineStateData.m_renderTargetFormat[index]; //DXGI_FORMAT_B8G8R8A8_UNORM;
-   }
-   psoDesc.DSVFormat = pipelineStateData.m_depthStencilViewFormat; //DXGI_FORMAT_UNKNOWN; // m_deviceResources->GetDepthBufferFormat();
-   psoDesc.SampleDesc.Count = 1;
-   //UINT NodeMask;
-   //D3D12_CACHED_PIPELINE_STATE CachedPSO;
-   //D3D12_PIPELINE_STATE_FLAGS Flags;
-
-   DX::ThrowIfFailed(
-      pDevice->CreateGraphicsPipelineState(
-         &psoDesc,
-         IID_PPV_ARGS(pPipelineState.ReleaseAndGetAddressOf())
-         )
-      );
-
-   pPipelineState->SetName(L"PipelineState");
-
-   return pPipelineState;
-}
-
-Shader::Shader(
-   DrawSystem* const pDrawSystem,
-   const ShaderPipelineStateData& pipelineStateData,
-   const std::shared_ptr< std::vector<uint8_t> >& pVertexShaderData,
-   const std::shared_ptr< std::vector<uint8_t> >& pGeometryShaderData,
-   const std::shared_ptr< std::vector<uint8_t> >& pPixelShaderData,
-   const std::vector< std::shared_ptr< ShaderResourceInfo > >& arrayShaderResourceInfo,
-   const std::vector< std::shared_ptr< ConstantBufferInfo > >& arrayShaderConstantsInfo,
-   const std::shared_ptr< std::vector<uint8_t> >& pComputeShaderData,
-   const std::vector< std::shared_ptr< UnorderedAccessInfo > >& arrayUnorderedAccessInfo
-   )
-   : IResource(pDrawSystem)
-   , m_pipelineStateData(pipelineStateData)
-   , m_pVertexShaderData(pVertexShaderData)
-   , m_pGeometryShaderData(pGeometryShaderData)
-   , m_pPixelShaderData(pPixelShaderData)
-   , m_arrayShaderResourceInfo(arrayShaderResourceInfo)
-   , m_arrayShaderConstantsInfo(arrayShaderConstantsInfo)
-   , m_pComputeShaderData(pComputeShaderData)
-   , m_arrayUnorderedAccessInfo(arrayUnorderedAccessInfo)
-{
-   for (auto& iter : m_arrayShaderConstantsInfo)
-   {
-      auto pResult = MakeConstantBuffer(pDrawSystem, iter);
-      if (pResult)
-      {
-         m_arrayConstantBuffer.push_back(pResult);
-      }
-   }
-
-   return;
-}
-
-Shader::~Shader()
-{
-   //nop
-}
-
-void Shader::SetDebugName( const std::string& name )
-{
-   m_debugName = name;
-}
-
-void Shader::SetActivate(
-   ID3D12GraphicsCommandList* const pCommandList,
-   const int frameIndex
-   )
-{
-   if (false == m_pipelineStateData.m_computeShader)
-   {
-      pCommandList->SetGraphicsRootSignature(m_rootSignature.Get());
-   }
-   else
-   {
-      pCommandList->SetComputeRootSignature(m_rootSignature.Get());
-   }
-   pCommandList->SetPipelineState(m_pipelineState.Get());
-
-   int rootParamterIndex = 0;
-
-   //b0,b1,b2,...
-   for(const auto& iter : m_arrayConstantBuffer)
-   {
-      iter->Activate(pCommandList, rootParamterIndex, frameIndex);
-      rootParamterIndex += 1;
-   }
-
-   //u0,u1,u2,...
-   for(const auto& iter : m_arrayUnorderedAccessInfo)
-   {
-      iter->Activate(pCommandList, rootParamterIndex);
-      rootParamterIndex += 1;
-   }
-
-   //t0,t1,t2,...
-   for(const auto& iter : m_arrayShaderResourceInfo)
-   {
-      iter->Activate(pCommandList, rootParamterIndex);
-      rootParamterIndex += 1;
-   }
-
-   //s0,s1,s2,...
-   //for(const auto& iter : m_arrayShaderResourceInfo)
-   //{
-   //   if (false == iter->GetUseSampler())
-   //   {
-   //      continue;
-   //   }
-   //   iter->ActivateSampler(pCommandList, rootParamterIndex);
-   //   rootParamterIndex += 1;
-   //}
-}
-
-void Shader::SetShaderResourceViewHandle( const int index, const std::shared_ptr< HeapWrapperItem >& pShaderResourceViewHandle )
-{
-   if ((0 <= index) && (index < (int)m_arrayShaderResourceInfo.size()))
-   {
-      m_arrayShaderResourceInfo[index]->SetShaderResourceViewHandle( pShaderResourceViewHandle );
-   }
-   return;
-}
-
-void Shader::SetUnorderedAccessViewHandle( const int index, const std::shared_ptr< HeapWrapperItem >& pUnorderedAccessViewHandle )
-{
-   if ((0 <= index) && (index < (int)m_arrayUnorderedAccessInfo.size()))
-   {
-      m_arrayUnorderedAccessInfo[index]->SetUnorderedAccessViewHandle( pUnorderedAccessViewHandle );
-   }
-   return;
-}
-
-void Shader::SetConstantBufferData( const int index, const std::vector<float>& data )
-{
-   if ((0 <= index) && (index < (int)m_arrayShaderConstantsInfo.size()))
-   {
-      auto& shaderConstantInfo = *m_arrayShaderConstantsInfo[index];
-      const void* const pData = &data[0];
-      shaderConstantInfo.UpdateData(pData, sizeof(float) * data.size());
-   }
-   return;
-}
-
-void Shader::OnDeviceLost()
-{
-   m_rootSignature.Reset();
-   m_pipelineState.Reset();
-
-   for( auto& pConstantBuffer : m_arrayConstantBuffer )
-   {
-      pConstantBuffer->DeviceLost();
-   }
-}
-
-void Shader::OnDeviceRestored(
-   ID3D12GraphicsCommandList* const,
-   ID3D12Device2* const pDevice
-   )
-{
-   for( auto& pConstantBuffer : m_arrayConstantBuffer )
-   {
-      pConstantBuffer->DeviceRestored(pDevice);
-   }
-   m_rootSignature = MakeRootSignature(
-      pDevice,
-      m_arrayShaderResourceInfo,
-      m_arrayConstantBuffer,
-      m_arrayUnorderedAccessInfo
-      );
-   if (true == m_pipelineStateData.m_computeShader)
-   {
-      m_pipelineState = MakePipelineStateComputeShader(
-         pDevice,
-         m_rootSignature,
-         m_pComputeShaderData
-      );
-   }
-   else
-   {
-      m_pipelineState = MakePipelineState(
-         pDevice,
-         m_rootSignature,
-         m_pVertexShaderData,
-         m_pGeometryShaderData,
-         m_pPixelShaderData,
-         m_pipelineStateData
-         );
-   }
-
-   return;
-
-}
 

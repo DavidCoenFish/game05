@@ -1,17 +1,18 @@
 #pragma once
-
-#include "Common/Math/VectorFloat4.h"
+#include "common/math/vector_float4.h"
 
 struct RenderTargetFormatData
 {
-   explicit RenderTargetFormatData(
-      const DXGI_FORMAT _format = DXGI_FORMAT_UNKNOWN,
-      const bool _clearOnSet = false,
-      const VectorFloat4& _clearColor = VectorFloat4()
-      );
-   D3D12_CLEAR_VALUE MakeClearValue() const;
+public:
+    explicit RenderTargetFormatData(
+        const DXGI_FORMAT in_format = DXGI_FORMAT_UNKNOWN,
+        const bool in_clear_on_set = false,
+        const VectorFloat4&in_clear_color = VectorFloat4()
+        );
+    D3D12_CLEAR_VALUE MakeClearValue() const;
 
-   DXGI_FORMAT format;
-   bool clearOnSet;
-   VectorFloat4 clearColor;
+public:
+    DXGI_FORMAT format;
+    bool _clear_on_set;
+    VectorFloat4 clear_color;
 };

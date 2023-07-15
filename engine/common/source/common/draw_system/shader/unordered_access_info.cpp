@@ -1,40 +1,42 @@
-#include "CommonPCH.h"
+#include "common/common_pch.h"
 
-#include "Common/DrawSystem/Shader/UnorderedAccessInfo.h"
-#include "Common/DrawSystem/HeapWrapper/HeapWrapperItem.h"
+#include "common/draw_system/heap_wrapper/heap_wrapper_item.h"
+#include "common/draw_system/shader/unordered_access_info.h"
 
 UnorderedAccessInfo::UnorderedAccessInfo(
-   const std::shared_ptr< HeapWrapperItem >& pUnorderedAccessViewHandle,
-   const D3D12_SHADER_VISIBILITY visiblity
-   )
-   : m_pUnorderedAccessViewHandle(pUnorderedAccessViewHandle)
-   , m_visiblity(visiblity)
+    const std::shared_ptr < HeapWrapperItem >&in_unordered_access_view_handle,
+    const D3D12_SHADER_VISIBILITY in_visiblity
+    ) 
+    : unordered_access_view_handle(in_unordered_access_view_handle)
+    , visiblity(in_visiblity)
 {
-   return;
+    return;
 }
 
-void UnorderedAccessInfo::SetUnorderedAccessViewHandle(const std::shared_ptr< HeapWrapperItem >& pUnorderedAccessViewHandle)
+void UnorderedAccessInfo::SetUnorderedAccessViewHandle(const std::shared_ptr < HeapWrapperItem >&
+    in_unordered_access_view_handle)
 {
-   m_pUnorderedAccessViewHandle = pUnorderedAccessViewHandle;
-   return;
+    unordered_access_view_handle = in_unordered_access_view_handle;
+    return;
 }
 
-void UnorderedAccessInfo::Activate( 
-   ID3D12GraphicsCommandList* const pCommandList,
-   const int rootParamIndex
-   )
+void UnorderedAccessInfo::Activate(
+    ID3D12GraphicsCommandList* const in_command_list,
+    const int in_root_param_index
+    )
 {
-   if (m_pUnorderedAccessViewHandle)
-   {
-      auto heap = m_pUnorderedAccessViewHandle->GetHeap();
-      pCommandList->SetDescriptorHeaps(1, &heap);
-      pCommandList->SetComputeRootDescriptorTable(
-         rootParamIndex, 
-         m_pUnorderedAccessViewHandle->GetGPUHandle()
-         );
-   }
-
-   return;
+    if (unordered_access_view_handle)
+    {
+        auto heap = unordered_access_view_handle->GetHeap();
+        in_command_list->SetDescriptorHeaps(
+            1,
+            &heap
+            );
+        in_command_list->SetComputeRootDescriptorTable(
+            in_root_param_index,
+            unordered_access_view_handle->GetGPUHandle()
+            );
+    }
+    return;
 }
-
 

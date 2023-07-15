@@ -1,25 +1,26 @@
-#include "CommonPCH.h"
+#include "common/common_pch.h"
 
-#include "Common/DrawSystem/CustomCommandList.h"
-#include "Common/DrawSystem/DrawSystem.h"
-#include "Common/DrawSystem/d3dx12.h"
+#include "common/draw_system/custom_command_list.h"
+#include "common/draw_system/d3dx12.h"
+#include "common/draw_system/draw_system.h"
 
 CustomCommandList::CustomCommandList(
-   DrawSystem& drawSystem,
-   ID3D12GraphicsCommandList* pCommandList
-   )
-   : m_drawSystem(drawSystem)
-   , m_pCommandList(pCommandList)
+    DrawSystem&in_draw_system,
+    ID3D12GraphicsCommandList* in_command_list
+    ) 
+    : draw_system(in_draw_system)
+    , command_list(in_command_list)
 {
-   //nop
+    // Nop
 }
 
 CustomCommandList::~CustomCommandList()
 {
-   m_drawSystem.CustomCommandListFinish(m_pCommandList);
+    draw_system.CustomCommandListFinish(in_command_list);
 }
 
 ID3D12GraphicsCommandList* CustomCommandList::GetCommandList()
 {
-   return m_pCommandList;
+    return command_list;
 }
+

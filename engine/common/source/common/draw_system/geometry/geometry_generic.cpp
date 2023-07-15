@@ -1,53 +1,55 @@
-#include "CommonPCH.h"
+#include "common/common_pch.h"
 
-#include "Common/DrawSystem/Geometry/GeometryGeneric.h"
-#include "Common/DrawSystem/Geometry/IGeometry.h"
+#include "common/draw_system/geometry/geometry_generic.h"
+#include "common/draw_system/geometry/i_geometry.h"
 
 GeometryGeneric::GeometryGeneric(
-   DrawSystem* const pDrawSystem,
-   const D3D_PRIMITIVE_TOPOLOGY primitiveTopology,
-   const std::vector< D3D12_INPUT_ELEMENT_DESC >& inputElementDescArray,
-   const std::vector< float >& vertexDataRaw,
-   const int floatPerVertex
-   )
-   : IResource( pDrawSystem)
-   , m_primitiveTopology(primitiveTopology)
-   , m_inputElementDescArray(inputElementDescArray)
-   , m_vertexRawData(vertexDataRaw)
-   , m_floatPerVertex(floatPerVertex)
-   , m_pVertexBuffer()
-   , m_vertexBufferView{}
+    DrawSystem* const in_draw_system,
+    const D3D_PRIMITIVE_TOPOLOGY in_primitive_topology,
+    const std::vector < D3D12_INPUT_ELEMENT_DESC >&in_input_element_desc_array,
+    const std::vector < float >&in_vertex_data_raw,
+    const int in_float_per_vertex
+    ) 
+    : IResource(in_draw_system)
+    , primitive_topology(in_primitive_topology)
+    , input_element_desc_array(in_input_element_desc_array)
+    , vertex_raw_data(in_vertex_data_raw)
+    , float_per_vertex(in_float_per_vertex)
+    , vertex_buffer()
+    , vertex_buffer_view{}
 {
-   //nop
+    // Nop
 }
 
-void GeometryGeneric::Draw(ID3D12GraphicsCommandList* const pCommandList)
+void GeometryGeneric::Draw(ID3D12GraphicsCommandList* const in_command_list)
 {
-   IGeometry::DrawImplementation(
-      pCommandList,
-      (UINT)(m_vertexRawData.size() / m_floatPerVertex),
-      m_primitiveTopology,
-      m_vertexBufferView
-      );
+    IGeometry::DrawImplementation(
+        in_command_list,
+        (UINT)(vertex_raw_data.size() / float_per_vertex),
+        in_primitive_topology,
+        in_vertex_buffer_view
+        );
 }
+
 void GeometryGeneric::OnDeviceLost()
 {
-   IGeometry::DeviceLostImplementation(m_pVertexBuffer);
+    IGeometry::DeviceLostImplementation(in_vertex_buffer);
 }
 
 void GeometryGeneric::OnDeviceRestored(
-   ID3D12GraphicsCommandList* const pCommandList,
-   ID3D12Device2* const pDevice
-   )
+    ID3D12GraphicsCommandList* const in_command_list,
+    ID3D12Device2* const in_device
+    )
 {
-   IGeometry::DeviceRestoredImplementation(
-      m_pDrawSystem,
-      pCommandList,
-      pDevice,
-      (int)(m_vertexRawData.size() / m_floatPerVertex),
-      sizeof(float) * m_floatPerVertex,
-      m_pVertexBuffer,
-      m_vertexBufferView,
-      m_vertexRawData.data()
-      );
+    IGeometry::DeviceRestoredImplementation(
+        in_draw_system,
+        in_command_list,
+        in_device,
+        (int)(vertex_raw_data.size() / float_per_vertex),
+        sizeof (float) * float_per_vertex,
+        in_vertex_buffer,
+        in_vertex_buffer_view,
+        vertex_raw_data.in_data()
+        );
 }
+

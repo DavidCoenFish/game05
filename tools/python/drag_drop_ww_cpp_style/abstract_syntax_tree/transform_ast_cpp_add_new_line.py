@@ -25,6 +25,9 @@ def AstTransformAddNewLine(in_ast_node, in_stack_ast_node, in_data):
     parent = None
     if 0 < len(in_stack_ast_node):
         parent = in_stack_ast_node[-1]
+    grand_parent = None
+    if 1 < len(in_stack_ast_node):
+        grand_parent = in_stack_ast_node[-2]
 
     if (
         parent is not None and
@@ -48,7 +51,15 @@ def AstTransformAddNewLine(in_ast_node, in_stack_ast_node, in_data):
         ):
         in_ast_node._export_post_children_format.append(export.ExportFormat.NEW_LINE)
     elif (
-        in_ast_node._type == dsc_ast_cpp.AstType.SCOPE_END
+        in_ast_node._type == dsc_ast_cpp.AstType.SCOPE_END and 
+        grand_parent and (
+        grand_parent._sub_type in set({
+            dsc_ast_cpp.SubType.STATEMENT_METHOD_DEFINITION,
+            dsc_ast_cpp.SubType.STATEMENT_CONSTRUCTOR,
+            dsc_ast_cpp.SubType.STATEMENT_DESTRUCTOR,
+            }) or
+            grand_parent._type == dsc_ast_cpp.AstType.SCOPE
+            )
         ):
         in_ast_node._export_post_token_format.append(export.ExportFormat.NEW_LINE)
     elif (
@@ -56,7 +67,8 @@ def AstTransformAddNewLine(in_ast_node, in_stack_ast_node, in_data):
         prev_node and prev_node._type == dsc_ast_cpp.AstType.SCOPE_END
         ):
         # remove the newline if there was a "};"
-        prev_node._export_post_token_format.remove(export.ExportFormat.NEW_LINE)
+        if export.ExportFormat.NEW_LINE in prev_node._export_post_token_format:
+            prev_node._export_post_token_format.remove(export.ExportFormat.NEW_LINE)
 
     # extra newline for include groups
     if in_ast_node._type == dsc_ast_cpp.AstType.DOCUMENT:

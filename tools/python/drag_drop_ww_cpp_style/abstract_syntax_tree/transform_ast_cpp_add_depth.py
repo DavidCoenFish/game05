@@ -23,7 +23,13 @@ def AstTransformAddDepth(in_ast_node, in_stack_ast_node, in_data):
     if in_ast_node._sub_type == dsc_ast_cpp.SubType.STATEMENT_ACCESS:
         in_ast_node._export_pre_token_format.append(export.ExportFormat.DEPTH_DECREMENT)
         in_ast_node._export_post_token_format.append(export.ExportFormat.DEPTH_INCREMENT)
-
+    elif in_ast_node._type == dsc_ast_cpp.AstType.STATEMENT:
+        if ( 
+            0 < len(in_ast_node._children) and 
+            in_ast_node._children[-1]._token._sub_type == dsc_token_cpp.OperatorType.COLON
+            ):
+            in_ast_node._export_pre_token_format.append(export.ExportFormat.DEPTH_DECREMENT)
+            in_ast_node._export_post_children_format.append(export.ExportFormat.DEPTH_INCREMENT)
 
     # Put children of first parenthesis of a statement on a new line
     if True == DoesParenthesisChildrenNeedNewline(in_ast_node, in_stack_ast_node):

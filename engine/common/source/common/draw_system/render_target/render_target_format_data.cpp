@@ -1,29 +1,23 @@
-#include "CommonPCH.h"
+#include "common/common_pch.h"
 
-#include "Common/DrawSystem/RenderTarget/RenderTargetFormatData.h"
+#include "common/draw_system/render_target/render_target_format_data.h"
 
 RenderTargetFormatData::RenderTargetFormatData(
-   const DXGI_FORMAT _format,
-   const bool _clearOnSet,
-   const VectorFloat4& _clearColor
-   )
-   : format(_format)
-   , clearOnSet(_clearOnSet)
-   , clearColor(_clearColor)
+    const DXGI_FORMAT in_format,
+    const bool in_clear_on_set,
+    const VectorFloat4&in_clear_color
+    ) 
+    : format(in_format)
+    , clear_on_set(in_clear_on_set)
+    , clear_color(in_clear_color)
 {
-   return;
+    return;
 }
 
-D3D12_CLEAR_VALUE RenderTargetFormatData::MakeClearValue() const
+D3D12_CLEAR_VALUE RenderTargetFormatData::MakeClearValue() const{_d3_d12_clea_r_value result(
 {
-   D3D12_CLEAR_VALUE result({
-      format,
-      { 
-         clearColor[0],
-         clearColor[1],
-         clearColor[2],
-         clearColor[3]
-      }});
-   return result;
-}
-
+    format,
+    {
+        clear_color[0], clear_color[1], clear_color[2], clear_color[3] }})
+        ; return result;
+    }

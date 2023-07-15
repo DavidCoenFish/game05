@@ -306,8 +306,14 @@ class AST:
 
             elif in_token._sub_type == dsc_token_cpp.OperatorType.STATEMENT_END:
                 CreateNewChild(self._children, AstType.STATEMENT_END, in_token, self._access)
-                #if parent._children[-1] != AstType.SCOPE:
-                in_stack.pop()
+                if (
+                    parent and parent._type == AstType.PARENTHESIS and
+                    grand_parent and grand_parent._token and 
+                    grand_parent._token._sub_type == dsc_token_cpp.KeywordType.FOR
+                    ):
+                    pass
+                else:
+                    in_stack.pop()
 
             elif in_token._sub_type == dsc_token_cpp.OperatorType.COLON:
                 # case 1, "public:" access specifier
