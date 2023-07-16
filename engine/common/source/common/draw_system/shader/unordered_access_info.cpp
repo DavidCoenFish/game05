@@ -7,16 +7,16 @@ UnorderedAccessInfo::UnorderedAccessInfo(
     const std::shared_ptr < HeapWrapperItem >&in_unordered_access_view_handle,
     const D3D12_SHADER_VISIBILITY in_visiblity
     ) 
-    : unordered_access_view_handle(in_unordered_access_view_handle)
-    , visiblity(in_visiblity)
+    : _unordered_access_view_handle(in_unordered_access_view_handle)
+    , _visiblity(in_visiblity)
 {
     return;
 }
 
-void UnorderedAccessInfo::SetUnorderedAccessViewHandle(const std::shared_ptr < HeapWrapperItem >&
+void UnorderedAccessInfo::SetUnorderedAccessViewHandle(const std::shared_ptr < HeapWrapperItem >&\
     in_unordered_access_view_handle)
 {
-    unordered_access_view_handle = in_unordered_access_view_handle;
+    _unordered_access_view_handle = in_unordered_access_view_handle;
     return;
 }
 
@@ -25,16 +25,16 @@ void UnorderedAccessInfo::Activate(
     const int in_root_param_index
     )
 {
-    if (unordered_access_view_handle)
+    if (_unordered_access_view_handle)
     {
-        auto heap = unordered_access_view_handle->GetHeap();
+        auto heap = _unordered_access_view_handle->GetHeap();
         in_command_list->SetDescriptorHeaps(
             1,
             &heap
             );
         in_command_list->SetComputeRootDescriptorTable(
             in_root_param_index,
-            unordered_access_view_handle->GetGPUHandle()
+            _unordered_access_view_handle->GetGPUHandle()
             );
     }
     return;

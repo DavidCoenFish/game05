@@ -5,7 +5,7 @@ class DrawSystem;
 class HeapWrapperItem
 {
 public:
-    static std::_shared_ptr < HeapWrapperItem > Factory(
+    static std::shared_ptr < HeapWrapperItem > Factory(
         ID3D12Device2* const in_device,
         const std::shared_ptr < HeapWrapper >&in_heap_wrapper,
         const int in_length = 1
@@ -22,11 +22,11 @@ public:
     ID3D12DescriptorHeap* const GetHeap();
     const int GetLength() const
     {
-        return length;
+        return _length;
     };
 
 private:
-    std::_shared_ptr < HeapWrapper > _heap_wrapper;
+    std::shared_ptr < HeapWrapper > _heap_wrapper;
     int _index;
     int _length;
 };

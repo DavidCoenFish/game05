@@ -85,9 +85,9 @@ using Microsoft::WRL::ComPtr;
         }
 
         Impl(Impl &&) = default;
-        Impl&_operator=(Impl &&) = default;
+        Impl& operator=(Impl &&) = default;
         Impl(Impl const&) = delete;
-        Impl&_operator=(Impl const&) = delete;
+        Impl& operator=(Impl const&) = delete;
         ~Impl()
         {
             if (_device_token)
@@ -188,8 +188,10 @@ using Microsoft::WRL::ComPtr;
             if (_mode == MODE_RELATIVE) return false;
             CURSORINFO info =
             {
-                sizeof (CURSORINFO), 0, nullptr, {}};
-            if (!GetCursorInfo(&info)) return false;
+                sizeof (CURSORINFO), 0, nullptr, {}
+            };
+            if (!GetCursorInfo(&info)) 
+                return false;
             return (info._flags&CURSOR_SHOWING) != 0;
         }
 
@@ -198,7 +200,8 @@ using Microsoft::WRL::ComPtr;
             if (_mode == MODE_RELATIVE) return;
             CURSORINFO info =
             {
-                sizeof (CURSORINFO), 0, nullptr, {}};
+                sizeof (CURSORINFO), 0, nullptr, {}
+            };
             if (!GetCursorInfo(&info))
             {
                 throw std::exception("GetCursorInfo");
@@ -218,22 +221,22 @@ using Microsoft::WRL::ComPtr;
             LPARAM in_l_param
             );
         static void CALLBACK OnGameInputDevice(
-            in_in_ GameInputCallbackToken,
-            in_in_ void* in_context,
-            in_in_ IGameInputDevice*,
-            in_in_ uint64_t,
-            in_in_ GameInputDeviceStatus in_current_status,
-            in_in_ GameInputDeviceStatus
+            _In_ GameInputCallbackToken,
+            _In_ void* in_context,
+            _In_ IGameInputDevice*,
+            _In_ uint64_t,
+            _In_ GameInputDeviceStatus in_current_status,
+            _In_ GameInputDeviceStatus
             ) noexcept
         {
             auto impl = reinterpret_cast < Mouse::Impl* > (in_context);
             if (in_current_status&GameInputDeviceConnected)
             {
-                ++ impl->_connected;
+                ++impl->_connected;
             }
             else if (impl->_connected > 0)
             {
-                -- impl->_connected;
+                --impl->_connected;
             }
 
         }
@@ -250,7 +253,7 @@ using Microsoft::WRL::ComPtr;
         ComPtr < IGameInput > _game_input;
         GameInputCallbackToken _device_token;
         Mode _mode;
-        std::_unique_ptr < void, _handle_closer > _scroll_wheel_value;
+        std::unique_ptr < void, handle_closer > _scroll_wheel_value;
         mutable int _scroll_wheel_current;
         mutable _int64_t _relative_x;
         mutable _int64_t _relative_y;
@@ -462,9 +465,9 @@ using Microsoft::WRL::ComPtr;
         }
 
         Impl(Impl &&) = default;
-        Impl&_operator=(Impl &&) = default;
+        Impl& operator=(Impl &&) = default;
         Impl(Impl const&) = delete;
-        Impl&_operator=(Impl const&) = delete;
+        Impl& operator=(Impl const&) = delete;
         ~Impl()
         {
             s_mouse = nullptr;
@@ -632,10 +635,10 @@ using Microsoft::WRL::ComPtr;
     private:
         HWND _window;
         Mode _mode;
-        std::_unique_ptr < void, _handle_closer > _scroll_wheel_value;
-        std::_unique_ptr < void, _handle_closer > _relative_read;
-        std::_unique_ptr < void, _handle_closer > _absolute_mode;
-        std::_unique_ptr < void, _handle_closer > _relative_mode;
+        std::unique_ptr < void, handle_closer > _scroll_wheel_value;
+        std::unique_ptr < void, handle_closer > _relative_read;
+        std::unique_ptr < void, handle_closer > _absolute_mode;
+        std::unique_ptr < void, handle_closer > _relative_mode;
         int _last_x;
         int _last_y;
         int _relative_x;
@@ -1150,15 +1153,15 @@ using Microsoft::WRL::ComPtr;
             ThrowIfFailed(hr);
             hr = mouse_statics->GetForCurrentView(_mouse.ReleaseAndGetAddressOf());
             ThrowIfFailed(hr);
-            typedef 
-                _fi_typed_event_handler_2_windows_c_devices_c_input_c_mouse_device_windows_c_devices_c_input_c_mouse_event_args
+            typedef \
+                _fi_typed_event_handler_2_windows_c_devices_c_input_c_mouse_device_windows_c_devices_c_input_c_mouse_event_args\
             MouseMovedHandler;
             hr = _mouse->add_mouse_moved(
                 Callback < MouseMovedHandler > (MouseMovedEvent) .Get(),
                 &_pointer_mouse_moved_token
                 );
             ThrowIfFailed(hr);
-            typedef _fi_typed_event_handler_2_windows_cu_i_c_core_c_core_window_windows_cu_i_c_core_c_pointer_event_args
+            typedef _fi_typed_event_handler_2_windows_cu_i_c_core_c_core_window_windows_cu_i_c_core_c_pointer_event_args\
             PointerHandler;
             auto cb = Callback < PointerHandler > (PointerEvent);
             hr = in_window->add_pointer_pressed(
@@ -1338,8 +1341,8 @@ using Microsoft::WRL::ComPtr;
         ComPtr < ABI::Windows::UI::Core::ICoreWindow > _window;
         ComPtr < ABI::Windows::Devices::Input::IMouseDevice > _mouse;
         ComPtr < ABI::Windows::UI::Core::ICoreCursor > _cursor;
-        std::_unique_ptr < void, _handle_closer > _scroll_wheel_value;
-        std::_unique_ptr < void, _handle_closer > _relative_read;
+        std::unique_ptr < void, handle_closer > _scroll_wheel_value;
+        std::unique_ptr < void, handle_closer > _relative_read;
         EventRegistrationToken _pointer_pressed_token;
         EventRegistrationToken _pointer_released_token;
         EventRegistrationToken _pointer_moved_token;
@@ -1425,16 +1428,16 @@ Mouse&Mouse::Get()
 // ======================================================================================
 // ButtonStateTracker
 // ======================================================================================
-#define UPDATE_BUTTON_STATE(field) field = static_cast < ButtonState > ((!!state.field) | ((!!state.field ^ !!lastState.
+#define UPDATE_BUTTON_STATE(field) field = static_cast < ButtonState > ((!!state.field) | ((!!state.field ^ !!lastState.\
     field) << 1));
 void MouseButtonStateTracker::Update(const Mouse::State&in_state) noexcept
 {
-    UPDATE_BUTTON_STATE(in_left_button) assert((!in_state.in_left_button && !last_state.in_left_button) == (
+    UPDATE_BUTTON_STATE(in_left_button) assert((!in_state.in_left_button && !last_state.in_left_button) == (\
         in_left_button == UP));
     assert((in_state.in_left_button && last_state.in_left_button) == (in_left_button == HELD));
     assert((!in_state.in_left_button && last_state.in_left_button) == (in_left_button == RELEASED));
     assert((in_state.in_left_button && !last_state.in_left_button) == (in_left_button == PRESSED));
-    UPDATE_BUTTON_STATE(in_middle_button) UPDATE_BUTTON_STATE(in_right_button) UPDATE_BUTTON_STATE(in_x_button1) 
+    UPDATE_BUTTON_STATE(in_middle_button) UPDATE_BUTTON_STATE(in_right_button) UPDATE_BUTTON_STATE(in_x_button1) \
         UPDATE_BUTTON_STATE(in_x_button2) d_x = last_state._x - in_state._x;
     d_y = last_state._y - in_state._y;
     last_state = in_state;

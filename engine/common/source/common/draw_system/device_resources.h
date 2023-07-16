@@ -88,6 +88,6 @@ private:
     Microsoft::WRL::Wrappers::Event _custom_command_fence_event;
     Microsoft::WRL::ComPtr < ID3D12CommandAllocator > _custom_command_allocator;
     Microsoft::WRL::ComPtr < ID3D12GraphicsCommandList > _custom_command_list;
-    std::_unique_ptr < ScreenSizeResources > _screen_size_resources;
-    std::_unique_ptr < DirectX::GraphicsMemory > _graphics_memory;
+    std::unique_ptr < ScreenSizeResources > _screen_size_resources;
+    std::unique_ptr < DirectX::GraphicsMemory > _graphics_memory;
 };

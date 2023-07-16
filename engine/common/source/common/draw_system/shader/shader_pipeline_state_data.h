@@ -1,12 +1,12 @@
 #pragma once
-#include "common/draw_system/d3dx12.h"
+#include "common/direct_xtk12/d3dx12.h"
 
 struct ShaderPipelineStateData
 {
 public:
     static ShaderPipelineStateData FactoryComputeShader();
     explicit ShaderPipelineStateData(
-        const std::vector < D3D12_INPUT_ELEMENT_DESC >&in_input_element_desc_array = std::vector < 
+        const std::vector < D3D12_INPUT_ELEMENT_DESC >&in_input_element_desc_array = std::vector < \
             D3D12_INPUT_ELEMENT_DESC > (),
         const D3D12_PRIMITIVE_TOPOLOGY_TYPE in_primitive_topology_type = D3D12_PRIMITIVE_TOPOLOGY_TYPE_UNDEFINED,
         const DXGI_FORMAT in_depth_stencil_view_format = DXGI_FORMAT_UNKNOWN,

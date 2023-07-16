@@ -54,19 +54,19 @@ public:
         );
 
 private:
-    virtual void OnDeviceLost() _override;
+    virtual void OnDeviceLost() override;
     virtual void OnDeviceRestored(
         ID3D12GraphicsCommandList* const in_command_list,
         ID3D12Device2* const in_device
-        ) _override;
+        ) override;
     virtual void OnResize(
         ID3D12GraphicsCommandList* const in_command_list,
         ID3D12Device2* const in_device,
         const int in_screen_width,
         const int in_screen_height
-        ) _override;
-    virtual void StartRender(ID3D12GraphicsCommandList* const in_command_list) _override;
-    virtual void EndRender(ID3D12GraphicsCommandList* const in_command_list) _override;
+        ) override;
+    virtual void StartRender(ID3D12GraphicsCommandList* const in_command_list) override;
+    virtual void EndRender(ID3D12GraphicsCommandList* const in_command_list) override;
     void TransitionResource(
         ID3D12GraphicsCommandList* const in_command_list,
         const D3D12_RESOURCE_STATES in_new_state_render_target,
@@ -79,9 +79,9 @@ private:
         DXGI_FORMAT&in_depth_format,
         int&in_render_target_view_format_count,
         const DXGI_FORMAT*&in_render_target_view_format
-        ) const _override;
-    virtual const int GetWidth() const _override;
-    virtual const int GetHeight() const _override;
+        ) const override;
+    virtual const int GetWidth() const override;
+    virtual const int GetHeight() const override;
 
 public:
     std::vector < std::shared_ptr < Resource > > _target_resource_array;

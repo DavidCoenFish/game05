@@ -39,7 +39,7 @@ namespace
             return 0;
         }
         // Scale into 0-1 range.
-        float scaled_value = value / (in_max_value - in_dead_zone_size);
+        float scaled_value = in_value / (in_max_value - in_dead_zone_size);
         return std::max(
             - 1.f,
             std::min(
@@ -55,8 +55,8 @@ namespace
         GamePad::DeadZone in_dead_zone_mode,
         float in_max_value,
         float in_dead_zone_size,
-        in_out_ float&in_result_x,
-        in_out_ float&in_result_y
+        _Out_ float& in_result_x,
+        _Out_ float& in_result_y
         ) noexcept
     {
         switch (in_dead_zone_mode)
@@ -150,9 +150,9 @@ namespace
         }
 
         Impl(Impl &&) = default;
-        Impl&_operator=(Impl &&) = default;
+        Impl& operator=(Impl &&) = default;
         Impl(Impl const&) = delete;
-        Impl&_operator=(Impl const&) = delete;
+        Impl& operator=(Impl const&) = delete;
         ~Impl()
         {
             if (_device_token)
@@ -178,7 +178,7 @@ namespace
 
         void GetState(
             int in_player,
-            in_out_ State&in_state,
+            _Out_ State&in_state,
             DeadZone in_dead_zone_mode
             )
         {
@@ -258,7 +258,7 @@ namespace
 
         void GetCapabilities(
             int in_player,
-            in_out_ Capabilities&in_caps
+            _Out_ Capabilities&in_caps
             )
         {
             if (in_player == c_most_recent) in_player = _most_recent_gamepad;
@@ -363,12 +363,12 @@ namespace
 
     private:
         static void CALLBACK OnGameInputDevice(
-            in_in_ GameInputCallbackToken,
-            in_in_ void* in_context,
-            in_in_ IGameInputDevice* in_device,
-            in_in_ uint64_t,
-            in_in_ GameInputDeviceStatus in_current_status,
-            in_in_ GameInputDeviceStatus
+            _In_ GameInputCallbackToken,
+            _In_ void* in_context,
+            _In_ IGameInputDevice* in_device,
+            _In_ uint64_t,
+            _In_ GameInputDeviceStatus in_current_status,
+            _In_ GameInputDeviceStatus
             ) noexcept
         {
             auto impl = reinterpret_cast < GamePad::Impl* > (in_context);
@@ -489,9 +489,9 @@ namespace
         }
 
         Impl(Impl &&) = default;
-        Impl&_operator=(Impl &&) = default;
+        Impl& operator=(Impl &&) = default;
         Impl(Impl const&) = delete;
-        Impl&_operator=(Impl const&) = delete;
+        Impl& operator=(Impl const&) = delete;
         ~Impl()
         {
             using namespace ABI::Windows::Gaming::Input;
@@ -522,7 +522,7 @@ namespace
 
         void GetState(
             int in_player,
-            in_out_ State&in_state,
+            _Out_ State&in_state,
             DeadZone in_dead_zone_mode
             )
         {
@@ -551,13 +551,13 @@ namespace
                         in_state._buttons._b = (reading.Buttons&GamepadButtons::GamepadButtons_B) != 0;
                         in_state._buttons._x = (reading.Buttons&GamepadButtons::GamepadButtons_X) != 0;
                         in_state._buttons._y = (reading.Buttons&GamepadButtons::GamepadButtons_Y) != 0;
-                        in_state._buttons._left_stick = (reading.Buttons&GamepadButtons::GamepadButtons_LeftThumbstick) 
+                        in_state._buttons._left_stick = (reading.Buttons&GamepadButtons::GamepadButtons_LeftThumbstick) \
                             != 0;
-                        in_state._buttons._right_stick = (reading.Buttons&GamepadButtons::GamepadButtons_RightThumbstick
+                        in_state._buttons._right_stick = (reading.Buttons&GamepadButtons::GamepadButtons_RightThumbstick\
                             ) != 0;
-                        in_state._buttons._left_shoulder = (reading.Buttons&GamepadButtons::GamepadButtons_LeftShoulder)
+                        in_state._buttons._left_shoulder = (reading.Buttons&GamepadButtons::GamepadButtons_LeftShoulder)\
                         != 0;
-                        in_state._buttons._right_shoulder = (reading.Buttons&GamepadButtons::
+                        in_state._buttons._right_shoulder = (reading.Buttons&GamepadButtons::\
                             GamepadButtons_RightShoulder) != 0;
                         in_state._buttons._back = (reading.Buttons&GamepadButtons::GamepadButtons_View) != 0;
                         in_state._buttons._start = (reading.Buttons&GamepadButtons::GamepadButtons_Menu) != 0;
@@ -787,8 +787,8 @@ namespace
                             hr = pad.As(&ctrl);
                             if (SUCCEEDED(hr) && ctrl)
                             {
-                                typedef 
-                                    _fi_typed_event_handler_2_windows_c_gaming_c_input_ci_game_controller_windows_c_system_c_user_changed_event_args
+                                typedef \
+                                    _fi_typed_event_handler_2_windows_c_gaming_c_input_ci_game_controller_windows_c_system_c_user_changed_event_args\
                                 UserHandler;
                                 ThrowIfFailed(ctrl->in_add_user_changed(
                                     Callback < UserHandler > (UserChanged) .Get(),
@@ -862,7 +862,7 @@ namespace
         EventRegistrationToken _user_change_token[MAX_PLAYER_COUNT];
         EventRegistrationToken _added_token;
         EventRegistrationToken _removed_token;
-        std::_unique_ptr < void, _handle_closer > _changed;
+        std::unique_ptr < void, std::handle_closer > _changed;
     };
     GamePad::Impl* GamePad::Impl::s_game_pad = nullptr;
 #elif defined (_XBOX_ONE)
@@ -875,15 +875,15 @@ namespace
     class GamePad::Impl
     {
     private:
-        class GamepadAddedListener : public Microsoft::WRL::RuntimeClass < Microsoft::WRL::RuntimeClassFlags < Microsoft
-            ::WRL::ClassicCom >, ABI::Windows::Foundation::IEventHandler < ABI::Windows::Xbox::Input::
+        class GamepadAddedListener : public Microsoft::WRL::RuntimeClass < Microsoft::WRL::RuntimeClassFlags < Microsoft\
+            ::WRL::ClassicCom >, ABI::Windows::Foundation::IEventHandler < ABI::Windows::Xbox::Input::\
             GamepadAddedEventArgs* >, Microsoft::WRL::FtmBase >
         {
         public:
             GamepadAddedListener(HANDLE in_event) 
                 : _event(in_event) _{} STDMETHOD(Invoke)(
-                    in_in_ IInspectable*,
-                    in_in_ ABI::Windows::Xbox::Input::IGamepadAddedEventArgs*
+                    _In_ IInspectable*,
+                    _In_ ABI::Windows::Xbox::Input::IGamepadAddedEventArgs*
                     ) _override
             {
                 SetEvent(_event);
@@ -899,15 +899,15 @@ namespace
         private:
             HANDLE _event;
         };
-        class GamepadRemovedListener : public Microsoft::WRL::RuntimeClass < Microsoft::WRL::RuntimeClassFlags < 
-            Microsoft::WRL::ClassicCom >, ABI::Windows::Foundation::IEventHandler < ABI::Windows::Xbox::Input::
+        class GamepadRemovedListener : public Microsoft::WRL::RuntimeClass < Microsoft::WRL::RuntimeClassFlags < \
+            Microsoft::WRL::ClassicCom >, ABI::Windows::Foundation::IEventHandler < ABI::Windows::Xbox::Input::\
             GamepadRemovedEventArgs* >, Microsoft::WRL::FtmBase >
         {
         public:
             GamepadRemovedListener(HANDLE in_event) 
                 : _event(in_event) _{} STDMETHOD(Invoke)(
-                    in_in_ IInspectable*,
-                    in_in_ ABI::Windows::Xbox::Input::IGamepadRemovedEventArgs*
+                    _In_ IInspectable*,
+                    _In_ ABI::Windows::Xbox::Input::IGamepadRemovedEventArgs*
                     ) _override
             {
                 SetEvent(_event);
@@ -923,14 +923,14 @@ namespace
         private:
             HANDLE _event;
         };
-        class UserPairingListener : public Microsoft::WRL::RuntimeClass < Microsoft::WRL::RuntimeClassFlags < Microsoft
-            ::WRL::ClassicCom >, ABI::Windows::Foundation::IEventHandler < ABI::Windows::Xbox::Input::
+        class UserPairingListener : public Microsoft::WRL::RuntimeClass < Microsoft::WRL::RuntimeClassFlags < Microsoft\
+            ::WRL::ClassicCom >, ABI::Windows::Foundation::IEventHandler < ABI::Windows::Xbox::Input::\
             ControllerPairingChangedEventArgs* >, Microsoft::WRL::FtmBase >
         {
         public:
             UserPairingListener() noexcept _{} STDMETHOD(Invoke)(
-                in_in_ IInspectable*,
-                in_in_ ABI::Windows::Xbox::Input::IControllerPairingChangedEventArgs*
+                _In_ IInspectable*,
+                _In_ ABI::Windows::Xbox::Input::IControllerPairingChangedEventArgs*
                 ) _override
             {
                 auto pad = GamePad::Impl::s_game_pad;
@@ -1017,7 +1017,7 @@ namespace
 
         void GetState(
             int in_player,
-            in_out_ State&in_state,
+            _Out_ State&in_state,
             DeadZone in_dead_zone_mode
             )
         {
@@ -1046,13 +1046,13 @@ namespace
                         in_state._buttons._b = (reading.Buttons&GamepadButtons::GamepadButtons_B) != 0;
                         in_state._buttons._x = (reading.Buttons&GamepadButtons::GamepadButtons_X) != 0;
                         in_state._buttons._y = (reading.Buttons&GamepadButtons::GamepadButtons_Y) != 0;
-                        in_state._buttons._left_stick = (reading.Buttons&GamepadButtons::GamepadButtons_LeftThumbstick) 
+                        in_state._buttons._left_stick = (reading.Buttons&GamepadButtons::GamepadButtons_LeftThumbstick) \
                             != 0;
-                        in_state._buttons._right_stick = (reading.Buttons&GamepadButtons::GamepadButtons_RightThumbstick
+                        in_state._buttons._right_stick = (reading.Buttons&GamepadButtons::GamepadButtons_RightThumbstick\
                             ) != 0;
-                        in_state._buttons._left_shoulder = (reading.Buttons&GamepadButtons::GamepadButtons_LeftShoulder)
+                        in_state._buttons._left_shoulder = (reading.Buttons&GamepadButtons::GamepadButtons_LeftShoulder)\
                         != 0;
-                        in_state._buttons._right_shoulder = (reading.Buttons&GamepadButtons::
+                        in_state._buttons._right_shoulder = (reading.Buttons&GamepadButtons::\
                             GamepadButtons_RightShoulder) != 0;
                         in_state._buttons._back = (reading.Buttons&GamepadButtons::GamepadButtons_View) != 0;
                         in_state._buttons._start = (reading.Buttons&GamepadButtons::GamepadButtons_Menu) != 0;
@@ -1093,7 +1093,7 @@ namespace
 
         void GetCapabilities(
             int in_player,
-            in_out_ Capabilities&in_caps
+            _Out_ Capabilities&in_caps
             )
         {
             using namespace Microsoft::WRL;
@@ -1305,7 +1305,7 @@ namespace
         EventRegistrationToken _added_token;
         EventRegistrationToken _removed_token;
         EventRegistrationToken _user_paring_token;
-        std::_unique_ptr < void, _handle_closer > _changed;
+        std::unique_ptr < void, handle_closer > _changed;
     };
     GamePad::Impl* GamePad::Impl::s_game_pad = nullptr;
 #else
@@ -1354,7 +1354,7 @@ namespace
 
         void GetState(
             int in_player,
-            in_out_ State&in_state,
+            _Out_ State&in_state,
             DeadZone in_dead_zone_mode
             )
         {
@@ -1467,7 +1467,7 @@ namespace
 
         void GetCapabilities(
             int in_player,
-            in_out_ Capabilities&in_caps
+            _Out_ Capabilities&in_caps
             )
         {
             if (in_player == c_most_recent) in_player = GetMostRecent();
@@ -1860,7 +1860,7 @@ GamePad&GamePad::Get()
 // ======================================================================================
 // ButtonStateTracker
 // ======================================================================================
-#define UPDATE_BUTTON_STATE(field) field = static_cast < ButtonState > ((!!state.buttons.field) | ((!!state.buttons.
+#define UPDATE_BUTTON_STATE(field) field = static_cast < ButtonState > ((!!state.buttons.field) | ((!!state.buttons.\
     field ^ !!lastState.buttons.field) << 1));
 void GamePadButtonStateTracker::Update(const GamePad::State&in_state) noexcept
 {
@@ -1868,15 +1868,15 @@ void GamePadButtonStateTracker::Update(const GamePad::State&in_state) noexcept
     assert((in_state._buttons.in_a && last_state._buttons.in_a) == (in_a == HELD));
     assert((!in_state._buttons.in_a && last_state._buttons.in_a) == (in_a == RELEASED));
     assert((in_state._buttons.in_a && !last_state._buttons.in_a) == (in_a == PRESSED));
-    UPDATE_BUTTON_STATE(in_b) UPDATE_BUTTON_STATE(in_x) UPDATE_BUTTON_STATE(in_y) UPDATE_BUTTON_STATE(in_left_stick) 
-        UPDATE_BUTTON_STATE(in_right_stick) UPDATE_BUTTON_STATE(in_left_shoulder) UPDATE_BUTTON_STATE(in_right_shoulder)
-    UPDATE_BUTTON_STATE(in_back) UPDATE_BUTTON_STATE(in_start) dpad_up = static_cast < ButtonState > ((!!in_state._dpad.
+    UPDATE_BUTTON_STATE(in_b) UPDATE_BUTTON_STATE(in_x) UPDATE_BUTTON_STATE(in_y) UPDATE_BUTTON_STATE(in_left_stick) \
+        UPDATE_BUTTON_STATE(in_right_stick) UPDATE_BUTTON_STATE(in_left_shoulder) UPDATE_BUTTON_STATE(in_right_shoulder)\
+    UPDATE_BUTTON_STATE(in_back) UPDATE_BUTTON_STATE(in_start) dpad_up = static_cast < ButtonState > ((!!in_state._dpad.\
         _up) | ((!!in_state._dpad._up ^ !!last_state._dpad._up) << 1));
-    dpad_down = static_cast < ButtonState > ((!!in_state._dpad._down) | ((!!in_state._dpad._down ^ !!last_state._dpad.
+    dpad_down = static_cast < ButtonState > ((!!in_state._dpad._down) | ((!!in_state._dpad._down ^ !!last_state._dpad.\
         _down) << 1));
-    dpad_left = static_cast < ButtonState > ((!!in_state._dpad._left) | ((!!in_state._dpad._left ^ !!last_state._dpad.
+    dpad_left = static_cast < ButtonState > ((!!in_state._dpad._left) | ((!!in_state._dpad._left ^ !!last_state._dpad.\
         _left) << 1));
-    dpad_right = static_cast < ButtonState > ((!!in_state._dpad._right) | ((!!in_state._dpad._right ^ !!last_state._dpad
+    dpad_right = static_cast < ButtonState > ((!!in_state._dpad._right) | ((!!in_state._dpad._right ^ !!last_state._dpad\
         ._right) << 1));
     assert((!in_state._dpad._up && !last_state._dpad._up) == (dpad_up == UP));
     assert((in_state._dpad._up && last_state._dpad._up) == (dpad_up == HELD));
@@ -1884,34 +1884,34 @@ void GamePadButtonStateTracker::Update(const GamePad::State&in_state) noexcept
     assert((in_state._dpad._up && !last_state._dpad._up) == (dpad_up == PRESSED));
     // Handle 'threshold' tests which emulate buttons
     bool threshold = in_state.IsLeftThumbStickUp();
-    left_stick_up = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsLeftThumbStickUp()) << 1
+    left_stick_up = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsLeftThumbStickUp()) << 1\
         ));
     threshold = in_state.IsLeftThumbStickDown();
-    left_stick_down = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsLeftThumbStickDown()) 
+    left_stick_down = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsLeftThumbStickDown()) \
         << 1));
     threshold = in_state.IsLeftThumbStickLeft();
-    left_stick_left = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsLeftThumbStickLeft()) 
+    left_stick_left = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsLeftThumbStickLeft()) \
         << 1));
     threshold = in_state.IsLeftThumbStickRight();
-    left_stick_right = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsLeftThumbStickRight()
+    left_stick_right = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsLeftThumbStickRight()\
         ) << 1));
     threshold = in_state.IsRightThumbStickUp();
-    right_stick_up = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsRightThumbStickUp()) <<
+    right_stick_up = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsRightThumbStickUp()) <<\
     1));
     threshold = in_state.IsRightThumbStickDown();
-    right_stick_down = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsRightThumbStickDown()
+    right_stick_down = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsRightThumbStickDown()\
         ) << 1));
     threshold = in_state.IsRightThumbStickLeft();
-    right_stick_left = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsRightThumbStickLeft()
+    right_stick_left = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsRightThumbStickLeft()\
         ) << 1));
     threshold = in_state.IsRightThumbStickRight();
-    right_stick_right = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsRightThumbStickRight
+    right_stick_right = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsRightThumbStickRight\
         ()) << 1));
     threshold = in_state.IsLeftTriggerPressed();
-    left_trigger = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsLeftTriggerPressed()) << 
+    left_trigger = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsLeftTriggerPressed()) << \
         1));
     threshold = in_state.IsRightTriggerPressed();
-    right_trigger = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsRightTriggerPressed()) 
+    right_trigger = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsRightTriggerPressed()) \
         << 1));
     last_state = in_state;
 }

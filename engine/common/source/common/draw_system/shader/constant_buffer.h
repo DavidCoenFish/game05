@@ -27,7 +27,7 @@ public:
     // Void SetRootParamIndex( const int index ) { m_rootParamIndex = index; }
     const D3D12_SHADER_VISIBILITY GetVisiblity() const
     {
-        return visiblity;
+        return _visiblity;
     }
 
     const int GetNum32BitValues() const;
@@ -36,7 +36,7 @@ private:
     static const size_t MAX_BACK_BUFFER_COUNT = 3;
     const int _frame_count;
     const size_t _constant_buffer_size;
-    std::_shared_ptr < HeapWrapperItem > _heap_wrapper_item;
+    std::shared_ptr < HeapWrapperItem > _heap_wrapper_item;
     // Int m_rootParamIndex;
     Microsoft::WRL::ComPtr < ID3D12Resource > _constant_buffer_upload_heap[MAX_BACK_BUFFER_COUNT];
     UINT8* _gpu_address[MAX_BACK_BUFFER_COUNT];

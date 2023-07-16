@@ -12,23 +12,23 @@ public:
         );
     const D3D12_SHADER_VISIBILITY GetVisiblity() const
     {
-        return visiblity;
+        return _visiblity;
     }
 
     const size_t GetBufferSize() const
     {
-        return data.size();
+        return _data.size();
     }
 
     const void* const GetBufferData() const
     {
-        return data.data();
+        return _data.data();
     }
 
     template < class TYPE > TYPE&GetBufferDataAsType()
     {
         assert(sizeof (TYPE) == GetBufferSize());
-        TYPE* data =&data[0];
+        TYPE* data =&_data[0];
         return* data;
     }
     // Public for json reflection
@@ -36,5 +36,5 @@ public:
         : D3D12_SHADER_VISIBILITY _visiblity;
 
 public:
-    std::_vector < uint8_t > _data;
+    std::vector < uint8_t > _data;
 };

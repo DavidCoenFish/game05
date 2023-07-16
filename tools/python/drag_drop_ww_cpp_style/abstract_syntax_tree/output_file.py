@@ -50,7 +50,9 @@ class OutputFile:
             self._current_line = (self._tab * self._depth)
             token_copy = token_copy.strip()
 
-        if self._max_line_length < len(self._current_line) + len(token_copy):
+        if self._max_line_length < len(token_copy) and (self._current_line == "" or self._current_line.isspace()):
+            self._current_line = (self._tab * self._depth) + token_copy.strip()
+        elif self._max_line_length < len(self._current_line) + len(token_copy):
             self._current_line += "\\" # add a line continue
             self.NewLine()
             self._current_line = (self._tab * (self._depth + 1)) + token_copy.strip()

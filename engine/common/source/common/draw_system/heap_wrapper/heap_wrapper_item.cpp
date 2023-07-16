@@ -25,20 +25,20 @@ HeapWrapperItem::HeapWrapperItem(
     const int in_index,
     const int in_length
     ) 
-    : heap_wrapper(in_heap_wrapper)
-    , index(in_index)
-    , length(in_length)
+    : _heap_wrapper(in_heap_wrapper)
+    , _index(in_index)
+    , _length(in_length)
 {
     return;
 }
 
 HeapWrapperItem::~HeapWrapperItem()
 {
-    if (heap_wrapper)
+    if (_heap_wrapper)
     {
-        heap_wrapper->FreeIndex(
-            in_index,
-            in_length
+        _heap_wrapper->FreeIndex(
+            _index,
+            _length
             );
     }
     return;
@@ -46,19 +46,19 @@ HeapWrapperItem::~HeapWrapperItem()
 
 D3D12_CPU_DESCRIPTOR_HANDLE HeapWrapperItem::GetCPUHandle()
 {
-    if (heap_wrapper)
+    if (_heap_wrapper)
     {
-        return heap_wrapper->GetCPUHandle(in_index);
+        return _heap_wrapper->GetCPUHandle(_index);
     }
     return D3D12_CPU_DESCRIPTOR_HANDLE();
 }
 
 D3D12_CPU_DESCRIPTOR_HANDLE HeapWrapperItem::GetCPUHandleFrame(const int in_frame_index)
 {
-    if (heap_wrapper)
+    if (_heap_wrapper)
     {
-        return heap_wrapper->GetCPUHandleFrame(
-            in_index,
+        return _heap_wrapper->GetCPUHandleFrame(
+            _index,
             in_frame_index
             );
     }
@@ -67,18 +67,18 @@ D3D12_CPU_DESCRIPTOR_HANDLE HeapWrapperItem::GetCPUHandleFrame(const int in_fram
 
 D3D12_GPU_DESCRIPTOR_HANDLE HeapWrapperItem::GetGPUHandle()
 {
-    if (heap_wrapper)
+    if (_heap_wrapper)
     {
-        return heap_wrapper->GetGPUHandle(in_index);
+        return _heap_wrapper->GetGPUHandle(_index);
     }
     return D3D12_GPU_DESCRIPTOR_HANDLE();
 }
 
 ID3D12DescriptorHeap* const HeapWrapperItem::GetHeap()
 {
-    if (heap_wrapper)
+    if (_heap_wrapper)
     {
-        return heap_wrapper->GetHeap(in_index);
+        return _heap_wrapper->GetHeap(_index);
     }
     return nullptr;
 }

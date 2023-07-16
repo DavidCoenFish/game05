@@ -2,7 +2,7 @@
 class HeapWrapperPage
 {
 public:
-    static std::_shared_ptr < HeapWrapperPage > Factory(
+    static std::shared_ptr < HeapWrapperPage > Factory(
         const int in_frame_count,
         const D3D12_DESCRIPTOR_HEAP_DESC&in_desc,
         ID3D12Device2* const in_device
@@ -42,6 +42,6 @@ private:
     D3D12_CPU_DESCRIPTOR_HANDLE _cpu_heap_start[MAX_BACK_BUFFER_COUNT];
     D3D12_GPU_DESCRIPTOR_HANDLE _gpu_heap_start[MAX_BACK_BUFFER_COUNT];
     int _index_high_water;
-    std::_vector < int > _free_index;
+    std::vector < int > _free_index;
     int _num_descriptors;
 };

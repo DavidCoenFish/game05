@@ -18,13 +18,13 @@ public:
         const std::shared_ptr < std::vector < uint8_t > >&in_vertex_shader_data,
         const std::shared_ptr < std::vector < uint8_t > >&in_geometry_shader_data,
         const std::shared_ptr < std::vector < uint8_t > >&in_pixel_shader_data,
-        const std::vector < std::shared_ptr < ShaderResourceInfo > >&in_array_shader_resource_info = std::vector < std::
+        const std::vector < std::shared_ptr < ShaderResourceInfo > >&in_array_shader_resource_info = std::vector < std::\
             shared_ptr < ShaderResourceInfo > > (),
-        const std::vector < std::shared_ptr < ConstantBufferInfo > >&in_array_shader_constants_info = std::vector < std
+        const std::vector < std::shared_ptr < ConstantBufferInfo > >&in_array_shader_constants_info = std::vector < std\
             ::shared_ptr < ConstantBufferInfo > > (),
-        const std::shared_ptr < std::vector < uint8_t > >&in_compute_shader_data = std::shared_ptr < std::vector < 
+        const std::shared_ptr < std::vector < uint8_t > >&in_compute_shader_data = std::shared_ptr < std::vector < \
             uint8_t > > (),
-        const std::vector < std::shared_ptr < UnorderedAccessInfo > >&in_array_unordered_access_info = std::vector < std
+        const std::vector < std::shared_ptr < UnorderedAccessInfo > >&in_array_unordered_access_info = std::vector < std\
             ::shared_ptr < UnorderedAccessInfo > > ()
         );
     virtual ~Shader();
@@ -47,9 +47,9 @@ public:
         );
     template < typename CONSTANTS > CONSTANTS&GetConstant(const int in_index)
     {
-        if ((0 <= in_index) && (in_index < array_shader_constants_info.size()))
+        if ((0 <= in_index) && (in_index < _array_shader_constants_info.size()))
         {
-            auto&shader_constant_info =* array_shader_constants_info[in_index];
+            auto&shader_constant_info =* _array_shader_constants_info[in_index];
             assert(sizeof (CONSTANTS) == shader_constant_info.GetBufferSize());
             const void* const data = shader_constant_info.GetBufferData();
             return (* ((CONSTANTS*) data));
@@ -60,23 +60,23 @@ public:
 
 
 private:
-    virtual void OnDeviceLost() _override;
+    virtual void OnDeviceLost() override;
     virtual void OnDeviceRestored(
         ID3D12GraphicsCommandList* const,
         ID3D12Device2* const in_device
-        ) _override;
+        ) override;
 
 private:
     ShaderPipelineStateData _pipeline_state_data;
-    std::_shared_ptr < std::_vector < uint8_t > > _vertex_shader_data;
-    std::_shared_ptr < std::_vector < uint8_t > > _geometry_shader_data;
-    std::_shared_ptr < std::_vector < uint8_t > > _pixel_shader_data;
-    std::_vector < std::_shared_ptr < ShaderResourceInfo > > _array_shader_resource_info;
-    std::_vector < std::_shared_ptr < ConstantBufferInfo > > _array_shader_constants_info;
-    std::_shared_ptr < std::_vector < uint8_t > > _compute_shader_data;
-    std::_vector < std::_shared_ptr < UnorderedAccessInfo > > _array_unordered_access_info;
-    std::_vector < std::_shared_ptr < ConstantBuffer > > _array_constant_buffer;
+    std::shared_ptr < std::vector < uint8_t > > _vertex_shader_data;
+    std::shared_ptr < std::vector < uint8_t > > _geometry_shader_data;
+    std::shared_ptr < std::vector < uint8_t > > _pixel_shader_data;
+    std::vector < std::shared_ptr < ShaderResourceInfo > > _array_shader_resource_info;
+    std::vector < std::shared_ptr < ConstantBufferInfo > > _array_shader_constants_info;
+    std::shared_ptr < std::vector < uint8_t > > _compute_shader_data;
+    std::vector < std::shared_ptr < UnorderedAccessInfo > > _array_unordered_access_info;
+    std::vector < std::shared_ptr < ConstantBuffer > > _array_constant_buffer;
     Microsoft::WRL::ComPtr < ID3D12RootSignature > _root_signature;
     Microsoft::WRL::ComPtr < ID3D12PipelineState > _pipeline_state;
-    std::_string _debug_name;
+    std::string _debug_name;
 };

@@ -1,6 +1,6 @@
 #include "common/common_pch.h"
 
-#include "common/draw_system/d3dx12.h"
+#include "common/direct_xtk12/d3dx12.h"
 #include "common/draw_system/heap_wrapper/heap_wrapper_page.h"
 
 std::shared_ptr < HeapWrapperPage > HeapWrapperPage::Factory(
@@ -27,26 +27,26 @@ HeapWrapperPage::HeapWrapperPage(
     // Const D3D12_GPU_DESCRIPTOR_HANDLE& GPUHeapStart
 
     ) 
-    : frame_count(in_frame_count)
-    , descriptor_heap()// PDescriptorHeap)
+    : _frame_count(in_frame_count)
+    , _descriptor_heap()// PDescriptorHeap)
 
-    , handle_increment_size(0)
-    , cpu_heap_start()// CPUHeapStart)
+    , _handle_increment_size(0)
+    , _cpu_heap_start()// CPUHeapStart)
 
-    , gpu_heap_start()// GPUHeapStart)
+    , _gpu_heap_start()// GPUHeapStart)
 
-    , index_high_water(0)
-    , free_index()
-    , num_descriptors(in_num_descriptors)
+    , _index_high_water(0)
+    , _free_index()
+    , _num_descriptors(in_num_descriptors)
 {
     return;
 }
 
 void HeapWrapperPage::OnDeviceLost()
 {
-    for (int index = 0; index < frame_count;++ index)
+    for (int index = 0; index < _frame_count;++ index)
     {
-        descriptor_heap[index].Reset();
+        _descriptor_heap[index].Reset();
     }
 }
 
@@ -59,34 +59,34 @@ void HeapWrapperPage::OnDeviceRestored(
     {
         return;
     }
-    for (int index = 0; index < frame_count;++ index)
+    for (int index = 0; index < _frame_count;++ index)
     {
-        if (nullptr != descriptor_heap[index])
+        if (nullptr != _descriptor_heap[index])
         {
             return;
         }
         DX::ThrowIfFailed(in_device->CreateDescriptorHeap(
             &in_desc,
-            IID_PPV_ARGS(descriptor_heap[index].ReleaseAndGetAddressOf())
+            IID_PPV_ARGS(_descriptor_heap[index].ReleaseAndGetAddressOf())
             ));
-        cpu_heap_start[index] = descriptor_heap[index]->GetCPUDescriptorHandleForHeapStart();
-        gpu_heap_start[index] = descriptor_heap[index]->GetGPUDescriptorHandleForHeapStart();
+        _cpu_heap_start[index] = _descriptor_heap[index]->GetCPUDescriptorHandleForHeapStart();
+        _gpu_heap_start[index] = _descriptor_heap[index]->GetGPUDescriptorHandleForHeapStart();
     }
-    handle_increment_size = in_device->GetDescriptorHandleIncrementSize(in_desc.Type);
+    _handle_increment_size = in_device->GetDescriptorHandleIncrementSize(in_desc.Type);
 }
 
 const int HeapWrapperPage::GetFreeIndex(const int in_length)
 {
-    if ((1 == in_length) && (0 < free_index.size()))
+    if ((1 == in_length) && (0 < _free_index.size()))
     {
-        int index = free_index.back();
-        free_index.pop_back();
+        int index = _free_index.back();
+        _free_index.pop_back();
         return index;
     }
-    if (index_high_water + in_length <= num_descriptors)
+    if (_index_high_water + in_length <= _num_descriptors)
     {
-        int result = index_high_water;
-        index_high_water += in_length;
+        int result = _index_high_water;
+        _index_high_water += in_length;
         return result;
     }
     return - 1;
@@ -99,12 +99,12 @@ void HeapWrapperPage::FreeIndex(
 {
     for (int index = 0; index < in_length;++ index)
     {
-        free_index.push_back(in_trace + index);
+        _free_index.push_back(in_trace + index);
     }
-    if (num_descriptors == free_index.size())
+    if (_num_descriptors == _free_index.size())
     {
-        index_high_water = 0;
-        free_index.clear();
+        _index_high_water = 0;
+        _free_index.clear();
     }
     return;
 }
@@ -114,11 +114,11 @@ D3D12_CPU_DESCRIPTOR_HANDLE HeapWrapperPage::GetCPUHandle(
     const int in_frame_index
     )
 {
-    const int local_frame_index = in_frame_index % frame_count;
+    const int local_frame_index = in_frame_index % _frame_count;
     return CD3DX12_CPU_DESCRIPTOR_HANDLE(
-        in_cpu_heap_start[local_frame_index],
+        _cpu_heap_start[local_frame_index],
         in_index,
-        in_handle_increment_size
+        _handle_increment_size
         );
 }
 
@@ -127,17 +127,17 @@ D3D12_GPU_DESCRIPTOR_HANDLE HeapWrapperPage::GetGPUHandle(
     const int in_frame_index
     )
 {
-    const int local_frame_index = in_frame_index % frame_count;
+    const int local_frame_index = in_frame_index % _frame_count;
     return CD3DX12_GPU_DESCRIPTOR_HANDLE(
-        in_gpu_heap_start[local_frame_index],
+        _gpu_heap_start[local_frame_index],
         in_index,
-        in_handle_increment_size
+        _handle_increment_size
         );
 }
 
 ID3D12DescriptorHeap* const HeapWrapperPage::GetHeap(const int in_frame_index)
 {
-    const int local_frame_index = in_frame_index % frame_count;
-    return descriptor_heap[local_frame_index].Get();
+    const int local_frame_index = in_frame_index % _frame_count;
+    return _descriptor_heap[local_frame_index].Get();
 }
 

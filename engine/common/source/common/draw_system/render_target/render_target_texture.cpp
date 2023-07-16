@@ -1,6 +1,6 @@
 #include "common/common_pch.h"
 
-#include "common/draw_system/d3dx12.h"
+#include "common/direct_xtk12/d3dx12.h"
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/heap_wrapper/heap_wrapper_item.h"
 #include "common/draw_system/render_target/render_target_texture.h"
@@ -14,15 +14,13 @@ RenderTargetTexture::Resource::Resource(
     const bool in_clear_color,
     const bool in_clear_depth,
     const bool in_clear_stencil
-    ) 
-    : format(format)
-    , render_target(in_render_target)
-    , render_target_view_descriptor(in_render_target_view_descriptor)
-    , shader_resource_view_descriptor(in_shader_resource_view_descriptor)
-    , clear_value{ in_clear_value}
-    , clear_color(in_clear_color)
-    , clear_depth(in_clear_depth)
-    , clear_stencil(in_clear_stencil)
+    ) : _format(format), _render_target(in_render_target), _render_target_view_descriptor(\
+    in_render_target_view_descriptor), _shader_resource_view_descriptor(in_shader_resource_view_descriptor), \
+    _clear_value{ in_clear_value}
+,
+_clear_color(in_clear_color)
+, _clear_depth(in_clear_depth)
+, _clear_stencil(in_clear_stencil)
 {
     return;
 }
@@ -34,30 +32,20 @@ RenderTargetTexture::RenderTargetTexture(
     const int in_width,
     const int in_height,
     const bool in_resize_with_screen
-    ) 
-    : IRenderTarget()
-    , IResource(in_draw_system)
-    , width(in_width)
-    , height(in_height)
-    , screen_viewport{ 0.0f
-    , 0.0f
-    , static_cast < float > (in_width)
-    , static_cast < float > (in_height)
-    , D3D12_MIN_DEPTH
-    , D3D12_MAX_DEPTH}
-    , scissor_rect{ 0
-    , 0
-    , in_width
-    , in_height}
-    , current_state_render_target(D3D12_RESOURCE_STATE_COMMON)
-    , current_state_depth_resource(D3D12_RESOURCE_STATE_COMMON)
-    , target_format_array()
-    , resize_with_screen(in_resize_with_screen)
+    ) : IRenderTarget(), IResource(in_draw_system), _width(in_width), _height(in_height), _screen_viewport{ 0.0f, 0.0f, \
+    static_cast < float > (in_width), static_cast < float > (in_height), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH}
+,
+_scissor_rect{ 0, 0, in_width, in_height}
+,
+_current_state_render_target(D3D12_RESOURCE_STATE_COMMON)
+, _current_state_depth_resource(D3D12_RESOURCE_STATE_COMMON)
+, _target_format_array()
+, _resize_with_screen(in_resize_with_screen)
 {
-    for (const auto&iter : in_target_format_data_array)
+    for (const auto& iter : in_target_format_data_array)
     {
         D3D12_CLEAR_VALUE clear_value = iter.MakeClearValue();
-        target_resource_array.push_back(std::make_shared < Resource > (
+        _target_resource_array.push_back(std::make_shared < Resource > (
             clear_value,
             iter._format,
             nullptr,
@@ -65,12 +53,12 @@ RenderTargetTexture::RenderTargetTexture(
             in_draw_system->MakeHeapWrapperCbvSrvUav(),
             iter._clear_on_set
             ));
-        target_format_array.push_back(iter._format);
+        _target_format_array.push_back(iter._format);
     }
     if (in_target_depth_data._format != DXGI_FORMAT_UNKNOWN)
     {
         D3D12_CLEAR_VALUE clear_value = in_target_depth_data.MakeClearValue();
-        depth_resource = std::make_shared < Resource > (
+        _depth_resource = std::make_shared < Resource > (
             clear_value,
             in_target_depth_data._format,
             nullptr,
@@ -91,27 +79,27 @@ RenderTargetTexture::~RenderTargetTexture()
 
 std::shared_ptr < HeapWrapperItem > RenderTargetTexture::GetShaderResourceHeapWrapperItem(const int in_index) const
 {
-    if ((0 <= in_index) && (in_index < (int) target_resource_array.size()))
+    if ((0 <= in_index) && (in_index < (int) _target_resource_array.size()))
     {
-        return target_resource_array[in_index]->_shader_resource_view_descriptor;
+        return _target_resource_array[in_index]->_shader_resource_view_descriptor;
     }
     return nullptr;
 }
 
 std::shared_ptr < HeapWrapperItem > RenderTargetTexture::GetDepthResourceHeapWrapperItem() const
 {
-    if (depth_resource)
+    if (_depth_resource)
     {
-        return depth_resource->_render_target_view_descriptor;
+        return _depth_resource->_render_target_view_descriptor;
     }
     return nullptr;
 }
 
 std::shared_ptr < HeapWrapperItem > RenderTargetTexture::GetDepthShaderResourceHeapWrapperItem() const
 {
-    if (depth_resource)
+    if (_depth_resource)
     {
-        return depth_resource->_shader_resource_view_descriptor;
+        return _depth_resource->_shader_resource_view_descriptor;
     }
     return nullptr;
 }
@@ -123,17 +111,17 @@ void RenderTargetTexture::Resize(
     const int in_height
     )
 {
-    if ((width == in_width) && (height == in_height))
+    if ((_width == in_width) && (_height == in_height))
     {
         return;
     }
     OnDeviceLost();
-    width = in_width;
-    height = in_height;
-    scissor_rect._right = in_width;
-    scissor_rect._bottom = in_height;
-    screen_viewport.Width = (float) in_width;
-    screen_viewport.Height = (float) in_height;
+    _width = in_width;
+    _height = in_height;
+    _scissor_rect.right = in_width;
+    _scissor_rect.bottom = in_height;
+    _screen_viewport.Width = (float) in_width;
+    _screen_viewport.Height = (float) in_height;
     OnDeviceRestored(
         in_command_list,
         in_device
@@ -142,23 +130,23 @@ void RenderTargetTexture::Resize(
 
 const int RenderTargetTexture::GetWidth() const
 {
-    return width;
+    return _width;
 }
 
 const int RenderTargetTexture::GetHeight() const
 {
-    return height;
+    return _height;
 }
 
 void RenderTargetTexture::OnDeviceLost()
 {
-    for (auto iter : target_resource_array)
+    for (auto iter : _target_resource_array)
     {
         iter->_render_target.Reset();
     }
-    if (nullptr != depth_resource)
+    if (nullptr != _depth_resource)
     {
-        depth_resource->_render_target.Reset();
+        _depth_resource->_render_target.Reset();
     }
 }
 
@@ -169,15 +157,15 @@ void RenderTargetTexture::OnDeviceRestored(
 {
     // So, is this a good idea, to allow Resize(), call OnDeviceLost
     // OnDeviceLost();
-    array_render_target_descriptors.clear();
-    current_state_render_target = D3D12_RESOURCE_STATE_RENDER_TARGET;
+    _array_render_target_descriptors.clear();
+    _current_state_render_target = D3D12_RESOURCE_STATE_RENDER_TARGET;
     auto heap_properties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
-    for (auto iter : target_resource_array)
+    for (auto iter : _target_resource_array)
     {
         D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(
             iter->_format,
-            static_cast < UINT64 > (width),
-            static_cast < UINT > (height),
+            static_cast < UINT64 > (_width),
+            static_cast < UINT > (_height),
             1,
             1,
             1,
@@ -188,19 +176,19 @@ void RenderTargetTexture::OnDeviceRestored(
             &heap_properties,
             D3D12_HEAP_FLAG_ALLOW_ALL_BUFFERS_AND_TEXTURES,
             &desc,
-            current_state_render_target,
+            _current_state_render_target,
             &iter->_clear_value,
             IID_PPV_ARGS(iter->_render_target.ReleaseAndGetAddressOf())
             ));
         iter->_render_target->SetName(L"RenderTargetResource");
         auto render_target_view_descriptor = iter->_render_target_view_descriptor->GetCPUHandle();
-        array_render_target_descriptors.push_back(render_target_view_descriptor);
+        _array_render_target_descriptors.push_back(render_target_view_descriptor);
         in_device->CreateRenderTargetView(
             iter->_render_target.Get(),
             nullptr,
             render_target_view_descriptor
             );
-        const int frame_count = draw_system->GetBackBufferCount();
+        const int frame_count = _draw_system->GetBackBufferCount();
         for (int index = 0; index < frame_count;++ index)
         {
             in_device->CreateShaderResourceView(
@@ -210,13 +198,13 @@ void RenderTargetTexture::OnDeviceRestored(
                 );
         }
     }
-    current_state_depth_resource = D3D12_RESOURCE_STATE_DEPTH_WRITE;
-    if (nullptr != depth_resource)
+    _current_state_depth_resource = D3D12_RESOURCE_STATE_DEPTH_WRITE;
+    if (nullptr != _depth_resource)
     {
         D3D12_RESOURCE_DESC depth_stencil_desc = CD3DX12_RESOURCE_DESC::Tex2D(
-            depth_resource->_format,
-            width,
-            height,
+            _depth_resource->_format,
+            _width,
+            _height,
             1,
             // This depth stencil view has only one texture.
             1,
@@ -229,36 +217,36 @@ void RenderTargetTexture::OnDeviceRestored(
             &heap_properties,
             D3D12_HEAP_FLAG_NONE,
             &depth_stencil_desc,
-            current_state_depth_resource,
-            &depth_resource->_clear_value,
-            IID_PPV_ARGS(depth_resource->_render_target.ReleaseAndGetAddressOf())
+            _current_state_depth_resource,
+            &_depth_resource->_clear_value,
+            IID_PPV_ARGS(_depth_resource->_render_target.ReleaseAndGetAddressOf())
             ));
-        depth_resource->_render_target->SetName(L"RenderTarget Depth Stencil");
+        _depth_resource->_render_target->SetName(L"RenderTarget Depth Stencil");
 
         {
             D3D12_DEPTH_STENCIL_VIEW_DESC dsv_desc = {};
-            dsv_desc.Format = depth_resource->_format;
+            dsv_desc.Format = _depth_resource->_format;
             dsv_desc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
             in_device->CreateDepthStencilView(
-                depth_resource->_render_target.Get(),
+                _depth_resource->_render_target.Get(),
                 &dsv_desc,
-                depth_resource->_render_target_view_descriptor->GetCPUHandle()
+                _depth_resource->_render_target_view_descriptor->GetCPUHandle()
                 );
         }
-        if (nullptr != depth_resource->_shader_resource_view_descriptor)
+        if (nullptr != _depth_resource->_shader_resource_view_descriptor)
         {
             D3D12_SHADER_RESOURCE_VIEW_DESC srv_desc = {};
             srv_desc.Format = DXGI_FORMAT_R32_FLOAT;
             srv_desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
             srv_desc.Texture2D.MipLevels = 1;
             srv_desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-            const int frame_count = draw_system->GetBackBufferCount();
+            const int frame_count = _draw_system->GetBackBufferCount();
             for (int index = 0; index < frame_count;++ index)
             {
                 in_device->CreateShaderResourceView(
-                    depth_resource->_render_target.Get(),
+                    _depth_resource->_render_target.Get(),
                     &srv_desc,
-                    depth_resource->_shader_resource_view_descriptor->GetCPUHandleFrame(index)
+                    _depth_resource->_shader_resource_view_descriptor->GetCPUHandleFrame(index)
                     );
             }
         }
@@ -273,7 +261,7 @@ void RenderTargetTexture::OnResize(
     const int in_screen_height
     )
 {
-    if (false == resize_with_screen)
+    if (false == _resize_with_screen)
     {
         return;
     }
@@ -295,23 +283,23 @@ void RenderTargetTexture::StartRender(ID3D12GraphicsCommandList* const in_comman
         );
     in_command_list->RSSetViewports(
         1,
-        &in_screen_viewport
+        &_screen_viewport
         );
     in_command_list->RSSetScissorRects(
         1,
-        &in_scissor_rect
+        &_scissor_rect
         );
     UINT NumRenderTargetDescriptors = 0;
     const D3D12_CPU_DESCRIPTOR_HANDLE* render_target_descriptors = nullptr;
     const D3D12_CPU_DESCRIPTOR_HANDLE* depth_stencil_descriptor = nullptr;
-    if (0 < array_render_target_descriptors.size())
+    if (0 < _array_render_target_descriptors.size())
     {
-        NumRenderTargetDescriptors = (UINT) array_render_target_descriptors.size();
-        render_target_descriptors = array_render_target_descriptors.data();
+        NumRenderTargetDescriptors = (UINT) _array_render_target_descriptors.size();
+        render_target_descriptors = _array_render_target_descriptors.data();
     }
-    D3D12_CPU_DESCRIPTOR_HANDLE dsv_descriptor = depth_resource ? depth_resource->_render_target_view_descriptor->
+    D3D12_CPU_DESCRIPTOR_HANDLE dsv_descriptor = _depth_resource ? _depth_resource->_render_target_view_descriptor->\
         GetCPUHandle() : D3D12_CPU_DESCRIPTOR_HANDLE();
-    if (depth_resource)
+    if (_depth_resource)
     {
         depth_stencil_descriptor =&dsv_descriptor;
     }
@@ -328,7 +316,7 @@ void RenderTargetTexture::StartRender(ID3D12GraphicsCommandList* const in_comman
             PIX_COLOR_DEFAULT,
             L"RenderTargetTexture::StartRender::Clear"
             );
-        for (const auto&iter : target_resource_array)
+        for (const auto&iter : _target_resource_array)
         {
             if (false == iter->_clear_color)
             {
@@ -342,16 +330,16 @@ void RenderTargetTexture::StartRender(ID3D12GraphicsCommandList* const in_comman
                 nullptr
                 );
         }
-        if (depth_resource && (depth_resource->_clear_depth || depth_resource->_clear_stencil))
+        if (_depth_resource && (_depth_resource->_clear_depth || _depth_resource->_clear_stencil))
         {
-            const D3D12_CLEAR_FLAGS flag = (D3D12_CLEAR_FLAGS)((depth_resource->_clear_depth ? D3D12_CLEAR_FLAG_DEPTH : 
-                0) | (depth_resource->_clear_stencil ? D3D12_CLEAR_FLAG_STENCIL : 0));
-            auto descriptor = depth_resource->_render_target_view_descriptor->GetCPUHandle();
+            const D3D12_CLEAR_FLAGS flag = (D3D12_CLEAR_FLAGS)((_depth_resource->_clear_depth ? D3D12_CLEAR_FLAG_DEPTH :\
+            0) | (_depth_resource->_clear_stencil ? D3D12_CLEAR_FLAG_STENCIL : 0));
+            auto descriptor = _depth_resource->_render_target_view_descriptor->GetCPUHandle();
             in_command_list->ClearDepthStencilView(
                 descriptor,
                 flag,
-                depth_resource->_clear_value.DepthStencil.Depth,
-                depth_resource->_clear_value.DepthStencil.Stencil,
+                _depth_resource->_clear_value.DepthStencil.Depth,
+                _depth_resource->_clear_value.DepthStencil.Stencil,
                 0,
                 nullptr
                 );
@@ -377,13 +365,13 @@ void RenderTargetTexture::TransitionResource(
     const D3D12_RESOURCE_STATES in_new_state_depth_resource
     )
 {
-    if (current_state_render_target != in_new_state_render_target)
+    if (_current_state_render_target != in_new_state_render_target)
     {
-        for (const auto&iter : target_resource_array)
+        for (const auto&iter : _target_resource_array)
         {
             D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
                 iter->_render_target.Get(),
-                current_state_render_target,
+                _current_state_render_target,
                 in_new_state_render_target
                 );
             in_command_list->ResourceBarrier(
@@ -391,15 +379,15 @@ void RenderTargetTexture::TransitionResource(
                 &barrier
                 );
         }
-        current_state_render_target = in_new_state_render_target;
+        _current_state_render_target = in_new_state_render_target;
     }
-    if (current_state_depth_resource != in_new_state_depth_resource)
+    if (_current_state_depth_resource != in_new_state_depth_resource)
     {
-        if (depth_resource)
+        if (_depth_resource)
         {
             D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-                depth_resource->_render_target.Get(),
-                current_state_depth_resource,
+                _depth_resource->_render_target.Get(),
+                _current_state_depth_resource,
                 in_new_state_depth_resource
                 );
             in_command_list->ResourceBarrier(
@@ -407,19 +395,19 @@ void RenderTargetTexture::TransitionResource(
                 &barrier
                 );
         }
-        current_state_depth_resource = in_new_state_depth_resource;
+        _current_state_depth_resource = in_new_state_depth_resource;
     }
 }
 
 void RenderTargetTexture::GetFormatData(
-    DXGI_FORMAT&in_depth_format,
-    int&in_render_target_view_format_count,
-    const DXGI_FORMAT*&in_render_target_view_format
+    DXGI_FORMAT& in_depth_format,
+    int& in_render_target_view_format_count,
+    const DXGI_FORMAT*& in_render_target_view_format
     ) const
 {
-    in_depth_format = depth_resource ? depth_resource->_format : DXGI_FORMAT_UNKNOWN;
-    in_render_target_view_format_count = (int) target_format_array.size();
-    in_render_target_view_format = (DXGI_FORMAT*)(target_format_array.in_data());
+    in_depth_format = _depth_resource ? _depth_resource->_format : DXGI_FORMAT_UNKNOWN;
+    in_render_target_view_format_count = (int) _target_format_array.size();
+    in_render_target_view_format = (DXGI_FORMAT*)(_target_format_array.data());
     return;
 }
 

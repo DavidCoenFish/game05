@@ -12,7 +12,7 @@ public:
     D3D12_CLEAR_VALUE MakeClearValue() const;
 
 public:
-    DXGI_FORMAT format;
+    DXGI_FORMAT _format;
     bool _clear_on_set;
-    VectorFloat4 clear_color;
+    VectorFloat4 _clear_color;
 };

@@ -4,20 +4,20 @@
 #include "common/draw_system/i_resource.h"
 
 IResource::IResource(DrawSystem* const in_draw_system) 
-    : draw_system(in_draw_system)
+    : _draw_system(in_draw_system)
 {
-    if (nullptr != draw_system)
+    if (nullptr != _draw_system)
     {
-        draw_system->AddResource(this);
+        _draw_system->AddResource(this);
     }
     return;
 }
 
 IResource::~IResource()
 {
-    if (nullptr != draw_system)
+    if (nullptr != _draw_system)
     {
-        draw_system->RemoveResource(this);
+        _draw_system->RemoveResource(this);
     }
 }
 

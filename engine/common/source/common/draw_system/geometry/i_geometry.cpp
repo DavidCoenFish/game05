@@ -1,8 +1,8 @@
 #include "common/common_pch.h"
 
+#include "common/direct_xtk12/d3dx12.h"
 #include "common/direct_xtk12/graphics_memory.h"
 #include "common/draw_system/custom_command_list.h"
-#include "common/draw_system/d3dx12.h"
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/geometry/i_geometry.h"
 
@@ -67,7 +67,7 @@ void IGeometry::DeviceRestoredImplementation(
             // We will start this heap in the copy destination state since we will copy data
             // From the upload heap to this heap
             nullptr,
-
+            \
                 // Optimized clear value must be null for this type of resource. used for render targets and depth/stencil buffers
             IID_PPV_ARGS(in_vertex_buffer.ReleaseAndGetAddressOf())
             );
@@ -78,7 +78,7 @@ void IGeometry::DeviceRestoredImplementation(
         if (in_command_list)
         {
             D3D12_SUBRESOURCE_DATA vertex_data = {};
-            vertex_data._data = in_raw_data;
+            vertex_data.pData = in_raw_data;
             vertex_data.RowPitch = byte_total_size;
             vertex_data.SlicePitch = byte_total_size;
             UpdateSubresources(

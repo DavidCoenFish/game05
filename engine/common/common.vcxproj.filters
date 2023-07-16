@@ -79,9 +79,6 @@
     <ClCompile Include="source\common\draw_system\draw_system_frame.cpp">
       <Filter>souce\common\draw_system</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\draw_system\frame_command_list.cpp">
-      <Filter>souce\common\draw_system</Filter>
-    </ClCompile>
     <ClCompile Include="source\common\draw_system\i_resource.cpp">
       <Filter>souce\common\draw_system</Filter>
     </ClCompile>
@@ -151,19 +148,10 @@
     <ClCompile Include="source\common\direct_xtk12\direct_x_helpers.cpp">
       <Filter>souce\common\direct_xtk12</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\direct_xtk12\game_pad.cpp">
-      <Filter>souce\common\direct_xtk12</Filter>
-    </ClCompile>
     <ClCompile Include="source\common\direct_xtk12\graphics_memory.cpp">
       <Filter>souce\common\direct_xtk12</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\direct_xtk12\keyboard.cpp">
-      <Filter>souce\common\direct_xtk12</Filter>
-    </ClCompile>
     <ClCompile Include="source\common\direct_xtk12\linear_allocator.cpp">
-      <Filter>souce\common\direct_xtk12</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\direct_xtk12\mouse.cpp">
       <Filter>souce\common\direct_xtk12</Filter>
     </ClCompile>
   </ItemGroup>
@@ -261,9 +249,6 @@
     <ClInclude Include="source\common\draw_system\draw_system_frame.h">
       <Filter>souce\common\draw_system</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\draw_system\frame_command_list.h">
-      <Filter>souce\common\draw_system</Filter>
-    </ClInclude>
     <ClInclude Include="source\common\draw_system\i_resource.h">
       <Filter>souce\common\draw_system</Filter>
     </ClInclude>
@@ -330,19 +315,10 @@
     <ClInclude Include="source\common\direct_xtk12\direct_x_helpers.h">
       <Filter>souce\common\direct_xtk12</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\direct_xtk12\game_pad.h">
-      <Filter>souce\common\direct_xtk12</Filter>
-    </ClInclude>
     <ClInclude Include="source\common\direct_xtk12\graphics_memory.h">
       <Filter>souce\common\direct_xtk12</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\direct_xtk12\keyboard.h">
-      <Filter>souce\common\direct_xtk12</Filter>
-    </ClInclude>
     <ClInclude Include="source\common\direct_xtk12\linear_allocator.h">
-      <Filter>souce\common\direct_xtk12</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\direct_xtk12\mouse.h">
       <Filter>souce\common\direct_xtk12</Filter>
     </ClInclude>
     <ClInclude Include="source\common\direct_xtk12\d3dx12.h">

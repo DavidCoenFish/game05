@@ -77,9 +77,9 @@ std::shared_ptr < ShaderResourceInfo > ShaderResourceInfo::FactorySampler(
             const D3D12_STATIC_SAMPLER_DESC&in_static_sampler_desc,
             const bool in_use_sampler
             ) 
-            : shader_resource_view_handle(in_shader_resource_view_handle)
-            , static_sampler_desc(in_static_sampler_desc)
-            , use_sampler(in_use_sampler)
+            : _shader_resource_view_handle(in_shader_resource_view_handle)
+            , _static_sampler_desc(in_static_sampler_desc)
+            , _use_sampler(in_use_sampler)
         {
             return;
         }
@@ -89,30 +89,30 @@ std::shared_ptr < ShaderResourceInfo > ShaderResourceInfo::FactorySampler(
             const int in_root_param_index
             )
         {
-            if (shader_resource_view_handle)
+            if (_shader_resource_view_handle)
             {
-                auto heap = shader_resource_view_handle->GetHeap();
+                auto heap = _shader_resource_view_handle->GetHeap();
                 in_command_list->SetDescriptorHeaps(
                     1,
                     &heap
                     );
                 in_command_list->SetGraphicsRootDescriptorTable(
                     in_root_param_index,
-                    shader_resource_view_handle->GetGPUHandle()
+                    _shader_resource_view_handle->GetGPUHandle()
                     );
             }
             return;
         }
 
-        void ShaderResourceInfo::SetShaderResourceViewHandle(const std::shared_ptr < HeapWrapperItem >&
+        void ShaderResourceInfo::SetShaderResourceViewHandle(const std::shared_ptr < HeapWrapperItem >&\
             in_shader_resource_view_handle)
         {
-            shader_resource_view_handle = in_shader_resource_view_handle;
+            _shader_resource_view_handle = in_shader_resource_view_handle;
             return;
         }
 
         const D3D12_SHADER_VISIBILITY ShaderResourceInfo::GetVisiblity() const
         {
-            return static_sampler_desc.ShaderVisibility;
+            return _static_sampler_desc.ShaderVisibility;
         }
 

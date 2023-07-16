@@ -39,14 +39,14 @@ public:
         );
 
 private:
-    virtual void OnDeviceLost() _override;
+    virtual void OnDeviceLost() override;
     virtual void OnDeviceRestored(
         ID3D12GraphicsCommandList* const in_command_list,
         ID3D12Device2* const in_device
-        ) _override;
+        ) override;
 
 private:
     int _frame_count;
-    std::_vector < std::_shared_ptr < HeapWrapperPage > > _array_page;
+    std::vector < std::shared_ptr < HeapWrapperPage > > _array_page;
     D3D12_DESCRIPTOR_HEAP_DESC _desc;
 };

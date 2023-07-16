@@ -1,5 +1,5 @@
 #pragma once
-#include "common/draw_system/d3dx12.h"
+#include "common/direct_xtk12/d3dx12.h"
 
 class HeapWrapperItem;
 
@@ -13,7 +13,7 @@ public:
     void SetUnorderedAccessViewHandle(const std::shared_ptr < HeapWrapperItem >&in_unordered_access_view_handle);
     const D3D12_SHADER_VISIBILITY GetVisiblity() const
     {
-        return visiblity;
+        return _visiblity;
     }
 
     void Activate(
@@ -22,6 +22,6 @@ public:
         );
 
 private:
-    std::_shared_ptr < HeapWrapperItem > _unordered_access_view_handle;
+    std::shared_ptr < HeapWrapperItem > _unordered_access_view_handle;
     D3D12_SHADER_VISIBILITY _visiblity;
 };

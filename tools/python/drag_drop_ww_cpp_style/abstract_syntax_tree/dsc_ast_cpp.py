@@ -273,7 +273,7 @@ class AST:
             token_or_statement = AstType.STATEMENT
 
             # assignment to array
-            if parent._type == AstType.SCOPE and grand_parent:
+            if parent._type == AstType.SCOPE and grand_parent and grand_parent._token:
                 if grand_parent._token._data == "enum":
                         token_or_statement = AstType.TOKEN
                 else:

@@ -78,9 +78,9 @@ namespace
         }
 
         Impl(Impl &&) = default;
-        Impl&_operator=(Impl &&) = default;
+        Impl& operator=(Impl &&) = default;
         Impl(Impl const&) = delete;
-        Impl&_operator=(Impl const&) = delete;
+        Impl& operator=(Impl const&) = delete;
         ~Impl()
         {
             if (_device_token)
@@ -139,12 +139,12 @@ namespace
 
     private:
         static void CALLBACK OnGameInputDevice(
-            in_in_ GameInputCallbackToken,
-            in_in_ void* in_context,
-            in_in_ IGameInputDevice*,
-            in_in_ uint64_t,
-            in_in_ GameInputDeviceStatus in_current_status,
-            in_in_ GameInputDeviceStatus
+            _In_ GameInputCallbackToken,
+            _In_ void* in_context,
+            _In_ IGameInputDevice*,
+            _In_ uint64_t,
+            _In_ GameInputDeviceStatus in_current_status,
+            _In_ GameInputDeviceStatus
             ) noexcept
         {
             auto impl = reinterpret_cast < Keyboard::Impl* > (in_context);
@@ -213,9 +213,9 @@ namespace
         }
 
         Impl(Impl &&) = default;
-        Impl&_operator=(Impl &&) = default;
+        Impl& operator=(Impl &&) = default;
         Impl(Impl const&) = delete;
-        Impl&_operator=(Impl const&) = delete;
+        Impl& operator=(Impl const&) = delete;
         ~Impl()
         {
             s_keyboard = nullptr;
@@ -405,8 +405,8 @@ namespace
             RemoveHandlers();
             _window = in_window;
             if (!in_window) return;
-            typedef 
-                _fi_typed_event_handler_2_windows_cu_i_c_core_c_core_window_windows_cu_i_c_core_c_window_activated_event_args
+            typedef \
+                _fi_typed_event_handler_2_windows_cu_i_c_core_c_core_window_windows_cu_i_c_core_c_window_activated_event_args\
             ActivatedHandler;
             HRESULT hr = in_window->add_activated(
                 Callback < ActivatedHandler > (Activated) .Get(),
@@ -419,8 +419,8 @@ namespace
             ComPtr < ICoreAcceleratorKeys > keys;
             hr = dispatcher.As(&keys);
             ThrowIfFailed(hr);
-            typedef 
-                _fi_typed_event_handler_2_windows_cu_i_c_core_c_core_dispatcher_windows_cu_i_c_core_c_accelerator_key_event_args
+            typedef \
+                _fi_typed_event_handler_2_windows_cu_i_c_core_c_core_dispatcher_windows_cu_i_c_core_c_accelerator_key_event_args\
             AcceleratorKeyHandler;
             hr = keys->add_accelerator_key_activated(
                 Callback < AcceleratorKeyHandler > (AcceleratorKeyEvent) .Get(),

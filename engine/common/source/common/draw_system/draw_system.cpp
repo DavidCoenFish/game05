@@ -17,16 +17,16 @@
 
 std::unique_ptr < DrawSystem > DrawSystem::Factory(
     const HWND in_hwnd,
-    const JSONDrawSystem&in_json
+    const JSONDrawSystem& in_json
     )
 {
     return std::make_unique < DrawSystem > (
         in_hwnd,
-        in_json.in_back_buffer_count,
-        in_json.in_d3d_feature_level,
-        in_json.in_options,
-        in_json.in_target_format_data,
-        in_json.in_target_depth_data
+        in_json._back_buffer_count,
+        in_json._d3d_feature_level,
+        in_json._options,
+        in_json._target_format_data,
+        in_json._target_depth_data
         );
 }
 
@@ -35,31 +35,31 @@ DrawSystem::DrawSystem(
     const unsigned int in_back_buffer_count,
     const D3D_FEATURE_LEVEL in_d3d_feature_level,
     const unsigned int in_options,
-    const RenderTargetFormatData&in_target_format_data,
-    const RenderTargetDepthData&in_target_depth_data
+    const RenderTargetFormatData& in_target_format_data,
+    const RenderTargetDepthData& in_target_depth_data
     ) 
-    : hwnd(in_hwnd)
-    , back_buffer_count(in_back_buffer_count)
-    , d3d_feature_level(in_d3d_feature_level)
-    , options(in_options)
-    , target_format_data(in_target_format_data)
-    , target_depth_data(in_target_depth_data)
+    : _hwnd(in_hwnd)
+    , _back_buffer_count(in_back_buffer_count)
+    , _d3d_feature_level(in_d3d_feature_level)
+    , _options(in_options)
+    , _target_format_data(in_target_format_data)
+    , _target_depth_data(in_target_depth_data)
 {
-    heap_wrapper_cbv_srv_uav = std::make_shared < HeapWrapper > (
+    _heap_wrapper_cbv_srv_uav = std::make_shared < HeapWrapper > (
         this,
         D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
         in_back_buffer_count,
         true
         );
-    heap_wrapper_sampler = std::make_shared < HeapWrapper > (
+    _heap_wrapper_sampler = std::make_shared < HeapWrapper > (
         this,
         D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER
         );
-    heap_wrapper_render_target_view = std::make_shared < HeapWrapper > (
+    _heap_wrapper_render_target_view = std::make_shared < HeapWrapper > (
         this,
         D3D12_DESCRIPTOR_HEAP_TYPE_RTV
         );
-    heap_wrapper_depth_stencil_view = std::make_shared < HeapWrapper > (
+    _heap_wrapper_depth_stencil_view = std::make_shared < HeapWrapper > (
         this,
         D3D12_DESCRIPTOR_HEAP_TYPE_DSV
         );
@@ -69,12 +69,12 @@ DrawSystem::DrawSystem(
 DrawSystem::~DrawSystem()
 {
     WaitForGpu();
-    for (auto iter : list_resource)
+    for (auto iter : _list_resource)
     {
         iter->OnDeviceLost();
     }
-    list_resource.clear();
-    device_resources.reset();
+    _list_resource.clear();
+    _device_resources.reset();
 }
 
 DirectX::GraphicsResource DrawSystem::AllocateConstant(
@@ -95,9 +95,9 @@ DirectX::GraphicsResource DrawSystem::AllocateUpload(
     size_t in_alignment
     )
 {
-    if (device_resources)
+    if (_device_resources)
     {
-        return device_resources->AllocateUpload(
+        return _device_resources->AllocateUpload(
             in_size,
             in_data_or_nullptr,
             in_alignment
@@ -129,11 +129,11 @@ std::shared_ptr < Shader > DrawSystem::MakeShader(
         in_compute_shader_data,
         in_array_unordered_access_info
         );
-    if (result && device_resources)
+    if (result && _device_resources)
     {
         ((IResource*)(result.get())) ->OnDeviceRestored(
             in_command_list,
-            device_resources->GetD3dDevice()
+            _device_resources->GetD3dDevice()
             );
     }
     return result;
@@ -154,11 +154,11 @@ std::shared_ptr < GeometryGeneric > DrawSystem::MakeGeometryGeneric(
         in_vertex_data_raw,
         in_float_per_vertex
         );
-    if (result && device_resources)
+    if (result && _device_resources)
     {
         ((IResource*)(result.get())) ->OnDeviceRestored(
             in_command_list,
-            device_resources->GetD3dDevice()
+            _device_resources->GetD3dDevice()
             );
     }
     return result;
@@ -179,11 +179,11 @@ std::shared_ptr < ShaderResource > DrawSystem::MakeShaderResource(
         in_shader_resource_view_desc,
         in_data
         );
-    if (result && device_resources)
+    if (result && _device_resources)
     {
         ((IResource*)(result.get())) ->OnDeviceRestored(
             in_command_list,
-            device_resources->GetD3dDevice()
+            _device_resources->GetD3dDevice()
             );
     }
     return result;
@@ -202,11 +202,11 @@ std::shared_ptr < UnorderedAccess > DrawSystem::MakeUnorderedAccess(
         in_desc,
         in_unordered_access_view_desc
         );
-    if (result && device_resources)
+    if (result && _device_resources)
     {
         ((IResource*)(result.get())) ->OnDeviceRestored(
             in_command_list,
-            device_resources->GetD3dDevice()
+            _device_resources->GetD3dDevice()
             );
     }
     return result;
@@ -229,11 +229,11 @@ std::shared_ptr < RenderTargetTexture > DrawSystem::MakeRenderTargetTexture(
         in_height,
         in_resize_with_screen
         );
-    if (result && device_resources)
+    if (result && _device_resources)
     {
         ((IResource*)(result.get())) ->OnDeviceRestored(
             in_command_list,
-            device_resources->GetD3dDevice()
+            _device_resources->GetD3dDevice()
             );
     }
     return result;
@@ -241,9 +241,9 @@ std::shared_ptr < RenderTargetTexture > DrawSystem::MakeRenderTargetTexture(
 
 std::shared_ptr < CustomCommandList > DrawSystem::CreateCustomCommandList()
 {
-    if (device_resources)
+    if (_device_resources)
     {
-        auto command_list = device_resources->GetCustomCommandList();
+        auto command_list = _device_resources->GetCustomCommandList();
         return std::make_shared < CustomCommandList > (
             * this,
             command_list
@@ -254,9 +254,9 @@ std::shared_ptr < CustomCommandList > DrawSystem::CreateCustomCommandList()
 
 void DrawSystem::CustomCommandListFinish(ID3D12GraphicsCommandList* in_command_list)
 {
-    if (device_resources)
+    if (_device_resources)
     {
-        device_resources->CustomCommandListFinish(in_command_list);
+        _device_resources->CustomCommandListFinish(in_command_list);
     }
     return;
 }
@@ -268,9 +268,9 @@ std::unique_ptr < DrawSystemFrame > DrawSystem::CreateNewFrame()
 
 void DrawSystem::Prepare(ID3D12GraphicsCommandList*&in_command_list)
 {
-    if (nullptr != device_resources)
+    if (nullptr != _device_resources)
     {
-        device_resources->Prepare(in_command_list);
+        _device_resources->Prepare(in_command_list);
     }
     return;
 }
@@ -285,11 +285,11 @@ void DrawSystem::Prepare(ID3D12GraphicsCommandList*&in_command_list)
 // }
 void DrawSystem::Present()
 {
-    if (nullptr == device_resources)
+    if (nullptr == _device_resources)
     {
         return;
     }
-    if (false == device_resources->Present())
+    if (false == _device_resources->Present())
     {
         CreateDeviceResources();
     }
@@ -297,9 +297,9 @@ void DrawSystem::Present()
 
 IRenderTarget* DrawSystem::GetRenderTargetBackBuffer()
 {
-    if (device_resources)
+    if (_device_resources)
     {
-        return device_resources->GetRenderTargetBackBuffer();
+        return _device_resources->GetRenderTargetBackBuffer();
     }
     return nullptr;
 }
@@ -307,8 +307,8 @@ IRenderTarget* DrawSystem::GetRenderTargetBackBuffer()
 std::shared_ptr < HeapWrapperItem > DrawSystem::MakeHeapWrapperCbvSrvUav(const int in_length)
 {
     return HeapWrapperItem::Factory(
-        in_device_resources ? in_device_resources->GetD3dDevice() : nullptr,
-        in_heap_wrapper_cbv_srv_uav,
+        _device_resources ? _device_resources->GetD3dDevice() : nullptr,
+        _heap_wrapper_cbv_srv_uav,
         in_length
         );
 }
@@ -316,8 +316,8 @@ std::shared_ptr < HeapWrapperItem > DrawSystem::MakeHeapWrapperCbvSrvUav(const i
 std::shared_ptr < HeapWrapperItem > DrawSystem::MakeHeapWrapperSampler(const int in_length)
 {
     return HeapWrapperItem::Factory(
-        in_device_resources ? in_device_resources->GetD3dDevice() : nullptr,
-        in_heap_wrapper_sampler,
+        _device_resources ? _device_resources->GetD3dDevice() : nullptr,
+        _heap_wrapper_sampler,
         in_length
         );
 }
@@ -325,8 +325,8 @@ std::shared_ptr < HeapWrapperItem > DrawSystem::MakeHeapWrapperSampler(const int
 std::shared_ptr < HeapWrapperItem > DrawSystem::MakeHeapWrapperRenderTargetView(const int in_length)
 {
     return HeapWrapperItem::Factory(
-        in_device_resources ? in_device_resources->GetD3dDevice() : nullptr,
-        in_heap_wrapper_render_target_view,
+        _device_resources ? _device_resources->GetD3dDevice() : nullptr,
+        _heap_wrapper_render_target_view,
         in_length
         );
 }
@@ -334,17 +334,17 @@ std::shared_ptr < HeapWrapperItem > DrawSystem::MakeHeapWrapperRenderTargetView(
 std::shared_ptr < HeapWrapperItem > DrawSystem::MakeHeapWrapperDepthStencilView(const int in_length)
 {
     return HeapWrapperItem::Factory(
-        in_device_resources ? in_device_resources->GetD3dDevice() : nullptr,
-        in_heap_wrapper_depth_stencil_view,
+        _device_resources ? _device_resources->GetD3dDevice() : nullptr,
+        _heap_wrapper_depth_stencil_view,
         in_length
         );
 }
 
 void DrawSystem::WaitForGpu() noexcept
 {
-    if (device_resources)
+    if (_device_resources)
     {
-        device_resources->WaitForGpu();
+        _device_resources->WaitForGpu();
     }
 }
 
@@ -353,23 +353,23 @@ void DrawSystem::OnResize()
     bool resized = false;
     int width = 0;
     int height = 0;
-    if (device_resources)
+    if (_device_resources)
     {
-        resized = device_resources->OnResize(
+        resized = _device_resources->OnResize(
             this,
-            in_hwnd,
+            _hwnd,
             width,
             height
             );
     }
-    if ((true == resized) && (0 < list_resource.size()))
+    if ((true == resized) && (0 < _list_resource.size()))
     {
         auto command_list = CreateCustomCommandList();
-        for (auto iter : list_resource)
+        for (auto iter : _list_resource)
         {
             iter->OnResize(
                 command_list->GetCommandList(),
-                device_resources->GetD3dDevice(),
+                _device_resources->GetD3dDevice(),
                 width,
                 height
                 );
@@ -381,7 +381,7 @@ void DrawSystem::AddResource(IResource* const in_resource)
 {
     if (in_resource)
     {
-        list_resource.push_back(in_resource);
+        _list_resource.push_back(in_resource);
     }
 }
 
@@ -392,46 +392,46 @@ void DrawSystem::RemoveResource(IResource* const in_resource)
     // {
     // PResource->OnDeviceLost();
     // }
-    list_resource.remove(in_resource);
+    _list_resource.remove(in_resource);
 }
 
 const int DrawSystem::GetBackBufferIndex() const
 {
-    if (nullptr != device_resources)
+    if (nullptr != _device_resources)
     {
-        device_resources->GetBackBufferIndex();
+        _device_resources->GetBackBufferIndex();
     }
     return 0;
 }
 
 void DrawSystem::CreateDeviceResources()
 {
-    for (auto iter : list_resource)
+    for (auto iter : _list_resource)
     {
         iter->OnDeviceLost();
     }
-    device_resources.reset();
-    device_resources = std::make_unique < DeviceResources > (
+    _device_resources.reset();
+    _device_resources = std::make_unique < DeviceResources > (
         2,
-        in_d3d_feature_level,
-        in_options,
-        in_target_format_data,
-        in_target_depth_data
+        _d3d_feature_level,
+        _options,
+        _target_format_data,
+        _target_depth_data
         );
-
+    \
         // Two pass construction as rendertargetbackbuffer calls MakeHeapWrapperRenderTargetView, MakeHeapWrapperDepthStencilView which need m_pDeviceResources assigned
-    device_resources->CreateWindowSizeDependentResources(
+    _device_resources->CreateWindowSizeDependentResources(
         this,
-        in_hwnd
+        _hwnd
         );
-    if (0 < list_resource.size())
+    if (0 < _list_resource.size())
     {
         auto command_list = CreateCustomCommandList();
-        for (auto iter : list_resource)
+        for (auto iter : _list_resource)
         {
             iter->OnDeviceRestored(
                 command_list->GetCommandList(),
-                device_resources->GetD3dDevice()
+                _device_resources->GetD3dDevice()
                 );
         }
     }

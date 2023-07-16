@@ -21,15 +21,15 @@ public:
         );
 
 private:
-    virtual void StartRender(ID3D12GraphicsCommandList* const in_command_list) _override;
-    virtual void EndRender(ID3D12GraphicsCommandList* const in_command_list) _override;
+    virtual void StartRender(ID3D12GraphicsCommandList* const in_command_list) override;
+    virtual void EndRender(ID3D12GraphicsCommandList* const in_command_list) override;
     virtual void GetFormatData(
         DXGI_FORMAT&in_depth_format,
         int&in_render_target_view_format_count,
         const DXGI_FORMAT*&in_render_target_view_format
-        ) const _override;
-    virtual const int GetWidth() const _override;
-    virtual const int GetHeight() const _override;
+        ) const override;
+    virtual const int GetWidth() const override;
+    virtual const int GetHeight() const override;
 
 private:
     int _buffer_index;
@@ -42,8 +42,8 @@ private:
     int _back_buffer_width;
     int _back_buffer_height;
     Microsoft::WRL::ComPtr < ID3D12Resource > _render_target_resource;
-    std::_shared_ptr < HeapWrapperItem > _render_target_descriptor;
+    std::shared_ptr < HeapWrapperItem > _render_target_descriptor;
     Microsoft::WRL::ComPtr < ID3D12Resource > _depth_resource;
-    std::_shared_ptr < HeapWrapperItem > _depth_stencil_view_descriptor;
+    std::shared_ptr < HeapWrapperItem > _depth_stencil_view_descriptor;
     D3D12_RESOURCE_STATES _current_state;
 };

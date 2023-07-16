@@ -15,11 +15,11 @@ public:
     std::shared_ptr < HeapWrapperItem > GetHeapWrapperItem() const;
 
 private:
-    virtual void OnDeviceLost() _override;
+    virtual void OnDeviceLost() override;
     virtual void OnDeviceRestored(
         ID3D12GraphicsCommandList* const in_command_list,
         ID3D12Device2* const in_device
-        ) _override;
+        ) override;
 
 private:
     Microsoft::WRL::ComPtr < ID3D12Resource > _resource;

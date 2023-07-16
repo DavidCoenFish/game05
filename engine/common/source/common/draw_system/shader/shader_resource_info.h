@@ -1,12 +1,12 @@
 #pragma once
-#include "common/draw_system/d3dx12.h"
+#include "common/direct_xtk12/d3dx12.h"
 
 class HeapWrapperItem;
 
 struct ShaderResourceInfo
 {
 public:
-    static std::_shared_ptr < ShaderResourceInfo > FactorySampler(
+    static std::shared_ptr < ShaderResourceInfo > FactorySampler(
         const std::shared_ptr < HeapWrapperItem >&in_shader_resource_view_handle,
         const D3D12_SHADER_VISIBILITY in_visiblity,
         // D3D12_SHADER_VISIBILITY_PIXEL
@@ -36,19 +36,19 @@ public:
     void SetShaderResourceViewHandle(const std::shared_ptr < HeapWrapperItem >&in_shader_resource_view_handle);
     const bool GetUseSampler() const
     {
-        return use_sampler;
+        return _use_sampler;
     }
 
     const D3D12_STATIC_SAMPLER_DESC&GetStaticSamplerDesc() const
     {
-        return static_sampler_desc;
+        return _static_sampler_desc;
     }
 
     const D3D12_SHADER_VISIBILITY GetVisiblity() const;
 
 private:
     bool _use_sampler;
-    std::_shared_ptr < HeapWrapperItem > _shader_resource_view_handle;
+    std::shared_ptr < HeapWrapperItem > _shader_resource_view_handle;
     // Std::shared_ptr< HeapWrapperItem > m_pSamplerHandle;
     D3D12_STATIC_SAMPLER_DESC _static_sampler_desc;
 };

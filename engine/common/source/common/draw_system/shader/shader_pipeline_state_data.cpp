@@ -29,14 +29,14 @@ ShaderPipelineStateData::ShaderPipelineStateData(
     const D3D12_DEPTH_STENCIL_DESC&in_depth_stencil_state,
     const bool in_compute_shader
     ) 
-    : input_element_desc_array(in_input_element_desc_array)
-    , primitive_topology_type(in_primitive_topology_type)
-    , depth_stencil_view_format(in_depth_stencil_view_format)
-    , render_target_format(in_render_target_format)
-    , blend_state(in_blend_state)
-    , rasterizer_state(in_rasterizer_state)
-    , depth_stencil_state(in_depth_stencil_state)
-    , compute_shader(in_compute_shader)
+    : _input_element_desc_array(in_input_element_desc_array)
+    , _primitive_topology_type(in_primitive_topology_type)
+    , _depth_stencil_view_format(in_depth_stencil_view_format)
+    , _render_target_format(in_render_target_format)
+    , _blend_state(in_blend_state)
+    , _rasterizer_state(in_rasterizer_state)
+    , _depth_stencil_state(in_depth_stencil_state)
+    , _compute_shader(in_compute_shader)
 {
     return;
 }

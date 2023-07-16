@@ -95,7 +95,7 @@ namespace DirectX
     // {
     // Microsoft::WRL::ComPtr<ID3DBlob> pSignature;
     // Microsoft::WRL::ComPtr<ID3DBlob> pError;
-
+    \
         // HRESULT hr = D3D12SerializeRootSignature(rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, pSignature.GetAddressOf(), pError.GetAddressOf());
     // If (SUCCEEDED(hr))
     // {
@@ -151,7 +151,7 @@ namespace DirectX
     // }
     //
     // Template<UINT TNameLength>
-
+    \
         // Inline void SetDebugObjectName(_In_ ID3D12DeviceChild* resource, _In_z_ const wchar_t(&name)[TNameLength]) noexcept
     // {
     // #if !defined(NO_D3D12_DEBUG_NAME) && (defined(_DEBUG) || defined(PROFILE))

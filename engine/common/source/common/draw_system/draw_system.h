@@ -33,7 +33,7 @@ namespace DirectX
 class DrawSystem
 {
 public:
-    static std::_unique_ptr < DrawSystem > Factory(
+    static std::unique_ptr < DrawSystem > Factory(
         const HWND in_hwnd,
         const JSONDrawSystem&in_json
         );
@@ -53,7 +53,7 @@ public:
     const int GetBackBufferIndex() const;
     const int GetBackBufferCount() const
     {
-        return back_buffer_count;
+        return _back_buffer_count;
     }
 
     DirectX::GraphicsResource AllocateConstant(
@@ -65,19 +65,19 @@ public:
         void* const in_data_or_nullptr = nullptr,
         size_t in_alignment = 16
         );
-    std::_shared_ptr < Shader > MakeShader(
+    std::shared_ptr < Shader > MakeShader(
         ID3D12GraphicsCommandList* const in_command_list,
         const ShaderPipelineStateData&in_pipeline_state_data,
         const std::shared_ptr < std::vector < uint8_t > >&in_vertex_shader_data,
         const std::shared_ptr < std::vector < uint8_t > >&in_geometry_shader_data,
         const std::shared_ptr < std::vector < uint8_t > >&in_pixel_shader_data,
-        const std::vector < std::shared_ptr < ShaderResourceInfo > >&in_array_shader_resource_info = std::vector < std::
+        const std::vector < std::shared_ptr < ShaderResourceInfo > >&in_array_shader_resource_info = std::vector < std::\
             shared_ptr < ShaderResourceInfo > > (),
-        const std::vector < std::shared_ptr < ConstantBufferInfo > >&in_array_shader_constants_info = std::vector < std
+        const std::vector < std::shared_ptr < ConstantBufferInfo > >&in_array_shader_constants_info = std::vector < std\
             ::shared_ptr < ConstantBufferInfo > > (),
-        const std::shared_ptr < std::vector < uint8_t > >&in_compute_shader_data = std::shared_ptr < std::vector < 
+        const std::shared_ptr < std::vector < uint8_t > >&in_compute_shader_data = std::shared_ptr < std::vector < \
             uint8_t > > (),
-        const std::vector < std::shared_ptr < UnorderedAccessInfo > >&in_array_unordered_access_info = std::vector < std
+        const std::vector < std::shared_ptr < UnorderedAccessInfo > >&in_array_unordered_access_info = std::vector < std\
             ::shared_ptr < UnorderedAccessInfo > > ()
         );
     std::shared_ptr < GeometryGeneric > MakeGeometryGeneric(
@@ -101,17 +101,17 @@ public:
             in_input_element_desc_array,
             in_vertex_data
             );
-        if (result && device_resources)
+        if (result && _device_resources)
         {
             ((IResource*)(result.get())) ->OnDeviceRestored(
                 in_command_list,
-                device_resources->GetD3dDevice()
+                _device_resources->GetD3dDevice()
                 );
         }
         return result;
     }
 
-    std::_shared_ptr < ShaderResource > MakeShaderResource(
+    std::shared_ptr < ShaderResource > MakeShaderResource(
         ID3D12GraphicsCommandList* const in_command_list,
         const std::shared_ptr < HeapWrapperItem >&in_heap_wrapper_item,
         const D3D12_RESOURCE_DESC&in_desc,
@@ -134,7 +134,7 @@ public:
         );
     std::shared_ptr < CustomCommandList > CreateCustomCommandList();
     void CustomCommandListFinish(ID3D12GraphicsCommandList* in_command_list);
-    std::_unique_ptr < DrawSystemFrame > CreateNewFrame();
+    std::unique_ptr < DrawSystemFrame > CreateNewFrame();
     // Ctor == Prepare, dtor == Present
     void Prepare(ID3D12GraphicsCommandList*&in_command_list);
     // Void Clear();
@@ -155,8 +155,8 @@ private:
     unsigned int _options;
     RenderTargetFormatData _target_format_data;
     RenderTargetDepthData _target_depth_data;
-    std::_unique_ptr < DeviceResources > _device_resources;
-    std::_list < IResource* > _list_resource;
+    std::unique_ptr < DeviceResources > _device_resources;
+    std::list < IResource* > _list_resource;
     std::shared_ptr < HeapWrapper > _heap_wrapper_cbv_srv_uav;
     std::shared_ptr < HeapWrapper > _heap_wrapper_sampler;
     std::shared_ptr < HeapWrapper > _heap_wrapper_render_target_view;

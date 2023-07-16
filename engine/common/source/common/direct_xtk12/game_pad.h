@@ -8,8 +8,7 @@
 // Http://go.microsoft.com/fwlink/?LinkID=615561
 // --------------------------------------------------------------------------------------
 #pragma once
-#if(_WIN32_WINNT < 0x0A00 /* _WIN32_WINNT_WIN10 */
-) || defined (_GAMING_DESKTOP)
+#if(_WIN32_WINNT < 0x0A00 /* _WIN32_WINNT_WIN10 */) || defined (_GAMING_DESKTOP)
 #ifndef _XBOX_ONE
 #if !defined (WINAPI_FAMILY) || (WINAPI_FAMILY != WINAPI_FAMILY_PHONE_APP)
 #if(_WIN32_WINNT >= 0x0602 /* _WIN32_WINNT_WIN8 */
@@ -32,8 +31,7 @@
 #include <cstdint>
 #include <memory>
 
-#if(_WIN32_WINNT >= 0x0A00 /* _WIN32_WINNT_WIN10 */
-) && !defined (_GAMING_DESKTOP)
+#if(_WIN32_WINNT >= 0x0A00 /* _WIN32_WINNT_WIN10 */) && !defined (_GAMING_DESKTOP)
     #pragma comment(lib, "runtimeobject.lib")
     #include <string>
 
@@ -69,13 +67,13 @@ namespace DirectX
             bool _right_shoulder;
             union
             {
-                bool back;
-                bool view;
+                bool _back;
+                bool _view;
             };
             union
             {
-                bool start;
-                bool menu;
+                bool _start;
+                bool _menu;
             };
         };
         struct DPad
@@ -105,138 +103,138 @@ namespace DirectX
         public:
             bool __cdecl IsConnected() const noexcept
             {
-                return connected;
+                return _connected;
             }
 
             // Is the button pressed currently?
             bool __cdecl IsAPressed() const noexcept
             {
-                return buttons._a;
+                return _buttons._a;
             }
 
             bool __cdecl IsBPressed() const noexcept
             {
-                return buttons._b;
+                return _buttons._b;
             }
 
             bool __cdecl IsXPressed() const noexcept
             {
-                return buttons._x;
+                return _buttons._x;
             }
 
             bool __cdecl IsYPressed() const noexcept
             {
-                return buttons._y;
+                return _buttons._y;
             }
 
             bool __cdecl IsLeftStickPressed() const noexcept
             {
-                return buttons._left_stick;
+                return _buttons._left_stick;
             }
 
             bool __cdecl IsRightStickPressed() const noexcept
             {
-                return buttons._right_stick;
+                return _buttons._right_stick;
             }
 
             bool __cdecl IsLeftShoulderPressed() const noexcept
             {
-                return buttons._left_shoulder;
+                return _buttons._left_shoulder;
             }
 
             bool __cdecl IsRightShoulderPressed() const noexcept
             {
-                return buttons._right_shoulder;
+                return _buttons._right_shoulder;
             }
 
             bool __cdecl IsBackPressed() const noexcept
             {
-                return buttons._back;
+                return _buttons._back;
             }
 
             bool __cdecl IsViewPressed() const noexcept
             {
-                return buttons._view;
+                return _buttons._view;
             }
 
             bool __cdecl IsStartPressed() const noexcept
             {
-                return buttons._start;
+                return _buttons._start;
             }
 
             bool __cdecl IsMenuPressed() const noexcept
             {
-                return buttons._menu;
+                return _buttons._menu;
             }
 
             bool __cdecl IsDPadDownPressed() const noexcept
             {
-                return dpad._down;
+                return _dpad._down;
             }
 
             bool __cdecl IsDPadUpPressed() const noexcept
             {
-                return dpad._up;
+                return _dpad._up;
             }
 
             bool __cdecl IsDPadLeftPressed() const noexcept
             {
-                return dpad._left;
+                return _dpad._left;
             }
 
             bool __cdecl IsDPadRightPressed() const noexcept
             {
-                return dpad._right;
+                return _dpad._right;
             }
 
             bool __cdecl IsLeftThumbStickUp() const noexcept
             {
-                return (in_thumb_sticks._left_y > 0.5f) != 0;
+                return (_thumb_sticks._left_y > 0.5f) != 0;
             }
 
             bool __cdecl IsLeftThumbStickDown() const noexcept
             {
-                return (in_thumb_sticks._left_y < - 0.5f) != 0;
+                return (_thumb_sticks._left_y < - 0.5f) != 0;
             }
 
             bool __cdecl IsLeftThumbStickLeft() const noexcept
             {
-                return (in_thumb_sticks._left_x < - 0.5f) != 0;
+                return (_thumb_sticks._left_x < - 0.5f) != 0;
             }
 
             bool __cdecl IsLeftThumbStickRight() const noexcept
             {
-                return (in_thumb_sticks._left_x > 0.5f) != 0;
+                return (_thumb_sticks._left_x > 0.5f) != 0;
             }
 
             bool __cdecl IsRightThumbStickUp() const noexcept
             {
-                return (in_thumb_sticks._right_y > 0.5f) != 0;
+                return (_thumb_sticks._right_y > 0.5f) != 0;
             }
 
             bool __cdecl IsRightThumbStickDown() const noexcept
             {
-                return (in_thumb_sticks._right_y < - 0.5f) != 0;
+                return (_thumb_sticks._right_y < - 0.5f) != 0;
             }
 
             bool __cdecl IsRightThumbStickLeft() const noexcept
             {
-                return (in_thumb_sticks._right_x < - 0.5f) != 0;
+                return (_thumb_sticks._right_x < - 0.5f) != 0;
             }
 
             bool __cdecl IsRightThumbStickRight() const noexcept
             {
-                return (in_thumb_sticks._right_x > 0.5f) != 0;
+                return (_thumb_sticks._right_x > 0.5f) != 0;
             }
 
             bool __cdecl IsLeftTriggerPressed() const noexcept
             {
-                return (in_triggers._left > 0.5f) != 0;
+                return (_triggers._left > 0.5f) != 0;
             }
 
             bool __cdecl IsRightTriggerPressed() const noexcept
             {
-                return (in_triggers._right > 0.5f) != 0;
+                return (_triggers._right > 0.5f) != 0;
             }
 
 
@@ -265,14 +263,18 @@ namespace DirectX
                 GUITAR_BASS = 11,
                 ARCADE_PAD = 19,
             };
+
             Capabilities() noexcept 
                 : _connected(false)
                 , _gamepad_type(UNKNOWN)
                 , _id{}
                 , _vid(0)
-                , _pid(0) _{} bool __cdecl IsConnected() const noexcept
+                , _pid(0) 
+            {} 
+            
+            bool __cdecl IsConnected() const noexcept
             {
-                return connected;
+                return _connected;
             }
 
 
@@ -283,9 +285,8 @@ namespace DirectX
             uint16_t _pid;
 #if defined (WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_GAMES)
                 APP_LOCAL_DEVICE_ID _id;
-#elif(_WIN32_WINNT >= 0x0A00 /* _WIN32_WINNT_WIN10 */
-) && !defined (_GAMING_DESKTOP)
-                std::_wstring _id;
+#elif(_WIN32_WINNT >= 0x0A00 /* _WIN32_WINNT_WIN10 */) && !defined (_GAMING_DESKTOP)
+                std::wstring _id;
 #else
                 uint64_t _id;
 #endif
@@ -293,9 +294,9 @@ namespace DirectX
         };
         GamePad() noexcept (false);
         GamePad(GamePad && in_move_from) noexcept;
-        GamePad&_operator=(GamePad && in_move_from) noexcept;
+        GamePad& operator=(GamePad && in_move_from) noexcept;
         GamePad(GamePad const&) = delete;
-        GamePad&_operator=(GamePad const&) = delete;
+        GamePad& operator=(GamePad const&) = delete;
         // Singleton
         static GamePad&__cdecl Get();
         virtual ~GamePad();
@@ -327,9 +328,8 @@ namespace DirectX
         static constexpr int c_most_recent = - 1;
 
     private:
-        std::_unique_ptr < Impl > _impl;
-#if((_WIN32_WINNT >= 0x0A00 /* _WIN32_WINNT_WIN10 */
-) && !defined (_GAMING_DESKTOP)) || defined (_XBOX_ONE)
+        std::unique_ptr < Impl > _impl;
+#if((_WIN32_WINNT >= 0x0A00 /* _WIN32_WINNT_WIN10 */) && !defined (_GAMING_DESKTOP)) || defined (_XBOX_ONE)
             static constexpr int MAX_PLAYER_COUNT = 8;
 #else
             static constexpr int MAX_PLAYER_COUNT = 4;
@@ -341,8 +341,7 @@ namespace DirectX
 
 #if defined (WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_GAMES)
             void __cdecl RegisterEvents(void* in_ctrl_changed) noexcept;
-#elif((_WIN32_WINNT >= 0x0A00 /* _WIN32_WINNT_WIN10 */
-) && !defined (_GAMING_DESKTOP)) || defined (_XBOX_ONE)
+#elif((_WIN32_WINNT >= 0x0A00 /* _WIN32_WINNT_WIN10 */) && !defined (_GAMING_DESKTOP)) || defined (_XBOX_ONE)
             void __cdecl RegisterEvents(
                 void* in_ctrl_changed,
                 void* in_user_changed
@@ -382,7 +381,7 @@ namespace DirectX
         void __cdecl Reset() noexcept;
         GamePad::State __cdecl GetLastState() const noexcept
         {
-            return last_state;
+            return _last_state;
         }
 
 

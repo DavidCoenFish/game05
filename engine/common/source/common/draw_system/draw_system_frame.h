@@ -23,7 +23,7 @@ public:
         );
     template < typename TypeVertex > void Draw(Geometry < TypeVertex >* const in_geometry)
     {
-        in_geometry->Draw(in_command_list);
+        in_geometry->Draw(_command_list);
     }
 
 

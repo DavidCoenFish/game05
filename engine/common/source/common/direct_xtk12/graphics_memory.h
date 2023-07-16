@@ -29,17 +29,17 @@ namespace DirectX
     public:
         GraphicsResource() noexcept;
         GraphicsResource(
-            in_in_ LinearAllocatorPage* in_page,
-            in_in_ D3D12_GPU_VIRTUAL_ADDRESS in_gpu_address,
-            in_in_ ID3D12Resource* in_resource,
-            in_in_ void* in_memory,
-            in_in_ size_t in_offset,
-            in_in_ size_t in_size
+            _In_ LinearAllocatorPage* in_page,
+            _In_ D3D12_GPU_VIRTUAL_ADDRESS in_gpu_address,
+            _In_ ID3D12Resource* in_resource,
+            _In_ void* in_memory,
+            _In_ size_t in_offset,
+            _In_ size_t in_size
             ) noexcept;
         GraphicsResource(GraphicsResource && in_other) noexcept;
-        GraphicsResource && _operator=(GraphicsResource &&) noexcept;
+        GraphicsResource &&  operator=(GraphicsResource &&) noexcept;
         GraphicsResource(const GraphicsResource&) = delete;
-        GraphicsResource&_operator=(const GraphicsResource&) = delete;
+        GraphicsResource& operator=(const GraphicsResource&) = delete;
         ~GraphicsResource();
         D3D12_GPU_VIRTUAL_ADDRESS GpuAddress() const noexcept
         {
@@ -88,13 +88,13 @@ namespace DirectX
     public:
         SharedGraphicsResource() noexcept;
         SharedGraphicsResource(SharedGraphicsResource &&) noexcept;
-        SharedGraphicsResource && _operator=(SharedGraphicsResource &&) noexcept;
+        SharedGraphicsResource && operator=(SharedGraphicsResource &&) noexcept;
         SharedGraphicsResource(GraphicsResource &&);
-        SharedGraphicsResource && _operator=(GraphicsResource &&);
+        SharedGraphicsResource && operator=(GraphicsResource &&);
         SharedGraphicsResource(const SharedGraphicsResource&) noexcept;
-        SharedGraphicsResource&_operator=(const SharedGraphicsResource&) noexcept;
+        SharedGraphicsResource& operator=(const SharedGraphicsResource&) noexcept;
         SharedGraphicsResource(const GraphicsResource&) = delete;
-        SharedGraphicsResource&_operator=(const GraphicsResource&) = delete;
+        SharedGraphicsResource& operator=(const GraphicsResource&) = delete;
         ~SharedGraphicsResource();
         D3D12_GPU_VIRTUAL_ADDRESS GpuAddress() const noexcept
         {
@@ -143,7 +143,7 @@ namespace DirectX
         void __cdecl Reset(const SharedGraphicsResource&in_resource) noexcept;
 
     private:
-        std::_shared_ptr < GraphicsResource > _shared_resource;
+        std::shared_ptr < GraphicsResource > _shared_resource;
     };
     // ----------------------------------------------------------------------------------
     struct GraphicsMemoryStatistics
@@ -165,14 +165,15 @@ namespace DirectX
     class GraphicsMemory
     {
     public:
-        explicit GraphicsMemory(in_in_ ID3D12Device* in_device);
+        explicit GraphicsMemory(_In_ ID3D12Device* in_device);
         GraphicsMemory(GraphicsMemory && in_move_from) noexcept;
-        GraphicsMemory&_operator=(GraphicsMemory && in_move_from) noexcept;
+        GraphicsMemory& operator=(GraphicsMemory && in_move_from) noexcept;
         GraphicsMemory(GraphicsMemory const&) = delete;
-        GraphicsMemory&_operator=(GraphicsMemory const&) = delete;
+        GraphicsMemory& operator=(GraphicsMemory const&) = delete;
         // Singleton
         // Should only use nullptr for single GPU scenarios; mGPU requires a specific device
-        static GraphicsMemory&__cdecl Get(in_in_opt_ ID3D12Device* in_device = nullptr);
+        static GraphicsMemory& __cdecl Get(_In_opt_ ID3D12Device* in_device = nullptr);
+
         virtual ~GraphicsMemory();
         // Make sure to keep the GraphicsResource handle alive as long as you need to access
         // The memory on the CPU. For example, do not simply cache GpuAddress() and discard
@@ -205,7 +206,7 @@ namespace DirectX
 
         // Submits all the pending one-shot memory to the GPU.
         // The memory will be recycled once the GPU is done with it.
-        void __cdecl Commit(in_in_ ID3D12CommandQueue* in_command_queue);
+        void __cdecl Commit(_In_ ID3D12CommandQueue* in_command_queue);
         // This frees up any unused memory.
         // If you want to make sure all memory is reclaimed, idle the GPU before calling this.
         // It is not recommended that you call this unless absolutely necessary (e.g. your
@@ -219,8 +220,7 @@ namespace DirectX
         // Private implementation.
         class Impl;
 
-
     private:
-        std::_unique_ptr < Impl > _impl;
+        std::unique_ptr < Impl > _impl;
     };
 }

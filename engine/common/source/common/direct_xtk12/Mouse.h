@@ -10,7 +10,7 @@
 #pragma once
 #include <memory>
 
-#if(defined (WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_APP)) || (defined (_XBOX_ONE) && defined (_TITLE) && (
+#if(defined (WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_APP)) || (defined (_XBOX_ONE) && defined (_TITLE) && (\
     _XDK_VER >= 0x42D907D1))
     namespace ABI
     {
@@ -58,9 +58,9 @@ namespace DirectX
         };
         Mouse() noexcept (false);
         Mouse(Mouse && in_move_from) noexcept;
-        Mouse&_operator=(Mouse && in_move_from) noexcept;
+        Mouse& operator=(Mouse && in_move_from) noexcept;
         Mouse(Mouse const&) = delete;
-        Mouse&_operator=(Mouse const&) = delete;
+        Mouse& operator=(Mouse const&) = delete;
         // Singleton
         static Mouse&__cdecl Get();
         virtual ~Mouse();
@@ -82,7 +82,7 @@ namespace DirectX
 
 
     private:
-        std::_unique_ptr < Impl > _impl;
+        std::unique_ptr < Impl > _impl;
 #ifdef WM_USER
 #if !defined (WINAPI_FAMILY) || (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP)
                 void __cdecl SetWindow(HWND in_window);
@@ -102,7 +102,7 @@ namespace DirectX
 
 #endif
 
-#if(defined (WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_APP)) || (defined (_XBOX_ONE) && defined (_TITLE) && (
+#if(defined (WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_APP)) || (defined (_XBOX_ONE) && defined (_TITLE) && (\
     _XDK_VER >= 0x42D907D1))
             void __cdecl SetWindow(ABI::Windows::UI::Core::ICoreWindow* in_window);
 #ifdef __cplusplus_winrt

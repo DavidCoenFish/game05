@@ -146,6 +146,7 @@ class KeywordType(enum.Enum):
     WHILE = 74 # while
 
     DEFINED = 75 # defined
+    OVERRIDE = 76 # override
 
 class PreprocessorType(enum.Enum):
     NONE = 0
@@ -301,7 +302,9 @@ s_keyword_dict = {
     "wchar_t" : KeywordType.WCHAR_T,
     "while" : KeywordType.WHILE,
 
-    "defined" : KeywordType.DEFINED
+    "defined" : KeywordType.DEFINED,
+    "override" : KeywordType.OVERRIDE,
+
 }
 
 s_preprocessor_dict = {
@@ -322,7 +325,7 @@ s_preprocessor_dict = {
 
 s_setOfStringsToTreatAsBreak = set({
     ".", "(", ")", "[", "]", "::", "->", "<", ">", ";", ",", "+", "-", "%", "*", "&", "/", " ", 
-    "\n", "\t", "\\", "\*", ":","~","!","++","--"
+    "\n", "\t", "\\", "\*", ":","~","!","++","--","{","}"
 })
 
 

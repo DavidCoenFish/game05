@@ -14,11 +14,11 @@ public:
     void Draw(ID3D12GraphicsCommandList* const in_command_list);
 
 private:
-    virtual void OnDeviceLost() _override;
+    virtual void OnDeviceLost() override;
     virtual void OnDeviceRestored(
         ID3D12GraphicsCommandList* const in_command_list,
         ID3D12Device2* const in_device
-        ) _override;
+        ) override;
 
 private:
     const D3D_PRIMITIVE_TOPOLOGY _primitive_topology;

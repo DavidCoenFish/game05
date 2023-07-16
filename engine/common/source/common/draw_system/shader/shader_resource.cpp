@@ -2,7 +2,7 @@
 
 #include "common/direct_xtk12/direct_x_helpers.h"
 #include "common/direct_xtk12/graphics_memory.h"
-#include "common/draw_system/d3dx12.h"
+#include "common/direct_xtk12/d3dx12.h"
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/heap_wrapper/heap_wrapper_item.h"
 #include "common/draw_system/shader/shader_resource.h"
@@ -15,10 +15,10 @@ ShaderResource::ShaderResource(
     const std::vector < uint8_t >&in_data
     ) 
     : IResource(in_draw_system)
-    , shader_resource(in_shader_resource)
-    , desc(in_desc)
-    , shader_resource_view_desc(in_shader_resource_view_desc)
-    , data(in_data)// , m_bDataDirty(true)
+    , _shader_resource(in_shader_resource)
+    , _desc(in_desc)
+    , _shader_resource_view_desc(in_shader_resource_view_desc)
+    , _data(in_data)// , m_bDataDirty(true)
 
 {
     return;
@@ -26,12 +26,12 @@ ShaderResource::ShaderResource(
 
 void ShaderResource::OnDeviceLost()
 {
-    resource.Reset();
+    _resource.Reset();
 }
 
 std::shared_ptr < HeapWrapperItem > ShaderResource::GetHeapWrapperItem() const
 {
-    return shader_resource;
+    return _shader_resource;
 }
 
 void ShaderResource::UploadCreateResource(
@@ -72,7 +72,7 @@ void ShaderResource::UploadCreateResource(
         const int bytes_per_texel = (int) DirectX::BytesPerPixel(in_desc.Format);
         // //D3D12_ShaderResource2D_DATA_PITCH_ALIGNMENT
         D3D12_SUBRESOURCE_DATA ShaderResource2DData = {};
-        ShaderResource2DData.in_data = in_data;
+        ShaderResource2DData.pData = in_data;
         ShaderResource2DData.RowPitch = in_desc.Width* bytes_per_texel, ShaderResource2DData.SlicePitch = in_data_size;
         if (in_command_list)
         {
@@ -155,12 +155,12 @@ void ShaderResource::UploadCreateResource(
 // }
 // M_bDataDirty = false;
 //
-
+\
     // PCommandList->ResourceBarrier(m_pResource.Get(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_COPY_DEST);
 //
 // #if 0
 // Const UINT64 uploadBufferSize = GetRequiredIntermediateSize(m_pResource.Get(), 0, 1);
-
+\
     // Auto pMemoryUpload = m_pDrawSystem->AllocateUpload(uploadBufferSize, nullptr, D3D12_TEXTURE_DATA_PLACEMENT_ALIGNMENT);
 //
 // Const int bytesPerTexel = (int)DirectX::BytesPerPixel(m_desc.Format);
@@ -182,7 +182,7 @@ void ShaderResource::UploadCreateResource(
 // #else
 // Const UINT64 rowSizeBytes = GetRowSizeBytes(m_pResource.Get(), 0, 1);
 // Const UINT rowCount = m_dataDirtyBox.bottom - m_dataDirtyBox.top;
-
+\
     // Auto pMemoryUpload = m_pDrawSystem->AllocateUpload(rowSizeBytes * rowCount, nullptr, D3D12_TEXTURE_DATA_PLACEMENT_ALIGNMENT);
 //
 // Const int bytesPerTexel = (int)DirectX::BytesPerPixel(m_desc.Format);
@@ -205,7 +205,7 @@ void ShaderResource::UploadCreateResource(
 //
 // #endif
 //
-
+\
     // PCommandList->ResourceBarrier(m_pResource.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 // }
 void ShaderResource::OnDeviceRestored(
@@ -214,15 +214,15 @@ void ShaderResource::OnDeviceRestored(
     )
 {
     UploadCreateResource(
-        in_draw_system,
+        _draw_system,
         in_command_list,
         in_device,
-        in_resource,
-        in_shader_resource,
-        in_desc,
-        in_shader_resource_view_desc,
-        in_data.in_size(),
-        in_data.in_size() ? in_data.in_data() : nullptr,
+        _resource,
+        _shader_resource,
+        _desc,
+        _shader_resource_view_desc,
+        _data.size(),
+        _data.size() ? _data.data() : nullptr,
         L"Shader Texture2D resource"
         );
     // M_bDataDirty = false;

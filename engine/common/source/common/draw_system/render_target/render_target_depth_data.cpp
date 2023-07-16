@@ -10,12 +10,12 @@ RenderTargetDepthData::RenderTargetDepthData(
     const UINT8 in_clear_stencil,
     const bool in_shader_resource
     ) 
-    : format(in_format)
-    , clear_depth_on_set(in_clear_depth_on_set)
-    , clear_depth(in_clear_depth)
-    , clear_stencil_on_set(in_clear_stencil_on_set)
-    , clear_stencil(in_clear_stencil)
-    , shader_resource(in_shader_resource)
+    : _format(in_format)
+    , _clear_depth_on_set(in_clear_depth_on_set)
+    , _clear_depth(in_clear_depth)
+    , _clear_stencil_on_set(in_clear_stencil_on_set)
+    , _clear_stencil(in_clear_stencil)
+    , _shader_resource(in_shader_resource)
 {
     return;
 }
@@ -23,9 +23,9 @@ RenderTargetDepthData::RenderTargetDepthData(
 D3D12_CLEAR_VALUE RenderTargetDepthData::MakeClearValue() const
 {
     D3D12_CLEAR_VALUE result;
-    result.Format = format;
-    result.DepthStencil.Depth = clear_depth;
-    result.DepthStencil.Stencil = clear_stencil;
+    result.Format = _format;
+    result.DepthStencil.Depth = _clear_depth;
+    result.DepthStencil.Stencil = _clear_stencil;
     return result;
 }
 

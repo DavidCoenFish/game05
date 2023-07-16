@@ -7,17 +7,22 @@ RenderTargetFormatData::RenderTargetFormatData(
     const bool in_clear_on_set,
     const VectorFloat4&in_clear_color
     ) 
-    : format(in_format)
-    , clear_on_set(in_clear_on_set)
-    , clear_color(in_clear_color)
+    : _format(in_format)
+    , _clear_on_set(in_clear_on_set)
+    , _clear_color(in_clear_color)
 {
     return;
 }
 
-D3D12_CLEAR_VALUE RenderTargetFormatData::MakeClearValue() const{_d3_d12_clea_r_value result(
-{
-    format,
-    {
-        clear_color[0], clear_color[1], clear_color[2], clear_color[3] }})
-        ; return result;
-    }
+D3D12_CLEAR_VALUE RenderTargetFormatData::MakeClearValue() const{
+    D3D12_CLEAR_VALUE result(
+        {
+            _format,
+            {
+                _clear_color[0], _clear_color[1], _clear_color[2], _clear_color[3] 
+            }
+        }
+    );
+    return result;
+}
+

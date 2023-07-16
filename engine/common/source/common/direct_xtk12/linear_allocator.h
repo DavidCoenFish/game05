@@ -49,12 +49,12 @@ namespace DirectX
     public:
         LinearAllocatorPage() noexcept;
         LinearAllocatorPage(LinearAllocatorPage &&) = delete;
-        LinearAllocatorPage&_operator=(LinearAllocatorPage &&) = delete;
+        LinearAllocatorPage& operator=(LinearAllocatorPage &&) = delete;
         LinearAllocatorPage(LinearAllocatorPage const&) = delete;
-        LinearAllocatorPage&_operator=(LinearAllocatorPage const&) = delete;
+        LinearAllocatorPage& operator=(LinearAllocatorPage const&) = delete;
         size_t Suballocate(
-            in_in_ size_t in_size,
-            in_in_ size_t in_alignment
+            _In_ size_t in_size,
+            _In_ size_t in_alignment
             );
         void* BaseMemory() const noexcept
         {
@@ -105,10 +105,10 @@ namespace DirectX
         D3D12_GPU_VIRTUAL_ADDRESS _gpu_address;
         size_t _offset;
         size_t _size;
-        Microsoft::WRL::ComPtr < ID3D12Resource > _upload_resource;
+        Microsoft::WRL::ComPtr<ID3D12Resource> _upload_resource;
 
     private:
-        std::_atomic < _int32_t > _ref_count;
+        std::atomic<int32_t> _ref_count;
     };
     class LinearAllocator
     {
@@ -117,24 +117,24 @@ namespace DirectX
         // You can specify zero for incrementalSizeBytes to increment
         // By 1 page (64k).
         LinearAllocator(
-            in_in_ ID3D12Device* in_device,
-            in_in_ size_t in_page_size,
-            in_in_ size_t in_preallocate_bytes = 0
+            _In_ ID3D12Device* in_device,
+            _In_ size_t in_page_size,
+            _In_ size_t in_preallocate_bytes = 0
             ) noexcept (false);
         LinearAllocator(LinearAllocator &&) = default;
-        LinearAllocator&_operator=(LinearAllocator &&) = default;
+        LinearAllocator& operator=(LinearAllocator &&) = default;
         LinearAllocator(LinearAllocator const&) = delete;
-        LinearAllocator&_operator=(LinearAllocator const&) = delete;
+        LinearAllocator& operator=(LinearAllocator const&) = delete;
         ~LinearAllocator();
         LinearAllocatorPage* FindPageForAlloc(
-            in_in_ size_t in_requested_size,
-            in_in_ size_t in_alignment
+            _In_ size_t in_requested_size,
+            _In_ size_t in_alignment
             );
         // Call this at least once a frame to check if pages have become available.
         void RetirePendingPages() noexcept;
         // Call this after you submit your work to the driver.
         // (e.g. immediately before Present.)
-        void FenceCommittedPages(in_in_ ID3D12CommandQueue* in_command_queue);
+        void FenceCommittedPages(_In_ ID3D12CommandQueue* in_command_queue);
         // Throws away all currently unused pages
         void Shrink() noexcept;
         // Statistics
@@ -199,8 +199,8 @@ namespace DirectX
         size_t _num_pending;
         size_t _total_pages;
         uint64_t _fence_count;
-        Microsoft::WRL::ComPtr < ID3D12Device > _device;
-        Microsoft::WRL::ComPtr < ID3D12Fence > _fence;
+        Microsoft::WRL::ComPtr<ID3D12Device> _device;
+        Microsoft::WRL::ComPtr<ID3D12Fence> _fence;
 #if defined (_DEBUG) || defined (PROFILE)
             // Debug info
             const wchar_t* GetDebugName() const noexcept
@@ -213,7 +213,7 @@ namespace DirectX
 #endif
 
 #if defined (_DEBUG) || defined (PROFILE)
-            std::_wstring _debug_name;
+            std::wstring _debug_name;
             static void ValidateList(LinearAllocatorPage* in_list);
             void ValidatePageLists();
             void SetPageDebugName(LinearAllocatorPage* in_list) noexcept;

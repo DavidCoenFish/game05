@@ -38,17 +38,17 @@ public:
     void UpdateBackBufferIndex();
     const int GetBackBufferIndex() const
     {
-        return back_buffer_index;
+        return _back_buffer_index;
     }
 
     const int GetWidth() const
     {
-        return width;
+        return _width;
     }
 
     const int GetHeight() const
     {
-        return height;
+        return _height;
     }
 
     void WaitForGpu(const Microsoft::WRL::ComPtr < ID3D12CommandQueue >&in_command_queue) noexcept;
@@ -69,5 +69,5 @@ private:
     Microsoft::WRL::ComPtr < ID3D12Fence > _fence;
     Microsoft::WRL::Wrappers::Event _fence_event;
     Microsoft::WRL::ComPtr < IDXGISwapChain3 > _swap_chain;
-    std::_unique_ptr < RenderTargetBackBuffer > _render_target_back_buffer[MAX_BACK_BUFFER_COUNT];
+    std::unique_ptr < RenderTargetBackBuffer > _render_target_back_buffer[MAX_BACK_BUFFER_COUNT];
 };

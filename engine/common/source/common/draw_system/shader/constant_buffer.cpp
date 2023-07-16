@@ -1,6 +1,6 @@
 #include "common/common_pch.h"
 
-#include "common/draw_system/d3dx12.h"
+#include "common/direct_xtk12/d3dx12.h"
 #include "common/draw_system/heap_wrapper/heap_wrapper_item.h"
 #include "common/draw_system/shader/constant_buffer.h"
 
@@ -11,31 +11,31 @@ ConstantBuffer::ConstantBuffer(
     const void* const in_data,
     const D3D12_SHADER_VISIBILITY in_visiblity
     ) 
-    : frame_count(in_frame_count)
-    , constant_buffer_size(in_constant_buffer_size)
-    , heap_wrapper_item(in_heap_wrapper_item)
-    , data(in_data)
-    , visiblity(in_visiblity)
+    : _frame_count(in_frame_count)
+    , _constant_buffer_size(in_constant_buffer_size)
+    , _heap_wrapper_item(in_heap_wrapper_item)
+    , _data(in_data)
+    , _visiblity(in_visiblity)
 {
     for (int i = 0; i < MAX_BACK_BUFFER_COUNT;++ i)
     {
-        gpu_address[i] = 0;
+        _gpu_address[i] = 0;
     }
 }
 
 void ConstantBuffer::DeviceLost()
 {
-    for (int i = 0; i < frame_count;++ i)
+    for (int i = 0; i < _frame_count;++ i)
     {
-        constant_buffer_upload_heap[i].Reset();
-        gpu_address[i] = 0;
+        _constant_buffer_upload_heap[i].Reset();
+        _gpu_address[i] = 0;
     }
     return;
 }
 
 void ConstantBuffer::DeviceRestored(ID3D12Device* const in_device)
 {
-    for (int i = 0; i < frame_count;++ i)
+    for (int i = 0; i < _frame_count;++ i)
     {
         const auto heap_properties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
         const auto resource_desc = CD3DX12_RESOURCE_DESC::Buffer(1024* 64);
@@ -50,16 +50,16 @@ void ConstantBuffer::DeviceRestored(ID3D12Device* const in_device)
             // Will be data that is read from so we keep it in the generic read state
             nullptr,
             // We do not have use an optimized clear value for constant buffers
-            IID_PPV_ARGS(&constant_buffer_upload_heap[i])
+            IID_PPV_ARGS(&_constant_buffer_upload_heap[i])
             ));
-        constant_buffer_upload_heap[i]->SetName(L"Constant Buffer Upload Resource Heap");
+        _constant_buffer_upload_heap[i]->SetName(L"Constant Buffer Upload Resource Heap");
         D3D12_CONSTANT_BUFFER_VIEW_DESC cbv_desc = {};
-        cbv_desc.BufferLocation = constant_buffer_upload_heap[i]->GetGPUVirtualAddress();
-        cbv_desc.SizeInBytes = (in_constant_buffer_size + 255) &~255;
+        cbv_desc.BufferLocation = _constant_buffer_upload_heap[i]->GetGPUVirtualAddress();
+        cbv_desc.SizeInBytes = (_constant_buffer_size + 255) &~255;
         // CB size is required to be 256-byte aligned.
         in_device->CreateConstantBufferView(
             &cbv_desc,
-            in_heap_wrapper_item->GetCPUHandleFrame(i)
+            _heap_wrapper_item->GetCPUHandleFrame(i)
             );
         // MainDescriptorHeap[i]->GetCPUDescriptorHandleForHeapStart());
         // ZeroMemory(&cbColorMultiplierData, sizeof(cbColorMultiplierData));
@@ -68,10 +68,10 @@ void ConstantBuffer::DeviceRestored(ID3D12Device* const in_device)
             0
             );
         // We do not intend to read from this resource on the CPU. (End is less than or equal to begin)
-        DX::ThrowIfFailed(constant_buffer_upload_heap[i]->Map(
+        DX::ThrowIfFailed(_constant_buffer_upload_heap[i]->Map(
             0,
             &read_range,
-            reinterpret_cast < void** > (&gpu_address[i])
+            reinterpret_cast < void** > (&_gpu_address[i])
             ));
         // Memcpy(m_pGPUAddress[i], &cbColorMultiplierData, sizeof(cbColorMultiplierData));
     }
@@ -86,29 +86,30 @@ void ConstantBuffer::Activate(
 {
     ID3D12DescriptorHeap* descriptor_heaps[] =
     {
-        heap_wrapper_item->GetHeap()};
+        _heap_wrapper_item->GetHeap()
+    };
     in_command_list->SetDescriptorHeaps(
-        in_countof(descriptor_heaps),
+        _countof(descriptor_heaps),
         descriptor_heaps
         );
     in_command_list->SetGraphicsRootDescriptorTable(
         in_root_param_index,
-        heap_wrapper_item->GetGPUHandle()
+        _heap_wrapper_item->GetGPUHandle()
         );
-    if (0 == gpu_address[in_frame_index])
+    if (0 == _gpu_address[in_frame_index])
     {
         return;
     }
     memcpy(
-        gpu_address[in_frame_index],
-        in_data,
-        in_constant_buffer_size
+        _gpu_address[in_frame_index],
+        _data,
+        _constant_buffer_size
         );
     return;
 }
 
 const int ConstantBuffer::GetNum32BitValues() const
 {
-    return (int)(in_constant_buffer_size / 4);
+    return (int)(_constant_buffer_size / 4);
 }
 

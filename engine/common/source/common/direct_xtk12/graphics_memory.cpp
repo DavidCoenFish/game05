@@ -66,12 +66,12 @@ inline size_t GetPoolIndexFromSize(size_t in_x) noexcept
     // Need to convert to an index.
     DWORD bit_index = 0;
 #ifdef _WIN64
-        return bit_scan_forward64(
+        return _BitScanForward64(
             &bit_index,
             allocator_page_size
             ) ? bit_index + 1 : 0;
 #else
-        return bit_scan_forward(
+        return _BitScanForward(
             &bit_index,
             static_cast < DWORD > (allocator_page_size)
             ) ? bit_index + 1 : 0;
@@ -95,7 +95,7 @@ inline size_t GetPageSizeFromPoolIndex(size_t in_x) noexcept
 class DeviceAllocator
 {
 public:
-    DeviceAllocator(in_in_ ID3D12Device* in_device) noexcept (false) 
+    DeviceAllocator(_In_ ID3D12Device* in_device) noexcept (false) 
         : _device(in_device)
     {
         if (!in_device) throw std::invalid_argument("Invalid device parameter");
@@ -110,9 +110,9 @@ public:
     }
 
     DeviceAllocator(DeviceAllocator &&) = delete;
-    DeviceAllocator&_operator=(DeviceAllocator &&) = delete;
+    DeviceAllocator& operator=(DeviceAllocator &&) = delete;
     DeviceAllocator(DeviceAllocator const&) = delete;
-    DeviceAllocator&_operator=(DeviceAllocator const&) = delete;
+    DeviceAllocator& operator=(DeviceAllocator const&) = delete;
     // Explicitly destroy LinearAllocators inside a critical section
     ~DeviceAllocator()
     {
@@ -124,15 +124,15 @@ public:
     }
 
     DirectX::GraphicsResource Alloc(
-        in_in_ size_t in_size,
-        in_in_ size_t in_alignment
+        _In_ size_t in_size,
+        _In_ size_t in_alignment
         )
     {
         std::lock_guard < std::mutex > lock(_mutex);
         // Which memory pool does it live in?
         size_t pool_size = NextPow2((in_alignment + in_size) * PoolIndexScale);
         size_t pool_index = GetPoolIndexFromSize(pool_size);
-        assert(pool_index < _pools.in_size());
+        assert(pool_index < _pools.size());
         // If the allocator isn't initialized yet, do so now
         auto&allocator = _pools[pool_index];
         assert(allocator != nullptr);
@@ -166,7 +166,7 @@ public:
     }
 
     // Submit page fences to the command queue
-    void KickFences(in_in_ ID3D12CommandQueue* in_command_queue)
+    void KickFences(_In_ ID3D12CommandQueue* in_command_queue)
     {
         std::lock_guard < std::mutex > lock(_mutex);
         for (auto&i : _pools)
@@ -215,8 +215,8 @@ public:
 
 private:
     Microsoft::WRL::ComPtr < ID3D12Device > _device;
-    std::_array < std::_unique_ptr < DirectX::LinearAllocator >, AllocatorPoolCount > _pools;
-    mutable std::_mutex _mutex;
+    std::array < std::unique_ptr < DirectX::LinearAllocator >, AllocatorPoolCount > _pools;
+    mutable std::mutex _mutex;
 #if ! (defined (_XBOX_ONE) && defined (_TITLE)) && !defined (_GAMING_XBOX)
         ID3D12Device* GetDevice() const noexcept
         {
@@ -249,15 +249,15 @@ public:
     }
 
     Impl(Impl &&) = default;
-    Impl&_operator=(Impl &&) = default;
+    Impl& operator=(Impl &&) = default;
     Impl(Impl const&) = delete;
-    Impl&_operator=(Impl const&) = delete;
+    Impl& operator=(Impl const&) = delete;
     ~Impl()
     {
         _device_allocator.reset();
     }
 
-    void Initialize(in_in_ ID3D12Device* in_device)
+    void Initialize(_In_ ID3D12Device* in_device)
     {
         _device_allocator = std::make_unique < DeviceAllocator > (in_device);
     }
@@ -273,7 +273,7 @@ public:
             );
     }
 
-    void Commit(in_in_ ID3D12CommandQueue* in_command_queue)
+    void Commit(_In_ ID3D12CommandQueue* in_command_queue)
     {
         _device_allocator->KickFences(in_command_queue);
     }
@@ -315,7 +315,7 @@ public:
     GraphicsMemory* _owner;
 
 private:
-    std::_unique_ptr < DeviceAllocator > _device_allocator;
+    std::unique_ptr < DeviceAllocator > _device_allocator;
     size_t _peak_commited;
     size_t _peak_bytes;
     size_t _peak_pages;
@@ -324,24 +324,24 @@ private:
 // GraphicsMemory
 // --------------------------------------------------------------------------------------
 // Public constructor.
-DirectX::GraphicsMemory::GraphicsMemory(in_in_ ID3D12Device* in_device) 
-    : impl(std::make_unique < Impl > (this))
+DirectX::GraphicsMemory::GraphicsMemory(_In_ ID3D12Device* in_device) 
+    : _impl(std::make_unique < Impl > (this))
 {
-    impl->Initialize(in_device);
+    _impl->Initialize(in_device);
 }
 
 // Move constructor.
 DirectX::GraphicsMemory::GraphicsMemory(DirectX::GraphicsMemory && in_move_from) noexcept 
-    : impl(std::move(in_move_from.impl))
+    : _impl(std::move(in_move_from._impl))
 {
-    impl->_owner = this;
+    _impl->_owner = this;
 }
 
 // Move assignment.
 DirectX::GraphicsMemory&DirectX::GraphicsMemory::operator=(DirectX::GraphicsMemory && in_move_from) noexcept
 {
-    impl = std::move(in_move_from.impl);
-    impl->_owner = this;
+    _impl = std::move(in_move_from._impl);
+    _impl->_owner = this;
     return* this;
 }
 
@@ -355,32 +355,32 @@ DirectX::GraphicsResource DirectX::GraphicsMemory::Allocate(
 {
     assert(in_alignment >= 4);
     // Should use at least DWORD alignment
-    return impl->Allocate(
+    return _impl->Allocate(
         in_size,
         in_alignment
         );
 }
 
-void DirectX::GraphicsMemory::Commit(in_in_ ID3D12CommandQueue* in_command_queue)
+void DirectX::GraphicsMemory::Commit(_In_ ID3D12CommandQueue* in_command_queue)
 {
-    impl->Commit(in_command_queue);
+    _impl->Commit(in_command_queue);
 }
 
 void DirectX::GraphicsMemory::GarbageCollect()
 {
-    impl->GarbageCollect();
+    _impl->GarbageCollect();
 }
 
 DirectX::GraphicsMemoryStatistics DirectX::GraphicsMemory::GetStatistics()
 {
     GraphicsMemoryStatistics stats;
-    impl->GetStatistics(stats);
+    _impl->GetStatistics(stats);
     return stats;
 }
 
 void DirectX::GraphicsMemory::ResetStatistics()
 {
-    impl->ResetStatistics();
+    _impl->ResetStatistics();
 }
 
 /*
@@ -425,12 +425,12 @@ DirectX::GraphicsResource::GraphicsResource() noexcept
     , _size(0){}
 
 DirectX::GraphicsResource::GraphicsResource(
-    in_in_ LinearAllocatorPage* in_page,
-    in_in_ D3D12_GPU_VIRTUAL_ADDRESS in_gpu_address,
-    in_in_ ID3D12Resource* in_resource,
-    in_in_ void* in_memory,
-    in_in_ size_t in_offset,
-    in_in_ size_t in_size
+    _In_ LinearAllocatorPage* in_page,
+    _In_ D3D12_GPU_VIRTUAL_ADDRESS in_gpu_address,
+    _In_ ID3D12Resource* in_resource,
+    _In_ void* in_memory,
+    _In_ size_t in_offset,
+    _In_ size_t in_size
     ) noexcept 
     : _page(in_page)
     , _gpu_address(in_gpu_address)
@@ -521,7 +521,7 @@ DirectX::SharedGraphicsResource::SharedGraphicsResource(const DirectX::SharedGra
 
 DirectX::SharedGraphicsResource::~SharedGraphicsResource(){}
 
-DirectX::SharedGraphicsResource && DirectX::SharedGraphicsResource::operator=(DirectX::SharedGraphicsResource && 
+DirectX::SharedGraphicsResource && DirectX::SharedGraphicsResource::operator=(DirectX::SharedGraphicsResource && \
     in_resource) noexcept
 {
     _shared_resource = std::move(in_resource._shared_resource);
@@ -534,7 +534,7 @@ DirectX::SharedGraphicsResource && DirectX::SharedGraphicsResource::operator=(Di
     return std::move(* this);
 }
 
-DirectX::SharedGraphicsResource&DirectX::SharedGraphicsResource::operator=(const DirectX::SharedGraphicsResource&
+DirectX::SharedGraphicsResource&DirectX::SharedGraphicsResource::operator=(const DirectX::SharedGraphicsResource&\
     in_resource) noexcept
 {
     _shared_resource = in_resource._shared_resource;
