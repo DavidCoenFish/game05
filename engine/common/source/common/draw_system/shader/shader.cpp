@@ -496,7 +496,7 @@ void Shader::SetConstantBufferData(
     if ((0 <= in_index) && (in_index < (int) _array_shader_constants_info.size()))
     {
         auto&shader_constant_info =* _array_shader_constants_info[in_index];
-        const void* const data =&in_data[0];
+        const void* const data = &in_data[0];
         shader_constant_info.UpdateData(
             data,
             sizeof (float) * in_data.size()

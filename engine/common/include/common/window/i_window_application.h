@@ -6,7 +6,7 @@ class TaskWindow;
 class IWindowApplication
 {
 public:
-	IWindowApplication(const HWND in_wnd, const WindowApplicationParam& in_application_param);
+	IWindowApplication(const HWND in_hwnd, const WindowApplicationParam& in_application_param);
 	virtual ~IWindowApplication();
 
 	virtual void Update();
@@ -33,7 +33,7 @@ public:
 	void Destroy(const int in_exit_code);
 
 private:
-	HWND _wnd; 
+	HWND _hwnd; 
 	int _default_width;
 	int _default_height;
 

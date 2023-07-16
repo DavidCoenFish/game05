@@ -49,8 +49,8 @@ void VectorFloat2::NormaliseSelf()
         if (0.0f != length)
         {
             const float mul = 1.0f / length;
-            _data[0]* = mul;
-            _data[1]* = mul;
+            _data[0] *= mul;
+            _data[1] *= mul;
         }
     }
 }

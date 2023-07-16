@@ -7,8 +7,8 @@ public:
     GeometryGeneric(
         DrawSystem* const in_draw_system,
         const D3D_PRIMITIVE_TOPOLOGY in_primitive_topology,
-        const std::vector < D3D12_INPUT_ELEMENT_DESC >&in_input_element_desc_array,
-        const std::vector < float >&in_vertex_data_raw,
+        const std::vector < D3D12_INPUT_ELEMENT_DESC >& in_input_element_desc_array,
+        const std::vector < float >& in_vertex_data_raw,
         const int in_float_per_vertex
         );
     void Draw(ID3D12GraphicsCommandList* const in_command_list);

@@ -20,8 +20,8 @@ public:
         );
     float&operator[](const int in_index);
     const float operator[](const int in_index) const;
-    const bool _operator==(const MatrixFloat33&in_rhs) const;
-    const VectorFloat3 operator* (const VectorFloat3&in_rhs) const;
+    const bool operator==(const MatrixFloat33& in_rhs) const;
+    const VectorFloat3 operator* (const VectorFloat3& in_rhs) const;
 
 private:
     enum Index

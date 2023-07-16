@@ -4,15 +4,15 @@
 #include "common/log/log.h"
 #include "common/task/task_window.h"
 
-IWindowApplication::IWindowApplication(const HWND hWnd, const WindowApplicationParam& applicationParam)
-   : _wnd(hWnd)
+IWindowApplication::IWindowApplication(const HWND in_hwnd, const WindowApplicationParam& in_applicationParam)
+   : _hwnd(in_hwnd)
    , _sizemove(false)
    , _suspend(false)
    , _minimized(false)
-   , _full_screen(applicationParam._full_screen)
-   , _default_width(applicationParam._width)
-   , _default_height(applicationParam._height)
-   , _task_window(applicationParam._task_window)
+   , _full_screen(in_applicationParam._full_screen)
+   , _default_width(in_applicationParam._width)
+   , _default_height(in_applicationParam._height)
+   , _task_window(in_applicationParam._task_window)
 {
    LOG_MESSAGE("IWindowApplication ctor %p", this);
 }
@@ -62,11 +62,11 @@ void IWindowApplication::OnKey(const int, const int, const bool, const int, bool
    return;
 }
 
-void IWindowApplication::Destroy(const int exitCode)
+void IWindowApplication::Destroy(const int in_exitCode)
 {
 	if (nullptr != _task_window)
 	{
-		_task_window->DestroyApplication(this, exitCode);
+		_task_window->DestroyApplication(this, in_exitCode);
 	}
 	return;
 }

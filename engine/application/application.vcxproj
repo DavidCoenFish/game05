@@ -87,6 +87,9 @@
     <CopyFileToFolders Include="task\empty\application.json">
       <FileType>Document</FileType>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="task\test_triangle\application.json">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\application.rc" />
@@ -98,12 +101,14 @@
     </ClCompile>
     <ClCompile Include="source\build.cpp" />
     <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\window_application\application_triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resources\resource.h" />
     <ClInclude Include="source\application_pch.h" />
     <ClInclude Include="source\build.h" />
     <ClInclude Include="source\host_define.h" />
+    <ClInclude Include="source\window_application\application_triangle.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\common\common.vcxproj">
@@ -112,6 +117,16 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\cut.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="task\test_triangle\pixel_shader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="task\test_triangle\vertex_shader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

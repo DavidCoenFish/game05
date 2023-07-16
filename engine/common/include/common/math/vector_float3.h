@@ -11,13 +11,13 @@ public:
         const VectorFloat3&in_lhs,
         const VectorFloat3&in_rhs
         );
-    float&operator[](const int in_index);
+    float& operator[](const int in_index);
     const float operator[](const int in_index) const;
     const float GetX() const;
     const float GetY() const;
     const float GetZ() const;
     void NormaliseSelf();
-    const bool _operator==(const VectorFloat3&in_rhs) const;
+    const bool operator==(const VectorFloat3& in_rhs) const;
 
 private:
     enum Index

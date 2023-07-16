@@ -51,7 +51,7 @@ private:
             sizeof (TypeVertex),
             _vertex_buffer,
             _vertex_buffer_view,
-            _vertex_data.in_data()
+            _vertex_data.data()
             );
     }
 

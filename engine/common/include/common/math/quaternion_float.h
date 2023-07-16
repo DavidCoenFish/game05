@@ -15,10 +15,10 @@ public:
         const float in_z = 0,
         const float in_w = 0
         );
-    const QuaternionFloat operator* (const QuaternionFloat&in_rhs) const;
-    float&operator[](const int in_index);
+    const QuaternionFloat operator* (const QuaternionFloat& in_rhs) const;
+    float& operator[](const int in_index);
     const float operator[](const int in_index) const;
-    const bool _operator==(const QuaternionFloat&in_rhs) const;
+    const bool operator==(const QuaternionFloat& in_rhs) const;
     const float GetX() const;
     const float GetY() const;
     const float GetZ() const;

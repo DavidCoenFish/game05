@@ -19,6 +19,12 @@
     <Filter Include="task\empty">
       <UniqueIdentifier>{8bb9a223-423f-43ba-a030-ccd65706e6ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\window_application">
+      <UniqueIdentifier>{f75a4d2e-bc3e-4077-8d98-645bdfb98b59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="task\test_triangle">
+      <UniqueIdentifier>{69427d29-458e-43c8-959d-57464f197fb8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Script\util_make_host_define.cmd">
@@ -54,6 +60,9 @@
     <ClCompile Include="source\application_pch.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="source\window_application\application_triangle.cpp">
+      <Filter>source\window_application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Build.h">
@@ -67,6 +76,9 @@
     </ClInclude>
     <ClInclude Include="source\host_define.h">
       <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\window_application\application_triangle.h">
+      <Filter>source\window_application</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -83,5 +95,16 @@
     <CopyFileToFolders Include="task\empty\application.json">
       <Filter>task\empty</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="task\test_triangle\application.json">
+      <Filter>task\test_triangle</Filter>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="task\test_triangle\pixel_shader.hlsl">
+      <Filter>task\test_triangle</Filter>
+    </FxCompile>
+    <FxCompile Include="task\test_triangle\vertex_shader.hlsl">
+      <Filter>task\test_triangle</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

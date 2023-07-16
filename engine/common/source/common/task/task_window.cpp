@@ -36,22 +36,19 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
 	);
 
 
-const TWindowApplicationFactory GetApplicationFactory(const std::string& in_factory_name)
+const TWindowApplicationFactory GetApplicationFactory(
+    const std::string& in_factory_name,
+    const std::map<std::string, TWindowApplicationFactory>& in_application_factory
+    )
 {
-	static std::map<std::string, TWindowApplicationFactory> s_factoryMap({
-		//{"ComputeShader", ApplicationComputeShader::Factory},
-		//{"DisplayList", ApplicationDisplayList::Factory},
-		//{"Texture", ApplicationTexture::Factory},
-		//{"Triangle", ApplicationTriangle::Factory}
-		});
-	const auto found = s_factoryMap.find(in_factory_name);
-	if (found != s_factoryMap.end())
+	const auto found = in_application_factory.find(in_factory_name);
+	if (found != in_application_factory.end())
 	{
 		return found->second;
 	}
-	return [](const HWND hWnd, const WindowApplicationParam& param)
+	return [](const HWND in_hwnd, const WindowApplicationParam& in_param)
 	{
-		return new IWindowApplication(hWnd, param);
+		return new IWindowApplication(in_hwnd, in_param);
 	};
 }
 
@@ -60,8 +57,9 @@ const std::shared_ptr<TaskWindow> TaskWindow::Factory(
 	const int in_cmd_show,
 	const std::shared_ptr< CommandLine >& in_command_line,
 	const std::filesystem::path& in_path,
-	const nlohmann::json& in_json
-)
+	const nlohmann::json& in_json,
+    const std::map<std::string, TWindowApplicationFactory>& in_application_factory
+    )
 {
 	std::vector<JSONWindow> array_window;
 	in_json.get_to(array_window);
@@ -80,7 +78,7 @@ const std::shared_ptr<TaskWindow> TaskWindow::Factory(
 			raw_task_window
 			);
 
-		auto application_factory = GetApplicationFactory(item._factory);
+		auto application_factory = GetApplicationFactory(item._factory, in_application_factory);
 		auto application_factory_wrapped = [raw_task_window, application_factory](const HWND in_hwnd, const WindowApplicationParam& in_param)
 		{
 			IWindowApplication* application = application_factory(in_hwnd, in_param);

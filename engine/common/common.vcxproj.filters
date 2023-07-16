@@ -154,6 +154,24 @@
     <ClCompile Include="source\common\direct_xtk12\linear_allocator.cpp">
       <Filter>souce\common\direct_xtk12</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\math\quaternion_float.cpp">
+      <Filter>souce\common\math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\math\vector_float2.cpp">
+      <Filter>souce\common\math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\math\vector_float3.cpp">
+      <Filter>souce\common\math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\math\vector_float4.cpp">
+      <Filter>souce\common\math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\math\vector_math.cpp">
+      <Filter>souce\common\math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\math\matrix_float33.cpp">
+      <Filter>souce\common\math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -231,38 +249,8 @@
     <ClInclude Include="source\common\window\window_helper.h">
       <Filter>souce\common\window</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\window\i_window_application.h">
-      <Filter>souce\common\window</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\window\window_application_param.h">
-      <Filter>souce\common\window</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\draw_system\custom_command_list.h">
-      <Filter>souce\common\draw_system</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\draw_system\device_resources.h">
-      <Filter>souce\common\draw_system</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\draw_system\draw_system.h">
-      <Filter>souce\common\draw_system</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\draw_system\draw_system_frame.h">
-      <Filter>souce\common\draw_system</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\draw_system\i_resource.h">
-      <Filter>souce\common\draw_system</Filter>
-    </ClInclude>
     <ClInclude Include="source\common\draw_system\screen_size_resources.h">
       <Filter>souce\common\draw_system</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\draw_system\shader\constant_buffer_info.h">
-      <Filter>souce\common\draw_system\shader</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\draw_system\shader\shader.h">
-      <Filter>souce\common\draw_system\shader</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\draw_system\shader\shader_pipeline_state_data.h">
-      <Filter>souce\common\draw_system\shader</Filter>
     </ClInclude>
     <ClInclude Include="source\common\draw_system\shader\shader_resource.h">
       <Filter>souce\common\draw_system\shader</Filter>
@@ -282,12 +270,6 @@
     <ClInclude Include="source\common\draw_system\render_target\render_target_backbuffer.h">
       <Filter>souce\common\draw_system\render_target</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\draw_system\render_target\render_target_depth_data.h">
-      <Filter>souce\common\draw_system\render_target</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\draw_system\render_target\render_target_format_data.h">
-      <Filter>souce\common\draw_system\render_target</Filter>
-    </ClInclude>
     <ClInclude Include="source\common\draw_system\render_target\render_target_texture.h">
       <Filter>souce\common\draw_system\render_target</Filter>
     </ClInclude>
@@ -303,15 +285,6 @@
     <ClInclude Include="source\common\draw_system\heap_wrapper\heap_wrapper.h">
       <Filter>souce\common\draw_system\heap_wrapper</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\draw_system\geometry\geometry_generic.h">
-      <Filter>souce\common\draw_system\geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\draw_system\geometry\i_geometry.h">
-      <Filter>souce\common\draw_system\geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\draw_system\geometry\geometry.h">
-      <Filter>souce\common\draw_system\geometry</Filter>
-    </ClInclude>
     <ClInclude Include="source\common\direct_xtk12\direct_x_helpers.h">
       <Filter>souce\common\direct_xtk12</Filter>
     </ClInclude>
@@ -321,8 +294,68 @@
     <ClInclude Include="source\common\direct_xtk12\linear_allocator.h">
       <Filter>souce\common\direct_xtk12</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\direct_xtk12\d3dx12.h">
-      <Filter>souce\common\direct_xtk12</Filter>
+    <ClInclude Include="include\common\window\i_window_application.h">
+      <Filter>include\common\window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\geometry\geometry.h">
+      <Filter>include\common\draw_system\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\custom_command_list.h">
+      <Filter>include\common\draw_system</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\draw_system.h">
+      <Filter>include\common\draw_system</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\draw_system_frame.h">
+      <Filter>include\common\draw_system</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\shader\shader.h">
+      <Filter>include\common\draw_system\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\shader\shader_pipeline_state_data.h">
+      <Filter>include\common\draw_system\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\geometry\geometry_generic.h">
+      <Filter>include\common\draw_system\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\geometry\i_geometry.h">
+      <Filter>include\common\draw_system\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\i_resource.h">
+      <Filter>include\common\draw_system</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\render_target\render_target_depth_data.h">
+      <Filter>include\common\draw_system\render_target</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\render_target\render_target_format_data.h">
+      <Filter>include\common\draw_system\render_target</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\math\matrix_float33.h">
+      <Filter>include\common\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\math\quaternion_float.h">
+      <Filter>include\common\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\math\vector_float2.h">
+      <Filter>include\common\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\math\vector_float3.h">
+      <Filter>include\common\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\math\vector_float4.h">
+      <Filter>include\common\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\math\vector_math.h">
+      <Filter>include\common\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\shader\constant_buffer_info.h">
+      <Filter>include\common\draw_system\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\direct_xtk12\d3dx12.h">
+      <Filter>include\common\direct_xtk12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\window\window_application_param.h">
+      <Filter>include\common\window</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -400,6 +433,27 @@
     </Filter>
     <Filter Include="souce\common\direct_xtk12">
       <UniqueIdentifier>{8054dfe3-46f3-43b9-b413-07cc8e6674ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\draw_system">
+      <UniqueIdentifier>{6188ceb0-5e9a-4060-a61e-94ab05b98d2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\draw_system\geometry">
+      <UniqueIdentifier>{cd52adbc-cd2c-4ec9-9b65-cd00316bfb49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\draw_system\shader">
+      <UniqueIdentifier>{3bc30901-71a2-42ae-8d38-f7bc9ec2828b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\draw_system\render_target">
+      <UniqueIdentifier>{22bdc9f7-c243-447c-8901-764828f41bb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\math">
+      <UniqueIdentifier>{d0dfc653-fe68-4154-b546-0868c36d2d91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\math">
+      <UniqueIdentifier>{6fed0663-9f0a-443f-9dac-86a782e00d6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\direct_xtk12">
+      <UniqueIdentifier>{fdceebdb-77d6-4c74-be19-6eb6343663a0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

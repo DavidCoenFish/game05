@@ -6,13 +6,13 @@ public:
         const float in_x = 0,
         const float in_y = 0
         );
-    static const VectorFloat2 Cross(const VectorFloat2&in_subject);
+    static const VectorFloat2 Cross(const VectorFloat2& in_subject);
     float&operator[](const int in_index);
     const float operator[](const int in_index) const;
     const float GetX() const;
     const float GetY() const;
     void NormaliseSelf();
-    const bool _operator==(const VectorFloat2&in_rhs) const;
+    const bool operator==(const VectorFloat2& in_rhs) const;
 
 private:
     enum Index

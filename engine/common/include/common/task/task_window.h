@@ -11,8 +11,9 @@ public:
 		const int in_cmd_show,
 		const std::shared_ptr< CommandLine >& in_command_line,
 		const std::filesystem::path& in_path,
-		const nlohmann::json& in_json
-		);
+		const nlohmann::json& in_json,
+        const std::map<std::string, TWindowApplicationFactory>& in_application_factory
+    );
 
 	TaskWindow();
 	virtual ~TaskWindow();

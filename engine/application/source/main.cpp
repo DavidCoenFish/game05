@@ -4,6 +4,7 @@
 
 #include "application_pch.h"
 #include "build.h"
+#include "window_application/application_triangle.h"
 #include "common/log/log.h"
 #include "common/file_system/file_system.h"
 #include "common/task/i_task.h"
@@ -29,6 +30,15 @@ static std::map< std::string, TTaskFactory >& GetTaskFactoryMap()
 		{"Window", TaskWindow::Factory}
 	});
 	return s_map;
+}
+
+static std::map< std::string, TWindowApplicationFactory >& GetWindowApplicationFactoryMap()
+{
+    static std::map< std::string, TWindowApplicationFactory > s_map(
+        {
+            {"Triangle", ApplicationTriangle::Factory}
+        });
+    return s_map;
 }
 
 static const TTaskFactory GetTaskFactory(const std::string& in_task_factory_key)
@@ -78,11 +88,19 @@ static const int RunTask(HINSTANCE in_instance, int in_cmd_show)
 		auto json = nlohmann::json::parse(file_string);
 		JSONApplication application_data;
 		json.get_to(application_data);
+        auto window_application_factory_map = GetWindowApplicationFactoryMap();
 
 		for (const auto& item: application_data._tasks)
 		{
-			auto task_factory = GetTaskFactory(item._factory);
-			auto task = (nullptr != task_factory) ? task_factory(in_instance, in_cmd_show, command_line, path, item._data) : nullptr;
+            auto task_factory = GetTaskFactory(item._factory);
+            auto task = (nullptr != task_factory) ? task_factory(
+                in_instance, 
+                in_cmd_show, 
+                command_line, 
+                path, 
+                item._data,
+                window_application_factory_map
+                ) : nullptr;
 			if (task)
 			{
 				result = task->Run();
