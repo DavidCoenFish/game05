@@ -14,28 +14,15 @@ namespace CommonDagThreaded
 			//Logger::WriteMessage(L"Hello world");
 			auto collection = DagThreadedCollection::Factory();
 			Assert::IsNotNull( collection.get() );
-			collection->SetMultiThreadedMode(true);
-			collection->SetMultiThreadedMode(false);
 			collection.reset();
 		}
-		TEST_METHOD(DagThreadedExceptionOnCreateCalculate)
-		{
-			auto lambda = []()
-			{
-				DagThreadedCollection* collection = new DagThreadedCollection();
-				Assert::IsNotNull( collection );
-				collection->SetMultiThreadedMode(true);
-				collection->CreateNodeCalculate(std::string("foo"), nullptr);
-			};
 
-			Assert::ExpectException<std::exception>(lambda);
-		}
 		TEST_METHOD(DagThreadedFindNull)
 		{
 			auto collection = DagThreadedCollection::Factory();
 			Assert::IsNotNull( collection.get() );
 			auto node_found = collection->FindNode("bar");
-			Assert::IsNull(node_found);
+			Assert::IsNull(node_found.get());
 		}
 
 		TEST_METHOD(DagThreadedCreateVariable)
@@ -43,9 +30,9 @@ namespace CommonDagThreaded
 			auto collection = DagThreadedCollection::Factory();
 			Assert::IsNotNull( collection.get() );
 			auto node = collection->CreateNodeVariable("foo");
-			Assert::IsNotNull(node);
+			Assert::IsNotNull(node.get());
 			auto node_found = collection->FindNode("foo");
-			Assert::AreEqual(node, node_found);
+			Assert::AreEqual((void*)node.get(), (void*)node_found.get());
 			auto dag_value = DagThreadedHelper::CreateDagValue<int>(3);
 			collection->SetDagValue(node, dag_value);
 

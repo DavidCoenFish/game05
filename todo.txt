@@ -1,10 +1,11 @@
 X thread safe dag node
 X autotron
-_ drag drop file rename snake case
-_ vsix document
-_ application framework
-_ setup d3dx12 application
-_ draw d3dx12 triangle
+X drag drop file rename snake case
+X vsix document
+X application framework
+X setup d3dx12 application
+X draw d3dx12 triangle
+_ make dag fully thread safe
 _ draw line d3dx12 defered renderer
 _ draw sphere d3dx12 defered renderer
 _ draw grid
@@ -17,6 +18,3 @@ _ minecraft equivlent terain render
 _ terrain collision
 _ flatland prototype
 _ ui text
-
-
-pass down application factory into task factory

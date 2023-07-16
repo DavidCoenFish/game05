@@ -6,20 +6,22 @@
 class IDagThreadedNode;
 class IDagThreadedValue;
 
-class DagThreadedVariable : public IDagThreadedNode
+// Rename DagThreadedNodeVariable
+class DagThreadedNodeVariable : public IDagThreadedNode
 {
 public:
-	DagThreadedVariable(
+	DagThreadedNodeVariable(
 		const std::string& in_name, 
 		const std::shared_ptr< IDagThreadedValue >& in_value,
 		const DagThreaded::DirtyCase in_dirty_case
 		);
-	virtual ~DagThreadedVariable();
+	virtual ~DagThreadedNodeVariable();
 
 	void SetValue(const std::shared_ptr<IDagThreadedValue>& in_value);
 
 private:
 	const std::string& GetName() const override { return _name; }
+    //std::mutex& GetOutputMutex() override { return _array_output_mutex; }
 	void SetOutput(IDagThreadedNode* const in_node) override;
 	void RemoveOutput(IDagThreadedNode* const in_node) override;
 	std::shared_ptr<IDagThreadedValue> GetValue() override;
@@ -29,9 +31,12 @@ private:
 	//const DagThreadedCollection& _collection;
 	const DagThreaded::DirtyCase _dirty_case;
 	const std::string _name;
+
+    std::shared_mutex _array_output_mutex;
 	std::vector< IDagThreadedNode* > _array_output;
 
-	std::mutex _value_mutex;
+    // Shared_ptr has an internal lock
+	//std::mutex _value_mutex; 
 	std::shared_ptr< IDagThreadedValue > _value;
 
 };

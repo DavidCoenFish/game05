@@ -52,6 +52,7 @@
 #include <mutex>
 //#include <set>
 //#include <stdexcept>
+#include <shared_mutex>
 #include <string>
 //#include <variant>
 #include <vector>

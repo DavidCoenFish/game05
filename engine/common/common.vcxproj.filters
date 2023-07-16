@@ -13,13 +13,13 @@
     <ClCompile Include="source\common\dag_threaded\i_dag_threaded_node.cpp">
       <Filter>souce\common\dag_threaded</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\dag_threaded\dag_threaded_calculate.cpp">
+    <ClCompile Include="source\common\dag_threaded\dag_threaded_node_calculate.cpp">
       <Filter>souce\common\dag_threaded</Filter>
     </ClCompile>
     <ClCompile Include="source\common\dag_threaded\i_dag_threaded_value.cpp">
       <Filter>souce\common\dag_threaded</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\dag_threaded\dag_threaded_variable.cpp">
+    <ClCompile Include="source\common\dag_threaded\dag_threaded_node_variable.cpp">
       <Filter>souce\common\dag_threaded</Filter>
     </ClCompile>
     <ClCompile Include="source\common\dag_threaded\dag_threaded_value.cpp">
@@ -192,10 +192,10 @@
     <ClInclude Include="source\common\dag_threaded\i_dag_threaded_node.h">
       <Filter>souce\common\dag_threaded</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\dag_threaded\dag_threaded_calculate.h">
+    <ClInclude Include="source\common\dag_threaded\dag_threaded_node_calculate.h">
       <Filter>souce\common\dag_threaded</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\dag_threaded\dag_threaded_variable.h">
+    <ClInclude Include="source\common\dag_threaded\dag_threaded_node_variable.h">
       <Filter>souce\common\dag_threaded</Filter>
     </ClInclude>
     <ClInclude Include="include\common\dag_threaded\i_dag_threaded_value.h">

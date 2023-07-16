@@ -5,7 +5,8 @@
 class IDagThreadedValue;
 class DagThreadedCollection;
 
-class DagThreadedCalculate : public IDagThreadedNode
+// Rename DagThreadedNodeCalculate
+class DagThreadedNodeCalculate : public IDagThreadedNode
 {
 public:
 	typedef std::function< std::shared_ptr< IDagThreadedValue > (
@@ -13,12 +14,12 @@ public:
 		const std::vector< std::shared_ptr< IDagThreadedValue > >& in_array_indexed
 		) > CalculateFunction;
 
-	DagThreadedCalculate(
+	DagThreadedNodeCalculate(
 		//const DagThreadedCollection& in_collection, 
 		const std::string& in_name,
 		const CalculateFunction& in_calculate_function
 		);
-	virtual ~DagThreadedCalculate();
+	virtual ~DagThreadedNodeCalculate();
 
 	void AddInputStack(IDagThreadedNode* const pNode);
 	void RemoveInputStack(IDagThreadedNode* const pNode);
@@ -27,6 +28,7 @@ public:
 
 private:
 	const std::string& GetName() const override { return _name; }
+    //std::mutex& GetOutputMutex() override { return _array_output_mutex; }
 	void SetOutput(IDagThreadedNode* const pNode) override;
 	void RemoveOutput(IDagThreadedNode* const pNode) override;
 	std::shared_ptr<IDagThreadedValue> GetValue() override;
@@ -36,11 +38,18 @@ private:
 	//const DagThreadedCollection& _collection;
 	const std::string _name;
 	const CalculateFunction _calculate_function;
-	std::vector< IDagThreadedNode* > _array_input_stack;
-	std::vector< IDagThreadedNode* > _array_input_index;
-	std::vector< IDagThreadedNode* > _array_output;
 
-	std::mutex _value_mutex;
+    std::shared_mutex _array_input_stack_mutex;
+    std::vector< IDagThreadedNode* > _array_input_stack;
+
+    std::shared_mutex _array_input_index_mutex;
+    std::vector< IDagThreadedNode* > _array_input_index;
+
+    std::shared_mutex _array_output_mutex;
+    std::vector< IDagThreadedNode* > _array_output;
+
+    // Shared_ptr has an internal lock
+    //std::shared_mutex _value_mutex;
 	std::shared_ptr< IDagThreadedValue > _value;
 
 	// Each time we are marked dirty, _change_id increments
