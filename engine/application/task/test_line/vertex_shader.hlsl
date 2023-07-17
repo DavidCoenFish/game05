@@ -1,28 +1,19 @@
-//--------------------------------------------------------------------------------------
-// VertexShader.hlsl
-//
-// Simple vertex shader for rendering a triangle
-//
-// Advanced Technology Group (ATG)
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//--------------------------------------------------------------------------------------
-
 struct Vertex
 {
-    float2 position     : Position;
-    float4 color        : COLOR0;
+    float2 _position : Position;
 };
 
-struct VertexOutput
+// https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-semantics
+struct Interpolant
 {
-    float4 position     : SV_Position;
-    float4 color        : COLOR0;
+    float4 _position : SV_Position;
+    float2 _uv : TEXCOORD0;
 };
 
-VertexOutput main( Vertex input )
+Interpolant main(Vertex in_input)
 {
-   VertexOutput output;
-   output.position = float4(input.position.x, input.position.y, 0.0f, 1.0f);
-   output.color = input.color;
-   return output;
+    Interpolant result;
+    result._position = float4(in_input._position.x, in_input._position.y, 0.0f, 1.0f);
+    result._uv = float2(in_input._position.x, in_input._position.y);
+    return result;
 }

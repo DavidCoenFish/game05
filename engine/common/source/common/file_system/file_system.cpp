@@ -27,12 +27,12 @@ const std::filesystem::path FileSystem::GetTempDir()
 // based on code Copyright (c) Microsoft Corporation. All rights reserved. ReadData.h
 const FileSystem::TFileData FileSystem::SyncReadFile(const std::filesystem::path& absolutePath)
 {
-    LOG_CONSOLE("FileSystem::SyncReadFile:%s", absolutePath.string().c_str());
+    LOG_MESSAGE_FILESYSTEM("FileSystem::SyncReadFile:%s", absolutePath.string().c_str());
 
 	std::ifstream inFile(absolutePath, std::ios::in | std::ios::binary | std::ios::ate);
 	auto pBlob = std::make_shared< std::vector< uint8_t > >();
    
-    LOG_CONSOLE("  file:%d fail():%d is_open():%d", inFile ? 1 : 0, inFile.fail() ? 1 : 0, inFile.is_open() ? 1 : 0);
+    LOG_MESSAGE_FILESYSTEM("  file:%d fail():%d is_open():%d", inFile ? 1 : 0, inFile.fail() ? 1 : 0, inFile.is_open() ? 1 : 0);
     DSC_CONDITION_THROW(!inFile || inFile.fail() || false == inFile.is_open(), "Failed to open file");
 
 	std::streampos len = inFile.tellg();

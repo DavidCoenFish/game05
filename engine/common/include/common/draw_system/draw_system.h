@@ -46,6 +46,7 @@ public:
         const RenderTargetDepthData&in_target_depth_data = RenderTargetDepthData()
         );
     ~DrawSystem();
+
     void WaitForGpu() noexcept;
     void OnResize();
     void AddResource(IResource* const in_resource);
@@ -65,21 +66,23 @@ public:
         void* const in_data_or_nullptr = nullptr,
         size_t in_alignment = 16
         );
+
     std::shared_ptr < Shader > MakeShader(
         ID3D12GraphicsCommandList* const in_command_list,
-        const ShaderPipelineStateData&in_pipeline_state_data,
-        const std::shared_ptr < std::vector < uint8_t > >&in_vertex_shader_data,
-        const std::shared_ptr < std::vector < uint8_t > >&in_geometry_shader_data,
-        const std::shared_ptr < std::vector < uint8_t > >&in_pixel_shader_data,
-        const std::vector < std::shared_ptr < ShaderResourceInfo > >&in_array_shader_resource_info = std::vector < std::\
+        const ShaderPipelineStateData& in_pipeline_state_data,
+        const std::shared_ptr < std::vector < uint8_t > >& in_vertex_shader_data,
+        const std::shared_ptr < std::vector < uint8_t > >& in_geometry_shader_data,
+        const std::shared_ptr < std::vector < uint8_t > >& in_pixel_shader_data,
+        const std::vector < std::shared_ptr < ShaderResourceInfo > >& in_array_shader_resource_info = std::vector < std::\
             shared_ptr < ShaderResourceInfo > > (),
-        const std::vector < std::shared_ptr < ConstantBufferInfo > >&in_array_shader_constants_info = std::vector < std\
+        const std::vector < std::shared_ptr < ConstantBufferInfo > >& in_array_shader_constants_info = std::vector < std\
             ::shared_ptr < ConstantBufferInfo > > (),
-        const std::shared_ptr < std::vector < uint8_t > >&in_compute_shader_data = std::shared_ptr < std::vector < \
+        const std::shared_ptr < std::vector < uint8_t > >& in_compute_shader_data = std::shared_ptr < std::vector < \
             uint8_t > > (),
-        const std::vector < std::shared_ptr < UnorderedAccessInfo > >&in_array_unordered_access_info = std::vector < std\
+        const std::vector < std::shared_ptr < UnorderedAccessInfo > >& in_array_unordered_access_info = std::vector < std\
             ::shared_ptr < UnorderedAccessInfo > > ()
         );
+
     std::shared_ptr < GeometryGeneric > MakeGeometryGeneric(
         ID3D12GraphicsCommandList* const in_command_list,
         const D3D_PRIMITIVE_TOPOLOGY in_primitive_topology,
@@ -87,8 +90,10 @@ public:
         const std::vector < float >&in_vertex_data_raw,
         const int in_float_per_vertex
         );
+
     // Was moving away from Geometry and towards GeometryGeneric as for json it is easier to load generic float data
-    template < typename TypeVertex > std::shared_ptr < Geometry < TypeVertex > > MakeGeometry(
+    template < typename TypeVertex > 
+    std::shared_ptr < Geometry < TypeVertex > > MakeGeometry(
         ID3D12GraphicsCommandList* const in_command_list,
         const D3D_PRIMITIVE_TOPOLOGY in_primitive_topology,
         const std::vector < D3D12_INPUT_ELEMENT_DESC >&in_input_element_desc_array,
@@ -118,12 +123,14 @@ public:
         const D3D12_SHADER_RESOURCE_VIEW_DESC&in_shader_resource_view_desc,
         const std::vector < uint8_t >&in_data = std::vector < uint8_t > ()
         );
+
     std::shared_ptr < UnorderedAccess > MakeUnorderedAccess(
         ID3D12GraphicsCommandList* const in_command_list,
         const std::shared_ptr < HeapWrapperItem >&in_heap_wrapper_item,
         const D3D12_RESOURCE_DESC&in_desc,
         const D3D12_UNORDERED_ACCESS_VIEW_DESC&in_unordered_access_view_desc
         );
+
     std::shared_ptr < RenderTargetTexture > MakeRenderTargetTexture(
         ID3D12GraphicsCommandList* const in_command_list,
         const std::vector < RenderTargetFormatData >&in_target_format_data_array,
@@ -132,14 +139,18 @@ public:
         const int in_height,
         const bool in_resize_with_screen = false
         );
+
     std::shared_ptr < CustomCommandList > CreateCustomCommandList();
     void CustomCommandListFinish(ID3D12GraphicsCommandList* in_command_list);
-    std::unique_ptr < DrawSystemFrame > CreateNewFrame();
+
     // Ctor == Prepare, dtor == Present
-    void Prepare(ID3D12GraphicsCommandList*&in_command_list);
-    // Void Clear();
+    std::unique_ptr < DrawSystemFrame > CreateNewFrame();
+
+    void Prepare(ID3D12GraphicsCommandList*& in_command_list);
     void Present();
+
     IRenderTarget* GetRenderTargetBackBuffer();
+
     std::shared_ptr < HeapWrapperItem > MakeHeapWrapperCbvSrvUav(const int in_length = 1);
     std::shared_ptr < HeapWrapperItem > MakeHeapWrapperSampler(const int in_length = 1);
     std::shared_ptr < HeapWrapperItem > MakeHeapWrapperRenderTargetView(const int in_length = 1);
@@ -161,4 +172,5 @@ private:
     std::shared_ptr < HeapWrapper > _heap_wrapper_sampler;
     std::shared_ptr < HeapWrapper > _heap_wrapper_render_target_view;
     std::shared_ptr < HeapWrapper > _heap_wrapper_depth_stencil_view;
+
 };

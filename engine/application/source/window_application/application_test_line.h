@@ -1,4 +1,5 @@
 #pragma once
+#include "common/math/vector_float3.h"
 #include "common/window/i_window_application.h"
 
 class DrawSystem;
@@ -30,4 +31,18 @@ private:
     std::unique_ptr < DrawSystem > _draw_system;
     std::shared_ptr < Shader > _shader;
     std::shared_ptr < GeometryGeneric > _geometry;
+
+    float _fov_vertical;
+    float _fov_horizontal_calculated;
+
+    VectorFloat3 _camera_pos;
+    VectorFloat3 _camera_at;
+    VectorFloat3 _camera_up;
+    float _camera_far;
+
+    VectorFloat3 _line_pos;
+    float _radian_per_pixel;
+    VectorFloat3 _line_at;
+    float _line_length;
+
 };

@@ -5,12 +5,16 @@ X vsix document
 X application framework
 X setup d3dx12 application
 X draw d3dx12 triangle
-_ make dag fully thread safe
-_ draw line d3dx12 defered renderer
-_ draw sphere d3dx12 defered renderer
+X make dag fully thread safe
+_ draw line d3dx12
+ _ const buffer into shader
+ _ keyboard change value/ move camera
+_ draw sphere d3dx12
 _ draw grid
+_ draw many lines
 _ draw bip simple
 _ draw bip generic
+_ bip animation
 _ compu shader many characters as spheres
 _ compu shader characters as generic bip
 _ compu shader collision
