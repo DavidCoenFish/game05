@@ -1,6 +1,7 @@
 #include "common/common_pch.h"
 
 #include "common/file_system/file_system.h"
+#include "common/log/log.h"
 #include "common/util/utf8.h"
 
 #define MAX_PATH_LENGTH 1024 
@@ -26,34 +27,27 @@ const std::filesystem::path FileSystem::GetTempDir()
 // based on code Copyright (c) Microsoft Corporation. All rights reserved. ReadData.h
 const FileSystem::TFileData FileSystem::SyncReadFile(const std::filesystem::path& absolutePath)
 {
+    LOG_CONSOLE("FileSystem::SyncReadFile:%s", absolutePath.string().c_str());
+
 	std::ifstream inFile(absolutePath, std::ios::in | std::ios::binary | std::ios::ate);
 	auto pBlob = std::make_shared< std::vector< uint8_t > >();
    
-	if ((!inFile) || (inFile.fail()))
-	{
-		throw std::exception("SyncReadFile");
-		//return pBlob;
-	}
+    LOG_CONSOLE("  file:%d fail():%d is_open():%d", inFile ? 1 : 0, inFile.fail() ? 1 : 0, inFile.is_open() ? 1 : 0);
+    DSC_CONDITION_THROW(!inFile || inFile.fail() || false == inFile.is_open(), "Failed to open file");
 
 	std::streampos len = inFile.tellg();
-	if (!inFile)
-	{
-		throw std::exception("SyncReadFile");
-	}
+
+    DSC_CONDITION_THROW(len < 0 || !inFile || inFile.fail(), "Failed to open file");
 
 	pBlob->resize(size_t(len));
 
 	inFile.seekg(0, std::ios::beg);
-	if (!inFile)
-	{
-		throw std::exception("SyncReadFile");
-	}
+
+    DSC_CONDITION_THROW(!inFile || inFile.fail(), "Failed to open file");
 
 	inFile.read(reinterpret_cast<char*>(pBlob->data()), len);
-	if (!inFile)
-	{
-		throw std::exception("SyncReadFile");
-	}
+
+    DSC_CONDITION_THROW(!inFile || inFile.fail(), "Failed to open file");
 
 	inFile.close();
 

@@ -1,6 +1,6 @@
 #include "application_pch.h"
 
-#include "window_application/application_triangle.h"
+#include "window_application/application_test_triangle.h"
 
 #include "common/draw_system/custom_command_list.h"
 #include "common/draw_system/draw_system.h"
@@ -12,18 +12,18 @@
 #include "common/log/log.h"
 #include "common/window/window_application_param.h"
 
-IWindowApplication* const ApplicationTriangle::Factory(
+IWindowApplication* const ApplicationTestTriangle::Factory(
     const HWND in_hwnd,
     const WindowApplicationParam&in_application_param
     )
 {
-    return new ApplicationTriangle(
+    return new ApplicationTestTriangle(
         in_hwnd,
         in_application_param
         );
 }
 
-ApplicationTriangle::ApplicationTriangle(
+ApplicationTestTriangle::ApplicationTestTriangle(
     const HWND in_hwnd,
     const WindowApplicationParam& in_application_param
     ) 
@@ -33,7 +33,7 @@ ApplicationTriangle::ApplicationTriangle(
         )
 {
     LOG_MESSAGE(
-        "ApplicationTriangle  ctor %p",
+        "ApplicationTestTriangle  ctor %p",
         this
         );
     _draw_system = std::make_unique < DrawSystem > (in_hwnd);
@@ -113,7 +113,7 @@ ApplicationTriangle::ApplicationTriangle(
     }
 }
 
-ApplicationTriangle::~ApplicationTriangle()
+ApplicationTestTriangle::~ApplicationTestTriangle()
 {
     if (_draw_system)
     {
@@ -123,12 +123,12 @@ ApplicationTriangle::~ApplicationTriangle()
     _geometry.reset();
     _draw_system.reset();
     LOG_MESSAGE(
-        "ApplicationTriangle  dtor %p",
+        "ApplicationTestTriangle  dtor %p",
         this
         );
 }
 
-void ApplicationTriangle::Update()
+void ApplicationTestTriangle::Update()
 {
     BaseType::Update();
     if (_draw_system)
@@ -140,7 +140,7 @@ void ApplicationTriangle::Update()
     }
 }
 
-void ApplicationTriangle::OnWindowSizeChanged(
+void ApplicationTestTriangle::OnWindowSizeChanged(
     const int in_width,
     const int in_height
     )

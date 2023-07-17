@@ -90,6 +90,9 @@
     <CopyFileToFolders Include="task\test_triangle\application.json">
       <FileType>Document</FileType>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="task\test_line\application.json">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\application.rc" />
@@ -101,14 +104,16 @@
     </ClCompile>
     <ClCompile Include="source\build.cpp" />
     <ClCompile Include="source\main.cpp" />
-    <ClCompile Include="source\window_application\application_triangle.cpp" />
+    <ClCompile Include="source\window_application\application_test_line.cpp" />
+    <ClCompile Include="source\window_application\application_test_triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resources\resource.h" />
     <ClInclude Include="source\application_pch.h" />
     <ClInclude Include="source\build.h" />
     <ClInclude Include="source\host_define.h" />
-    <ClInclude Include="source\window_application\application_triangle.h" />
+    <ClInclude Include="source\window_application\application_test_line.h" />
+    <ClInclude Include="source\window_application\application_test_triangle.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\common\common.vcxproj">
@@ -119,6 +124,14 @@
     <Image Include="resources\cut.ico" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="task\test_line\pixel_shader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="task\test_line\vertex_shader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
     <FxCompile Include="task\test_triangle\pixel_shader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>

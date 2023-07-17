@@ -3,12 +3,16 @@
   "Id": "240fc133-78da-4158-b0c7-1be8214f8843",
   "Items": [
     {
+      "Id": "08527c4c-2d76-445f-8c0c-7b222eece588",
+      "Command": "test_line"
+    },
+    {
       "Id": "22b0f0e5-1b7b-4ef9-ba74-f20c04a78274",
       "Command": "test_triangle"
     },
     {
       "Id": "3bf71329-47eb-448a-a043-f1975e7a08ec",
-      "Command": "empty LogOutputDebugString"
+      "Command": "LogOutputDebugString"
     },
     {
       "Id": "227ff93b-7cfb-4955-bfe0-fc5f6eb9ee27",
