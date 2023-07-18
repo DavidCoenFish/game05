@@ -148,13 +148,12 @@ namespace DirectX
             Reset();
         }
 
-        void __cdecl Update(const Mouse::State&in_state) noexcept;
+        void __cdecl Update(const Mouse::State& in_state) noexcept;
         void __cdecl Reset() noexcept;
         Mouse::State __cdecl GetLastState() const noexcept
         {
-            return last_state;
+            return _last_state;
         }
-
 
     public:
         ButtonState _left_button;

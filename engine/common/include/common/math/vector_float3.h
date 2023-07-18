@@ -7,17 +7,26 @@ public:
         const float in_y = 0,
         const float in_z = 0
         );
+
     static const VectorFloat3 Cross(
         const VectorFloat3&in_lhs,
         const VectorFloat3&in_rhs
         );
-    float& operator[](const int in_index);
-    const float operator[](const int in_index) const;
     const float GetX() const;
     const float GetY() const;
     const float GetZ() const;
     void NormaliseSelf();
+
+    float& operator[](const int in_index);
+    const float operator[](const int in_index) const;
     const bool operator==(const VectorFloat3& in_rhs) const;
+
+    friend VectorFloat3& operator+= (VectorFloat3& in_lhs, const VectorFloat3& in_rhs);
+    friend VectorFloat3& operator-= (VectorFloat3& in_lhs, const VectorFloat3& in_rhs);
+    friend const VectorFloat3 operator+ (const VectorFloat3& in_lhs, const VectorFloat3& in_rhs);
+    friend const VectorFloat3 operator- (const VectorFloat3& in_lhs, const VectorFloat3& in_rhs);
+    friend const VectorFloat3 operator* (const VectorFloat3& in_lhs, const float in_rhs);
+    friend const VectorFloat3 operator* (const float in_lhs, const VectorFloat3& in_rhs);
 
 private:
     enum Index
@@ -29,4 +38,12 @@ private:
 
 private:
     float _data[Index::Count];
+
 };
+
+VectorFloat3& operator+= (VectorFloat3& in_lhs, const VectorFloat3& in_rhs);
+VectorFloat3& operator-= (VectorFloat3& in_lhs, const VectorFloat3& in_rhs);
+const VectorFloat3 operator+ (const VectorFloat3& in_lhs, const VectorFloat3& in_rhs);
+const VectorFloat3 operator- (const VectorFloat3& in_lhs, const VectorFloat3& in_rhs);
+const VectorFloat3 operator* (const VectorFloat3& in_lhs, const float in_rhs);
+const VectorFloat3 operator* (const float in_lhs, const VectorFloat3& in_rhs);

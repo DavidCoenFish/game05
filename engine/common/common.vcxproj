@@ -28,6 +28,7 @@
     <ClCompile Include="source\common\dag_threaded\i_dag_threaded_value.cpp" />
     <ClCompile Include="source\common\direct_xtk12\direct_x_helpers.cpp" />
     <ClCompile Include="source\common\direct_xtk12\graphics_memory.cpp" />
+    <ClCompile Include="source\common\direct_xtk12\handle_closer.cpp" />
     <ClCompile Include="source\common\direct_xtk12\linear_allocator.cpp" />
     <ClCompile Include="source\common\draw_system\custom_command_list.cpp" />
     <ClCompile Include="source\common\draw_system\device_resources.cpp" />
@@ -72,6 +73,7 @@
     <ClCompile Include="source\common\task\i_task.cpp" />
     <ClCompile Include="source\common\task\task_window.cpp" />
     <ClCompile Include="source\common\util\command_line.cpp" />
+    <ClCompile Include="source\common\util\timer.cpp" />
     <ClCompile Include="source\common\util\utf8.cpp" />
     <ClCompile Include="source\common\window\i_window_application.cpp" />
     <ClCompile Include="source\common\window\window_application_param.cpp" />
@@ -112,6 +114,7 @@
     <ClInclude Include="include\common\task\i_task.h" />
     <ClInclude Include="include\common\task\task_window.h" />
     <ClInclude Include="include\common\util\command_line.h" />
+    <ClInclude Include="include\common\util\timer.h" />
     <ClInclude Include="include\common\util\utf8.h" />
     <ClInclude Include="include\common\window\i_window_application.h" />
     <ClInclude Include="include\common\window\window_application_param.h" />
@@ -123,6 +126,7 @@
     <ClInclude Include="source\common\dag_threaded\i_dag_threaded_node.h" />
     <ClInclude Include="source\common\direct_xtk12\direct_x_helpers.h" />
     <ClInclude Include="source\common\direct_xtk12\graphics_memory.h" />
+    <ClInclude Include="source\common\direct_xtk12\handle_closer.h" />
     <ClInclude Include="source\common\direct_xtk12\linear_allocator.h" />
     <ClInclude Include="source\common\draw_system\heap_wrapper\heap_wrapper.h" />
     <ClInclude Include="source\common\draw_system\heap_wrapper\heap_wrapper_item.h" />

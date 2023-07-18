@@ -175,6 +175,12 @@
     <ClCompile Include="source\common\math\angle.cpp">
       <Filter>souce\common\math</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\direct_xtk12\handle_closer.cpp">
+      <Filter>souce\common\direct_xtk12</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\util\timer.cpp">
+      <Filter>souce\common\util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -362,6 +368,12 @@
     </ClInclude>
     <ClInclude Include="include\common\math\angle.h">
       <Filter>include\common\math</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\direct_xtk12\handle_closer.h">
+      <Filter>souce\common\direct_xtk12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\util\timer.h">
+      <Filter>include\common\util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

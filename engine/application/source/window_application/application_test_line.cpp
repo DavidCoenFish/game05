@@ -2,6 +2,7 @@
 
 #include "window_application/application_test_line.h"
 
+#include "common/direct_xtk12/keyboard.h"
 #include "common/draw_system/custom_command_list.h"
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/draw_system_frame.h"
@@ -11,6 +12,9 @@
 #include "common/file_system/file_system.h"
 #include "common/log/log.h"
 #include "common/math/angle.h"
+#include "common/math/matrix_float33.h"
+#include "common/math/quaternion_float.h"
+#include "common/util/timer.h"
 #include "common/window/window_application_param.h"
 
 struct ConstantBufferB0
@@ -57,6 +61,18 @@ ApplicationTestLine::ApplicationTestLine(
     , _line_pos(0.0f, 0.0f, 0.0f)
     , _line_at(0.0f, 1.0f, 0.0f)
     , _line_length(2.0f)
+    , _input_q(false)
+    , _input_w(false)
+    , _input_e(false)
+    , _input_a(false)
+    , _input_s(false)
+    , _input_d(false)
+    , _input_u(false)
+    , _input_i(false)
+    , _input_o(false)
+    , _input_j(false)
+    , _input_k(false)
+    , _input_l(false)
 {
     LOG_MESSAGE(
         "ApplicationTestLine  ctor %p",
@@ -123,6 +139,8 @@ ApplicationTestLine::ApplicationTestLine(
             2
             );
     }
+
+    _timer = std::make_unique<Timer>();
 }
 
 ApplicationTestLine::~ApplicationTestLine()
@@ -143,6 +161,86 @@ ApplicationTestLine::~ApplicationTestLine()
 void ApplicationTestLine::Update()
 {
     BaseType::Update();
+
+    if (nullptr != _timer)
+    {
+        const float time_delta = _timer->GetDeltaSeconds();
+        const auto camera_right = VectorFloat3::Cross(_camera_at, _camera_up);
+
+        //LOG_MESSAGE("ApplicationTestLine::Update %f %f %f", _camera_pos[0], _camera_pos[1], _camera_pos[2]);
+
+        if (true == _input_q)
+        {
+            _camera_pos += (_camera_up * time_delta);
+        }
+        if (true == _input_w)
+        {
+            _camera_pos += (_camera_at * time_delta);
+        }
+        if (true == _input_e)
+        {
+            _camera_pos -= (_camera_up * time_delta);
+        }
+        if (true == _input_a)
+        {
+            _camera_pos -= (camera_right * time_delta);
+        }
+        if (true == _input_d)
+        {
+            _camera_pos += (camera_right * time_delta);
+        }
+        if (true == _input_s)
+        {
+            _camera_pos -= (_camera_at * time_delta);
+        }
+
+        bool rotation_flag = false;
+        auto rotation = QuaternionFloat::FactoryIdentity();
+        if (true == _input_u)
+        {
+            rotation_flag = true;
+            rotation *= QuaternionFloat::FactoryAxisAngle(_camera_at, time_delta);
+        }
+        if (true == _input_i)
+        {
+            rotation_flag = true;
+            rotation *= QuaternionFloat::FactoryAxisAngle(camera_right, time_delta);
+        }
+        if (true == _input_o)
+        {
+            rotation_flag = true;
+            rotation *= QuaternionFloat::FactoryAxisAngle(_camera_at, -time_delta);
+        }
+        if (true == _input_j)
+        {
+            rotation_flag = true;
+            rotation *= QuaternionFloat::FactoryAxisAngle(_camera_up, time_delta);
+        }
+        if (true == _input_k)
+        {
+            rotation_flag = true;
+            rotation *= QuaternionFloat::FactoryAxisAngle(camera_right, -time_delta);
+        }
+        if (true == _input_l)
+        {
+            rotation_flag = true;
+            rotation *= QuaternionFloat::FactoryAxisAngle(_camera_up, -time_delta);
+        }
+
+        if (true == rotation_flag)
+        {
+            const auto matrix = MatrixFloat33::FactoryQuaternionFloat(rotation);
+            _camera_at = matrix * _camera_at;
+            _camera_up = matrix * _camera_up;
+
+            // Normalise
+            _camera_at.NormaliseSelf();
+            const auto temp = VectorFloat3::Cross(_camera_at, _camera_up);
+            _camera_up = VectorFloat3::Cross(temp, _camera_at);
+            _camera_up.NormaliseSelf();
+        }
+    }
+
     if (_draw_system)
     {
         auto frame = _draw_system->CreateNewFrame();
@@ -191,3 +289,67 @@ void ApplicationTestLine::OnWindowSizeChanged(
     return;
 }
 
+void ApplicationTestLine::OnKey(
+    const int in_vk_code,
+    const int in_scan_code,
+    const bool in_repeat_flag,
+    const int in_repeat_count,
+    bool in_up_flag
+    )
+{
+    in_scan_code;
+    in_repeat_flag;
+    in_repeat_count;
+
+    if ('Q' == in_vk_code)
+    {
+        _input_q = (false == in_up_flag);
+    }
+    else if ('W' == in_vk_code)
+    {
+        _input_w = (false == in_up_flag);
+    }
+    else if ('E' == in_vk_code)
+    {
+        _input_e = (false == in_up_flag);
+    }
+    else if ('A' == in_vk_code)
+    {
+        _input_a = (false == in_up_flag);
+    }
+    else if ('S' == in_vk_code)
+    {
+        _input_s = (false == in_up_flag);
+    }
+    else if ('D' == in_vk_code)
+    {
+        _input_d = (false == in_up_flag);
+    }
+
+    else if ('U' == in_vk_code)
+    {
+        _input_u = (false == in_up_flag);
+    }
+    else if ('I' == in_vk_code)
+    {
+        _input_i = (false == in_up_flag);
+    }
+    else if ('O' == in_vk_code)
+    {
+        _input_o = (false == in_up_flag);
+    }
+    else if ('J' == in_vk_code)
+    {
+        _input_j = (false == in_up_flag);
+    }
+    else if ('K' == in_vk_code)
+    {
+        _input_k = (false == in_up_flag);
+    }
+    else if ('L' == in_vk_code)
+    {
+        _input_l = (false == in_up_flag);
+    }
+
+    return;
+}

@@ -6,7 +6,7 @@ class QuaternionFloat
 public:
     static const QuaternionFloat FactoryIdentity();
     static const QuaternionFloat FactoryAxisAngle(
-        const VectorFloat3&in_axis,
+        const VectorFloat3& in_axis,
         const float in_angle_radian
         );
     explicit QuaternionFloat(
@@ -15,7 +15,6 @@ public:
         const float in_z = 0,
         const float in_w = 0
         );
-    const QuaternionFloat operator* (const QuaternionFloat& in_rhs) const;
     float& operator[](const int in_index);
     const float operator[](const int in_index) const;
     const bool operator==(const QuaternionFloat& in_rhs) const;
@@ -35,4 +34,11 @@ private:
 
 private:
     float _data[Index::Count];
+
+    friend QuaternionFloat& operator*= (QuaternionFloat& in_lhs, const QuaternionFloat& in_rhs);
+    friend const QuaternionFloat operator* (const QuaternionFloat& in_lhs, const QuaternionFloat& in_rhs);
+
 };
+
+QuaternionFloat& operator*= (QuaternionFloat& in_lhs, const QuaternionFloat& in_rhs);
+const QuaternionFloat operator* (const QuaternionFloat& in_lhs, const QuaternionFloat& in_rhs);

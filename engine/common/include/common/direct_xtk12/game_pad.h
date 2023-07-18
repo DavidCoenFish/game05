@@ -396,13 +396,13 @@ namespace DirectX
         ButtonState _right_shoulder;
         union
         {
-            ButtonState back;
-            ButtonState view;
+            ButtonState _back;
+            ButtonState _view;
         };
         union
         {
-            ButtonState start;
-            ButtonState menu;
+            ButtonState _start;
+            ButtonState _menu;
         };
         ButtonState _dpad_up;
         ButtonState _dpad_down;

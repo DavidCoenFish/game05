@@ -18,7 +18,7 @@ public:
         const float in_a12 = 0,
         const float in_a22 = 0
         );
-    float&operator[](const int in_index);
+    float& operator[](const int in_index);
     const float operator[](const int in_index) const;
     const bool operator==(const MatrixFloat33& in_rhs) const;
     const VectorFloat3 operator* (const VectorFloat3& in_rhs) const;
@@ -35,8 +35,10 @@ private:
         M02,
         M12,
         M22,
-        Count};
+        Count
+    };
 
 private:
     float _data[Index::Count];
+
 };

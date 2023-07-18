@@ -17,7 +17,8 @@ public:
 	{
 		//nop
 	}
-	std::string _name;
+public:
+    std::string _name;
 	bool _full_screen;
 	int _width;
 	int _height;

@@ -862,7 +862,7 @@ namespace
         EventRegistrationToken _user_change_token[MAX_PLAYER_COUNT];
         EventRegistrationToken _added_token;
         EventRegistrationToken _removed_token;
-        std::unique_ptr < void, std::handle_closer > _changed;
+        std::unique_ptr < void, handle_closer > _changed;
     };
     GamePad::Impl* GamePad::Impl::s_game_pad = nullptr;
 #elif defined (_XBOX_ONE)
@@ -1853,65 +1853,79 @@ void GamePad::Resume() noexcept
 
 GamePad&GamePad::Get()
 {
-    if (!Impl::s_game_pad || !Impl::s_game_pad->_owner) throw std::exception("GamePad is a singleton");
+    if (!Impl::s_game_pad || !Impl::s_game_pad->_owner) 
+        throw std::exception("GamePad is a singleton");
     return* Impl::s_game_pad->_owner;
 }
 
 // ======================================================================================
 // ButtonStateTracker
 // ======================================================================================
-#define UPDATE_BUTTON_STATE(field) field = static_cast < ButtonState > ((!!state.buttons.field) | ((!!state.buttons.\
-    field ^ !!lastState.buttons.field) << 1));
+#define UPDATE_BUTTON_STATE(in_field) in_field = static_cast < ButtonState > ((!!state._buttons._field) | ((!!state.buttons.\
+    in_field ^ !!lastState._buttons._field) << 1));
 void GamePadButtonStateTracker::Update(const GamePad::State&in_state) noexcept
 {
-    UPDATE_BUTTON_STATE(in_a) assert((!in_state._buttons.in_a && !last_state._buttons.in_a) == (in_a == UP));
-    assert((in_state._buttons.in_a && last_state._buttons.in_a) == (in_a == HELD));
-    assert((!in_state._buttons.in_a && last_state._buttons.in_a) == (in_a == RELEASED));
-    assert((in_state._buttons.in_a && !last_state._buttons.in_a) == (in_a == PRESSED));
-    UPDATE_BUTTON_STATE(in_b) UPDATE_BUTTON_STATE(in_x) UPDATE_BUTTON_STATE(in_y) UPDATE_BUTTON_STATE(in_left_stick) \
-        UPDATE_BUTTON_STATE(in_right_stick) UPDATE_BUTTON_STATE(in_left_shoulder) UPDATE_BUTTON_STATE(in_right_shoulder)\
-    UPDATE_BUTTON_STATE(in_back) UPDATE_BUTTON_STATE(in_start) dpad_up = static_cast < ButtonState > ((!!in_state._dpad.\
+    UPDATE_BUTTON_STATE(_a) 
+
+    assert((!in_state._buttons._a && !last_state._buttons._a) == (_a == UP));
+    assert((in_state._buttons._a && last_state._buttons._a) == (_a == HELD));
+    assert((!in_state._buttons._a && last_state._buttons._a) == (_a == RELEASED));
+    assert((in_state._buttons._a && !last_state._buttons._a) == (_a == PRESSED));
+
+    UPDATE_BUTTON_STATE(_b) 
+    UPDATE_BUTTON_STATE(_x) 
+    UPDATE_BUTTON_STATE(_y) 
+    UPDATE_BUTTON_STATE(_left_stick) 
+    UPDATE_BUTTON_STATE(_right_stick)
+    UPDATE_BUTTON_STATE(_left_shoulder)
+    UPDATE_BUTTON_STATE(_right_shoulder)
+    UPDATE_BUTTON_STATE(_back)
+    UPDATE_BUTTON_STATE(_start)
+    
+    _dpad_up = static_cast < ButtonState > ((!!in_state._dpad.\
         _up) | ((!!in_state._dpad._up ^ !!last_state._dpad._up) << 1));
-    dpad_down = static_cast < ButtonState > ((!!in_state._dpad._down) | ((!!in_state._dpad._down ^ !!last_state._dpad.\
+    _dpad_down = static_cast < ButtonState > ((!!in_state._dpad._down) | ((!!in_state._dpad._down ^ !!last_state._dpad.\
         _down) << 1));
-    dpad_left = static_cast < ButtonState > ((!!in_state._dpad._left) | ((!!in_state._dpad._left ^ !!last_state._dpad.\
+    _dpad_left = static_cast < ButtonState > ((!!in_state._dpad._left) | ((!!in_state._dpad._left ^ !!last_state._dpad.\
         _left) << 1));
-    dpad_right = static_cast < ButtonState > ((!!in_state._dpad._right) | ((!!in_state._dpad._right ^ !!last_state._dpad\
+    _dpad_right = static_cast < ButtonState > ((!!in_state._dpad._right) | ((!!in_state._dpad._right ^ !!last_state._dpad\
         ._right) << 1));
+
     assert((!in_state._dpad._up && !last_state._dpad._up) == (dpad_up == UP));
     assert((in_state._dpad._up && last_state._dpad._up) == (dpad_up == HELD));
     assert((!in_state._dpad._up && last_state._dpad._up) == (dpad_up == RELEASED));
     assert((in_state._dpad._up && !last_state._dpad._up) == (dpad_up == PRESSED));
+
     // Handle 'threshold' tests which emulate buttons
     bool threshold = in_state.IsLeftThumbStickUp();
-    left_stick_up = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsLeftThumbStickUp()) << 1\
+    _left_stick_up = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsLeftThumbStickUp()) << 1\
         ));
     threshold = in_state.IsLeftThumbStickDown();
-    left_stick_down = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsLeftThumbStickDown()) \
+    _left_stick_down = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsLeftThumbStickDown()) \
         << 1));
     threshold = in_state.IsLeftThumbStickLeft();
-    left_stick_left = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsLeftThumbStickLeft()) \
+    _left_stick_left = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsLeftThumbStickLeft()) \
         << 1));
     threshold = in_state.IsLeftThumbStickRight();
-    left_stick_right = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsLeftThumbStickRight()\
+    _left_stick_right = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsLeftThumbStickRight()\
         ) << 1));
     threshold = in_state.IsRightThumbStickUp();
-    right_stick_up = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsRightThumbStickUp()) <<\
+    _right_stick_up = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsRightThumbStickUp()) <<\
     1));
     threshold = in_state.IsRightThumbStickDown();
-    right_stick_down = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsRightThumbStickDown()\
+    _right_stick_down = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsRightThumbStickDown()\
         ) << 1));
     threshold = in_state.IsRightThumbStickLeft();
-    right_stick_left = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsRightThumbStickLeft()\
+    _right_stick_left = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsRightThumbStickLeft()\
         ) << 1));
     threshold = in_state.IsRightThumbStickRight();
-    right_stick_right = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsRightThumbStickRight\
+    _right_stick_right = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsRightThumbStickRight\
         ()) << 1));
     threshold = in_state.IsLeftTriggerPressed();
-    left_trigger = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsLeftTriggerPressed()) << \
+    _left_trigger = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsLeftTriggerPressed()) << \
         1));
     threshold = in_state.IsRightTriggerPressed();
-    right_trigger = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsRightTriggerPressed()) \
+    _right_trigger = static_cast < ButtonState > ((!!threshold) | ((!!threshold ^ !!last_state.IsRightTriggerPressed()) \
         << 1));
     last_state = in_state;
 }

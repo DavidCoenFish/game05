@@ -14,7 +14,7 @@ const QuaternionFloat QuaternionFloat::FactoryIdentity()
 }
 
 const QuaternionFloat QuaternionFloat::FactoryAxisAngle(
-    const VectorFloat3&in_axis,
+    const VectorFloat3& in_axis,
     const float in_angle_radian
     )
 {
@@ -57,7 +57,7 @@ const float QuaternionFloat::operator[](const int in_index) const
     return 0;
 }
 
-const bool QuaternionFloat::operator==(const QuaternionFloat&in_rhs) const
+const bool QuaternionFloat::operator==(const QuaternionFloat& in_rhs) const
 {
     for (int index = 0; index < Index::Count;++ index)
     {
@@ -67,20 +67,6 @@ const bool QuaternionFloat::operator==(const QuaternionFloat&in_rhs) const
         }
     }
     return true;
-}
-
-const QuaternionFloat QuaternionFloat::operator* (const QuaternionFloat&in_rhs) const
-{
-    return QuaternionFloat(
-        (_data[3]* in_rhs._data[0]) + (_data[0]* in_rhs._data[3]) + (_data[1]* in_rhs._data[2]) - (_data[2]* in_rhs.\
-            _data[1]),
-        (_data[3]* in_rhs._data[1]) - (_data[0]* in_rhs._data[2]) + (_data[1]* in_rhs._data[3]) + (_data[2]* in_rhs.\
-            _data[0]),
-        (_data[3]* in_rhs._data[2]) + (_data[0]* in_rhs._data[1]) - (_data[1]* in_rhs._data[0]) + (_data[2]* in_rhs.\
-            _data[3]),
-        (_data[3]* in_rhs._data[3]) - (_data[0]* in_rhs._data[0]) - (_data[1]* in_rhs._data[1]) - (_data[2]* in_rhs.\
-            _data[2])
-        );
 }
 
 const float QuaternionFloat::GetX() const
@@ -102,4 +88,25 @@ const float QuaternionFloat::GetW() const
 {
     return _data[Index::W];
 }
+
+QuaternionFloat& operator*= (QuaternionFloat& in_lhs, const QuaternionFloat& in_rhs)
+{
+    in_lhs = in_lhs * in_rhs;
+    return in_lhs;
+}
+
+const QuaternionFloat operator* (const QuaternionFloat& in_lhs, const QuaternionFloat& in_rhs)
+{
+    return QuaternionFloat(
+        (in_lhs._data[3] * in_rhs._data[0]) + (in_lhs._data[0] * in_rhs._data[3]) + (in_lhs._data[1] * in_rhs._data[2]) - (in_lhs._data[2] * in_rhs.\
+            _data[1]),
+        (in_lhs._data[3] * in_rhs._data[1]) - (in_lhs._data[0] * in_rhs._data[2]) + (in_lhs._data[1] * in_rhs._data[3]) + (in_lhs._data[2] * in_rhs.\
+            _data[0]),
+        (in_lhs._data[3] * in_rhs._data[2]) + (in_lhs._data[0] * in_rhs._data[1]) - (in_lhs._data[1] * in_rhs._data[0]) + (in_lhs._data[2] * in_rhs.\
+            _data[3]),
+        (in_lhs._data[3] * in_rhs._data[3]) - (in_lhs._data[0] * in_rhs._data[0]) - (in_lhs._data[1] * in_rhs._data[1]) - (in_lhs._data[2] * in_rhs.\
+            _data[2])
+    );
+}
+
 

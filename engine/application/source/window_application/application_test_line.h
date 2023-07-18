@@ -5,6 +5,7 @@
 class DrawSystem;
 class Shader;
 class GeometryGeneric;
+class Timer;
 
 class ApplicationTestLine : public IWindowApplication
 {
@@ -25,6 +26,13 @@ private:
         const int in_width,
         const int in_height
         ) override;
+    virtual void OnKey(
+        const int in_vk_code, 
+        const int in_scan_code, 
+        const bool in_repeat_flag, 
+        const int in_repeat_count, 
+        bool in_up_flag
+        ) override;
 
 private:
     typedef IWindowApplication BaseType;
@@ -44,5 +52,23 @@ private:
     float _radian_per_pixel;
     VectorFloat3 _line_at;
     float _line_length;
+
+    std::unique_ptr < Timer > _timer;
+
+    // Camera Pos
+    bool _input_q;
+    bool _input_w;
+    bool _input_e;
+    bool _input_a;
+    bool _input_s;
+    bool _input_d;
+
+    // Camera Rot
+    bool _input_u;
+    bool _input_i;
+    bool _input_o;
+    bool _input_j;
+    bool _input_k;
+    bool _input_l;
 
 };

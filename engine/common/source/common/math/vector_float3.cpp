@@ -12,6 +12,7 @@ VectorFloat3::VectorFloat3(
 {
     return;
 }
+
 float&VectorFloat3::operator[](const int in_index)
 {
     if ((0 <= in_index) && (in_index < Index::Count))
@@ -87,4 +88,58 @@ const bool VectorFloat3::operator==(const VectorFloat3&in_rhs) const
     }
     return true;
 }
+
+VectorFloat3& operator+= (VectorFloat3& in_lhs, const VectorFloat3& in_rhs)
+{
+    in_lhs._data[0] += in_rhs._data[0];
+    in_lhs._data[1] += in_rhs._data[1];
+    in_lhs._data[2] += in_rhs._data[2];
+    return in_lhs;
+}
+
+VectorFloat3& operator-= (VectorFloat3& in_lhs, const VectorFloat3& in_rhs)
+{
+    in_lhs._data[0] -= in_rhs._data[0];
+    in_lhs._data[1] -= in_rhs._data[1];
+    in_lhs._data[2] -= in_rhs._data[2];
+    return in_lhs;
+}
+
+const VectorFloat3 operator+ (const VectorFloat3& in_lhs, const VectorFloat3& in_rhs)
+{
+    return VectorFloat3(
+        in_lhs._data[0] + in_rhs._data[0],
+        in_lhs._data[1] + in_rhs._data[1],
+        in_lhs._data[2] + in_rhs._data[2]
+        );
+}
+
+const VectorFloat3 operator- (const VectorFloat3& in_lhs, const VectorFloat3& in_rhs)
+{
+    return VectorFloat3(
+        in_lhs._data[0] - in_rhs._data[0],
+        in_lhs._data[1] - in_rhs._data[1],
+        in_lhs._data[2] - in_rhs._data[2]
+        );
+}
+
+const VectorFloat3 operator* (const VectorFloat3& in_lhs, const float in_rhs)
+{
+    return VectorFloat3(
+        in_lhs._data[0] * in_rhs,
+        in_lhs._data[1] * in_rhs,
+        in_lhs._data[2] * in_rhs
+        );
+}
+
+const VectorFloat3 operator* (const float in_lhs, const VectorFloat3& in_rhs)
+{
+    return VectorFloat3(
+        in_lhs * in_rhs._data[0],
+        in_lhs * in_rhs._data[1],
+        in_lhs * in_rhs._data[2]
+        );
+}
+
+
 

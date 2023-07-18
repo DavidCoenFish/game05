@@ -179,25 +179,28 @@ namespace
     //
     // For a Win32 desktop application, call this function from your Window Message Procedure
     //
-    // LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-    // {
-    // Switch (message)
-    // {
-    //
-    // Case WM_ACTIVATEAPP:
-    // Keyboard::ProcessMessage(message, wParam, lParam);
-    // Break;
-    //
-    // Case WM_KEYDOWN:
-    // Case WM_SYSKEYDOWN:
-    // Case WM_KEYUP:
-    // Case WM_SYSKEYUP:
-    // Keyboard::ProcessMessage(message, wParam, lParam);
-    // Break;
-    //
-    // }
-    // }
-    //
+    /*
+    LRESULT CALLBACK WndProc(HWND in_hwnd, UINT in_message, WPARAM in_w_param, LPARAM in_l_param)
+    {
+        switch (in_message)
+        {
+        default:
+            break;    
+        case WM_ACTIVATEAPP:
+            Keyboard::ProcessMessage(in_message, in_w_param, in_l_param);
+            break;
+
+        case WM_KEYDOWN:
+        case WM_SYSKEYDOWN:
+        case WM_KEYUP:
+        case WM_SYSKEYUP:
+            Keyboard::ProcessMessage(in_message, in_w_param, in_l_param);
+            break;
+
+        }
+    }
+    */
+    
     class Keyboard::Impl
     {
     public:
@@ -248,7 +251,7 @@ namespace
     public:
         State _state;
         Keyboard* _owner;
-        static Keyboard::Impl* _s_keyboard;
+        static Keyboard::Impl* s_keyboard;
     };
     Keyboard::Impl* Keyboard::Impl::s_keyboard = nullptr;
     void Keyboard::ProcessMessage(
@@ -258,7 +261,8 @@ namespace
         )
     {
         auto impl = Impl::s_keyboard;
-        if (!impl) return;
+        if (!impl) 
+            return;
         bool down = false;
         switch (in_message)
         {
@@ -281,7 +285,7 @@ namespace
         {
         case VK_SHIFT:
             vk = static_cast < int > (MapVirtualKey(
-                (static_cast < UINT > (l_param) &0x00ff0000) >> 16u,
+                (static_cast < UINT > (in_l_param) &0x00ff0000) >> 16u,
                 MAPVK_VSC_TO_VK_EX
                 ));
             if (!down)
@@ -289,34 +293,34 @@ namespace
                 // Workaround to ensure left vs. right shift get cleared when both were pressed at same time
                 KeyUp(
                     VK_LSHIFT,
-                    in_impl->_state
+                    impl->_state
                     );
                 KeyUp(
                     VK_RSHIFT,
-                    in_impl->_state
+                    impl->_state
                     );
             }
             break;
         case VK_CONTROL:
-            vk = (static_cast < UINT > (l_param) &0x01000000) ? VK_RCONTROL : VK_LCONTROL;
+            vk = (static_cast < UINT > (in_l_param) &0x01000000) ? VK_RCONTROL : VK_LCONTROL;
             break;
         case VK_MENU:
-            vk = (static_cast < UINT > (l_param) &0x01000000) ? VK_RMENU : VK_LMENU;
+            vk = (static_cast < UINT > (in_l_param) &0x01000000) ? VK_RMENU : VK_LMENU;
             break;
         }
 
         if (down)
         {
             KeyDown(
-                in_vk,
-                in_impl->_state
+                vk,
+                impl->_state
                 );
         }
         else
         {
             KeyUp(
-                in_vk,
-                in_impl->_state
+                vk,
+                impl->_state
                 );
         }
     }
@@ -557,20 +561,20 @@ namespace
 #pragma warning(disable : 4355)
 // Public constructor.
 Keyboard::Keyboard() noexcept (false) 
-    : impl(std::make_unique < Impl > (this)){}
+    : _impl(std::make_unique < Impl > (this)){}
 
 // Move constructor.
 Keyboard::Keyboard(Keyboard && in_move_from) noexcept 
-    : impl(std::move(in_move_from.impl))
+    : _impl(std::move(in_move_from._impl))
 {
-    impl->_owner = this;
+    _impl->_owner = this;
 }
 
 // Move assignment.
 Keyboard&Keyboard::operator=(Keyboard && in_move_from) noexcept
 {
-    impl = std::move(in_move_from.impl);
-    impl->_owner = this;
+    _impl = std::move(in_move_from._impl);
+    _impl->_owner = this;
     return* this;
 }
 
@@ -580,35 +584,38 @@ Keyboard::~Keyboard(){}
 Keyboard::State Keyboard::GetState() const
 {
     State state;
-    impl->GetState(state);
+    _impl->GetState(state);
     return state;
 }
 
 void Keyboard::Reset() noexcept
 {
-    impl->Reset();
+    _impl->Reset();
 }
 
 bool Keyboard::IsConnected() const
 {
-    return impl->IsConnected();
+    return _impl->IsConnected();
 }
 
-Keyboard&Keyboard::Get()
+Keyboard& Keyboard::Get()
 {
-    if (!Impl::s_keyboard || !Impl::s_keyboard->_owner) throw std::exception("Keyboard is a singleton");
+    if (!Impl::s_keyboard || !Impl::s_keyboard->_owner) 
+    {
+        throw std::exception("Keyboard is a singleton");
+    }
     return* Impl::s_keyboard->_owner;
 }
 
 // ======================================================================================
 // KeyboardStateTracker
 // ======================================================================================
-void KeyboardButtonStateTracker::Update(const Keyboard::State&in_state) noexcept
+void KeyboardButtonStateTracker::Update(const Keyboard::State& in_state) noexcept
 {
     auto curr_ptr = reinterpret_cast < const uint32_t* > (&in_state);
-    auto prev_ptr = reinterpret_cast < const uint32_t* > (&in_last_state);
-    auto released_ptr = reinterpret_cast < uint32_t* > (&in_released);
-    auto pressed_ptr = reinterpret_cast < uint32_t* > (&in_pressed);
+    auto prev_ptr = reinterpret_cast < const uint32_t* > (&_last_state);
+    auto released_ptr = reinterpret_cast < uint32_t* > (&_released);
+    auto pressed_ptr = reinterpret_cast < uint32_t* > (&_pressed);
     for (size_t j = 0; j < (256 / 32);++ j)
     {
         * pressed_ptr =* curr_ptr&~ (* prev_ptr);
@@ -618,7 +625,7 @@ void KeyboardButtonStateTracker::Update(const Keyboard::State&in_state) noexcept
         ++ released_ptr;
         ++ pressed_ptr;
     }
-    in_last_state = in_state;
+    _last_state = in_state;
 }
 
 void KeyboardButtonStateTracker::Reset() noexcept

@@ -233,35 +233,35 @@ LRESULT CALLBACK WndProc(HWND in_hwnd, UINT in_message, WPARAM in_wparam, LPARAM
 			}
 			else
 			{
-				WORD vkCode = LOWORD(in_wparam);                                 // virtual-key code
-				WORD keyFlags = HIWORD(in_lparam);
+				WORD vk_code = LOWORD(in_wparam);                                 // virtual-key code
+				WORD key_flags = HIWORD(in_lparam);
 
-				WORD scanCode = LOBYTE(keyFlags);                             // scan code
-				BOOL isExtendedKey = (keyFlags & KF_EXTENDED) == KF_EXTENDED; // extended-key flag, 1 if scancode has 0xE0 prefix
-    
-				if (isExtendedKey)
+				WORD scan_code = LOBYTE(key_flags);                             // scan code
+				BOOL is_extended_key = (key_flags & KF_EXTENDED) == KF_EXTENDED; // extended-key flag, 1 if scancode has 0xE0 prefix
+
+				if (is_extended_key)
 				{
-					scanCode = MAKEWORD(scanCode, 0xE0);
+					scan_code = MAKEWORD(scan_code, 0xE0);
 				}
 
-				BOOL repeatFlag = (keyFlags & KF_REPEAT) == KF_REPEAT;        // previous key-state flag, 1 on autorepeat
-				WORD repeatCount = LOWORD(in_lparam);                            // repeat count, > 0 if several keydown messages was combined into one message
+				BOOL repeat_flag = (key_flags & KF_REPEAT) == KF_REPEAT;        // previous key-state flag, 1 on autorepeat
+				WORD repeat_count = LOWORD(in_lparam);                            // repeat count, > 0 if several keydown messages was combined into one message
 
-				BOOL upFlag = (keyFlags & KF_UP) == KF_UP;                    // transition-state flag, 1 on keyup
+				BOOL up_flag = (key_flags & KF_UP) == KF_UP;                    // transition-state flag, 1 on keyup
 
 				// if we want to distinguish these keys:
-				switch (vkCode)
+				switch (vk_code)
 				{
 				default:
 					break;
 				case VK_SHIFT:   // converts to VK_LSHIFT or VK_RSHIFT
 				case VK_CONTROL: // converts to VK_LCONTROL or VK_RCONTROL
 				case VK_MENU:    // converts to VK_LMENU or VK_RMENU
-					vkCode = LOWORD(MapVirtualKeyW(scanCode, MAPVK_VSC_TO_VK_EX));
+					vk_code = LOWORD(MapVirtualKeyW(scan_code, MAPVK_VSC_TO_VK_EX));
 					break;
 				}
 
-				application->OnKey(vkCode, scanCode, repeatFlag, repeatCount, upFlag);
+				application->OnKey(vk_code, scan_code, repeat_flag, repeat_count, up_flag);
 			}
 		}
 		break;
