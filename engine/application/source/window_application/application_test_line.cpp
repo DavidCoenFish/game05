@@ -25,12 +25,14 @@ struct ConstantBufferB0
     float _camera_fov_vertical;
     VectorFloat3 _camera_up;
     float _camera_far;
+};
 
+struct ConstantBufferB1
+{
     VectorFloat3 _line_pos;
     float _radian_per_pixel;
     VectorFloat3 _line_at;
     float _line_length;
-
 };
 
 IWindowApplication* const ApplicationTestLine::Factory(
@@ -87,8 +89,9 @@ ApplicationTestLine::ApplicationTestLine(
     });
     auto command_list = _draw_system->CreateCustomCommandList();
 
+    // Make shaders
+    auto vertex_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "vertex_shader.cso");
     {
-        auto vertex_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "vertex_shader.cso");
         auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "pixel_shader.cso");
         std::vector < DXGI_FORMAT > render_target_format;
         render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
@@ -106,8 +109,12 @@ ApplicationTestLine::ApplicationTestLine(
         std::vector < std::shared_ptr < ShaderResourceInfo > > array_shader_resource_info;
         std::vector < std::shared_ptr < ConstantBufferInfo > > array_shader_constants_info;
 
-        array_shader_constants_info.push_back(ConstantBufferInfo::Factory< ConstantBufferB0>(
-            ConstantBufferB0(), 
+        array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
+            ConstantBufferB0(),
+            D3D12_SHADER_VISIBILITY_PIXEL
+            ));
+        array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
+            ConstantBufferB1(),
             D3D12_SHADER_VISIBILITY_PIXEL
             ));
 
@@ -120,6 +127,40 @@ ApplicationTestLine::ApplicationTestLine(
             array_shader_resource_info,
             array_shader_constants_info
             );
+    }
+    // Shader background
+    {
+        auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "pixel_shader_background.cso");
+        std::vector < DXGI_FORMAT > render_target_format;
+        render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
+        ShaderPipelineStateData shader_pipeline_state_data(
+            input_element_desc_array,
+            D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
+            DXGI_FORMAT_UNKNOWN,
+            // DXGI_FORMAT_D32_FLOAT,
+            render_target_format,
+            CD3DX12_BLEND_DESC(D3D12_DEFAULT),
+            CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT),
+            CD3DX12_DEPTH_STENCIL_DESC()// CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT)
+        );
+
+        std::vector < std::shared_ptr < ShaderResourceInfo > > array_shader_resource_info;
+        std::vector < std::shared_ptr < ConstantBufferInfo > > array_shader_constants_info;
+
+        array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
+            ConstantBufferB0(),
+            D3D12_SHADER_VISIBILITY_PIXEL
+        ));
+
+        _shader_background = _draw_system->MakeShader(
+            command_list->GetCommandList(),
+            shader_pipeline_state_data,
+            vertex_shader_data,
+            nullptr,
+            pixel_shader_data,
+            array_shader_resource_info,
+            array_shader_constants_info
+        );
     }
 
     {
@@ -150,6 +191,7 @@ ApplicationTestLine::~ApplicationTestLine()
         _draw_system->WaitForGpu();
     }
     _shader.reset();
+    _shader_background.reset();
     _geometry.reset();
     _draw_system.reset();
     LOG_MESSAGE(
@@ -246,20 +288,36 @@ void ApplicationTestLine::Update()
         auto frame = _draw_system->CreateNewFrame();
         frame->SetRenderTarget(_draw_system->GetRenderTargetBackBuffer());
 
+        auto shader_background = _shader_background.get();
+        if (nullptr != shader_background)
+        {
+            auto& buffer0 = shader_background->GetConstant<ConstantBufferB0>(0);
+            buffer0._camera_at = _camera_at;
+            buffer0._camera_up = _camera_up;
+            buffer0._camera_pos = _camera_pos;
+            buffer0._camera_far = _camera_far;
+            buffer0._camera_fov_horizontal = _fov_horizontal_calculated;
+            buffer0._camera_fov_vertical = _fov_vertical;
+        }
+        frame->SetShader(shader_background);
+        frame->Draw(_geometry.get());
+
         auto shader = _shader.get();
         if (nullptr != shader)
         {
-            auto& buffer = shader->GetConstant<ConstantBufferB0>(0);
-            buffer._camera_at = _camera_at;
-            buffer._camera_up = _camera_up;
-            buffer._camera_pos = _camera_pos;
-            buffer._camera_far = _camera_far;
-            buffer._camera_fov_horizontal = _fov_horizontal_calculated;
-            buffer._camera_fov_vertical = _fov_vertical;
-            buffer._line_at = _line_at;
-            buffer._line_pos = _line_pos;
-            buffer._radian_per_pixel = _radian_per_pixel;
-            buffer._line_length = _line_length;
+            auto& buffer0 = shader->GetConstant<ConstantBufferB0>(0);
+            buffer0._camera_at = _camera_at;
+            buffer0._camera_up = _camera_up;
+            buffer0._camera_pos = _camera_pos;
+            buffer0._camera_far = _camera_far;
+            buffer0._camera_fov_horizontal = _fov_horizontal_calculated;
+            buffer0._camera_fov_vertical = _fov_vertical;
+
+            auto& buffer1 = shader->GetConstant<ConstantBufferB1>(1);
+            buffer1._line_at = _line_at;
+            buffer1._line_pos = _line_pos;
+            buffer1._radian_per_pixel = _radian_per_pixel;
+            buffer1._line_length = _line_length;
         }
 
         frame->SetShader(shader);

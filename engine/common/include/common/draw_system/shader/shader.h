@@ -49,7 +49,7 @@ public:
     {
         if ((0 <= in_index) && (in_index < _array_shader_constants_info.size()))
         {
-            auto&shader_constant_info =* _array_shader_constants_info[in_index];
+            auto& shader_constant_info = *_array_shader_constants_info[in_index];
             assert(sizeof (CONSTANTS) == shader_constant_info.GetBufferSize());
             const void* const data = shader_constant_info.GetBufferData();
             return (* ((CONSTANTS*) data));

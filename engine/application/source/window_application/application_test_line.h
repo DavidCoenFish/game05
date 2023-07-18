@@ -40,6 +40,8 @@ private:
     std::shared_ptr < Shader > _shader;
     std::shared_ptr < GeometryGeneric > _geometry;
 
+    std::shared_ptr < Shader > _shader_background;
+
     float _fov_vertical;
     float _fov_horizontal_calculated;
 

@@ -9,11 +9,14 @@ struct Pixel
     float4 _color : SV_TARGET0;
 };
 
-cbuffer ConstantBuffer : register(b0)
+cbuffer ConstantBuffer0 : register(b0)
 {
     float4 _camera_pos_fov_horizontal;
     float4 _camera_at_fov_vertical;
     float4 _camera_up_camera_far;
+};
+cbuffer ConstantBuffer1 : register(b1)
+{
     float4 _line_pos_radian_per_pixel;
     float4 _line_at_length;
 };

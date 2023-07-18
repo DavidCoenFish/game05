@@ -124,5 +124,8 @@
     <FxCompile Include="task\test_line\vertex_shader.hlsl">
       <Filter>task\test_line</Filter>
     </FxCompile>
+    <FxCompile Include="task\test_line\pixel_shader_background.hlsl">
+      <Filter>task\test_line</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

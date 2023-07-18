@@ -129,16 +129,16 @@ Microsoft::WRL::ComPtr < ID3D12RootSignature > MakeRootSignature(
     // B0,b1,b2,...
     if (0 < in_constant_buffer_array.size())
     {
-        int offset_table_start = 0;
-        for (const auto&iter : in_constant_buffer_array)
+        int trace = 0;
+        for (const auto& iter : in_constant_buffer_array)
         {
-            auto descriptor_range = std::make_shared < D3D12_DESCRIPTOR_RANGE1 > ();
+            auto descriptor_range = std::make_shared < D3D12_DESCRIPTOR_RANGE1 >();
             descriptor_range_array.push_back(descriptor_range);
-            descriptor_range->BaseShaderRegister = 0;
+            descriptor_range->BaseShaderRegister = trace;
+            trace += 1;
             descriptor_range->Flags = D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC_WHILE_SET_AT_EXECUTE;
             descriptor_range->NumDescriptors = 1;
-            descriptor_range->OffsetInDescriptorsFromTableStart = offset_table_start;
-            offset_table_start += descriptor_range->NumDescriptors;
+            descriptor_range->OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
             descriptor_range->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
             D3D12_ROOT_PARAMETER1 param;
             param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
@@ -149,22 +149,22 @@ Microsoft::WRL::ComPtr < ID3D12RootSignature > MakeRootSignature(
             RemoveDenyFlag(
                 flags,
                 param.ShaderVisibility
-                );
+            );
         }
     }
     // U0,u1,u2,...
     if (0 < in_array_unordered_access_info.size())
     {
-        int offset_table_start = 0;
+        int trace = 0;
         for (const auto&iter : in_array_unordered_access_info)
         {
             auto descriptor_range = std::make_shared < D3D12_DESCRIPTOR_RANGE1 > ();
             descriptor_range_array.push_back(descriptor_range);
-            descriptor_range->BaseShaderRegister = 0;
+            descriptor_range->BaseShaderRegister = trace;
+            trace += 1;
             descriptor_range->Flags = D3D12_DESCRIPTOR_RANGE_FLAG_NONE;
             descriptor_range->NumDescriptors = 1;
-            descriptor_range->OffsetInDescriptorsFromTableStart = offset_table_start;
-            offset_table_start += descriptor_range->NumDescriptors;
+            descriptor_range->OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
             descriptor_range->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
             D3D12_ROOT_PARAMETER1 param;
             param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
@@ -181,16 +181,16 @@ Microsoft::WRL::ComPtr < ID3D12RootSignature > MakeRootSignature(
     // T0,t1,t2,...
     if (0 < in_shader_texture_info_array.size())
     {
-        int offset_table_start = 0;
+        int trace = 0;
         for (const auto&iter : in_shader_texture_info_array)
         {
             auto descriptor_range = std::make_shared < D3D12_DESCRIPTOR_RANGE1 > ();
             descriptor_range_array.push_back(descriptor_range);
-            descriptor_range->BaseShaderRegister = 0;
+            descriptor_range->BaseShaderRegister = trace;
+            trace += 1;
             descriptor_range->Flags = D3D12_DESCRIPTOR_RANGE_FLAG_NONE;
             descriptor_range->NumDescriptors = 1;
-            descriptor_range->OffsetInDescriptorsFromTableStart = offset_table_start;
-            offset_table_start += descriptor_range->NumDescriptors;
+            descriptor_range->OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
             descriptor_range->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             D3D12_ROOT_PARAMETER1 param;
             param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
