@@ -52,6 +52,22 @@ struct ConstantBufferBackgroundB1
     float _pad1;
 };
 
+namespace
+{
+    const VectorFloat3 RotateAround(
+        const VectorFloat3& in_subject,
+        const VectorFloat3& in_around,
+        const float in_radian
+        )
+    {
+        const auto cross = VectorFloat3::Cross(in_subject, in_around);
+        const float a = sin(in_radian);
+        const float b = cos(in_radian);
+        const auto result = (in_subject * b) + (cross * a);
+        return result;
+    }
+}
+
 IWindowApplication* const ApplicationTestLine::Factory(
     const HWND in_hwnd,
     const WindowApplicationParam&in_application_param
@@ -229,6 +245,7 @@ void ApplicationTestLine::Update()
     {
         const float time_delta = _timer->GetDeltaSeconds();
         const auto camera_right = VectorFloat3::Cross(_camera_at, _camera_up);
+        //const auto camera_right = VectorFloat3::Cross(_camera_up, _camera_at);
 
         //LOG_MESSAGE("ApplicationTestLine::Update %f %f %f", _camera_pos[0], _camera_pos[1], _camera_pos[2]);
 
@@ -257,6 +274,51 @@ void ApplicationTestLine::Update()
             _camera_pos -= (_camera_at * time_delta);
         }
 
+        if (true == _input_i)
+        {
+            _camera_at = RotateAround(
+                _camera_at,
+                camera_right,
+                time_delta
+            );
+            _camera_up = RotateAround(
+                _camera_up,
+                camera_right,
+                time_delta
+            );
+        }
+        if (true == _input_j)
+        {
+            _camera_at = RotateAround(
+                _camera_at,
+                _camera_up,
+                time_delta
+            );
+        }
+        if (true == _input_k)
+        {
+            _camera_at = RotateAround(
+                _camera_at,
+                camera_right,
+                -time_delta
+            );
+            _camera_up = RotateAround(
+                _camera_up,
+                camera_right,
+                -time_delta
+            );
+        }
+        if (true == _input_l)
+        {
+            _camera_at = RotateAround(
+                _camera_at,
+                _camera_up,
+                -time_delta
+            );
+        }
+
+
+        /*
         bool rotation_flag = false;
         auto rotation = QuaternionFloat::FactoryIdentity();
         if (true == _input_u)
@@ -267,7 +329,7 @@ void ApplicationTestLine::Update()
         if (true == _input_i)
         {
             rotation_flag = true;
-            rotation *= QuaternionFloat::FactoryAxisAngle(camera_right, time_delta);
+            rotation *= QuaternionFloat::FactoryAxisAngle(camera_right, -time_delta);
         }
         if (true == _input_o)
         {
@@ -282,7 +344,7 @@ void ApplicationTestLine::Update()
         if (true == _input_k)
         {
             rotation_flag = true;
-            rotation *= QuaternionFloat::FactoryAxisAngle(camera_right, -time_delta);
+            rotation *= QuaternionFloat::FactoryAxisAngle(camera_right, time_delta);
         }
         if (true == _input_l)
         {
@@ -293,6 +355,7 @@ void ApplicationTestLine::Update()
         if (true == rotation_flag)
         {
             const auto matrix = MatrixFloat33::FactoryQuaternionFloat(rotation);
+            //matrix.in
             _camera_at = matrix * _camera_at;
             _camera_up = matrix * _camera_up;
 
@@ -302,13 +365,16 @@ void ApplicationTestLine::Update()
             _camera_up = VectorFloat3::Cross(temp, _camera_at);
             _camera_up.NormaliseSelf();
         }
+        */
     }
 
     if (_draw_system)
     {
         auto frame = _draw_system->CreateNewFrame();
         frame->SetRenderTarget(_draw_system->GetRenderTargetBackBuffer());
-#if 0
+
+        // Draw background
+#if 1
         auto shader_background = _shader_background.get();
         if (nullptr != shader_background)
         {
@@ -322,12 +388,12 @@ void ApplicationTestLine::Update()
 
             auto& buffer_background1 = shader_background->GetConstant<ConstantBufferBackgroundB1>(1);
 
-            buffer_background1._sun_azimuth_altitude = VectorFloat2(Angle::DegToRadian(-90.0f), Angle::DegToRadian(45.0f));
-            buffer_background1._sun_range = VectorFloat2(1.0f, 5.0f);
+            buffer_background1._sun_azimuth_altitude = VectorFloat2(Angle::DegToRadian(-45.0f), Angle::DegToRadian(30.0f));
+            buffer_background1._sun_range = VectorFloat2(0.05f, 0.2f);//1.0f, 5.0f);
             buffer_background1._sun_tint = VectorFloat3(255.0f / 255.0f, 245.0f / 255.0f, 235.0f / 255.0f);
-            buffer_background1._sky_spread = -0.5f;
+            buffer_background1._sky_spread = 0.5f; //-0.5
             buffer_background1._sky_tint = VectorFloat3(10.0f / 255.0f, 10.0f / 255.0f, 255.0f / 255.0f);
-            buffer_background1._sky_turbitity = 10.0f;
+            buffer_background1._sky_turbitity = 5.0f; //10.0f;
             buffer_background1._ground_tint = VectorFloat3(32.0f / 255.0f, 16.0f / 255.0f, 2.0f / 255.0f);
             buffer_background1._fog_tint = VectorFloat3(200.0f / 255.0f, 200.0f / 255.0f, 200.0f / 255.0f);
         }
@@ -335,6 +401,8 @@ void ApplicationTestLine::Update()
         frame->Draw(_geometry.get());
 #endif
 
+        // Draw Line / Grid
+#if 1
         auto shader = _shader.get();
         if (nullptr != shader)
         {
@@ -352,11 +420,12 @@ void ApplicationTestLine::Update()
             buffer1._line_pos = _line_pos;
             buffer1._radian_per_pixel = _radian_per_pixel;
             buffer1._line_length = _line_length;
-            buffer1._line_thickness = 1.0f;
+            buffer1._line_thickness = 0.5f;
         }
 
         frame->SetShader(shader);
         frame->Draw(_geometry.get());
+#endif
     }
 }
 

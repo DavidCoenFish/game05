@@ -88,15 +88,23 @@ const bool MatrixFloat33::operator==(const MatrixFloat33&in_rhs) const
     return true;
 }
 
-const VectorFloat3 MatrixFloat33::operator* (const VectorFloat3&in_rhs) const
+const VectorFloat3 operator* (const MatrixFloat33& in_lhs, const VectorFloat3&in_rhs)
 {
     const float x = in_rhs.GetX();
     const float y = in_rhs.GetY();
     const float z = in_rhs.GetZ();
+#if 0
     return VectorFloat3(
-        (x* _data[M00]) + (y* _data[M01]) + (z* _data[M02]),
-        (x* _data[M10]) + (y* _data[M11]) + (z* _data[M12]),
-        (x* _data[M20]) + (y* _data[M21]) + (z* _data[M22])
+        (x * in_lhs._data[MatrixFloat33::M00]) + (y * in_lhs._data[MatrixFloat33::M01]) + (z * in_lhs._data[MatrixFloat33::M02]),
+        (x * in_lhs._data[MatrixFloat33::M10]) + (y * in_lhs._data[MatrixFloat33::M11]) + (z * in_lhs._data[MatrixFloat33::M12]),
+        (x * in_lhs._data[MatrixFloat33::M20]) + (y * in_lhs._data[MatrixFloat33::M21]) + (z * in_lhs._data[MatrixFloat33::M22])
         );
+#else
+    return VectorFloat3(
+        (x * in_lhs._data[MatrixFloat33::M00]) + (y * in_lhs._data[MatrixFloat33::M10]) + (z * in_lhs._data[MatrixFloat33::M20]),
+        (x * in_lhs._data[MatrixFloat33::M01]) + (y * in_lhs._data[MatrixFloat33::M11]) + (z * in_lhs._data[MatrixFloat33::M21]),
+        (x * in_lhs._data[MatrixFloat33::M02]) + (y * in_lhs._data[MatrixFloat33::M12]) + (z * in_lhs._data[MatrixFloat33::M22])
+        );
+#endif
 }
 

@@ -21,7 +21,8 @@ public:
     float& operator[](const int in_index);
     const float operator[](const int in_index) const;
     const bool operator==(const MatrixFloat33& in_rhs) const;
-    const VectorFloat3 operator* (const VectorFloat3& in_rhs) const;
+
+    friend const VectorFloat3 operator* (const MatrixFloat33& in_lhs, const VectorFloat3& in_rhs);
 
 private:
     enum Index
@@ -42,3 +43,5 @@ private:
     float _data[Index::Count];
 
 };
+
+const VectorFloat3 operator* (const MatrixFloat33& in_lhs, const VectorFloat3& in_rhs);
