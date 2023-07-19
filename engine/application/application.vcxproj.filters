@@ -52,6 +52,9 @@
       <Filter>resources</Filter>
     </None>
     <None Include=".gitignore" />
+    <None Include="task\test_line\polar.hlsli">
+      <Filter>task\test_line</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Build.cpp">

@@ -139,9 +139,6 @@
     <ClCompile Include="source\common\draw_system\geometry\i_geometry.cpp">
       <Filter>souce\common\draw_system\geometry</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\draw_system\geometry\geometry.cpp">
-      <Filter>souce\common\draw_system\geometry</Filter>
-    </ClCompile>
     <ClCompile Include="source\common\draw_system\geometry\geometry_generic.cpp">
       <Filter>souce\common\draw_system\geometry</Filter>
     </ClCompile>
@@ -305,9 +302,6 @@
     </ClInclude>
     <ClInclude Include="include\common\window\i_window_application.h">
       <Filter>include\common\window</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\draw_system\geometry\geometry.h">
-      <Filter>include\common\draw_system\geometry</Filter>
     </ClInclude>
     <ClInclude Include="include\common\draw_system\custom_command_list.h">
       <Filter>include\common\draw_system</Filter>

@@ -14,6 +14,8 @@
 #include "common/math/angle.h"
 #include "common/math/matrix_float33.h"
 #include "common/math/quaternion_float.h"
+#include "common/math/vector_float2.h"
+#include "common/math/vector_float3.h"
 #include "common/util/timer.h"
 #include "common/window/window_application_param.h"
 
@@ -33,6 +35,21 @@ struct ConstantBufferB1
     float _radian_per_pixel;
     VectorFloat3 _line_at;
     float _line_length;
+    float _line_thickness;
+};
+
+struct ConstantBufferBackgroundB1
+{
+    VectorFloat2 _sun_azimuth_altitude;
+    VectorFloat2 _sun_range;
+    VectorFloat3 _sun_tint;
+    float _sky_spread;
+    VectorFloat3 _sky_tint;
+    float _sky_turbitity;
+    VectorFloat3 _ground_tint;
+    float _pad0;
+    VectorFloat3 _fog_tint;
+    float _pad1;
 };
 
 IWindowApplication* const ApplicationTestLine::Factory(
@@ -149,6 +166,10 @@ ApplicationTestLine::ApplicationTestLine(
 
         array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
             ConstantBufferB0(),
+            D3D12_SHADER_VISIBILITY_PIXEL
+        ));
+        array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
+            ConstantBufferBackgroundB1(),
             D3D12_SHADER_VISIBILITY_PIXEL
         ));
 
@@ -287,7 +308,7 @@ void ApplicationTestLine::Update()
     {
         auto frame = _draw_system->CreateNewFrame();
         frame->SetRenderTarget(_draw_system->GetRenderTargetBackBuffer());
-
+#if 0
         auto shader_background = _shader_background.get();
         if (nullptr != shader_background)
         {
@@ -298,9 +319,21 @@ void ApplicationTestLine::Update()
             buffer0._camera_far = _camera_far;
             buffer0._camera_fov_horizontal = _fov_horizontal_calculated;
             buffer0._camera_fov_vertical = _fov_vertical;
+
+            auto& buffer_background1 = shader_background->GetConstant<ConstantBufferBackgroundB1>(1);
+
+            buffer_background1._sun_azimuth_altitude = VectorFloat2(Angle::DegToRadian(-90.0f), Angle::DegToRadian(45.0f));
+            buffer_background1._sun_range = VectorFloat2(1.0f, 5.0f);
+            buffer_background1._sun_tint = VectorFloat3(255.0f / 255.0f, 245.0f / 255.0f, 235.0f / 255.0f);
+            buffer_background1._sky_spread = -0.5f;
+            buffer_background1._sky_tint = VectorFloat3(10.0f / 255.0f, 10.0f / 255.0f, 255.0f / 255.0f);
+            buffer_background1._sky_turbitity = 10.0f;
+            buffer_background1._ground_tint = VectorFloat3(32.0f / 255.0f, 16.0f / 255.0f, 2.0f / 255.0f);
+            buffer_background1._fog_tint = VectorFloat3(200.0f / 255.0f, 200.0f / 255.0f, 200.0f / 255.0f);
         }
         frame->SetShader(shader_background);
         frame->Draw(_geometry.get());
+#endif
 
         auto shader = _shader.get();
         if (nullptr != shader)
@@ -313,11 +346,13 @@ void ApplicationTestLine::Update()
             buffer0._camera_fov_horizontal = _fov_horizontal_calculated;
             buffer0._camera_fov_vertical = _fov_vertical;
 
+
             auto& buffer1 = shader->GetConstant<ConstantBufferB1>(1);
             buffer1._line_at = _line_at;
             buffer1._line_pos = _line_pos;
             buffer1._radian_per_pixel = _radian_per_pixel;
             buffer1._line_length = _line_length;
+            buffer1._line_thickness = 1.0f;
         }
 
         frame->SetShader(shader);

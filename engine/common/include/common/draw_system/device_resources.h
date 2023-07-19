@@ -51,7 +51,9 @@ public:
     IRenderTarget* GetRenderTargetBackBuffer();
     ID3D12Device2* const GetD3dDevice();
     // ID3D12CommandQueue* const GetCommandQueue();
-    ID3D12GraphicsCommandList* GetCustomCommandList();
+    ID3D12GraphicsCommandList* GetCustomCommandList(
+        ID3D12PipelineState* const in_pipeline_state_object_or_null
+        );
     void CustomCommandListFinish(ID3D12GraphicsCommandList* in_command_list);
     // Return true if size changed
     const bool CreateWindowSizeDependentResources(

@@ -14,17 +14,17 @@ class Shader : public IResource
 public:
     Shader(
         DrawSystem* const in_draw_system,
-        const ShaderPipelineStateData&in_pipeline_state_data,
-        const std::shared_ptr < std::vector < uint8_t > >&in_vertex_shader_data,
-        const std::shared_ptr < std::vector < uint8_t > >&in_geometry_shader_data,
-        const std::shared_ptr < std::vector < uint8_t > >&in_pixel_shader_data,
-        const std::vector < std::shared_ptr < ShaderResourceInfo > >&in_array_shader_resource_info = std::vector < std::\
+        const ShaderPipelineStateData& in_pipeline_state_data,
+        const std::shared_ptr < std::vector < uint8_t > >& in_vertex_shader_data,
+        const std::shared_ptr < std::vector < uint8_t > >& in_geometry_shader_data,
+        const std::shared_ptr < std::vector < uint8_t > >& in_pixel_shader_data,
+        const std::vector < std::shared_ptr < ShaderResourceInfo > >& in_array_shader_resource_info = std::vector < std::\
             shared_ptr < ShaderResourceInfo > > (),
-        const std::vector < std::shared_ptr < ConstantBufferInfo > >&in_array_shader_constants_info = std::vector < std\
+        const std::vector < std::shared_ptr < ConstantBufferInfo > >& in_array_shader_constants_info = std::vector < std\
             ::shared_ptr < ConstantBufferInfo > > (),
-        const std::shared_ptr < std::vector < uint8_t > >&in_compute_shader_data = std::shared_ptr < std::vector < \
+        const std::shared_ptr < std::vector < uint8_t > >& in_compute_shader_data = std::shared_ptr < std::vector < \
             uint8_t > > (),
-        const std::vector < std::shared_ptr < UnorderedAccessInfo > >&in_array_unordered_access_info = std::vector < std\
+        const std::vector < std::shared_ptr < UnorderedAccessInfo > >& in_array_unordered_access_info = std::vector < std\
             ::shared_ptr < UnorderedAccessInfo > > ()
         );
     virtual ~Shader();

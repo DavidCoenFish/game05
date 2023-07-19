@@ -1,6 +1,5 @@
 #pragma once
 #include "common/draw_system/device_resources.h"
-#include "common/draw_system/geometry/geometry.h"
 #include "common/draw_system/render_target/render_target_depth_data.h"
 #include "common/draw_system/render_target/render_target_format_data.h"
 
@@ -8,7 +7,6 @@ class DeviceResources;
 class DrawSystemFrame;
 class IResource;
 class IRenderTarget;
-// * GetRenderTargetBackBuffer();
 class HeapWrapper;
 class HeapWrapperItem;
 class CustomCommandList;
@@ -91,31 +89,6 @@ public:
         const int in_float_per_vertex
         );
 
-    // Was moving away from Geometry and towards GeometryGeneric as for json it is easier to load generic float data
-    template < typename TypeVertex > 
-    std::shared_ptr < Geometry < TypeVertex > > MakeGeometry(
-        ID3D12GraphicsCommandList* const in_command_list,
-        const D3D_PRIMITIVE_TOPOLOGY in_primitive_topology,
-        const std::vector < D3D12_INPUT_ELEMENT_DESC >&in_input_element_desc_array,
-        const std::vector < TypeVertex >&in_vertex_data
-        )
-    {
-        auto result = std::make_shared < Geometry < TypeVertex >> (
-            this,
-            in_primitive_topology,
-            in_input_element_desc_array,
-            in_vertex_data
-            );
-        if (result && _device_resources)
-        {
-            ((IResource*)(result.get())) ->OnDeviceRestored(
-                in_command_list,
-                _device_resources->GetD3dDevice()
-                );
-        }
-        return result;
-    }
-
     std::shared_ptr < ShaderResource > MakeShaderResource(
         ID3D12GraphicsCommandList* const in_command_list,
         const std::shared_ptr < HeapWrapperItem >&in_heap_wrapper_item,
@@ -133,14 +106,16 @@ public:
 
     std::shared_ptr < RenderTargetTexture > MakeRenderTargetTexture(
         ID3D12GraphicsCommandList* const in_command_list,
-        const std::vector < RenderTargetFormatData >&in_target_format_data_array,
-        const RenderTargetDepthData&in_target_depth_data,
+        const std::vector < RenderTargetFormatData >& in_target_format_data_array,
+        const RenderTargetDepthData& in_target_depth_data,
         const int in_width,
         const int in_height,
         const bool in_resize_with_screen = false
         );
 
-    std::shared_ptr < CustomCommandList > CreateCustomCommandList();
+    std::shared_ptr < CustomCommandList > CreateCustomCommandList(
+        ID3D12PipelineState* const in_pipeline_state_object_or_null = nullptr
+        );
     void CustomCommandListFinish(ID3D12GraphicsCommandList* in_command_list);
 
     // Ctor == Prepare, dtor == Present
@@ -166,8 +141,10 @@ private:
     unsigned int _options;
     RenderTargetFormatData _target_format_data;
     RenderTargetDepthData _target_depth_data;
+
     std::unique_ptr < DeviceResources > _device_resources;
     std::list < IResource* > _list_resource;
+
     std::shared_ptr < HeapWrapper > _heap_wrapper_cbv_srv_uav;
     std::shared_ptr < HeapWrapper > _heap_wrapper_sampler;
     std::shared_ptr < HeapWrapper > _heap_wrapper_render_target_view;

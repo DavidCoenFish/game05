@@ -207,7 +207,6 @@ Microsoft::WRL::ComPtr < ID3D12RootSignature > MakeRootSignature(
     // S0,s1,s2,...
     if (0 < in_shader_texture_info_array.size())
     {
-#if 1
             for (const auto&iter : in_shader_texture_info_array)
             {
                 if (false == iter->GetUseSampler())
@@ -216,35 +215,6 @@ Microsoft::WRL::ComPtr < ID3D12RootSignature > MakeRootSignature(
                 }
                 static_sampler_desc_array.push_back(iter->GetStaticSamplerDesc());
             }
-#else
-            int offset_table_start = 0;
-            for (const auto&iter : in_shader_texture_info_array)
-            {
-                if (false == iter->GetUseSampler())
-                {
-                    continue;
-                }
-                auto descriptor_range = std::make_shared < D3D12_DESCRIPTOR_RANGE1 > ();
-                descriptor_range_array.push_back(descriptor_range);
-                descriptor_range->BaseShaderRegister = 0;
-                descriptor_range->Flags = D3D12_DESCRIPTOR_RANGE_FLAG_NONE;
-                descriptor_range->NumDescriptors = 1;
-                descriptor_range->OffsetInDescriptorsFromTableStart = offset_table_start;
-                offset_table_start += descriptor_range->NumDescriptors;
-                descriptor_range->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
-                D3D12_ROOT_PARAMETER1 param;
-                param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-                param.ShaderVisibility = iter->GetVisiblity();
-                param.DescriptorTable.NumDescriptorRanges = 1;
-                param.DescriptorTable._descriptor_ranges = descriptor_range.get();
-                root_paramter_array.push_back(param);
-                RemoveDenyFlag(
-                    flags,
-                    param.ShaderVisibility
-                    );
-            }
-#endif
-
     }
     CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC root_signature_desc(
         (UINT) root_paramter_array.size(),

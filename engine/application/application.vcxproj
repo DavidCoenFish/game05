@@ -93,6 +93,7 @@
     <CopyFileToFolders Include="task\test_line\application.json">
       <FileType>Document</FileType>
     </CopyFileToFolders>
+    <None Include="task\test_line\polar.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\application.rc" />

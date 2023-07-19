@@ -1,3 +1,5 @@
+#include "polar.hlsli"
+
 struct Interpolant
 {
     float4 _position : SV_Position;
@@ -19,35 +21,17 @@ cbuffer ConstantBuffer1 : register(b1)
 {
     float4 _line_pos_radian_per_pixel;
     float4 _line_at_length;
+    float _line_thickness;
 };
-
-float3 MakeScreenEyeRay(float2 in_polar_coord) 
-{
-    float temp = cos(in_polar_coord.y);
-    float x = temp * sin(in_polar_coord.x);
-    float y = sin(in_polar_coord.y);
-    float z = temp * cos(in_polar_coord.x);
-
-    return float3(x,y,z);
-}
-
-float3 MakeWorldEyeRay(float3 in_ray, float3 in_at, float3 in_up, float3 in_right)
-{
-    float x = dot(in_right, in_ray);
-    float y = dot(in_up, in_ray);
-    float z = dot(in_at, in_ray);
-
-    return float3(x, y, z);
-}
 
 // https://en.wikipedia.org/wiki/Skew_lines#Distance%5B/url%5D
 float3 RayRayClosest(float3 in_p1, float3 in_d1, float3 in_p2, float3 in_d2)
 {
     float3 n = cross(in_d1, in_d2);
-    float3 n1;
-    float3 n2;
-    float t1;
-    float t2;
+    float3 n1 = float3(0.0, 0.0, 0.0);
+    float3 n2 = float3(0.0, 0.0, 0.0);
+    float t1 = 0.0f;
+    float t2 = 0.0f;
 
     if (dot(n, n) < 0.00001)
     {
@@ -65,9 +49,9 @@ float3 RayRayClosest(float3 in_p1, float3 in_d1, float3 in_p2, float3 in_d2)
 
 float2 CalculateDistance(float in_t1, float in_t2, float3 in_p1, float3 in_d1, float in_l1, float3 in_p2, float3 in_d2, float in_l2)
 {
-    float3 c1;
-    float3 c2;
-    float d;
+    float3 c1 = float3(0.0, 0.0, 0.0);
+    float3 c2 = float3(0.0, 0.0, 0.0);
+    float d = 0.0;
 
     if ((in_t1 < 0.0) || (in_l1 < in_t1))
     {
@@ -83,19 +67,25 @@ float2 CalculateDistance(float in_t1, float in_t2, float3 in_p1, float3 in_d1, f
     return float2(1.0, d);
 }
 
-float CalculateCoverage(float in_radian_per_pixel, float in_ray_ray_distance, float in_camera_distance)
+float CalculateCoverage(float in_radian_per_pixel, float in_line_pixel_thickness, float in_ray_ray_distance, float in_camera_distance)
 {
+#if 0
     if (in_ray_ray_distance < 0.01)
     {
         return 1.0;
     }
     return 0.0;
 
-#if 0
-    float angle = atan2(in_camera_distance, in_ray_ray_distance);
-    float pixel_distance = (angle * 10.0) / in_radian_per_pixel;
-    float coverage = max(0.0, 1.0 - abs(pixel_distance));
+#else
+    float angle = atan2(in_ray_ray_distance, in_camera_distance);
+    float pixel_distance = angle / in_radian_per_pixel;
+
+    float low = max(-0.5, pixel_distance - (0.5 * in_line_pixel_thickness));
+    float high = min(0.5, pixel_distance + (0.5 * in_line_pixel_thickness));
+
+    float coverage = high - low;
     return coverage;
+
 #endif
 }
 
@@ -121,9 +111,11 @@ Pixel main( Interpolant in_input )
         discard;
     }
 
-    float coverage = CalculateCoverage(_line_pos_radian_per_pixel.w, pass_distance.y, pass_t1_t2.z);
+    float coverage = CalculateCoverage(_line_pos_radian_per_pixel.w, _line_thickness, pass_distance.y, pass_t1_t2.z);
 
-    result._color = float4(coverage, coverage, screen_eye_ray.z, 1.0);
+    result._color = float4(coverage, coverage, coverage, 1.0);
+    //result._color = float4(_camera_pos_fov_horizontal.x, _camera_pos_fov_horizontal.y, _camera_pos_fov_horizontal.z, 1.0f);
+    //result._color = float4(_line_pos_radian_per_pixel.x, _line_pos_radian_per_pixel.y, _line_pos_radian_per_pixel.z, 1.0);
     //result._color = float4(0.0, 0.0, 0.0, coverage);
 
     return result;

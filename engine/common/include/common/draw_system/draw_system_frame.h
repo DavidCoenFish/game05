@@ -1,5 +1,4 @@
 #pragma once
-#include "common/draw_system/geometry/geometry.h"
 
 class DrawSystem;
 class IRenderTarget;
@@ -21,11 +20,6 @@ public:
         uint32_t in_num_groups_y = 1,
         uint32_t in_num_groups_z = 1
         );
-    template < typename TypeVertex > void Draw(Geometry < TypeVertex >* const in_geometry)
-    {
-        in_geometry->Draw(_command_list);
-    }
-
 
 private:
     DrawSystem&_draw_system;

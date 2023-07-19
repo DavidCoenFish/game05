@@ -34,7 +34,6 @@
     <ClCompile Include="source\common\draw_system\device_resources.cpp" />
     <ClCompile Include="source\common\draw_system\draw_system.cpp" />
     <ClCompile Include="source\common\draw_system\draw_system_frame.cpp" />
-    <ClCompile Include="source\common\draw_system\geometry\geometry.cpp" />
     <ClCompile Include="source\common\draw_system\geometry\geometry_generic.cpp" />
     <ClCompile Include="source\common\draw_system\geometry\i_geometry.cpp" />
     <ClCompile Include="source\common\draw_system\heap_wrapper\heap_wrapper.cpp" />
@@ -90,7 +89,6 @@
     <ClInclude Include="include\common\draw_system\custom_command_list.h" />
     <ClInclude Include="include\common\draw_system\draw_system.h" />
     <ClInclude Include="include\common\draw_system\draw_system_frame.h" />
-    <ClInclude Include="include\common\draw_system\geometry\geometry.h" />
     <ClInclude Include="include\common\draw_system\geometry\geometry_generic.h" />
     <ClInclude Include="include\common\draw_system\geometry\i_geometry.h" />
     <ClInclude Include="include\common\draw_system\i_resource.h" />

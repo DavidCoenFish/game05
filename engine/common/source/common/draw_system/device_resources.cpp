@@ -494,13 +494,15 @@ ID3D12Device2* const DeviceResources::GetD3dDevice()
 // {
 // Return m_pCommandQueue.Get();
 // }
-ID3D12GraphicsCommandList* DeviceResources::GetCustomCommandList()
+ID3D12GraphicsCommandList* DeviceResources::GetCustomCommandList(
+    ID3D12PipelineState* const in_pipeline_state_object_or_null
+    )
 {
     WaitForCustomCommand();
     DX::ThrowIfFailed(_custom_command_allocator->Reset());
     DX::ThrowIfFailed(_custom_command_list->Reset(
         _custom_command_allocator.Get(),
-        nullptr
+        in_pipeline_state_object_or_null
         ));
     DX::ThrowIfFailed(_command_queue->Signal(
         _custom_command_fence.Get(),

@@ -239,11 +239,13 @@ std::shared_ptr < RenderTargetTexture > DrawSystem::MakeRenderTargetTexture(
     return result;
 }
 
-std::shared_ptr < CustomCommandList > DrawSystem::CreateCustomCommandList()
+std::shared_ptr < CustomCommandList > DrawSystem::CreateCustomCommandList(
+    ID3D12PipelineState* const in_pipeline_state_object_or_null
+    )
 {
     if (_device_resources)
     {
-        auto command_list = _device_resources->GetCustomCommandList();
+        auto command_list = _device_resources->GetCustomCommandList(in_pipeline_state_object_or_null);
         return std::make_shared < CustomCommandList > (
             * this,
             command_list

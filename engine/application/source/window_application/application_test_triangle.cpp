@@ -76,39 +76,18 @@ ApplicationTestTriangle::ApplicationTestTriangle(
     }
 
     {
-        std::vector < Vertex > vertex_data(
+        std::vector < float > vertex_data(
         {
-            {
-                {
-                    0.0f, 0.5f
-                },
-                {
-                    1.0f, 0.0f, 0.0f, 1.0f
-                }
-            },
-            {
-
-                {
-                    0.5f, -0.5f
-                },
-                {
-                    0.0f, 1.0f, 0.0f, 1.0f
-                }
-            },
-            {
-                {
-                    -0.5f, -0.5
-                },
-                {
-                    0.0f, 0.0f, 1.0f, 1.0f
-                }
-            },
+            0.0f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f,
+            0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f,
+            -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f
         });
-        _geometry = _draw_system->MakeGeometry(
+        _geometry = _draw_system->MakeGeometryGeneric(
             command_list->GetCommandList(),
             D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
             input_element_desc_array,
-            vertex_data
+            vertex_data,
+            6
             );
     }
 }

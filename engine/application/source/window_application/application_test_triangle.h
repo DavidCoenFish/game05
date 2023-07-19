@@ -1,6 +1,5 @@
 #pragma once
 #include "common/window/i_window_application.h"
-#include "common/draw_system/geometry/geometry.h"
 
 class DrawSystem;
 class Shader;
@@ -32,11 +31,9 @@ private:
         const int in_height
         ) override;
 
-public:
-    std::shared_ptr < Geometry < Vertex > > _geometry;
-
 private:
     typedef IWindowApplication BaseType;
     std::unique_ptr < DrawSystem > _draw_system;
     std::shared_ptr < Shader > _shader;
+    std::shared_ptr < GeometryGeneric > _geometry;
 };
