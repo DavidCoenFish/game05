@@ -27,6 +27,8 @@ struct ConstantBufferB0
     float _camera_fov_vertical;
     VectorFloat3 _camera_up;
     float _camera_far;
+    float _camera_unit_pixel_size; //sin(radian_per_pixel)
+    float _pad0[3];
 };
 
 struct ConstantBufferB1
@@ -52,6 +54,10 @@ struct ConstantBufferBackgroundB1
     float _pad1;
 };
 
+static VectorFloat3 s_camera_pos(-1.0f, 0.0f, 0.0f);
+static VectorFloat3 s_camera_at(1.0f, 0.0f, 0.0f);
+static VectorFloat3 s_camera_up(0.0f, 0.0f, 1.0f);
+
 namespace
 {
     const VectorFloat3 RotateAround(
@@ -60,7 +66,7 @@ namespace
         const float in_radian
         )
     {
-        const auto cross = VectorFloat3::Cross(in_subject, in_around);
+        const auto cross = Cross(in_subject, in_around);
         const float a = sin(in_radian);
         const float b = cos(in_radian);
         const auto result = (in_subject * b) + (cross * a);
@@ -89,13 +95,11 @@ ApplicationTestLine::ApplicationTestLine(
         )
     , _fov_vertical(Angle::DegToRadian(75.0f))
     , _fov_horizontal_calculated(0.0f)
-    , _camera_pos(1.0f, 0.0f, -1.0f)
-    , _camera_at(0.0f, 0.0f, 1.0f)
-    , _camera_up(0.0f, 1.0f, 0.0f)
+    , _unit_pixel_size(0.0f)
+    , _camera_pos(s_camera_pos)
+    , _camera_at(s_camera_at)
+    , _camera_up(s_camera_up)
     , _camera_far(1000.0f)
-    , _line_pos(0.0f, 0.0f, 0.0f)
-    , _line_at(0.0f, 1.0f, 0.0f)
-    , _line_length(2.0f)
     , _input_q(false)
     , _input_w(false)
     , _input_e(false)
@@ -113,7 +117,18 @@ ApplicationTestLine::ApplicationTestLine(
         "ApplicationTestLine  ctor %p",
         this
         );
-    _draw_system = std::make_unique < DrawSystem > (in_hwnd);
+    RenderTargetFormatData render_target_format_data(
+        DXGI_FORMAT_B8G8R8A8_UNORM//,
+        //true,
+        //VectorFloat4(1.0f, 0.0f, 0.0f, 1.0f)
+        );
+    _draw_system = std::make_unique < DrawSystem > (
+        in_hwnd, 
+        2, //in_back_buffer_count
+        D3D_FEATURE_LEVEL_11_0, 
+        0, //in_options
+        render_target_format_data
+        );
     std::vector < D3D12_INPUT_ELEMENT_DESC > input_element_desc_array;
     input_element_desc_array.push_back(D3D12_INPUT_ELEMENT_DESC
     {
@@ -128,13 +143,37 @@ ApplicationTestLine::ApplicationTestLine(
         auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "pixel_shader.cso");
         std::vector < DXGI_FORMAT > render_target_format;
         render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
+        D3D12_BLEND_DESC blend_desc;
+        blend_desc.AlphaToCoverageEnable = FALSE;
+        blend_desc.IndependentBlendEnable = FALSE;
+        const D3D12_RENDER_TARGET_BLEND_DESC defaultRenderTargetBlendDesc =
+        {
+            TRUE, //BlendEnable
+            FALSE, //LogicOpEnable
+            // dest.rgb = src.rgb * src.a + dest.rgb * (1 - src.a)
+            D3D12_BLEND_SRC_ALPHA, //SrcBlend 
+            D3D12_BLEND_INV_SRC_ALPHA, //DestBlend
+            D3D12_BLEND_OP_ADD, //BlendOp
+            // dest.a = 1 - (1 - src.a) * (1 - dest.a) [the math works out]
+            D3D12_BLEND_INV_DEST_ALPHA, //SrcBlendAlpha
+            D3D12_BLEND_ONE, //DestBlendAlpha
+            D3D12_BLEND_OP_ADD, //BlendOpAlpha
+            D3D12_LOGIC_OP_NOOP, //LogicOp
+            D3D12_COLOR_WRITE_ENABLE_ALL, //RenderTargetWriteMask
+        };
+
+        for (UINT i = 0; i < D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT; ++i)
+        {
+            blend_desc.RenderTarget[i] = defaultRenderTargetBlendDesc;
+        }
+
         ShaderPipelineStateData shader_pipeline_state_data(
             input_element_desc_array,
             D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
             DXGI_FORMAT_UNKNOWN,
             // DXGI_FORMAT_D32_FLOAT,
             render_target_format,
-            CD3DX12_BLEND_DESC(D3D12_DEFAULT),
+            blend_desc, //CD3DX12_BLEND_DESC(D3D12_DEFAULT),
             CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT),
             CD3DX12_DEPTH_STENCIL_DESC()// CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT)
             );
@@ -146,10 +185,10 @@ ApplicationTestLine::ApplicationTestLine(
             ConstantBufferB0(),
             D3D12_SHADER_VISIBILITY_PIXEL
             ));
-        array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
-            ConstantBufferB1(),
-            D3D12_SHADER_VISIBILITY_PIXEL
-            ));
+        //array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
+        //    ConstantBufferB1(),
+        //    D3D12_SHADER_VISIBILITY_PIXEL
+        //    ));
 
         _shader = _draw_system->MakeShader(
             command_list->GetCommandList(),
@@ -243,37 +282,45 @@ void ApplicationTestLine::Update()
 
     if (nullptr != _timer)
     {
+        bool change = false;
         const float time_delta = _timer->GetDeltaSeconds();
-        const auto camera_right = VectorFloat3::Cross(_camera_at, _camera_up);
-        //const auto camera_right = VectorFloat3::Cross(_camera_up, _camera_at);
+        //const auto camera_right = Cross(_camera_at, _camera_up);
+        const auto camera_right = Cross(_camera_up, _camera_at);
 
         //LOG_MESSAGE("ApplicationTestLine::Update %f %f %f", _camera_pos[0], _camera_pos[1], _camera_pos[2]);
 
         if (true == _input_q)
         {
-            _camera_pos += (_camera_up * time_delta);
+            _camera_pos -= (_camera_up * time_delta);
+            change = true;
         }
         if (true == _input_w)
         {
             _camera_pos += (_camera_at * time_delta);
+            change = true;
         }
         if (true == _input_e)
         {
-            _camera_pos -= (_camera_up * time_delta);
+            _camera_pos += (_camera_up * time_delta);
+            change = true;
         }
         if (true == _input_a)
         {
             _camera_pos -= (camera_right * time_delta);
-        }
-        if (true == _input_d)
-        {
-            _camera_pos += (camera_right * time_delta);
+            change = true;
         }
         if (true == _input_s)
         {
             _camera_pos -= (_camera_at * time_delta);
+            change = true;
+        }
+        if (true == _input_d)
+        {
+            _camera_pos += (camera_right * time_delta);
+            change = true;
         }
 
+#if 0
         if (true == _input_i)
         {
             _camera_at = RotateAround(
@@ -316,9 +363,8 @@ void ApplicationTestLine::Update()
                 -time_delta
             );
         }
+#else
 
-
-        /*
         bool rotation_flag = false;
         auto rotation = QuaternionFloat::FactoryIdentity();
         if (true == _input_u)
@@ -361,11 +407,27 @@ void ApplicationTestLine::Update()
 
             // Normalise
             _camera_at.NormaliseSelf();
-            const auto temp = VectorFloat3::Cross(_camera_at, _camera_up);
-            _camera_up = VectorFloat3::Cross(temp, _camera_at);
+            const auto temp = Cross(_camera_at, _camera_up);
+            _camera_up = Cross(temp, _camera_at);
             _camera_up.NormaliseSelf();
+            change = true;
         }
-        */
+#endif
+        if (true == change)
+        {
+            LOG_MESSAGE("pos[%f %f %f] at[%f %f %f] up[%f %f %f] dot[%f]",
+                _camera_pos[0],
+                _camera_pos[1],
+                _camera_pos[2],
+                _camera_at[0],
+                _camera_at[1],
+                _camera_at[2],
+                _camera_up[0],
+                _camera_up[1],
+                _camera_up[2],
+                Dot(_camera_at, _camera_up)
+                );
+        }
     }
 
     if (_draw_system)
@@ -385,15 +447,16 @@ void ApplicationTestLine::Update()
             buffer0._camera_far = _camera_far;
             buffer0._camera_fov_horizontal = _fov_horizontal_calculated;
             buffer0._camera_fov_vertical = _fov_vertical;
+            buffer0._camera_unit_pixel_size = _unit_pixel_size;
 
             auto& buffer_background1 = shader_background->GetConstant<ConstantBufferBackgroundB1>(1);
 
-            buffer_background1._sun_azimuth_altitude = VectorFloat2(Angle::DegToRadian(-45.0f), Angle::DegToRadian(30.0f));
+            buffer_background1._sun_azimuth_altitude = VectorFloat2(Angle::DegToRadian(90.0f), Angle::DegToRadian(0.0f));
             buffer_background1._sun_range = VectorFloat2(0.05f, 0.2f);//1.0f, 5.0f);
             buffer_background1._sun_tint = VectorFloat3(255.0f / 255.0f, 245.0f / 255.0f, 235.0f / 255.0f);
-            buffer_background1._sky_spread = 0.5f; //-0.5
+            buffer_background1._sky_spread = -0.75f; //-0.5
             buffer_background1._sky_tint = VectorFloat3(10.0f / 255.0f, 10.0f / 255.0f, 255.0f / 255.0f);
-            buffer_background1._sky_turbitity = 5.0f; //10.0f;
+            buffer_background1._sky_turbitity = 25.0f; //5.0f; //10.0f;
             buffer_background1._ground_tint = VectorFloat3(32.0f / 255.0f, 16.0f / 255.0f, 2.0f / 255.0f);
             buffer_background1._fog_tint = VectorFloat3(200.0f / 255.0f, 200.0f / 255.0f, 200.0f / 255.0f);
         }
@@ -413,18 +476,11 @@ void ApplicationTestLine::Update()
             buffer0._camera_far = _camera_far;
             buffer0._camera_fov_horizontal = _fov_horizontal_calculated;
             buffer0._camera_fov_vertical = _fov_vertical;
+            buffer0._camera_unit_pixel_size = _unit_pixel_size;
 
-
-            auto& buffer1 = shader->GetConstant<ConstantBufferB1>(1);
-            buffer1._line_at = _line_at;
-            buffer1._line_pos = _line_pos;
-            buffer1._radian_per_pixel = _radian_per_pixel;
-            buffer1._line_length = _line_length;
-            buffer1._line_thickness = 0.5f;
+            frame->SetShader(shader);
+            frame->Draw(_geometry.get());
         }
-
-        frame->SetShader(shader);
-        frame->Draw(_geometry.get());
 #endif
     }
 }
@@ -441,7 +497,8 @@ void ApplicationTestLine::OnWindowSizeChanged(
 
     const float aspect = (float)in_width / (float)in_height;
     _fov_horizontal_calculated = aspect * _fov_vertical;
-    _radian_per_pixel = _fov_vertical / (float)in_height;
+    const auto radian_per_pixel = _fov_vertical / (float)in_height;
+    _unit_pixel_size = sin(radian_per_pixel);
 
     if (_draw_system)
     {
@@ -511,6 +568,12 @@ void ApplicationTestLine::OnKey(
     else if ('L' == in_vk_code)
     {
         _input_l = (false == in_up_flag);
+    }
+    else if ((VK_HOME == in_vk_code) && (false == in_up_flag))
+    {
+        _camera_pos = s_camera_pos;
+        _camera_at = s_camera_at;
+        _camera_up = s_camera_up;
     }
 
     return;

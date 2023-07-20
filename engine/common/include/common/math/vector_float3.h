@@ -21,6 +21,15 @@ public:
     const float operator[](const int in_index) const;
     const bool operator==(const VectorFloat3& in_rhs) const;
 
+    friend const VectorFloat3 Cross(
+        const VectorFloat3& in_lhs,
+        const VectorFloat3& in_rhs
+        );
+    friend const float Dot(
+        const VectorFloat3& in_lhs,
+        const VectorFloat3& in_rhs
+        );
+
     friend VectorFloat3& operator+= (VectorFloat3& in_lhs, const VectorFloat3& in_rhs);
     friend VectorFloat3& operator-= (VectorFloat3& in_lhs, const VectorFloat3& in_rhs);
     friend const VectorFloat3 operator+ (const VectorFloat3& in_lhs, const VectorFloat3& in_rhs);
@@ -41,6 +50,14 @@ private:
 
 };
 
+const VectorFloat3 Cross(
+    const VectorFloat3& in_lhs,
+    const VectorFloat3& in_rhs
+    );
+const float Dot(
+    const VectorFloat3& in_lhs,
+    const VectorFloat3& in_rhs
+    );
 VectorFloat3& operator+= (VectorFloat3& in_lhs, const VectorFloat3& in_rhs);
 VectorFloat3& operator-= (VectorFloat3& in_lhs, const VectorFloat3& in_rhs);
 const VectorFloat3 operator+ (const VectorFloat3& in_lhs, const VectorFloat3& in_rhs);

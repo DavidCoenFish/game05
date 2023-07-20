@@ -44,16 +44,12 @@ private:
 
     float _fov_vertical;
     float _fov_horizontal_calculated;
+    float _unit_pixel_size;
 
     VectorFloat3 _camera_pos;
     VectorFloat3 _camera_at;
     VectorFloat3 _camera_up;
     float _camera_far;
-
-    VectorFloat3 _line_pos;
-    float _radian_per_pixel;
-    VectorFloat3 _line_at;
-    float _line_length;
 
     std::unique_ptr < Timer > _timer;
 

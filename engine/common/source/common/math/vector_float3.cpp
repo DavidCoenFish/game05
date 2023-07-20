@@ -63,20 +63,6 @@ void VectorFloat3::NormaliseSelf()
     }
 }
 
-const VectorFloat3 VectorFloat3::Cross(
-    const VectorFloat3&in_lhs,
-    const VectorFloat3&in_rhs
-    )
-{
-    VectorFloat3 result;
-    VectorMath::CrossProduct(
-        result._data,
-        in_lhs._data,
-        in_rhs._data
-        );
-    return result;
-}
-
 const bool VectorFloat3::operator==(const VectorFloat3&in_rhs) const
 {
     for (int index = 0; index < Index::Count;++ index)
@@ -87,6 +73,29 @@ const bool VectorFloat3::operator==(const VectorFloat3&in_rhs) const
         }
     }
     return true;
+}
+
+
+const VectorFloat3 Cross(
+    const VectorFloat3& in_lhs,
+    const VectorFloat3& in_rhs
+    )
+{
+    VectorFloat3 result;
+    VectorMath::CrossProduct(
+        result._data,
+        in_lhs._data,
+        in_rhs._data
+    );
+    return result;
+}
+
+const float Dot(
+    const VectorFloat3& in_lhs,
+    const VectorFloat3& in_rhs
+    )
+{
+    return (in_lhs._data[0] * in_rhs._data[0]) + (in_lhs._data[1] * in_rhs._data[1]) + (in_lhs._data[2] * in_rhs._data[2]);
 }
 
 VectorFloat3& operator+= (VectorFloat3& in_lhs, const VectorFloat3& in_rhs)

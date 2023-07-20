@@ -6,12 +6,12 @@ struct Pixel
     float4 _color : SV_TARGET0;
 };
 
-cbuffer ConstantBuffer1 : register(b1)
-{
-    float4 _line_pos_radian_per_pixel;
-    float4 _line_at_length;
-    float _line_thickness;
-};
+//cbuffer ConstantBuffer1 : register(b1)
+//{
+//    float4 _line_pos_radian_per_pixel;
+//    float4 _line_at_length;
+//    float _line_thickness;
+//};
 
 // https://en.wikipedia.org/wiki/Skew_lines#Distance%5B/url%5D
 float3 RayRayClosest(float3 in_p1, float3 in_d1, float3 in_p2, float3 in_d2)
@@ -21,19 +21,20 @@ float3 RayRayClosest(float3 in_p1, float3 in_d1, float3 in_p2, float3 in_d2)
     float3 n2 = float3(0.0, 0.0, 0.0);
     float t1 = 0.0f;
     float t2 = 0.0f;
+    float3 result = float3(0.0, 0.0, 0.0);
 
-    if (dot(n, n) < 0.00001)
+    //if (dot(n, n) < 0.00001)
+    // rays are parrallel or very close
+    if (dot(n, n) != 0.0)
     {
-        // rays are parrallel or very close
-        return float3(0.0, 0.0, 0.0);
+        n1 = cross(in_d1, n);
+        n2 = cross(in_d2, n);
+        t1 = dot(in_p2 - in_p1, n2) / dot(in_d1, n2);
+        t2 = dot(in_p1 - in_p2, n1) / dot(in_d2, n1);
+        result = float3(1.0, t1, t2);
     }
 
-    n1 = cross(in_d1, n);
-    n2 = cross(in_d2, n);
-    t1 = dot(in_p2 - in_p1, n2) / dot(in_d1, n2);
-    t2 = dot(in_p1 - in_p2, n1) / dot(in_d2, n1);
-
-    return float3(1.0, t1, t2);
+    return result;
 }
 
 float2 CalculateDistance(float in_t1, float in_t2, float3 in_p1, float3 in_d1, float in_l1, float3 in_p2, float3 in_d2, float in_l2)
@@ -61,15 +62,60 @@ float2 CalculateDistance(float in_t1, float in_t2, float3 in_p1, float3 in_d1, f
     return result;
 }
 
-float CalculateCoverage(float in_radian_per_pixel, float in_line_pixel_thickness, float in_ray_ray_distance, float in_camera_distance)
+float CalculatePixelCoverage(float in_camera_unit_pixel_size, float in_line_pixel_thickness, float in_ray_ray_distance, float in_camera_distance)
 {
-    float angle = atan2(in_ray_ray_distance, in_camera_distance);
-    float pixel_distance = angle / in_radian_per_pixel;
+    //float angle = atan2(in_ray_ray_distance, in_camera_distance);
+    //float pixel_distance = angle / in_radian_per_pixel;
+
+    float pixel_distance = (in_ray_ray_distance / in_camera_distance) / in_camera_unit_pixel_size;
 
     float low = max(-0.5, pixel_distance - (0.5 * in_line_pixel_thickness));
     float high = min(0.5, pixel_distance + (0.5 * in_line_pixel_thickness));
 
-    float coverage = high - low;
+    float coverage = max(0.0, min(1.0, (high - low)));
+    return coverage;
+}
+
+float CalculateCoverage(
+    float3 in_line_pos,
+    float3 in_line_at,
+    float in_line_length,
+    float in_line_thickness,
+    float3 in_camera_pos,
+    float3 in_camera_at,
+    float in_camera_far,
+    float in_camera_unit_pixel_size
+    )
+{
+    float coverage = 0.0;
+    float3 pass_t1_t2 = RayRayClosest(
+        in_line_pos, 
+        in_line_at, 
+        in_camera_pos, 
+        in_camera_at
+        );
+    if (pass_t1_t2.x != 0.0)
+    {
+        float2 pass_distance = CalculateDistance(
+            pass_t1_t2.y, 
+            pass_t1_t2.z, 
+            in_line_pos, 
+            in_line_at, 
+            in_line_length, 
+            in_camera_pos, 
+            in_camera_at,
+            in_camera_far
+            );
+        if (pass_distance.x != 0.0)
+        {
+            coverage = CalculatePixelCoverage(
+                in_camera_unit_pixel_size,
+                in_line_thickness,
+                pass_distance.y,
+                pass_t1_t2.z
+            );
+        }
+    }
     return coverage;
 }
 
@@ -79,24 +125,48 @@ Pixel main( Interpolant in_input )
 
     float3 world_eye_ray = MakeWorldEyeRay(in_input._uv);
 
-    float3 pass_t1_t2 = RayRayClosest(_line_pos_radian_per_pixel.xyz, _line_at_length.xyz, _camera_pos_fov_horizontal.xyz, world_eye_ray);
-    if (pass_t1_t2.x == 0.0)
-    {
-        discard;
-    }
+    float3 camera_pos = GetCameraPos();
+    float camera_unit_pixel_size = GetCameraUnitPixelSize();
+    float camera_far = GetCameraFar();
+    float coverage = 0.0;
+    coverage += CalculateCoverage(
+        float3(-10.0, 0.0, 0.0),
+        float3(1.0, 0.0, 0.0),
+        20.0,
+        0.5,
+        camera_pos,
+        world_eye_ray,
+        camera_far,
+        camera_unit_pixel_size
+        );
 
-    float2 pass_distance = CalculateDistance(pass_t1_t2.y, pass_t1_t2.z, _line_pos_radian_per_pixel.xyz, _line_at_length.xyz, _line_at_length.w, _camera_pos_fov_horizontal.xyz, world_eye_ray, _camera_up_camera_far.w);
-    if (pass_distance.x == 0.0)
-    {
-        discard;
-    }
+    coverage += CalculateCoverage(
+        float3(0.0, -10.0, 0.0),
+        float3(0.0, 1.0, 0.0),
+        20.0,
+        0.5,
+        camera_pos,
+        world_eye_ray,
+        camera_far,
+        camera_unit_pixel_size
+    );
 
-    float coverage = CalculateCoverage(_line_pos_radian_per_pixel.w, _line_thickness, pass_distance.y, pass_t1_t2.z);
+    coverage += CalculateCoverage(
+        float3(0.0, 0.0, -10.0),
+        float3(0.0, 0.0, 1.0),
+        20.0,
+        0.5,
+        camera_pos,
+        world_eye_ray,
+        camera_far,
+        camera_unit_pixel_size
+    );
 
-    result._color = float4(coverage, coverage, coverage, 1.0);
-    //result._color = float4(_camera_pos_fov_horizontal.x, _camera_pos_fov_horizontal.y, _camera_pos_fov_horizontal.z, 1.0f);
-    //result._color = float4(_line_pos_radian_per_pixel.x, _line_pos_radian_per_pixel.y, _line_pos_radian_per_pixel.z, 1.0);
-    //result._color = float4(0.0, 0.0, 0.0, coverage);
+
+    coverage = min(1.0, coverage);
+
+    result._color = float4(0.0, 0.0, 0.0, coverage);
+    //result._color = float4(coverage, coverage, coverage, 1.0);
 
     return result;
 }
