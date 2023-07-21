@@ -8,10 +8,6 @@ public:
         const float in_z = 0
         );
 
-    static const VectorFloat3 Cross(
-        const VectorFloat3&in_lhs,
-        const VectorFloat3&in_rhs
-        );
     const float GetX() const;
     const float GetY() const;
     const float GetZ() const;
@@ -29,7 +25,6 @@ public:
         const VectorFloat3& in_lhs,
         const VectorFloat3& in_rhs
         );
-
     friend VectorFloat3& operator+= (VectorFloat3& in_lhs, const VectorFloat3& in_rhs);
     friend VectorFloat3& operator-= (VectorFloat3& in_lhs, const VectorFloat3& in_rhs);
     friend const VectorFloat3 operator+ (const VectorFloat3& in_lhs, const VectorFloat3& in_rhs);

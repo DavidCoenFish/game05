@@ -28,7 +28,7 @@ Pixel main( Interpolant in_input )
     Pixel result;
 
     float3 world_eye_ray = MakeWorldEyeRay(in_input._uv);
-    float world_up = world_eye_ray.z;
+    float world_up = world_eye_ray.y;
 
     float3 sun_norm = MakeScreenEyeRay(_sun_azimuth_altitude_sun_range.xy);
 
@@ -41,14 +41,8 @@ Pixel main( Interpolant in_input )
     float3 rgb = lerp(ground_color, sky_dome_color, step(0.0, world_up));
     rgb = lerp(rgb, _fog_tint.xyz, fog);
 
-    //result._color = float4(rgb.x, rgb.y, rgb.z, 1.0);
-    //result._color = float4(sky_dome_color.x, sky_dome_color.y, sky_dome_color.z, 1.0);
-    //result._color = float4(_sky_tint_sky_turbitity.x, _sky_tint_sky_turbitity.y, _sky_tint_sky_turbitity.z, 1.0);
-    //result._color = float4(world_eye_ray.x, world_up, world_eye_ray.z, 1.0);
-    //result._color = float4(sun_norm.x, sun_norm.y, sun_norm.z, 1.0); //blue
-    //result._color = float4(angle_sun_view, angle_sun_view, angle_sun_view, 1.0);
-    //result._color = float4(sky_dome_color.x, sky_dome_color.y, sky_dome_color.z, 1.0);
     result._color = float4(rgb.x, rgb.y, rgb.z, 1.0);
 
     return result;
 }
+

@@ -15,6 +15,9 @@
     <ClCompile Include="source\common_dag_threaded.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="source\common_math_vector_float3.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\unit_test_pch.h">

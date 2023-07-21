@@ -69,8 +69,10 @@ float CalculatePixelCoverage(float in_camera_unit_pixel_size, float in_line_pixe
 
     float pixel_distance = (in_ray_ray_distance / in_camera_distance) / in_camera_unit_pixel_size;
 
-    float low = max(-0.5, pixel_distance - (0.5 * in_line_pixel_thickness));
-    float high = min(0.5, pixel_distance + (0.5 * in_line_pixel_thickness));
+    //float low = max(-0.5, pixel_distance - (0.5 * in_line_pixel_thickness));
+    //float high = min(0.5, pixel_distance + (0.5 * in_line_pixel_thickness));
+    float low = max(-0.5, pixel_distance - in_line_pixel_thickness);
+    float high = min(0.5, pixel_distance + in_line_pixel_thickness);
 
     float coverage = max(0.0, min(1.0, (high - low)));
     return coverage;
@@ -130,9 +132,9 @@ Pixel main( Interpolant in_input )
     float camera_far = GetCameraFar();
     float coverage = 0.0;
     coverage += CalculateCoverage(
-        float3(-10.0, 0.0, 0.0),
+        float3(-1.0, 0.0, 0.0),
         float3(1.0, 0.0, 0.0),
-        20.0,
+        2.0,
         0.5,
         camera_pos,
         world_eye_ray,
@@ -141,9 +143,9 @@ Pixel main( Interpolant in_input )
         );
 
     coverage += CalculateCoverage(
-        float3(0.0, -10.0, 0.0),
+        float3(0.0, -1.0, 0.0),
         float3(0.0, 1.0, 0.0),
-        20.0,
+        2.0,
         0.5,
         camera_pos,
         world_eye_ray,
@@ -152,9 +154,9 @@ Pixel main( Interpolant in_input )
     );
 
     coverage += CalculateCoverage(
-        float3(0.0, 0.0, -10.0),
+        float3(0.0, 0.0, -1.0),
         float3(0.0, 0.0, 1.0),
-        20.0,
+        2.0,
         0.5,
         camera_pos,
         world_eye_ray,

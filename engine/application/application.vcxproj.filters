@@ -130,5 +130,8 @@
     <FxCompile Include="task\test_line\pixel_shader_background.hlsl">
       <Filter>task\test_line</Filter>
     </FxCompile>
+    <FxCompile Include="task\test_line\pixel_shader_sphere.hlsl">
+      <Filter>task\test_line</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
