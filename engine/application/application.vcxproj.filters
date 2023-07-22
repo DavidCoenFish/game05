@@ -28,6 +28,9 @@
     <Filter Include="task\test_line">
       <UniqueIdentifier>{2f7311bd-8b95-4e8c-9d01-f2f48f5ac3bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="task\multi_line">
+      <UniqueIdentifier>{678648ac-ad02-4fd3-81c3-4faf5d339018}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Script\util_make_host_define.cmd">
@@ -55,6 +58,12 @@
     <None Include="task\test_line\polar.hlsli">
       <Filter>task\test_line</Filter>
     </None>
+    <None Include="task\multi_line\interpolant.hlsli">
+      <Filter>task\multi_line</Filter>
+    </None>
+    <None Include="task\multi_line\polar.hlsli">
+      <Filter>task\multi_line</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Build.cpp">
@@ -70,6 +79,9 @@
       <Filter>source\window_application</Filter>
     </ClCompile>
     <ClCompile Include="source\window_application\application_test_triangle.cpp">
+      <Filter>source\window_application</Filter>
+    </ClCompile>
+    <ClCompile Include="source\window_application\application_multi_line.cpp">
       <Filter>source\window_application</Filter>
     </ClCompile>
   </ItemGroup>
@@ -90,6 +102,9 @@
       <Filter>source\window_application</Filter>
     </ClInclude>
     <ClInclude Include="source\window_application\application_test_triangle.h">
+      <Filter>source\window_application</Filter>
+    </ClInclude>
+    <ClInclude Include="source\window_application\application_multi_line.h">
       <Filter>source\window_application</Filter>
     </ClInclude>
   </ItemGroup>
@@ -113,6 +128,9 @@
     <CopyFileToFolders Include="task\test_line\application.json">
       <Filter>task\test_line</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="task\multi_line\application.json">
+      <Filter>task\multi_line</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="task\test_triangle\pixel_shader.hlsl">
@@ -135,6 +153,21 @@
     </FxCompile>
     <FxCompile Include="task\test_line\pixel_shader_grid.hlsl">
       <Filter>task\test_line</Filter>
+    </FxCompile>
+    <FxCompile Include="task\multi_line\compute_shader.hlsl">
+      <Filter>task\multi_line</Filter>
+    </FxCompile>
+    <FxCompile Include="task\multi_line\geometry_shader.hlsl">
+      <Filter>task\multi_line</Filter>
+    </FxCompile>
+    <FxCompile Include="task\multi_line\pixel_shader_background.hlsl">
+      <Filter>task\multi_line</Filter>
+    </FxCompile>
+    <FxCompile Include="task\multi_line\pixel_shader_grid.hlsl">
+      <Filter>task\multi_line</Filter>
+    </FxCompile>
+    <FxCompile Include="task\multi_line\vertex_shader.hlsl">
+      <Filter>task\multi_line</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

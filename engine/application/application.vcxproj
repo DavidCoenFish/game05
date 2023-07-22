@@ -93,6 +93,11 @@
     <CopyFileToFolders Include="task\test_line\application.json">
       <FileType>Document</FileType>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="task\multi_line\application.json">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+    <None Include="task\multi_line\interpolant.hlsli" />
+    <None Include="task\multi_line\polar.hlsli" />
     <None Include="task\test_line\polar.hlsli" />
   </ItemGroup>
   <ItemGroup>
@@ -105,6 +110,7 @@
     </ClCompile>
     <ClCompile Include="source\build.cpp" />
     <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\window_application\application_multi_line.cpp" />
     <ClCompile Include="source\window_application\application_test_line.cpp" />
     <ClCompile Include="source\window_application\application_test_triangle.cpp" />
   </ItemGroup>
@@ -113,6 +119,7 @@
     <ClInclude Include="source\application_pch.h" />
     <ClInclude Include="source\build.h" />
     <ClInclude Include="source\host_define.h" />
+    <ClInclude Include="source\window_application\application_multi_line.h" />
     <ClInclude Include="source\window_application\application_test_line.h" />
     <ClInclude Include="source\window_application\application_test_triangle.h" />
   </ItemGroup>
@@ -125,6 +132,30 @@
     <Image Include="resources\cut.ico" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="task\multi_line\compute_shader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="task\multi_line\geometry_shader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="task\multi_line\pixel_shader_background.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="task\multi_line\pixel_shader_grid.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="task\multi_line\vertex_shader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
     <FxCompile Include="task\test_line\pixel_shader_axis.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>

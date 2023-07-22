@@ -6,12 +6,9 @@ X application framework
 X setup d3dx12 application
 X draw d3dx12 triangle
 X make dag fully thread safe
-_ draw line d3dx12
- x const buffer into shader
- x keyboard change value/ move camera
- _ skybox background
-_ draw sphere d3dx12
-_ draw grid
+X draw line d3dx12
+X draw sphere d3dx12
+X draw grid
 _ draw many lines
 _ draw bip simple
 _ draw bip generic
