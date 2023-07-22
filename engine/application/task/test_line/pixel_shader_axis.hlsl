@@ -74,7 +74,7 @@ float CalculatePixelCoverage(float in_camera_unit_pixel_size, float in_line_pixe
     float low = max(-0.5, pixel_distance - in_line_pixel_thickness);
     float high = min(0.5, pixel_distance + in_line_pixel_thickness);
 
-    float coverage = max(0.0, min(1.0, (high - low)));
+    float coverage = saturate(high - low);
     return coverage;
 }
 
@@ -151,7 +151,7 @@ Pixel main( Interpolant in_input )
         world_eye_ray,
         camera_far,
         camera_unit_pixel_size
-    );
+        );
 
     coverage += CalculateCoverage(
         float3(0.0, 0.0, -1.0),
@@ -162,10 +162,10 @@ Pixel main( Interpolant in_input )
         world_eye_ray,
         camera_far,
         camera_unit_pixel_size
-    );
+        );
 
 
-    coverage = min(1.0, coverage);
+    coverage = saturate(coverage * 0.5);
 
     result._color = float4(0.0, 0.0, 0.0, coverage);
     //result._color = float4(coverage, coverage, coverage, 1.0);

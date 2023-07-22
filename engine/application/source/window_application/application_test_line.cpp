@@ -146,8 +146,49 @@ ApplicationTestLine::ApplicationTestLine(
 
     // Make shaders
     auto vertex_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "vertex_shader.cso");
+
+    // Shader background
     {
-        auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "pixel_shader.cso");
+        auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "pixel_shader_background.cso");
+        std::vector < DXGI_FORMAT > render_target_format;
+        render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
+        ShaderPipelineStateData shader_pipeline_state_data(
+            input_element_desc_array,
+            D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
+            DXGI_FORMAT_UNKNOWN,
+            // DXGI_FORMAT_D32_FLOAT,
+            render_target_format,
+            CD3DX12_BLEND_DESC(D3D12_DEFAULT),
+            CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT),
+            CD3DX12_DEPTH_STENCIL_DESC()// CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT)
+        );
+
+        std::vector < std::shared_ptr < ShaderResourceInfo > > array_shader_resource_info;
+        std::vector < std::shared_ptr < ConstantBufferInfo > > array_shader_constants_info;
+
+        array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
+            ConstantBufferB0(),
+            D3D12_SHADER_VISIBILITY_PIXEL
+        ));
+        array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
+            ConstantBufferBackgroundB1(),
+            D3D12_SHADER_VISIBILITY_PIXEL
+        ));
+
+        _shader_background = _draw_system->MakeShader(
+            command_list->GetCommandList(),
+            shader_pipeline_state_data,
+            vertex_shader_data,
+            nullptr,
+            pixel_shader_data,
+            array_shader_resource_info,
+            array_shader_constants_info
+        );
+    }
+
+    // Shader grid
+    {
+        auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "pixel_shader_grid.cso");
         std::vector < DXGI_FORMAT > render_target_format;
         render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
         D3D12_BLEND_DESC blend_desc;
@@ -183,7 +224,7 @@ ApplicationTestLine::ApplicationTestLine(
             blend_desc, //CD3DX12_BLEND_DESC(D3D12_DEFAULT),
             CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT),
             CD3DX12_DEPTH_STENCIL_DESC()// CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT)
-            );
+        );
 
         std::vector < std::shared_ptr < ShaderResourceInfo > > array_shader_resource_info;
         std::vector < std::shared_ptr < ConstantBufferInfo > > array_shader_constants_info;
@@ -191,13 +232,9 @@ ApplicationTestLine::ApplicationTestLine(
         array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
             ConstantBufferB0(),
             D3D12_SHADER_VISIBILITY_PIXEL
-            ));
-        //array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
-        //    ConstantBufferB1(),
-        //    D3D12_SHADER_VISIBILITY_PIXEL
-        //    ));
+        ));
 
-        _shader = _draw_system->MakeShader(
+        _shader_grid = _draw_system->MakeShader(
             command_list->GetCommandList(),
             shader_pipeline_state_data,
             vertex_shader_data,
@@ -205,21 +242,45 @@ ApplicationTestLine::ApplicationTestLine(
             pixel_shader_data,
             array_shader_resource_info,
             array_shader_constants_info
-            );
+        );
     }
 
-    // Shader background
+    // Shader axis
     {
-        auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "pixel_shader_background.cso");
+        auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "pixel_shader_axis.cso");
         std::vector < DXGI_FORMAT > render_target_format;
         render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
+        D3D12_BLEND_DESC blend_desc;
+        blend_desc.AlphaToCoverageEnable = FALSE;
+        blend_desc.IndependentBlendEnable = FALSE;
+        const D3D12_RENDER_TARGET_BLEND_DESC defaultRenderTargetBlendDesc =
+        {
+            TRUE, //BlendEnable
+            FALSE, //LogicOpEnable
+            // dest.rgb = src.rgb * src.a + dest.rgb * (1 - src.a)
+            D3D12_BLEND_SRC_ALPHA, //SrcBlend 
+            D3D12_BLEND_INV_SRC_ALPHA, //DestBlend
+            D3D12_BLEND_OP_ADD, //BlendOp
+            // dest.a = 1 - (1 - src.a) * (1 - dest.a) [the math works out]
+            D3D12_BLEND_INV_DEST_ALPHA, //SrcBlendAlpha
+            D3D12_BLEND_ONE, //DestBlendAlpha
+            D3D12_BLEND_OP_ADD, //BlendOpAlpha
+            D3D12_LOGIC_OP_NOOP, //LogicOp
+            D3D12_COLOR_WRITE_ENABLE_ALL, //RenderTargetWriteMask
+        };
+
+        for (UINT i = 0; i < D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT; ++i)
+        {
+            blend_desc.RenderTarget[i] = defaultRenderTargetBlendDesc;
+        }
+
         ShaderPipelineStateData shader_pipeline_state_data(
             input_element_desc_array,
             D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
             DXGI_FORMAT_UNKNOWN,
             // DXGI_FORMAT_D32_FLOAT,
             render_target_format,
-            CD3DX12_BLEND_DESC(D3D12_DEFAULT),
+            blend_desc, //CD3DX12_BLEND_DESC(D3D12_DEFAULT),
             CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT),
             CD3DX12_DEPTH_STENCIL_DESC()// CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT)
         );
@@ -231,12 +292,8 @@ ApplicationTestLine::ApplicationTestLine(
             ConstantBufferB0(),
             D3D12_SHADER_VISIBILITY_PIXEL
         ));
-        array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
-            ConstantBufferBackgroundB1(),
-            D3D12_SHADER_VISIBILITY_PIXEL
-        ));
 
-        _shader_background = _draw_system->MakeShader(
+        _shader_axis = _draw_system->MakeShader(
             command_list->GetCommandList(),
             shader_pipeline_state_data,
             vertex_shader_data,
@@ -319,6 +376,7 @@ ApplicationTestLine::ApplicationTestLine(
         );
     }
 
+    // Geometry Screen Quad
     {
         std::vector < float > vertex_data(
             {
@@ -346,8 +404,9 @@ ApplicationTestLine::~ApplicationTestLine()
     {
         _draw_system->WaitForGpu();
     }
-    _shader.reset();
     _shader_background.reset();
+    _shader_grid.reset();
+    _shader_axis.reset();
     _shader_sphere_a.reset();
     _shader_sphere_b.reset();
     _geometry.reset();
@@ -532,7 +591,7 @@ void ApplicationTestLine::Update()
 
             auto& buffer_background1 = shader_background->GetConstant<ConstantBufferBackgroundB1>(1);
 
-            buffer_background1._sun_azimuth_altitude = VectorFloat2(Angle::DegToRadian(0.0f), Angle::DegToRadian(0.0f));
+            buffer_background1._sun_azimuth_altitude = VectorFloat2(Angle::DegToRadian(45.0f), Angle::DegToRadian(45.0f));
             buffer_background1._sun_range = VectorFloat2(0.05f, 0.2f);//1.0f, 5.0f);
             buffer_background1._sun_tint = VectorFloat3(255.0f / 255.0f, 245.0f / 255.0f, 235.0f / 255.0f);
             buffer_background1._sky_spread = -0.75f; //-0.5
@@ -545,12 +604,12 @@ void ApplicationTestLine::Update()
         frame->Draw(_geometry.get());
 #endif
 
-        // Draw Line / Grid
+        // Draw Grid
 #if 1
-        auto shader = _shader.get();
-        if (nullptr != shader)
+        auto shader_grid = _shader_grid.get();
+        if (nullptr != shader_grid)
         {
-            auto& buffer0 = shader->GetConstant<ConstantBufferB0>(0);
+            auto& buffer0 = shader_grid->GetConstant<ConstantBufferB0>(0);
             buffer0._camera_at = _camera_at;
             buffer0._camera_up = _camera_up;
             buffer0._camera_pos = _camera_pos;
@@ -559,7 +618,26 @@ void ApplicationTestLine::Update()
             buffer0._camera_fov_vertical = _fov_vertical;
             buffer0._camera_unit_pixel_size = _unit_pixel_size;
 
-            frame->SetShader(shader);
+            frame->SetShader(shader_grid);
+            frame->Draw(_geometry.get());
+        }
+#endif
+
+        // Draw Axis
+#if 1
+        auto shader_axis = _shader_axis.get();
+        if (nullptr != shader_axis)
+        {
+            auto& buffer0 = shader_axis->GetConstant<ConstantBufferB0>(0);
+            buffer0._camera_at = _camera_at;
+            buffer0._camera_up = _camera_up;
+            buffer0._camera_pos = _camera_pos;
+            buffer0._camera_far = _camera_far;
+            buffer0._camera_fov_horizontal = _fov_horizontal_calculated;
+            buffer0._camera_fov_vertical = _fov_vertical;
+            buffer0._camera_unit_pixel_size = _unit_pixel_size;
+
+            frame->SetShader(shader_axis);
             frame->Draw(_geometry.get());
         }
 #endif
@@ -580,7 +658,7 @@ void ApplicationTestLine::Update()
 
             auto& buffer1 = shader_sphere->GetConstant<ConstantBufferSphereB1>(1);
             buffer1._sphere_pos = VectorFloat3(1.5f, 0.0f, 0.0f);
-            buffer1._sphere_edge_thickness_pixels = 0.5f;
+            buffer1._sphere_edge_thickness_pixels = 0.25f;
             buffer1._sphere_tint = VectorFloat3(1.0f, 1.0f, 1.0f);
             buffer1._sphere_radius = 0.5f;
 
@@ -601,7 +679,7 @@ void ApplicationTestLine::Update()
 
             auto& buffer1 = shader_sphere->GetConstant<ConstantBufferSphereB1>(1);
             buffer1._sphere_pos = VectorFloat3(0.0f, 0.0f, 0.0f);
-            buffer1._sphere_edge_thickness_pixels = 0.5f;
+            buffer1._sphere_edge_thickness_pixels = 0.25f;
             buffer1._sphere_tint = VectorFloat3(0.0f, 0.0f, 0.0f);
             buffer1._sphere_radius = 1.0f;
 

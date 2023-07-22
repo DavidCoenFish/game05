@@ -121,7 +121,7 @@
     <FxCompile Include="task\test_triangle\vertex_shader.hlsl">
       <Filter>task\test_triangle</Filter>
     </FxCompile>
-    <FxCompile Include="task\test_line\pixel_shader.hlsl">
+    <FxCompile Include="task\test_line\pixel_shader_axis.hlsl">
       <Filter>task\test_line</Filter>
     </FxCompile>
     <FxCompile Include="task\test_line\vertex_shader.hlsl">
@@ -131,6 +131,9 @@
       <Filter>task\test_line</Filter>
     </FxCompile>
     <FxCompile Include="task\test_line\pixel_shader_sphere.hlsl">
+      <Filter>task\test_line</Filter>
+    </FxCompile>
+    <FxCompile Include="task\test_line\pixel_shader_grid.hlsl">
       <Filter>task\test_line</Filter>
     </FxCompile>
   </ItemGroup>

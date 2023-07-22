@@ -37,12 +37,13 @@ private:
 private:
     typedef IWindowApplication BaseType;
     std::unique_ptr < DrawSystem > _draw_system;
-    std::shared_ptr < Shader > _shader;
     std::shared_ptr < GeometryGeneric > _geometry;
 
     std::shared_ptr < Shader > _shader_background;
+    std::shared_ptr < Shader > _shader_axis;
     std::shared_ptr < Shader > _shader_sphere_a;
     std::shared_ptr < Shader > _shader_sphere_b;
+    std::shared_ptr < Shader > _shader_grid;
 
     float _fov_vertical;
     float _fov_horizontal_calculated;
