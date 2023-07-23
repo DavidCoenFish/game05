@@ -226,7 +226,7 @@ const bool ScreenSizeResources::Present(
     const Microsoft::WRL::ComPtr < ID3D12CommandQueue >&in_command_queue
     )
 {
-    ((IRenderTarget*) _render_target_back_buffer[_back_buffer_index].get()) ->EndRender(_command_list.Get());
+    ((IRenderTarget*) _render_target_back_buffer[_back_buffer_index].get())->EndRender(_command_list.Get());
     // Send the command list off to the GPU for processing.
     DX::ThrowIfFailed(_command_list->Close());
     in_command_queue->ExecuteCommandLists(

@@ -45,7 +45,7 @@ public:
         void* const in_data_or_nullptr,
         size_t in_alignment = 16
         );
-    void Prepare(ID3D12GraphicsCommandList*&in_command_list);
+    void Prepare(ID3D12GraphicsCommandList*& in_command_list);
     // Void Clear();
     const bool Present();
     IRenderTarget* GetRenderTargetBackBuffer();

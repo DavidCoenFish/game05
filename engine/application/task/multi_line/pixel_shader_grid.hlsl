@@ -16,9 +16,8 @@ float3 RayRayClosest(float3 in_p1, float3 in_d1, float3 in_p2, float3 in_d2)
     float t2 = 0.0f;
     float3 result = float3(0.0, 0.0, 0.0);
 
-    //if (dot(n, n) < 0.00001)
-    // rays are parrallel or very close
-    if (dot(n, n) != 0.0)
+    // rays are not that close to parrallel
+    if (0.0001 < dot(n, n))
     {
         n1 = cross(in_d1, n);
         n2 = cross(in_d2, n);

@@ -131,7 +131,7 @@ std::shared_ptr < Shader > DrawSystem::MakeShader(
         );
     if (result && _device_resources)
     {
-        ((IResource*)(result.get())) ->OnDeviceRestored(
+        ((IResource*)(result.get()))->OnDeviceRestored(
             in_command_list,
             _device_resources->GetD3dDevice()
             );
@@ -156,7 +156,7 @@ std::shared_ptr < GeometryGeneric > DrawSystem::MakeGeometryGeneric(
         );
     if (result && _device_resources)
     {
-        ((IResource*)(result.get())) ->OnDeviceRestored(
+        ((IResource*)(result.get()))->OnDeviceRestored(
             in_command_list,
             _device_resources->GetD3dDevice()
             );
@@ -181,7 +181,7 @@ std::shared_ptr < ShaderResource > DrawSystem::MakeShaderResource(
         );
     if (result && _device_resources)
     {
-        ((IResource*)(result.get())) ->OnDeviceRestored(
+        ((IResource*)(result.get()))->OnDeviceRestored(
             in_command_list,
             _device_resources->GetD3dDevice()
             );
@@ -204,7 +204,7 @@ std::shared_ptr < UnorderedAccess > DrawSystem::MakeUnorderedAccess(
         );
     if (result && _device_resources)
     {
-        ((IResource*)(result.get())) ->OnDeviceRestored(
+        ((IResource*)(result.get()))->OnDeviceRestored(
             in_command_list,
             _device_resources->GetD3dDevice()
             );
@@ -231,7 +231,7 @@ std::shared_ptr < RenderTargetTexture > DrawSystem::MakeRenderTargetTexture(
         );
     if (result && _device_resources)
     {
-        ((IResource*)(result.get())) ->OnDeviceRestored(
+        ((IResource*)(result.get()))->OnDeviceRestored(
             in_command_list,
             _device_resources->GetD3dDevice()
             );

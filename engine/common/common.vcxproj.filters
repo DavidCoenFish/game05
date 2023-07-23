@@ -369,6 +369,9 @@
     <ClInclude Include="include\common\util\timer.h">
       <Filter>include\common\util</Filter>
     </ClInclude>
+    <ClInclude Include="source\common\draw_system\device_resources.h">
+      <Filter>souce\common\draw_system</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="souce">

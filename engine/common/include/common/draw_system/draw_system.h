@@ -1,5 +1,5 @@
 #pragma once
-#include "common/draw_system/device_resources.h"
+//#include "common/draw_system/device_resources.h"
 #include "common/draw_system/render_target/render_target_depth_data.h"
 #include "common/draw_system/render_target/render_target_format_data.h"
 

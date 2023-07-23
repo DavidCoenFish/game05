@@ -301,7 +301,7 @@ void ApplicationMultiLine::Update()
         if (true == _input_j)
         {
             rotation_flag = true;
-            rotation *= QuaternionFloat::FactoryAxisAngle(_camera_up, time_delta);
+            rotation *= QuaternionFloat::FactoryAxisAngle(_camera_up, -time_delta);
         }
         if (true == _input_k)
         {
@@ -311,7 +311,7 @@ void ApplicationMultiLine::Update()
         if (true == _input_l)
         {
             rotation_flag = true;
-            rotation *= QuaternionFloat::FactoryAxisAngle(_camera_up, -time_delta);
+            rotation *= QuaternionFloat::FactoryAxisAngle(_camera_up, time_delta);
         }
 
         if (true == rotation_flag)

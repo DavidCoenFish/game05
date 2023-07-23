@@ -126,6 +126,7 @@
     <ClInclude Include="source\common\direct_xtk12\graphics_memory.h" />
     <ClInclude Include="source\common\direct_xtk12\handle_closer.h" />
     <ClInclude Include="source\common\direct_xtk12\linear_allocator.h" />
+    <ClInclude Include="source\common\draw_system\device_resources.h" />
     <ClInclude Include="source\common\draw_system\heap_wrapper\heap_wrapper.h" />
     <ClInclude Include="source\common\draw_system\heap_wrapper\heap_wrapper_item.h" />
     <ClInclude Include="source\common\draw_system\heap_wrapper\heap_wrapper_page.h" />
