@@ -2,6 +2,35 @@
 
 #include "common/draw_system/shader/shader_pipeline_state_data.h"
 
+const D3D12_BLEND_DESC ShaderPipelineStateData::FactoryBlendDescAlphaPremultiplied()
+{
+    D3D12_BLEND_DESC blend_desc;
+    blend_desc.AlphaToCoverageEnable = FALSE;
+    blend_desc.IndependentBlendEnable = FALSE;
+    const D3D12_RENDER_TARGET_BLEND_DESC defaultRenderTargetBlendDesc =
+    {
+        TRUE, //BlendEnable
+        FALSE, //LogicOpEnable
+        // dest.rgb = src.rgb * src.a + dest.rgb * (1 - src.a)
+        D3D12_BLEND_SRC_ALPHA, //SrcBlend 
+        D3D12_BLEND_INV_SRC_ALPHA, //DestBlend
+        D3D12_BLEND_OP_ADD, //BlendOp
+        // dest.a = 1 - (1 - src.a) * (1 - dest.a) [the math works out]
+        D3D12_BLEND_INV_DEST_ALPHA, //SrcBlendAlpha
+        D3D12_BLEND_ONE, //DestBlendAlpha
+        D3D12_BLEND_OP_ADD, //BlendOpAlpha
+        D3D12_LOGIC_OP_NOOP, //LogicOp
+        D3D12_COLOR_WRITE_ENABLE_ALL, //RenderTargetWriteMask
+    };
+
+    for (UINT i = 0; i < D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT; ++i)
+    {
+        blend_desc.RenderTarget[i] = defaultRenderTargetBlendDesc;
+    }
+
+    return blend_desc;
+}
+
 ShaderPipelineStateData ShaderPipelineStateData::FactoryComputeShader()
 {
     return ShaderPipelineStateData(
@@ -10,11 +39,8 @@ ShaderPipelineStateData ShaderPipelineStateData::FactoryComputeShader()
         DXGI_FORMAT_UNKNOWN,
         std::vector < DXGI_FORMAT > (),
         CD3DX12_BLEND_DESC(D3D12_DEFAULT),
-        // D3D12_DEFAULT),
         CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT),
-        // D3D12_DEFAULT),
         CD3DX12_DEPTH_STENCIL_DESC(),
-        // D3D12_DEFAULT)
         true
         );
 }

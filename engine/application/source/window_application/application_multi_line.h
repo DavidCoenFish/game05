@@ -37,22 +37,25 @@ private:
 
 private:
     typedef IWindowApplication BaseType;
-    std::unique_ptr < DrawSystem > _draw_system;
+    std::unique_ptr<DrawSystem> _draw_system;
 
     struct DrawResources
     {
-        std::shared_ptr< Shader > _shader_background;
-        std::shared_ptr< Shader > _shader_grid;
+        std::shared_ptr<Shader> _background_shader;
+        std::shared_ptr<Shader> _background_shader_grid;
+        std::shared_ptr<GeometryGeneric> _background_geometry;
 
-        std::shared_ptr< Shader > _shader_compute;
-        std::shared_ptr< UnorderedAccess > m_pComputeOutputTexture;
-        std::shared_ptr< Shader > _shader_multi_line;
+        std::shared_ptr<Shader> _multi_line_compute;
+        std::shared_ptr<UnorderedAccess> _multi_line_data_pos_thick;
+        std::shared_ptr<UnorderedAccess> _multi_line_data_dir_length;
+        std::shared_ptr<UnorderedAccess> _multi_line_data_colour;
+        std::shared_ptr<Shader> _multi_line_shader;
+        std::shared_ptr<GeometryGeneric> _multi_line_geometry;
 
-        std::shared_ptr< GeometryGeneric > geometry_screen_quad;
     };
-    std::unique_ptr< DrawResources > _draw_resources;
+    std::unique_ptr<DrawResources> _draw_resources;
 
-    std::unique_ptr < Timer > _timer;
+    std::unique_ptr<Timer> _timer;
 
     float _fov_vertical;
     float _fov_horizontal_calculated;

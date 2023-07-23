@@ -60,3 +60,30 @@ float3 MakeWorldEyeRay(float2 in_uv)
 
     return result;
 }
+
+/*
+x = r sin 0 cos t
+y = r sin 0 sin t
+z = r cos 0
+*/
+float2 MakePolarUV(float3 in_world_pos)
+{
+    float3 relative = in_world_pos - _camera_pos_fov_horizontal.xyz;
+    float3 camera_right = cross(_camera_at_fov_vertical.xyz, _camera_up_camera_far.xyz);
+    float3 camera_relative = float3(
+        dot(_camera_at_fov_vertical.xyz, relative),
+        dot(_camera_up_camera_far.xyz, relative),
+        dot(camera_right.xyz, relative));
+
+    float r = length(camera_relative);
+    float u = acos(camera_relative.z / r);
+    float v = acos(camera_relative.x / (r * sin(u)));
+
+    //return float2(u,v);
+    float2 uv = float2(
+        u / (2.0 * _camera_pos_fov_horizontal[3]), 
+        v / (2.0 * _camera_at_fov_vertical[3])
+        );
+
+    return uv;
+}

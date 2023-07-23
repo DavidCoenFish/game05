@@ -178,6 +178,9 @@
     <ClCompile Include="source\common\util\timer.cpp">
       <Filter>souce\common\util</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\util\vector_helper.cpp">
+      <Filter>souce\common\util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -371,6 +374,9 @@
     </ClInclude>
     <ClInclude Include="source\common\draw_system\device_resources.h">
       <Filter>souce\common\draw_system</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\util\vector_helper.h">
+      <Filter>include\common\util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

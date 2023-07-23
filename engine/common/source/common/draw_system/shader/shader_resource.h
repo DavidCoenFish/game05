@@ -15,17 +15,14 @@ public:
         const std::vector<uint8_t>& in_data
         );
     std::shared_ptr < HeapWrapperItem > GetHeapWrapperItem() const;
-    static void UploadCreateResource(
+
+    static void UploadResource(
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list,
-        ID3D12Device* const in_device,
         Microsoft::WRL::ComPtr<ID3D12Resource>& in_resource,
-        std::shared_ptr<HeapWrapperItem>& in_shader_resource,
         const D3D12_RESOURCE_DESC& in_desc,
-        const D3D12_SHADER_RESOURCE_VIEW_DESC& in_shader_resource_view_desc,
         const size_t in_data_size,
-        void* in_data,
-        LPCWSTR in_name
+        void* in_data
         );
 
 private:

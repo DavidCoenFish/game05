@@ -191,16 +191,22 @@ std::shared_ptr < ShaderResource > DrawSystem::MakeShaderResource(
 
 std::shared_ptr < UnorderedAccess > DrawSystem::MakeUnorderedAccess(
     ID3D12GraphicsCommandList* const in_command_list,
-    const std::shared_ptr < HeapWrapperItem >&in_heap_wrapper_item,
-    const D3D12_RESOURCE_DESC&in_desc,
-    const D3D12_UNORDERED_ACCESS_VIEW_DESC&in_unordered_access_view_desc
-    )
+    const D3D12_RESOURCE_DESC& in_desc,
+    const D3D12_UNORDERED_ACCESS_VIEW_DESC& in_unordered_access_view_desc,
+    const bool in_make_shader_view_heap_wrapper_item,
+    const std::vector<uint8_t>& in_data
+)
 {
-    auto result = std::make_shared < UnorderedAccess > (
+    auto heap_wrapper_item = MakeHeapWrapperCbvSrvUav();
+    auto shader_view_heap_wrapper_or_null = in_make_shader_view_heap_wrapper_item ? MakeHeapWrapperCbvSrvUav() : nullptr;
+
+    auto result = std::make_shared<UnorderedAccess>(
         this,
-        in_heap_wrapper_item,
+        heap_wrapper_item,
+        shader_view_heap_wrapper_or_null,
         in_desc,
-        in_unordered_access_view_desc
+        in_unordered_access_view_desc,
+        in_data
         );
     if (result && _device_resources)
     {
@@ -221,7 +227,7 @@ std::shared_ptr < RenderTargetTexture > DrawSystem::MakeRenderTargetTexture(
     const bool in_resize_with_screen
     )
 {
-    auto result = std::make_shared < RenderTargetTexture > (
+    auto result = std::make_shared<RenderTargetTexture>(
         this,
         in_target_format_data_array,
         in_target_depth_data,
@@ -420,8 +426,7 @@ void DrawSystem::CreateDeviceResources()
         _target_format_data,
         _target_depth_data
         );
-    \
-        // Two pass construction as rendertargetbackbuffer calls MakeHeapWrapperRenderTargetView, MakeHeapWrapperDepthStencilView which need m_pDeviceResources assigned
+    // Two pass construction as rendertargetbackbuffer calls MakeHeapWrapperRenderTargetView, MakeHeapWrapperDepthStencilView which need m_pDeviceResources assigned
     _device_resources->CreateWindowSizeDependentResources(
         this,
         _hwnd

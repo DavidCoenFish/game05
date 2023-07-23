@@ -56,13 +56,8 @@ float2 CalculateDistance(float in_t1, float in_t2, float3 in_p1, float3 in_d1, f
 
 float CalculatePixelCoverage(float in_camera_unit_pixel_size, float in_line_pixel_thickness, float in_ray_ray_distance, float in_camera_distance)
 {
-    //float angle = atan2(in_ray_ray_distance, in_camera_distance);
-    //float pixel_distance = angle / in_radian_per_pixel;
-
     float pixel_distance = (in_ray_ray_distance / in_camera_distance) / in_camera_unit_pixel_size;
 
-    //float low = max(-0.5, pixel_distance - (0.5 * in_line_pixel_thickness));
-    //float high = min(0.5, pixel_distance + (0.5 * in_line_pixel_thickness));
     float low = max(-0.5, pixel_distance - in_line_pixel_thickness);
     float high = min(0.5, pixel_distance + in_line_pixel_thickness);
 

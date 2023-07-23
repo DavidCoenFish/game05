@@ -17,6 +17,7 @@
 #include "common/math/vector_float2.h"
 #include "common/math/vector_float3.h"
 #include "common/util/timer.h"
+#include "common/util/vector_helper.h"
 #include "common/window/window_application_param.h"
 
 struct ConstantBufferB0
@@ -136,7 +137,7 @@ ApplicationMultiLine::ApplicationMultiLine(
                 D3D12_SHADER_VISIBILITY_PIXEL
             ));
 
-            _draw_resources->_shader_background = _draw_system->MakeShader(
+            _draw_resources->_background_shader = _draw_system->MakeShader(
                 command_list->GetCommandList(),
                 shader_pipeline_state_data,
                 vertex_shader_data,
@@ -147,45 +148,22 @@ ApplicationMultiLine::ApplicationMultiLine(
             );
         }
 
-        // Shader grid
+        // Shader background grid
         {
             auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "pixel_shader_grid.cso");
             std::vector < DXGI_FORMAT > render_target_format;
             render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
-            D3D12_BLEND_DESC blend_desc;
-            blend_desc.AlphaToCoverageEnable = FALSE;
-            blend_desc.IndependentBlendEnable = FALSE;
-            const D3D12_RENDER_TARGET_BLEND_DESC defaultRenderTargetBlendDesc =
-            {
-                TRUE, //BlendEnable
-                FALSE, //LogicOpEnable
-                // dest.rgb = src.rgb * src.a + dest.rgb * (1 - src.a)
-                D3D12_BLEND_SRC_ALPHA, //SrcBlend 
-                D3D12_BLEND_INV_SRC_ALPHA, //DestBlend
-                D3D12_BLEND_OP_ADD, //BlendOp
-                // dest.a = 1 - (1 - src.a) * (1 - dest.a) [the math works out]
-                D3D12_BLEND_INV_DEST_ALPHA, //SrcBlendAlpha
-                D3D12_BLEND_ONE, //DestBlendAlpha
-                D3D12_BLEND_OP_ADD, //BlendOpAlpha
-                D3D12_LOGIC_OP_NOOP, //LogicOp
-                D3D12_COLOR_WRITE_ENABLE_ALL, //RenderTargetWriteMask
-            };
-
-            for (UINT i = 0; i < D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT; ++i)
-            {
-                blend_desc.RenderTarget[i] = defaultRenderTargetBlendDesc;
-            }
+            const auto blend_desc = ShaderPipelineStateData::FactoryBlendDescAlphaPremultiplied();
 
             ShaderPipelineStateData shader_pipeline_state_data(
                 input_element_desc_array,
                 D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
                 DXGI_FORMAT_UNKNOWN,
-                // DXGI_FORMAT_D32_FLOAT,
                 render_target_format,
-                blend_desc, //CD3DX12_BLEND_DESC(D3D12_DEFAULT),
+                blend_desc,
                 CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT),
-                CD3DX12_DEPTH_STENCIL_DESC()// CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT)
-            );
+                CD3DX12_DEPTH_STENCIL_DESC()
+                );
 
             std::vector < std::shared_ptr < ShaderResourceInfo > > array_shader_resource_info;
             std::vector < std::shared_ptr < ConstantBufferInfo > > array_shader_constants_info;
@@ -193,9 +171,9 @@ ApplicationMultiLine::ApplicationMultiLine(
             array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
                 ConstantBufferB0(),
                 D3D12_SHADER_VISIBILITY_PIXEL
-            ));
+                ));
 
-            _draw_resources->_shader_grid = _draw_system->MakeShader(
+            _draw_resources->_background_shader_grid = _draw_system->MakeShader(
                 command_list->GetCommandList(),
                 shader_pipeline_state_data,
                 vertex_shader_data,
@@ -203,7 +181,7 @@ ApplicationMultiLine::ApplicationMultiLine(
                 pixel_shader_data,
                 array_shader_resource_info,
                 array_shader_constants_info
-            );
+                );
         }
 
         // Geometry Screen Quad
@@ -216,7 +194,7 @@ ApplicationMultiLine::ApplicationMultiLine(
                     1.0f, 1.0f,
                 }
             );
-            _draw_resources->geometry_screen_quad = _draw_system->MakeGeometryGeneric(
+            _draw_resources->_background_geometry = _draw_system->MakeGeometryGeneric(
                 command_list->GetCommandList(),
                 D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP,
                 input_element_desc_array,
@@ -224,6 +202,218 @@ ApplicationMultiLine::ApplicationMultiLine(
                 2
                 );
         }
+
+        // std::shared_ptr<Shader> _multi_line_compute;
+        // std::shared_ptr<UnorderedAccess> _multi_line_data_pos_thick;
+        {
+            std::vector< RenderTargetFormatData > targetFormatDataArray;
+            targetFormatDataArray.push_back(RenderTargetFormatData(DXGI_FORMAT_R32G32B32A32_FLOAT));
+
+            const D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(
+                DXGI_FORMAT_R32G32B32A32_FLOAT,
+                4,
+                4,
+                1,
+                1,
+                1,
+                0,
+                D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS
+            );
+
+            D3D12_UNORDERED_ACCESS_VIEW_DESC unordered_access_view_desc({});
+            unordered_access_view_desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+            unordered_access_view_desc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
+            unordered_access_view_desc.Texture2D.MipSlice = 0;
+            unordered_access_view_desc.Texture2D.PlaneSlice = 0;
+
+            const float thickness = 0.5f;
+            const VectorFloat4 data_literal[] = {
+                VectorFloat4(-0.5, -0.5, -0.5f, thickness),
+                VectorFloat4(-0.5, -0.5, -0.5f, thickness),
+                VectorFloat4(-0.5, -0.5, 0.5f, thickness),
+                VectorFloat4(-0.5, -0.5, 0.5f, thickness),
+                VectorFloat4(0.5, -0.5, -0.5f, thickness),
+                VectorFloat4(0.5, -0.5, -0.5f, thickness),
+                VectorFloat4(0.5, -0.5, 0.5f, thickness),
+                VectorFloat4(0.5, -0.5, 0.5f, thickness),
+                VectorFloat4(),
+                VectorFloat4(),
+                VectorFloat4(),
+                VectorFloat4(),
+                VectorFloat4(),
+                VectorFloat4(),
+                VectorFloat4(),
+                VectorFloat4()
+                };
+            auto data = VectorHelper::FactoryArrayLiteral(data_literal);
+
+            _draw_resources->_multi_line_data_pos_thick = _draw_system->MakeUnorderedAccess(
+                command_list->GetCommandList(),
+                desc,
+                unordered_access_view_desc,
+                true,
+                data
+                );
+        }
+
+        // std::shared_ptr<UnorderedAccess> _multi_line_data_dir_length;
+        {
+            std::vector< RenderTargetFormatData > targetFormatDataArray;
+            targetFormatDataArray.push_back(RenderTargetFormatData(DXGI_FORMAT_R32G32B32A32_FLOAT));
+
+            const D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(
+                DXGI_FORMAT_R32G32B32A32_FLOAT,
+                4,
+                4,
+                1,
+                1,
+                1,
+                0,
+                D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS
+            );
+
+            D3D12_UNORDERED_ACCESS_VIEW_DESC unordered_access_view_desc({});
+            unordered_access_view_desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+            unordered_access_view_desc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
+            unordered_access_view_desc.Texture2D.MipSlice = 0;
+            unordered_access_view_desc.Texture2D.PlaneSlice = 0;
+
+            const float length = 1.0f;
+            const VectorFloat4 data_literal[] = {
+                VectorFloat4(0.0f, 1.0f, 0.0f, length),
+                VectorFloat4(0.0f, 0.0f, -1.0f, length),
+                VectorFloat4(0.0f, 1.0f, 0.0f, length),
+                VectorFloat4(1.0f, 0.0f, 0.0f, length),
+                VectorFloat4(0.0f, 1.0f, 0.0f, length),
+                VectorFloat4(0.0f, 0.0f, 1.0f, length),
+                VectorFloat4(0.0f, 1.0f, 0.0f, length),
+                VectorFloat4(-1.0f, 0.0f, 0.0f, length),
+                VectorFloat4(),
+                VectorFloat4(),
+                VectorFloat4(),
+                VectorFloat4(),
+                VectorFloat4(),
+                VectorFloat4(),
+                VectorFloat4(),
+                VectorFloat4()
+                };
+            auto data = VectorHelper::FactoryArrayLiteral(data_literal);
+
+            _draw_resources->_multi_line_data_dir_length = _draw_system->MakeUnorderedAccess(
+                command_list->GetCommandList(),
+                desc,
+                unordered_access_view_desc,
+                true,
+                data
+            );
+        }
+
+        // std::shared_ptr<UnorderedAccess> _multi_line_data_colour;
+        {
+            std::vector< RenderTargetFormatData > targetFormatDataArray;
+            targetFormatDataArray.push_back(RenderTargetFormatData(DXGI_FORMAT_R32G32B32A32_FLOAT));
+
+            const D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(
+                DXGI_FORMAT_R32G32B32A32_FLOAT,
+                4,
+                4,
+                1,
+                1,
+                1,
+                0,
+                D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS
+            );
+
+            D3D12_UNORDERED_ACCESS_VIEW_DESC unordered_access_view_desc({});
+            unordered_access_view_desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+            unordered_access_view_desc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
+            unordered_access_view_desc.Texture2D.MipSlice = 0;
+            unordered_access_view_desc.Texture2D.PlaneSlice = 0;
+
+            const float thickness = 0.5f;
+            const VectorFloat4 data_literal[] = {
+                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+                VectorFloat4(),
+                VectorFloat4(),
+                VectorFloat4(),
+                VectorFloat4(),
+                VectorFloat4(),
+                VectorFloat4(),
+                VectorFloat4(),
+                VectorFloat4()
+            };
+            auto data = VectorHelper::FactoryArrayLiteral(data_literal);
+
+            _draw_resources->_multi_line_data_colour = _draw_system->MakeUnorderedAccess(
+                command_list->GetCommandList(),
+                desc,
+                unordered_access_view_desc,
+                true,
+                data
+            );
+        }
+        // std::shared_ptr<Shader> _multi_line_shader;
+        // std::shared_ptr<GeometryGeneric> _multi_line_geometry;
+        {
+            std::vector<float> vertex_data;
+            int trace = 0;
+            for (int y = 0; y < 4; ++y)
+            {
+                for (int x = 0; x < 4; ++x)
+                {
+                    ++trace;
+                    if (8 < trace)
+                    {
+                        break;
+                    }
+                    const float uv_x = (1.0f + (x * 2.0f)) / 8.0f;
+                    const float uv_y = (1.0f + (y * 2.0f)) / 8.0f;
+
+                    vertex_data.push_back(-1.0f);
+                    vertex_data.push_back(-1.0f);
+                    vertex_data.push_back(uv_x);
+                    vertex_data.push_back(uv_y);
+
+                    vertex_data.push_back(-1.0f);
+                    vertex_data.push_back(1.0f);
+                    vertex_data.push_back(uv_x);
+                    vertex_data.push_back(uv_y);
+
+                    vertex_data.push_back(1.0f);
+                    vertex_data.push_back(-1.0f);
+                    vertex_data.push_back(uv_x);
+                    vertex_data.push_back(uv_y);
+
+                    vertex_data.push_back(1.0f);
+                    vertex_data.push_back(1.0f);
+                    vertex_data.push_back(uv_x);
+                    vertex_data.push_back(uv_y);
+                }
+                if (8 < trace)
+                {
+                    break;
+                }
+            }
+                    //-1.0f, -1.0f,
+                    //-1.0f, 1.0f,
+                    //1.0f, -1.0f,
+                    //1.0f, 1.0f,
+            _draw_resources->_multi_line_geometry = _draw_system->MakeGeometryGeneric(
+                command_list->GetCommandList(),
+                D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP,
+                input_element_desc_array,
+                vertex_data,
+                4
+            );
+        }
+
     }
 
     _timer = std::make_unique<Timer>();
@@ -336,7 +526,7 @@ void ApplicationMultiLine::Update()
 
         // Draw background
 #if 1
-        auto shader_background = _draw_resources->_shader_background.get();
+        auto shader_background = _draw_resources->_background_shader.get();
         if (nullptr != shader_background)
         {
             auto& buffer0 = shader_background->GetConstant<ConstantBufferB0>(0);
@@ -360,12 +550,12 @@ void ApplicationMultiLine::Update()
             buffer_background1._fog_tint = VectorFloat3(200.0f / 255.0f, 200.0f / 255.0f, 200.0f / 255.0f);
         }
         frame->SetShader(shader_background);
-        frame->Draw(_draw_resources->geometry_screen_quad.get());
+        frame->Draw(_draw_resources->_background_geometry.get());
 #endif
 
         // Draw Grid
 #if 1
-        auto shader_grid = _draw_resources->_shader_grid.get();
+        auto shader_grid = _draw_resources->_background_shader_grid.get();
         if (nullptr != shader_grid)
         {
             auto& buffer0 = shader_grid->GetConstant<ConstantBufferB0>(0);
@@ -378,7 +568,7 @@ void ApplicationMultiLine::Update()
             buffer0._camera_unit_pixel_size = _unit_pixel_size;
 
             frame->SetShader(shader_grid);
-            frame->Draw(_draw_resources->geometry_screen_quad.get());
+            frame->Draw(_draw_resources->_background_geometry.get());
         }
 #endif
 
