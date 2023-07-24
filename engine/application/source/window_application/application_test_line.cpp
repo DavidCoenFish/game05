@@ -176,29 +176,7 @@ ApplicationTestLine::ApplicationTestLine(
         auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "pixel_shader_grid.cso");
         std::vector < DXGI_FORMAT > render_target_format;
         render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
-        D3D12_BLEND_DESC blend_desc;
-        blend_desc.AlphaToCoverageEnable = FALSE;
-        blend_desc.IndependentBlendEnable = FALSE;
-        const D3D12_RENDER_TARGET_BLEND_DESC defaultRenderTargetBlendDesc =
-        {
-            TRUE, //BlendEnable
-            FALSE, //LogicOpEnable
-            // dest.rgb = src.rgb * src.a + dest.rgb * (1 - src.a)
-            D3D12_BLEND_SRC_ALPHA, //SrcBlend 
-            D3D12_BLEND_INV_SRC_ALPHA, //DestBlend
-            D3D12_BLEND_OP_ADD, //BlendOp
-            // dest.a = 1 - (1 - src.a) * (1 - dest.a) [the math works out]
-            D3D12_BLEND_INV_DEST_ALPHA, //SrcBlendAlpha
-            D3D12_BLEND_ONE, //DestBlendAlpha
-            D3D12_BLEND_OP_ADD, //BlendOpAlpha
-            D3D12_LOGIC_OP_NOOP, //LogicOp
-            D3D12_COLOR_WRITE_ENABLE_ALL, //RenderTargetWriteMask
-        };
-
-        for (UINT i = 0; i < D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT; ++i)
-        {
-            blend_desc.RenderTarget[i] = defaultRenderTargetBlendDesc;
-        }
+        const auto blend_desc = ShaderPipelineStateData::FactoryBlendDescAlphaPremultiplied();
 
         ShaderPipelineStateData shader_pipeline_state_data(
             input_element_desc_array,
@@ -235,29 +213,7 @@ ApplicationTestLine::ApplicationTestLine(
         auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "pixel_shader_axis.cso");
         std::vector < DXGI_FORMAT > render_target_format;
         render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
-        D3D12_BLEND_DESC blend_desc;
-        blend_desc.AlphaToCoverageEnable = FALSE;
-        blend_desc.IndependentBlendEnable = FALSE;
-        const D3D12_RENDER_TARGET_BLEND_DESC defaultRenderTargetBlendDesc =
-        {
-            TRUE, //BlendEnable
-            FALSE, //LogicOpEnable
-            // dest.rgb = src.rgb * src.a + dest.rgb * (1 - src.a)
-            D3D12_BLEND_SRC_ALPHA, //SrcBlend 
-            D3D12_BLEND_INV_SRC_ALPHA, //DestBlend
-            D3D12_BLEND_OP_ADD, //BlendOp
-            // dest.a = 1 - (1 - src.a) * (1 - dest.a) [the math works out]
-            D3D12_BLEND_INV_DEST_ALPHA, //SrcBlendAlpha
-            D3D12_BLEND_ONE, //DestBlendAlpha
-            D3D12_BLEND_OP_ADD, //BlendOpAlpha
-            D3D12_LOGIC_OP_NOOP, //LogicOp
-            D3D12_COLOR_WRITE_ENABLE_ALL, //RenderTargetWriteMask
-        };
-
-        for (UINT i = 0; i < D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT; ++i)
-        {
-            blend_desc.RenderTarget[i] = defaultRenderTargetBlendDesc;
-        }
+        const auto blend_desc = ShaderPipelineStateData::FactoryBlendDescAlphaPremultiplied();
 
         ShaderPipelineStateData shader_pipeline_state_data(
             input_element_desc_array,
@@ -294,29 +250,7 @@ ApplicationTestLine::ApplicationTestLine(
         auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "pixel_shader_sphere.cso");
         std::vector < DXGI_FORMAT > render_target_format;
         render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
-        D3D12_BLEND_DESC blend_desc;
-        blend_desc.AlphaToCoverageEnable = FALSE;
-        blend_desc.IndependentBlendEnable = FALSE;
-        const D3D12_RENDER_TARGET_BLEND_DESC defaultRenderTargetBlendDesc =
-        {
-            TRUE, //BlendEnable
-            FALSE, //LogicOpEnable
-            // dest.rgb = src.rgb * src.a + dest.rgb * (1 - src.a)
-            D3D12_BLEND_SRC_ALPHA, //SrcBlend 
-            D3D12_BLEND_INV_SRC_ALPHA, //DestBlend
-            D3D12_BLEND_OP_ADD, //BlendOp
-            // dest.a = 1 - (1 - src.a) * (1 - dest.a) [the math works out]
-            D3D12_BLEND_INV_DEST_ALPHA, //SrcBlendAlpha
-            D3D12_BLEND_ONE, //DestBlendAlpha
-            D3D12_BLEND_OP_ADD, //BlendOpAlpha
-            D3D12_LOGIC_OP_NOOP, //LogicOp
-            D3D12_COLOR_WRITE_ENABLE_ALL, //RenderTargetWriteMask
-        };
-
-        for (UINT i = 0; i < D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT; ++i)
-        {
-            blend_desc.RenderTarget[i] = defaultRenderTargetBlendDesc;
-        }
+        const auto blend_desc = ShaderPipelineStateData::FactoryBlendDescAlphaPremultiplied();
 
         ShaderPipelineStateData shader_pipeline_state_data(
             input_element_desc_array,
@@ -599,7 +533,7 @@ void ApplicationTestLine::Update()
             auto& buffer1 = shader_sphere->GetConstant<ConstantBufferSphereB1>(1);
             buffer1._sphere_pos = VectorFloat3(1.5f, 0.0f, 0.0f);
             buffer1._sphere_edge_thickness_pixels = 0.25f;
-            buffer1._sphere_tint = VectorFloat3(1.0f, 1.0f, 1.0f);
+            buffer1._sphere_tint = VectorFloat3(0.0f, 0.0f, 0.0f);
             buffer1._sphere_radius = 0.5f;
 
             frame->SetShader(shader_sphere);

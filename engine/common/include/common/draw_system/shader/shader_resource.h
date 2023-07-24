@@ -31,6 +31,10 @@ private:
         ID3D12GraphicsCommandList* const in_command_list,
         ID3D12Device2* const in_device
         ) override;
+    virtual void OnResourceBarrier(
+        ID3D12GraphicsCommandList* const in_command_list,
+        D3D12_RESOURCE_STATES in_new_state
+        ) override;
 
 private:
     Microsoft::WRL::ComPtr<ID3D12Resource> _resource;
@@ -38,4 +42,7 @@ private:
     D3D12_RESOURCE_DESC _desc;
     D3D12_SHADER_RESOURCE_VIEW_DESC _shader_resource_view_desc;
     std::vector<uint8_t> _data;
+
+    D3D12_RESOURCE_STATES _current_state;
+
 };

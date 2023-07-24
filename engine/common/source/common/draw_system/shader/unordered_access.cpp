@@ -47,7 +47,7 @@ void UnorderedAccess::OnDeviceRestored(
     ID3D12Device2* const in_device
     )
 {
-    _current_state = D3D12_RESOURCE_STATE_COMMON;
+    _current_state = D3D12_RESOURCE_STATE_COPY_DEST;
 
     CD3DX12_HEAP_PROPERTIES heap_default(D3D12_HEAP_TYPE_DEFAULT);
     DX::ThrowIfFailed(in_device->CreateCommittedResource(
@@ -67,6 +67,10 @@ void UnorderedAccess::OnDeviceRestored(
         _desc,
         _data.size(),
         _data.size() ? _data.data() : nullptr
+        );
+    OnResourceBarrier(
+        in_command_list,
+        D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE
         );
 
     in_device->CreateUnorderedAccessView(

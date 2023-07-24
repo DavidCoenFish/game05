@@ -19,6 +19,7 @@ ShaderResource::ShaderResource(
     , _desc(in_desc)
     , _shader_resource_view_desc(in_shader_resource_view_desc)
     , _data(in_data)
+    , _current_state(D3D12_RESOURCE_STATE_COPY_DEST)
 {
     return;
 }
@@ -71,15 +72,11 @@ void ShaderResource::UploadResource(
                 1,
                 &ShaderResource2DData
                 );
-            auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-                in_resource.Get(),
-                D3D12_RESOURCE_STATE_COPY_DEST,
-                D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE
-                );
-            in_command_list->ResourceBarrier(
-                1,
-                &barrier
-                );
+
+            //OnResourceBarrier(
+            //    in_command_list,
+            //    D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE
+            //    );
         }
     }
 
@@ -92,12 +89,14 @@ void ShaderResource::OnDeviceRestored(
     )
 {
     {
+        _current_state = D3D12_RESOURCE_STATE_COPY_DEST;
+
         CD3DX12_HEAP_PROPERTIES heap_default(D3D12_HEAP_TYPE_DEFAULT);
         DX::ThrowIfFailed(in_device->CreateCommittedResource(
             &heap_default,
             D3D12_HEAP_FLAG_NONE,
             &_desc,
-            D3D12_RESOURCE_STATE_COPY_DEST,
+            _current_state,
             nullptr,
             IID_PPV_ARGS(_resource.ReleaseAndGetAddressOf())
             ));
@@ -110,6 +109,11 @@ void ShaderResource::OnDeviceRestored(
             _desc,
             _data.size(),
             _data.size() ? _data.data() : nullptr
+            );
+
+        OnResourceBarrier(
+            in_command_list,
+            D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE
             );
 
         const int frame_count = _draw_system->GetBackBufferCount();
@@ -127,3 +131,26 @@ void ShaderResource::OnDeviceRestored(
     return;
 }
 
+void ShaderResource::OnResourceBarrier(
+    ID3D12GraphicsCommandList* const in_command_list,
+    D3D12_RESOURCE_STATES in_new_state
+)
+{
+    if (in_new_state == _current_state)
+    {
+        return;
+    }
+
+    D3D12_RESOURCE_BARRIER barrierDesc = {};
+
+    barrierDesc.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+    barrierDesc.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+    barrierDesc.Transition.pResource = _resource.Get();
+    barrierDesc.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+    barrierDesc.Transition.StateBefore = _current_state;
+    barrierDesc.Transition.StateAfter = in_new_state;
+
+    in_command_list->ResourceBarrier(1, &barrierDesc);
+    _current_state = in_new_state;
+
+}

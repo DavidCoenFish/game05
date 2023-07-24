@@ -47,7 +47,7 @@ private:
         std::shared_ptr<GeometryGeneric> _background_geometry;
 
         std::shared_ptr<Shader> _multi_line_compute;
-#if 1
+#if 0
         std::shared_ptr<UnorderedAccess> _multi_line_data_pos_thick;
         std::shared_ptr<UnorderedAccess> _multi_line_data_dir_length;
         std::shared_ptr<UnorderedAccess> _multi_line_data_colour;

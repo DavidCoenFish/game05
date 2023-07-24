@@ -49,6 +49,7 @@ float3 MakeWorldEyeRay(float2 in_uv)
     float3 screen_eye_ray = MakeScreenEyeRay(screen_radian);
 
     float3 camera_right = cross(_camera_at_fov_vertical.xyz, _camera_up_camera_far.xyz);
+    // Transpose
     float3 tx = float3(_camera_at_fov_vertical.x, _camera_up_camera_far.x, camera_right.x);
     float3 ty = float3(_camera_at_fov_vertical.y, _camera_up_camera_far.y, camera_right.y);
     float3 tz = float3(_camera_at_fov_vertical.z, _camera_up_camera_far.z, camera_right.z);
@@ -70,14 +71,35 @@ float2 MakePolarUV(float3 in_world_pos)
 {
     float3 relative = in_world_pos - _camera_pos_fov_horizontal.xyz;
     float3 camera_right = cross(_camera_at_fov_vertical.xyz, _camera_up_camera_far.xyz);
+#if 0
+    // Transpose
+    float3 tx = float3(_camera_at_fov_vertical.x, _camera_up_camera_far.x, camera_right.x);
+    float3 ty = float3(_camera_at_fov_vertical.y, _camera_up_camera_far.y, camera_right.y);
+    float3 tz = float3(_camera_at_fov_vertical.z, _camera_up_camera_far.z, camera_right.z);
+    float3 camera_relative = float3(
+        dot(relative, tx),
+        dot(relative, ty),
+        dot(relative, tz)
+        );
+#else
     float3 camera_relative = float3(
         dot(_camera_at_fov_vertical.xyz, relative),
         dot(_camera_up_camera_far.xyz, relative),
         dot(camera_right.xyz, relative));
+#endif
+    //float r = length(camera_relative);
+    //float u = acos(camera_relative.z / r);
+    //float v = acos(camera_relative.x / (r * sin(u)));
+
+    ////float temp = cos(in_polar_coord.y);
+    ////float x = temp * cos(in_polar_coord.x);
+    ////float y = sin(in_polar_coord.y);
+    ////float z = temp * sin(in_polar_coord.x);
 
     float r = length(camera_relative);
-    float u = acos(camera_relative.z / r);
-    float v = acos(camera_relative.x / (r * sin(u)));
+    float v = asin(camera_relative.y / r);
+    float temp = cos(v);
+    float u = acos(camera_relative.x / (temp * r));
 
     //return float2(u,v);
     float2 uv = float2(

@@ -107,7 +107,10 @@ Pixel main( Interpolant in_input )
     }
 
     float a = coverage * in_input._line_colour.a;
-    result._colour = float4(in_input._line_colour.xyz * a, a);
+    //result._colour = float4(in_input._line_colour.xyz * a, a);
+    //result._colour = float4(1.0, 0.0, 0.0, 1.0);
+    //result._colour = in_input._line_colour;
+    result._colour = float4(a, a, a, 1.0);
 
     return result;
 }
