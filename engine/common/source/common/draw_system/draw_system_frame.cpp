@@ -79,3 +79,11 @@ void DrawSystemFrame::Dispatch(
         );
 }
 
+void DrawSystemFrame::ResourceBarrier(
+    IResource* const in_resource,
+    D3D12_RESOURCE_STATES in_after_state
+    )
+{
+    in_resource->OnResourceBarrier(_command_list, in_after_state);
+}
+

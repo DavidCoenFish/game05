@@ -17,6 +17,7 @@
 #include "common/math/vector_float2.h"
 #include "common/math/vector_float3.h"
 #include "common/util/timer.h"
+#include "common/util/vector_helper.h"
 #include "common/window/window_application_param.h"
 
 struct ConstantBufferB0
@@ -64,22 +65,6 @@ struct ConstantBufferSphereB1
 static VectorFloat3 s_camera_pos(-1.0f, 0.0f, 0.0f);
 static VectorFloat3 s_camera_at(1.0f, 0.0f, 0.0f);
 static VectorFloat3 s_camera_up(0.0f, 1.0f, 0.0f);
-
-namespace
-{
-    const VectorFloat3 RotateAround(
-        const VectorFloat3& in_subject,
-        const VectorFloat3& in_around,
-        const float in_radian
-        )
-    {
-        const auto cross = Cross(in_subject, in_around);
-        const float a = sin(in_radian);
-        const float b = cos(in_radian);
-        const auto result = (in_subject * b) + (cross * a);
-        return result;
-    }
-}
 
 IWindowApplication* const ApplicationTestLine::Factory(
     const HWND in_hwnd,
@@ -378,7 +363,7 @@ ApplicationTestLine::ApplicationTestLine(
 
     // Geometry Screen Quad
     {
-        std::vector < float > vertex_data(
+        const auto vertex_data = VectorHelper::FactoryArrayLiteral(
             {
                 -1.0f, -1.0f,
                 -1.0f, 1.0f,
@@ -460,51 +445,6 @@ void ApplicationTestLine::Update()
             change = true;
         }
 
-#if 0
-        if (true == _input_i)
-        {
-            _camera_at = RotateAround(
-                _camera_at,
-                camera_right,
-                time_delta
-            );
-            _camera_up = RotateAround(
-                _camera_up,
-                camera_right,
-                time_delta
-            );
-        }
-        if (true == _input_j)
-        {
-            _camera_at = RotateAround(
-                _camera_at,
-                _camera_up,
-                time_delta
-            );
-        }
-        if (true == _input_k)
-        {
-            _camera_at = RotateAround(
-                _camera_at,
-                camera_right,
-                -time_delta
-            );
-            _camera_up = RotateAround(
-                _camera_up,
-                camera_right,
-                -time_delta
-            );
-        }
-        if (true == _input_l)
-        {
-            _camera_at = RotateAround(
-                _camera_at,
-                _camera_up,
-                -time_delta
-            );
-        }
-#else
-
         bool rotation_flag = false;
         auto rotation = QuaternionFloat::FactoryIdentity();
         if (true == _input_u)
@@ -552,7 +492,7 @@ void ApplicationTestLine::Update()
             _camera_up.NormaliseSelf();
             change = true;
         }
-#endif
+
         if (true == change)
         {
             LOG_MESSAGE("pos[%f %f %f] at[%f %f %f] up[%f %f %f] dot[%f]",

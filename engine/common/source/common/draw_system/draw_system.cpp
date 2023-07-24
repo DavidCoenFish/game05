@@ -108,17 +108,17 @@ DirectX::GraphicsResource DrawSystem::AllocateUpload(
 
 std::shared_ptr < Shader > DrawSystem::MakeShader(
     ID3D12GraphicsCommandList* const in_command_list,
-    const ShaderPipelineStateData&in_pipeline_state_data,
-    const std::shared_ptr < std::vector < uint8_t > >&in_vertex_shader_data,
-    const std::shared_ptr < std::vector < uint8_t > >&in_geometry_shader_data,
-    const std::shared_ptr < std::vector < uint8_t > >&in_pixel_shader_data,
-    const std::vector < std::shared_ptr < ShaderResourceInfo > >&in_array_shader_resource_info,
-    const std::vector < std::shared_ptr < ConstantBufferInfo > >&in_array_shader_constants_info,
-    const std::shared_ptr < std::vector < uint8_t > >&in_compute_shader_data,
-    const std::vector < std::shared_ptr < UnorderedAccessInfo > >&in_array_unordered_access_info
+    const ShaderPipelineStateData& in_pipeline_state_data,
+    const std::shared_ptr<std::vector<uint8_t>>& in_vertex_shader_data,
+    const std::shared_ptr<std::vector<uint8_t>>& in_geometry_shader_data,
+    const std::shared_ptr<std::vector<uint8_t>>& in_pixel_shader_data,
+    const std::vector<std::shared_ptr<ShaderResourceInfo>>& in_array_shader_resource_info,
+    const std::vector<std::shared_ptr<ConstantBufferInfo>>& in_array_shader_constants_info,
+    const std::shared_ptr<std::vector<uint8_t>>& in_compute_shader_data,
+    const std::vector<std::shared_ptr<UnorderedAccessInfo>>& in_array_unordered_access_info
     )
 {
-    auto result = std::make_shared < Shader > (
+    auto result = std::make_shared<Shader>(
         this,
         in_pipeline_state_data,
         in_vertex_shader_data,
@@ -142,8 +142,8 @@ std::shared_ptr < Shader > DrawSystem::MakeShader(
 std::shared_ptr < GeometryGeneric > DrawSystem::MakeGeometryGeneric(
     ID3D12GraphicsCommandList* const in_command_list,
     const D3D_PRIMITIVE_TOPOLOGY in_primitive_topology,
-    const std::vector < D3D12_INPUT_ELEMENT_DESC >&in_input_element_desc_array,
-    const std::vector < float >&in_vertex_data_raw,
+    const std::vector<D3D12_INPUT_ELEMENT_DESC>& in_input_element_desc_array,
+    const std::vector<uint8_t>& in_vertex_data_raw,
     const int in_float_per_vertex
     )
 {

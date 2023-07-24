@@ -10,6 +10,7 @@
 #include "common/draw_system/shader/shader_pipeline_state_data.h"
 #include "common/file_system/file_system.h"
 #include "common/log/log.h"
+#include "common/util/vector_helper.h"
 #include "common/window/window_application_param.h"
 
 IWindowApplication* const ApplicationTestTriangle::Factory(
@@ -76,12 +77,16 @@ ApplicationTestTriangle::ApplicationTestTriangle(
     }
 
     {
-        std::vector < float > vertex_data(
-        {
+        //const float vertex_data_literal[] = {
+        //    0.0f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f,
+        //    0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f,
+        //    -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f
+        //};
+        const auto vertex_data = VectorHelper::FactoryArrayLiteral({
             0.0f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f,
             0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f,
             -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f
-        });
+            });
         _geometry = _draw_system->MakeGeometryGeneric(
             command_list->GetCommandList(),
             D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST,

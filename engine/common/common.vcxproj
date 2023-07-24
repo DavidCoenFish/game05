@@ -98,6 +98,10 @@
     <ClInclude Include="include\common\draw_system\shader\constant_buffer_info.h" />
     <ClInclude Include="include\common\draw_system\shader\shader.h" />
     <ClInclude Include="include\common\draw_system\shader\shader_pipeline_state_data.h" />
+    <ClInclude Include="include\common\draw_system\shader\shader_resource.h" />
+    <ClInclude Include="include\common\draw_system\shader\shader_resource_info.h" />
+    <ClInclude Include="include\common\draw_system\shader\unordered_access.h" />
+    <ClInclude Include="include\common\draw_system\shader\unordered_access_info.h" />
     <ClInclude Include="include\common\file_system\file_system.h" />
     <ClInclude Include="include\common\log\log.h" />
     <ClInclude Include="include\common\log\log_enum.h" />
@@ -137,10 +141,6 @@
     <ClInclude Include="source\common\draw_system\render_target\render_target_texture.h" />
     <ClInclude Include="source\common\draw_system\screen_size_resources.h" />
     <ClInclude Include="source\common\draw_system\shader\constant_buffer.h" />
-    <ClInclude Include="source\common\draw_system\shader\shader_resource.h" />
-    <ClInclude Include="source\common\draw_system\shader\shader_resource_info.h" />
-    <ClInclude Include="source\common\draw_system\shader\unordered_access.h" />
-    <ClInclude Include="source\common\draw_system\shader\unordered_access_info.h" />
     <ClInclude Include="source\common\log\i_log_consumer.h" />
     <ClInclude Include="source\common\log\log_consumer_console.h" />
     <ClInclude Include="source\common\log\log_consumer_output_debug_string.h" />

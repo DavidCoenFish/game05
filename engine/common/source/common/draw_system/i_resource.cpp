@@ -31,3 +31,11 @@ void IResource::OnResize(
     return;
 }
 
+void IResource::OnResourceBarrier(
+    ID3D12GraphicsCommandList* const,
+    D3D12_RESOURCE_STATES
+    )
+{
+    return;
+}
+

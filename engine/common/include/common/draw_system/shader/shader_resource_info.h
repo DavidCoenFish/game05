@@ -6,17 +6,17 @@ class HeapWrapperItem;
 struct ShaderResourceInfo
 {
 public:
-    static std::shared_ptr < ShaderResourceInfo > FactorySampler(
+    static std::shared_ptr<ShaderResourceInfo> FactorySampler(
         const std::shared_ptr < HeapWrapperItem >&in_shader_resource_view_handle,
         const D3D12_SHADER_VISIBILITY in_visiblity,
         // D3D12_SHADER_VISIBILITY_PIXEL
         const bool in_mip_map = false
         );
-    static std::shared_ptr < ShaderResourceInfo > FactoryDataSampler(
+    static std::shared_ptr<ShaderResourceInfo> FactoryDataSampler(
         const std::shared_ptr < HeapWrapperItem >&in_shader_resource_view_handle,
         const D3D12_SHADER_VISIBILITY in_visiblity
         );
-    static std::shared_ptr < ShaderResourceInfo > FactoryNoSampler(
+    static std::shared_ptr<ShaderResourceInfo> FactoryNoSampler(
         const std::shared_ptr < HeapWrapperItem >&in_shader_resource_view_handle,
         const D3D12_SHADER_VISIBILITY in_visiblity
         );

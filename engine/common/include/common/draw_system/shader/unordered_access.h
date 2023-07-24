@@ -23,11 +23,16 @@ private:
         ID3D12GraphicsCommandList* const in_command_list,
         ID3D12Device2* const in_device
         ) override;
+    virtual void OnResourceBarrier(
+        ID3D12GraphicsCommandList* const in_command_list,
+        D3D12_RESOURCE_STATES in_new_state
+        ) override;
 
 private:
     Microsoft::WRL::ComPtr<ID3D12Resource> _resource;
     std::shared_ptr<HeapWrapperItem> _heap_wrapper_item;
     std::shared_ptr<HeapWrapperItem> _shader_view_heap_wrapper_item;
+    D3D12_RESOURCE_STATES _current_state;
 
     D3D12_RESOURCE_DESC _desc;
     D3D12_UNORDERED_ACCESS_VIEW_DESC _unordered_access_view_desc;

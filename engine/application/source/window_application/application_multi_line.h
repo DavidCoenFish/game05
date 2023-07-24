@@ -4,6 +4,7 @@
 
 class DrawSystem;
 class Shader;
+class ShaderResource;
 class UnorderedAccess;
 class GeometryGeneric;
 class Timer;
@@ -46,9 +47,16 @@ private:
         std::shared_ptr<GeometryGeneric> _background_geometry;
 
         std::shared_ptr<Shader> _multi_line_compute;
+#if 1
         std::shared_ptr<UnorderedAccess> _multi_line_data_pos_thick;
         std::shared_ptr<UnorderedAccess> _multi_line_data_dir_length;
         std::shared_ptr<UnorderedAccess> _multi_line_data_colour;
+#else
+        std::shared_ptr<ShaderResource> _multi_line_data_pos_thick;
+        std::shared_ptr<ShaderResource> _multi_line_data_dir_length;
+        std::shared_ptr<ShaderResource> _multi_line_data_colour;
+#endif
+
         std::shared_ptr<Shader> _multi_line_shader;
         std::shared_ptr<GeometryGeneric> _multi_line_geometry;
 

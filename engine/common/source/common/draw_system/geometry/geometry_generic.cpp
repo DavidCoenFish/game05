@@ -6,8 +6,8 @@
 GeometryGeneric::GeometryGeneric(
     DrawSystem* const in_draw_system,
     const D3D_PRIMITIVE_TOPOLOGY in_primitive_topology,
-    const std::vector < D3D12_INPUT_ELEMENT_DESC >&in_input_element_desc_array,
-    const std::vector < float >&in_vertex_data_raw,
+    const std::vector<D3D12_INPUT_ELEMENT_DESC>& in_input_element_desc_array,
+    const std::vector<uint8_t>& in_vertex_data_raw,
     const int in_float_per_vertex
     ) 
     : IResource(in_draw_system)
@@ -25,7 +25,7 @@ void GeometryGeneric::Draw(ID3D12GraphicsCommandList* const in_command_list)
 {
     IGeometry::DrawImplementation(
         in_command_list,
-        (UINT)(_vertex_raw_data.size() / _float_per_vertex),
+        (UINT)(_vertex_raw_data.size() / (sizeof(float) * _float_per_vertex)),
         _primitive_topology,
         _vertex_buffer_view
         );
@@ -41,15 +41,16 @@ void GeometryGeneric::OnDeviceRestored(
     ID3D12Device2* const in_device
     )
 {
+    const int byte_vertex_size = sizeof(float) * _float_per_vertex;
     IGeometry::DeviceRestoredImplementation(
-        _draw_system,
-        in_command_list,
-        in_device,
-        (int)(_vertex_raw_data.size() / _float_per_vertex),
-        sizeof (float) * _float_per_vertex,
-        _vertex_buffer,
-        _vertex_buffer_view,
-        _vertex_raw_data.data()
+        _draw_system, //DrawSystem* const
+        in_command_list, //ID3D12GraphicsCommandList* const 
+        in_device, //ID3D12Device* const
+        (int)(_vertex_raw_data.size() / byte_vertex_size), //const int in_vertex_count
+        byte_vertex_size, //const int in_byte_vertex_size
+        _vertex_buffer, //Microsoft::WRL::ComPtr < ID3D12Resource >& in_vertex_buffer
+        _vertex_buffer_view, //D3D12_VERTEX_BUFFER_VIEW& in_vertex_buffer_view
+        _vertex_raw_data.data() //void* in_raw_data
         );
 }
 

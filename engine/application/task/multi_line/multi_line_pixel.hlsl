@@ -1,9 +1,9 @@
-#include "interpolant.hlsli"
+#include "multi_line_interpolant.hlsli"
 #include "polar.hlsli" //b0
 
 struct Pixel
 {
-    float4 _color : SV_TARGET0;
+    float4 _colour : SV_TARGET0;
 };
 
 // https://en.wikipedia.org/wiki/Skew_lines#Distance%5B/url%5D
@@ -92,7 +92,7 @@ Pixel main( Interpolant in_input )
             in_input._line_dir_length.xyz,
             in_input._line_dir_length.w,
             camera_pos,
-            camera_at
+            camera_at,
             camera_far
             );
         if (pass_distance.x != 0.0)
@@ -107,10 +107,7 @@ Pixel main( Interpolant in_input )
     }
 
     float a = coverage * in_input._line_colour.a;
-    result._color(
-        in_input.rgb * a,
-        a
-        );
+    result._colour = float4(in_input._line_colour.xyz * a, a);
 
     return result;
 }

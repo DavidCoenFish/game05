@@ -1,4 +1,4 @@
-#include "interpolant.hlsli"
+#include "multi_line_interpolant.hlsli"
 #include "polar.hlsli" //b0
 
 Texture2D _texture0 : register(t0);
@@ -7,8 +7,8 @@ Texture2D _texture2 : register(t2);
 
 struct Vertex
 {
-    float2 _position : Position;
-    int2 _uv;
+    float2 _position : POSITION0;
+    int2 _uv : TEXCOORD0;
 };
 
 Interpolant main(Vertex in_input)
@@ -25,8 +25,8 @@ Interpolant main(Vertex in_input)
     float2 uv_delta = max(uv_a, uv_b) - uv_low;
 
     result._position = float4(
-        uv_low.x + (uv_delta.x * in_input.x),
-        uv_low.y + (uv_delta.y * in_input.y),
+        uv_low.x + (uv_delta.x * step(0.0, in_input._uv.x)),
+        uv_low.y + (uv_delta.y * step(0.0, in_input._uv.y)),
         0.0,
         1.0
         );

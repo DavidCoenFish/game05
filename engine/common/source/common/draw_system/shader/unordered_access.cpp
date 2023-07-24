@@ -22,6 +22,7 @@ UnorderedAccess::UnorderedAccess(
     , _desc(in_desc)
     , _unordered_access_view_desc(in_unordered_access_view_desc)
     , _data(in_data)
+    , _current_state(D3D12_RESOURCE_STATE_COMMON)
 {
     return;
 }
@@ -46,12 +47,14 @@ void UnorderedAccess::OnDeviceRestored(
     ID3D12Device2* const in_device
     )
 {
+    _current_state = D3D12_RESOURCE_STATE_COMMON;
+
     CD3DX12_HEAP_PROPERTIES heap_default(D3D12_HEAP_TYPE_DEFAULT);
     DX::ThrowIfFailed(in_device->CreateCommittedResource(
         &heap_default,
         D3D12_HEAP_FLAG_NONE,
         &_desc,
-        D3D12_RESOURCE_STATE_COMMON,
+        _current_state,
         nullptr,
         IID_PPV_ARGS(_resource.ReleaseAndGetAddressOf())
         ));
@@ -75,3 +78,26 @@ void UnorderedAccess::OnDeviceRestored(
     return;
 }
 
+void UnorderedAccess::OnResourceBarrier(
+    ID3D12GraphicsCommandList* const in_command_list,
+    D3D12_RESOURCE_STATES in_new_state
+    )
+{
+    if (in_new_state == _current_state)
+    {
+        return;
+    }
+
+    D3D12_RESOURCE_BARRIER barrierDesc = {};
+
+    barrierDesc.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+    barrierDesc.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+    barrierDesc.Transition.pResource = _resource.Get();
+    barrierDesc.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+    barrierDesc.Transition.StateBefore = _current_state;
+    barrierDesc.Transition.StateAfter = in_new_state;
+
+    in_command_list->ResourceBarrier(1, &barrierDesc);
+    _current_state = in_new_state;
+
+}

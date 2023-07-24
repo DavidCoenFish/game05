@@ -1,5 +1,4 @@
 #pragma once
-
 class DrawSystem;
 class IRenderTarget;
 class Shader;
@@ -19,6 +18,11 @@ public:
         uint32_t in_num_groups_x,
         uint32_t in_num_groups_y = 1,
         uint32_t in_num_groups_z = 1
+        );
+
+    void ResourceBarrier(
+        IResource* const in_resource, 
+        D3D12_RESOURCE_STATES in_after_state
         );
 
 private:

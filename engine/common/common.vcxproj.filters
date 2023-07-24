@@ -261,18 +261,6 @@
     <ClInclude Include="source\common\draw_system\screen_size_resources.h">
       <Filter>souce\common\draw_system</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\draw_system\shader\shader_resource.h">
-      <Filter>souce\common\draw_system\shader</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\draw_system\shader\shader_resource_info.h">
-      <Filter>souce\common\draw_system\shader</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\draw_system\shader\unordered_access.h">
-      <Filter>souce\common\draw_system\shader</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\draw_system\shader\unordered_access_info.h">
-      <Filter>souce\common\draw_system\shader</Filter>
-    </ClInclude>
     <ClInclude Include="source\common\draw_system\shader\constant_buffer.h">
       <Filter>souce\common\draw_system\shader</Filter>
     </ClInclude>
@@ -377,6 +365,18 @@
     </ClInclude>
     <ClInclude Include="include\common\util\vector_helper.h">
       <Filter>include\common\util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\shader\shader_resource_info.h">
+      <Filter>include\common\draw_system\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\shader\unordered_access_info.h">
+      <Filter>include\common\draw_system\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\shader\shader_resource.h">
+      <Filter>include\common\draw_system\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\shader\unordered_access.h">
+      <Filter>include\common\draw_system\shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

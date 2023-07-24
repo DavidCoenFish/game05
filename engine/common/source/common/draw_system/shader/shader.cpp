@@ -9,9 +9,9 @@
 #include "common/draw_system/shader/shader_resource_info.h"
 #include "common/draw_system/shader/unordered_access_info.h"
 
-std::shared_ptr < ConstantBuffer > MakeConstantBuffer(
+std::shared_ptr<ConstantBuffer> MakeConstantBuffer(
     DrawSystem* const in_draw_system,
-    const std::shared_ptr < ConstantBufferInfo >&in_constant_buffer_info
+    const std::shared_ptr<ConstantBufferInfo>& in_constant_buffer_info
     )
 {
     if (nullptr == in_constant_buffer_info)
@@ -32,16 +32,16 @@ std::shared_ptr < ConstantBuffer > MakeConstantBuffer(
     return constant_buffer;
 }
 
-static Microsoft::WRL::ComPtr < ID3D12RootSignature > MakeRootSignatureLocal(
+static Microsoft::WRL::ComPtr<ID3D12RootSignature> MakeRootSignatureLocal(
     ID3D12Device* const in_device,
-    const CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC&in_root_signature_desc
+    const CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC& in_root_signature_desc
     )
 {
-    Microsoft::WRL::ComPtr < ID3D12RootSignature > root_signature;
+    Microsoft::WRL::ComPtr<ID3D12RootSignature> root_signature;
 
     {
-        Microsoft::WRL::ComPtr < ID3DBlob > signature;
-        Microsoft::WRL::ComPtr < ID3DBlob > error;
+        Microsoft::WRL::ComPtr<ID3DBlob> signature;
+        Microsoft::WRL::ComPtr<ID3DBlob> error;
         DX::ThrowIfFailed(D3D12SerializeVersionedRootSignature(
             &in_root_signature_desc,
             &signature,
@@ -105,14 +105,14 @@ static void RemoveDenyFlag(
 }
 
 // Https://docs.microsoft.com/en-us/windows/win32/direct3d12/creating-a-root-signature
-Microsoft::WRL::ComPtr < ID3D12RootSignature > MakeRootSignature(
+Microsoft::WRL::ComPtr<ID3D12RootSignature> MakeRootSignature(
     ID3D12Device* const in_device,
-    const std::vector < std::shared_ptr < ShaderResourceInfo > >&in_shader_texture_info_array,
-    const std::vector < std::shared_ptr < ConstantBuffer > >&in_constant_buffer_array,
-    const std::vector < std::shared_ptr < UnorderedAccessInfo > >&in_array_unordered_access_info
+    const std::vector<std::shared_ptr<ShaderResourceInfo>>& in_shader_texture_info_array,
+    const std::vector<std::shared_ptr<ConstantBuffer>>& in_constant_buffer_array,
+    const std::vector<std::shared_ptr<UnorderedAccessInfo>>& in_array_unordered_access_info
     )
 {
-    Microsoft::WRL::ComPtr < ID3D12RootSignature > root_signature;
+    Microsoft::WRL::ComPtr<ID3D12RootSignature> root_signature;
     in_shader_texture_info_array;
     in_constant_buffer_array;
     in_array_unordered_access_info;
@@ -123,16 +123,16 @@ Microsoft::WRL::ComPtr < ID3D12RootSignature > MakeRootSignature(
         D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS | \
         D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS | D3D12_ROOT_SIGNATURE_FLAG_DENY_MESH_SHADER_ROOT_ACCESS\
         ;
-    std::vector < D3D12_ROOT_PARAMETER1 > root_paramter_array;
-    std::vector < D3D12_STATIC_SAMPLER_DESC > static_sampler_desc_array;
-    std::vector < std::shared_ptr < D3D12_DESCRIPTOR_RANGE1 >> descriptor_range_array;
+    std::vector<D3D12_ROOT_PARAMETER1> root_paramter_array;
+    std::vector<D3D12_STATIC_SAMPLER_DESC> static_sampler_desc_array;
+    std::vector<std::shared_ptr<D3D12_DESCRIPTOR_RANGE1>> descriptor_range_array;
     // B0,b1,b2,...
     if (0 < in_constant_buffer_array.size())
     {
         int trace = 0;
         for (const auto& iter : in_constant_buffer_array)
         {
-            auto descriptor_range = std::make_shared < D3D12_DESCRIPTOR_RANGE1 >();
+            auto descriptor_range = std::make_shared<D3D12_DESCRIPTOR_RANGE1>();
             descriptor_range_array.push_back(descriptor_range);
             descriptor_range->BaseShaderRegister = trace;
             trace += 1;
@@ -158,7 +158,7 @@ Microsoft::WRL::ComPtr < ID3D12RootSignature > MakeRootSignature(
         int trace = 0;
         for (const auto&iter : in_array_unordered_access_info)
         {
-            auto descriptor_range = std::make_shared < D3D12_DESCRIPTOR_RANGE1 > ();
+            auto descriptor_range = std::make_shared<D3D12_DESCRIPTOR_RANGE1>();
             descriptor_range_array.push_back(descriptor_range);
             descriptor_range->BaseShaderRegister = trace;
             trace += 1;
@@ -184,7 +184,7 @@ Microsoft::WRL::ComPtr < ID3D12RootSignature > MakeRootSignature(
         int trace = 0;
         for (const auto&iter : in_shader_texture_info_array)
         {
-            auto descriptor_range = std::make_shared < D3D12_DESCRIPTOR_RANGE1 > ();
+            auto descriptor_range = std::make_shared<D3D12_DESCRIPTOR_RANGE1>();
             descriptor_range_array.push_back(descriptor_range);
             descriptor_range->BaseShaderRegister = trace;
             trace += 1;

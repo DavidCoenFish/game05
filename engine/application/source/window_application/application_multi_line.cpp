@@ -9,6 +9,10 @@
 #include "common/draw_system/geometry/geometry_generic.h"
 #include "common/draw_system/shader/shader.h"
 #include "common/draw_system/shader/shader_pipeline_state_data.h"
+#include "common/draw_system/shader/shader_resource.h"
+#include "common/draw_system/shader/shader_resource_info.h"
+#include "common/draw_system/shader/unordered_access.h"
+#include "common/draw_system/shader/unordered_access_info.h"
 #include "common/file_system/file_system.h"
 #include "common/log/log.h"
 #include "common/math/angle.h"
@@ -97,113 +101,120 @@ ApplicationMultiLine::ApplicationMultiLine(
 
     {
         _draw_resources = std::make_unique<DrawResources>();
-
-        std::vector < D3D12_INPUT_ELEMENT_DESC > input_element_desc_array;
-        input_element_desc_array.push_back(D3D12_INPUT_ELEMENT_DESC
-        {
-            "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, \
-                D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 // UINT InstanceDataStepRate;
-        });
         auto command_list = _draw_system->CreateCustomCommandList();
 
-        // Make shaders
-        auto vertex_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "vertex_shader.cso");
-
-        // Shader background
+#if 1
+        // Background
         {
-            auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "pixel_shader_background.cso");
-            std::vector < DXGI_FORMAT > render_target_format;
-            render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
-            ShaderPipelineStateData shader_pipeline_state_data(
-                input_element_desc_array,
-                D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
-                DXGI_FORMAT_UNKNOWN,
-                // DXGI_FORMAT_D32_FLOAT,
-                render_target_format,
-                CD3DX12_BLEND_DESC(D3D12_DEFAULT),
-                CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT),
-                CD3DX12_DEPTH_STENCIL_DESC()// CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT)
-            );
+            std::vector < D3D12_INPUT_ELEMENT_DESC > input_element_desc_array;
+            input_element_desc_array.push_back(D3D12_INPUT_ELEMENT_DESC
+                {
+                    "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, \
+                        D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 // UINT InstanceDataStepRate;
+                });
 
-            std::vector < std::shared_ptr < ShaderResourceInfo > > array_shader_resource_info;
-            std::vector < std::shared_ptr < ConstantBufferInfo > > array_shader_constants_info;
+            auto vertex_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "vertex_shader.cso");
 
-            array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
-                ConstantBufferB0(),
-                D3D12_SHADER_VISIBILITY_PIXEL
-            ));
-            array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
-                ConstantBufferBackgroundB1(),
-                D3D12_SHADER_VISIBILITY_PIXEL
-            ));
-
-            _draw_resources->_background_shader = _draw_system->MakeShader(
-                command_list->GetCommandList(),
-                shader_pipeline_state_data,
-                vertex_shader_data,
-                nullptr,
-                pixel_shader_data,
-                array_shader_resource_info,
-                array_shader_constants_info
-            );
-        }
-
-        // Shader background grid
-        {
-            auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "pixel_shader_grid.cso");
-            std::vector < DXGI_FORMAT > render_target_format;
-            render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
-            const auto blend_desc = ShaderPipelineStateData::FactoryBlendDescAlphaPremultiplied();
-
-            ShaderPipelineStateData shader_pipeline_state_data(
-                input_element_desc_array,
-                D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
-                DXGI_FORMAT_UNKNOWN,
-                render_target_format,
-                blend_desc,
-                CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT),
-                CD3DX12_DEPTH_STENCIL_DESC()
+            // Shader background
+            {
+                auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "pixel_shader_background.cso");
+                std::vector < DXGI_FORMAT > render_target_format;
+                render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
+                ShaderPipelineStateData shader_pipeline_state_data(
+                    input_element_desc_array,
+                    D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
+                    DXGI_FORMAT_UNKNOWN,
+                    // DXGI_FORMAT_D32_FLOAT,
+                    render_target_format,
+                    CD3DX12_BLEND_DESC(D3D12_DEFAULT),
+                    CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT),
+                    CD3DX12_DEPTH_STENCIL_DESC()// CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT)
                 );
 
-            std::vector < std::shared_ptr < ShaderResourceInfo > > array_shader_resource_info;
-            std::vector < std::shared_ptr < ConstantBufferInfo > > array_shader_constants_info;
+                std::vector < std::shared_ptr < ShaderResourceInfo > > array_shader_resource_info;
+                std::vector < std::shared_ptr < ConstantBufferInfo > > array_shader_constants_info;
 
-            array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
-                ConstantBufferB0(),
-                D3D12_SHADER_VISIBILITY_PIXEL
+                array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
+                    ConstantBufferB0(),
+                    D3D12_SHADER_VISIBILITY_PIXEL
+                ));
+                array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
+                    ConstantBufferBackgroundB1(),
+                    D3D12_SHADER_VISIBILITY_PIXEL
                 ));
 
-            _draw_resources->_background_shader_grid = _draw_system->MakeShader(
-                command_list->GetCommandList(),
-                shader_pipeline_state_data,
-                vertex_shader_data,
-                nullptr,
-                pixel_shader_data,
-                array_shader_resource_info,
-                array_shader_constants_info
+                _draw_resources->_background_shader = _draw_system->MakeShader(
+                    command_list->GetCommandList(),
+                    shader_pipeline_state_data,
+                    vertex_shader_data,
+                    nullptr,
+                    pixel_shader_data,
+                    array_shader_resource_info,
+                    array_shader_constants_info
                 );
-        }
+            }
 
-        // Geometry Screen Quad
-        {
-            std::vector < float > vertex_data(
-                {
-                    -1.0f, -1.0f,
-                    -1.0f, 1.0f,
-                    1.0f, -1.0f,
-                    1.0f, 1.0f,
-                }
-            );
-            _draw_resources->_background_geometry = _draw_system->MakeGeometryGeneric(
-                command_list->GetCommandList(),
-                D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP,
-                input_element_desc_array,
-                vertex_data,
-                2
+            // Shader background grid
+            {
+                auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "pixel_shader_grid.cso");
+                std::vector < DXGI_FORMAT > render_target_format;
+                render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
+                const auto blend_desc = ShaderPipelineStateData::FactoryBlendDescAlphaPremultiplied();
+
+                ShaderPipelineStateData shader_pipeline_state_data(
+                    input_element_desc_array,
+                    D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
+                    DXGI_FORMAT_UNKNOWN,
+                    render_target_format,
+                    blend_desc,
+                    CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT),
+                    CD3DX12_DEPTH_STENCIL_DESC()
+                    );
+
+                std::vector < std::shared_ptr < ShaderResourceInfo > > array_shader_resource_info;
+                std::vector < std::shared_ptr < ConstantBufferInfo > > array_shader_constants_info;
+
+                array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
+                    ConstantBufferB0(),
+                    D3D12_SHADER_VISIBILITY_PIXEL
+                    ));
+
+                _draw_resources->_background_shader_grid = _draw_system->MakeShader(
+                    command_list->GetCommandList(),
+                    shader_pipeline_state_data,
+                    vertex_shader_data,
+                    nullptr,
+                    pixel_shader_data,
+                    array_shader_resource_info,
+                    array_shader_constants_info
+                    );
+            }
+
+            // Geometry Screen Quad
+            {
+                const auto vertex_data = VectorHelper::FactoryArrayLiteral(
+                    {
+                        -1.0f, -1.0f,
+                        -1.0f, 1.0f,
+                        1.0f, -1.0f,
+                        1.0f, 1.0f,
+                    }
                 );
+                _draw_resources->_background_geometry = _draw_system->MakeGeometryGeneric(
+                    command_list->GetCommandList(),
+                    D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP,
+                    input_element_desc_array,
+                    vertex_data,
+                    2
+                    );
+            }
         }
+#endif
 
         // std::shared_ptr<Shader> _multi_line_compute;
+        {
+        }
+
         // std::shared_ptr<UnorderedAccess> _multi_line_data_pos_thick;
         {
             std::vector< RenderTargetFormatData > targetFormatDataArray;
@@ -359,59 +370,121 @@ ApplicationMultiLine::ApplicationMultiLine(
                 data
             );
         }
-        // std::shared_ptr<Shader> _multi_line_shader;
-        // std::shared_ptr<GeometryGeneric> _multi_line_geometry;
+
+        // Multi line shader and geometry
         {
-            std::vector<float> vertex_data;
-            int trace = 0;
-            for (int y = 0; y < 4; ++y)
-            {
-                for (int x = 0; x < 4; ++x)
+            std::vector < D3D12_INPUT_ELEMENT_DESC > input_element_desc_array;
+            input_element_desc_array.push_back(D3D12_INPUT_ELEMENT_DESC
                 {
-                    ++trace;
+                    "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, \
+                        D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 // UINT InstanceDataStepRate;
+                });
+                //DXGI_FORMAT_R32G32_UINT
+            input_element_desc_array.push_back(D3D12_INPUT_ELEMENT_DESC
+                {
+                    "TEXCOORD", 0, DXGI_FORMAT_R32G32_SINT, 0, D3D12_APPEND_ALIGNED_ELEMENT, \
+                        D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 // UINT InstanceDataStepRate;
+                }
+            );
+
+            // std::shared_ptr<Shader> _multi_line_shader;
+            {
+
+                auto vertex_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "multi_line_vertex.cso");
+                auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "multi_line_pixel.cso");
+                std::vector < DXGI_FORMAT > render_target_format;
+                render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
+                ShaderPipelineStateData shader_pipeline_state_data(
+                    input_element_desc_array,
+                    D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
+                    DXGI_FORMAT_UNKNOWN,
+                    // DXGI_FORMAT_D32_FLOAT,
+                    render_target_format,
+                    CD3DX12_BLEND_DESC(D3D12_DEFAULT),
+                    CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT),
+                    CD3DX12_DEPTH_STENCIL_DESC()// CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT)
+                );
+
+                std::vector<std::shared_ptr<ShaderResourceInfo>> array_shader_resource_info;
+                array_shader_resource_info.push_back(ShaderResourceInfo::FactoryNoSampler(
+                    _draw_resources->_multi_line_data_pos_thick->GetShaderViewHeapWrapperItem(),
+                    D3D12_SHADER_VISIBILITY_VERTEX
+                    ));
+                array_shader_resource_info.push_back(ShaderResourceInfo::FactoryNoSampler(
+                    _draw_resources->_multi_line_data_dir_length->GetShaderViewHeapWrapperItem(),
+                    D3D12_SHADER_VISIBILITY_VERTEX
+                    ));
+                array_shader_resource_info.push_back(ShaderResourceInfo::FactoryNoSampler(
+                    _draw_resources->_multi_line_data_colour->GetShaderViewHeapWrapperItem(),
+                    D3D12_SHADER_VISIBILITY_VERTEX
+                    ));
+
+                std::vector<std::shared_ptr<ConstantBufferInfo>> array_shader_constants_info;
+                array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
+                    ConstantBufferB0(),
+                    D3D12_SHADER_VISIBILITY_ALL
+                    ));
+
+                _draw_resources->_multi_line_shader = _draw_system->MakeShader(
+                    command_list->GetCommandList(),
+                    shader_pipeline_state_data,
+                    vertex_shader_data,
+                    nullptr,
+                    pixel_shader_data,
+                    array_shader_resource_info,
+                    array_shader_constants_info
+                );
+            }
+
+            // std::shared_ptr<GeometryGeneric> _multi_line_geometry;
+            {
+                std::vector<uint8_t> vertex_data;
+                int trace = 0;
+                for (int y = 0; y < 4; ++y)
+                {
+                    for (int x = 0; x < 4; ++x)
+                    {
+                        ++trace;
+                        if (8 < trace)
+                        {
+                            break;
+                        }
+                        //const float uv_x = (1.0f + (x * 2.0f)) / 8.0f;
+                        //const float uv_y = (1.0f + (y * 2.0f)) / 8.0f;
+
+                        VectorHelper::AppendValue<float>(vertex_data, -1.0f);
+                        VectorHelper::AppendValue<float>(vertex_data, -1.0f);
+                        VectorHelper::AppendValue<int>(vertex_data, x);
+                        VectorHelper::AppendValue<int>(vertex_data, y);
+
+                        VectorHelper::AppendValue<float>(vertex_data, -1.0f);
+                        VectorHelper::AppendValue<float>(vertex_data, 1.0f);
+                        VectorHelper::AppendValue<int>(vertex_data, x);
+                        VectorHelper::AppendValue<int>(vertex_data, y);
+
+                        VectorHelper::AppendValue<float>(vertex_data, 1.0f);
+                        VectorHelper::AppendValue<float>(vertex_data, -1.0f);
+                        VectorHelper::AppendValue<int>(vertex_data, x);
+                        VectorHelper::AppendValue<int>(vertex_data, y);
+
+                        VectorHelper::AppendValue<float>(vertex_data, 1.0f);
+                        VectorHelper::AppendValue<float>(vertex_data, 1.0f);
+                        VectorHelper::AppendValue<int>(vertex_data, x);
+                        VectorHelper::AppendValue<int>(vertex_data, y);
+                    }
                     if (8 < trace)
                     {
                         break;
                     }
-                    const float uv_x = (1.0f + (x * 2.0f)) / 8.0f;
-                    const float uv_y = (1.0f + (y * 2.0f)) / 8.0f;
-
-                    vertex_data.push_back(-1.0f);
-                    vertex_data.push_back(-1.0f);
-                    vertex_data.push_back(uv_x);
-                    vertex_data.push_back(uv_y);
-
-                    vertex_data.push_back(-1.0f);
-                    vertex_data.push_back(1.0f);
-                    vertex_data.push_back(uv_x);
-                    vertex_data.push_back(uv_y);
-
-                    vertex_data.push_back(1.0f);
-                    vertex_data.push_back(-1.0f);
-                    vertex_data.push_back(uv_x);
-                    vertex_data.push_back(uv_y);
-
-                    vertex_data.push_back(1.0f);
-                    vertex_data.push_back(1.0f);
-                    vertex_data.push_back(uv_x);
-                    vertex_data.push_back(uv_y);
                 }
-                if (8 < trace)
-                {
-                    break;
-                }
+                _draw_resources->_multi_line_geometry = _draw_system->MakeGeometryGeneric(
+                    command_list->GetCommandList(),
+                    D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP,
+                    input_element_desc_array,
+                    vertex_data,
+                    4
+                );
             }
-                    //-1.0f, -1.0f,
-                    //-1.0f, 1.0f,
-                    //1.0f, -1.0f,
-                    //1.0f, 1.0f,
-            _draw_resources->_multi_line_geometry = _draw_system->MakeGeometryGeneric(
-                command_list->GetCommandList(),
-                D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP,
-                input_element_desc_array,
-                vertex_data,
-                4
-            );
         }
 
     }
@@ -525,7 +598,7 @@ void ApplicationMultiLine::Update()
         frame->SetRenderTarget(_draw_system->GetRenderTargetBackBuffer());
 
         // Draw background
-#if 1
+#if 0
         auto shader_background = _draw_resources->_background_shader.get();
         if (nullptr != shader_background)
         {
@@ -548,13 +621,14 @@ void ApplicationMultiLine::Update()
             buffer_background1._sky_turbitity = 25.0f; //5.0f; //10.0f;
             buffer_background1._ground_tint = VectorFloat3(32.0f / 255.0f, 16.0f / 255.0f, 2.0f / 255.0f);
             buffer_background1._fog_tint = VectorFloat3(200.0f / 255.0f, 200.0f / 255.0f, 200.0f / 255.0f);
+
+            frame->SetShader(shader_background);
+            frame->Draw(_draw_resources->_background_geometry.get());
         }
-        frame->SetShader(shader_background);
-        frame->Draw(_draw_resources->_background_geometry.get());
 #endif
 
         // Draw Grid
-#if 1
+#if 0
         auto shader_grid = _draw_resources->_background_shader_grid.get();
         if (nullptr != shader_grid)
         {
@@ -569,6 +643,29 @@ void ApplicationMultiLine::Update()
 
             frame->SetShader(shader_grid);
             frame->Draw(_draw_resources->_background_geometry.get());
+        }
+#endif
+
+        // Draw Multi Line
+#if 1
+        auto multi_line_shader = _draw_resources->_multi_line_shader.get();
+        if (nullptr != multi_line_shader)
+        {
+            frame->ResourceBarrier(_draw_resources->_multi_line_data_pos_thick.get(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+            frame->ResourceBarrier(_draw_resources->_multi_line_data_dir_length.get(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+            frame->ResourceBarrier(_draw_resources->_multi_line_data_colour.get(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+
+            auto& buffer0 = multi_line_shader->GetConstant<ConstantBufferB0>(0);
+            buffer0._camera_at = _camera_at;
+            buffer0._camera_up = _camera_up;
+            buffer0._camera_pos = _camera_pos;
+            buffer0._camera_far = _camera_far;
+            buffer0._camera_fov_horizontal = _fov_horizontal_calculated;
+            buffer0._camera_fov_vertical = _fov_vertical;
+            buffer0._camera_unit_pixel_size = _unit_pixel_size;
+
+            frame->SetShader(multi_line_shader);
+            frame->Draw(_draw_resources->_multi_line_geometry.get());
         }
 #endif
 

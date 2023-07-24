@@ -12,6 +12,6 @@ public:
     ID3D12GraphicsCommandList* GetCommandList();
 
 private:
-    DrawSystem&_draw_system;
+    DrawSystem& _draw_system;
     ID3D12GraphicsCommandList* _command_list;
 };

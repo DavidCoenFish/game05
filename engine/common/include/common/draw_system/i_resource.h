@@ -18,6 +18,10 @@ public:
         const int in_screen_width,
         const int in_screen_height
         );
+    virtual void OnResourceBarrier(
+        ID3D12GraphicsCommandList* const in_command_list,
+        D3D12_RESOURCE_STATES in_after_state
+        );
 
 protected:
     DrawSystem* _draw_system;
