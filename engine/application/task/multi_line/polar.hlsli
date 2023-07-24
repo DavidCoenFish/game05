@@ -71,7 +71,7 @@ float2 MakePolarUV(float3 in_world_pos)
 {
     float3 relative = in_world_pos - _camera_pos_fov_horizontal.xyz;
     float3 camera_right = cross(_camera_at_fov_vertical.xyz, _camera_up_camera_far.xyz);
-#if 0
+#if 1
     // Transpose
     float3 tx = float3(_camera_at_fov_vertical.x, _camera_up_camera_far.x, camera_right.x);
     float3 ty = float3(_camera_at_fov_vertical.y, _camera_up_camera_far.y, camera_right.y);
@@ -98,8 +98,10 @@ float2 MakePolarUV(float3 in_world_pos)
 
     float r = length(camera_relative);
     float v = asin(camera_relative.y / r);
-    float temp = cos(v);
-    float u = acos(camera_relative.x / (temp * r));
+    //float temp = cos(v);
+    //float u = acos(camera_relative.x / (temp * r));
+    //float u = atan2(camera_relative.x, camera_relative.z);
+    float u = atan2(camera_relative.z, camera_relative.x);
 
     //return float2(u,v);
     float2 uv = float2(
