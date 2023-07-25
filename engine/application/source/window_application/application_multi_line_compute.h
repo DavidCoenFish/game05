@@ -2,8 +2,6 @@
 #include "common/math/vector_float3.h"
 #include "common/window/i_window_application.h"
 
-#define DSC_UNORDED_ACCESS 1
-
 class DrawSystem;
 class Shader;
 class ShaderResource;
@@ -11,18 +9,18 @@ class UnorderedAccess;
 class GeometryGeneric;
 class Timer;
 
-class ApplicationMultiLine : public IWindowApplication
+class ApplicationMultiLineCompute : public IWindowApplication
 {
 public:
     static IWindowApplication* const Factory(
         const HWND in_hwnd,
         const WindowApplicationParam& in_application_param
         );
-    ApplicationMultiLine(
+    ApplicationMultiLineCompute(
         const HWND in_hwnd,
         const WindowApplicationParam& in_application_param
         );
-    virtual ~ApplicationMultiLine();
+    virtual ~ApplicationMultiLineCompute();
 
 private:
     virtual void Update() override;
@@ -48,18 +46,11 @@ private:
         std::shared_ptr<Shader> _background_shader_grid;
         std::shared_ptr<GeometryGeneric> _background_geometry;
 
-        std::shared_ptr<Shader> _multi_line_compute;
-
-#if defined(DSC_UNORDED_ACCESS)
         std::shared_ptr<UnorderedAccess> _multi_line_data_pos_thick;
         std::shared_ptr<UnorderedAccess> _multi_line_data_dir_length;
         std::shared_ptr<UnorderedAccess> _multi_line_data_colour;
-#else
-        std::shared_ptr<ShaderResource> _multi_line_data_pos_thick;
-        std::shared_ptr<ShaderResource> _multi_line_data_dir_length;
-        std::shared_ptr<ShaderResource> _multi_line_data_colour;
-#endif
 
+        std::shared_ptr<Shader> _multi_line_compute;
         std::shared_ptr<Shader> _multi_line_shader;
         std::shared_ptr<GeometryGeneric> _multi_line_geometry;
 
@@ -67,6 +58,7 @@ private:
     std::unique_ptr<DrawResources> _draw_resources;
 
     std::unique_ptr<Timer> _timer;
+    float _timer_accumulate_wrapped;
 
     float _fov_vertical;
     float _fov_horizontal_calculated;

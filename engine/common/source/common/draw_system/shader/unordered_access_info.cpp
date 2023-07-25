@@ -3,6 +3,18 @@
 #include "common/draw_system/heap_wrapper/heap_wrapper_item.h"
 #include "common/draw_system/shader/unordered_access_info.h"
 
+std::shared_ptr<UnorderedAccessInfo> UnorderedAccessInfo::Factory(
+    const std::shared_ptr<HeapWrapperItem>& in_unordered_access_view_handle,
+    const D3D12_SHADER_VISIBILITY in_visiblity
+    )
+{
+    return std::make_shared<UnorderedAccessInfo>(
+        in_unordered_access_view_handle,
+        in_visiblity
+        );
+}
+
+
 UnorderedAccessInfo::UnorderedAccessInfo(
     const std::shared_ptr < HeapWrapperItem >&in_unordered_access_view_handle,
     const D3D12_SHADER_VISIBILITY in_visiblity

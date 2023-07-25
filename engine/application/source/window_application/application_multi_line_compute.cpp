@@ -1,6 +1,6 @@
 #include "application_pch.h"
 
-#include "window_application/application_multi_line.h"
+#include "window_application/application_multi_line_compute.h"
 
 #include "common/direct_xtk12/keyboard.h"
 #include "common/draw_system/custom_command_list.h"
@@ -51,22 +51,35 @@ struct ConstantBufferBackgroundB1
     float _pad1;
 };
 
+struct ConstantBufferComputeB0
+{
+    float _timer;
+    float _thickness;
+    float _pad0[2];
+    VectorFloat4 _colour;
+};
+
 static VectorFloat3 s_camera_pos(-1.0f, 0.0f, 0.0f);
 static VectorFloat3 s_camera_at(1.0f, 0.0f, 0.0f);
 static VectorFloat3 s_camera_up(0.0f, 1.0f, 0.0f);
+static int s_thread_x = 8;
+static int s_thread_y = 4;
+static int s_thread_z = 8;
+static int s_texture_width = s_thread_x * 24;
+static int s_texture_height = s_thread_z * s_thread_y;
 
-IWindowApplication* const ApplicationMultiLine::Factory(
+IWindowApplication* const ApplicationMultiLineCompute::Factory(
     const HWND in_hwnd,
     const WindowApplicationParam&in_application_param
     )
 {
-    return new ApplicationMultiLine(
+    return new ApplicationMultiLineCompute(
         in_hwnd,
         in_application_param
         );
 }
 
-ApplicationMultiLine::ApplicationMultiLine(
+ApplicationMultiLineCompute::ApplicationMultiLineCompute(
     const HWND in_hwnd,
     const WindowApplicationParam& in_application_param
     ) 
@@ -82,6 +95,7 @@ ApplicationMultiLine::ApplicationMultiLine(
     , _camera_at(s_camera_at)
     , _camera_up(s_camera_up)
     , _camera_far(1000.0f)
+    , _timer_accumulate_wrapped(0.0f)
     , _input_q(false)
     , _input_w(false)
     , _input_e(false)
@@ -96,7 +110,7 @@ ApplicationMultiLine::ApplicationMultiLine(
     , _input_l(false)
 {
     LOG_MESSAGE(
-        "ApplicationMultiLine  ctor %p",
+        "ApplicationMultiLineCompute  ctor %p",
         this
         );
     _draw_system = std::make_unique < DrawSystem > (in_hwnd);
@@ -213,10 +227,6 @@ ApplicationMultiLine::ApplicationMultiLine(
         }
 #endif
 
-        // std::shared_ptr<Shader> _multi_line_compute;
-        {
-        }
-#if defined(DSC_UNORDED_ACCESS)
         // std::shared_ptr<UnorderedAccess> _multi_line_data_pos_thick;
         {
             std::vector< RenderTargetFormatData > targetFormatDataArray;
@@ -224,8 +234,8 @@ ApplicationMultiLine::ApplicationMultiLine(
 
             const D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(
                 DXGI_FORMAT_R32G32B32A32_FLOAT,
-                4,
-                4,
+                s_texture_width,
+                s_texture_height,
                 1,
                 1,
                 1,
@@ -239,33 +249,11 @@ ApplicationMultiLine::ApplicationMultiLine(
             unordered_access_view_desc.Texture2D.MipSlice = 0;
             unordered_access_view_desc.Texture2D.PlaneSlice = 0;
 
-            const float thickness = 0.5f;
-            const VectorFloat4 data_literal[] = {
-                VectorFloat4(-0.5f, 0.0f, -0.5f, thickness),
-                VectorFloat4(-0.5f, 0.0f, -0.5f, thickness),
-                VectorFloat4(-0.5f, 0.0f, 0.5f, thickness),
-                VectorFloat4(-0.5f, 0.0f, 0.5f, thickness),
-                VectorFloat4(0.5f, 0.0f, -0.5f, thickness),
-                VectorFloat4(0.5f, 0.0f, -0.5f, thickness),
-                VectorFloat4(0.5f, 0.0f, 0.5f, thickness),
-                VectorFloat4(0.5f, 0.0f, 0.5f, thickness),
-                VectorFloat4(-0.5f, 1.0f, -0.5f, thickness),
-                VectorFloat4(-0.5f, 1.0f, 0.5f, thickness),
-                VectorFloat4(0.5f, 1.0f, -0.5f, thickness),
-                VectorFloat4(0.5f, 1.0f, 0.5f, thickness),
-                VectorFloat4(),
-                VectorFloat4(),
-                VectorFloat4(),
-                VectorFloat4()
-            };
-            auto data = VectorHelper::FactoryArrayLiteral(data_literal);
-
             _draw_resources->_multi_line_data_pos_thick = _draw_system->MakeUnorderedAccess(
                 command_list->GetCommandList(),
                 desc,
                 unordered_access_view_desc,
-                true,
-                data
+                true
                 );
         }
 
@@ -276,8 +264,8 @@ ApplicationMultiLine::ApplicationMultiLine(
 
             const D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(
                 DXGI_FORMAT_R32G32B32A32_FLOAT,
-                4,
-                4,
+                s_texture_width,
+                s_texture_height,
                 1,
                 1,
                 1,
@@ -291,33 +279,11 @@ ApplicationMultiLine::ApplicationMultiLine(
             unordered_access_view_desc.Texture2D.MipSlice = 0;
             unordered_access_view_desc.Texture2D.PlaneSlice = 0;
 
-            const float length = 1.0f;
-            const VectorFloat4 data_literal[] = {
-                VectorFloat4(0.0f, 1.0f, 0.0f, length),
-                VectorFloat4(0.0f, 0.0f, 1.0f, length),
-                VectorFloat4(0.0f, 1.0f, 0.0f, length),
-                VectorFloat4(1.0f, 0.0f, 0.0f, length),
-                VectorFloat4(0.0f, 1.0f, 0.0f, length),
-                VectorFloat4(-1.0f, 0.0f, 0.0f, length),
-                VectorFloat4(0.0f, 1.0f, 0.0f, length),
-                VectorFloat4(0.0f, 0.0f, -1.0f, length),
-                VectorFloat4(0.0f, 0.0f, 1.0f, length),
-                VectorFloat4(1.0f, 0.0f, 0.0f, length),
-                VectorFloat4(-1.0f, 0.0f, 0.0f, length),
-                VectorFloat4(0.0f, 0.0f, -1.0f, length),
-                VectorFloat4(),
-                VectorFloat4(),
-                VectorFloat4(),
-                VectorFloat4()
-                };
-            auto data = VectorHelper::FactoryArrayLiteral(data_literal);
-
             _draw_resources->_multi_line_data_dir_length = _draw_system->MakeUnorderedAccess(
                 command_list->GetCommandList(),
                 desc,
                 unordered_access_view_desc,
-                true,
-                data
+                true
             );
         }
 
@@ -328,8 +294,8 @@ ApplicationMultiLine::ApplicationMultiLine(
 
             const D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(
                 DXGI_FORMAT_R32G32B32A32_FLOAT,
-                4,
-                4,
+                s_texture_width,
+                s_texture_height,
                 1,
                 1,
                 1,
@@ -343,188 +309,49 @@ ApplicationMultiLine::ApplicationMultiLine(
             unordered_access_view_desc.Texture2D.MipSlice = 0;
             unordered_access_view_desc.Texture2D.PlaneSlice = 0;
 
-            const VectorFloat4 data_literal[] = {
-                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-                VectorFloat4(),
-                VectorFloat4(),
-                VectorFloat4(),
-                VectorFloat4()
-            };
-            auto data = VectorHelper::FactoryArrayLiteral(data_literal);
-
             _draw_resources->_multi_line_data_colour = _draw_system->MakeUnorderedAccess(
                 command_list->GetCommandList(),
                 desc,
                 unordered_access_view_desc,
-                true,
-                data
-            );
-        }
-#else
-        // std::shared_ptr<ShaderResource> _multi_line_data_pos_thick;
-        {
-            D3D12_RESOURCE_DESC desc = {
-                D3D12_RESOURCE_DIMENSION_TEXTURE2D, //D3D12_RESOURCE_DIMENSION Dimension;
-                D3D12_DEFAULT_RESOURCE_PLACEMENT_ALIGNMENT, //UINT64 Alignment;
-                4, //UINT64 Width;
-                4, //UINT Height;
-                1, //UINT16 DepthOrArraySize;
-                1, //UINT16 MipLevels;
-                DXGI_FORMAT_R32G32B32A32_FLOAT, //DXGI_FORMAT Format;
-                DXGI_SAMPLE_DESC{ 1, 0 }, //DXGI_SAMPLE_DESC SampleDesc;
-                D3D12_TEXTURE_LAYOUT_UNKNOWN, //D3D12_TEXTURE_LAYOUT Layout;
-                D3D12_RESOURCE_FLAG_NONE //D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE //D3D12_RESOURCE_FLAGS Flags;
-            };
-            // Describe and create a SRV for the texture.
-            D3D12_SHADER_RESOURCE_VIEW_DESC shader_resource_view_desc = {};
-            shader_resource_view_desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-            shader_resource_view_desc.Format = desc.Format;
-            shader_resource_view_desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-            shader_resource_view_desc.Texture2D.MipLevels = 1;
-
-            const float thickness = 1.0f;
-            const VectorFloat4 data_literal[] = {
-                VectorFloat4(-0.5f, 0.0f, -0.5f, thickness),
-                VectorFloat4(-0.5f, 0.0f, -0.5f, thickness),
-                VectorFloat4(-0.5f, 0.0f, 0.5f, thickness),
-                VectorFloat4(-0.5f, 0.0f, 0.5f, thickness),
-                VectorFloat4(0.5f, 0.0f, -0.5f, thickness),
-                VectorFloat4(0.5f, 0.0f, -0.5f, thickness),
-                VectorFloat4(0.5f, 0.0f, 0.5f, thickness),
-                VectorFloat4(0.5f, 0.0f, 0.5f, thickness),
-                VectorFloat4(-0.5f, 1.0f, -0.5f, thickness),
-                VectorFloat4(-0.5f, 1.0f, 0.5f, thickness),
-                VectorFloat4(0.5f, 1.0f, -0.5f, thickness),
-                VectorFloat4(0.5f, 1.0f, 0.5f, thickness),
-                VectorFloat4(),
-                VectorFloat4(),
-                VectorFloat4(),
-                VectorFloat4()
-            };
-            auto data = VectorHelper::FactoryArrayLiteral(data_literal);
-
-            _draw_resources->_multi_line_data_pos_thick = _draw_system->MakeShaderResource(
-                command_list->GetCommandList(), //ID3D12GraphicsCommandList* const in_command_list,
-                _draw_system->MakeHeapWrapperCbvSrvUav(), //const std::shared_ptr < HeapWrapperItem >&in_shader_resource,
-                desc, //const D3D12_RESOURCE_DESC & in_desc,
-                shader_resource_view_desc, //const D3D12_SHADER_RESOURCE_VIEW_DESC & in_shader_resource_view_desc,
-                data //const std::vector < uint8_t >&in_data
-                );
-        }
-
-        // std::shared_ptr<ShaderResource> _multi_line_data_dir_length;
-        {
-            D3D12_RESOURCE_DESC desc = {
-                D3D12_RESOURCE_DIMENSION_TEXTURE2D, //D3D12_RESOURCE_DIMENSION Dimension;
-                D3D12_DEFAULT_RESOURCE_PLACEMENT_ALIGNMENT, //UINT64 Alignment;
-                4, //UINT64 Width;
-                4, //UINT Height;
-                1, //UINT16 DepthOrArraySize;
-                1, //UINT16 MipLevels;
-                DXGI_FORMAT_R32G32B32A32_FLOAT, //DXGI_FORMAT Format;
-                DXGI_SAMPLE_DESC{ 1, 0 }, //DXGI_SAMPLE_DESC SampleDesc;
-                D3D12_TEXTURE_LAYOUT_UNKNOWN, //D3D12_TEXTURE_LAYOUT Layout;
-                D3D12_RESOURCE_FLAG_NONE //D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE //D3D12_RESOURCE_FLAGS Flags;
-            };
-            // Describe and create a SRV for the texture.
-            D3D12_SHADER_RESOURCE_VIEW_DESC shader_resource_view_desc = {};
-            shader_resource_view_desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-            shader_resource_view_desc.Format = desc.Format;
-            shader_resource_view_desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-            shader_resource_view_desc.Texture2D.MipLevels = 1;
-
-            const float length = 1.0f;
-            const VectorFloat4 data_literal[] = {
-                VectorFloat4(0.0f, 1.0f, 0.0f, length),
-                VectorFloat4(0.0f, 0.0f, 1.0f, length),
-                VectorFloat4(0.0f, 1.0f, 0.0f, length),
-                VectorFloat4(1.0f, 0.0f, 0.0f, length),
-                VectorFloat4(0.0f, 1.0f, 0.0f, length),
-                VectorFloat4(-1.0f, 0.0f, 0.0f, length),
-                VectorFloat4(0.0f, 1.0f, 0.0f, length),
-                VectorFloat4(0.0f, 0.0f, -1.0f, length),
-                VectorFloat4(0.0f, 0.0f, 1.0f, length),
-                VectorFloat4(1.0f, 0.0f, 0.0f, length),
-                VectorFloat4(-1.0f, 0.0f, 0.0f, length),
-                VectorFloat4(0.0f, 0.0f, -1.0f, length),
-                VectorFloat4(),
-                VectorFloat4(),
-                VectorFloat4(),
-                VectorFloat4()
-            };
-            auto data = VectorHelper::FactoryArrayLiteral(data_literal);
-
-            _draw_resources->_multi_line_data_dir_length = _draw_system->MakeShaderResource(
-                command_list->GetCommandList(), //ID3D12GraphicsCommandList* const in_command_list,
-                _draw_system->MakeHeapWrapperCbvSrvUav(), //const std::shared_ptr < HeapWrapperItem >&in_shader_resource,
-                desc, //const D3D12_RESOURCE_DESC & in_desc,
-                shader_resource_view_desc, //const D3D12_SHADER_RESOURCE_VIEW_DESC & in_shader_resource_view_desc,
-                data //const std::vector < uint8_t >&in_data
+                true
             );
         }
 
-        // std::shared_ptr<ShaderResource> _multi_line_data_colour;
+        // std::shared_ptr<Shader> _multi_line_compute;
         {
-            D3D12_RESOURCE_DESC desc = {
-                D3D12_RESOURCE_DIMENSION_TEXTURE2D, //D3D12_RESOURCE_DIMENSION Dimension;
-                D3D12_DEFAULT_RESOURCE_PLACEMENT_ALIGNMENT, //UINT64 Alignment;
-                4, //UINT64 Width;
-                4, //UINT Height;
-                1, //UINT16 DepthOrArraySize;
-                1, //UINT16 MipLevels;
-                DXGI_FORMAT_R32G32B32A32_FLOAT, //DXGI_FORMAT Format;
-                DXGI_SAMPLE_DESC{ 1, 0 }, //DXGI_SAMPLE_DESC SampleDesc;
-                D3D12_TEXTURE_LAYOUT_UNKNOWN, //D3D12_TEXTURE_LAYOUT Layout;
-                D3D12_RESOURCE_FLAG_NONE //D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE //D3D12_RESOURCE_FLAGS Flags;
-            };
-            // Describe and create a SRV for the texture.
-            D3D12_SHADER_RESOURCE_VIEW_DESC shader_resource_view_desc = {};
-            shader_resource_view_desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-            shader_resource_view_desc.Format = desc.Format;
-            shader_resource_view_desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-            shader_resource_view_desc.Texture2D.MipLevels = 1;
+            auto pComputeShaderData = FileSystem::SyncReadFile(in_application_param._root_path / "multi_line_compute.cso");
+            ShaderPipelineStateData computePipelineStateData = ShaderPipelineStateData::FactoryComputeShader();
 
-            const VectorFloat4 data_literal[] = {
-                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-                VectorFloat4(),
-                VectorFloat4(),
-                VectorFloat4(),
-                VectorFloat4()
-            };
-            auto data = VectorHelper::FactoryArrayLiteral(data_literal);
+            std::vector< std::shared_ptr< ShaderResourceInfo > > arrayShaderResourceInfo;
+            //arrayShaderResourceInfo.push_back( ShaderResourceInfo::FactorySampler( m_pComputeOutputTexture->GetShaderResourceHeapWrapperItem(), D3D12_SHADER_VISIBILITY_PIXEL ) );
 
-            _draw_resources->_multi_line_data_colour = _draw_system->MakeShaderResource(
-                command_list->GetCommandList(), //ID3D12GraphicsCommandList* const in_command_list,
-                _draw_system->MakeHeapWrapperCbvSrvUav(), //const std::shared_ptr < HeapWrapperItem >&in_shader_resource,
-                desc, //const D3D12_RESOURCE_DESC & in_desc,
-                shader_resource_view_desc, //const D3D12_SHADER_RESOURCE_VIEW_DESC & in_shader_resource_view_desc,
-                data //const std::vector < uint8_t >&in_data
+            std::vector< std::shared_ptr< ConstantBufferInfo > > arrayShaderConstantsInfo;
+            arrayShaderConstantsInfo.push_back(ConstantBufferInfo::Factory(ConstantBufferComputeB0()));
+
+            std::vector< std::shared_ptr< UnorderedAccessInfo > > arrayUnorderedAccessInfo;
+            arrayUnorderedAccessInfo.push_back(std::make_shared< UnorderedAccessInfo>(
+                _draw_resources->_multi_line_data_pos_thick->GetHeapWrapperItem()
+                ));
+            arrayUnorderedAccessInfo.push_back(std::make_shared< UnorderedAccessInfo>(
+                _draw_resources->_multi_line_data_dir_length->GetHeapWrapperItem()
+                ));
+            arrayUnorderedAccessInfo.push_back(std::make_shared< UnorderedAccessInfo>(
+                _draw_resources->_multi_line_data_colour->GetHeapWrapperItem()
+                ));
+
+            _draw_resources->_multi_line_compute = _draw_system->MakeShader(
+                command_list->GetCommandList(),
+                computePipelineStateData,
+                nullptr,
+                nullptr,
+                nullptr,
+                arrayShaderResourceInfo,
+                arrayShaderConstantsInfo,
+                pComputeShaderData,
+                arrayUnorderedAccessInfo
             );
         }
 
-#endif
         // Multi line shader and geometry
         {
             std::vector < D3D12_INPUT_ELEMENT_DESC > input_element_desc_array;
@@ -562,10 +389,7 @@ ApplicationMultiLine::ApplicationMultiLine(
                 );
 
                 std::vector<std::shared_ptr<ShaderResourceInfo>> array_shader_resource_info;
-                //std::shared_ptr<std::vector<uint8_t>> compute_shader_data;
-                //std::vector<std::shared_ptr<UnorderedAccessInfo>> array_unordered_access_info;
 
-#if defined(DSC_UNORDED_ACCESS)
                 array_shader_resource_info.push_back(ShaderResourceInfo::FactoryNoSampler(
                     _draw_resources->_multi_line_data_pos_thick->GetShaderViewHeapWrapperItem(),
                     D3D12_SHADER_VISIBILITY_VERTEX
@@ -578,20 +402,6 @@ ApplicationMultiLine::ApplicationMultiLine(
                     _draw_resources->_multi_line_data_colour->GetShaderViewHeapWrapperItem(),
                     D3D12_SHADER_VISIBILITY_VERTEX
                 ));
-#else
-                array_shader_resource_info.push_back(ShaderResourceInfo::FactoryNoSampler(
-                    _draw_resources->_multi_line_data_pos_thick->GetHeapWrapperItem(),
-                    D3D12_SHADER_VISIBILITY_VERTEX
-                ));
-                array_shader_resource_info.push_back(ShaderResourceInfo::FactoryNoSampler(
-                    _draw_resources->_multi_line_data_dir_length->GetHeapWrapperItem(),
-                    D3D12_SHADER_VISIBILITY_VERTEX
-                ));
-                array_shader_resource_info.push_back(ShaderResourceInfo::FactoryNoSampler(
-                    _draw_resources->_multi_line_data_colour->GetHeapWrapperItem(),
-                    D3D12_SHADER_VISIBILITY_VERTEX
-                ));
-#endif
 
                 std::vector<std::shared_ptr<ConstantBufferInfo>> array_shader_constants_info;
                 array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
@@ -606,9 +416,7 @@ ApplicationMultiLine::ApplicationMultiLine(
                     nullptr,
                     pixel_shader_data,
                     array_shader_resource_info,
-                    array_shader_constants_info//,
-                    //compute_shader_data,
-                    //array_unordered_access_info
+                    array_shader_constants_info
                 );
             }
 
@@ -680,7 +488,7 @@ ApplicationMultiLine::ApplicationMultiLine(
     _timer = std::make_unique<Timer>();
 }
 
-ApplicationMultiLine::~ApplicationMultiLine()
+ApplicationMultiLineCompute::~ApplicationMultiLineCompute()
 {
     if (_draw_system)
     {
@@ -691,21 +499,23 @@ ApplicationMultiLine::~ApplicationMultiLine()
     _draw_system.reset();
 
     LOG_MESSAGE(
-        "ApplicationMultiLine  dtor %p",
+        "ApplicationMultiLineCompute  dtor %p",
         this
         );
 }
 
-void ApplicationMultiLine::Update()
+void ApplicationMultiLineCompute::Update()
 {
     BaseType::Update();
 
     if (nullptr != _timer)
     {
         const float time_delta = _timer->GetDeltaSeconds();
+        _timer_accumulate_wrapped = fmodf(_timer_accumulate_wrapped + time_delta, 1.0f);
+
         const auto camera_right = Cross(_camera_at, _camera_up);
 
-        //LOG_MESSAGE("ApplicationMultiLine::Update %f %f %f", _camera_pos[0], _camera_pos[1], _camera_pos[2]);
+        //LOG_MESSAGE("ApplicationMultiLineCompute::Update %f %f %f", _camera_pos[0], _camera_pos[1], _camera_pos[2]);
 
         if (true == _input_q)
         {
@@ -834,6 +644,25 @@ void ApplicationMultiLine::Update()
         }
 #endif
 
+        // Draw Multi Line Compute
+#if 1
+        auto multi_line_compute = _draw_resources->_multi_line_compute.get();
+        if (nullptr != multi_line_compute)
+        {
+            frame->ResourceBarrier(_draw_resources->_multi_line_data_pos_thick.get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+            frame->ResourceBarrier(_draw_resources->_multi_line_data_dir_length.get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+            frame->ResourceBarrier(_draw_resources->_multi_line_data_colour.get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+
+            auto& buffer = multi_line_compute->GetConstant<ConstantBufferComputeB0>(0);
+            buffer._colour = VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f);
+            buffer._timer = _timer_accumulate_wrapped;
+            buffer._thickness = 2.0f;
+
+            frame->SetShader(multi_line_compute);
+            frame->Dispatch(s_thread_x, s_thread_y, s_thread_z);
+        }
+#endif
+
         // Draw Multi Line
 #if 1
         auto multi_line_shader = _draw_resources->_multi_line_shader.get();
@@ -861,7 +690,7 @@ void ApplicationMultiLine::Update()
     }
 }
 
-void ApplicationMultiLine::OnWindowSizeChanged(
+void ApplicationMultiLineCompute::OnWindowSizeChanged(
     const int in_width,
     const int in_height
     )
@@ -884,7 +713,7 @@ void ApplicationMultiLine::OnWindowSizeChanged(
     return;
 }
 
-void ApplicationMultiLine::OnKey(
+void ApplicationMultiLineCompute::OnKey(
     const int in_vk_code,
     const int in_scan_code,
     const bool in_repeat_flag,

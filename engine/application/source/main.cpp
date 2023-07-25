@@ -11,6 +11,7 @@
 #include "common/util/command_line.h"
 #include "common/util/utf8.h"
 #include "window_application/application_multi_line.h"
+#include "window_application/application_multi_line_compute.h"
 #include "window_application/application_test_line.h"
 #include "window_application/application_test_triangle.h"
 #include <json/json.hpp>
@@ -39,6 +40,7 @@ static std::map< std::string, TWindowApplicationFactory >& GetWindowApplicationF
     static std::map< std::string, TWindowApplicationFactory > s_map(
         {
             {"MultiLine", ApplicationMultiLine::Factory},
+            {"MultiLineCompute", ApplicationMultiLineCompute::Factory},
             {"TestTriangle", ApplicationTestTriangle::Factory},
             {"TestLine", ApplicationTestLine::Factory}
         });

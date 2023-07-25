@@ -31,6 +31,9 @@
     <Filter Include="task\multi_line">
       <UniqueIdentifier>{678648ac-ad02-4fd3-81c3-4faf5d339018}</UniqueIdentifier>
     </Filter>
+    <Filter Include="task\multi_line_compute">
+      <UniqueIdentifier>{e27b3c0f-3df9-409d-971b-3f5186d7dcb4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Script\util_make_host_define.cmd">
@@ -67,6 +70,15 @@
     <None Include="task\multi_line\multi_line_interpolant.hlsli">
       <Filter>task\multi_line</Filter>
     </None>
+    <None Include="task\multi_line_compute\interpolant.hlsli">
+      <Filter>task\multi_line_compute</Filter>
+    </None>
+    <None Include="task\multi_line_compute\multi_line_interpolant.hlsli">
+      <Filter>task\multi_line_compute</Filter>
+    </None>
+    <None Include="task\multi_line_compute\polar.hlsli">
+      <Filter>task\multi_line_compute</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Build.cpp">
@@ -85,6 +97,9 @@
       <Filter>source\window_application</Filter>
     </ClCompile>
     <ClCompile Include="source\window_application\application_multi_line.cpp">
+      <Filter>source\window_application</Filter>
+    </ClCompile>
+    <ClCompile Include="source\window_application\application_multi_line_compute.cpp">
       <Filter>source\window_application</Filter>
     </ClCompile>
   </ItemGroup>
@@ -110,6 +125,9 @@
     <ClInclude Include="source\window_application\application_multi_line.h">
       <Filter>source\window_application</Filter>
     </ClInclude>
+    <ClInclude Include="source\window_application\application_multi_line_compute.h">
+      <Filter>source\window_application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\cut.ico">
@@ -133,6 +151,9 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="task\multi_line\application.json">
       <Filter>task\multi_line</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="task\multi_line_compute\application.json">
+      <Filter>task\multi_line_compute</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
@@ -171,6 +192,24 @@
     </FxCompile>
     <FxCompile Include="task\multi_line\multi_line_vertex.hlsl">
       <Filter>task\multi_line</Filter>
+    </FxCompile>
+    <FxCompile Include="task\multi_line_compute\multi_line_pixel.hlsl">
+      <Filter>task\multi_line_compute</Filter>
+    </FxCompile>
+    <FxCompile Include="task\multi_line_compute\multi_line_vertex.hlsl">
+      <Filter>task\multi_line_compute</Filter>
+    </FxCompile>
+    <FxCompile Include="task\multi_line_compute\pixel_shader_background.hlsl">
+      <Filter>task\multi_line_compute</Filter>
+    </FxCompile>
+    <FxCompile Include="task\multi_line_compute\pixel_shader_grid.hlsl">
+      <Filter>task\multi_line_compute</Filter>
+    </FxCompile>
+    <FxCompile Include="task\multi_line_compute\vertex_shader.hlsl">
+      <Filter>task\multi_line_compute</Filter>
+    </FxCompile>
+    <FxCompile Include="task\multi_line_compute\multi_line_compute.hlsl">
+      <Filter>task\multi_line_compute</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
