@@ -67,6 +67,7 @@ private:
 
     float _fov_vertical;
     float _fov_horizontal_calculated;
+    float _radian_per_pixel;
     float _unit_pixel_size;
 
     VectorFloat3 _camera_pos;

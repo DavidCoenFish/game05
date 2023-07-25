@@ -81,7 +81,7 @@ Pixel main( Interpolant in_input )
         in_input._line_pos_thickness.xyz,
         in_input._line_dir_length.xyz,
         camera_pos,
-        camera_at
+        world_eye_ray
         );
     if (pass_t1_t2.x != 0.0)
     {
@@ -92,7 +92,7 @@ Pixel main( Interpolant in_input )
             in_input._line_dir_length.xyz,
             in_input._line_dir_length.w,
             camera_pos,
-            camera_at,
+            world_eye_ray,
             camera_far
             );
         if (pass_distance.x != 0.0)
@@ -107,10 +107,13 @@ Pixel main( Interpolant in_input )
     }
 
     float a = coverage * in_input._line_colour.a;
-    //result._colour = float4(in_input._line_colour.xyz * a, a);
+    result._colour = float4(in_input._line_colour.xyz * a, a);
     //result._colour = float4(1.0, 0.0, 0.0, 1.0);
     //result._colour = in_input._line_colour;
-    result._colour = float4(a, a, a, 1.0);
+    //result._colour = float4(a, a, a, 1.0);
+    //result._colour = float4(in_input._line_dir_length.xyz, 1.0);
+    //result._colour = float4(in_input._uv.x, in_input._uv.y, 0.0, 1.0);
+    //result._colour = float4(coverage, coverage, coverage, 1.0);
 
     return result;
 }

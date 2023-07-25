@@ -17,13 +17,20 @@ float3 RayRayClosest(float3 in_p1, float3 in_d1, float3 in_p2, float3 in_d2)
     float3 result = float3(0.0, 0.0, 0.0);
 
     // rays are not that close to parrallel
-    if (0.0001 < dot(n, n))
+    if (0.000001 < dot(n, n))
     {
         n1 = cross(in_d1, n);
         n2 = cross(in_d2, n);
-        t1 = dot(in_p2 - in_p1, n2) / dot(in_d1, n2);
-        t2 = dot(in_p1 - in_p2, n1) / dot(in_d2, n1);
-        result = float3(1.0, t1, t2);
+
+        float denom1 = dot(in_d1, n2);
+        float denom2 = dot(in_d2, n1);
+        if ((0.000001 < abs(denom1)) &&
+            (0.000001 < abs(denom2)))
+        {
+            t1 = dot(in_p2 - in_p1, n2) / denom1;
+            t2 = dot(in_p1 - in_p2, n1) / denom2;
+            result = float3(1.0, t1, t2);
+        }
     }
 
     return result;

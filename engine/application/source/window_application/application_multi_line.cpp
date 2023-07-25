@@ -33,7 +33,8 @@ struct ConstantBufferB0
     VectorFloat3 _camera_up;
     float _camera_far;
     float _camera_unit_pixel_size; //sin(radian_per_pixel)
-    float _pad0[3];
+    float _camera_radian_per_pixel;
+    float _pad0[2];
 };
 
 struct ConstantBufferBackgroundB1
@@ -73,8 +74,9 @@ ApplicationMultiLine::ApplicationMultiLine(
         in_hwnd,
         in_application_param
         )
-    , _fov_vertical(Angle::DegToRadian(75.0f))
+    , _fov_vertical(Angle::DegToRadian(145.0f))
     , _fov_horizontal_calculated(0.0f)
+    , _radian_per_pixel(0.0f)
     , _unit_pixel_size(0.0f)
     , _camera_pos(s_camera_pos)
     , _camera_at(s_camera_at)
@@ -391,21 +393,20 @@ ApplicationMultiLine::ApplicationMultiLine(
             shader_resource_view_desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
             shader_resource_view_desc.Texture2D.MipLevels = 1;
 
-            const float thickness = 2.0f;
+            const float thickness = 1.0f;
             const VectorFloat4 data_literal[] = {
-                VectorFloat4(0.0f, 0.0f, 0.0f, thickness),
-                //VectorFloat4(-0.5f, -0.5f, -0.5f, thickness),
-                VectorFloat4(-0.5f, -0.5f, -0.5f, thickness),
-                VectorFloat4(-0.5f, -0.5f, 0.5f, thickness),
-                VectorFloat4(-0.5f, -0.5f, 0.5f, thickness),
-                VectorFloat4(0.5f, -0.5f, -0.5f, thickness),
-                VectorFloat4(0.5f, -0.5f, -0.5f, thickness),
-                VectorFloat4(0.5f, -0.5f, 0.5f, thickness),
-                VectorFloat4(0.5f, -0.5f, 0.5f, thickness),
-                VectorFloat4(),
-                VectorFloat4(),
-                VectorFloat4(),
-                VectorFloat4(),
+                VectorFloat4(-0.5f, 0.0f, -0.5f, thickness),
+                VectorFloat4(-0.5f, 0.0f, -0.5f, thickness),
+                VectorFloat4(-0.5f, 0.0f, 0.5f, thickness),
+                VectorFloat4(-0.5f, 0.0f, 0.5f, thickness),
+                VectorFloat4(0.5f, 0.0f, -0.5f, thickness),
+                VectorFloat4(0.5f, 0.0f, -0.5f, thickness),
+                VectorFloat4(0.5f, 0.0f, 0.5f, thickness),
+                VectorFloat4(0.5f, 0.0f, 0.5f, thickness),
+                VectorFloat4(-0.5f, 1.0f, -0.5f, thickness),
+                VectorFloat4(-0.5f, 1.0f, 0.5f, thickness),
+                VectorFloat4(0.5f, 1.0f, -0.5f, thickness),
+                VectorFloat4(0.5f, 1.0f, 0.5f, thickness),
                 VectorFloat4(),
                 VectorFloat4(),
                 VectorFloat4(),
@@ -446,18 +447,17 @@ ApplicationMultiLine::ApplicationMultiLine(
             const float length = 1.0f;
             const VectorFloat4 data_literal[] = {
                 VectorFloat4(0.0f, 1.0f, 0.0f, length),
-                //VectorFloat4(0.0f, 1.0f, 0.0f, length),
-                VectorFloat4(0.0f, 0.0f, -1.0f, length),
+                VectorFloat4(0.0f, 0.0f, 1.0f, length),
                 VectorFloat4(0.0f, 1.0f, 0.0f, length),
                 VectorFloat4(1.0f, 0.0f, 0.0f, length),
                 VectorFloat4(0.0f, 1.0f, 0.0f, length),
-                VectorFloat4(0.0f, 0.0f, 1.0f, length),
-                VectorFloat4(0.0f, 1.0f, 0.0f, length),
                 VectorFloat4(-1.0f, 0.0f, 0.0f, length),
-                VectorFloat4(),
-                VectorFloat4(),
-                VectorFloat4(),
-                VectorFloat4(),
+                VectorFloat4(0.0f, 1.0f, 0.0f, length),
+                VectorFloat4(0.0f, 0.0f, -1.0f, length),
+                VectorFloat4(0.0f, 0.0f, 1.0f, length),
+                VectorFloat4(1.0f, 0.0f, 0.0f, length),
+                VectorFloat4(-1.0f, 0.0f, 0.0f, length),
+                VectorFloat4(0.0f, 0.0f, -1.0f, length),
                 VectorFloat4(),
                 VectorFloat4(),
                 VectorFloat4(),
@@ -496,18 +496,19 @@ ApplicationMultiLine::ApplicationMultiLine(
             shader_resource_view_desc.Texture2D.MipLevels = 1;
 
             const VectorFloat4 data_literal[] = {
-                VectorFloat4(1.0f, 0.5f, 0.25f, 1.0f),
-                VectorFloat4(1.0f, 0.5f, 0.25f, 1.0f),
-                VectorFloat4(1.0f, 0.5f, 0.25f, 1.0f),
-                VectorFloat4(1.0f, 0.5f, 0.25f, 1.0f),
-                VectorFloat4(1.0f, 0.5f, 0.25f, 1.0f),
-                VectorFloat4(1.0f, 0.5f, 0.25f, 1.0f),
-                VectorFloat4(1.0f, 0.5f, 0.25f, 1.0f),
-                VectorFloat4(1.0f, 0.5f, 0.25f, 1.0f),
-                VectorFloat4(),
-                VectorFloat4(),
-                VectorFloat4(),
-                VectorFloat4(),
+                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+                VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+
                 VectorFloat4(),
                 VectorFloat4(),
                 VectorFloat4(),
@@ -616,7 +617,7 @@ ApplicationMultiLine::ApplicationMultiLine(
                     for (int x = 0; x < 4; ++x)
                     {
                         ++trace;
-                        if (1 < trace)
+                        if (12 < trace)
                         {
                             break;
                         }
@@ -655,7 +656,7 @@ ApplicationMultiLine::ApplicationMultiLine(
                         VectorHelper::AppendValue<int>(vertex_data, x);
                         VectorHelper::AppendValue<int>(vertex_data, y);
                     }
-                    if (1 < trace)
+                    if (12 < trace)
                     {
                         break;
                     }
@@ -846,6 +847,7 @@ void ApplicationMultiLine::Update()
             buffer0._camera_fov_horizontal = _fov_horizontal_calculated;
             buffer0._camera_fov_vertical = _fov_vertical;
             buffer0._camera_unit_pixel_size = _unit_pixel_size;
+            buffer0._camera_radian_per_pixel = _radian_per_pixel;
 
             frame->SetShader(multi_line_shader);
             frame->Draw(_draw_resources->_multi_line_geometry.get());
@@ -867,8 +869,8 @@ void ApplicationMultiLine::OnWindowSizeChanged(
 
     const float aspect = (float)in_width / (float)in_height;
     _fov_horizontal_calculated = aspect * _fov_vertical;
-    const auto radian_per_pixel = _fov_vertical / (float)in_height;
-    _unit_pixel_size = sin(radian_per_pixel);
+    _radian_per_pixel = _fov_vertical / (float)in_height;
+    _unit_pixel_size = sin(_radian_per_pixel);
 
     if (_draw_system)
     {
