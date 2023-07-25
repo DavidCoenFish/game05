@@ -10,6 +10,9 @@ X draw line d3dx12
 X draw sphere d3dx12
 X draw grid
 _ draw many lines
+  X from shader resource
+  - from unordered access
+  - compute shader write line pos, dir
 _ draw bip simple
 _ draw bip generic
 _ bip animation
