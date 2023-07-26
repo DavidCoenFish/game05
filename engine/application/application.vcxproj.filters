@@ -34,6 +34,9 @@
     <Filter Include="task\multi_line_compute">
       <UniqueIdentifier>{e27b3c0f-3df9-409d-971b-3f5186d7dcb4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="task\test_compute">
+      <UniqueIdentifier>{a4a95af2-4203-4a67-9f40-ab6a2ba39535}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Script\util_make_host_define.cmd">
@@ -79,6 +82,9 @@
     <None Include="task\multi_line_compute\polar.hlsli">
       <Filter>task\multi_line_compute</Filter>
     </None>
+    <None Include="task\test_compute\present_interpolant.hlsli">
+      <Filter>task\test_compute</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Build.cpp">
@@ -100,6 +106,9 @@
       <Filter>source\window_application</Filter>
     </ClCompile>
     <ClCompile Include="source\window_application\application_multi_line_compute.cpp">
+      <Filter>source\window_application</Filter>
+    </ClCompile>
+    <ClCompile Include="source\window_application\application_test_compute.cpp">
       <Filter>source\window_application</Filter>
     </ClCompile>
   </ItemGroup>
@@ -128,6 +137,9 @@
     <ClInclude Include="source\window_application\application_multi_line_compute.h">
       <Filter>source\window_application</Filter>
     </ClInclude>
+    <ClInclude Include="source\window_application\application_test_compute.h">
+      <Filter>source\window_application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\cut.ico">
@@ -154,6 +166,9 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="task\multi_line_compute\application.json">
       <Filter>task\multi_line_compute</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="task\test_compute\application.json">
+      <Filter>task\test_compute</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
@@ -210,6 +225,15 @@
     </FxCompile>
     <FxCompile Include="task\multi_line_compute\multi_line_compute.hlsl">
       <Filter>task\multi_line_compute</Filter>
+    </FxCompile>
+    <FxCompile Include="task\test_compute\compute_shader.hlsl">
+      <Filter>task\test_compute</Filter>
+    </FxCompile>
+    <FxCompile Include="task\test_compute\present_pixel.hlsl">
+      <Filter>task\test_compute</Filter>
+    </FxCompile>
+    <FxCompile Include="task\test_compute\present_vertex.hlsl">
+      <Filter>task\test_compute</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

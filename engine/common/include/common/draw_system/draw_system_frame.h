@@ -14,10 +14,11 @@ public:
     void SetRenderTarget(IRenderTarget* const in_render_target);
     void SetShader(Shader* const in_shader);
     void Draw(GeometryGeneric* const in_geometry);
+    // thread_group_count as the number of steps for each thread to do
     void Dispatch(
-        uint32_t in_num_groups_x,
-        uint32_t in_num_groups_y = 1,
-        uint32_t in_num_groups_z = 1
+        uint32_t in_thread_group_count_x,
+        uint32_t in_thread_group_count_y = 1,
+        uint32_t in_thread_group_count_z = 1
         );
 
     void ResourceBarrier(

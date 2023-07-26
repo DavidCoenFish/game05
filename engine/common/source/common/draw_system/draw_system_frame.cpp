@@ -67,15 +67,15 @@ void DrawSystemFrame::Draw(GeometryGeneric* const in_geometry)
 }
 
 void DrawSystemFrame::Dispatch(
-    uint32_t in_num_groups_x,
-    uint32_t in_num_groups_y,
-    uint32_t in_num_groups_z
+    uint32_t in_thread_group_count_x,
+    uint32_t in_thread_group_count_y,
+    uint32_t in_thread_group_count_z
     )
 {
     _command_list->Dispatch(
-        in_num_groups_x,
-        in_num_groups_y,
-        in_num_groups_z
+        in_thread_group_count_x,
+        in_thread_group_count_y,
+        in_thread_group_count_z
         );
 }
 

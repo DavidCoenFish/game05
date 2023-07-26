@@ -8,6 +8,7 @@ RWTexture2D<float4> _output_texture_line_pos_thickness : register(u0);
 RWTexture2D<float4> _output_texture_line_dir_length : register(u1);
 RWTexture2D<float4> _output_texture_line_colour : register(u2);
 
+/*
 float3 GetAtomixPos(uint in_trunc, float in_frac)
 {
     uint axis0 = in_trunc / 2;
@@ -108,24 +109,33 @@ float4 MakeDir(uint in_index, float2 in_timer, float3 in_line_pos)
 }
 
 // Each "square" takes 24 lines, texture size for [8,4,8] is [24 * 8, 4 * 8]? 192x32
-[numthreads(8, 4, 8)]
+[numthreads(7, 24, 6)]
 void main(uint3 in_id : SV_DispatchThreadID)
 {
-    float3 origin = float3(in_id.x * 3.0, in_id.y * 2.0, in_id.z * 3.0);
+    float3 origin = float3(in_id.x * 3.0, 1.0, in_id.z * 3.0);
     float timer_temp = g_timer_thickness.x * 6.0;
     float2 timer = float2(trunc(timer_temp), frac(timer_temp));
     float3 line_pos;
     float4 line_dir_length;
     uint2 output_uv;
 
-    for (uint index = 0; index < 24; ++index)
-    {
+    uint index = in_id.y;
+    //for (uint index = 0; index < 24; ++index)
+    //{
         line_pos = MakePos(index, timer);
         line_dir_length = MakeDir(index, timer, line_pos);
 
-        output_uv = uint2(in_id.x * index, in_id.y * in_id.z);
+        output_uv = uint2((in_id.x * 24) + index, in_id.z);
         _output_texture_line_pos_thickness[output_uv] = float4(line_pos + origin, g_timer_thickness.y);
         _output_texture_line_dir_length[output_uv] = line_dir_length;
         _output_texture_line_colour[output_uv] = g_colour;
-    }
+    //}
+}
+*/
+[numthreads(8, 8, 1)]
+void main(uint3 in_id : SV_DispatchThreadID)
+{
+    _output_texture_line_pos_thickness[in_id.xy] = float4(in_id.x / 24, 0.0, in_id.x % 24, g_timer_thickness.y);
+    _output_texture_line_dir_length[in_id.xy] = float4(0.0, 1.0, 0.0, 2.0);
+    _output_texture_line_colour[in_id.xy] = g_colour;
 }

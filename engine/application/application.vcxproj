@@ -105,6 +105,10 @@
     <None Include="task\multi_line_compute\interpolant.hlsli" />
     <None Include="task\multi_line_compute\multi_line_interpolant.hlsli" />
     <None Include="task\multi_line_compute\polar.hlsli" />
+    <CopyFileToFolders Include="task\test_compute\application.json">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+    <None Include="task\test_compute\present_interpolant.hlsli" />
     <None Include="task\test_line\polar.hlsli" />
   </ItemGroup>
   <ItemGroup>
@@ -119,6 +123,7 @@
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\window_application\application_multi_line.cpp" />
     <ClCompile Include="source\window_application\application_multi_line_compute.cpp" />
+    <ClCompile Include="source\window_application\application_test_compute.cpp" />
     <ClCompile Include="source\window_application\application_test_line.cpp" />
     <ClCompile Include="source\window_application\application_test_triangle.cpp" />
   </ItemGroup>
@@ -129,6 +134,7 @@
     <ClInclude Include="source\host_define.h" />
     <ClInclude Include="source\window_application\application_multi_line.h" />
     <ClInclude Include="source\window_application\application_multi_line_compute.h" />
+    <ClInclude Include="source\window_application\application_test_compute.h" />
     <ClInclude Include="source\window_application\application_test_line.h" />
     <ClInclude Include="source\window_application\application_test_triangle.h" />
   </ItemGroup>
@@ -192,6 +198,20 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="task\multi_line_compute\vertex_shader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="task\test_compute\compute_shader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="task\test_compute\present_pixel.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="task\test_compute\present_vertex.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>

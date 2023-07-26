@@ -3,6 +3,10 @@
   "Id": "240fc133-78da-4158-b0c7-1be8214f8843",
   "Items": [
     {
+      "Id": "c3febc89-9fb1-4341-9a96-054856b196de",
+      "Command": "test_compute"
+    },
+    {
       "Id": "01605840-1c2d-4ce7-ab87-5c238c23e514",
       "Command": "multi_line_compute"
     },

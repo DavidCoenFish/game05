@@ -1,38 +1,40 @@
-//
-// Main.cpp
-//
-
 #include "application_pch.h"
+
 #include "build.h"
+
 #include "common/log/log.h"
 #include "common/file_system/file_system.h"
 #include "common/task/i_task.h"
 #include "common/task/task_window.h"
 #include "common/util/command_line.h"
 #include "common/util/utf8.h"
+
 #include "window_application/application_multi_line.h"
 #include "window_application/application_multi_line_compute.h"
+#include "window_application/application_test_compute.h"
 #include "window_application/application_test_line.h"
 #include "window_application/application_test_triangle.h"
+
 #include <json/json.hpp>
 
 struct JSONApplication
 {
-	std::vector< JSONTask > _tasks;
+    std::vector< JSONTask > _tasks;
 };
 
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
-	JSONApplication, 
-	_tasks
-	);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE
+(
+    JSONApplication, 
+    _tasks
+);
 
 static std::map< std::string, TTaskFactory >& GetTaskFactoryMap()
 {
-	static std::map< std::string, TTaskFactory > s_map(
-	{
-		{"Window", TaskWindow::Factory}
-	});
-	return s_map;
+    static std::map< std::string, TTaskFactory > s_map(
+    {
+        {"Window", TaskWindow::Factory}
+    });
+    return s_map;
 }
 
 static std::map< std::string, TWindowApplicationFactory >& GetWindowApplicationFactoryMap()
@@ -41,6 +43,7 @@ static std::map< std::string, TWindowApplicationFactory >& GetWindowApplicationF
         {
             {"MultiLine", ApplicationMultiLine::Factory},
             {"MultiLineCompute", ApplicationMultiLineCompute::Factory},
+            {"TestCompute", ApplicationTestCompute::Factory},
             {"TestTriangle", ApplicationTestTriangle::Factory},
             {"TestLine", ApplicationTestLine::Factory}
         });
@@ -49,55 +52,54 @@ static std::map< std::string, TWindowApplicationFactory >& GetWindowApplicationF
 
 static const TTaskFactory GetTaskFactory(const std::string& in_task_factory_key)
 {
-	const auto& factoryMap = GetTaskFactoryMap();
-	auto found = factoryMap.find(in_task_factory_key);
-	if (found != factoryMap.end())
-	{
-		return found->second;
-	}
-	return nullptr;
+    const auto& factoryMap = GetTaskFactoryMap();
+    auto found = factoryMap.find(in_task_factory_key);
+    if (found != factoryMap.end())
+    {
+        return found->second;
+    }
+    return nullptr;
 }
 
 static const int RunTask(HINSTANCE in_instance, int in_cmd_show)
 {
-	in_instance;
-	in_cmd_show;
+    in_instance;
+    in_cmd_show;
 
-	auto command_line = CommandLine::Factory(Utf8::Utf16ToUtf8(GetCommandLineW()));
-	if (nullptr == command_line)
-	{
-		return -1;
-	}
+    auto command_line = CommandLine::Factory(Utf8::Utf16ToUtf8(GetCommandLineW()));
+    if (nullptr == command_line)
+    {
+        return -1;
+    }
 
-	auto log = Log::FactoryCommandLine(command_line);
+    auto log = Log::FactoryCommandLine(command_line);
 
-	LOG_MESSAGE("Build %s %s %s", Build::GetBuildVersion(), Build::GetBuildTime(), Build::GetBuildDescription());
+    LOG_MESSAGE("Build %s %s %s", Build::GetBuildVersion(), Build::GetBuildTime(), Build::GetBuildDescription());
 
+    int result = 0;
+    std::string task_name("empty");
 
-	int result = 0;
-	std::string task_name("empty");
+    if (2 <= command_line->GetParamCount())
+    {
+        task_name = command_line->GetParam(1);
+    }
+    else
+    {
+        LOG_MESSAGE_ERROR("Only got [%d] param, want at least a task name", command_line->GetParamCount());
+        return -1;
+    }
 
-	if (2 <= command_line->GetParamCount())
-	{
-		task_name = command_line->GetParam(1);
-	}
-	else
-	{
-		LOG_MESSAGE_ERROR("Only got [%d] param, want at least a task name", command_line->GetParamCount());
-		return -1;
-	}
-
-	{
-		std::filesystem::path path = FileSystem::GetModualDir(in_instance) / "task" / task_name;
-		std::filesystem::path application_path = path / "application.json";
-		auto file_string = FileSystem::DataToString(FileSystem::SyncReadFile(application_path));
-		auto json = nlohmann::json::parse(file_string);
-		JSONApplication application_data;
-		json.get_to(application_data);
+    {
+        std::filesystem::path path = FileSystem::GetModualDir(in_instance) / "task" / task_name;
+        std::filesystem::path application_path = path / "application.json";
+        auto file_string = FileSystem::DataToString(FileSystem::SyncReadFile(application_path));
+        auto json = nlohmann::json::parse(file_string);
+        JSONApplication application_data;
+        json.get_to(application_data);
         auto window_application_factory_map = GetWindowApplicationFactoryMap();
 
-		for (const auto& item: application_data._tasks)
-		{
+        for (const auto& item: application_data._tasks)
+        {
             auto task_factory = GetTaskFactory(item._factory);
             auto task = (nullptr != task_factory) ? task_factory(
                 in_instance, 
@@ -107,27 +109,27 @@ static const int RunTask(HINSTANCE in_instance, int in_cmd_show)
                 item._data,
                 window_application_factory_map
                 ) : nullptr;
-			if (task)
-			{
-				result = task->Run();
-			}
-			if (result < 0)
-			{
-				LOG_MESSAGE_ERROR("task returner [%d], abort run", result);
-			}
-		}
-	}
+            if (task)
+            {
+                result = task->Run();
+            }
+            if (result < 0)
+            {
+                LOG_MESSAGE_ERROR("task returner [%d], abort run", result);
+            }
+        }
+    }
 
-	return result;
+    return result;
 }
 
 // Entry point
 int WINAPI wWinMain(_In_ HINSTANCE in_instance, _In_opt_ HINSTANCE in_prev_instance, _In_ LPWSTR in_cmd_line, _In_ int in_cmd_show)
 {
-	UNREFERENCED_PARAMETER(in_prev_instance);
-	UNREFERENCED_PARAMETER(in_cmd_line);
+    UNREFERENCED_PARAMETER(in_prev_instance);
+    UNREFERENCED_PARAMETER(in_cmd_line);
 
-	const int result = RunTask(in_instance, in_cmd_show);
+    const int result = RunTask(in_instance, in_cmd_show);
 
-	return result;
+    return result;
 }
