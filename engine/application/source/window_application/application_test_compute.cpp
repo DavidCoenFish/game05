@@ -94,7 +94,7 @@ ApplicationTestCompute::ApplicationTestCompute(
 
         // std::shared_ptr<Shader> _compute_shader;
         {
-            auto pComputeShaderData = FileSystem::SyncReadFile(in_application_param._root_path / "compute_shader.cso");
+            auto pComputeShaderData = FileSystem::SyncReadFile(in_application_param._data_path / "compute_shader.cso");
             ShaderPipelineStateData computePipelineStateData = ShaderPipelineStateData::FactoryComputeShader();
 
             std::vector< std::shared_ptr< ShaderResourceInfo > > arrayShaderResourceInfo;
@@ -129,8 +129,8 @@ ApplicationTestCompute::ApplicationTestCompute(
 
             // Shader
             {
-                auto vertex_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "present_vertex.cso");
-                auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "present_pixel.cso");
+                auto vertex_shader_data = FileSystem::SyncReadFile(in_application_param._data_path / "present_vertex.cso");
+                auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._data_path / "present_pixel.cso");
                 std::vector < DXGI_FORMAT > render_target_format;
                 render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
 

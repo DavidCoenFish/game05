@@ -130,11 +130,11 @@ ApplicationTestLine::ApplicationTestLine(
     auto command_list = _draw_system->CreateCustomCommandList();
 
     // Make shaders
-    auto vertex_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "vertex_shader.cso");
+    auto vertex_shader_data = FileSystem::SyncReadFile(in_application_param._data_path / "vertex_shader.cso");
 
     // Shader background
     {
-        auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "pixel_shader_background.cso");
+        auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._data_path / "pixel_shader_background.cso");
         std::vector < DXGI_FORMAT > render_target_format;
         render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
         ShaderPipelineStateData shader_pipeline_state_data(
@@ -173,7 +173,7 @@ ApplicationTestLine::ApplicationTestLine(
 
     // Shader grid
     {
-        auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "pixel_shader_grid.cso");
+        auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._data_path / "pixel_shader_grid.cso");
         std::vector < DXGI_FORMAT > render_target_format;
         render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
         const auto blend_desc = ShaderPipelineStateData::FactoryBlendDescAlphaPremultiplied();
@@ -210,7 +210,7 @@ ApplicationTestLine::ApplicationTestLine(
 
     // Shader axis
     {
-        auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "pixel_shader_axis.cso");
+        auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._data_path / "pixel_shader_axis.cso");
         std::vector < DXGI_FORMAT > render_target_format;
         render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
         const auto blend_desc = ShaderPipelineStateData::FactoryBlendDescAlphaPremultiplied();
@@ -247,7 +247,7 @@ ApplicationTestLine::ApplicationTestLine(
 
     // Shader sphere
     {
-        auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "pixel_shader_sphere.cso");
+        auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._data_path / "pixel_shader_sphere.cso");
         std::vector < DXGI_FORMAT > render_target_format;
         render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
         const auto blend_desc = ShaderPipelineStateData::FactoryBlendDescAlphaPremultiplied();

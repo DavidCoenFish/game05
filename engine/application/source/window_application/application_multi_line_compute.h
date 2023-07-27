@@ -49,14 +49,15 @@ private:
         std::shared_ptr<SceneComponentCameraRay> _camera_ray;
         std::shared_ptr<SceneComponentBackground> _background;
 
-        //std::shared_ptr<UnorderedAccess> _multi_line_data_pos_thick;
-        //std::shared_ptr<UnorderedAccess> _multi_line_data_dir_length;
-        //std::shared_ptr<UnorderedAccess> _multi_line_data_colour;
+        std::shared_ptr<UnorderedAccess> _multi_line_data_uv_low_uv_high;
+        std::shared_ptr<UnorderedAccess> _multi_line_data_pos_thick;
+        std::shared_ptr<UnorderedAccess> _multi_line_data_dir_length;
+        std::shared_ptr<UnorderedAccess> _multi_line_data_colour;
 
-        //std::shared_ptr<Shader> _multi_line_compute;
-        //std::shared_ptr<Shader> _multi_line_shader;
-        //std::shared_ptr<GeometryGeneric> _multi_line_geometry;
+        std::shared_ptr<GeometryGeneric> _multi_line_geometry;
 
+        std::shared_ptr<Shader> _multi_line_compute;
+        std::shared_ptr<Shader> _multi_line_shader;
     };
     std::unique_ptr<DrawResources> _draw_resources;
 

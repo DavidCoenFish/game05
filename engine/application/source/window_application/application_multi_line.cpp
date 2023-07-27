@@ -115,11 +115,11 @@ ApplicationMultiLine::ApplicationMultiLine(
                         D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 // UINT InstanceDataStepRate;
                 });
 
-            auto vertex_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "vertex_shader.cso");
+            auto vertex_shader_data = FileSystem::SyncReadFile(in_application_param._data_path / "vertex_shader.cso");
 
             // Shader background
             {
-                auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "pixel_shader_background.cso");
+                auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._data_path / "pixel_shader_background.cso");
                 std::vector < DXGI_FORMAT > render_target_format;
                 render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
                 ShaderPipelineStateData shader_pipeline_state_data(
@@ -158,7 +158,7 @@ ApplicationMultiLine::ApplicationMultiLine(
 
             // Shader background grid
             {
-                auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "pixel_shader_grid.cso");
+                auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._data_path / "pixel_shader_grid.cso");
                 std::vector < DXGI_FORMAT > render_target_format;
                 render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
                 const auto blend_desc = ShaderPipelineStateData::FactoryBlendDescAlphaPremultiplied();
@@ -544,8 +544,8 @@ ApplicationMultiLine::ApplicationMultiLine(
             // std::shared_ptr<Shader> _multi_line_shader;
             {
 
-                auto vertex_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "multi_line_vertex.cso");
-                auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "multi_line_pixel.cso");
+                auto vertex_shader_data = FileSystem::SyncReadFile(in_application_param._data_path / "multi_line_vertex.cso");
+                auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._data_path / "multi_line_pixel.cso");
                 std::vector < DXGI_FORMAT > render_target_format;
                 render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
                 const auto blend_desc = ShaderPipelineStateData::FactoryBlendDescAlphaPremultiplied();
