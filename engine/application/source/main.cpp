@@ -90,9 +90,10 @@ static const int RunTask(HINSTANCE in_instance, int in_cmd_show)
     }
 
     {
-        std::filesystem::path path = FileSystem::GetModualDir(in_instance) / "task" / task_name;
-        std::filesystem::path application_path = path / "application.json";
-        auto file_string = FileSystem::DataToString(FileSystem::SyncReadFile(application_path));
+        std::filesystem::path root_path = FileSystem::GetModualDir(in_instance);
+        std::filesystem::path data_path = root_path / "task" / task_name;
+        std::filesystem::path application_json_path = data_path / "application.json";
+        auto file_string = FileSystem::DataToString(FileSystem::SyncReadFile(application_json_path));
         auto json = nlohmann::json::parse(file_string);
         JSONApplication application_data;
         json.get_to(application_data);
@@ -105,7 +106,8 @@ static const int RunTask(HINSTANCE in_instance, int in_cmd_show)
                 in_instance, 
                 in_cmd_show, 
                 command_line, 
-                path, 
+                root_path,
+                data_path,
                 item._data,
                 window_application_factory_map
                 ) : nullptr;

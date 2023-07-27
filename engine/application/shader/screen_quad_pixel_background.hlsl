@@ -1,12 +1,15 @@
-#include "interpolant.hlsli"
-#include "polar.hlsli" //b0
+#include "screen_quad_interpolant.hlsli"
+#include "polar_util.hlsli"
+
+Texture2D g_texture0 : register(t0);
+SamplerState g_sampler_state : register(s0);
 
 struct Pixel
 {
     float4 _color : SV_TARGET0;
 };
 
-cbuffer ConstantBuffer1 : register(b1)
+cbuffer ConstantBufferSky : register(b0)
 {
     float4 _sun_azimuth_altitude_sun_range;
     float4 _sun_tint_sky_spread;
@@ -27,10 +30,12 @@ Pixel main( Interpolant in_input )
 {
     Pixel result;
 
-    float3 world_eye_ray = MakeWorldEyeRay(in_input._uv);
+    //float3 world_eye_ray = MakeWorldEyeRay(in_input._uv);
+    float3 world_eye_ray = g_texture0.Sample(g_sampler_state, in_input._uv).xyz;
+
     float world_up = world_eye_ray.y;
 
-    float3 sun_norm = MakeScreenEyeRay(_sun_azimuth_altitude_sun_range.xy);
+    float3 sun_norm = PolarToVector(_sun_azimuth_altitude_sun_range.xy);
 
     float angle_sun_view = acos(dot(world_eye_ray, sun_norm));
 
@@ -42,6 +47,7 @@ Pixel main( Interpolant in_input )
     rgb = lerp(rgb, _fog_tint.xyz, fog);
 
     result._color = float4(rgb.x, rgb.y, rgb.z, 1.0);
+    //result._color = float4(world_eye_ray, 1.0);
 
     return result;
 }

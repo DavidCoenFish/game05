@@ -93,8 +93,10 @@
     <ClInclude Include="include\common\draw_system\geometry\geometry_generic.h" />
     <ClInclude Include="include\common\draw_system\geometry\i_geometry.h" />
     <ClInclude Include="include\common\draw_system\i_resource.h" />
+    <ClInclude Include="include\common\draw_system\render_target\i_render_target.h" />
     <ClInclude Include="include\common\draw_system\render_target\render_target_depth_data.h" />
     <ClInclude Include="include\common\draw_system\render_target\render_target_format_data.h" />
+    <ClInclude Include="include\common\draw_system\render_target\render_target_texture.h" />
     <ClInclude Include="include\common\draw_system\shader\constant_buffer_info.h" />
     <ClInclude Include="include\common\draw_system\shader\shader.h" />
     <ClInclude Include="include\common\draw_system\shader\shader_pipeline_state_data.h" />
@@ -136,9 +138,7 @@
     <ClInclude Include="source\common\draw_system\heap_wrapper\heap_wrapper.h" />
     <ClInclude Include="source\common\draw_system\heap_wrapper\heap_wrapper_item.h" />
     <ClInclude Include="source\common\draw_system\heap_wrapper\heap_wrapper_page.h" />
-    <ClInclude Include="source\common\draw_system\render_target\i_render_target.h" />
     <ClInclude Include="source\common\draw_system\render_target\render_target_backbuffer.h" />
-    <ClInclude Include="source\common\draw_system\render_target\render_target_texture.h" />
     <ClInclude Include="source\common\draw_system\screen_size_resources.h" />
     <ClInclude Include="source\common\draw_system\shader\constant_buffer.h" />
     <ClInclude Include="source\common\log\i_log_consumer.h" />

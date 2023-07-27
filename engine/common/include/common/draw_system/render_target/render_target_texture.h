@@ -14,11 +14,11 @@ public:
     {
     public:
         explicit Resource(
-            const D3D12_CLEAR_VALUE&in_clear_value,
+            const D3D12_CLEAR_VALUE& in_clear_value,
             const DXGI_FORMAT in_format = DXGI_FORMAT_UNKNOWN,
-            const Microsoft::WRL::ComPtr < ID3D12Resource >&in_render_target = nullptr,
-            const std::shared_ptr < HeapWrapperItem >&in_render_target_view_descriptor = nullptr,
-            const std::shared_ptr < HeapWrapperItem >&in_shader_resource_view_descriptor = nullptr,
+            const Microsoft::WRL::ComPtr<ID3D12Resource>& in_render_target = nullptr,
+            const std::shared_ptr<HeapWrapperItem>& in_render_target_view_descriptor = nullptr,
+            const std::shared_ptr<HeapWrapperItem>& in_shader_resource_view_descriptor = nullptr,
             const bool in_clear_color = false,
             const bool in_clear_depth = false,
             const bool in_clear_stencil = false
@@ -43,9 +43,9 @@ public:
         const bool in_resize_with_screen = false
         );
     virtual ~RenderTargetTexture();
-    std::shared_ptr < HeapWrapperItem > GetShaderResourceHeapWrapperItem(const int in_index = 0) const;
-    std::shared_ptr < HeapWrapperItem > GetDepthResourceHeapWrapperItem() const;
-    std::shared_ptr < HeapWrapperItem > GetDepthShaderResourceHeapWrapperItem() const;
+    std::shared_ptr<HeapWrapperItem> GetShaderResourceHeapWrapperItem(const int in_index = 0) const;
+    std::shared_ptr<HeapWrapperItem> GetDepthResourceHeapWrapperItem() const;
+    std::shared_ptr<HeapWrapperItem> GetDepthShaderResourceHeapWrapperItem() const;
     void Resize(
         ID3D12GraphicsCommandList* const in_command_list,
         ID3D12Device2* const in_device,

@@ -15,12 +15,12 @@
 #include "common/draw_system/shader/unordered_access_info.h"
 #include "common/json/json_draw_system.h"
 
-std::unique_ptr < DrawSystem > DrawSystem::Factory(
+std::unique_ptr<DrawSystem> DrawSystem::Factory(
     const HWND in_hwnd,
     const JSONDrawSystem& in_json
     )
 {
-    return std::make_unique < DrawSystem > (
+    return std::make_unique<DrawSystem>(
         in_hwnd,
         in_json._back_buffer_count,
         in_json._d3d_feature_level,
@@ -106,7 +106,7 @@ DirectX::GraphicsResource DrawSystem::AllocateUpload(
     return DirectX::GraphicsResource();
 }
 
-std::shared_ptr < Shader > DrawSystem::MakeShader(
+std::shared_ptr<Shader> DrawSystem::MakeShader(
     ID3D12GraphicsCommandList* const in_command_list,
     const ShaderPipelineStateData& in_pipeline_state_data,
     const std::shared_ptr<std::vector<uint8_t>>& in_vertex_shader_data,
@@ -139,7 +139,7 @@ std::shared_ptr < Shader > DrawSystem::MakeShader(
     return result;
 }
 
-std::shared_ptr < GeometryGeneric > DrawSystem::MakeGeometryGeneric(
+std::shared_ptr<GeometryGeneric> DrawSystem::MakeGeometryGeneric(
     ID3D12GraphicsCommandList* const in_command_list,
     const D3D_PRIMITIVE_TOPOLOGY in_primitive_topology,
     const std::vector<D3D12_INPUT_ELEMENT_DESC>& in_input_element_desc_array,
@@ -164,12 +164,12 @@ std::shared_ptr < GeometryGeneric > DrawSystem::MakeGeometryGeneric(
     return result;
 }
 
-std::shared_ptr < ShaderResource > DrawSystem::MakeShaderResource(
+std::shared_ptr<ShaderResource> DrawSystem::MakeShaderResource(
     ID3D12GraphicsCommandList* const in_command_list,
-    const std::shared_ptr < HeapWrapperItem >&in_shader_resource,
-    const D3D12_RESOURCE_DESC&in_desc,
-    const D3D12_SHADER_RESOURCE_VIEW_DESC&in_shader_resource_view_desc,
-    const std::vector < uint8_t >&in_data
+    const std::shared_ptr<HeapWrapperItem>& in_shader_resource,
+    const D3D12_RESOURCE_DESC& in_desc,
+    const D3D12_SHADER_RESOURCE_VIEW_DESC& in_shader_resource_view_desc,
+    const std::vector<uint8_t>& in_data
     )
 {
     auto result = std::make_shared < ShaderResource > (
@@ -189,7 +189,7 @@ std::shared_ptr < ShaderResource > DrawSystem::MakeShaderResource(
     return result;
 }
 
-std::shared_ptr < UnorderedAccess > DrawSystem::MakeUnorderedAccess(
+std::shared_ptr<UnorderedAccess> DrawSystem::MakeUnorderedAccess(
     ID3D12GraphicsCommandList* const in_command_list,
     const D3D12_RESOURCE_DESC& in_desc,
     const D3D12_UNORDERED_ACCESS_VIEW_DESC& in_unordered_access_view_desc,
@@ -218,10 +218,10 @@ std::shared_ptr < UnorderedAccess > DrawSystem::MakeUnorderedAccess(
     return result;
 }
 
-std::shared_ptr < RenderTargetTexture > DrawSystem::MakeRenderTargetTexture(
+std::shared_ptr<RenderTargetTexture> DrawSystem::MakeRenderTargetTexture(
     ID3D12GraphicsCommandList* const in_command_list,
-    const std::vector < RenderTargetFormatData >&in_target_format_data_array,
-    const RenderTargetDepthData&in_target_depth_data,
+    const std::vector<RenderTargetFormatData>& in_target_format_data_array,
+    const RenderTargetDepthData& in_target_depth_data,
     const int in_width,
     const int in_height,
     const bool in_resize_with_screen
@@ -245,14 +245,14 @@ std::shared_ptr < RenderTargetTexture > DrawSystem::MakeRenderTargetTexture(
     return result;
 }
 
-std::shared_ptr < CustomCommandList > DrawSystem::CreateCustomCommandList(
+std::shared_ptr<CustomCommandList> DrawSystem::CreateCustomCommandList(
     ID3D12PipelineState* const in_pipeline_state_object_or_null
     )
 {
     if (_device_resources)
     {
         auto command_list = _device_resources->GetCustomCommandList(in_pipeline_state_object_or_null);
-        return std::make_shared < CustomCommandList > (
+        return std::make_shared<CustomCommandList>(
             * this,
             command_list
             );
@@ -269,12 +269,12 @@ void DrawSystem::CustomCommandListFinish(ID3D12GraphicsCommandList* in_command_l
     return;
 }
 
-std::unique_ptr < DrawSystemFrame > DrawSystem::CreateNewFrame()
+std::unique_ptr<DrawSystemFrame> DrawSystem::CreateNewFrame()
 {
-    return std::make_unique < DrawSystemFrame > (* this);
+    return std::make_unique<DrawSystemFrame>(*this);
 }
 
-void DrawSystem::Prepare(ID3D12GraphicsCommandList*&in_command_list)
+void DrawSystem::Prepare(ID3D12GraphicsCommandList*& in_command_list)
 {
     if (nullptr != _device_resources)
     {
@@ -283,14 +283,6 @@ void DrawSystem::Prepare(ID3D12GraphicsCommandList*&in_command_list)
     return;
 }
 
-// Void DrawSystem::Clear()
-// {
-// If (nullptr == m_pDeviceResources)
-// {
-// Return;
-// }
-// M_pDeviceResources->Clear();
-// }
 void DrawSystem::Present()
 {
     if (nullptr == _device_resources)
@@ -419,7 +411,7 @@ void DrawSystem::CreateDeviceResources()
         iter->OnDeviceLost();
     }
     _device_resources.reset();
-    _device_resources = std::make_unique < DeviceResources > (
+    _device_resources = std::make_unique<DeviceResources>(
         2,
         _d3d_feature_level,
         _options,

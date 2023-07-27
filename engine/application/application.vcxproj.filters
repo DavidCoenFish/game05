@@ -37,6 +37,12 @@
     <Filter Include="task\test_compute">
       <UniqueIdentifier>{a4a95af2-4203-4a67-9f40-ab6a2ba39535}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\scene_component">
+      <UniqueIdentifier>{62dc5cd4-92f5-4417-8e93-011b4a1a7f6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{89986356-d54d-46fd-8aad-db662b473e74}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Script\util_make_host_define.cmd">
@@ -73,17 +79,23 @@
     <None Include="task\multi_line\multi_line_interpolant.hlsli">
       <Filter>task\multi_line</Filter>
     </None>
-    <None Include="task\multi_line_compute\interpolant.hlsli">
-      <Filter>task\multi_line_compute</Filter>
+    <None Include="task\test_compute\present_interpolant.hlsli">
+      <Filter>task\test_compute</Filter>
     </None>
     <None Include="task\multi_line_compute\multi_line_interpolant.hlsli">
       <Filter>task\multi_line_compute</Filter>
     </None>
-    <None Include="task\multi_line_compute\polar.hlsli">
-      <Filter>task\multi_line_compute</Filter>
+    <None Include="shader\polar.hlsli">
+      <Filter>shader</Filter>
     </None>
-    <None Include="task\test_compute\present_interpolant.hlsli">
-      <Filter>task\test_compute</Filter>
+    <None Include="shader\ray_ray.hlsli">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\screen_quad_interpolant.hlsli">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\polar_util.hlsli">
+      <Filter>shader</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -110,6 +122,15 @@
     </ClCompile>
     <ClCompile Include="source\window_application\application_test_compute.cpp">
       <Filter>source\window_application</Filter>
+    </ClCompile>
+    <ClCompile Include="source\scene_component\scene_component_background.cpp">
+      <Filter>source\scene_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\scene_component\scene_component_camera_ray.cpp">
+      <Filter>source\scene_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\scene_component\scene_component_screen_quad.cpp">
+      <Filter>source\scene_component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +160,15 @@
     </ClInclude>
     <ClInclude Include="source\window_application\application_test_compute.h">
       <Filter>source\window_application</Filter>
+    </ClInclude>
+    <ClInclude Include="source\scene_component\scene_component_background.h">
+      <Filter>source\scene_component</Filter>
+    </ClInclude>
+    <ClInclude Include="source\scene_component\scene_component_camera_ray.h">
+      <Filter>source\scene_component</Filter>
+    </ClInclude>
+    <ClInclude Include="source\scene_component\scene_component_screen_quad.h">
+      <Filter>source\scene_component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -208,24 +238,6 @@
     <FxCompile Include="task\multi_line\multi_line_vertex.hlsl">
       <Filter>task\multi_line</Filter>
     </FxCompile>
-    <FxCompile Include="task\multi_line_compute\multi_line_pixel.hlsl">
-      <Filter>task\multi_line_compute</Filter>
-    </FxCompile>
-    <FxCompile Include="task\multi_line_compute\multi_line_vertex.hlsl">
-      <Filter>task\multi_line_compute</Filter>
-    </FxCompile>
-    <FxCompile Include="task\multi_line_compute\pixel_shader_background.hlsl">
-      <Filter>task\multi_line_compute</Filter>
-    </FxCompile>
-    <FxCompile Include="task\multi_line_compute\pixel_shader_grid.hlsl">
-      <Filter>task\multi_line_compute</Filter>
-    </FxCompile>
-    <FxCompile Include="task\multi_line_compute\vertex_shader.hlsl">
-      <Filter>task\multi_line_compute</Filter>
-    </FxCompile>
-    <FxCompile Include="task\multi_line_compute\multi_line_compute.hlsl">
-      <Filter>task\multi_line_compute</Filter>
-    </FxCompile>
     <FxCompile Include="task\test_compute\compute_shader.hlsl">
       <Filter>task\test_compute</Filter>
     </FxCompile>
@@ -234,6 +246,27 @@
     </FxCompile>
     <FxCompile Include="task\test_compute\present_vertex.hlsl">
       <Filter>task\test_compute</Filter>
+    </FxCompile>
+    <FxCompile Include="task\multi_line_compute\multi_line_compute.hlsl">
+      <Filter>task\multi_line_compute</Filter>
+    </FxCompile>
+    <FxCompile Include="task\multi_line_compute\multi_line_pixel.hlsl">
+      <Filter>task\multi_line_compute</Filter>
+    </FxCompile>
+    <FxCompile Include="task\multi_line_compute\multi_line_vertex.hlsl">
+      <Filter>task\multi_line_compute</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\screen_quad_pixel_background.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\screen_quad_pixel_camera_ray.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\screen_quad_pixel_grid.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\screen_quad_vertex.hlsl">
+      <Filter>shader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

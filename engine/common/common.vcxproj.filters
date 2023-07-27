@@ -267,12 +267,6 @@
     <ClInclude Include="source\common\draw_system\render_target\render_target_backbuffer.h">
       <Filter>souce\common\draw_system\render_target</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\draw_system\render_target\render_target_texture.h">
-      <Filter>souce\common\draw_system\render_target</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\draw_system\render_target\i_render_target.h">
-      <Filter>souce\common\draw_system\render_target</Filter>
-    </ClInclude>
     <ClInclude Include="source\common\draw_system\heap_wrapper\heap_wrapper_item.h">
       <Filter>souce\common\draw_system\heap_wrapper</Filter>
     </ClInclude>
@@ -377,6 +371,12 @@
     </ClInclude>
     <ClInclude Include="include\common\draw_system\shader\unordered_access.h">
       <Filter>include\common\draw_system\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\render_target\render_target_texture.h">
+      <Filter>include\common\draw_system\render_target</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\render_target\i_render_target.h">
+      <Filter>include\common\draw_system\render_target</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
