@@ -1,0 +1,374 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source">
+      <UniqueIdentifier>{2906b3fe-6eff-4362-9d36-85bcdb39daf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include">
+      <UniqueIdentifier>{21ee7215-1277-4dcd-8e95-c435040d87ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Props">
+      <UniqueIdentifier>{fe23cbaa-2ced-47a1-ac0a-e72e4c91e720}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Props\Harfbuzz.props">
+      <Filter>Props</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\hb-aat-layout-just-table.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-aat-layout-kerx-table.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-aat-layout-morx-table.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-aat-layout-opbd-table.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-aat-layout-trak-table.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-aat-ltag-table.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-coretext.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-draw.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-ot-cff1-table.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-ot-cff2-table.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-aat-layout.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-aat-layout-ankr-table.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-aat-layout-bsln-table.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-aat-layout-common.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-aat-layout-feat-table.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-blob.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-buffer.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-common.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-deprecated.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-draw.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-face.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-font.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-map.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-set.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-shape.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-shape-plan.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-style.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-unicode.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-version.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-aat-map.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-config.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\config.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-ot.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-ot-color.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-ot-deprecated.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-ot-font.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-ot-layout.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-ot-math.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-ot-meta.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-ot-metrics.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-ot-name.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-ot-shape.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-ot-var.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-aat.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\hb-aat-layout.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-cplusplus.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-meta.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-mutex.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-debug.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-null.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-number.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-object.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-vector.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-algs.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-array.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-atomic.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-iter.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-ot-shape.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-ot-map.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\hb-buffer.hh">
+      <Filter>Source</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\hb-aat-map.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-blob.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-buffer.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-buffer-serialize.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-buffer-verify.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-common.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-coretext.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-directwrite.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-draw.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-face.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-fallback-shape.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-font.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ft.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-gdi.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-glib.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-graphite2.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-map.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-number.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-cff1-table.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-cff2-table.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-color.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-face.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-font.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-layout.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-map.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-math.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-meta.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-metrics.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-name.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-shape.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-shape-fallback.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-shape-normalize.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-shaper-arabic.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-shaper-default.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-shaper-hangul.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-shaper-hebrew.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-shaper-indic.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-shaper-indic-table.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-shaper-khmer.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-shaper-myanmar.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-shaper-syllabic.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-shaper-thai.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-shaper-use.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-shaper-vowel-constraints.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-tag.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ot-var.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-set.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-shape.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-shape-plan.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-shaper.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-style.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-ucd.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-unicode.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-uniscribe.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\hb-aat-layout.cc">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

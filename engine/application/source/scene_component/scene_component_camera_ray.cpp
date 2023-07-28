@@ -7,6 +7,7 @@
 #include "common/draw_system/render_target/render_target_texture.h"
 #include "common/draw_system/shader/constant_buffer_info.h"
 #include "common/draw_system/shader/shader.h"
+#include "common/draw_system/shader/shader_resource.h"
 #include "common/draw_system/shader/shader_pipeline_state_data.h"
 #include "common/file_system/file_system.h"
 #include "common/math/angle.h"

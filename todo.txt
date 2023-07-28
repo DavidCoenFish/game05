@@ -13,6 +13,7 @@ _ draw many lines
   X from shader resource
   X from unordered access
   - compute shader write line pos, dir
+_ ui text
 _ draw bip simple
 _ draw bip generic
 _ bip animation
@@ -22,4 +23,3 @@ _ compu shader collision
 _ minecraft equivlent terain render
 _ terrain collision
 _ flatland prototype
-_ ui text

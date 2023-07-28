@@ -3,20 +3,28 @@
   "Id": "240fc133-78da-4158-b0c7-1be8214f8843",
   "Items": [
     {
-      "Id": "c3febc89-9fb1-4341-9a96-054856b196de",
-      "Command": "test_compute"
-    },
-    {
-      "Id": "01605840-1c2d-4ce7-ab87-5c238c23e514",
-      "Command": "multi_line_compute"
+      "Id": "227ff93b-7cfb-4955-bfe0-fc5f6eb9ee27",
+      "Command": "empty"
     },
     {
       "Id": "82ed63e0-256a-4093-b7c2-23cba72e0928",
       "Command": "multi_line"
     },
     {
+      "Id": "01605840-1c2d-4ce7-ab87-5c238c23e514",
+      "Command": "multi_line_compute"
+    },
+    {
+      "Id": "c3febc89-9fb1-4341-9a96-054856b196de",
+      "Command": "test_compute"
+    },
+    {
       "Id": "08527c4c-2d76-445f-8c0c-7b222eece588",
       "Command": "test_line"
+    },
+    {
+      "Id": "40f08ddd-15e8-4bba-a84b-9287f3fdd9ca",
+      "Command": "test_text"
     },
     {
       "Id": "22b0f0e5-1b7b-4ef9-ba74-f20c04a78274",
@@ -24,11 +32,7 @@
     },
     {
       "Id": "3bf71329-47eb-448a-a043-f1975e7a08ec",
-      "Command": "LogOutputDebugString"
-    },
-    {
-      "Id": "227ff93b-7cfb-4955-bfe0-fc5f6eb9ee27",
-      "Command": "empty"
+      "Command": "log_output"
     }
   ]
 }

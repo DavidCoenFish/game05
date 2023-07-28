@@ -5,6 +5,7 @@ class DrawSystem;
 class DrawSystemFrame;
 class HeapWrapperItem;
 class Shader;
+class ShaderResource;
 class GeometryGeneric;
 class RenderTargetTexture;
 

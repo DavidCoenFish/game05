@@ -95,7 +95,8 @@ LRESULT CALLBACK WndProc(HWND in_hwnd, UINT in_message, WPARAM in_wparam, LPARAM
 			(void)BeginPaint(in_hwnd, &ps);
 			EndPaint(in_hwnd, &ps);
 		}
-		break;
+        // An application returns zero if it processes this message.
+        return 0;
 
 	case WM_MOVE:
 		if (nullptr != application)

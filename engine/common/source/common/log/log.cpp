@@ -194,17 +194,17 @@ std::shared_ptr< Log > Log::FactoryCommandLine(const std::shared_ptr< CommandLin
 
 	{
 		std::string file_path;
-		if (true == in_command_line->GetValueString("LogFile", file_path))
+		if (true == in_command_line->GetValueString("log_file", file_path))
 		{
 			array_consumer.push_back(std::make_shared< LogConsumerWriteToFile >(file_path));
 		}
 	}
-	if (true == in_command_line->GetFlag("LogConsole"))
+	if (true == in_command_line->GetFlag("log_console"))
 	{
 		array_consumer.push_back(std::make_shared< LogConsumerConsole>());
 	}
 
-	if ((true == in_command_line->GetFlag("LogOutputDebugString")) ||
+	if ((true == in_command_line->GetFlag("log_output")) ||
 		(((0 == array_consumer.size()) && (1 == in_command_line->GetParamCount()))))
 	{
 		array_consumer.push_back(std::make_shared< LogConsumerOutputDebugString >());

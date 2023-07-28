@@ -3,6 +3,7 @@
 enum class LogTopic : int
 {
    None = 0,
+   Info,
    Debug,
    Warning,
    Error,

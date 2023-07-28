@@ -13,6 +13,7 @@
 #include "window_application/application_multi_line_compute.h"
 #include "window_application/application_test_compute.h"
 #include "window_application/application_test_line.h"
+#include "window_application/application_test_text.h"
 #include "window_application/application_test_triangle.h"
 
 #include <json/json.hpp>
@@ -44,8 +45,9 @@ static std::map< std::string, TWindowApplicationFactory >& GetWindowApplicationF
             {"MultiLine", ApplicationMultiLine::Factory},
             {"MultiLineCompute", ApplicationMultiLineCompute::Factory},
             {"TestCompute", ApplicationTestCompute::Factory},
-            {"TestTriangle", ApplicationTestTriangle::Factory},
-            {"TestLine", ApplicationTestLine::Factory}
+            {"TestLine", ApplicationTestLine::Factory},
+            {"TestText", ApplicationTestText::Factory},
+            {"TestTriangle", ApplicationTestTriangle::Factory}
         });
     return s_map;
 }

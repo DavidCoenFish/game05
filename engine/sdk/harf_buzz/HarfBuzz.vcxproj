@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Props\Harfbuzz.props" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\hb-aat-layout.h" />
+    <ClInclude Include="Include\hb-aat.h" />
+    <ClInclude Include="Include\hb-blob.h" />
+    <ClInclude Include="Include\hb-buffer.h" />
+    <ClInclude Include="Include\hb-common.h" />
+    <ClInclude Include="Include\hb-deprecated.h" />
+    <ClInclude Include="Include\hb-draw.h" />
+    <ClInclude Include="Include\hb-face.h" />
+    <ClInclude Include="Include\hb-font.h" />
+    <ClInclude Include="Include\hb-map.h" />
+    <ClInclude Include="Include\hb-ot-color.h" />
+    <ClInclude Include="Include\hb-ot-deprecated.h" />
+    <ClInclude Include="Include\hb-ot-font.h" />
+    <ClInclude Include="Include\hb-ot-layout.h" />
+    <ClInclude Include="Include\hb-ot-math.h" />
+    <ClInclude Include="Include\hb-ot-meta.h" />
+    <ClInclude Include="Include\hb-ot-metrics.h" />
+    <ClInclude Include="Include\hb-ot-name.h" />
+    <ClInclude Include="Include\hb-ot-shape.h" />
+    <ClInclude Include="Include\hb-ot-var.h" />
+    <ClInclude Include="Include\hb-ot.h" />
+    <ClInclude Include="Include\hb-set.h" />
+    <ClInclude Include="Include\hb-shape-plan.h" />
+    <ClInclude Include="Include\hb-shape.h" />
+    <ClInclude Include="Include\hb-style.h" />
+    <ClInclude Include="Include\hb-unicode.h" />
+    <ClInclude Include="Include\hb-version.h" />
+    <ClInclude Include="Include\hb.h" />
+    <ClInclude Include="Source\config.h" />
+    <ClInclude Include="Source\hb-aat-layout-ankr-table.hh" />
+    <ClInclude Include="Source\hb-aat-layout-bsln-table.hh" />
+    <ClInclude Include="Source\hb-aat-layout-common.hh" />
+    <ClInclude Include="Source\hb-aat-layout-feat-table.hh" />
+    <ClInclude Include="Source\hb-aat-layout-just-table.hh" />
+    <ClInclude Include="Source\hb-aat-layout-kerx-table.hh" />
+    <ClInclude Include="Source\hb-aat-layout-morx-table.hh" />
+    <ClInclude Include="Source\hb-aat-layout-opbd-table.hh" />
+    <ClInclude Include="Source\hb-aat-layout-trak-table.hh" />
+    <ClInclude Include="Source\hb-aat-layout.hh" />
+    <ClInclude Include="Source\hb-aat-ltag-table.hh" />
+    <ClInclude Include="Source\hb-aat-map.hh" />
+    <ClInclude Include="Source\hb-algs.hh" />
+    <ClInclude Include="Source\hb-array.hh" />
+    <ClInclude Include="Source\hb-atomic.hh" />
+    <ClInclude Include="Source\hb-buffer.hh" />
+    <ClInclude Include="Source\hb-config.hh" />
+    <ClInclude Include="Source\hb-coretext.h" />
+    <ClInclude Include="Source\hb-cplusplus.hh" />
+    <ClInclude Include="Source\hb-debug.hh" />
+    <ClInclude Include="Source\hb-draw.hh" />
+    <ClInclude Include="Source\hb-iter.hh" />
+    <ClInclude Include="Source\hb-meta.hh" />
+    <ClInclude Include="Source\hb-mutex.hh" />
+    <ClInclude Include="Source\hb-null.hh" />
+    <ClInclude Include="Source\hb-number.hh" />
+    <ClInclude Include="Source\hb-object.hh" />
+    <ClInclude Include="Source\hb-ot-cff1-table.hh" />
+    <ClInclude Include="Source\hb-ot-cff2-table.hh" />
+    <ClInclude Include="Source\hb-ot-map.hh" />
+    <ClInclude Include="Source\hb-ot-shape.hh" />
+    <ClInclude Include="Source\hb-vector.hh" />
+    <ClInclude Include="Source\hb.hh" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\hb-aat-layout.cc" />
+    <ClCompile Include="Source\hb-aat-map.cc" />
+    <ClCompile Include="Source\hb-blob.cc" />
+    <ClCompile Include="Source\hb-buffer-serialize.cc" />
+    <ClCompile Include="Source\hb-buffer-verify.cc" />
+    <ClCompile Include="Source\hb-buffer.cc" />
+    <ClCompile Include="Source\hb-common.cc" />
+    <ClCompile Include="Source\hb-coretext.cc" />
+    <ClCompile Include="Source\hb-directwrite.cc" />
+    <ClCompile Include="Source\hb-draw.cc" />
+    <ClCompile Include="Source\hb-face.cc" />
+    <ClCompile Include="Source\hb-fallback-shape.cc" />
+    <ClCompile Include="Source\hb-font.cc" />
+    <ClCompile Include="Source\hb-ft.cc" />
+    <ClCompile Include="Source\hb-gdi.cc" />
+    <ClCompile Include="Source\hb-glib.cc" />
+    <ClCompile Include="Source\hb-graphite2.cc" />
+    <ClCompile Include="Source\hb-map.cc" />
+    <ClCompile Include="Source\hb-number.cc" />
+    <ClCompile Include="Source\hb-ot-cff1-table.cc" />
+    <ClCompile Include="Source\hb-ot-cff2-table.cc" />
+    <ClCompile Include="Source\hb-ot-color.cc" />
+    <ClCompile Include="Source\hb-ot-face.cc" />
+    <ClCompile Include="Source\hb-ot-font.cc" />
+    <ClCompile Include="Source\hb-ot-layout.cc" />
+    <ClCompile Include="Source\hb-ot-map.cc" />
+    <ClCompile Include="Source\hb-ot-math.cc" />
+    <ClCompile Include="Source\hb-ot-meta.cc" />
+    <ClCompile Include="Source\hb-ot-metrics.cc" />
+    <ClCompile Include="Source\hb-ot-name.cc" />
+    <ClCompile Include="Source\hb-ot-shape-fallback.cc" />
+    <ClCompile Include="Source\hb-ot-shape-normalize.cc" />
+    <ClCompile Include="Source\hb-ot-shape.cc" />
+    <ClCompile Include="Source\hb-ot-shaper-arabic.cc" />
+    <ClCompile Include="Source\hb-ot-shaper-default.cc" />
+    <ClCompile Include="Source\hb-ot-shaper-hangul.cc" />
+    <ClCompile Include="Source\hb-ot-shaper-hebrew.cc" />
+    <ClCompile Include="Source\hb-ot-shaper-indic-table.cc" />
+    <ClCompile Include="Source\hb-ot-shaper-indic.cc" />
+    <ClCompile Include="Source\hb-ot-shaper-khmer.cc" />
+    <ClCompile Include="Source\hb-ot-shaper-myanmar.cc" />
+    <ClCompile Include="Source\hb-ot-shaper-syllabic.cc" />
+    <ClCompile Include="Source\hb-ot-shaper-thai.cc" />
+    <ClCompile Include="Source\hb-ot-shaper-use.cc" />
+    <ClCompile Include="Source\hb-ot-shaper-vowel-constraints.cc" />
+    <ClCompile Include="Source\hb-ot-tag.cc" />
+    <ClCompile Include="Source\hb-ot-var.cc" />
+    <ClCompile Include="Source\hb-set.cc" />
+    <ClCompile Include="Source\hb-shape-plan.cc" />
+    <ClCompile Include="Source\hb-shape.cc" />
+    <ClCompile Include="Source\hb-shaper.cc" />
+    <ClCompile Include="Source\hb-style.cc" />
+    <ClCompile Include="Source\hb-ucd.cc" />
+    <ClCompile Include="Source\hb-unicode.cc" />
+    <ClCompile Include="Source\hb-uniscribe.cc" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{92518a37-172c-4526-920f-ab1fa10f9f07}</ProjectGuid>
+    <RootNamespace>HarfBuzz</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>HarfBuzz</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Props\HarfBuzz.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Props\HarfBuzz.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

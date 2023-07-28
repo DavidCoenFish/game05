@@ -43,6 +43,9 @@
     <Filter Include="shader">
       <UniqueIdentifier>{89986356-d54d-46fd-8aad-db662b473e74}</UniqueIdentifier>
     </Filter>
+    <Filter Include="task\test_text">
+      <UniqueIdentifier>{d2934bc2-9912-458b-9257-29b460a5c947}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Script\util_make_host_define.cmd">
@@ -97,6 +100,12 @@
     <None Include="shader\polar_util.hlsli">
       <Filter>shader</Filter>
     </None>
+    <None Include="task\test_text\text_interpolant.hlsli">
+      <Filter>task\test_text</Filter>
+    </None>
+    <None Include="task\test_text\background_interpolant.hlsli">
+      <Filter>task\test_text</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Build.cpp">
@@ -131,6 +140,9 @@
     </ClCompile>
     <ClCompile Include="source\scene_component\scene_component_screen_quad.cpp">
       <Filter>source\scene_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\window_application\application_test_text.cpp">
+      <Filter>source\window_application</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -170,6 +182,9 @@
     <ClInclude Include="source\scene_component\scene_component_screen_quad.h">
       <Filter>source\scene_component</Filter>
     </ClInclude>
+    <ClInclude Include="source\window_application\application_test_text.h">
+      <Filter>source\window_application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\cut.ico">
@@ -199,6 +214,9 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="task\test_compute\application.json">
       <Filter>task\test_compute</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="task\test_text\application.json">
+      <Filter>task\test_text</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
@@ -267,6 +285,15 @@
     </FxCompile>
     <FxCompile Include="shader\screen_quad_vertex.hlsl">
       <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="task\test_text\text_pixel.hlsl">
+      <Filter>task\test_text</Filter>
+    </FxCompile>
+    <FxCompile Include="task\test_text\text_vertex.hlsl">
+      <Filter>task\test_text</Filter>
+    </FxCompile>
+    <FxCompile Include="task\test_text\background_pixel.hlsl">
+      <Filter>task\test_text</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
