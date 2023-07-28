@@ -1,12 +1,13 @@
-cbuffer Constants : register(b0)
-{
-    float4 g_timer_thickness : packoffset(c0);
-    float4 g_colour : packoffset(c1);
-};
+#include "../../shader/polar.hlsli" //b0
 
-RWTexture2D<float4> _output_texture_line_pos_thickness : register(u0);
-RWTexture2D<float4> _output_texture_line_dir_length : register(u1);
-RWTexture2D<float4> _output_texture_line_colour : register(u2);
+/*
+RWTexture2D<float4> _output_texture_uv_low_uv_high : register(u0);
+RWTexture2D<float4> _output_texture_line_pos_thickness : register(u1);
+RWTexture2D<float4> _output_texture_line_dir_length : register(u2);
+RWTexture2D<float4> _output_texture_line_colour : register(u3);
+*/
+RWTexture2D<float4> _output_texture_uv_low_uv_high : register(u0);
+RWTexture2D<float4> _output_texture_line_pos_thickness : register(u1);
 
 /*
 float3 GetAtomixPos(uint in_trunc, float in_frac)
@@ -135,7 +136,58 @@ void main(uint3 in_id : SV_DispatchThreadID)
 [numthreads(8, 8, 1)]
 void main(uint3 in_id : SV_DispatchThreadID)
 {
-    _output_texture_line_pos_thickness[in_id.xy] = float4(in_id.x / 24, 0.0, in_id.x % 24, g_timer_thickness.y);
-    _output_texture_line_dir_length[in_id.xy] = float4(0.0, 1.0, 0.0, 2.0);
-    _output_texture_line_colour[in_id.xy] = g_colour;
+/*
+    float3 start = float3(
+        (float)(in_id.x / 24) * 3.0,
+        (float)(in_id.x % 24),
+        (float)(in_id.y) * 3.0
+        );
+    float length = 2.0;
+    float3 dir = float3(1.0, 0.0, 0.0);
+    float3 end = start + (dir * length);
+
+    float thickness = 2.0;
+    float radian_per_pixel = GetCameraRadianPerPixel();
+    float radian_padding = thickness * radian_per_pixel;
+    float2 radian_padding2 = float2(radian_padding, radian_padding);
+
+    float2 uv_a = MakePolarUV(start);
+    float2 uv_b = MakePolarUV(end);
+    float2 uv_low = min(uv_a - radian_padding2, uv_b - radian_padding2);
+    float2 uv_high = max(uv_a + radian_padding2, uv_b + radian_padding2);
+
+    _output_texture_uv_low_uv_high[in_id.xy] = float4(uv_low, uv_high);
+    _output_texture_line_pos_thickness[in_id.xy] = float4(start, thickness);
+    _output_texture_line_dir_length[in_id.xy] = float4(dir, length);
+    _output_texture_line_colour[in_id.xy] = float4(0.0, 1.0, 0.0, 1.0);
+*/
+    float3 start = float3(
+        (float)(in_id.x / 24) * 3.0,
+        (float)(in_id.x % 24),
+        (float)(in_id.y) * 3.0
+        );
+    float length = 2.0;
+    float3 dir = float3(1.0, 0.0, 0.0);
+    float3 end = start + (dir * length);
+
+    float thickness = 20.0;
+    float radian_per_pixel = GetCameraRadianPerPixel();
+    float radian_padding = thickness * radian_per_pixel;
+    float2 radian_padding2 = float2(radian_padding, radian_padding);
+
+    float2 uv_a = MakePolarUV(start);
+    //float2 uv_b = MakePolarUV(end);
+    //float2 uv_low = min(uv_a - radian_padding2, uv_b - radian_padding2);
+    //float2 uv_high = max(uv_a + radian_padding2, uv_b + radian_padding2);
+    float2 uv_low = uv_a - radian_padding2;
+    float2 uv_high = uv_a + radian_padding2;
+
+    float4 colour = float4(
+        (float)(in_id.x / 24) / 8.0,
+        (float)(in_id.x % 24) / 24,
+        (float)(in_id.y) / 8.0,
+        1.0
+        );
+    _output_texture_uv_low_uv_high[in_id.xy] = float4(uv_low, uv_high);
+    _output_texture_line_pos_thickness[in_id.xy] = colour;
 }

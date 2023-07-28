@@ -42,9 +42,8 @@ namespace
     static int s_thread_y = 8;
     static int s_thread_z = 1;
     static int s_texture_width = 8 * 24;
-    static int s_texture_height = 8 * 24;
+    static int s_texture_height = 8;
     static int s_line_segment_count = s_texture_width * s_texture_height;
-
 
     static std::shared_ptr<UnorderedAccess> MakeUnordedAccess(
         DrawSystem* in_draw_system,
@@ -149,6 +148,45 @@ ApplicationMultiLineCompute::ApplicationMultiLineCompute(
             command_list->GetCommandList()
             );
 
+        // Compute shader
+        {
+            auto pComputeShaderData = FileSystem::SyncReadFile(in_application_param._data_path / "multi_line_compute.cso");
+            ShaderPipelineStateData computePipelineStateData = ShaderPipelineStateData::FactoryComputeShader();
+
+            std::vector< std::shared_ptr< ShaderResourceInfo > > array_shader_resource_info;
+            std::vector< std::shared_ptr< ConstantBufferInfo > > array_shader_constants_info;
+            array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
+                CameraConstantBufferB0(),
+                D3D12_SHADER_VISIBILITY_ALL
+                ));
+
+            std::vector< std::shared_ptr<UnorderedAccessInfo>> array_unordered_access_info;
+            array_unordered_access_info.push_back(std::make_shared<UnorderedAccessInfo>(
+                _draw_resources->_multi_line_data_uv_low_uv_high->GetHeapWrapperItem()
+                ));
+            array_unordered_access_info.push_back(std::make_shared<UnorderedAccessInfo>(
+                _draw_resources->_multi_line_data_pos_thick->GetHeapWrapperItem()
+                ));
+/*
+            array_unordered_access_info.push_back(std::make_shared<UnorderedAccessInfo>(
+                _draw_resources->_multi_line_data_dir_length->GetHeapWrapperItem()
+                ));
+            array_unordered_access_info.push_back(std::make_shared<UnorderedAccessInfo>(
+                _draw_resources->_multi_line_data_colour->GetHeapWrapperItem()
+                ));
+*/
+            _draw_resources->_multi_line_compute = _draw_system->MakeShader(
+                command_list->GetCommandList(),
+                computePipelineStateData,
+                nullptr,
+                nullptr,
+                nullptr,
+                array_shader_resource_info,
+                array_shader_constants_info,
+                pComputeShaderData,
+                array_unordered_access_info
+                );
+        }
 
         // Multi line shader and geometry
         {
@@ -158,13 +196,11 @@ ApplicationMultiLineCompute::ApplicationMultiLineCompute(
                     "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, \
                         D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 // UINT InstanceDataStepRate;
                 });
-                //DXGI_FORMAT_R32G32_UINT
             input_element_desc_array.push_back(D3D12_INPUT_ELEMENT_DESC
                 {
                     "TEXCOORD", 0, DXGI_FORMAT_R32G32_SINT, 0, D3D12_APPEND_ALIGNED_ELEMENT, \
                         D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 // UINT InstanceDataStepRate;
-                }
-            );
+                });
 
             // std::shared_ptr<Shader> _multi_line_shader;
             {
@@ -181,7 +217,6 @@ ApplicationMultiLineCompute::ApplicationMultiLineCompute(
                     render_target_format,
                     blend_desc,
                     CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT),
-
                     CD3DX12_DEPTH_STENCIL_DESC()// CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT)
                 );
 
@@ -195,14 +230,14 @@ ApplicationMultiLineCompute::ApplicationMultiLineCompute(
                     _draw_resources->_multi_line_data_pos_thick->GetShaderViewHeapWrapperItem(),
                     D3D12_SHADER_VISIBILITY_VERTEX
                 ));
-                array_shader_resource_info.push_back(ShaderResourceInfo::FactoryNoSampler(
-                    _draw_resources->_multi_line_data_dir_length->GetShaderViewHeapWrapperItem(),
-                    D3D12_SHADER_VISIBILITY_VERTEX
-                ));
-                array_shader_resource_info.push_back(ShaderResourceInfo::FactoryNoSampler(
-                    _draw_resources->_multi_line_data_colour->GetShaderViewHeapWrapperItem(),
-                    D3D12_SHADER_VISIBILITY_VERTEX
-                ));
+                //array_shader_resource_info.push_back(ShaderResourceInfo::FactoryNoSampler(
+                //    _draw_resources->_multi_line_data_dir_length->GetShaderViewHeapWrapperItem(),
+                //    D3D12_SHADER_VISIBILITY_VERTEX
+                //));
+                //array_shader_resource_info.push_back(ShaderResourceInfo::FactoryNoSampler(
+                //    _draw_resources->_multi_line_data_colour->GetShaderViewHeapWrapperItem(),
+                //    D3D12_SHADER_VISIBILITY_VERTEX
+                //));
                 array_shader_resource_info.push_back(ShaderResourceInfo::FactoryNoSampler(
                     _draw_resources->_camera_ray->GetHeapWrapperCameraRay(),
                     D3D12_SHADER_VISIBILITY_PIXEL
@@ -211,7 +246,7 @@ ApplicationMultiLineCompute::ApplicationMultiLineCompute(
                 std::vector<std::shared_ptr<ConstantBufferInfo>> array_shader_constants_info;
                 array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
                     CameraConstantBufferB0(),
-                    D3D12_SHADER_VISIBILITY_ALL
+                    D3D12_SHADER_VISIBILITY_PIXEL
                     ));
 
                 _draw_resources->_multi_line_shader = _draw_system->MakeShader(
@@ -222,7 +257,7 @@ ApplicationMultiLineCompute::ApplicationMultiLineCompute(
                     pixel_shader_data,
                     array_shader_resource_info,
                     array_shader_constants_info
-                );
+                    );
             }
 
             // std::shared_ptr<GeometryGeneric> _multi_line_geometry;
@@ -337,45 +372,36 @@ void ApplicationMultiLineCompute::Update()
         }
 
         // Draw Multi Line Compute
-#if 0
+#if 1
         auto multi_line_compute = _draw_resources->_multi_line_compute.get();
         if (nullptr != multi_line_compute)
         {
+            frame->ResourceBarrier(_draw_resources->_multi_line_data_uv_low_uv_high.get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
             frame->ResourceBarrier(_draw_resources->_multi_line_data_pos_thick.get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-            //frame->ResourceBarrier(_draw_resources->_multi_line_data_dir_length.get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-            //frame->ResourceBarrier(_draw_resources->_multi_line_data_colour.get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+            frame->ResourceBarrier(_draw_resources->_multi_line_data_dir_length.get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+            frame->ResourceBarrier(_draw_resources->_multi_line_data_colour.get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
-            auto& buffer = multi_line_compute->GetConstant<ConstantBufferComputeB0>(0);
-            buffer._colour = VectorFloat4(1.0f, 0.0f, 0.0f, 1.0f);
-            buffer._timer = _timer_accumulate_wrapped;
-            buffer._thickness = 2.0f;
+            multi_line_compute->GetConstant<CameraConstantBufferB0>(0) = _draw_resources->_camera_ray->GetConstantBufferB0();
 
             frame->SetShader(multi_line_compute);
             frame->Dispatch(
-                s_texture_width / 8,
-                s_texture_height / 8
+                s_texture_width / s_thread_x,
+                s_texture_height / s_thread_y
                 );
         }
 #endif
 
         // Draw Multi Line
-#if 0
+#if 1
         auto multi_line_shader = _draw_resources->_multi_line_shader.get();
         if (nullptr != multi_line_shader)
         {
+            frame->ResourceBarrier(_draw_resources->_multi_line_data_uv_low_uv_high.get(), D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
             frame->ResourceBarrier(_draw_resources->_multi_line_data_pos_thick.get(), D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
             frame->ResourceBarrier(_draw_resources->_multi_line_data_dir_length.get(), D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
             frame->ResourceBarrier(_draw_resources->_multi_line_data_colour.get(), D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
 
-            auto& buffer0 = multi_line_shader->GetConstant<ConstantBufferB0>(0);
-            buffer0._camera_at = _camera_at;
-            buffer0._camera_up = _camera_up;
-            buffer0._camera_pos = _camera_pos;
-            buffer0._camera_far = _camera_far;
-            buffer0._camera_fov_horizontal = _fov_horizontal_calculated;
-            buffer0._camera_fov_vertical = _fov_vertical;
-            buffer0._camera_unit_pixel_size = _unit_pixel_size;
-            buffer0._camera_radian_per_pixel = _radian_per_pixel;
+            multi_line_shader->GetConstant<CameraConstantBufferB0>(0) = _draw_resources->_camera_ray->GetConstantBufferB0();
 
             frame->SetShader(multi_line_shader);
             frame->Draw(_draw_resources->_multi_line_geometry.get());

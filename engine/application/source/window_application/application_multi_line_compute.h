@@ -53,11 +53,10 @@ private:
         std::shared_ptr<UnorderedAccess> _multi_line_data_pos_thick;
         std::shared_ptr<UnorderedAccess> _multi_line_data_dir_length;
         std::shared_ptr<UnorderedAccess> _multi_line_data_colour;
-
-        std::shared_ptr<GeometryGeneric> _multi_line_geometry;
-
         std::shared_ptr<Shader> _multi_line_compute;
+
         std::shared_ptr<Shader> _multi_line_shader;
+        std::shared_ptr<GeometryGeneric> _multi_line_geometry;
     };
     std::unique_ptr<DrawResources> _draw_resources;
 
