@@ -121,7 +121,11 @@ _hb_buffer_serialize_glyphs_json (hb_buffer_t *buffer,
 
     /* In the following code, we know b is large enough that no overflow can happen. */
 
+#if 0
 #define APPEND(s) HB_STMT_START { strcpy (p, s); p += strlen (s); } HB_STMT_END
+#else
+#define APPEND(s) HB_STMT_START { strcpy_s (p, 1024, s); p += strlen (s); } HB_STMT_END
+#endif
 
     if (i)
       *p++ = ',';

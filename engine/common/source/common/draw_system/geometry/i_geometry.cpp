@@ -107,3 +107,61 @@ void IGeometry::DeviceRestoredImplementation(
     return;
 }
 
+void IGeometry::UploadVertexData(
+    DrawSystem* const in_draw_system,
+    ID3D12GraphicsCommandList* const in_command_list,
+    const int in_vertex_count,
+    const int in_byte_vertex_size,
+    Microsoft::WRL::ComPtr<ID3D12Resource>& in_vertex_buffer,
+    void* in_raw_data
+    )
+{
+    if (nullptr == in_command_list)
+    {
+        return;
+    }
+
+    const int byte_total_size = in_byte_vertex_size * in_vertex_count;
+    auto buffer_resource_desc = CD3DX12_RESOURCE_DESC::Buffer(byte_total_size);
+    auto upload_memory = in_draw_system->AllocateUpload(byte_total_size);
+
+    {
+        auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+            in_vertex_buffer.Get(),
+            D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
+            D3D12_RESOURCE_STATE_COPY_DEST
+        );
+        in_command_list->ResourceBarrier(
+            1,
+            &barrier
+        );
+    }
+
+    D3D12_SUBRESOURCE_DATA vertex_data = {};
+    vertex_data.pData = in_raw_data;
+    vertex_data.RowPitch = byte_total_size;
+    vertex_data.SlicePitch = byte_total_size;
+    UpdateSubresources(
+        in_command_list,
+        in_vertex_buffer.Get(),
+        upload_memory.Resource(),
+        upload_memory.ResourceOffset(),
+        0,
+        1,
+        &vertex_data
+    );
+
+    {
+        auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+            in_vertex_buffer.Get(),
+            D3D12_RESOURCE_STATE_COPY_DEST,
+            D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE
+        );
+        in_command_list->ResourceBarrier(
+            1,
+            &barrier
+        );
+    }
+
+    return;
+}

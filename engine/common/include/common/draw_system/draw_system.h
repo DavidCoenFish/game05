@@ -79,6 +79,7 @@ public:
             ::shared_ptr<UnorderedAccessInfo>>()
         );
 
+    // Todo: in_float_per_vertex -> bytes per vertex
     std::shared_ptr<GeometryGeneric> MakeGeometryGeneric(
         ID3D12GraphicsCommandList* const in_command_list,
         const D3D_PRIMITIVE_TOPOLOGY in_primitive_topology,
@@ -110,6 +111,12 @@ public:
         const int in_width,
         const int in_height,
         const bool in_resize_with_screen = false
+        );
+    void ResizeRenderTargetTexture(
+        ID3D12GraphicsCommandList* const in_command_list,
+        const std::shared_ptr<RenderTargetTexture>& in_render_target_texture,
+        const int in_width,
+        const int in_height
         );
 
     std::shared_ptr<CustomCommandList> CreateCustomCommandList(

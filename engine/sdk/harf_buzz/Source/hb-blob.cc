@@ -673,9 +673,14 @@ fail_without_close:
 
   HANDLE fd;
   unsigned int size = strlen (file_name) + 1;
+  size_t converted_count = 0;
   wchar_t * wchar_file_name = (wchar_t *) hb_malloc (sizeof (wchar_t) * size);
   if (unlikely (!wchar_file_name)) goto fail_without_close;
+#if 0
   mbstowcs (wchar_file_name, file_name, size);
+#else
+  mbstowcs_s(&converted_count, wchar_file_name, sizeof(wchar_t) * size, file_name, size);
+#endif
 #if !WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
   {
     CREATEFILE2_EXTENDED_PARAMETERS ceparams = { 0 };
@@ -735,7 +740,13 @@ fail_without_close:
   char *data = (char *) hb_malloc (allocated);
   if (unlikely (!data)) return nullptr;
 
+#if 0
   FILE *fp = fopen (file_name, "rb");
+#else
+  FILE* fp = nullptr;
+  fopen_s(&fp, file_name, "rb");
+#endif
+
   if (unlikely (!fp)) goto fread_fail_without_close;
 
   while (!feof (fp))

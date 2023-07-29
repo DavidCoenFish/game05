@@ -43,3 +43,11 @@ const bool VectorFloat4::operator==(const VectorFloat4& in_rhs) const
     return true;
 }
 
+VectorFloat4& VectorFloat4::operator=(const VectorFloat4& in_rhs)
+{
+    for (int index = 0; index < Index::Count; ++index)
+    {
+        _data[index] = in_rhs._data[index];
+    }
+    return (*this);
+}

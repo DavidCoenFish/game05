@@ -13,6 +13,12 @@ public:
         );
     void Draw(ID3D12GraphicsCommandList* const in_command_list);
 
+    void UpdateVertexData(
+        DrawSystem* const in_draw_system,
+        ID3D12GraphicsCommandList* const in_command_list,
+        const std::vector<uint8_t>& in_vertex_data_raw
+        );
+
 private:
     virtual void OnDeviceLost() override;
     virtual void OnDeviceRestored(

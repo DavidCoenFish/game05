@@ -39,6 +39,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "application", "application\
 		{B4064DBC-E1BA-42ED-8E9B-FC82ED339576} = {B4064DBC-E1BA-42ED-8E9B-FC82ED339576}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "free_type", "sdk\free_type\free_type.vcxproj", "{E571E6AF-77D1-47A4-988B-365AF9C5B2BC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HarfBuzz", "sdk\harf_buzz\harf_buzz.vcxproj", "{92518A37-172C-4526-920F-AB1FA10F9F07}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -100,6 +104,26 @@ Global
 		{240FC133-78DA-4158-B0C7-1BE8214F8843}.Release|Any CPU.ActiveCfg = Release|x64
 		{240FC133-78DA-4158-B0C7-1BE8214F8843}.Release|x64.ActiveCfg = Release|x64
 		{240FC133-78DA-4158-B0C7-1BE8214F8843}.Release|x64.Build.0 = Release|x64
+		{E571E6AF-77D1-47A4-988B-365AF9C5B2BC}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{E571E6AF-77D1-47A4-988B-365AF9C5B2BC}.Debug|x64.ActiveCfg = Debug|x64
+		{E571E6AF-77D1-47A4-988B-365AF9C5B2BC}.Debug|x64.Build.0 = Debug|x64
+		{E571E6AF-77D1-47A4-988B-365AF9C5B2BC}.Profile|Any CPU.ActiveCfg = Debug|x64
+		{E571E6AF-77D1-47A4-988B-365AF9C5B2BC}.Profile|Any CPU.Build.0 = Debug|x64
+		{E571E6AF-77D1-47A4-988B-365AF9C5B2BC}.Profile|x64.ActiveCfg = Debug|x64
+		{E571E6AF-77D1-47A4-988B-365AF9C5B2BC}.Profile|x64.Build.0 = Debug|x64
+		{E571E6AF-77D1-47A4-988B-365AF9C5B2BC}.Release|Any CPU.ActiveCfg = Release|x64
+		{E571E6AF-77D1-47A4-988B-365AF9C5B2BC}.Release|x64.ActiveCfg = Release|x64
+		{E571E6AF-77D1-47A4-988B-365AF9C5B2BC}.Release|x64.Build.0 = Release|x64
+		{92518A37-172C-4526-920F-AB1FA10F9F07}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{92518A37-172C-4526-920F-AB1FA10F9F07}.Debug|x64.ActiveCfg = Debug|x64
+		{92518A37-172C-4526-920F-AB1FA10F9F07}.Debug|x64.Build.0 = Debug|x64
+		{92518A37-172C-4526-920F-AB1FA10F9F07}.Profile|Any CPU.ActiveCfg = Debug|x64
+		{92518A37-172C-4526-920F-AB1FA10F9F07}.Profile|Any CPU.Build.0 = Debug|x64
+		{92518A37-172C-4526-920F-AB1FA10F9F07}.Profile|x64.ActiveCfg = Debug|x64
+		{92518A37-172C-4526-920F-AB1FA10F9F07}.Profile|x64.Build.0 = Debug|x64
+		{92518A37-172C-4526-920F-AB1FA10F9F07}.Release|Any CPU.ActiveCfg = Release|x64
+		{92518A37-172C-4526-920F-AB1FA10F9F07}.Release|x64.ActiveCfg = Release|x64
+		{92518A37-172C-4526-920F-AB1FA10F9F07}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

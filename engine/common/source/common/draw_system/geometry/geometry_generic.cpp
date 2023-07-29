@@ -31,6 +31,24 @@ void GeometryGeneric::Draw(ID3D12GraphicsCommandList* const in_command_list)
         );
 }
 
+void GeometryGeneric::UpdateVertexData(
+    DrawSystem* const in_draw_system,
+    ID3D12GraphicsCommandList* const in_command_list,
+    const std::vector<uint8_t>& in_vertex_data_raw
+    )
+{
+    _vertex_raw_data = in_vertex_data_raw;
+    const int byte_vertex_size = sizeof(float) * _float_per_vertex;
+    IGeometry::UploadVertexData(
+        in_draw_system,
+        in_command_list,
+        (int)(_vertex_raw_data.size() / byte_vertex_size),
+        byte_vertex_size,
+        _vertex_buffer,
+        _vertex_raw_data.data()
+        );
+}
+
 void GeometryGeneric::OnDeviceLost()
 {
     IGeometry::DeviceLostImplementation(_vertex_buffer);

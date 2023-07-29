@@ -23,8 +23,18 @@ public:
         ID3D12Device* const in_device,
         const int in_vertex_count,
         const int in_byte_vertex_size,
-        Microsoft::WRL::ComPtr < ID3D12Resource >&in_vertex_buffer,
-        D3D12_VERTEX_BUFFER_VIEW&in_vertex_buffer_view,
+        Microsoft::WRL::ComPtr<ID3D12Resource>& in_vertex_buffer,
+        D3D12_VERTEX_BUFFER_VIEW& in_vertex_buffer_view,
         void* in_raw_data
         );
+
+    static void UploadVertexData(
+        DrawSystem* const in_draw_system,
+        ID3D12GraphicsCommandList* const in_command_list,
+        const int in_vertex_count,
+        const int in_byte_vertex_size,
+        Microsoft::WRL::ComPtr<ID3D12Resource>& in_vertex_buffer,
+        void* in_raw_data
+        );
+
 };

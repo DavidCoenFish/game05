@@ -637,7 +637,7 @@ hb_ft_get_glyph_from_name (hb_font_t *font HB_UNUSED,
     /* Make a nul-terminated version. */
     char buf[128];
     len = hb_min (len, (int) sizeof (buf) - 1);
-    strncpy (buf, name, len);
+    strncpy_s (buf, 128, name, len);
     buf[len] = '\0';
     *glyph = FT_Get_Name_Index (ft_face, buf);
   }

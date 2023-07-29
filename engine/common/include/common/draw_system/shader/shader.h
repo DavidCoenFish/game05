@@ -35,7 +35,7 @@ public:
         );
     void SetShaderResourceViewHandle(
         const int in_index,
-        const std::shared_ptr < HeapWrapperItem >&in_shader_resource_view_handle
+        const std::shared_ptr<HeapWrapperItem>& in_shader_resource_view_handle
         );
     void SetUnorderedAccessViewHandle(
         const int in_index,

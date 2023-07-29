@@ -245,6 +245,25 @@ std::shared_ptr<RenderTargetTexture> DrawSystem::MakeRenderTargetTexture(
     return result;
 }
 
+void DrawSystem::ResizeRenderTargetTexture(
+    ID3D12GraphicsCommandList* const in_command_list,
+    const std::shared_ptr<RenderTargetTexture>& in_render_target_texture,
+    const int in_width,
+    const int in_height
+    )
+{
+    auto render_target_texture = in_render_target_texture.get();
+    if ((nullptr != render_target_texture) && (nullptr != _device_resources))
+    {
+        render_target_texture->Resize(
+            in_command_list,
+            _device_resources->GetD3dDevice(),
+            in_width,
+            in_height
+            );
+    }
+}
+
 std::shared_ptr<CustomCommandList> DrawSystem::CreateCustomCommandList(
     ID3D12PipelineState* const in_pipeline_state_object_or_null
     )

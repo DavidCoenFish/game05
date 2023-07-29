@@ -10,6 +10,8 @@ public:
     DrawSystemFrame(DrawSystem&in_draw_system);
     ~DrawSystemFrame();
     ID3D12GraphicsCommandList* GetCommandList();
+    // Was trying to hide device, but resizing render texture?
+    //ID3D12Device2* const GetDevice();
     const int GetBackBufferIndex();
     void SetRenderTarget(IRenderTarget* const in_render_target);
     void SetShader(Shader* const in_shader);

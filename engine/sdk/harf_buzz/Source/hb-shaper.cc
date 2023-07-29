@@ -45,7 +45,13 @@ static struct hb_shapers_lazy_loader_t : hb_lazy_loader_t<hb_shaper_entry_t,
 {
   static hb_shaper_entry_t *create ()
   {
+#if 0
     char *env = getenv ("HB_SHAPER_LIST");
+#else
+      char* env = nullptr;
+      size_t sz = 0;
+      _dupenv_s(&env, &sz, "HB_SHAPER_LIST");
+#endif
     if (!env || !*env)
       return nullptr;
 
@@ -80,6 +86,8 @@ static struct hb_shapers_lazy_loader_t : hb_lazy_loader_t<hb_shaper_entry_t,
       else
 	p = end + 1;
     }
+
+    free(env);
 
     hb_atexit (free_static_shapers);
 

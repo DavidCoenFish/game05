@@ -155,12 +155,15 @@
     <ClCompile Include="Source\type42\type42.c" />
     <ClCompile Include="Source\winfonts\winfnt.c" />
     <ClCompile Include="Source\ftdebug.c" />
-    <ClCompile Include="Source\ftsystem.c" >
+    <ClCompile Include="Source\ftsystem.c">
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Source\base\ftver.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="props\free_type.props" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -190,11 +193,11 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="FreeType.props" />
+    <Import Project="props\free_type.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="FreeType.props" />
+    <Import Project="props\free_type.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
