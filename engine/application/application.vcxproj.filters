@@ -46,6 +46,9 @@
     <Filter Include="task\test_text">
       <UniqueIdentifier>{d2934bc2-9912-458b-9257-29b460a5c947}</UniqueIdentifier>
     </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{b84ab994-3665-4516-8f32-b500758322b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Script\util_make_host_define.cmd">
@@ -223,6 +226,9 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="task\test_text\application.json">
       <Filter>task\test_text</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="data\open_sans.ttf">
+      <Filter>data</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>

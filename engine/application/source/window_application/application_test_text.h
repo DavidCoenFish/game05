@@ -10,6 +10,7 @@ class UiManager;
 class TextBlock;
 class TextFace;
 class TextManager;
+class UiBlock;
 
 class ApplicationTestText : public IWindowApplication
 {
@@ -45,6 +46,7 @@ private:
         std::shared_ptr<TextManager> _text_manager;
         std::shared_ptr<TextFace> _text_face;
         std::shared_ptr<TextBlock> _text_block;
+        std::shared_ptr<UiBlock> _ui_block;
     };
     std::unique_ptr<DrawResources> _draw_resources;
 

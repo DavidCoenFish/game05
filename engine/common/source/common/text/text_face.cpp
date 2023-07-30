@@ -4,6 +4,7 @@
 #include "common/draw_system/draw_system.h"
 #include "common/file_system/file_system.h"
 #include "common/math/vector_int2.h"
+#include "common/text/text_block.h"
 #include "common/text/text_cell.h"
 #include "common/util/utf8.h"
 
@@ -61,7 +62,19 @@ public:
     {
         auto map_glyph_cell = FindMapGlyphCell(in_glyph_size);
         SetScale(in_glyph_size);
-        return nullptr;
+
+        auto result = std::make_shared<TextBlock>(
+            in_draw_system,
+            in_command_list,
+            in_string_utf8,
+            in_containter_size,
+            in_width_limit_enabled,
+            in_width_limit,
+            in_horizontal_line_alignment,
+            in_vertical_block_alignment
+            );
+
+        return result;
     }
 
     VectorInt2 CalculateTextBounds(

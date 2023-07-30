@@ -14,7 +14,7 @@ public:
         const D3D12_SHADER_RESOURCE_VIEW_DESC& in_shader_resource_view_desc,
         const std::vector<uint8_t>& in_data
         );
-    std::shared_ptr < HeapWrapperItem > GetHeapWrapperItem() const;
+    std::shared_ptr<HeapWrapperItem> GetHeapWrapperItem() const;
 
     static void UploadResource(
         DrawSystem* const in_draw_system,

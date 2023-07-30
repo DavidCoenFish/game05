@@ -31,7 +31,7 @@ public:
     UiManagerImplementation(
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list,
-        const std::filesystem::path& in_shader_root_path
+        const std::filesystem::path& in_root_path
         )
     {
         std::vector<D3D12_INPUT_ELEMENT_DESC> input_element_desc_array(
@@ -66,8 +66,8 @@ public:
             2
             );
 
-        auto vertex_shader_data = FileSystem::SyncReadFile(in_shader_root_path / "ui_block_vertex.cso");
-        auto pixel_shader_data = FileSystem::SyncReadFile(in_shader_root_path / "ui_block_pixel.cso");
+        auto vertex_shader_data = FileSystem::SyncReadFile(in_root_path / "shader" / "ui_block_vertex.cso");
+        auto pixel_shader_data = FileSystem::SyncReadFile(in_root_path / "shader" / "ui_block_pixel.cso");
         std::vector < DXGI_FORMAT > render_target_format;
         render_target_format.push_back(DXGI_FORMAT_R32G32B32A32_FLOAT);
         ShaderPipelineStateData shader_pipeline_state_data(
@@ -81,11 +81,15 @@ public:
             CD3DX12_DEPTH_STENCIL_DESC()// CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT)
         );
 
-        std::vector < std::shared_ptr < ShaderResourceInfo > > array_shader_resource_info;
-        std::vector < std::shared_ptr < ConstantBufferInfo > > array_shader_constants_info;
+        std::vector<std::shared_ptr<ShaderResourceInfo>> array_shader_resource_info;
+        array_shader_resource_info.push_back(
+            ShaderResourceInfo::FactorySampler(nullptr, D3D12_SHADER_VISIBILITY_PIXEL)
+            );
+
+        std::vector<std::shared_ptr<ConstantBufferInfo>> array_shader_constants_info;
         array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
             UIConstantBufferB0(),
-            D3D12_SHADER_VISIBILITY_PIXEL
+            D3D12_SHADER_VISIBILITY_VERTEX
             ));
 
         _shader = in_draw_system->MakeShader(
@@ -130,15 +134,21 @@ private:
 UiManager::UiManager(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list,
-    const std::filesystem::path& in_shader_root_path
+    const std::filesystem::path& in_root_path
     )
 {
     _implementation = std::make_unique<UiManagerImplementation>(
         in_draw_system, 
         in_command_list,
-        in_shader_root_path
+        in_root_path
         );
 }
+
+UiManager::~UiManager()
+{
+    // Nop
+}
+
 
 void UiManager::DrawBlock(
     const std::unique_ptr<DrawSystemFrame>& in_frame,

@@ -24,6 +24,8 @@ public:
         const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment
         );
 
+    ~TextBlock();
+
     void SetText(
         const std::string& in_string_utf8
         );
@@ -50,10 +52,11 @@ public:
 #if 1
     void Update(
         DrawSystem* const in_draw_system,
-        DrawSystemFrame* const in_draw_system_frame,
+        ID3D12GraphicsCommandList* const in_command_list,
+        //DrawSystemFrame* const in_draw_system_frame,
         Shader* const in_shader
         );
-    std::shared_ptr<HeapWrapperItem> GetTexture() const;
+    //std::shared_ptr<HeapWrapperItem> GetTexture() const;
 #else
     std::shared_ptr<HeapWrapperItem> UpdateGetTexture(
         ID3D12GraphicsCommandList* const in_command_list

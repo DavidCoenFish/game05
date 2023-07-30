@@ -14,8 +14,9 @@ public:
     UiManager(
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list,
-        const std::filesystem::path& in_shader_root_path
+        const std::filesystem::path& in_root_path
         );
+    ~UiManager();
 
     // Expose block drawing to current frame and whatever render target is already set on the frame
     void DrawBlock(

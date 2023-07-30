@@ -5,25 +5,88 @@
 #include "common/draw_system/shader/shader.h"
 #include "common/draw_system/shader/shader_resource.h"
 #include "common/draw_system/shader/shader_resource_info.h"
+#include "common/file_system/file_system.h"
 #include "common/text/text_block.h"
 #include "common/text/text_face.h"
 #include "common/text/text_geometry.h"
 #include "common/text/text_row.h"
+#include "common/text/text_texture.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
+
+namespace
+{
+    static const std::vector<D3D12_INPUT_ELEMENT_DESC> s_input_element_desc_array({
+        D3D12_INPUT_ELEMENT_DESC
+        {
+            "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, \
+                D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 // UINT InstanceDataStepRate;
+        },
+        D3D12_INPUT_ELEMENT_DESC
+        {
+            "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, \
+                D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 // UINT InstanceDataStepRate;
+        },
+        D3D12_INPUT_ELEMENT_DESC
+        {
+            "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, \
+                D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 // UINT InstanceDataStepRate;
+        }
+    });
+}
 
 class TextManagerImplementation
 {
 public:
     TextManagerImplementation(
         DrawSystem* const in_draw_system,
-        const std::filesystem::path& in_shader_root_path,
-        const int _texture_size = 2048
+        ID3D12GraphicsCommandList* const in_command_list,
+        const std::filesystem::path& in_root_path
         )
     {
         FT_Error error;
         error = FT_Init_FreeType(&_library);
+
+        _texture = std::make_shared<TextTexture>(
+            in_draw_system,
+            in_command_list
+            );
+
+        {
+            auto vertex_shader_data = FileSystem::SyncReadFile(in_root_path / "shader" / "text_vertex.cso");
+            auto pixel_shader_data = FileSystem::SyncReadFile(in_root_path / "shader" / "text_pixel.cso");
+            std::vector<DXGI_FORMAT> render_target_format;
+            render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
+            const auto blend_desc = ShaderPipelineStateData::FactoryBlendDescAlphaPremultiplied();
+            ShaderPipelineStateData shader_pipeline_state_data(
+                s_input_element_desc_array,
+                D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
+                DXGI_FORMAT_UNKNOWN,
+                render_target_format,
+                blend_desc,
+                CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT),
+                CD3DX12_DEPTH_STENCIL_DESC()
+                );
+
+            std::vector<std::shared_ptr<ShaderResourceInfo>> array_shader_resource_info;
+            array_shader_resource_info.push_back(ShaderResourceInfo::FactoryDataSampler(
+                _texture->GetShaderViewHeapWrapperItem(),
+                D3D12_SHADER_VISIBILITY_PIXEL
+                ));
+
+            std::vector<std::shared_ptr<ConstantBufferInfo>> array_shader_constants_info;
+
+            _shader = in_draw_system->MakeShader(
+                in_command_list,
+                shader_pipeline_state_data,
+                vertex_shader_data,
+                nullptr,
+                pixel_shader_data,
+                array_shader_resource_info,
+                array_shader_constants_info
+                );
+        }
 
     }
 
@@ -50,13 +113,14 @@ public:
 
     void UpdateTextBlock(
         DrawSystem* const in_draw_system,
-        DrawSystemFrame* const in_draw_system_frame,
+        //DrawSystemFrame* const in_draw_system_frame,
+        ID3D12GraphicsCommandList* const in_command_list,
         TextBlock* const in_text_block
         )
     {
         in_text_block->Update(
             in_draw_system,
-            in_draw_system_frame,
+            in_command_list,
             _shader.get()
             );
     }
@@ -77,10 +141,7 @@ private:
 
     std::shared_ptr<Shader> _shader;
 
-    std::shared_ptr<ShaderResource> _glyph_texture;
-    std::vector<uint8_t> _glyph_texture_data;
-    bool _glyph_texture_dirty;
-    VectorInt2 _glyph_texture_dirty_range;
+    std::shared_ptr<TextTexture> _texture;
 
     std::vector<std::shared_ptr<TextFace>> _array_text_face;
 
@@ -89,15 +150,27 @@ private:
 
 };
 
+const std::vector<D3D12_INPUT_ELEMENT_DESC>& TextManager::GetInputElementDesc()
+{
+    return s_input_element_desc_array;
+}
+
 TextManager::TextManager(
     DrawSystem* const in_draw_system,
-    const std::filesystem::path& in_shader_root_path
+    ID3D12GraphicsCommandList* const in_command_list,
+    const std::filesystem::path& in_root_path
     )
 {
     _implementation = std::make_unique<TextManagerImplementation>(
         in_draw_system,
-        in_shader_root_path
+        in_command_list,
+        in_root_path
         );
+}
+
+TextManager::~TextManager()
+{
+    // Nop
 }
 
 std::shared_ptr<TextFace> TextManager::MakeTextFace(
@@ -112,13 +185,15 @@ std::shared_ptr<TextFace> TextManager::MakeTextFace(
 
 void TextManager::UpdateTextBlock(
     DrawSystem* const in_draw_system,
-    DrawSystemFrame* const in_draw_system_frame,
+    //DrawSystemFrame* const in_draw_system_frame,
+    ID3D12GraphicsCommandList* const in_command_list,
     TextBlock* const in_text_block
     )
 {
     _implementation->UpdateTextBlock(
         in_draw_system,
-        in_draw_system_frame,
+        //in_draw_system_frame,
+        in_command_list,
         in_text_block
         );
     return;

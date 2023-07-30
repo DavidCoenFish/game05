@@ -1,0 +1,14 @@
+TextBlock/ TextGeometry could have no concept of render target? allow draw to screen or ui block?
+would this allow ui_block to be more generic, holds the render target and some compisition info, that is the pixel size
+
+ui_hierarchy
+i_ui_hierarchy_node
+    ui_hierarchy_node_text
+        ui_block
+    ui_hierarchy_node_fill
+    ui_hierarchy_node_drop_shadow
+    ?ui_hierarchy_node_margin
+    ?auto scroll
+    ?interactive scroll
+    ?stack
+    ?grid

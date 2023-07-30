@@ -44,39 +44,31 @@ void IGeometry::DeviceRestoredImplementation(
     ID3D12Device* const in_device,
     const int in_vertex_count,
     const int in_byte_vertex_size,
-    Microsoft::WRL::ComPtr < ID3D12Resource >&in_vertex_buffer,
-    D3D12_VERTEX_BUFFER_VIEW&in_vertex_buffer_view,
+    Microsoft::WRL::ComPtr<ID3D12Resource>& in_vertex_buffer,
+    D3D12_VERTEX_BUFFER_VIEW& in_vertex_buffer_view,
     void* in_raw_data
     )
 {
     const int byte_total_size = in_byte_vertex_size* in_vertex_count;
     auto buffer_resource_desc = CD3DX12_RESOURCE_DESC::Buffer(byte_total_size);
-    auto upload_memory = in_draw_system->AllocateUpload(byte_total_size);
-    // Create memory on gpu for vertex buffer
 
     {
         auto heap_properties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
         in_device->CreateCommittedResource(
             &heap_properties,
-            // A default heap
             D3D12_HEAP_FLAG_NONE,
-            // No flags
             &buffer_resource_desc,
-            // Resource description for a buffer
             D3D12_RESOURCE_STATE_COPY_DEST,
-            // We will start this heap in the copy destination state since we will copy data
-            // From the upload heap to this heap
             nullptr,
-            \
-                // Optimized clear value must be null for this type of resource. used for render targets and depth/stencil buffers
             IID_PPV_ARGS(in_vertex_buffer.ReleaseAndGetAddressOf())
             );
         in_vertex_buffer->SetName(L"GeometryVertexBuffer");
     }
 
     {
-        if (in_command_list)
+        if (in_command_list && (0 != byte_total_size))
         {
+            auto upload_memory = in_draw_system->AllocateUpload(byte_total_size);
             D3D12_SUBRESOURCE_DATA vertex_data = {};
             vertex_data.pData = in_raw_data;
             vertex_data.RowPitch = byte_total_size;

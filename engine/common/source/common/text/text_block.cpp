@@ -24,21 +24,22 @@ public:
         const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment
         )
         : _geometry_dirty(false)
-        , _render_target_dirty(false)
+        //, _render_target_dirty(false)
     {
-        const std::vector<RenderTargetFormatData> target_format_data_array({
-            RenderTargetFormatData(DXGI_FORMAT_R8G8B8A8_TYPELESS)
-            });
+        //const std::vector<RenderTargetFormatData> target_format_data_array({
+        //    RenderTargetFormatData(DXGI_FORMAT_R8G8B8A8_UNORM)
+        //    });
 
-        _render_target = in_draw_system->MakeRenderTargetTexture(
-            in_command_list,
-            target_format_data_array,
-            RenderTargetDepthData(),
-            in_containter_size.GetX(),
-            in_containter_size.GetY(),
-            true
-        );
+        //_render_target = in_draw_system->MakeRenderTargetTexture(
+        //    in_command_list,
+        //    target_format_data_array,
+        //    RenderTargetDepthData(),
+        //    in_containter_size.GetX(),
+        //    in_containter_size.GetY(),
+        //    true
+        //);
 
+        std::vector<uint8_t> vertex_raw_data;
         _geometry = std::make_unique<TextGeometry>(
             in_draw_system,
             in_command_list,
@@ -47,7 +48,8 @@ public:
             in_width_limit_enabled,
             in_width_limit,
             in_horizontal_line_alignment,
-            in_vertical_block_alignment
+            in_vertical_block_alignment,
+            vertex_raw_data
             );
     }
 
@@ -74,7 +76,8 @@ public:
     {
         if (true == _geometry->SetTextContainerSize(in_size))
         {
-            _render_target_dirty = true;
+            //_render_target_dirty = true;
+            _geometry_dirty = true;
         }
         return;
     }
@@ -116,10 +119,19 @@ public:
     // Which is better, two pass, or one function that coould do two things
     void Update(
         DrawSystem* const in_draw_system,
-        DrawSystemFrame* const in_draw_system_frame,
+        ID3D12GraphicsCommandList* const in_command_list,
         Shader* const in_shader
     )
     {
+#if 1
+        std::vector<uint8_t> vertex_raw_data;
+        _geometry->UpdateVertexData(
+            in_draw_system,
+            in_command_list,
+            vertex_raw_data
+        );
+        return;
+#else
         bool needs_to_draw = false;
         if (true == _render_target_dirty)
         {
@@ -135,33 +147,37 @@ public:
         }
         if (true == _geometry_dirty)
         {
+            std::vector<uint8_t> vertex_raw_data;
             needs_to_draw = true;
             _geometry_dirty = false;
-            _geometry->RegenerateVertexData(
+            _geometry->UpdateVertexData(
                 in_draw_system,
-                in_draw_system_frame->GetCommandList()
+                in_draw_system_frame->GetCommandList(),
+                vertex_raw_data
                 );
         }
         in_draw_system_frame->SetRenderTarget(_render_target.get());
         in_draw_system_frame->SetShader(in_shader);
         in_draw_system_frame->Draw(_geometry->GetGeometry());
         return;
+#endif
     }
 
-    std::shared_ptr<HeapWrapperItem> GetTexture() const
-    {
-        auto render_target = _render_target.get();
-        if (nullptr != render_target)
-        {
-            return _render_target->GetShaderResourceHeapWrapperItem();
-        }
-        return nullptr;
-    }
+    //std::shared_ptr<HeapWrapperItem> GetTexture() const
+    //{
+    //    auto render_target = _render_target.get();
+    //    if (nullptr != render_target)
+    //    {
+    //        return _render_target->GetShaderResourceHeapWrapperItem();
+    //    }
+    //    return nullptr;
+    //}
 
 private:
-    std::shared_ptr<RenderTargetTexture> _render_target;
+    // Todo, remove _render_target from here, use ui_block to host render targets?
+    //std::shared_ptr<RenderTargetTexture> _render_target;
     std::unique_ptr<TextGeometry> _geometry;
-    bool _render_target_dirty;
+    //bool _render_target_dirty;
     bool _geometry_dirty;
 
 };
@@ -187,6 +203,11 @@ TextBlock::TextBlock(
         in_horizontal_line_alignment,
         in_vertical_block_alignment
         );
+}
+
+TextBlock::~TextBlock()
+{
+    // Nop
 }
 
 void TextBlock::SetText(
@@ -245,20 +266,21 @@ void TextBlock::SetVerticalBlockAlignment(
 
 void TextBlock::Update(
     DrawSystem* const in_draw_system,
-    DrawSystemFrame* const in_draw_system_frame,
+    ID3D12GraphicsCommandList* const in_command_list,
+    //DrawSystemFrame* const in_draw_system_frame,
     Shader* const in_shader
     )
 {
     _implementation->Update(
         in_draw_system, 
-        in_draw_system_frame,
+        in_command_list,
         in_shader
         );
     return;
 }
 
-std::shared_ptr<HeapWrapperItem> TextBlock::GetTexture() const
-{
-    return _implementation->GetTexture();
-}
-
+//std::shared_ptr<HeapWrapperItem> TextBlock::GetTexture() const
+//{
+//    return _implementation->GetTexture();
+//}
+//

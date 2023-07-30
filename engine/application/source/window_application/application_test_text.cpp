@@ -17,9 +17,12 @@
 #include "common/math/quaternion_float.h"
 #include "common/math/vector_float2.h"
 #include "common/math/vector_float3.h"
+#include "common/math/vector_int2.h"
+#include "common/math/vector_int4.h"
 #include "common/text/text_block.h"
 #include "common/text/text_face.h"
 #include "common/text/text_manager.h"
+#include "common/ui/ui_block.h"
 #include "common/ui/ui_manager.h"
 #include "common/util/timer.h"
 #include "common/util/vector_helper.h"
@@ -31,6 +34,11 @@ struct BackgroundConstantBufferB0
     int32_t _screen_height;
     int32_t _pad0[2];
 };
+
+namespace
+{
+    static const VectorInt2 s_text_block_size(200, 100);
+}
 
 IWindowApplication* const ApplicationTestText::Factory(
     const HWND in_hwnd,
@@ -112,6 +120,37 @@ ApplicationTestText::ApplicationTestText(
             array_shader_constants_info
             );
     }
+
+    _draw_resources->_ui_manager = std::make_shared<UiManager>(
+        _draw_system.get(),
+        command_list->GetCommandList(),
+        in_application_param._root_path
+        );
+
+    _draw_resources->_text_manager = std::make_shared<TextManager>(
+        _draw_system.get(),
+        command_list->GetCommandList(),
+        in_application_param._root_path
+        );
+
+    _draw_resources->_text_face = _draw_resources->_text_manager->MakeTextFace(
+        in_application_param._root_path / "data" / "open_sans.ttf"
+        );
+
+    _draw_resources->_text_block = _draw_resources->_text_face->MakeBlock(
+        _draw_system.get(),
+        command_list->GetCommandList(),
+        "abcd",
+        100,
+        s_text_block_size
+        );
+
+    _draw_resources->_ui_block = std::make_shared<UiBlock>(
+        _draw_system.get(),
+        command_list->GetCommandList(),
+        s_text_block_size
+        );
+
 }
 
 ApplicationTestText::~ApplicationTestText()
@@ -150,6 +189,14 @@ void ApplicationTestText::Update()
             frame->Draw(_draw_resources->_screen_quad->GetGeometry());
         }
 #endif
+
+        _draw_resources->_ui_manager->DrawBlock(
+            frame,
+            VectorInt2(_screen_width, _screen_height),
+            VectorInt4(100, 50, s_text_block_size.GetX() + 100, s_text_block_size.GetY() + 50),
+            VectorFloat4(0.0f, 0.0f, 1.0f, 1.0f),
+            _draw_resources->_ui_block->GetTexture()
+            );
     }
 }
 

@@ -17,13 +17,18 @@ public:
         const bool in_width_limit_enabled,
         const int in_width_limit,
         const TextEnum::HorizontalLineAlignment::Enum in_horizontal_line_alignment,
-        const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment
+        const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment,
+        const std::vector<uint8_t>& in_vertex_data_raw
         );
 
     // return True if the value changes
     const bool SetText(
         const std::string& in_string_utf8
         );
+    const std::string GetTest() const
+    {
+        return _string_utf8;
+    }
 
     // Get the natural size required by the text using current width limit if enabled
     VectorInt2 GetTextBounds() const;
@@ -37,16 +42,37 @@ public:
         const bool in_width_limit_enabled,
         const int in_width_limit
         );
+    const bool GetWidthLimitEnabled() const
+    {
+        return _width_limit_enabled;
+    }
+    const int GetWidthLimit() const
+    {
+        return _width_limit;
+    }
+
+
     const bool SetHorizontalLineAlignment(
         const TextEnum::HorizontalLineAlignment::Enum in_horizontal_line_alignment
         );
+    const TextEnum::HorizontalLineAlignment::Enum GetHorizontalLineAlignment() const
+    {
+        return _horizontal_line_alignment;
+    }
+
+
     const bool SetVerticalBlockAlignment(
         const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment
         );
+    const TextEnum::VerticalBlockAlignment::Enum GetVerticalBlockAlignment() const
+    {
+        return _vertical_block_alignment;
+    }
 
-    void RegenerateVertexData(
+    void UpdateVertexData(
         DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list
+        ID3D12GraphicsCommandList* const in_command_list,
+        const std::vector<uint8_t>& in_vertex_data_raw
         );
 
     GeometryGeneric* const GetGeometry() const;

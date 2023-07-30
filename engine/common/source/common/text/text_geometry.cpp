@@ -8,21 +8,22 @@
 #include "common/draw_system/geometry/geometry_generic.h"
 #include "common/text/text_face.h"
 #include "common/text/text_geometry.h"
+#include "common/text/text_manager.h"
 
 namespace
 {
-    const std::vector<uint8_t> GenerateVertexData(
-        //TextFace* const in_text_face,
-        const std::string& in_string_utf8,
-        const bool in_width_limit_enabled,
-        const int in_width_limit,
-        const TextEnum::HorizontalLineAlignment::Enum in_horizontal_line_alignment,
-        const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment
-        )
-    {
-        // TODO
-        return std::vector<uint8_t>();
-    }
+    //const std::vector<uint8_t> GenerateVertexData(
+    //    //TextFace* const in_text_face,
+    //    const std::string& in_string_utf8,
+    //    const bool in_width_limit_enabled,
+    //    const int in_width_limit,
+    //    const TextEnum::HorizontalLineAlignment::Enum in_horizontal_line_alignment,
+    //    const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment
+    //    )
+    //{
+    //    // TODO
+    //    return std::vector<uint8_t>();
+    //}
 
 }
 
@@ -34,7 +35,8 @@ TextGeometry::TextGeometry(
     const bool in_width_limit_enabled,
     const int in_width_limit,
     const TextEnum::HorizontalLineAlignment::Enum in_horizontal_line_alignment,
-    const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment
+    const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment,
+    const std::vector<uint8_t>& in_vertex_data_raw
     )
 : _string_utf8(in_string_utf8)
 , _geometry()
@@ -44,56 +46,20 @@ TextGeometry::TextGeometry(
 , _horizontal_line_alignment(in_horizontal_line_alignment)
 , _vertical_block_alignment(in_vertical_block_alignment)
 {
-    std::vector<D3D12_INPUT_ELEMENT_DESC> input_element_desc_array(
-        {
-            D3D12_INPUT_ELEMENT_DESC
-            {
-                "POSITION",
-                0,
-                DXGI_FORMAT_R32G32_FLOAT,
-                0,
-                D3D12_APPEND_ALIGNED_ELEMENT,
-                D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,
-                0 // UINT InstanceDataStepRate;
-            },
-            D3D12_INPUT_ELEMENT_DESC
-            {
-                "TEXCOORD",
-                0,
-                DXGI_FORMAT_R32G32_FLOAT,
-                0,
-                D3D12_APPEND_ALIGNED_ELEMENT,
-                D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,
-                0 // UINT InstanceDataStepRate;
-            },
 
-            D3D12_INPUT_ELEMENT_DESC
-            {
-                "COLOR",
-                0,
-                DXGI_FORMAT_R32G32B32A32_FLOAT,
-                0,
-                D3D12_APPEND_ALIGNED_ELEMENT,
-                D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,
-                0 // UINT InstanceDataStepRate;
-            }
-        }
-
-    );
-
-    const auto vertex_data_raw = GenerateVertexData(
-        _string_utf8,
-        _width_limit_enabled,
-        _width_limit,
-        _horizontal_line_alignment,
-        _vertical_block_alignment
-        );
+    //const auto vertex_data_raw = GenerateVertexData(
+    //    _string_utf8,
+    //    _width_limit_enabled,
+    //    _width_limit,
+    //    _horizontal_line_alignment,
+    //    _vertical_block_alignment
+    //    );
 
     _geometry = in_draw_system->MakeGeometryGeneric(
         in_command_list,
         D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP,
-        input_element_desc_array,
-        vertex_data_raw,
+        TextManager::GetInputElementDesc(),
+        in_vertex_data_raw,
         8
         );
     return;
@@ -174,23 +140,37 @@ const bool TextGeometry::SetVerticalBlockAlignment(
     return true;
 }
 
-void TextGeometry::RegenerateVertexData(
+//void TextGeometry::RegenerateVertexData(
+//    DrawSystem* const in_draw_system,
+//    ID3D12GraphicsCommandList* const in_command_list
+//    )
+//{
+//    const auto vertex_data_raw = GenerateVertexData(
+//        _string_utf8,
+//        _width_limit_enabled,
+//        _width_limit,
+//        _horizontal_line_alignment,
+//        _vertical_block_alignment
+//        );
+//    _geometry->UpdateVertexData(
+//        in_draw_system,
+//        in_command_list,
+//        vertex_data_raw
+//        );
+//}
+
+void TextGeometry::UpdateVertexData(
     DrawSystem* const in_draw_system,
-    ID3D12GraphicsCommandList* const in_command_list
+    ID3D12GraphicsCommandList* const in_command_list,
+    const std::vector<uint8_t>& in_vertex_data_raw
     )
 {
-    const auto vertex_data_raw = GenerateVertexData(
-        _string_utf8,
-        _width_limit_enabled,
-        _width_limit,
-        _horizontal_line_alignment,
-        _vertical_block_alignment
-        );
     _geometry->UpdateVertexData(
         in_draw_system,
         in_command_list,
-        vertex_data_raw
+        in_vertex_data_raw
         );
+    return;
 }
 
 GeometryGeneric* const TextGeometry::GetGeometry() const

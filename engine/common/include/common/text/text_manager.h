@@ -10,10 +10,14 @@ class TextManagerImplementation;
 class TextManager
 {
 public:
+    static const std::vector<D3D12_INPUT_ELEMENT_DESC>& GetInputElementDesc();
+
     TextManager(
         DrawSystem* const in_draw_system,
-        const std::filesystem::path& in_shader_root_path
+        ID3D12GraphicsCommandList* const in_command_list,
+        const std::filesystem::path& in_root_path
         );
+    ~TextManager();
 
     std::shared_ptr<TextFace> MakeTextFace(
         const std::filesystem::path& in_font_file_path
@@ -21,7 +25,8 @@ public:
 
     void UpdateTextBlock(
         DrawSystem* const in_draw_system,
-        DrawSystemFrame* const in_draw_system_frame,
+        //DrawSystemFrame* const in_draw_system_frame,
+        ID3D12GraphicsCommandList* const in_command_list,
         TextBlock* const in_text_block
         );
 
