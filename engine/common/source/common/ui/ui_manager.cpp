@@ -114,7 +114,6 @@ public:
             auto& buffer = _shader->GetConstant<UIConstantBufferB0>(0);
             buffer._block_pos = in_block_size;
             buffer._block_uv = in_block_uv;
-            //buffer._block_uv.operator=(in_block_uv);
             buffer._target_size = in_target_size;
 
             in_frame->SetShader(_shader.get());

@@ -17,6 +17,10 @@
 #include "common/math/quaternion_float.h"
 #include "common/math/vector_float2.h"
 #include "common/math/vector_float3.h"
+#include "common/text/text_block.h"
+#include "common/text/text_face.h"
+#include "common/text/text_manager.h"
+#include "common/ui/ui_manager.h"
 #include "common/util/timer.h"
 #include "common/util/vector_helper.h"
 #include "common/window/window_application_param.h"
@@ -47,9 +51,6 @@ ApplicationTestText::ApplicationTestText(
         in_hwnd,
         in_application_param
         )
-    , _glyph_pixel_data_dirty(false)
-    , _text_dirty(false)
-    , _text("")
     , _screen_width(0)
     , _screen_height(0)
 {

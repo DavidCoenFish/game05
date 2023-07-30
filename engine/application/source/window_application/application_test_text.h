@@ -1,5 +1,4 @@
 #pragma once
-#include "common/math/vector_float3.h"
 #include "common/window/i_window_application.h"
 
 class DrawSystem;
@@ -7,6 +6,10 @@ class GeometryGeneric;
 class Shader;
 class ShaderResource;
 class SceneComponentScreenQuad;
+class UiManager;
+class TextBlock;
+class TextFace;
+class TextManager;
 
 class ApplicationTestText : public IWindowApplication
 {
@@ -38,39 +41,12 @@ private:
         std::shared_ptr<SceneComponentScreenQuad> _screen_quad;
         std::shared_ptr<Shader> _background_shader;
 
-        std::shared_ptr<Shader> _text_shader;
-        std::shared_ptr<ShaderResource> _text_shader_resource;
-        std::shared_ptr<GeometryGeneric> _text_geometry;
+        std::shared_ptr<UiManager> _ui_manager;
+        std::shared_ptr<TextManager> _text_manager;
+        std::shared_ptr<TextFace> _text_face;
+        std::shared_ptr<TextBlock> _text_block;
     };
     std::unique_ptr<DrawResources> _draw_resources;
-
-    struct Cell
-    {
-        int _channel;
-        int _rect[4];
-        // int _ref_count;
-    };
-
-    struct Row
-    {
-        int _channel;
-        int _start_y;
-        int _height;
-        std::vector<Cell> _cell_data;
-        int _last_x;
-    };
-
-    // For a given font and size, have a map of glyph id to texture data
-    std::map<uint32_t, Cell*> _glyph_cell_map;
-    std::vector<std::shared_ptr<Row>> _row_data;
-
-    std::vector<uint8_t> _glyph_pixel_data;
-    bool _glyph_pixel_data_dirty;
-    int _glyph_pixel_data_dirty_range_y_low;
-    int _glyph_pixel_data_dirty_range_y_high;
-
-    std::string _text;
-    bool _text_dirty;
 
     int _screen_width;
     int _screen_height;
