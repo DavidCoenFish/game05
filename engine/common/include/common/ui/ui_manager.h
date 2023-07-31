@@ -20,7 +20,7 @@ public:
 
     // Expose block drawing to current frame and whatever render target is already set on the frame
     void DrawBlock(
-        const std::unique_ptr<DrawSystemFrame>& in_frame,
+        DrawSystemFrame* const in_frame,
         const VectorInt2& in_target_size,
         const VectorInt4& in_block_size,
         const VectorFloat4& in_block_uv,

@@ -57,7 +57,7 @@ TextGeometry::TextGeometry(
 
     _geometry = in_draw_system->MakeGeometryGeneric(
         in_command_list,
-        D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP,
+        D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
         TextManager::GetInputElementDesc(),
         in_vertex_data_raw,
         8
@@ -165,9 +165,9 @@ void TextGeometry::UpdateVertexData(
     const std::vector<uint8_t>& in_vertex_data_raw
     )
 {
-    _geometry->UpdateVertexData(
-        in_draw_system,
+    in_draw_system->UpdateGeometryGeneric(
         in_command_list,
+        _geometry.get(),
         in_vertex_data_raw
         );
     return;

@@ -16,6 +16,7 @@ public:
     void UpdateVertexData(
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list,
+        ID3D12Device2* const in_device,
         const std::vector<uint8_t>& in_vertex_data_raw
         );
 

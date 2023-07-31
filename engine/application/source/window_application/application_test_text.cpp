@@ -17,6 +17,7 @@
 #include "common/math/quaternion_float.h"
 #include "common/math/vector_float2.h"
 #include "common/math/vector_float3.h"
+#include "common/math/vector_float4.h"
 #include "common/math/vector_int2.h"
 #include "common/math/vector_int4.h"
 #include "common/text/text_block.h"
@@ -37,7 +38,7 @@ struct BackgroundConstantBufferB0
 
 namespace
 {
-    static const VectorInt2 s_text_block_size(200, 100);
+    static const VectorInt2 s_text_block_size(512, 128);
 }
 
 IWindowApplication* const ApplicationTestText::Factory(
@@ -127,13 +128,13 @@ ApplicationTestText::ApplicationTestText(
         in_application_param._root_path
         );
 
-    _draw_resources->_text_manager = std::make_shared<TextManager>(
+    _text_manager = std::make_shared<TextManager>(
         _draw_system.get(),
         command_list->GetCommandList(),
         in_application_param._root_path
         );
 
-    _draw_resources->_text_face = _draw_resources->_text_manager->MakeTextFace(
+    _draw_resources->_text_face = _text_manager->MakeTextFace(
         in_application_param._root_path / "data" / "open_sans.ttf"
         );
 
@@ -141,14 +142,16 @@ ApplicationTestText::ApplicationTestText(
         _draw_system.get(),
         command_list->GetCommandList(),
         "abcd",
-        100,
+        200,
         s_text_block_size
         );
 
     _draw_resources->_ui_block = std::make_shared<UiBlock>(
         _draw_system.get(),
         command_list->GetCommandList(),
-        s_text_block_size
+        s_text_block_size,
+        true,
+        VectorFloat4(1.0f, 0.0f, 0.0f, 1.0f)
         );
 
 }
@@ -160,6 +163,7 @@ ApplicationTestText::~ApplicationTestText()
         _draw_system->WaitForGpu();
     }
     _draw_resources.reset();
+    _text_manager.reset();
     _draw_system.reset();
 
     LOG_MESSAGE(
@@ -189,13 +193,21 @@ void ApplicationTestText::Update()
             frame->Draw(_draw_resources->_screen_quad->GetGeometry());
         }
 #endif
+        _draw_resources->_ui_block->Activate(frame.get());
+        _text_manager->DrawText(
+            _draw_system.get(),
+            frame.get(),
+            _draw_resources->_text_block.get()
+            );
 
+        frame->SetRenderTarget(_draw_system->GetRenderTargetBackBuffer());
+        auto texture = _draw_resources->_ui_block->GetTexture(frame.get());
         _draw_resources->_ui_manager->DrawBlock(
-            frame,
+            frame.get(),
             VectorInt2(_screen_width, _screen_height),
-            VectorInt4(100, 50, s_text_block_size.GetX() + 100, s_text_block_size.GetY() + 50),
+            VectorInt4(128, 64, s_text_block_size.GetX() + 128, s_text_block_size.GetY() + 64),
             VectorFloat4(0.0f, 0.0f, 1.0f, 1.0f),
-            _draw_resources->_ui_block->GetTexture()
+            texture
             );
     }
 }

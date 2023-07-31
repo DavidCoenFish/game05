@@ -88,12 +88,24 @@ public:
         const int in_float_per_vertex
         );
 
+    void UpdateGeometryGeneric(
+        ID3D12GraphicsCommandList* const in_command_list,
+        GeometryGeneric* const in_geometry,
+        const std::vector<uint8_t>& in_vertex_data_raw
+        );
+
     std::shared_ptr<ShaderResource> MakeShaderResource(
         ID3D12GraphicsCommandList* const in_command_list,
         const std::shared_ptr<HeapWrapperItem>& in_heap_wrapper_item,
         const D3D12_RESOURCE_DESC& in_desc,
         const D3D12_SHADER_RESOURCE_VIEW_DESC& in_shader_resource_view_desc,
         const std::vector<uint8_t>& in_data = std::vector<uint8_t>()
+        );
+
+    void UploadShaderResource(
+        ID3D12GraphicsCommandList* const in_command_list,
+        ShaderResource* const in_shader_resource//,
+        //const std::vector<uint8_t>& in_data
         );
 
     std::shared_ptr<UnorderedAccess> MakeUnorderedAccess(

@@ -23,6 +23,12 @@ public:
         const std::filesystem::path& in_font_file_path
         );
 
+    void DrawText(
+        DrawSystem* const in_draw_system,
+        DrawSystemFrame* const in_draw_system_frame,
+        TextBlock* const in_text_block
+        );
+
     void UpdateTextBlock(
         DrawSystem* const in_draw_system,
         //DrawSystemFrame* const in_draw_system_frame,

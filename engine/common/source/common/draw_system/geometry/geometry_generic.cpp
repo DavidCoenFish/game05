@@ -23,30 +23,48 @@ GeometryGeneric::GeometryGeneric(
 
 void GeometryGeneric::Draw(ID3D12GraphicsCommandList* const in_command_list)
 {
-    IGeometry::DrawImplementation(
-        in_command_list,
-        (UINT)(_vertex_raw_data.size() / (sizeof(float) * _float_per_vertex)),
-        _primitive_topology,
-        _vertex_buffer_view
-        );
+    if (_vertex_buffer)
+    {
+        IGeometry::DrawImplementation(
+            in_command_list,
+            (UINT)(_vertex_raw_data.size() / (sizeof(float) * _float_per_vertex)),
+            _primitive_topology,
+            _vertex_buffer_view
+            );
+    }
 }
 
 void GeometryGeneric::UpdateVertexData(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list,
+    ID3D12Device2* const in_device,
     const std::vector<uint8_t>& in_vertex_data_raw
     )
 {
     _vertex_raw_data = in_vertex_data_raw;
-    const int byte_vertex_size = sizeof(float) * _float_per_vertex;
-    IGeometry::UploadVertexData(
-        in_draw_system,
-        in_command_list,
-        (int)(_vertex_raw_data.size() / byte_vertex_size),
-        byte_vertex_size,
-        _vertex_buffer,
-        _vertex_raw_data.data()
-        );
+    if (0 == _vertex_raw_data.size())
+    {
+        IGeometry::DeviceLostImplementation(_vertex_buffer);
+        return;
+    }
+
+    if (nullptr == _vertex_buffer)
+    {
+        OnDeviceRestored(in_command_list, in_device);
+    }
+    else
+    {
+        const int byte_vertex_size = sizeof(float) * _float_per_vertex;
+        IGeometry::UploadVertexData(
+            in_draw_system,
+            in_command_list,
+            (int)(_vertex_raw_data.size() / byte_vertex_size),
+            byte_vertex_size,
+            _vertex_buffer,
+            _vertex_raw_data.data()
+            );
+    }
+    return;
 }
 
 void GeometryGeneric::OnDeviceLost()

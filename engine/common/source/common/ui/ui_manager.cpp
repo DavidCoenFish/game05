@@ -69,7 +69,7 @@ public:
         auto vertex_shader_data = FileSystem::SyncReadFile(in_root_path / "shader" / "ui_block_vertex.cso");
         auto pixel_shader_data = FileSystem::SyncReadFile(in_root_path / "shader" / "ui_block_pixel.cso");
         std::vector < DXGI_FORMAT > render_target_format;
-        render_target_format.push_back(DXGI_FORMAT_R32G32B32A32_FLOAT);
+        render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
         ShaderPipelineStateData shader_pipeline_state_data(
             input_element_desc_array,
             D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
@@ -104,7 +104,7 @@ public:
     }
 
     void DrawBlock(
-        const std::unique_ptr<DrawSystemFrame>& in_frame,
+        DrawSystemFrame* const in_frame,
         const VectorInt2& in_target_size,
         const VectorInt4& in_block_size,
         const VectorFloat4& in_block_uv,
@@ -151,7 +151,7 @@ UiManager::~UiManager()
 
 
 void UiManager::DrawBlock(
-    const std::unique_ptr<DrawSystemFrame>& in_frame,
+    DrawSystemFrame* const in_frame,
     const VectorInt2& in_target_size,
     const VectorInt4& in_block_size,
     const VectorFloat4& in_block_uv,

@@ -2,6 +2,7 @@
 #include "common/text/text_manager.h"
 
 #include "common/draw_system/draw_system.h"
+#include "common/draw_system/draw_system_frame.h"
 #include "common/draw_system/shader/shader.h"
 #include "common/draw_system/shader/shader_resource.h"
 #include "common/draw_system/shader/shader_resource_info.h"
@@ -9,7 +10,7 @@
 #include "common/text/text_block.h"
 #include "common/text/text_face.h"
 #include "common/text/text_geometry.h"
-#include "common/text/text_row.h"
+#include "common/text/text_glyph_row.h"
 #include "common/text/text_texture.h"
 
 #include <ft2build.h>
@@ -92,6 +93,7 @@ public:
 
     ~TextManagerImplementation()
     {
+        _map_path_face.clear();
         FT_Done_FreeType(_library);
     }
 
@@ -105,7 +107,7 @@ public:
             return found->second;
         }
 
-        auto text_face = std::make_shared<TextFace>(_library, in_font_file_path);
+        auto text_face = std::make_shared<TextFace>(_library, in_font_file_path, _texture.get());
         _map_path_face[in_font_file_path] = text_face;
 
         return text_face;
@@ -120,18 +122,29 @@ public:
     {
         in_text_block->Update(
             in_draw_system,
-            in_command_list,
-            _shader.get()
+            in_command_list
             );
+    }
+
+    void DrawText(
+        DrawSystem* const in_draw_system,
+        DrawSystemFrame* const in_draw_system_frame,
+        TextBlock* const in_text_block
+        )
+    {
+        _texture->Update(in_draw_system, in_draw_system_frame);
+        in_draw_system_frame->SetShader(_shader.get());
+        in_draw_system_frame->Draw(in_text_block->GetGeometry());
     }
 
     // Assert if there are any TextGeometry
     void RestGlyphUsage()
     {
-        for (auto iter : _array_text_face)
+        for (auto iter : _map_path_face)
         {
-            iter->RestGlyphUsage();
+            iter.second->RestGlyphUsage();
         }
+        _texture->RestGlyphUsage();
         //_array_text_row.reset();
     }
 
@@ -143,10 +156,10 @@ private:
 
     std::shared_ptr<TextTexture> _texture;
 
-    std::vector<std::shared_ptr<TextFace>> _array_text_face;
+    //std::vector<std::shared_ptr<TextFace>> _array_text_face;
 
     // The array of glyph data in the shader glyph texture
-    std::vector<std::shared_ptr<TextRow>> _array_text_row;
+    //std::vector<std::shared_ptr<TextRow>> _array_text_row;
 
 };
 
@@ -180,6 +193,19 @@ std::shared_ptr<TextFace> TextManager::MakeTextFace(
 {
     return _implementation->MakeTextFace(
         in_font_file_path
+        );
+}
+
+void TextManager::DrawText(
+    DrawSystem* const in_draw_system,
+    DrawSystemFrame* const in_draw_system_frame,
+    TextBlock* const in_text_block
+    )
+{
+    _implementation->DrawText(
+        in_draw_system,
+        in_draw_system_frame,
+        in_text_block
         );
 }
 

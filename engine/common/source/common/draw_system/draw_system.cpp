@@ -164,6 +164,20 @@ std::shared_ptr<GeometryGeneric> DrawSystem::MakeGeometryGeneric(
     return result;
 }
 
+void DrawSystem::UpdateGeometryGeneric(
+    ID3D12GraphicsCommandList* const in_command_list,
+    GeometryGeneric* const in_geometry,
+    const std::vector<uint8_t>& in_vertex_data_raw
+    )
+{
+    in_geometry->UpdateVertexData(
+        this,
+        in_command_list,
+        _device_resources->GetD3dDevice(),
+        in_vertex_data_raw
+        );
+}
+
 std::shared_ptr<ShaderResource> DrawSystem::MakeShaderResource(
     ID3D12GraphicsCommandList* const in_command_list,
     const std::shared_ptr<HeapWrapperItem>& in_shader_resource,
@@ -189,13 +203,27 @@ std::shared_ptr<ShaderResource> DrawSystem::MakeShaderResource(
     return result;
 }
 
+void DrawSystem::UploadShaderResource(
+    ID3D12GraphicsCommandList* const in_command_list,
+    ShaderResource* const in_shader_resource//,
+    //const std::vector<uint8_t>& in_data
+    )
+{
+    in_shader_resource->UploadData(
+        this,
+        in_command_list//,
+        //_device_resources->GetD3dDevice()
+        //in_data
+        );
+}
+
 std::shared_ptr<UnorderedAccess> DrawSystem::MakeUnorderedAccess(
     ID3D12GraphicsCommandList* const in_command_list,
     const D3D12_RESOURCE_DESC& in_desc,
     const D3D12_UNORDERED_ACCESS_VIEW_DESC& in_unordered_access_view_desc,
     const bool in_make_shader_view_heap_wrapper_item,
     const std::vector<uint8_t>& in_data
-)
+    )
 {
     auto heap_wrapper_item = MakeHeapWrapperCbvSrvUav();
     auto shader_view_heap_wrapper_or_null = in_make_shader_view_heap_wrapper_item ? MakeHeapWrapperCbvSrvUav() : nullptr;

@@ -16,6 +16,12 @@ public:
         );
     std::shared_ptr<HeapWrapperItem> GetHeapWrapperItem() const;
 
+    std::vector<uint8_t>& GetData() { return _data; }
+    void UploadData(
+        DrawSystem* const in_draw_system,
+        ID3D12GraphicsCommandList* const in_command_list
+        );
+
     static void UploadResource(
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list,

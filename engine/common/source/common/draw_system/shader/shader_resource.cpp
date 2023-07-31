@@ -34,6 +34,26 @@ std::shared_ptr < HeapWrapperItem > ShaderResource::GetHeapWrapperItem() const
     return _shader_resource;
 }
 
+void ShaderResource::UploadData(
+    DrawSystem* const in_draw_system,
+    ID3D12GraphicsCommandList* const in_command_list
+    )
+{
+    OnResourceBarrier(in_command_list, D3D12_RESOURCE_STATE_COPY_DEST);
+
+    UploadResource(
+        _draw_system,
+        in_command_list,
+        _resource,
+        _desc,
+        _data.size(),
+        _data.size() ? _data.data() : nullptr
+        );
+
+    OnResourceBarrier(in_command_list, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+}
+
+
 void ShaderResource::UploadResource(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list,

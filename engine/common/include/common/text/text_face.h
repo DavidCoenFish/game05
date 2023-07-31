@@ -5,6 +5,7 @@
 class DrawSystem;
 class TextBlock;
 class TextFaceImplementation;
+class TextTexture;
 class VectorInt2;
 typedef struct FT_LibraryRec_* FT_Library;
 
@@ -13,7 +14,8 @@ class TextFace
 public:
     TextFace(
         FT_Library in_library,
-        const std::filesystem::path& in_font_file_path
+        const std::filesystem::path& in_font_file_path,
+        TextTexture* const in_text_texture
         );
     ~TextFace();
 

@@ -208,7 +208,7 @@
     <ClCompile Include="source\common\text\text_cell.cpp">
       <Filter>souce\common\text</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\text\text_row.cpp">
+    <ClCompile Include="source\common\text\text_glyph_row.cpp">
       <Filter>souce\common\text</Filter>
     </ClCompile>
     <ClCompile Include="source\common\text\text_texture.cpp">
@@ -441,7 +441,7 @@
     <ClInclude Include="source\common\text\text_cell.h">
       <Filter>souce\common\text</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\text\text_row.h">
+    <ClInclude Include="source\common\text\text_glyph_row.h">
       <Filter>souce\common\text</Filter>
     </ClInclude>
     <ClInclude Include="source\common\text\text_texture.h">

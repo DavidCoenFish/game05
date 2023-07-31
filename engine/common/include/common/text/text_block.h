@@ -21,7 +21,8 @@ public:
         const bool in_width_limit_enabled,
         const int in_width_limit,
         const TextEnum::HorizontalLineAlignment::Enum in_horizontal_line_alignment,
-        const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment
+        const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment,
+        const std::vector<uint8_t>& in_vertex_raw_data
         );
 
     ~TextBlock();
@@ -48,13 +49,15 @@ public:
         const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment
         );
 
+    GeometryGeneric* const GetGeometry() const;
+
     // Which is better, two pass, or one function that coould do two things
 #if 1
     void Update(
         DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list,
+        ID3D12GraphicsCommandList* const in_command_list//,
         //DrawSystemFrame* const in_draw_system_frame,
-        Shader* const in_shader
+        //Shader* const in_shader
         );
     //std::shared_ptr<HeapWrapperItem> GetTexture() const;
 #else

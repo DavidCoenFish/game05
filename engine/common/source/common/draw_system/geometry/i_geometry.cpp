@@ -50,6 +50,11 @@ void IGeometry::DeviceRestoredImplementation(
     )
 {
     const int byte_total_size = in_byte_vertex_size* in_vertex_count;
+    // We could return null vertex buffer on no geometry, but what then happens on an update
+    if (0 == byte_total_size)
+    {
+        return;
+    }
     auto buffer_resource_desc = CD3DX12_RESOURCE_DESC::Buffer(byte_total_size);
 
     {
@@ -66,7 +71,7 @@ void IGeometry::DeviceRestoredImplementation(
     }
 
     {
-        if (in_command_list && (0 != byte_total_size))
+        if (in_command_list)
         {
             auto upload_memory = in_draw_system->AllocateUpload(byte_total_size);
             D3D12_SUBRESOURCE_DATA vertex_data = {};

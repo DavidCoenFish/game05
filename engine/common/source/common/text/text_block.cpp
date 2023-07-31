@@ -21,7 +21,8 @@ public:
         const bool in_width_limit_enabled,
         const int in_width_limit,
         const TextEnum::HorizontalLineAlignment::Enum in_horizontal_line_alignment,
-        const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment
+        const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment,
+        const std::vector<uint8_t>& in_vertex_raw_data
         )
         : _geometry_dirty(false)
         //, _render_target_dirty(false)
@@ -39,7 +40,6 @@ public:
         //    true
         //);
 
-        std::vector<uint8_t> vertex_raw_data;
         _geometry = std::make_unique<TextGeometry>(
             in_draw_system,
             in_command_list,
@@ -49,7 +49,7 @@ public:
             in_width_limit,
             in_horizontal_line_alignment,
             in_vertical_block_alignment,
-            vertex_raw_data
+            in_vertex_raw_data
             );
     }
 
@@ -119,8 +119,7 @@ public:
     // Which is better, two pass, or one function that coould do two things
     void Update(
         DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list,
-        Shader* const in_shader
+        ID3D12GraphicsCommandList* const in_command_list
     )
     {
 #if 1
@@ -129,7 +128,8 @@ public:
             in_draw_system,
             in_command_list,
             vertex_raw_data
-        );
+            );
+        _geometry_dirty = false;
         return;
 #else
         bool needs_to_draw = false;
@@ -172,6 +172,15 @@ public:
     //    }
     //    return nullptr;
     //}
+    GeometryGeneric* const GetGeometry() const
+    {
+        return _geometry->GetGeometry();
+    }
+
+    const bool GetGeometryDirty() const 
+    {
+        return _geometry_dirty;
+    }
 
 private:
     // Todo, remove _render_target from here, use ui_block to host render targets?
@@ -190,7 +199,8 @@ TextBlock::TextBlock(
     const bool in_width_limit_enabled,
     const int in_width_limit,
     const TextEnum::HorizontalLineAlignment::Enum in_horizontal_line_alignment,
-    const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment
+    const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment,
+    const std::vector<uint8_t>& in_vertex_raw_data
     )
 {
     _implementation = std::make_unique<TextBlockImplementation>(
@@ -201,7 +211,8 @@ TextBlock::TextBlock(
         in_width_limit_enabled,
         in_width_limit,
         in_horizontal_line_alignment,
-        in_vertical_block_alignment
+        in_vertical_block_alignment,
+        in_vertex_raw_data
         );
 }
 
@@ -266,18 +277,21 @@ void TextBlock::SetVerticalBlockAlignment(
 
 void TextBlock::Update(
     DrawSystem* const in_draw_system,
-    ID3D12GraphicsCommandList* const in_command_list,
-    //DrawSystemFrame* const in_draw_system_frame,
-    Shader* const in_shader
+    ID3D12GraphicsCommandList* const in_command_list
     )
 {
     _implementation->Update(
         in_draw_system, 
-        in_command_list,
-        in_shader
+        in_command_list
         );
     return;
 }
+
+GeometryGeneric* const TextBlock::GetGeometry() const
+{
+    return _implementation->GetGeometry();
+}
+
 
 //std::shared_ptr<HeapWrapperItem> TextBlock::GetTexture() const
 //{

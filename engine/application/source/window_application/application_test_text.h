@@ -36,6 +36,7 @@ private:
 private:
     typedef IWindowApplication BaseType;
     std::unique_ptr<DrawSystem> _draw_system;
+    std::shared_ptr<TextManager> _text_manager;
 
     struct DrawResources
     {
@@ -43,7 +44,6 @@ private:
         std::shared_ptr<Shader> _background_shader;
 
         std::shared_ptr<UiManager> _ui_manager;
-        std::shared_ptr<TextManager> _text_manager;
         std::shared_ptr<TextFace> _text_face;
         std::shared_ptr<TextBlock> _text_block;
         std::shared_ptr<UiBlock> _ui_block;

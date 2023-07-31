@@ -29,8 +29,8 @@ Interpolant main(Vertex in_input)
         ((float)block_pos_low.y) / ((float)_target_size.y)
         ) * 2.0 - 1.0;
     float2 pos_high = float2(
-        ((float)block_pos_high.x) / ((float)block_pos_high.x),
-        ((float)block_pos_high.y) / ((float)block_pos_high.y)
+        ((float)block_pos_high.x) / ((float)_target_size.x),
+        ((float)block_pos_high.y) / ((float)_target_size.y)
         ) * 2.0 - 1.0;
     float2 pos_delta = pos_high- pos_low;
 
