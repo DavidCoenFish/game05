@@ -20,9 +20,14 @@ namespace TextEnum
     {
         enum Enum
         {
+            // Use text bounds
             Top,
-            Middle,
-            Bottom
+            Middle, 
+            Bottom,
+            // Use glyph size
+            MiddleEM, 
+            TopEM,
+            BottomEM,
         };
     };
 }

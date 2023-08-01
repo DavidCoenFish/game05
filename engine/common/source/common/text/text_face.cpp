@@ -4,6 +4,8 @@
 #include "common/draw_system/draw_system.h"
 #include "common/file_system/file_system.h"
 #include "common/log/log.h"
+#include "common/math/vector_float2.h"
+#include "common/math/vector_float4.h"
 #include "common/math/vector_int2.h"
 #include "common/text/text_block.h"
 #include "common/text/text_cell.h"
@@ -16,6 +18,20 @@
 #include <hb.h>
 // Was not in the include folder, is this safe to use?
 #include <harf_buzz\Source\hb-ft.h>
+
+namespace
+{
+    struct PreVertexData
+    {
+        //VectorFloat2 _pos_low;
+        //VectorFloat2 _pos_hight;
+        //VectorFloat2 _uv_low;
+        //VectorFloat2 _uv_hight;
+        VectorFloat4 _pos_low_high;
+        VectorFloat4 _uv_low_high;
+        VectorFloat4 _mask;
+    };
+}
 
 class TextFaceImplementation
 {
@@ -74,7 +90,10 @@ public:
             *map_glyph_cell,
             in_string_utf8,
             vertex_raw_data,
-            in_containter_size
+            in_containter_size,
+            in_glyph_size,
+            in_horizontal_line_alignment,
+            in_vertical_block_alignment
             );
 
         auto result = std::make_shared<TextBlock>(
@@ -133,19 +152,8 @@ private:
 
     void SetScale(const int in_glyph_size)
     {
-#if 0
-        FT_Error error;
-        error = FT_Set_Char_Size(_face, in_glyph_size, in_glyph_size, 72, 72);
-        hb_font_set_scale(_harf_buzz_font, in_glyph_size, in_glyph_size);
-        hb_font_set_ptem(_harf_buzz_font, 72);
-#elif 0
-        FT_Error error;
-        error = FT_Set_Char_Size(_face, in_glyph_size, in_glyph_size, 2048, 2048);
-        hb_font_set_scale(_harf_buzz_font, in_glyph_size, in_glyph_size);
-#else
         FT_Set_Char_Size(_face, 0, in_glyph_size * 64, 72, 72);
-
-#endif
+        return;
     }
 
     TextCell* FindOrMakeCell(
@@ -173,7 +181,9 @@ private:
     }
 
     void AddVertexData(
-        std::vector<uint8_t>& out_vertex_raw_data,
+        //std::vector<uint8_t>& out_vertex_raw_data,
+        std::vector<PreVertexData>& out_pre_vertex_data,
+        VectorFloat4& out_pos_bounds,
         TextCell* in_cell,
         const float in_pos_x,
         const float in_pos_y,
@@ -190,13 +200,28 @@ private:
 
         const VectorFloat4 pos = VectorFloat4(
             (((float)pos_x / (float)in_containter_size.GetX()) * 2.0f) - 1.0f,
-            (((float)pos_y / (float)in_containter_size.GetY()) * -2.0f) + 1.0f,
+            (((float)pos_y / (float)in_containter_size.GetY()) * 2.0f) - 1.0f,
             (((float)(pos_x + width_height.GetX()) / (float)in_containter_size.GetX()) * 2.0f) - 1.0f,
-            (((float)(pos_y + width_height.GetY()) / (float)in_containter_size.GetY()) * -2.0f) + 1.0f
+            (((float)(pos_y + width_height.GetY()) / (float)in_containter_size.GetY()) * 2.0f) - 1.0f
             );
+        //VectorFloat2 _pos_low;
+        //VectorFloat2 _pos_hight;
+        //VectorFloat2 _uv_low;
+        //VectorFloat2 _uv_hight;
+        //VectorFloat4 _mask;
+        out_pre_vertex_data.push_back(PreVertexData({
+            pos,
+            uv,
+            mask
+        }));
 
+        out_pos_bounds[0] = std::min(out_pos_bounds[0], pos[0]);
+        out_pos_bounds[1] = std::min(out_pos_bounds[1], pos[1]);
+        out_pos_bounds[2] = std::max(out_pos_bounds[2], pos[2]);
+        out_pos_bounds[3] = std::max(out_pos_bounds[3], pos[3]);
+
+/*
         // Warning, inverted Y
-
         //0.0f, 0.0f,
         VectorHelper::AppendValue(out_vertex_raw_data, pos[0]);
         VectorHelper::AppendValue(out_vertex_raw_data, pos[1]);
@@ -238,14 +263,132 @@ private:
         VectorHelper::AppendValue(out_vertex_raw_data, uv[0]);
         VectorHelper::AppendValue(out_vertex_raw_data, uv[1]);
         VectorHelper::AppendValue(out_vertex_raw_data, mask);
+*/
+        return;
+    }
 
+    void PerformAlign(
+        std::vector<PreVertexData>& in_pre_vertex_data,
+        const VectorFloat4& in_bounds,
+        const int in_glyph_size,
+        const VectorInt2& in_containter_size,
+        const TextEnum::HorizontalLineAlignment::Enum in_horizontal_line_alignment,
+        const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment
+        )
+    {
+        VectorFloat2 delta;
+        switch (in_horizontal_line_alignment)
+        {
+        default:
+            break;
+        case TextEnum::HorizontalLineAlignment::Left:
+            break;
+        case TextEnum::HorizontalLineAlignment::Middle:
+            delta[0] = (1.0f - in_bounds[2]) * 0.5f;
+            break;
+        case TextEnum::HorizontalLineAlignment::Right:
+            delta[0] = (1.0f - in_bounds[2]);
+            break;
+        }
+        switch (in_vertical_block_alignment)
+        {
+        default:
+            break;
+        case TextEnum::VerticalBlockAlignment::Bottom:
+            break;
+        case TextEnum::VerticalBlockAlignment::BottomEM:
+            break;
+        case TextEnum::VerticalBlockAlignment::Middle:
+            delta[1] = (in_bounds[1] + in_bounds[3]) * -0.5f;
+            break;
+        case TextEnum::VerticalBlockAlignment::MiddleEM:
+            {
+                float temp = ((float)(in_glyph_size / 2)) / ((float)in_containter_size[1]);
+                delta[1] = 1.0f - (temp * 0.5f);
+            }
+            break;
+        case TextEnum::VerticalBlockAlignment::Top:
+            delta[1] = 1.0f - in_bounds[3];
+            break;
+        case TextEnum::VerticalBlockAlignment::TopEM:
+            {
+                float temp = ((float)(in_glyph_size / 2)) / ((float)in_containter_size[1]);
+                delta[1] = 2.0f - temp;
+            }
+        break;
+        }
+
+        for (auto& item : in_pre_vertex_data)
+        {
+            item._pos_low_high[0] += delta[0];
+            item._pos_low_high[1] += delta[1];
+            item._pos_low_high[2] += delta[0];
+            item._pos_low_high[3] += delta[1];
+        }
+    }
+
+    void BuildVertexData(
+        std::vector<uint8_t>& out_vertex_raw_data,
+        const std::vector<PreVertexData>& in_pre_vertex_data
+        )
+    {
+        for (const auto& item : in_pre_vertex_data)
+        {
+            // Warning, inverted Y
+            //0.0f, 0.0f,
+            VectorHelper::AppendValue(out_vertex_raw_data, item._pos_low_high[0]);
+            VectorHelper::AppendValue(out_vertex_raw_data, -(item._pos_low_high[1]));
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[0]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[3]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
+
+            //1.0f, 0.0f,
+            VectorHelper::AppendValue(out_vertex_raw_data, item._pos_low_high[2]);
+            VectorHelper::AppendValue(out_vertex_raw_data, -(item._pos_low_high[1]));
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[2]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[3]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
+
+            //0.0f, 1.0f,
+            VectorHelper::AppendValue(out_vertex_raw_data, item._pos_low_high[0]);
+            VectorHelper::AppendValue(out_vertex_raw_data, -(item._pos_low_high[3]));
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[0]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[1]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
+
+            //1.0f, 0.0f,
+            VectorHelper::AppendValue(out_vertex_raw_data, item._pos_low_high[2]);
+            VectorHelper::AppendValue(out_vertex_raw_data, -(item._pos_low_high[1]));
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[2]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[3]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
+
+            //1.0f, 1.0f,
+            VectorHelper::AppendValue(out_vertex_raw_data, item._pos_low_high[2]);
+            VectorHelper::AppendValue(out_vertex_raw_data, -(item._pos_low_high[3]));
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[2]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[1]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
+
+            //0.0f, 1.0f,
+            VectorHelper::AppendValue(out_vertex_raw_data, item._pos_low_high[0]);
+            VectorHelper::AppendValue(out_vertex_raw_data, -(item._pos_low_high[3]));
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[0]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[1]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
+        }
+
+        return;
     }
 
     void ShapeText(
         TMapGlyphCell& in_out_map_glyph_cell,
         const std::string& in_string_utf8,
         std::vector<uint8_t>& out_vertex_raw_data,
-        const VectorInt2& in_containter_size
+        const VectorInt2& in_containter_size,
+        const int in_glyph_size,
+        const TextEnum::HorizontalLineAlignment::Enum in_horizontal_line_alignment,
+        const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment
         )
     {    
         hb_buffer_t* buffer = hb_buffer_create();
@@ -263,6 +406,9 @@ private:
         hb_glyph_info_t* glyph_info = hb_buffer_get_glyph_infos(buffer, &glyph_count);
         hb_glyph_position_t* glyph_pos = hb_buffer_get_glyph_positions(buffer, &glyph_count);
 
+        std::vector<PreVertexData> pre_vertex_data;
+        VectorFloat4 bounds(1.0f, 1.0f, -1.0f, -1.0f);
+        pre_vertex_data.reserve(glyph_count);
         float cursor_x = 0;
         float cursor_y = 0;
         for (unsigned int i = 0; i < glyph_count; i++) 
@@ -281,7 +427,8 @@ private:
 
             auto cell = FindOrMakeCell(codepoint, slot, in_out_map_glyph_cell);
             AddVertexData(
-                out_vertex_raw_data, 
+                pre_vertex_data,
+                bounds,
                 cell, 
                 cursor_x + x_offset, 
                 cursor_y + y_offset, 
@@ -293,17 +440,32 @@ private:
         }
 
         hb_buffer_destroy(buffer);
+
+        PerformAlign(
+            pre_vertex_data,
+            bounds,
+            in_glyph_size,
+            in_containter_size,
+            in_horizontal_line_alignment,
+            in_vertical_block_alignment
+            );
+
+        BuildVertexData(
+            out_vertex_raw_data,
+            pre_vertex_data
+            );
+
+        return;
     }
 
 private:
     FT_Face _face;
-    //hb_face_t* _harf_buzz_face;
     hb_font_t* _harf_buzz_font;
     //std::vector<hb_feature_t> _features;
 
     TextTexture* _text_texture;
-    //unsigned int _upem;
 
+    // For each font size, have a glyph cell referencing the uv on _text_texture
     std::map<uint32_t, std::shared_ptr<TMapGlyphCell>> _map_size_glyph_cell;
 
 };

@@ -142,8 +142,12 @@ ApplicationTestText::ApplicationTestText(
         _draw_system.get(),
         command_list->GetCommandList(),
         "abcdefg",
-        128,
-        s_text_block_size
+        64,
+        s_text_block_size,
+        false, //const bool in_width_limit_enabled,
+        0, //const int in_width_limit,
+        TextEnum::HorizontalLineAlignment::Middle,
+        TextEnum::VerticalBlockAlignment::Middle
         );
 
     _draw_resources->_ui_block = std::make_shared<UiBlock>(
@@ -154,6 +158,7 @@ ApplicationTestText::ApplicationTestText(
         VectorFloat4(1.0f, 0.0f, 0.0f, 1.0f)
         );
 
+    return;
 }
 
 ApplicationTestText::~ApplicationTestText()
