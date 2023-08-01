@@ -14,8 +14,8 @@ Pixel main(Interpolant in_input)
 
     float4 texel = g_texture.Sample(g_sampler_state, in_input._uv);
     float colour = dot(texel, in_input._mask);
-    //result._colour = float4(0.0, 0.0, 0.0, colour);
-    result._colour = float4(colour, colour, colour, 1.0);
+    result._colour = float4(0.0, 0.0, 0.0, colour);
+    //result._colour = float4(colour, colour, colour, 1.0);
 
     return result;
 }

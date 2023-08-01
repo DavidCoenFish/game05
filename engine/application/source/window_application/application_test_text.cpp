@@ -141,8 +141,8 @@ ApplicationTestText::ApplicationTestText(
     _draw_resources->_text_block = _draw_resources->_text_face->MakeBlock(
         _draw_system.get(),
         command_list->GetCommandList(),
-        "abcd",
-        200,
+        "abcdefg",
+        100,
         s_text_block_size
         );
 

@@ -3,6 +3,7 @@
 
 #include "common/draw_system/draw_system.h"
 #include "common/file_system/file_system.h"
+#include "common/log/log.h"
 #include "common/math/vector_int2.h"
 #include "common/text/text_block.h"
 #include "common/text/text_cell.h"
@@ -32,23 +33,24 @@ public:
         auto path = Utf8::Utf16ToUtf8(in_font_file_path.c_str());
         error = FT_New_Face(in_library, path.c_str(), 0, &_face);
 
-        //hb_blob_t* harf_buzz_blob = hb_blob_create_from_file(path.c_str());
-        //_harf_buzz_face = hb_face_create(harf_buzz_blob, 0);
-        _harf_buzz_face = hb_ft_face_create_referenced(_face);
-        //hb_blob_destroy(harf_buzz_blob);
-        //unsigned int upem = hb_face_get_upem(_harf_buzz_face);
+        //https://github.com/tangrams/harfbuzz-example/blob/master/src/freetypelib.cpp
+        for (int i = 0; i < _face->num_charmaps; i++) 
+        {
+            if (((_face->charmaps[i]->platform_id == 0)
+                && (_face->charmaps[i]->encoding_id == 3))
+                || ((_face->charmaps[i]->platform_id == 3)
+                    && (_face->charmaps[i]->encoding_id == 1))) 
+            {
+                FT_Set_Charmap(_face, _face->charmaps[i]);
+            }
+        }
 
-        //_harf_buzz_font = hb_font_create(_harf_buzz_face);
-        _harf_buzz_font = hb_ft_font_create_referenced(_face);
-        //hb_font_set_scale(_harf_buzz_font, upem, upem);
-
-        //hb_ft_font_set_funcs(_harf_buzz_font);
+        _harf_buzz_font = hb_ft_font_create(_face, NULL);
     }
 
     ~TextFaceImplementation()
     {
         hb_font_destroy(_harf_buzz_font);
-        //hb_face_destroy(_harf_buzz_face);
         FT_Done_Face(_face);
     }
 
@@ -136,10 +138,13 @@ private:
         error = FT_Set_Char_Size(_face, in_glyph_size, in_glyph_size, 72, 72);
         hb_font_set_scale(_harf_buzz_font, in_glyph_size, in_glyph_size);
         hb_font_set_ptem(_harf_buzz_font, 72);
-#else
+#elif 0
         FT_Error error;
         error = FT_Set_Char_Size(_face, in_glyph_size, in_glyph_size, 2048, 2048);
         hb_font_set_scale(_harf_buzz_font, in_glyph_size, in_glyph_size);
+#else
+        FT_Set_Char_Size(_face, 0, in_glyph_size * 64, 72, 72);
+
 #endif
     }
 
@@ -158,7 +163,9 @@ private:
         auto cell = _text_texture->MakeCell(
             in_slot->bitmap.buffer,
             in_slot->bitmap.width,
-            in_slot->bitmap.rows
+            in_slot->bitmap.rows,
+            in_slot->bitmap_left,
+            in_slot->bitmap_top
             );
 
         in_out_map_glyph_cell[in_codepoint] = cell;
@@ -168,36 +175,31 @@ private:
     void AddVertexData(
         std::vector<uint8_t>& out_vertex_raw_data,
         TextCell* in_cell,
-        const hb_position_t in_pos_x,
-        const hb_position_t in_pos_y,
+        const float in_pos_x,
+        const float in_pos_y,
         const VectorInt2& in_containter_size
         )
     {
         const VectorInt2 width_height = in_cell->GetWidthHeight();
+        const VectorInt2 bearing = in_cell->GetBearing();
         const VectorFloat4 uv = in_cell->GetUV();
         const VectorFloat4 mask = in_cell->GetMask();
 
+        float pos_x = in_pos_x + bearing.GetX();
+        float pos_y = in_pos_y - (width_height.GetY() - bearing.GetY());
+
         const VectorFloat4 pos = VectorFloat4(
-            (((float)in_pos_x / (float)in_containter_size.GetX()) * 2.0f) - 1.0f,
-            (((float)in_pos_y / (float)in_containter_size.GetY()) * 2.0f) - 1.0f,
-            (((float)(in_pos_x + width_height.GetX()) / (float)in_containter_size.GetX()) * 2.0f) - 1.0f,
-            (((float)(in_pos_y + width_height.GetY()) / (float)in_containter_size.GetY()) * 2.0f) - 1.0f
+            (((float)pos_x / (float)in_containter_size.GetX()) * 2.0f) - 1.0f,
+            (((float)pos_y / (float)in_containter_size.GetY()) * -2.0f) + 1.0f,
+            (((float)(pos_x + width_height.GetX()) / (float)in_containter_size.GetX()) * 2.0f) - 1.0f,
+            (((float)(pos_y + width_height.GetY()) / (float)in_containter_size.GetY()) * -2.0f) + 1.0f
             );
 
-        //float2 _position : Position;
-        //float2 _uv : TEXCOORD0;
-        //float4 _mask : COLOR0;
+        // warning, inverted Y
 
         //0.0f, 0.0f,
         VectorHelper::AppendValue(out_vertex_raw_data, pos[0]);
         VectorHelper::AppendValue(out_vertex_raw_data, pos[1]);
-        VectorHelper::AppendValue(out_vertex_raw_data, uv[0]);
-        VectorHelper::AppendValue(out_vertex_raw_data, uv[1]);
-        VectorHelper::AppendValue(out_vertex_raw_data, mask);
-
-        //0.0f, 1.0f,
-        VectorHelper::AppendValue(out_vertex_raw_data, pos[0]);
-        VectorHelper::AppendValue(out_vertex_raw_data, pos[3]);
         VectorHelper::AppendValue(out_vertex_raw_data, uv[0]);
         VectorHelper::AppendValue(out_vertex_raw_data, uv[3]);
         VectorHelper::AppendValue(out_vertex_raw_data, mask);
@@ -206,6 +208,13 @@ private:
         VectorHelper::AppendValue(out_vertex_raw_data, pos[2]);
         VectorHelper::AppendValue(out_vertex_raw_data, pos[1]);
         VectorHelper::AppendValue(out_vertex_raw_data, uv[2]);
+        VectorHelper::AppendValue(out_vertex_raw_data, uv[3]);
+        VectorHelper::AppendValue(out_vertex_raw_data, mask);
+
+        //0.0f, 1.0f,
+        VectorHelper::AppendValue(out_vertex_raw_data, pos[0]);
+        VectorHelper::AppendValue(out_vertex_raw_data, pos[3]);
+        VectorHelper::AppendValue(out_vertex_raw_data, uv[0]);
         VectorHelper::AppendValue(out_vertex_raw_data, uv[1]);
         VectorHelper::AppendValue(out_vertex_raw_data, mask);
 
@@ -213,13 +222,6 @@ private:
         VectorHelper::AppendValue(out_vertex_raw_data, pos[2]);
         VectorHelper::AppendValue(out_vertex_raw_data, pos[1]);
         VectorHelper::AppendValue(out_vertex_raw_data, uv[2]);
-        VectorHelper::AppendValue(out_vertex_raw_data, uv[1]);
-        VectorHelper::AppendValue(out_vertex_raw_data, mask);
-
-        //0.0f, 1.0f,
-        VectorHelper::AppendValue(out_vertex_raw_data, pos[0]);
-        VectorHelper::AppendValue(out_vertex_raw_data, pos[3]);
-        VectorHelper::AppendValue(out_vertex_raw_data, uv[0]);
         VectorHelper::AppendValue(out_vertex_raw_data, uv[3]);
         VectorHelper::AppendValue(out_vertex_raw_data, mask);
 
@@ -227,7 +229,14 @@ private:
         VectorHelper::AppendValue(out_vertex_raw_data, pos[2]);
         VectorHelper::AppendValue(out_vertex_raw_data, pos[3]);
         VectorHelper::AppendValue(out_vertex_raw_data, uv[2]);
-        VectorHelper::AppendValue(out_vertex_raw_data, uv[3]);
+        VectorHelper::AppendValue(out_vertex_raw_data, uv[1]);
+        VectorHelper::AppendValue(out_vertex_raw_data, mask);
+
+        //0.0f, 1.0f,
+        VectorHelper::AppendValue(out_vertex_raw_data, pos[0]);
+        VectorHelper::AppendValue(out_vertex_raw_data, pos[3]);
+        VectorHelper::AppendValue(out_vertex_raw_data, uv[0]);
+        VectorHelper::AppendValue(out_vertex_raw_data, uv[1]);
         VectorHelper::AppendValue(out_vertex_raw_data, mask);
 
     }
@@ -242,35 +251,44 @@ private:
         hb_buffer_t* buffer = hb_buffer_create();
         hb_buffer_add_utf8(buffer, in_string_utf8.c_str(), -1, 0, -1);
 
+        unsigned int glyph_count = 0;
+
         //set script, language, direction
         hb_buffer_set_direction(buffer, HB_DIRECTION_LTR);
         hb_buffer_set_script(buffer, HB_SCRIPT_LATIN);
         hb_buffer_set_language(buffer, hb_language_from_string("en", -1));
-
-        unsigned int glyph_count = 0;
 
         hb_shape(_harf_buzz_font, buffer, NULL, 0);
 
         hb_glyph_info_t* glyph_info = hb_buffer_get_glyph_infos(buffer, &glyph_count);
         hb_glyph_position_t* glyph_pos = hb_buffer_get_glyph_positions(buffer, &glyph_count);
 
-        hb_position_t cursor_x = 0;
-        hb_position_t cursor_y = 0;
+        float cursor_x = 0;
+        float cursor_y = 0;
         for (unsigned int i = 0; i < glyph_count; i++) 
         {
             hb_codepoint_t codepoint = glyph_info[i].codepoint;
-            hb_position_t x_offset = glyph_pos[i].x_offset;
-            hb_position_t y_offset = glyph_pos[i].y_offset;
-            hb_position_t x_advance = glyph_pos[i].x_advance;
-            hb_position_t y_advance = glyph_pos[i].y_advance;
+            LOG_MESSAGE_DEBUG("ShapeText2[%d]", glyph_info[i].codepoint);
+
+            float x_offset = (float)glyph_pos[i].x_offset / 64.0f;
+            float y_offset = (float)glyph_pos[i].y_offset / 64.0f;
+            float x_advance = (float)glyph_pos[i].x_advance / 64.0f;
+            float y_advance = (float)glyph_pos[i].y_advance / 64.0f;
             // draw_glyph(glyphid, cursor_x + x_offset, cursor_y + y_offset);
-            FT_Error error = FT_Load_Char(_face, codepoint, FT_LOAD_RENDER);
+            FT_Error error = FT_Load_Glyph(_face, codepoint, FT_LOAD_DEFAULT);
             FT_GlyphSlot slot = _face->glyph;
+            FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL);
 
             auto cell = FindOrMakeCell(codepoint, slot, in_out_map_glyph_cell);
-            AddVertexData(out_vertex_raw_data, cell, cursor_x + x_offset, cursor_y + y_offset, in_containter_size);
+            AddVertexData(
+                out_vertex_raw_data, 
+                cell, 
+                cursor_x + x_offset, 
+                cursor_y + y_offset, 
+                in_containter_size
+                );
 
-            cursor_x += x_advance / 72;
+            cursor_x += x_advance;
             cursor_y += y_advance;
         }
 
@@ -279,8 +297,10 @@ private:
 
 private:
     FT_Face _face;
-    hb_face_t* _harf_buzz_face;
+    //hb_face_t* _harf_buzz_face;
     hb_font_t* _harf_buzz_font;
+    //std::vector<hb_feature_t> _features;
+
     TextTexture* _text_texture;
     //unsigned int _upem;
 

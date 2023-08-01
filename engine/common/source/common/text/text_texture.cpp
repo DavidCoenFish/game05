@@ -60,7 +60,9 @@ TextTexture::~TextTexture()
 std::shared_ptr<TextCell> TextTexture::MakeCell(
     const uint8_t* const in_buffer,
     const uint32_t in_width,
-    const uint32_t in_height
+    const uint32_t in_height,
+    const uint32_t in_bearing_x,
+    const uint32_t in_bearing_y
     )
 {
     DSC_ASSERT(in_width <= _texture_dimention, "invalid param");
@@ -142,6 +144,7 @@ std::shared_ptr<TextCell> TextTexture::MakeCell(
     // add cell to end of row
     auto cell = std::make_shared<TextCell>(
         VectorInt2(in_width, in_height),
+        VectorInt2(in_bearing_x, in_bearing_y),
         uv,
         mask
         );

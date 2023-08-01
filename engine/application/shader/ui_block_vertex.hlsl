@@ -19,6 +19,7 @@ Interpolant main(Vertex in_input)
 {
     Interpolant result;
 
+#if 0
     // [-1 ... 1]
     //float4 _position : SV_Position;
     int2 block_pos_low = max(int2(0,0), _block_pos.xy);
@@ -57,6 +58,33 @@ Interpolant main(Vertex in_input)
     float2 uv_delta = uv_high - uv_low;
 
     result._uv = uv_low + (uv_delta * in_input._position.xy);
+#else
 
+    // [-1 ... 1]
+    //float4 _position : SV_Position;
+    float2 pos_low = (float2(
+        ((float)_block_pos.x) / ((float)_target_size.x),
+        ((float)_block_pos.y) / ((float)_target_size.y)
+        ) * 2.0) - 1.0;
+    float2 pos_delta = (float2(
+        ((float)(_block_pos.z - _block_pos.x)) / ((float)_target_size.x),
+        ((float)(_block_pos.w - _block_pos.y)) / ((float)_target_size.y)
+        ) * 2.0);
+
+    result._position = float4(
+        pos_low.x + (pos_delta.x * in_input._position.x),
+        pos_low.y + (pos_delta.y * in_input._position.y),
+        0.0,
+        1.0
+        );
+
+    // [0 ... 1]
+    //float2 _uv : TEXCOORD0;
+    float2 uv_low = _block_uv.xy;
+    float2 uv_delta = _block_uv.zw - _block_uv.xy;
+
+    result._uv = uv_low + (uv_delta * in_input._position.xy);
+
+#endif
     return result;
 }

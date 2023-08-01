@@ -20,7 +20,9 @@ public:
     std::shared_ptr<TextCell> MakeCell(
         const uint8_t* const in_buffer,
         const uint32_t in_width,
-        const uint32_t in_height
+        const uint32_t in_height,
+        const uint32_t in_bearing_x,
+        const uint32_t in_bearing_y
         );
     void Update(
         DrawSystem* const in_draw_system,
