@@ -195,7 +195,7 @@ private:
             (((float)(pos_y + width_height.GetY()) / (float)in_containter_size.GetY()) * -2.0f) + 1.0f
             );
 
-        // warning, inverted Y
+        // Warning, inverted Y
 
         //0.0f, 0.0f,
         VectorHelper::AppendValue(out_vertex_raw_data, pos[0]);

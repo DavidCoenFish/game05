@@ -142,7 +142,7 @@ ApplicationTestText::ApplicationTestText(
         _draw_system.get(),
         command_list->GetCommandList(),
         "abcdefg",
-        100,
+        128,
         s_text_block_size
         );
 
