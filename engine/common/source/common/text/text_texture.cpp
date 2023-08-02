@@ -132,12 +132,23 @@ std::shared_ptr<TextCell> TextTexture::MakeCell(
         found_row = temp.get();
     }
 
+#if 1
     VectorFloat4 uv = VectorFloat4(
         (float)found_row->GetTextureHighestX() / (float)_texture_dimention,
         (float)(found_row->GetTexturePosY() + in_height) / (float)_texture_dimention,
         (float)(found_row->GetTextureHighestX() + in_width) / (float)_texture_dimention,
         (float)found_row->GetTexturePosY() / (float)_texture_dimention
     );
+#else
+    VectorFloat4 uv = VectorFloat4(
+        (float)found_row->GetTextureHighestX() / (float)_texture_dimention,
+        (float)found_row->GetTexturePosY() / (float)_texture_dimention,
+        (float)(found_row->GetTextureHighestX() + in_width) / (float)_texture_dimention,
+        (float)(found_row->GetTexturePosY() + in_height) / (float)_texture_dimention
+    );
+
+#endif
+
     VectorFloat4 mask;
     mask[found_row->GetMaskIndex()] = 1.0f;
 

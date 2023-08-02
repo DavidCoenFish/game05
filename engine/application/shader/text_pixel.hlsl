@@ -16,6 +16,7 @@ Pixel main(Interpolant in_input)
     float colour = dot(texel, in_input._mask);
     result._colour = float4(0.0, 0.0, 0.0, colour);
     //result._colour = float4(colour, colour, colour, 1.0);
+    //result._colour = float4(in_input._uv.x, in_input._uv.y, 0.0, colour);
 
     return result;
 }

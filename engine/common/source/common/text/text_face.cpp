@@ -319,6 +319,50 @@ private:
                 ((item._pos_low_high[3] / (float)in_containter_size.GetY()) * 2.0f) - 1.0f
                 );
 
+#if 1
+            //0.0f, 0.0f,
+            VectorHelper::AppendValue(out_vertex_raw_data, pos[0]);
+            VectorHelper::AppendValue(out_vertex_raw_data, pos[1]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[0]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[1]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
+
+            //0.0f, 1.0f,
+            VectorHelper::AppendValue(out_vertex_raw_data, pos[0]);
+            VectorHelper::AppendValue(out_vertex_raw_data, pos[3]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[0]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[3]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
+
+            //1.0f, 0.0f,
+            VectorHelper::AppendValue(out_vertex_raw_data, pos[2]);
+            VectorHelper::AppendValue(out_vertex_raw_data, pos[1]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[2]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[1]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
+
+            //1.0f, 0.0f,
+            VectorHelper::AppendValue(out_vertex_raw_data, pos[2]);
+            VectorHelper::AppendValue(out_vertex_raw_data, pos[1]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[2]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[1]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
+
+            //0.0f, 1.0f,
+            VectorHelper::AppendValue(out_vertex_raw_data, pos[0]);
+            VectorHelper::AppendValue(out_vertex_raw_data, pos[3]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[0]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[3]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
+
+            //1.0f, 1.0f,
+            VectorHelper::AppendValue(out_vertex_raw_data, pos[2]);
+            VectorHelper::AppendValue(out_vertex_raw_data, pos[3]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[2]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[3]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
+
+#else
             // Warning, inverted Y
             //0.0f, 0.0f,
             VectorHelper::AppendValue(out_vertex_raw_data, pos[0]);
@@ -361,6 +405,7 @@ private:
             VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[0]);
             VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[3]);
             VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
+#endif
         }
 
         return;
