@@ -23,10 +23,6 @@ namespace
 {
     struct PreVertexData
     {
-        //VectorFloat2 _pos_low;
-        //VectorFloat2 _pos_hight;
-        //VectorFloat2 _uv_low;
-        //VectorFloat2 _uv_hight;
         VectorFloat4 _pos_low_high;
         VectorFloat4 _uv_low_high;
         VectorFloat4 _mask;
@@ -220,50 +216,6 @@ private:
         out_pos_bounds[2] = std::max(out_pos_bounds[2], pos[2]);
         out_pos_bounds[3] = std::max(out_pos_bounds[3], pos[3]);
 
-/*
-        // Warning, inverted Y
-        //0.0f, 0.0f,
-        VectorHelper::AppendValue(out_vertex_raw_data, pos[0]);
-        VectorHelper::AppendValue(out_vertex_raw_data, pos[1]);
-        VectorHelper::AppendValue(out_vertex_raw_data, uv[0]);
-        VectorHelper::AppendValue(out_vertex_raw_data, uv[3]);
-        VectorHelper::AppendValue(out_vertex_raw_data, mask);
-
-        //1.0f, 0.0f,
-        VectorHelper::AppendValue(out_vertex_raw_data, pos[2]);
-        VectorHelper::AppendValue(out_vertex_raw_data, pos[1]);
-        VectorHelper::AppendValue(out_vertex_raw_data, uv[2]);
-        VectorHelper::AppendValue(out_vertex_raw_data, uv[3]);
-        VectorHelper::AppendValue(out_vertex_raw_data, mask);
-
-        //0.0f, 1.0f,
-        VectorHelper::AppendValue(out_vertex_raw_data, pos[0]);
-        VectorHelper::AppendValue(out_vertex_raw_data, pos[3]);
-        VectorHelper::AppendValue(out_vertex_raw_data, uv[0]);
-        VectorHelper::AppendValue(out_vertex_raw_data, uv[1]);
-        VectorHelper::AppendValue(out_vertex_raw_data, mask);
-
-        //1.0f, 0.0f,
-        VectorHelper::AppendValue(out_vertex_raw_data, pos[2]);
-        VectorHelper::AppendValue(out_vertex_raw_data, pos[1]);
-        VectorHelper::AppendValue(out_vertex_raw_data, uv[2]);
-        VectorHelper::AppendValue(out_vertex_raw_data, uv[3]);
-        VectorHelper::AppendValue(out_vertex_raw_data, mask);
-
-        //1.0f, 1.0f,
-        VectorHelper::AppendValue(out_vertex_raw_data, pos[2]);
-        VectorHelper::AppendValue(out_vertex_raw_data, pos[3]);
-        VectorHelper::AppendValue(out_vertex_raw_data, uv[2]);
-        VectorHelper::AppendValue(out_vertex_raw_data, uv[1]);
-        VectorHelper::AppendValue(out_vertex_raw_data, mask);
-
-        //0.0f, 1.0f,
-        VectorHelper::AppendValue(out_vertex_raw_data, pos[0]);
-        VectorHelper::AppendValue(out_vertex_raw_data, pos[3]);
-        VectorHelper::AppendValue(out_vertex_raw_data, uv[0]);
-        VectorHelper::AppendValue(out_vertex_raw_data, uv[1]);
-        VectorHelper::AppendValue(out_vertex_raw_data, mask);
-*/
         return;
     }
 
@@ -339,20 +291,6 @@ private:
             VectorHelper::AppendValue(out_vertex_raw_data, item._pos_low_high[0]);
             VectorHelper::AppendValue(out_vertex_raw_data, -(item._pos_low_high[1]));
             VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[0]);
-            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[3]);
-            VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
-
-            //1.0f, 0.0f,
-            VectorHelper::AppendValue(out_vertex_raw_data, item._pos_low_high[2]);
-            VectorHelper::AppendValue(out_vertex_raw_data, -(item._pos_low_high[1]));
-            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[2]);
-            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[3]);
-            VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
-
-            //0.0f, 1.0f,
-            VectorHelper::AppendValue(out_vertex_raw_data, item._pos_low_high[0]);
-            VectorHelper::AppendValue(out_vertex_raw_data, -(item._pos_low_high[3]));
-            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[0]);
             VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[1]);
             VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
 
@@ -360,21 +298,35 @@ private:
             VectorHelper::AppendValue(out_vertex_raw_data, item._pos_low_high[2]);
             VectorHelper::AppendValue(out_vertex_raw_data, -(item._pos_low_high[1]));
             VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[2]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[1]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
+
+            //0.0f, 1.0f,
+            VectorHelper::AppendValue(out_vertex_raw_data, item._pos_low_high[0]);
+            VectorHelper::AppendValue(out_vertex_raw_data, -(item._pos_low_high[3]));
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[0]);
             VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[3]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
+
+            //1.0f, 0.0f,
+            VectorHelper::AppendValue(out_vertex_raw_data, item._pos_low_high[2]);
+            VectorHelper::AppendValue(out_vertex_raw_data, -(item._pos_low_high[1]));
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[2]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[1]);
             VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
 
             //1.0f, 1.0f,
             VectorHelper::AppendValue(out_vertex_raw_data, item._pos_low_high[2]);
             VectorHelper::AppendValue(out_vertex_raw_data, -(item._pos_low_high[3]));
             VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[2]);
-            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[1]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[3]);
             VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
 
             //0.0f, 1.0f,
             VectorHelper::AppendValue(out_vertex_raw_data, item._pos_low_high[0]);
             VectorHelper::AppendValue(out_vertex_raw_data, -(item._pos_low_high[3]));
             VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[0]);
-            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[1]);
+            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[3]);
             VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
         }
 
