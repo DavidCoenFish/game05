@@ -76,7 +76,7 @@
     <ClCompile Include="source\common\text\text_block.cpp" />
     <ClCompile Include="source\common\text\text_cell.cpp" />
     <ClCompile Include="source\common\text\text_face.cpp" />
-    <ClCompile Include="source\common\text\text_geometry.cpp" />
+    <ClCompile Include="source\common\text\text_locale.cpp" />
     <ClCompile Include="source\common\text\text_manager.cpp" />
     <ClCompile Include="source\common\text\text_glyph_row.cpp" />
     <ClCompile Include="source\common\text\text_texture.cpp" />
@@ -165,8 +165,8 @@
     <ClInclude Include="source\common\log\log_consumer_output_debug_string.h" />
     <ClInclude Include="source\common\log\log_consumer_write_to_file.h" />
     <ClInclude Include="source\common\text\text_cell.h" />
-    <ClInclude Include="source\common\text\text_geometry.h" />
     <ClInclude Include="source\common\text\text_glyph_row.h" />
+    <ClInclude Include="source\common\text\text_locale.h" />
     <ClInclude Include="source\common\text\text_texture.h" />
     <ClInclude Include="source\common\window\window_helper.h" />
   </ItemGroup>

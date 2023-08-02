@@ -5,6 +5,7 @@ class DrawSystemFrame;
 class Shader;
 class TextBlock;
 class TextFace;
+class TextLocale;
 class TextManagerImplementation;
 
 class TextManager
@@ -31,13 +32,14 @@ public:
 
     void UpdateTextBlock(
         DrawSystem* const in_draw_system,
-        //DrawSystemFrame* const in_draw_system_frame,
         ID3D12GraphicsCommandList* const in_command_list,
         TextBlock* const in_text_block
         );
 
-    // Assert if there are any TextGeometry
+    // Assert if there are any live TextBlocks
     void RestGlyphUsage();
+
+    const TextLocale* const GetLocaleToken(const std::string& in_locale_key) const;
 
 private:
     std::unique_ptr<TextManagerImplementation> _implementation;

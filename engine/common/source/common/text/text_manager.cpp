@@ -9,8 +9,8 @@
 #include "common/file_system/file_system.h"
 #include "common/text/text_block.h"
 #include "common/text/text_face.h"
-#include "common/text/text_geometry.h"
 #include "common/text/text_glyph_row.h"
+#include "common/text/text_locale.h"
 #include "common/text/text_texture.h"
 
 #include <ft2build.h>
@@ -34,6 +34,40 @@ namespace
             "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, \
                 D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 // UINT InstanceDataStepRate;
         }
+    });
+
+    static std::shared_ptr<TextLocale> s_locale_en = std::make_shared<TextLocale>(
+        HB_DIRECTION_LTR,
+        HB_SCRIPT_LATIN,
+        hb_language_from_string("en", -1)
+        );
+    static std::map<std::string, std::shared_ptr<TextLocale>> s_map_text_locale({
+        {"ar", std::make_shared<TextLocale>(
+            HB_DIRECTION_RTL,
+            HB_SCRIPT_ARABIC,
+            hb_language_from_string("ar", -1)
+        )},
+        {"ch", std::make_shared<TextLocale>(
+            HB_DIRECTION_LTR, //HB_DIRECTION_TTB,
+            HB_SCRIPT_HAN,
+            hb_language_from_string("ch", -1)
+        )},
+        {"en", s_locale_en},
+        {"fr", std::make_shared<TextLocale>(
+            HB_DIRECTION_LTR,
+            HB_SCRIPT_LATIN,
+            hb_language_from_string("fr", -1)
+        )},
+        {"hi", std::make_shared<TextLocale>(
+            HB_DIRECTION_LTR, //HB_DIRECTION_TTB,
+            HB_SCRIPT_DEVANAGARI,
+            hb_language_from_string("hi", -1)
+        )},
+        {"ru", std::make_shared<TextLocale>(
+            HB_DIRECTION_LTR,
+            HB_SCRIPT_CYRILLIC,
+            hb_language_from_string("ru", -1)
+        )},
     });
 }
 
@@ -115,7 +149,6 @@ public:
 
     void UpdateTextBlock(
         DrawSystem* const in_draw_system,
-        //DrawSystemFrame* const in_draw_system_frame,
         ID3D12GraphicsCommandList* const in_command_list,
         TextBlock* const in_text_block
         )
@@ -137,7 +170,7 @@ public:
         in_draw_system_frame->Draw(in_text_block->GetGeometry());
     }
 
-    // Assert if there are any TextGeometry
+    // Assert if there are any TextGeometry?
     void RestGlyphUsage()
     {
         for (auto iter : _map_path_face)
@@ -145,21 +178,25 @@ public:
             iter.second->RestGlyphUsage();
         }
         _texture->RestGlyphUsage();
-        //_array_text_row.reset();
+    }
+
+    const TextLocale* const GetLocaleToken(const std::string& in_locale_key) const
+    {
+        const auto found = s_map_text_locale.find(in_locale_key);
+        if (found != s_map_text_locale.end())
+        {
+            return found->second.get();
+        }
+        return s_locale_en.get();
     }
 
 private:
     FT_Library _library;
+
     std::map<std::filesystem::path, std::shared_ptr<TextFace>> _map_path_face;
 
     std::shared_ptr<Shader> _shader;
-
     std::shared_ptr<TextTexture> _texture;
-
-    //std::vector<std::shared_ptr<TextFace>> _array_text_face;
-
-    // The array of glyph data in the shader glyph texture
-    //std::vector<std::shared_ptr<TextRow>> _array_text_row;
 
 };
 
@@ -188,7 +225,6 @@ TextManager::~TextManager()
 
 std::shared_ptr<TextFace> TextManager::MakeTextFace(
     const std::filesystem::path& in_font_file_path
-    // flag
     )
 {
     return _implementation->MakeTextFace(
@@ -211,14 +247,12 @@ void TextManager::DrawText(
 
 void TextManager::UpdateTextBlock(
     DrawSystem* const in_draw_system,
-    //DrawSystemFrame* const in_draw_system_frame,
     ID3D12GraphicsCommandList* const in_command_list,
     TextBlock* const in_text_block
     )
 {
     _implementation->UpdateTextBlock(
         in_draw_system,
-        //in_draw_system_frame,
         in_command_list,
         in_text_block
         );
@@ -231,3 +265,9 @@ void TextManager::RestGlyphUsage()
     _implementation->RestGlyphUsage();
     return;
 }
+
+const TextLocale* const TextManager::GetLocaleToken(const std::string& in_locale_key) const
+{
+    return _implementation->GetLocaleToken(in_locale_key);
+}
+

@@ -193,9 +193,6 @@
     <ClCompile Include="source\common\text\text_block.cpp">
       <Filter>souce\common\text</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\text\text_geometry.cpp">
-      <Filter>souce\common\text</Filter>
-    </ClCompile>
     <ClCompile Include="source\common\ui\ui_block.cpp">
       <Filter>souce\common\ui</Filter>
     </ClCompile>
@@ -212,6 +209,9 @@
       <Filter>souce\common\text</Filter>
     </ClCompile>
     <ClCompile Include="source\common\text\text_texture.cpp">
+      <Filter>souce\common\text</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\text\text_locale.cpp">
       <Filter>souce\common\text</Filter>
     </ClCompile>
   </ItemGroup>
@@ -426,9 +426,6 @@
     <ClInclude Include="include\common\text\text_block.h">
       <Filter>include\common\text</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\text\text_geometry.h">
-      <Filter>souce\common\text</Filter>
-    </ClInclude>
     <ClInclude Include="include\common\ui\ui_manager.h">
       <Filter>include\common\ui</Filter>
     </ClInclude>
@@ -445,6 +442,9 @@
       <Filter>souce\common\text</Filter>
     </ClInclude>
     <ClInclude Include="source\common\text\text_texture.h">
+      <Filter>souce\common\text</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\text\text_locale.h">
       <Filter>souce\common\text</Filter>
     </ClInclude>
   </ItemGroup>

@@ -12,6 +12,7 @@ public:
     const int GetX() const;
     const int GetY() const;
     const bool operator==(const VectorInt2& in_rhs) const;
+    const bool operator!=(const VectorInt2& in_rhs) const;
 
 private:
     enum Index

@@ -142,6 +142,7 @@ ApplicationTestText::ApplicationTestText(
         _draw_system.get(),
         command_list->GetCommandList(),
         "abcdefg",
+        nullptr,
         64,
         s_text_block_size,
         false, //const bool in_width_limit_enabled,

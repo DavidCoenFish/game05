@@ -51,3 +51,7 @@ const bool VectorInt2::operator==(const VectorInt2& in_rhs) const
     return true;
 }
 
+const bool VectorInt2::operator!=(const VectorInt2& in_rhs) const
+{
+    return !(operator==(in_rhs));
+}

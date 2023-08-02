@@ -9,6 +9,7 @@
 #include "common/math/vector_int2.h"
 #include "common/text/text_block.h"
 #include "common/text/text_cell.h"
+#include "common/text/text_locale.h"
 #include "common/text/text_texture.h"
 #include "common/util/utf8.h"
 #include "common/util/vector_helper.h"
@@ -70,6 +71,7 @@ public:
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list,
         const std::string& in_string_utf8,
+        const TextLocale* const in_locale_token,
         const int in_glyph_size,
         const VectorInt2& in_containter_size,
         const bool in_width_limit_enabled = false,
@@ -81,21 +83,47 @@ public:
         auto map_glyph_cell = FindMapGlyphCell(in_glyph_size);
         SetScale(in_glyph_size);
 
-        std::vector<uint8_t> vertex_raw_data;
-        ShapeText(
-            *map_glyph_cell,
+        hb_buffer_t* const buffer = MakeBuffer(
             in_string_utf8,
-            vertex_raw_data,
-            in_containter_size,
+            in_locale_token
+            );
+
+        std::vector<PreVertexData> pre_vertex_data;
+        VectorFloat4 bounds(
+            std::numeric_limits<float>::max(),
+            std::numeric_limits<float>::max(),
+            std::numeric_limits<float>::min(),
+            std::numeric_limits<float>::min()
+            );
+        ShapeText(
+            &pre_vertex_data,
+            bounds,
+            buffer,
+            *map_glyph_cell
+            );
+        hb_buffer_destroy(buffer);
+
+        PerformAlign(
+            pre_vertex_data,
+            bounds,
             in_glyph_size,
+            in_containter_size,
             in_horizontal_line_alignment,
             in_vertical_block_alignment
+            );
+
+        std::vector<uint8_t> vertex_raw_data;
+        BuildVertexData(
+            vertex_raw_data,
+            pre_vertex_data,
+            in_containter_size
             );
 
         auto result = std::make_shared<TextBlock>(
             in_draw_system,
             in_command_list,
             in_string_utf8,
+            in_locale_token,
             in_containter_size,
             in_width_limit_enabled,
             in_width_limit,
@@ -177,13 +205,11 @@ private:
     }
 
     void AddVertexData(
-        //std::vector<uint8_t>& out_vertex_raw_data,
-        std::vector<PreVertexData>& out_pre_vertex_data,
+        std::vector<PreVertexData>* const out_pre_vertex_data_or_null,
         VectorFloat4& out_pos_bounds,
         TextCell* in_cell,
         const float in_pos_x,
-        const float in_pos_y,
-        const VectorInt2& in_containter_size
+        const float in_pos_y
         )
     {
         const VectorInt2 width_height = in_cell->GetWidthHeight();
@@ -191,25 +217,24 @@ private:
         const VectorFloat4 uv = in_cell->GetUV();
         const VectorFloat4 mask = in_cell->GetMask();
 
-        float pos_x = in_pos_x + bearing.GetX();
-        float pos_y = in_pos_y - (width_height.GetY() - bearing.GetY());
 
+        const float pos_x = in_pos_x + bearing.GetX();
+        const float pos_y = in_pos_y - (width_height.GetY() - bearing.GetY());
         const VectorFloat4 pos = VectorFloat4(
-            (((float)pos_x / (float)in_containter_size.GetX()) * 2.0f) - 1.0f,
-            (((float)pos_y / (float)in_containter_size.GetY()) * 2.0f) - 1.0f,
-            (((float)(pos_x + width_height.GetX()) / (float)in_containter_size.GetX()) * 2.0f) - 1.0f,
-            (((float)(pos_y + width_height.GetY()) / (float)in_containter_size.GetY()) * 2.0f) - 1.0f
+            pos_x,
+            pos_y,
+            pos_x + width_height.GetX(),
+            pos_y + width_height.GetY()
             );
-        //VectorFloat2 _pos_low;
-        //VectorFloat2 _pos_hight;
-        //VectorFloat2 _uv_low;
-        //VectorFloat2 _uv_hight;
-        //VectorFloat4 _mask;
-        out_pre_vertex_data.push_back(PreVertexData({
-            pos,
-            uv,
-            mask
-        }));
+
+        if (nullptr != out_pre_vertex_data_or_null)
+        {
+            out_pre_vertex_data_or_null->push_back(PreVertexData({
+                pos,
+                uv,
+                mask
+                }));
+        }
 
         out_pos_bounds[0] = std::min(out_pos_bounds[0], pos[0]);
         out_pos_bounds[1] = std::min(out_pos_bounds[1], pos[1]);
@@ -236,10 +261,10 @@ private:
         case TextEnum::HorizontalLineAlignment::Left:
             break;
         case TextEnum::HorizontalLineAlignment::Middle:
-            delta[0] = (1.0f - in_bounds[2]) * 0.5f;
+            delta[0] = (in_containter_size[0] - in_bounds[2]) * 0.5f;
             break;
         case TextEnum::HorizontalLineAlignment::Right:
-            delta[0] = (1.0f - in_bounds[2]);
+            delta[0] = (in_containter_size[0] - in_bounds[2]);
             break;
         }
         switch (in_vertical_block_alignment)
@@ -251,21 +276,21 @@ private:
         case TextEnum::VerticalBlockAlignment::BottomEM:
             break;
         case TextEnum::VerticalBlockAlignment::Middle:
-            delta[1] = (in_bounds[1] + in_bounds[3]) * -0.5f;
+            delta[1] = ((in_containter_size[1] + in_containter_size[3]) - (in_bounds[1] + in_bounds[3])) * 0.5f;
             break;
         case TextEnum::VerticalBlockAlignment::MiddleEM:
             {
                 float temp = ((float)(in_glyph_size / 2)) / ((float)in_containter_size[1]);
-                delta[1] = 1.0f - (temp * 0.5f);
+                delta[1] = in_containter_size[1] - (temp * 0.5f);
             }
             break;
         case TextEnum::VerticalBlockAlignment::Top:
-            delta[1] = 1.0f - in_bounds[3];
+            delta[1] = in_containter_size[1] - in_bounds[3];
             break;
         case TextEnum::VerticalBlockAlignment::TopEM:
             {
                 float temp = ((float)(in_glyph_size / 2)) / ((float)in_containter_size[1]);
-                delta[1] = 2.0f - temp;
+                delta[1] = in_containter_size[1] - temp;
             }
         break;
         }
@@ -281,50 +306,58 @@ private:
 
     void BuildVertexData(
         std::vector<uint8_t>& out_vertex_raw_data,
-        const std::vector<PreVertexData>& in_pre_vertex_data
+        const std::vector<PreVertexData>& in_pre_vertex_data,
+        const VectorInt2& in_containter_size
         )
     {
         for (const auto& item : in_pre_vertex_data)
         {
+            const VectorFloat4 pos = VectorFloat4(
+                ((item._pos_low_high[0] / (float)in_containter_size.GetX()) * 2.0f) - 1.0f,
+                ((item._pos_low_high[1] / (float)in_containter_size.GetY()) * 2.0f) - 1.0f,
+                ((item._pos_low_high[2] / (float)in_containter_size.GetX()) * 2.0f) - 1.0f,
+                ((item._pos_low_high[3] / (float)in_containter_size.GetY()) * 2.0f) - 1.0f
+                );
+
             // Warning, inverted Y
             //0.0f, 0.0f,
-            VectorHelper::AppendValue(out_vertex_raw_data, item._pos_low_high[0]);
-            VectorHelper::AppendValue(out_vertex_raw_data, -(item._pos_low_high[1]));
+            VectorHelper::AppendValue(out_vertex_raw_data, pos[0]);
+            VectorHelper::AppendValue(out_vertex_raw_data, -(pos[1]));
             VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[0]);
             VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[1]);
             VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
 
             //1.0f, 0.0f,
-            VectorHelper::AppendValue(out_vertex_raw_data, item._pos_low_high[2]);
-            VectorHelper::AppendValue(out_vertex_raw_data, -(item._pos_low_high[1]));
+            VectorHelper::AppendValue(out_vertex_raw_data, pos[2]);
+            VectorHelper::AppendValue(out_vertex_raw_data, -(pos[1]));
             VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[2]);
             VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[1]);
             VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
 
             //0.0f, 1.0f,
-            VectorHelper::AppendValue(out_vertex_raw_data, item._pos_low_high[0]);
-            VectorHelper::AppendValue(out_vertex_raw_data, -(item._pos_low_high[3]));
+            VectorHelper::AppendValue(out_vertex_raw_data, pos[0]);
+            VectorHelper::AppendValue(out_vertex_raw_data, -(pos[3]));
             VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[0]);
             VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[3]);
             VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
 
             //1.0f, 0.0f,
-            VectorHelper::AppendValue(out_vertex_raw_data, item._pos_low_high[2]);
-            VectorHelper::AppendValue(out_vertex_raw_data, -(item._pos_low_high[1]));
+            VectorHelper::AppendValue(out_vertex_raw_data, pos[2]);
+            VectorHelper::AppendValue(out_vertex_raw_data, -(pos[1]));
             VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[2]);
             VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[1]);
             VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
 
             //1.0f, 1.0f,
-            VectorHelper::AppendValue(out_vertex_raw_data, item._pos_low_high[2]);
-            VectorHelper::AppendValue(out_vertex_raw_data, -(item._pos_low_high[3]));
+            VectorHelper::AppendValue(out_vertex_raw_data, pos[2]);
+            VectorHelper::AppendValue(out_vertex_raw_data, -(pos[3]));
             VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[2]);
             VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[3]);
             VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
 
             //0.0f, 1.0f,
-            VectorHelper::AppendValue(out_vertex_raw_data, item._pos_low_high[0]);
-            VectorHelper::AppendValue(out_vertex_raw_data, -(item._pos_low_high[3]));
+            VectorHelper::AppendValue(out_vertex_raw_data, pos[0]);
+            VectorHelper::AppendValue(out_vertex_raw_data, -(pos[3]));
             VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[0]);
             VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[3]);
             VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
@@ -333,40 +366,61 @@ private:
         return;
     }
 
-    void ShapeText(
-        TMapGlyphCell& in_out_map_glyph_cell,
+    // hb_buffer_destroy(buffer);
+    hb_buffer_t* MakeBuffer(
         const std::string& in_string_utf8,
-        std::vector<uint8_t>& out_vertex_raw_data,
-        const VectorInt2& in_containter_size,
-        const int in_glyph_size,
-        const TextEnum::HorizontalLineAlignment::Enum in_horizontal_line_alignment,
-        const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment
+        const TextLocale* const in_locale_token
         )
-    {    
+    {
         hb_buffer_t* buffer = hb_buffer_create();
         hb_buffer_add_utf8(buffer, in_string_utf8.c_str(), -1, 0, -1);
+        //set script, language, direction
+        if (nullptr != in_locale_token)
+        {
+            hb_buffer_set_direction(buffer, in_locale_token->GetDirection());
+            hb_buffer_set_script(buffer, in_locale_token->GetScript());
+            hb_buffer_set_language(buffer, in_locale_token->GetLanguage());
+        }
+        else
+        {
+            hb_buffer_set_direction(buffer, HB_DIRECTION_LTR);
+            hb_buffer_set_script(buffer, HB_SCRIPT_LATIN);
+            hb_buffer_set_language(buffer, hb_language_from_string("en", -1));
+        }
+        return buffer;
+    }
+
+    //std::vector<PreVertexData> pre_vertex_data;
+    //VectorFloat4 bounds(1.0f, 1.0f, -1.0f, -1.0f);
+
+    void ShapeText(
+        std::vector<PreVertexData>* const out_pre_vertex_data_or_null,
+        VectorFloat4& out_bounds,
+        hb_buffer_t* in_buffer,
+        TMapGlyphCell& in_out_map_glyph_cell
+        //std::vector<uint8_t>& out_vertex_raw_data,
+        //const VectorInt2& in_containter_size,
+        //const int in_glyph_size,
+        //const TextEnum::HorizontalLineAlignment::Enum in_horizontal_line_alignment,
+        //const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment
+        )
+    {    
+        hb_shape(_harf_buzz_font, in_buffer, NULL, 0);
 
         unsigned int glyph_count = 0;
+        hb_glyph_info_t* glyph_info = hb_buffer_get_glyph_infos(in_buffer, &glyph_count);
+        hb_glyph_position_t* glyph_pos = hb_buffer_get_glyph_positions(in_buffer, &glyph_count);
 
-        //set script, language, direction
-        hb_buffer_set_direction(buffer, HB_DIRECTION_LTR);
-        hb_buffer_set_script(buffer, HB_SCRIPT_LATIN);
-        hb_buffer_set_language(buffer, hb_language_from_string("en", -1));
-
-        hb_shape(_harf_buzz_font, buffer, NULL, 0);
-
-        hb_glyph_info_t* glyph_info = hb_buffer_get_glyph_infos(buffer, &glyph_count);
-        hb_glyph_position_t* glyph_pos = hb_buffer_get_glyph_positions(buffer, &glyph_count);
-
-        std::vector<PreVertexData> pre_vertex_data;
-        VectorFloat4 bounds(1.0f, 1.0f, -1.0f, -1.0f);
-        pre_vertex_data.reserve(glyph_count);
+        if (nullptr != out_pre_vertex_data_or_null)
+        {
+            out_pre_vertex_data_or_null->reserve(glyph_count);
+        }
         float cursor_x = 0;
         float cursor_y = 0;
         for (unsigned int i = 0; i < glyph_count; i++) 
         {
             hb_codepoint_t codepoint = glyph_info[i].codepoint;
-            LOG_MESSAGE_DEBUG("ShapeText2[%d]", glyph_info[i].codepoint);
+            //LOG_MESSAGE_DEBUG("ShapeText2[%d]", glyph_info[i].codepoint);
 
             float x_offset = (float)glyph_pos[i].x_offset / 64.0f;
             float y_offset = (float)glyph_pos[i].y_offset / 64.0f;
@@ -379,33 +433,16 @@ private:
 
             auto cell = FindOrMakeCell(codepoint, slot, in_out_map_glyph_cell);
             AddVertexData(
-                pre_vertex_data,
-                bounds,
+                out_pre_vertex_data_or_null,
+                out_bounds,
                 cell, 
                 cursor_x + x_offset, 
-                cursor_y + y_offset, 
-                in_containter_size
+                cursor_y + y_offset
                 );
 
             cursor_x += x_advance;
             cursor_y += y_advance;
         }
-
-        hb_buffer_destroy(buffer);
-
-        PerformAlign(
-            pre_vertex_data,
-            bounds,
-            in_glyph_size,
-            in_containter_size,
-            in_horizontal_line_alignment,
-            in_vertical_block_alignment
-            );
-
-        BuildVertexData(
-            out_vertex_raw_data,
-            pre_vertex_data
-            );
 
         return;
     }
@@ -444,7 +481,8 @@ std::shared_ptr<TextBlock> TextFace::MakeBlock(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list,
     const std::string& in_string_utf8,
-    const int in_char_size,
+    const TextLocale* const in_locale_token,
+    const int in_font_size,
     const VectorInt2& in_containter_size,
     const bool in_width_limit_enabled,
     const int in_width_limit,
@@ -456,7 +494,8 @@ std::shared_ptr<TextBlock> TextFace::MakeBlock(
         in_draw_system,
         in_command_list,
         in_string_utf8,
-        in_char_size,
+        in_locale_token,
+        in_font_size,
         in_containter_size,
         in_width_limit_enabled,
         in_width_limit,
