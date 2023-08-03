@@ -23,3 +23,10 @@ _ compu shader collision
 _ minecraft equivlent terain render
 _ terrain collision
 _ flatland prototype
+
+move draw_sytem to return unique ptr for resources? 
+can you put unique ptr in a std::map? std::vector
+change draw_sytem to take raw ptrs 
+fix ui manager to not use const buffer, memory is one to one for shader instance
+build geometry for ui block, rather than multipe shaders?
+

@@ -49,6 +49,9 @@
     <Filter Include="data">
       <UniqueIdentifier>{b84ab994-3665-4516-8f32-b500758322b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="task\test_coord">
+      <UniqueIdentifier>{09b591cb-6fc1-4e89-8ec9-f358f2662188}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Script\util_make_host_define.cmd">
@@ -115,6 +118,12 @@
     <None Include="shader\ui_block_interpolant.hlsli">
       <Filter>shader</Filter>
     </None>
+    <None Include="task\test_coord\triangle_interpolant.hlsli">
+      <Filter>task\test_coord</Filter>
+    </None>
+    <None Include="task\test_coord\present_interpolant.hlsli">
+      <Filter>task\test_coord</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Build.cpp">
@@ -151,6 +160,9 @@
       <Filter>source\scene_component</Filter>
     </ClCompile>
     <ClCompile Include="source\window_application\application_test_text.cpp">
+      <Filter>source\window_application</Filter>
+    </ClCompile>
+    <ClCompile Include="source\window_application\application_test_coord.cpp">
       <Filter>source\window_application</Filter>
     </ClCompile>
   </ItemGroup>
@@ -194,6 +206,9 @@
     <ClInclude Include="source\window_application\application_test_text.h">
       <Filter>source\window_application</Filter>
     </ClInclude>
+    <ClInclude Include="source\window_application\application_test_coord.h">
+      <Filter>source\window_application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\cut.ico">
@@ -229,6 +244,9 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="data\open_sans.ttf">
       <Filter>data</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="task\test_coord\application.json">
+      <Filter>task\test_coord</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
@@ -318,6 +336,18 @@
     </FxCompile>
     <FxCompile Include="shader\ui_block_vertex.hlsl">
       <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="task\test_coord\triangle_pixel.hlsl">
+      <Filter>task\test_coord</Filter>
+    </FxCompile>
+    <FxCompile Include="task\test_coord\triangle_vertex.hlsl">
+      <Filter>task\test_coord</Filter>
+    </FxCompile>
+    <FxCompile Include="task\test_coord\present_pixel.hlsl">
+      <Filter>task\test_coord</Filter>
+    </FxCompile>
+    <FxCompile Include="task\test_coord\present_vertex.hlsl">
+      <Filter>task\test_coord</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

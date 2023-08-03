@@ -3,6 +3,10 @@
   "Id": "240fc133-78da-4158-b0c7-1be8214f8843",
   "Items": [
     {
+      "Id": "caa9db59-ef0b-4a3b-9716-f9a10136f3e1",
+      "Command": "test_coord"
+    },
+    {
       "Id": "227ff93b-7cfb-4955-bfe0-fc5f6eb9ee27",
       "Command": "empty"
     },

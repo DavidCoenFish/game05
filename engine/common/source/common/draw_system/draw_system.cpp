@@ -186,7 +186,7 @@ std::shared_ptr<ShaderResource> DrawSystem::MakeShaderResource(
     const std::vector<uint8_t>& in_data
     )
 {
-    auto result = std::make_shared < ShaderResource > (
+    auto result = std::make_shared<ShaderResource>(
         this,
         in_shader_resource,
         in_desc,

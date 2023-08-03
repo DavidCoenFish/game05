@@ -422,16 +422,6 @@ void Shader::SetActivate(
             );
         root_paramter_index += 1;
     }
-    // S0,s1,s2,...
-    // For(const auto& iter : m_arrayShaderResourceInfo)
-    // {
-    // If (false == iter->GetUseSampler())
-    // {
-    // Continue;
-    // }
-    // Iter->ActivateSampler(pCommandList, rootParamterIndex);
-    // RootParamterIndex += 1;
-    // }
 }
 
 void Shader::SetShaderResourceViewHandle(

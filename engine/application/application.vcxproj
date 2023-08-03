@@ -113,6 +113,11 @@
     </CopyFileToFolders>
     <None Include="task\multi_line_compute\multi_line_interpolant.hlsli" />
     <None Include="task\test_compute\present_interpolant.hlsli" />
+    <CopyFileToFolders Include="task\test_coord\application.json">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+    <None Include="task\test_coord\present_interpolant.hlsli" />
+    <None Include="task\test_coord\triangle_interpolant.hlsli" />
     <None Include="task\test_line\polar.hlsli" />
     <CopyFileToFolders Include="task\test_text\application.json">
       <FileType>Document</FileType>
@@ -136,6 +141,7 @@
     <ClCompile Include="source\window_application\application_multi_line.cpp" />
     <ClCompile Include="source\window_application\application_multi_line_compute.cpp" />
     <ClCompile Include="source\window_application\application_test_compute.cpp" />
+    <ClCompile Include="source\window_application\application_test_coord.cpp" />
     <ClCompile Include="source\window_application\application_test_line.cpp" />
     <ClCompile Include="source\window_application\application_test_text.cpp" />
     <ClCompile Include="source\window_application\application_test_triangle.cpp" />
@@ -151,6 +157,7 @@
     <ClInclude Include="source\window_application\application_multi_line.h" />
     <ClInclude Include="source\window_application\application_multi_line_compute.h" />
     <ClInclude Include="source\window_application\application_test_compute.h" />
+    <ClInclude Include="source\window_application\application_test_coord.h" />
     <ClInclude Include="source\window_application\application_test_line.h" />
     <ClInclude Include="source\window_application\application_test_text.h" />
     <ClInclude Include="source\window_application\application_test_triangle.h" />
@@ -263,6 +270,22 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="task\test_compute\present_vertex.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="task\test_coord\present_pixel.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="task\test_coord\present_vertex.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="task\test_coord\triangle_pixel.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="task\test_coord\triangle_vertex.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>

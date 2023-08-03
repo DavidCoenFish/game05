@@ -51,7 +51,7 @@ public:
 
 public:
     // Public for json reflection
-    std::vector < uint8_t > _data;
+    std::vector<uint8_t> _data;
 
 private: 
     D3D12_SHADER_VISIBILITY _visiblity;

@@ -12,6 +12,7 @@
 #include "window_application/application_multi_line.h"
 #include "window_application/application_multi_line_compute.h"
 #include "window_application/application_test_compute.h"
+#include "window_application/application_test_coord.h"
 #include "window_application/application_test_line.h"
 #include "window_application/application_test_text.h"
 #include "window_application/application_test_triangle.h"
@@ -45,6 +46,7 @@ static std::map< std::string, TWindowApplicationFactory >& GetWindowApplicationF
             {"MultiLine", ApplicationMultiLine::Factory},
             {"MultiLineCompute", ApplicationMultiLineCompute::Factory},
             {"TestCompute", ApplicationTestCompute::Factory},
+            {"TestCoord", ApplicationTestCoord::Factory},
             {"TestLine", ApplicationTestLine::Factory},
             {"TestText", ApplicationTestText::Factory},
             {"TestTriangle", ApplicationTestTriangle::Factory}
