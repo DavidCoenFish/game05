@@ -42,6 +42,26 @@ namespace
     }
 }
 
+std::shared_ptr<GeometryGeneric> UIGeometry::GeometryHelper(
+    DrawSystem* const in_draw_system,
+    ID3D12GraphicsCommandList* const in_command_list,
+    const VectorFloat4& in_pos,
+    const VectorFloat4& in_uv
+    )
+{
+    std::vector<uint8_t> vertex_data;
+    GeneratedVertexData(vertex_data, in_pos, in_uv);
+
+    auto geometry = in_draw_system->MakeGeometryGeneric(
+        in_command_list,
+        D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
+        UIManager::GetInputElementDesc(),
+        vertex_data,
+        4
+    );
+    return geometry;
+}
+
 UIGeometry::UIGeometry(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list,
@@ -51,16 +71,12 @@ UIGeometry::UIGeometry(
     : _pos(in_pos)
     , _uv(in_uv)
 {
-    std::vector<uint8_t> vertex_data;
-    GeneratedVertexData(vertex_data, _pos, _uv);
-
-    _geometry = in_draw_system->MakeGeometryGeneric(
+    _geometry = GeometryHelper(
+        in_draw_system,
         in_command_list,
-        D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
-        UIManager::GetInputElementDesc(),
-        vertex_data,
-        4
-    );
+        in_pos,
+        in_uv
+        );
 }
 
 UIGeometry::~UIGeometry()

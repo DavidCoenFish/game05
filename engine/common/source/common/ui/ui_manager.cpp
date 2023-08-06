@@ -13,6 +13,7 @@
 #include "common/math/vector_float4.h"
 #include "common/math/vector_int2.h"
 #include "common/math/vector_int4.h"
+#include "common/ui/ui_geometry.h"
 #include "common/util/vector_helper.h"
 
 namespace
@@ -53,7 +54,7 @@ public:
             CD3DX12_BLEND_DESC(D3D12_DEFAULT),
             CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT),
             CD3DX12_DEPTH_STENCIL_DESC()// CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT)
-        );
+            );
 
         std::vector<std::shared_ptr<ShaderResourceInfo>> array_shader_resource_info;
         array_shader_resource_info.push_back(
@@ -123,6 +124,21 @@ UIManager::UIManager(
 UIManager::~UIManager()
 {
     // Nop
+}
+
+std::shared_ptr<GeometryGeneric> UIManager::GeometryHelper(
+    DrawSystem* const in_draw_system,
+    ID3D12GraphicsCommandList* const in_command_list,
+    const VectorFloat4& in_pos,
+    const VectorFloat4& in_uv
+    )
+{
+    return UIGeometry::GeometryHelper(
+        in_draw_system,
+        in_command_list,
+        in_pos,
+        in_uv
+        );
 }
 
 void UIManager::DrawHelper(

@@ -6,7 +6,7 @@ struct Vertex
     float2 _position : Position;
 
     // [0 ... 1] (top left, bottom right)
-    float2 _uv : Texcord;
+    float2 _uv : TEXCOORD0;
 };
 
 Interpolant main(Vertex in_input)
