@@ -3,6 +3,7 @@
 #include "common/draw_system/render_target/i_render_target.h"
 #include "common/draw_system/render_target/render_target_depth_data.h"
 #include "common/draw_system/render_target/render_target_format_data.h"
+#include "common/math/vector_int2.h"
 
 class DrawSystem;
 class HeapWrapperItem;
@@ -38,8 +39,7 @@ public:
         DrawSystem* const in_draw_system,
         const std::vector < RenderTargetFormatData >&in_target_format_data_array,
         const RenderTargetDepthData&in_target_depth_data,
-        const int in_width,
-        const int in_height,
+        const VectorInt2& in_size,
         const bool in_resize_with_screen = false
         );
     virtual ~RenderTargetTexture();
@@ -49,8 +49,7 @@ public:
     void Resize(
         ID3D12GraphicsCommandList* const in_command_list,
         ID3D12Device2* const in_device,
-        const int in_width,
-        const int in_height
+        const VectorInt2& in_size
         );
 
 private:
@@ -62,8 +61,7 @@ private:
     virtual void OnResize(
         ID3D12GraphicsCommandList* const in_command_list,
         ID3D12Device2* const in_device,
-        const int in_screen_width,
-        const int in_screen_height
+        const VectorInt2& in_screen_size
         ) override;
     virtual void StartRender(ID3D12GraphicsCommandList* const in_command_list) override;
     virtual void EndRender(ID3D12GraphicsCommandList* const in_command_list) override;
@@ -80,8 +78,7 @@ private:
         int&in_render_target_view_format_count,
         const DXGI_FORMAT*&in_render_target_view_format
         ) const override;
-    virtual const int GetWidth() const override;
-    virtual const int GetHeight() const override;
+    virtual const VectorInt2 GetSize() const override;
 
 public:
     std::vector < std::shared_ptr < Resource > > _target_resource_array;
@@ -94,8 +91,7 @@ public:
     D3D12_RESOURCE_STATES _current_state_depth_resource;
 
 private:
-    int _width;
-    int _height;
+    VectorInt2 _size;
     bool _resize_with_screen;
     std::vector < DXGI_FORMAT > _target_format_array;
 };

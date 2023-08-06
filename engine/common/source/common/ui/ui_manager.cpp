@@ -17,61 +17,35 @@
 
 namespace
 {
-    struct UIConstantBufferB0
-    {
-        VectorInt4 _block_pos; // Low xy, high xy 
-        VectorFloat4 _block_uv; // Low xy, high xy [0 ... 1]
-        VectorInt2 _target_size; // width, height of the thing we are drawing into
-    };
+    static const std::vector<D3D12_INPUT_ELEMENT_DESC> s_input_element_desc_array({
+        D3D12_INPUT_ELEMENT_DESC
+        {
+            "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, \
+                D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 // UINT InstanceDataStepRate;
+        },
+        D3D12_INPUT_ELEMENT_DESC
+        {
+            "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, \
+                D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 // UINT InstanceDataStepRate;
+        }
+    });
 }
 
-class UiManagerImplementation
+class UIManagerImplementation
 {
 public:
-    UiManagerImplementation(
+    UIManagerImplementation(
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list,
         const std::filesystem::path& in_root_path
         )
     {
-        std::vector<D3D12_INPUT_ELEMENT_DESC> input_element_desc_array(
-            {
-                D3D12_INPUT_ELEMENT_DESC
-                {
-                    "POSITION",
-                    0,
-                    DXGI_FORMAT_R32G32_FLOAT,
-                    0,
-                    D3D12_APPEND_ALIGNED_ELEMENT,
-                    D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,
-                    0 // UINT InstanceDataStepRate;
-                }
-            }
-        );
-
-        const auto vertex_data = VectorHelper::FactoryArrayLiteral(
-            {
-                0.0f, 0.0f,
-                0.0f, 1.0f,
-                1.0f, 0.0f,
-                1.0f, 1.0f,
-            }
-        );
-
-        _geometry_generic = in_draw_system->MakeGeometryGeneric(
-            in_command_list,
-            D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP,
-            input_element_desc_array,
-            vertex_data,
-            2
-            );
-
         auto vertex_shader_data = FileSystem::SyncReadFile(in_root_path / "shader" / "ui_block_vertex.cso");
         auto pixel_shader_data = FileSystem::SyncReadFile(in_root_path / "shader" / "ui_block_pixel.cso");
         std::vector < DXGI_FORMAT > render_target_format;
         render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
         ShaderPipelineStateData shader_pipeline_state_data(
-            input_element_desc_array,
+            s_input_element_desc_array,
             D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
             DXGI_FORMAT_UNKNOWN,
             // DXGI_FORMAT_D32_FLOAT,
@@ -86,84 +60,99 @@ public:
             ShaderResourceInfo::FactorySampler(nullptr, D3D12_SHADER_VISIBILITY_PIXEL)
             );
 
-        std::vector<std::shared_ptr<ConstantBufferInfo>> array_shader_constants_info;
-        array_shader_constants_info.push_back(ConstantBufferInfo::Factory(
-            UIConstantBufferB0(),
-            D3D12_SHADER_VISIBILITY_VERTEX
-            ));
-
         _shader = in_draw_system->MakeShader(
             in_command_list,
             shader_pipeline_state_data,
             vertex_shader_data,
             nullptr,
             pixel_shader_data,
-            array_shader_resource_info,
-            array_shader_constants_info
+            array_shader_resource_info
             );
     }
 
-    void DrawBlock(
+    void DrawHelper(
         DrawSystemFrame* const in_frame,
-        const VectorInt2& in_target_size,
-        const VectorInt4& in_block_size,
-        const VectorFloat4& in_block_uv,
-        const std::shared_ptr<HeapWrapperItem>& in_shader_resource_view_handle
+        IRenderTarget* const in_render_target,
+        GeometryGeneric* const in_geometry,
+        const std::shared_ptr<HeapWrapperItem>& in_texture_handle
         )
     {
-        auto shader = _shader.get();
-        if (shader)
-        {
-            shader->SetShaderResourceViewHandle(0, in_shader_resource_view_handle);
-            auto& buffer = _shader->GetConstant<UIConstantBufferB0>(0);
-            buffer._block_pos = in_block_size;
-            buffer._block_uv = in_block_uv;
-            buffer._target_size = in_target_size;
+        in_frame->SetRenderTarget(in_render_target);
+        _shader->SetShaderResourceViewHandle(0, in_texture_handle);
+        in_frame->Draw(in_geometry);
+        return;
+    }
 
-            in_frame->SetShader(_shader.get());
-            in_frame->Draw(_geometry_generic.get());
-        }
+    void DrawHierarchy(
+        DrawSystem* const in_draw_system,
+        DrawSystemFrame* const in_frame,
+        UIHierarchyNode* const in_node,
+        const float in_ui_scale
+        )
+    {
+        in_draw_system;
+        in_frame;
+        in_node;
+        in_ui_scale;
+        return;
     }
 
 private:
     std::shared_ptr<Shader> _shader;
-    std::shared_ptr<GeometryGeneric> _geometry_generic;
 
 };
 
-UiManager::UiManager(
+const std::vector<D3D12_INPUT_ELEMENT_DESC>& UIManager::GetInputElementDesc()
+{
+    return s_input_element_desc_array;
+}
+
+UIManager::UIManager(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list,
     const std::filesystem::path& in_root_path
     )
 {
-    _implementation = std::make_unique<UiManagerImplementation>(
+    _implementation = std::make_unique<UIManagerImplementation>(
         in_draw_system, 
         in_command_list,
         in_root_path
         );
 }
 
-UiManager::~UiManager()
+UIManager::~UIManager()
 {
     // Nop
 }
 
-
-void UiManager::DrawBlock(
+void UIManager::DrawHelper(
     DrawSystemFrame* const in_frame,
-    const VectorInt2& in_target_size,
-    const VectorInt4& in_block_size,
-    const VectorFloat4& in_block_uv,
-    const std::shared_ptr<HeapWrapperItem>& in_shader_resource_view_handle
+    IRenderTarget* const in_render_target,
+    GeometryGeneric* const in_geometry,
+    const std::shared_ptr<HeapWrapperItem>& in_texture_handle
     )
 {
-    _implementation->DrawBlock(
+    _implementation->DrawHelper(
         in_frame,
-        in_target_size,
-        in_block_size,
-        in_block_uv,
-        in_shader_resource_view_handle
+        in_render_target,
+        in_geometry,
+        in_texture_handle
+        );
+    return;
+}
+
+void UIManager::DrawHierarchy(
+    DrawSystem* const in_draw_system,
+    DrawSystemFrame* const in_frame,
+    UIHierarchyNode* const in_node,
+    const float in_ui_scale
+    )
+{
+    _implementation->DrawHierarchy(
+        in_draw_system,
+        in_frame,
+        in_node,
+        in_ui_scale
         );
     return;
 }

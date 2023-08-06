@@ -135,18 +135,39 @@ public:
         return result;
     }
 
-    VectorInt2 CalculateTextBounds(
+    VectorFloat2 CalculateTextBounds(
         const std::string& in_string_utf8,
-        const int in_glyph_size,
-        const bool in_width_limit_enabled,
-        const int in_width_limit
+        const TextLocale* const in_locale_token,
+        const int in_font_size
         )
     {
-        auto map_glyph_cell = FindMapGlyphCell(in_glyph_size);
-        SetScale(in_glyph_size);
+        auto map_glyph_cell = FindMapGlyphCell(in_font_size);
+        SetScale(in_font_size);
 
-        // TODO
-        return VectorInt2();
+        hb_buffer_t* const buffer = MakeBuffer(
+            in_string_utf8,
+            in_locale_token
+            );
+
+        std::vector<PreVertexData> pre_vertex_data;
+        VectorFloat4 bounds(
+            std::numeric_limits<float>::max(),
+            std::numeric_limits<float>::max(),
+            std::numeric_limits<float>::min(),
+            std::numeric_limits<float>::min()
+        );
+        ShapeText(
+            &pre_vertex_data,
+            bounds,
+            buffer,
+            *map_glyph_cell
+        );
+        hb_buffer_destroy(buffer);
+
+        return VectorFloat2(
+            bounds[2] - bounds[0],
+            bounds[3] - bounds[1]
+            );
     }
 
     void RestGlyphUsage()
@@ -473,6 +494,7 @@ private:
             float y_advance = (float)glyph_pos[i].y_advance / 64.0f;
             // draw_glyph(glyphid, cursor_x + x_offset, cursor_y + y_offset);
             FT_Error error = FT_Load_Glyph(_face, codepoint, FT_LOAD_DEFAULT);
+            error;
             FT_GlyphSlot slot = _face->glyph;
             FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL);
 
@@ -549,18 +571,16 @@ std::shared_ptr<TextBlock> TextFace::MakeBlock(
         );
 }
 
-VectorInt2 TextFace::CalculateTextBounds(
+VectorFloat2 TextFace::CalculateTextBounds(
     const std::string& in_string_utf8,
-    const int in_char_size,
-    const bool in_width_limit_enabled,
-    const int in_width_limit
+    const TextLocale* const in_locale_token,
+    const int in_font_size
     )
 {
     return _implementation->CalculateTextBounds(
         in_string_utf8,
-        in_char_size,
-        in_width_limit_enabled,
-        in_width_limit
+        in_locale_token,
+        in_font_size
         );
 }
 

@@ -12,17 +12,23 @@ RenderTargetBackBuffer::RenderTargetBackBuffer(
     const RenderTargetFormatData&in_target_format_data,
     const RenderTargetDepthData&in_target_depth_data,
     IDXGISwapChain* const in_swap_chain,
-    const int in_width,
-    const int in_height
-    ) : IRenderTarget(), _buffer_index(in_buffer_index), _target_format_data(in_target_format_data), _target_clear_value\
-    (in_target_format_data.MakeClearValue()), _target_depth_data(in_target_depth_data), _depth_clear_value(\
-    in_target_depth_data.MakeClearValue()), _current_state(D3D12_RESOURCE_STATE_COMMON), _screen_viewport{ 0.0f, 0.0f, \
-    static_cast < float > (in_width), static_cast < float > (in_height), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH}
-,
-_scissor_rect{ 0, 0, in_width, in_height}
-,
-_back_buffer_width(in_width)
-, _back_buffer_height(in_height)
+    const VectorInt2& in_size
+    ) 
+    : IRenderTarget()
+    , _buffer_index(in_buffer_index)
+    , _target_format_data(in_target_format_data)
+    , _target_clear_value(in_target_format_data.MakeClearValue())
+    , _target_depth_data(in_target_depth_data)
+    , _depth_clear_value(in_target_depth_data.MakeClearValue())
+    , _current_state(D3D12_RESOURCE_STATE_COMMON)
+    , _screen_viewport{ 
+        0.0f 
+        , 0.0f
+        , static_cast<float>(in_size.GetX())
+        , static_cast<float>(in_size.GetY())
+        , D3D12_MIN_DEPTH, D3D12_MAX_DEPTH}
+    , _scissor_rect{ 0, 0, in_size.GetX(), in_size.GetY() }
+    , _back_buffer_size(in_size)
 {
     _render_target_descriptor = in_draw_system->MakeHeapWrapperRenderTargetView();
     if (DXGI_FORMAT_UNKNOWN != _target_depth_data._format)
@@ -61,8 +67,8 @@ _back_buffer_width(in_width)
         CD3DX12_HEAP_PROPERTIES depth_heap_properties(D3D12_HEAP_TYPE_DEFAULT);
         D3D12_RESOURCE_DESC depth_stencil_desc = CD3DX12_RESOURCE_DESC::Tex2D(
             _target_depth_data._format,
-            in_width,
-            in_height,
+            in_size.GetX(),
+            in_size.GetY(),
             1,
             // This depth stencil view has only one texture.
             0,
@@ -210,13 +216,7 @@ void RenderTargetBackBuffer::GetFormatData(
     in_render_target_view_format = &_target_format_data._format;
 }
 
-const int RenderTargetBackBuffer::GetWidth() const
+const VectorInt2 RenderTargetBackBuffer::GetSize() const
 {
-    return _back_buffer_width;
+    return _back_buffer_size;
 }
-
-const int RenderTargetBackBuffer::GetHeight() const
-{
-    return _back_buffer_height;
-}
-

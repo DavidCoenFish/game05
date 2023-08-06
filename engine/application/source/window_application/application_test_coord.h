@@ -7,7 +7,7 @@ class Shader;
 class ShaderResource;
 class RenderTargetTexture;
 class GeometryGeneric;
-class UiManager;
+class UIManager;
 
 class ApplicationTestCoord : public IWindowApplication
 {
@@ -35,7 +35,7 @@ private:
 
     struct DrawResource
     {
-        std::unique_ptr<UiManager> _ui_manager;
+        std::unique_ptr<UIManager> _ui_manager;
 
         std::shared_ptr<Shader> _triangle_shader;
         std::shared_ptr<GeometryGeneric> _triangle_geometry;

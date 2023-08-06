@@ -38,8 +38,7 @@ std::shared_ptr<SceneComponentCameraRay> SceneComponentCameraRay::Factory(
         in_command_list,
         target_format_data_array,
         RenderTargetDepthData(),
-        in_draw_system->GetRenderTargetBackBuffer()->GetWidth(),
-        in_draw_system->GetRenderTargetBackBuffer()->GetHeight(),
+        in_draw_system->GetRenderTargetBackBuffer()->GetSize(),
         true
         );
 

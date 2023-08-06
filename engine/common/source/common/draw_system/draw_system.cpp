@@ -250,8 +250,7 @@ std::shared_ptr<RenderTargetTexture> DrawSystem::MakeRenderTargetTexture(
     ID3D12GraphicsCommandList* const in_command_list,
     const std::vector<RenderTargetFormatData>& in_target_format_data_array,
     const RenderTargetDepthData& in_target_depth_data,
-    const int in_width,
-    const int in_height,
+    const VectorInt2& in_size,
     const bool in_resize_with_screen
     )
 {
@@ -259,8 +258,7 @@ std::shared_ptr<RenderTargetTexture> DrawSystem::MakeRenderTargetTexture(
         this,
         in_target_format_data_array,
         in_target_depth_data,
-        in_width,
-        in_height,
+        in_size,
         in_resize_with_screen
         );
     if (result && _device_resources)
@@ -276,8 +274,7 @@ std::shared_ptr<RenderTargetTexture> DrawSystem::MakeRenderTargetTexture(
 void DrawSystem::ResizeRenderTargetTexture(
     ID3D12GraphicsCommandList* const in_command_list,
     const std::shared_ptr<RenderTargetTexture>& in_render_target_texture,
-    const int in_width,
-    const int in_height
+    const VectorInt2& in_size
     )
 {
     auto render_target_texture = in_render_target_texture.get();
@@ -286,8 +283,7 @@ void DrawSystem::ResizeRenderTargetTexture(
         render_target_texture->Resize(
             in_command_list,
             _device_resources->GetD3dDevice(),
-            in_width,
-            in_height
+            in_size
             );
     }
 }
@@ -398,15 +394,13 @@ void DrawSystem::WaitForGpu() noexcept
 void DrawSystem::OnResize()
 {
     bool resized = false;
-    int width = 0;
-    int height = 0;
+    VectorInt2 size;
     if (_device_resources)
     {
         resized = _device_resources->OnResize(
             this,
             _hwnd,
-            width,
-            height
+            size
             );
     }
     if ((true == resized) && (0 < _list_resource.size()))
@@ -417,8 +411,7 @@ void DrawSystem::OnResize()
             iter->OnResize(
                 command_list->GetCommandList(),
                 _device_resources->GetD3dDevice(),
-                width,
-                height
+                size
                 );
         }
     }

@@ -42,7 +42,7 @@ void ShaderResource::UploadData(
     OnResourceBarrier(in_command_list, D3D12_RESOURCE_STATE_COPY_DEST);
 
     UploadResource(
-        _draw_system,
+        in_draw_system,
         in_command_list,
         _resource,
         _desc,

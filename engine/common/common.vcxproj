@@ -80,8 +80,15 @@
     <ClCompile Include="source\common\text\text_manager.cpp" />
     <ClCompile Include="source\common\text\text_glyph_row.cpp" />
     <ClCompile Include="source\common\text\text_texture.cpp" />
-    <ClCompile Include="source\common\ui\ui_block.cpp" />
+    <ClCompile Include="source\common\ui\i_ui_content.cpp" />
+    <ClCompile Include="source\common\ui\ui_content_canvas.cpp" />
+    <ClCompile Include="source\common\ui\ui_content_stack.cpp" />
+    <ClCompile Include="source\common\ui\ui_content_text.cpp" />
+    <ClCompile Include="source\common\ui\ui_coord.cpp" />
+    <ClCompile Include="source\common\ui\ui_geometry.cpp" />
+    <ClCompile Include="source\common\ui\ui_hierarchy_node.cpp" />
     <ClCompile Include="source\common\ui\ui_manager.cpp" />
+    <ClCompile Include="source\common\ui\ui_texture.cpp" />
     <ClCompile Include="source\common\util\command_line.cpp" />
     <ClCompile Include="source\common\util\timer.cpp" />
     <ClCompile Include="source\common\util\utf8.cpp" />
@@ -135,7 +142,12 @@
     <ClInclude Include="include\common\text\text_enum.h" />
     <ClInclude Include="include\common\text\text_face.h" />
     <ClInclude Include="include\common\text\text_manager.h" />
-    <ClInclude Include="include\common\ui\ui_block.h" />
+    <ClInclude Include="include\common\ui\i_ui_content.h" />
+    <ClInclude Include="include\common\ui\ui_content_canvas.h" />
+    <ClInclude Include="include\common\ui\ui_content_stack.h" />
+    <ClInclude Include="include\common\ui\ui_content_text.h" />
+    <ClInclude Include="include\common\ui\ui_coord.h" />
+    <ClInclude Include="include\common\ui\ui_hierarchy_node.h" />
     <ClInclude Include="include\common\ui\ui_manager.h" />
     <ClInclude Include="include\common\util\command_line.h" />
     <ClInclude Include="include\common\util\timer.h" />
@@ -168,6 +180,8 @@
     <ClInclude Include="source\common\text\text_glyph_row.h" />
     <ClInclude Include="source\common\text\text_locale.h" />
     <ClInclude Include="source\common\text\text_texture.h" />
+    <ClInclude Include="source\common\ui\ui_geometry.h" />
+    <ClInclude Include="source\common\ui\ui_texture.h" />
     <ClInclude Include="source\common\window\window_helper.h" />
   </ItemGroup>
   <ItemGroup>

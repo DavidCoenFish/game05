@@ -1,6 +1,7 @@
 #pragma once
 class DrawSystem;
 class CustomCommandList;
+class VectorInt2;
 
 class IResource
 {
@@ -15,8 +16,7 @@ public:
     virtual void OnResize(
         ID3D12GraphicsCommandList* const in_command_list,
         ID3D12Device2* const in_device,
-        const int in_screen_width,
-        const int in_screen_height
+        const VectorInt2& in_screen_size
         );
     virtual void OnResourceBarrier(
         ID3D12GraphicsCommandList* const in_command_list,

@@ -12,3 +12,83 @@ i_ui_hierarchy_node
     ?interactive scroll
     ?stack
     ?grid
+
+
+UiBlock rename as UiRenderTarget, is a render target, with size
+UiDraw is a pair of geometry and texture to get drawn
+what about canvas? 
+UiCanvas rename as UiHierarchyNode
+    data of how to translate parent size into our size
+        ratio and pixel offset for top, left, bottom, right?
+        or speify a pivot on parent and self, and sepcify size (as float ratio and int pisel offset)
+        flag, use calculated size as max, and collapse to child required
+
+    UiRenderTarget
+    array of UiDraw/ array of UiHierarchyNode
+
+
+given dag nod for screen size, (the parent size)
+UIManager::Draw(DrawFrame, IRenderTarget (with size), UiHierarchyNode)
+
+draw to back buffer vrs draw to render target? root hierarchy node? or node that takes an external render target
+
+UIManager::Draw(draw frame, render target, geometry, texture)
+UIManager::DrawHierarchy(draw frame, UiHierarchyNode)
+
+UiHierarchyNode
+    array children UiHierarchyNode
+    UiTexture, render target for children or custom texture
+    UiGeometry, geometry or null, top level may not need geometry
+    rules to make geometry/ render target size based on parent size
+    calculated size~ or authorative size is in UiTexture
+    
+    content may change, needing re-draw, size may change needing re draw...
+
+
+how does text fit in? is UiGeometry part of the array children UiHierarchyNode
+
+
+UiHierarchyNode
+    array children <UiHierarchyNode, UiGeometry>
+    UiTexture, render target for children to draw to, or texture
+    rules to update size based on parent size, also uv
+    // given max size, return needed size?
+
+for text, it outputs to a UiTexture, and gets input from UiHierarchyNode size
+
+
+i_ui_content
+    UiContentImage
+    UiContentText
+    UiContentCanvas
+    UiContentDock //grid/ or a canvas that doesn't allow overlap, 
+    UiContentStack // so, what controls how children have positions generated
+    // build scroll auto/manual into geometry ui calculation?
+    //UiContentScrollAuto
+    //UiContentScrollManual
+
+    UiContentEffectDropShadow
+    UiContentEffectStroke
+    UiContentEffectHighlight // mouse over/ mouse down
+    UiContentEffectShine
+
+each content has an on click? on select sound? block mouse over/ navigation
+
+ui scale effects font size and pixel portion of coords
+ui coord have a ratio and a pixel size
+
+canvas child position specified by 
+
+
+i_ui_content
+    void UpdateChildGeometry(out render target size4, out geometry pos4, out geometry uv4, in child)
+    int2 CalculateNeededSize(max size2)
+
+
+
+
++ new game
+> continue
+i info
+0 options
+x exit

@@ -23,7 +23,6 @@
 #include "common/text/text_block.h"
 #include "common/text/text_face.h"
 #include "common/text/text_manager.h"
-#include "common/ui/ui_block.h"
 #include "common/ui/ui_manager.h"
 #include "common/util/timer.h"
 #include "common/util/vector_helper.h"
@@ -122,7 +121,7 @@ ApplicationTestText::ApplicationTestText(
             );
     }
 
-    _draw_resources->_ui_manager = std::make_shared<UiManager>(
+    _draw_resources->_ui_manager = std::make_shared<UIManager>(
         _draw_system.get(),
         command_list->GetCommandList(),
         in_application_param._root_path
@@ -150,7 +149,7 @@ ApplicationTestText::ApplicationTestText(
         TextEnum::HorizontalLineAlignment::Middle,
         TextEnum::VerticalBlockAlignment::Middle
         );
-
+#if 0
     _draw_resources->_ui_block = std::make_shared<UiBlock>(
         _draw_system.get(),
         command_list->GetCommandList(),
@@ -158,6 +157,7 @@ ApplicationTestText::ApplicationTestText(
         true,
         VectorFloat4(1.0f, 0.0f, 0.0f, 1.0f)
         );
+#endif
 
     return;
 }
@@ -199,6 +199,7 @@ void ApplicationTestText::Update()
             frame->Draw(_draw_resources->_screen_quad->GetGeometry());
         }
 #endif
+#if 0
         _draw_resources->_ui_block->Activate(frame.get());
         _text_manager->DrawText(
             _draw_system.get(),
@@ -215,6 +216,7 @@ void ApplicationTestText::Update()
             VectorFloat4(0.0f, 0.0f, 1.0f, 1.0f),
             texture
             );
+#endif
     }
 }
 

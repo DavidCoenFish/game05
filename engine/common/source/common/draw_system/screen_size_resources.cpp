@@ -22,29 +22,24 @@ static const DXGI_FORMAT NoSRGB(DXGI_FORMAT in_fmt) noexcept
 
 ScreenSizeResources::ScreenSizeResources(
     DrawSystem* const in_draw_system,
-    const Microsoft::WRL::ComPtr < ID3D12Device >&in_device,
-    const Microsoft::WRL::ComPtr < IDXGIFactory6 >&in_dxgi_factory,
-    const Microsoft::WRL::ComPtr < ID3D12CommandQueue >&in_command_queue,
+    const Microsoft::WRL::ComPtr<ID3D12Device>& in_device,
+    const Microsoft::WRL::ComPtr<IDXGIFactory6>& in_dxgi_factory,
+    const Microsoft::WRL::ComPtr<ID3D12CommandQueue>& in_command_queue,
     const HWND in_hwnd,
     const UINT64 in_fence_value,
     const unsigned int in_back_buffer_count,
-    const int in_width,
-    const int in_height,
+    const VectorInt2& in_size,
     const bool in_allow_tearing,
-    const RenderTargetFormatData&in_target_format_data,
-    const RenderTargetDepthData&in_target_depth_data
+    const RenderTargetFormatData& in_target_format_data,
+    const RenderTargetDepthData& in_target_depth_data
     ) 
     : _back_buffer_count(in_back_buffer_count)
     , _back_buffer_index(0)
     , _allow_tearing(in_allow_tearing)
-    , _width(std::max(
-        in_width,
-        1
-        ))
-    , _height(std::max(
-        in_height,
-        1
-        ))
+    , _size(
+        std::max(in_size.GetX(), 1),
+        std::max(in_size.GetY(), 1)
+        )
 {
     for (unsigned int index = 0; index < MAX_BACK_BUFFER_COUNT;++ index)
     {
@@ -91,8 +86,8 @@ ScreenSizeResources::ScreenSizeResources(
     {
         // Create a descriptor for the swap chain.
         DXGI_SWAP_CHAIN_DESC1 swap_chain_desc = {};
-        swap_chain_desc.Width = _width;
-        swap_chain_desc.Height = _height;
+        swap_chain_desc.Width = _size.GetX();
+        swap_chain_desc.Height = _size.GetY();
         swap_chain_desc.Format = back_buffer_format;
         swap_chain_desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
         swap_chain_desc.BufferCount = _back_buffer_count;
@@ -130,15 +125,14 @@ ScreenSizeResources::ScreenSizeResources(
     // RenderTargetDepthData targetDepthData(depthBufferFormat, true, 1.0f);
     for (int n = 0; n < _back_buffer_count; n++)
     {
-        _render_target_back_buffer[n] = std::make_unique < RenderTargetBackBuffer > (
+        _render_target_back_buffer[n] = std::make_unique<RenderTargetBackBuffer>(
             in_draw_system,
             in_device.Get(),
             n,
             in_target_format_data,
             in_target_depth_data,
             _swap_chain.Get(),
-            _width,
-            _height
+            _size
             );
     }
     // Reset the index to the current back buffer.

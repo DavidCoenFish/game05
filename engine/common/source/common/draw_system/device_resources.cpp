@@ -5,6 +5,7 @@
 #include "common/draw_system/device_resources.h"
 #include "common/draw_system/screen_size_resources.h"
 #include "common/log/log.h"
+#include "common/math/vector_int2.h"
 #include "common/util/utf8.h"
 
 DeviceResources::DeviceResources(
@@ -156,16 +157,13 @@ DeviceResources::DeviceResources(
             );
         _command_queue->SetName(name);
     }
-    // CreateWindowSizeDependentResources(pDrawSystem, hWnd);
+
     _graphics_memory = std::make_unique < DirectX::GraphicsMemory > (_device.Get());
     if (nullptr == _graphics_memory)
     {
         throw std::exception("CreateEvent");
     }
-    // Microsoft::WRL::ComPtr<ID3D12CommandAllocator> m_pCustomCommandAllocator;
-    // Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> m_pCustomCommandList;
-    // Microsoft::WRL::ComPtr<ID3D12Fence> m_pCustomCommandFence;
-    // Microsoft::WRL::Wrappers::Event m_customCommandFenceEvent;
+
     DX::ThrowIfFailed(_device->CreateCommandAllocator(
         D3D12_COMMAND_LIST_TYPE_DIRECT,
         IID_PPV_ARGS(_custom_command_allocator.ReleaseAndGetAddressOf())
@@ -213,29 +211,27 @@ DeviceResources::DeviceResources(
     {
         throw std::exception("CustomCommandFence");
     }
-#if 1
-        D3D12_FEATURE_DATA_SHADER_MODEL shader_model =
-        {
-            D3D_SHADER_MODEL_6_5};
-        if (FAILED(_device->CheckFeatureSupport(
-            D3D12_FEATURE_SHADER_MODEL,
-            &shader_model,
-            sizeof (shader_model)
-            )) || (shader_model.HighestShaderModel < D3D_SHADER_MODEL_6_5))
-        {
-            LOG_MESSAGE_WARNING("WARNING: Shader Model 6.5 is not supported");
-        }
-        D3D12_FEATURE_DATA_D3D12_OPTIONS7 feature_options7 = {};
-        if (FAILED(_device->CheckFeatureSupport(
-            D3D12_FEATURE_D3D12_OPTIONS7,
-            &feature_options7,
-            sizeof (feature_options7)
-            )) || (feature_options7.MeshShaderTier == D3D12_MESH_SHADER_TIER_NOT_SUPPORTED))
-        {
-            LOG_MESSAGE_WARNING("WARNING: Mesh Shaders aren't supported");
-        }
-#endif
 
+    D3D12_FEATURE_DATA_SHADER_MODEL shader_model =
+    {
+        D3D_SHADER_MODEL_6_5};
+    if (FAILED(_device->CheckFeatureSupport(
+        D3D12_FEATURE_SHADER_MODEL,
+        &shader_model,
+        sizeof (shader_model)
+        )) || (shader_model.HighestShaderModel < D3D_SHADER_MODEL_6_5))
+    {
+        LOG_MESSAGE_WARNING("WARNING: Shader Model 6.5 is not supported");
+    }
+    D3D12_FEATURE_DATA_D3D12_OPTIONS7 feature_options7 = {};
+    if (FAILED(_device->CheckFeatureSupport(
+        D3D12_FEATURE_D3D12_OPTIONS7,
+        &feature_options7,
+        sizeof (feature_options7)
+        )) || (feature_options7.MeshShaderTier == D3D12_MESH_SHADER_TIER_NOT_SUPPORTED))
+    {
+        LOG_MESSAGE_WARNING("WARNING: Mesh Shaders aren't supported");
+    }
 }
 
 DeviceResources::~DeviceResources()
@@ -253,7 +249,6 @@ DeviceResources::~DeviceResources()
     _device.Reset();
     _dxgi_factory.Reset();
 #ifdef _DEBUG
-
         {
             Microsoft::WRL::ComPtr < IDXGIDebug1 > dxgi_debug;
             if (SUCCEEDED(DXGIGetDebugInterface1(
@@ -281,7 +276,6 @@ void DeviceResources::WaitForGpu() noexcept
 }
 
 void DeviceResources::WaitForCustomCommand()// Make sure any outstanding command list are completed
-
 {
     if (_command_queue && _custom_command_fence && _custom_command_fence_event.IsValid())
     {
@@ -311,15 +305,13 @@ void DeviceResources::WaitForCustomCommand()// Make sure any outstanding command
 const bool DeviceResources::OnResize(
     DrawSystem* const in_draw_system,
     const HWND in_hwnd,
-    int&out_width,
-    int&out_height
+    VectorInt2& out_size
     )
 {
     return CreateWindowSizeDependentResources(
         in_draw_system,
         in_hwnd,
-        &out_width,
-        &out_height
+        &out_size
         );
 }
 
@@ -418,8 +410,7 @@ void DeviceResources::GetAdapter(
 const bool DeviceResources::CreateWindowSizeDependentResources(
     DrawSystem* const in_draw_system,
     const HWND in_hwnd,
-    int* out_width,
-    int* out_height
+    VectorInt2* const out_size
     )
 {
     RECT rc;
@@ -427,19 +418,14 @@ const bool DeviceResources::CreateWindowSizeDependentResources(
         in_hwnd,
         &rc
         );
-    const int width = rc.right - rc.left;
-    const int height = rc.bottom - rc.top;
-    if (nullptr != out_width)
+    const VectorInt2 size(rc.right - rc.left, rc.bottom - rc.top);
+    if (nullptr != out_size)
     {
-        * out_width = width;
-    }
-    if (nullptr != out_height)
-    {
-        * out_height = height;
+        *out_size = size;
     }
     // If we don't need to resize, then don't
-    if ((nullptr != _screen_size_resources) && (width == _screen_size_resources->GetWidth()) && (height == \
-        _screen_size_resources->GetHeight()))
+    if ((nullptr != _screen_size_resources) && 
+        (size == _screen_size_resources->GetSize()))
     {
         return false;
     }
@@ -451,7 +437,7 @@ const bool DeviceResources::CreateWindowSizeDependentResources(
     }
     _screen_size_resources.reset();
     const unsigned int swap_flag = (_options&c_allow_tearing) ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0u;
-    _screen_size_resources = std::make_unique < ScreenSizeResources > (
+    _screen_size_resources = std::make_unique<ScreenSizeResources>(
         in_draw_system,
         _device,
         _dxgi_factory,
@@ -459,8 +445,7 @@ const bool DeviceResources::CreateWindowSizeDependentResources(
         in_hwnd,
         fence_value,
         _back_buffer_count,
-        width,
-        height,
+        size,
         swap_flag,
         _target_format_data,
         _target_depth_data
@@ -490,10 +475,6 @@ ID3D12Device2* const DeviceResources::GetD3dDevice()
     return _device.Get();
 }
 
-// ID3D12CommandQueue* const DeviceResources::GetCommandQueue()
-// {
-// Return m_pCommandQueue.Get();
-// }
 ID3D12GraphicsCommandList* DeviceResources::GetCustomCommandList(
     ID3D12PipelineState* const in_pipeline_state_object_or_null
     )
@@ -534,14 +515,6 @@ void DeviceResources::CustomCommandListFinish(ID3D12GraphicsCommandList* in_comm
         );
 }
 
-// Void DeviceResources::Clear()
-// {
-// If (nullptr == m_pScreenSizeResources)
-// {
-// Return;
-// }
-// M_pScreenSizeResources->Clear();
-// }
 const bool DeviceResources::Present()
 {
     if (nullptr == _screen_size_resources)

@@ -20,6 +20,7 @@ class ShaderResource;
 class RenderTargetTexture;
 class JSONDrawSystem;
 class UnorderedAccess;
+class VectorInt2;
 
 namespace DirectX
 {
@@ -120,15 +121,13 @@ public:
         ID3D12GraphicsCommandList* const in_command_list,
         const std::vector<RenderTargetFormatData>& in_target_format_data_array,
         const RenderTargetDepthData& in_target_depth_data,
-        const int in_width,
-        const int in_height,
+        const VectorInt2& in_size,
         const bool in_resize_with_screen = false
         );
     void ResizeRenderTargetTexture(
         ID3D12GraphicsCommandList* const in_command_list,
         const std::shared_ptr<RenderTargetTexture>& in_render_target_texture,
-        const int in_width,
-        const int in_height
+        const VectorInt2& in_size
         );
 
     std::shared_ptr<CustomCommandList> CreateCustomCommandList(

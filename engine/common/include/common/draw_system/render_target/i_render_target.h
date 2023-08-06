@@ -1,4 +1,7 @@
 #pragma once
+
+class VectorInt2;
+
 // #include "Common/DrawSystem/IResource.h"
 class IRenderTarget // : public IResource
 
@@ -16,6 +19,5 @@ public:
         int&in_render_target_view_format_count,
         const DXGI_FORMAT*&in_render_target_view_format
         ) const = 0;
-    virtual const int GetWidth() const = 0;
-    virtual const int GetHeight() const = 0;
+    virtual const VectorInt2 GetSize() const = 0;
 };

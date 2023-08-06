@@ -193,9 +193,6 @@
     <ClCompile Include="source\common\text\text_block.cpp">
       <Filter>souce\common\text</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\ui\ui_block.cpp">
-      <Filter>souce\common\ui</Filter>
-    </ClCompile>
     <ClCompile Include="source\common\ui\ui_manager.cpp">
       <Filter>souce\common\ui</Filter>
     </ClCompile>
@@ -213,6 +210,30 @@
     </ClCompile>
     <ClCompile Include="source\common\text\text_locale.cpp">
       <Filter>souce\common\text</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_coord.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_geometry.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_hierarchy_node.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_texture.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\i_ui_content.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_content_canvas.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_content_stack.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_content_text.cpp">
+      <Filter>souce\common\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -429,9 +450,6 @@
     <ClInclude Include="include\common\ui\ui_manager.h">
       <Filter>include\common\ui</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\ui\ui_block.h">
-      <Filter>include\common\ui</Filter>
-    </ClInclude>
     <ClInclude Include="include\common\math\vector_int4.h">
       <Filter>include\common\math</Filter>
     </ClInclude>
@@ -446,6 +464,30 @@
     </ClInclude>
     <ClInclude Include="source\common\text\text_locale.h">
       <Filter>souce\common\text</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_content_stack.h">
+      <Filter>include\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_content_text.h">
+      <Filter>include\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_coord.h">
+      <Filter>include\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_hierarchy_node.h">
+      <Filter>include\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\i_ui_content.h">
+      <Filter>include\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_content_canvas.h">
+      <Filter>include\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\ui\ui_geometry.h">
+      <Filter>souce\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\ui\ui_texture.h">
+      <Filter>souce\common\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

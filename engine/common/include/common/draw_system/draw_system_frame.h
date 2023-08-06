@@ -28,6 +28,11 @@ public:
         D3D12_RESOURCE_STATES in_after_state
         );
 
+    void UpdateGeometryGeneric(
+        GeometryGeneric* const in_geometry,
+        const std::vector<uint8_t>& in_vertex_data_raw
+        );
+
 private:
     DrawSystem&_draw_system;
     ID3D12GraphicsCommandList* _command_list;

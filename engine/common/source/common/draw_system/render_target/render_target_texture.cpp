@@ -29,18 +29,24 @@ RenderTargetTexture::RenderTargetTexture(
     DrawSystem* const in_draw_system,
     const std::vector < RenderTargetFormatData >&in_target_format_data_array,
     const RenderTargetDepthData&in_target_depth_data,
-    const int in_width,
-    const int in_height,
+    const VectorInt2& in_size,
     const bool in_resize_with_screen
-    ) : IRenderTarget(), IResource(in_draw_system), _width(in_width), _height(in_height), _screen_viewport{ 0.0f, 0.0f, \
-    static_cast < float > (in_width), static_cast < float > (in_height), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH}
-,
-_scissor_rect{ 0, 0, in_width, in_height}
-,
-_current_state_render_target(D3D12_RESOURCE_STATE_COMMON)
-, _current_state_depth_resource(D3D12_RESOURCE_STATE_COMMON)
-, _target_format_array()
-, _resize_with_screen(in_resize_with_screen)
+    ) 
+    : IRenderTarget()
+    , IResource(in_draw_system)
+    , _size(in_size)
+    , _screen_viewport{ 
+        0.0f, 
+        0.0f,
+        static_cast<float>(in_size[0]), 
+        static_cast<float>(in_size[1]), 
+        D3D12_MIN_DEPTH, 
+        D3D12_MAX_DEPTH}
+    , _scissor_rect{ 0, 0, in_size[0], in_size[1]}
+    , _current_state_render_target(D3D12_RESOURCE_STATE_COMMON)
+    , _current_state_depth_resource(D3D12_RESOURCE_STATE_COMMON)
+    , _target_format_array()
+    , _resize_with_screen(in_resize_with_screen)
 {
     for (const auto& iter : in_target_format_data_array)
     {
@@ -107,35 +113,28 @@ std::shared_ptr < HeapWrapperItem > RenderTargetTexture::GetDepthShaderResourceH
 void RenderTargetTexture::Resize(
     ID3D12GraphicsCommandList* const in_command_list,
     ID3D12Device2* const in_device,
-    const int in_width,
-    const int in_height
+    const VectorInt2& in_size
     )
 {
-    if ((_width == in_width) && (_height == in_height))
+    if (_size == in_size)
     {
         return;
     }
     OnDeviceLost();
-    _width = in_width;
-    _height = in_height;
-    _scissor_rect.right = in_width;
-    _scissor_rect.bottom = in_height;
-    _screen_viewport.Width = (float) in_width;
-    _screen_viewport.Height = (float) in_height;
+    _size = in_size;
+    _scissor_rect.right = in_size[0];
+    _scissor_rect.bottom = in_size[1];
+    _screen_viewport.Width = (float)in_size[0];
+    _screen_viewport.Height = (float)in_size[1];
     OnDeviceRestored(
         in_command_list,
         in_device
         );
 }
 
-const int RenderTargetTexture::GetWidth() const
+const VectorInt2 RenderTargetTexture::GetSize() const
 {
-    return _width;
-}
-
-const int RenderTargetTexture::GetHeight() const
-{
-    return _height;
+    return _size;
 }
 
 void RenderTargetTexture::OnDeviceLost()
@@ -164,8 +163,8 @@ void RenderTargetTexture::OnDeviceRestored(
     {
         D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(
             iter->_format,
-            static_cast < UINT64 > (_width),
-            static_cast < UINT > (_height),
+            static_cast<UINT64>(_size[0]),
+            static_cast<UINT>(_size[1]),
             1,
             1,
             1,
@@ -203,8 +202,8 @@ void RenderTargetTexture::OnDeviceRestored(
     {
         D3D12_RESOURCE_DESC depth_stencil_desc = CD3DX12_RESOURCE_DESC::Tex2D(
             _depth_resource->_format,
-            _width,
-            _height,
+            _size[0],
+            _size[1],
             1,
             // This depth stencil view has only one texture.
             1,
@@ -257,8 +256,7 @@ void RenderTargetTexture::OnDeviceRestored(
 void RenderTargetTexture::OnResize(
     ID3D12GraphicsCommandList* const in_command_list,
     ID3D12Device2* const in_device,
-    const int in_screen_width,
-    const int in_screen_height
+    const VectorInt2& in_screen_size
     )
 {
     if (false == _resize_with_screen)
@@ -268,8 +266,7 @@ void RenderTargetTexture::OnResize(
     Resize(
         in_command_list,
         in_device,
-        in_screen_width,
-        in_screen_height
+        in_screen_size
         );
     return;
 }

@@ -8,6 +8,7 @@ class TextFaceImplementation;
 class TextLocale;
 class TextTexture;
 class VectorInt2;
+class VectorFloat2;
 typedef struct FT_LibraryRec_* FT_Library;
 
 class TextFace
@@ -33,11 +34,10 @@ public:
         const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment = TextEnum::VerticalBlockAlignment::Enum::Top
         );
 
-    VectorInt2 CalculateTextBounds(
+    VectorFloat2 CalculateTextBounds(
         const std::string& in_string_utf8,
-        const int in_char_size,
-        const bool in_width_limit_enabled = false,
-        const int in_width_limit = 0
+        const TextLocale* const in_locale_token,
+        const int in_font_size
         );
 
     void RestGlyphUsage();

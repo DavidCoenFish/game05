@@ -62,7 +62,7 @@ ApplicationTestCoord::ApplicationTestCoord(
     _draw_resource = std::make_unique<DrawResource>();
 
     auto command_list = _draw_system->CreateCustomCommandList();
-    _draw_resource->_ui_manager = std::make_unique<UiManager>(
+    _draw_resource->_ui_manager = std::make_unique<UIManager>(
         _draw_system.get(),
         command_list->GetCommandList(),
         in_application_param._root_path
@@ -82,8 +82,7 @@ ApplicationTestCoord::ApplicationTestCoord(
             command_list->GetCommandList(),
             target_format_data_array,
             RenderTargetDepthData(),
-            256,
-            256
+            VectorInt2(256, 256)
             );
     }
 
@@ -306,6 +305,7 @@ void ApplicationTestCoord::Update()
         frame->SetShader(_draw_resource->_present_shader.get());
         frame->Draw(_draw_resource->_panel_geometry[1].get());
 
+#if 0
         // Draw uv manager 2 render texture of triangle
         _draw_resource->_ui_manager->DrawBlock(
             frame.get(),
@@ -319,7 +319,7 @@ void ApplicationTestCoord::Update()
             VectorFloat4(0.0f, 0.0f, 1.0f, 1.0f),
             _draw_resource->_render_target->GetShaderResourceHeapWrapperItem()
             );
-#if 1
+
         // Draw uv manager 3 with texture
         _draw_resource->_ui_manager->DrawBlock(
             frame.get(),

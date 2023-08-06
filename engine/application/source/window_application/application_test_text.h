@@ -6,11 +6,11 @@ class GeometryGeneric;
 class Shader;
 class ShaderResource;
 class SceneComponentScreenQuad;
-class UiManager;
+class UIManager;
 class TextBlock;
 class TextFace;
 class TextManager;
-class UiBlock;
+//class UiBlock;
 
 class ApplicationTestText : public IWindowApplication
 {
@@ -43,10 +43,10 @@ private:
         std::shared_ptr<SceneComponentScreenQuad> _screen_quad;
         std::shared_ptr<Shader> _background_shader;
 
-        std::shared_ptr<UiManager> _ui_manager;
+        std::shared_ptr<UIManager> _ui_manager;
         std::shared_ptr<TextFace> _text_face;
         std::shared_ptr<TextBlock> _text_block;
-        std::shared_ptr<UiBlock> _ui_block;
+        //std::shared_ptr<UiBlock> _ui_block;
     };
     std::unique_ptr<DrawResources> _draw_resources;
 

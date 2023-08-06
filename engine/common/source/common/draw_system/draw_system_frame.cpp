@@ -13,21 +13,14 @@ DrawSystemFrame::DrawSystemFrame(DrawSystem&in_draw_system)
     , _render_target(nullptr)
 {
     _draw_system.Prepare(_command_list);
-    // M_drawSystem.Clear();
+    return;
 }
 
 DrawSystemFrame::~DrawSystemFrame()
 {
-    // If (m_pCommandList)
-    // {
-    // DX::ThrowIfFailed(m_pCommandList->Close());
-    // }
-    // If (m_pCommandList && m_pCommandQueue)
-    // {
-    // M_pCommandQueue->ExecuteCommandLists(1, CommandListCast(m_pCommandList.GetAddressOf()));
-    // }
     SetRenderTarget(nullptr);
     _draw_system.Present();
+    return;
 }
 
 ID3D12GraphicsCommandList* DrawSystemFrame::GetCommandList()
@@ -51,6 +44,7 @@ void DrawSystemFrame::SetRenderTarget(IRenderTarget* const in_render_target)
     {
         _render_target->StartRender(_command_list);
     }
+    return;
 }
 
 void DrawSystemFrame::SetShader(Shader* const in_shader)
@@ -59,11 +53,13 @@ void DrawSystemFrame::SetShader(Shader* const in_shader)
         _command_list,
         _draw_system.GetBackBufferIndex()
         );
+    return;
 }
 
 void DrawSystemFrame::Draw(GeometryGeneric* const in_geometry)
 {
     in_geometry->Draw(_command_list);
+    return;
 }
 
 void DrawSystemFrame::Dispatch(
@@ -77,6 +73,7 @@ void DrawSystemFrame::Dispatch(
         in_thread_group_count_y,
         in_thread_group_count_z
         );
+    return;
 }
 
 void DrawSystemFrame::ResourceBarrier(
@@ -85,5 +82,19 @@ void DrawSystemFrame::ResourceBarrier(
     )
 {
     in_resource->OnResourceBarrier(_command_list, in_after_state);
+    return;
+}
+
+void DrawSystemFrame::UpdateGeometryGeneric(
+    GeometryGeneric* const in_geometry,
+    const std::vector<uint8_t>& in_vertex_data_raw
+    )
+{
+    _draw_system.UpdateGeometryGeneric(
+        _command_list,
+        in_geometry,
+        in_vertex_data_raw
+        );
+    return;
 }
 
