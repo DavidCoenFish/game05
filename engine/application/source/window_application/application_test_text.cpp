@@ -144,7 +144,7 @@ ApplicationTestText::ApplicationTestText(
         "abcdefg",
         nullptr,
         64,
-        s_text_block_size,
+        VectorInt2(800, 600), //s_text_block_size,
         false, //const bool in_width_limit_enabled,
         0, //const int in_width_limit,
         TextEnum::HorizontalLineAlignment::Middle,
@@ -159,7 +159,7 @@ ApplicationTestText::ApplicationTestText(
         command_list->GetCommandList(),
         target_format_data_array,
         RenderTargetDepthData(),
-        s_text_block_size
+        VectorInt2(800,600) // s_text_block_size
         );
 
     _draw_resources->_ui_geometry = _draw_resources->_ui_manager->GeometryHelper(
