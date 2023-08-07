@@ -31,6 +31,26 @@ const float VectorFloat4::operator[](const int in_index) const
     return 0;
 }
 
+const float VectorFloat4::GetX() const
+{
+    return _data[Index::X];
+}
+
+const float VectorFloat4::GetY() const
+{
+    return _data[Index::Y];
+}
+
+const float VectorFloat4::GetZ() const
+{
+    return _data[Index::Z];
+}
+
+const float VectorFloat4::GetW() const
+{
+    return _data[Index::W];
+}
+
 const bool VectorFloat4::operator==(const VectorFloat4& in_rhs) const
 {
     for (int index = 0; index < Index::Count;++ index)

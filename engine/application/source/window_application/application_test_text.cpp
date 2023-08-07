@@ -151,37 +151,6 @@ ApplicationTestText::ApplicationTestText(
         TextEnum::VerticalBlockAlignment::Middle
         );
 
-    const std::vector<RenderTargetFormatData> target_format_data_array({
-        RenderTargetFormatData(DXGI_FORMAT_B8G8R8A8_UNORM)
-        });
-
-    _draw_resources->_ui_render_target = _draw_system->MakeRenderTargetTexture(
-        command_list->GetCommandList(),
-        target_format_data_array,
-        RenderTargetDepthData(),
-        VectorInt2(800,600) // s_text_block_size
-        );
-
-    _draw_resources->_ui_geometry = _draw_resources->_ui_manager->GeometryHelper(
-        _draw_system.get(),
-        command_list->GetCommandList(),
-        VectorFloat4(
-            (-800.0f + 64.0f) / 800.0f,
-            (-600.0f + 64.0f) / 600.0f,
-            (-800.0f + 64.0f + 512.0f) / 800.0f,
-            (-600.0f + 64.0f + 128.0f) / 600.0f
-            )
-        );
-#if 0
-    _draw_resources->_ui_block = std::make_shared<UiBlock>(
-        _draw_system.get(),
-        command_list->GetCommandList(),
-        s_text_block_size,
-        true,
-        VectorFloat4(1.0f, 0.0f, 0.0f, 1.0f)
-        );
-#endif
-
     return;
 }
 
@@ -210,7 +179,6 @@ void ApplicationTestText::Update()
         auto frame = _draw_system->CreateNewFrame();
         frame->SetRenderTarget(_draw_system->GetRenderTargetBackBuffer());
 
-#if 1
         auto background_shader = _draw_resources->_background_shader.get();
         if (nullptr != background_shader)
         {
@@ -221,54 +189,14 @@ void ApplicationTestText::Update()
             frame->SetShader(background_shader);
             frame->Draw(_draw_resources->_screen_quad->GetGeometry());
         }
-#endif
         _draw_resources->_text_block->SetTextContainerSize(
             VectorInt2(_screen_width, _screen_height)
             );
-        //_draw_resources->_text_block->Update(
-        //    _draw_system.get(),
-        //    frame->GetCommandList()
-        //    );
         _text_manager->DrawText(
             _draw_system.get(),
             frame.get(),
             _draw_resources->_text_block.get()
             );
-
-
-//        frame->SetRenderTarget(_draw_resources->_ui_render_target.get());
-//        _text_manager->DrawText(
-//            _draw_system.get(),
-//            frame.get(),
-//            _draw_resources->_text_block.get()
-//            );
-//        //frame->SetRenderTarget(_draw_system->GetRenderTargetBackBuffer());
-//
-//        _draw_resources->_ui_manager->DrawHelper(
-//            frame.get(),
-//            _draw_system->GetRenderTargetBackBuffer(),
-//            _draw_resources->_ui_geometry.get(),
-//            _draw_resources->_ui_render_target->GetShaderResourceHeapWrapperItem()
-//            );
-//
-//#if 0
-//        _draw_resources->_ui_block->Activate(frame.get());
-//        _text_manager->DrawText(
-//            _draw_system.get(),
-//            frame.get(),
-//            _draw_resources->_text_block.get()
-//            );
-//
-//        frame->SetRenderTarget(_draw_system->GetRenderTargetBackBuffer());
-//        auto texture = _draw_resources->_ui_block->GetTexture(frame.get());
-//        _draw_resources->_ui_manager->DrawBlock(
-//            frame.get(),
-//            VectorInt2(_screen_width, _screen_height),
-//            VectorInt4(128, 64, s_text_block_size.GetX() + 128, s_text_block_size.GetY() + 64),
-//            VectorFloat4(0.0f, 0.0f, 1.0f, 1.0f),
-//            texture
-//            );
-//#endif
     }
 }
 

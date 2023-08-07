@@ -62,6 +62,25 @@ std::shared_ptr<GeometryGeneric> UIGeometry::GeometryHelper(
     return geometry;
 }
 
+void UIGeometry::GeometryUpdateHelper(
+    DrawSystem* const in_draw_system,
+    ID3D12GraphicsCommandList* const in_command_list,
+    GeometryGeneric* const in_geometry,
+    // Left bottom, right top (pos, uv)
+    const VectorFloat4& in_pos = VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f),
+    const VectorFloat4& in_uv = VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f) // atention Y inverted
+    )
+{
+    std::vector<uint8_t> vertex_data;
+    GeneratedVertexData(vertex_data, in_pos, in_uv);
+
+    in_draw_system->UpdateGeometryGeneric(
+        in_command_list,
+        in_geometry,
+        vertex_data
+        );
+}
+
 UIGeometry::UIGeometry(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list,

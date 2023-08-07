@@ -27,8 +27,17 @@ public:
     static std::shared_ptr<GeometryGeneric> GeometryHelper(
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list,
+        // Left bottom, right top (pos, uv)
         const VectorFloat4& in_pos = VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f),
         const VectorFloat4& in_uv = VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f)
+        );
+    static void GeometryUpdateHelper(
+        DrawSystem* const in_draw_system,
+        ID3D12GraphicsCommandList* const in_command_list,
+        GeometryGeneric* const in_geometry,
+        // Left bottom, right top (pos, uv)
+        const VectorFloat4& in_pos = VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f),
+        const VectorFloat4& in_uv = VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f) // atention Y inverted
         );
 
     // Expose block drawing to current frame and whatever render target is already set on the frame
@@ -43,7 +52,7 @@ public:
         DrawSystem* const in_draw_system,
         DrawSystemFrame* const in_frame,
         UIHierarchyNode* const in_node,
-        const float in_ui_scale
+        const float in_ui_scale //in_pixels_per_em//pixels per em?
         );
 
 private:

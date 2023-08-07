@@ -11,5 +11,5 @@ public:
 
 private:
     //TextManager
-    //TextBlock
+    //std::shared_ptr<TextBlock> _text_block;
 };

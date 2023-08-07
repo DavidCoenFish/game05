@@ -141,6 +141,24 @@ std::shared_ptr<GeometryGeneric> UIManager::GeometryHelper(
         );
 }
 
+void UIManager::GeometryUpdateHelper(
+    DrawSystem* const in_draw_system,
+    ID3D12GraphicsCommandList* const in_command_list,
+    GeometryGeneric* const in_geometry,
+    const VectorFloat4& in_pos,
+    const VectorFloat4& in_uv
+    )
+{
+    UIGeometry::GeometryUpdateHelper(
+        in_draw_system,
+        in_command_list,
+        in_geometry,
+        in_pos,
+        in_uv
+        );
+    return;
+}
+
 void UIManager::DrawHelper(
     DrawSystemFrame* const in_frame,
     IRenderTarget* const in_render_target,

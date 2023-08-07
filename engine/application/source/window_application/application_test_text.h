@@ -48,8 +48,8 @@ private:
         std::shared_ptr<TextFace> _text_face;
         std::shared_ptr<TextBlock> _text_block;
         //std::shared_ptr<UiBlock> _ui_block;
-        std::shared_ptr<RenderTargetTexture> _ui_render_target;
-        std::shared_ptr<GeometryGeneric> _ui_geometry;
+        //std::shared_ptr<RenderTargetTexture> _ui_render_target;
+        //std::shared_ptr<GeometryGeneric> _ui_geometry;
     };
     std::unique_ptr<DrawResources> _draw_resources;
 

@@ -11,7 +11,7 @@ public:
 
     const float Calculate(
         const float in_parent_dim,
-        const float in_ui_scale
+        const float in_ui_scale // pixels per em
         ) const;
 
 private:

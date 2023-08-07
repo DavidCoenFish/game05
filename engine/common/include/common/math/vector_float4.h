@@ -10,6 +10,10 @@ public:
         );
     float& operator[](const int in_index);
     const float operator[](const int in_index) const;
+    const float GetX() const;
+    const float GetY() const;
+    const float GetZ() const;
+    const float GetW() const;
     const bool operator==(const VectorFloat4& in_rhs) const;
     VectorFloat4& operator=(const VectorFloat4& in_rhs);
 
