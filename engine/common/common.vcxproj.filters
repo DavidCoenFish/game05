@@ -235,6 +235,9 @@
     <ClCompile Include="source\common\ui\ui_content_text.cpp">
       <Filter>souce\common\ui</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\ui\ui_content_texture.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -488,6 +491,9 @@
     </ClInclude>
     <ClInclude Include="source\common\ui\ui_texture.h">
       <Filter>souce\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_content_texture.h">
+      <Filter>include\common\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

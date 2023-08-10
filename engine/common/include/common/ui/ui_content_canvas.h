@@ -5,10 +5,7 @@
 class UIContentCanvas : public IUIContent
 {
 public:
-    UIContentCanvas(
-        );
-    ~UIContentCanvas();
-
-private:
+    UIContentCanvas();
+    virtual ~UIContentCanvas();
 
 };

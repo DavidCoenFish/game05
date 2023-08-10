@@ -52,7 +52,8 @@ public:
         DrawSystem* const in_draw_system,
         DrawSystemFrame* const in_frame,
         UIHierarchyNode* const in_node,
-        const float in_ui_scale //in_pixels_per_em//pixels per em?
+        const float in_ui_scale, //in_pixels_per_em//pixels per em?,
+        const bool in_needs_to_draw = true// If something else is drawing to the render target, we always need to draw
         );
 
 private:

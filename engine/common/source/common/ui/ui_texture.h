@@ -35,9 +35,13 @@ public:
     // nullptr if _bUseBackBuffer is true
     std::shared_ptr<HeapWrapperItem> GetShaderResourceHeapWrapperItem() const;
 
+    const bool GetHasDrawn() const { return _has_drawn; }
+    void SetHasDrawn(const bool in_has_drawn) { _has_drawn = in_has_drawn; return; }
+
 private:
     //IRenderTarget* _render_target;
     bool _use_back_buffer;
+    bool _has_drawn;
     DrawSystem* const _draw_system;
 
     // If _bUseBackBuffer is false, we own out own render target texture

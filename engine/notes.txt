@@ -72,6 +72,9 @@ i_ui_content
     UiContentEffectHighlight // mouse over/ mouse down
     UiContentEffectShine
 
+    UiContentMixMask //combine rgb from child 0 and use child 1 as a mask as alpha
+    UiContentEffectRoundCorners // draws round corners in black
+
 each content has an on click? on select sound? block mouse over/ navigation
 
 ui scale effects font size and pixel portion of coords
@@ -84,11 +87,14 @@ i_ui_content
     void UpdateChildGeometry(out render target size4, out geometry pos4, out geometry uv4, in child)
     int2 CalculateNeededSize(max size2)
 
-
-
-
 + new game
 > continue
 i info
-0 options
+(gear) options
 x exit
+
+todo:
+- application coord test, add two panels bottom right
+- have a stack of text, the fps, build details, build time and version
+- have a stack of buttons, mask out rounded corners and icon, drop shadow
+

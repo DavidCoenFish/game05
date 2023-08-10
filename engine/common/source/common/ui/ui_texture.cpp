@@ -13,6 +13,7 @@ UITexture::UITexture(
     )
     : _use_back_buffer(in_use_back_buffer)
     , _draw_system(in_draw_system)
+    , _has_drawn(false)
 {
     if (false == in_use_back_buffer)
     {

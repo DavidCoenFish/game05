@@ -84,6 +84,7 @@
     <ClCompile Include="source\common\ui\ui_content_canvas.cpp" />
     <ClCompile Include="source\common\ui\ui_content_stack.cpp" />
     <ClCompile Include="source\common\ui\ui_content_text.cpp" />
+    <ClCompile Include="source\common\ui\ui_content_texture.cpp" />
     <ClCompile Include="source\common\ui\ui_coord.cpp" />
     <ClCompile Include="source\common\ui\ui_geometry.cpp" />
     <ClCompile Include="source\common\ui\ui_hierarchy_node.cpp" />
@@ -146,6 +147,7 @@
     <ClInclude Include="include\common\ui\ui_content_canvas.h" />
     <ClInclude Include="include\common\ui\ui_content_stack.h" />
     <ClInclude Include="include\common\ui\ui_content_text.h" />
+    <ClInclude Include="include\common\ui\ui_content_texture.h" />
     <ClInclude Include="include\common\ui\ui_coord.h" />
     <ClInclude Include="include\common\ui\ui_hierarchy_node.h" />
     <ClInclude Include="include\common\ui\ui_manager.h" />

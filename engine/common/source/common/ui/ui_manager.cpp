@@ -14,6 +14,7 @@
 #include "common/math/vector_int2.h"
 #include "common/math/vector_int4.h"
 #include "common/ui/ui_geometry.h"
+#include "common/ui/ui_hierarchy_node.h"
 #include "common/util/vector_helper.h"
 
 namespace
@@ -88,13 +89,18 @@ public:
         DrawSystem* const in_draw_system,
         DrawSystemFrame* const in_frame,
         UIHierarchyNode* const in_node,
-        const float in_ui_scale
+        const float in_ui_scale,
+        const bool in_needs_to_draw // If something else is drawing to the render target, we always need to draw
         )
     {
-        in_draw_system;
-        in_frame;
-        in_node;
-        in_ui_scale;
+        in_node->DrawHierarchyRoot(
+            in_draw_system,
+            in_frame,
+            _shader.get(),
+            in_ui_scale,
+            in_needs_to_draw
+            );
+
         return;
     }
 
@@ -179,14 +185,16 @@ void UIManager::DrawHierarchy(
     DrawSystem* const in_draw_system,
     DrawSystemFrame* const in_frame,
     UIHierarchyNode* const in_node,
-    const float in_ui_scale
-    )
+    const float in_ui_scale,
+    const bool in_needs_to_draw
+)
 {
     _implementation->DrawHierarchy(
         in_draw_system,
         in_frame,
         in_node,
-        in_ui_scale
+        in_ui_scale,
+        in_needs_to_draw
         );
     return;
 }

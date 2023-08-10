@@ -66,9 +66,8 @@ void UIGeometry::GeometryUpdateHelper(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list,
     GeometryGeneric* const in_geometry,
-    // Left bottom, right top (pos, uv)
-    const VectorFloat4& in_pos = VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f),
-    const VectorFloat4& in_uv = VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f) // atention Y inverted
+    const VectorFloat4& in_pos,
+    const VectorFloat4& in_uv
     )
 {
     std::vector<uint8_t> vertex_data;

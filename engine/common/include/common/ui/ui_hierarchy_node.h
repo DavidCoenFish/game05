@@ -1,13 +1,34 @@
 #pragma once
 
 #include "common/ui/ui_coord.h"
+#include "common/math/vector_int2.h"
 
-class DrawySystem;
+class DrawSystem;
+class DrawSystemFrame;
+class HeapWrapperItem;
 class IUIContent;
+class Shader;
 class TextBlock;
 class UIGeometry;
+class UIHierarchyNode;
 class UITexture;
-class VectorInt2;
+class VectorFloat4;
+
+struct UIHierarchyNodeChildData
+{
+    UIHierarchyNodeChildData(
+        std::shared_ptr<UIHierarchyNode>& in_node,
+        std::shared_ptr<UIGeometry>& in_geometry,
+        const VectorInt2& in_render_target_size
+        );
+
+    std::shared_ptr<UIHierarchyNode> _node;
+    // Need to track if state changed, so not using GeometryGeneric
+    //std::unique_ptr<GeometryGeneric> _geometry;
+    std::shared_ptr<UIGeometry> _geometry;
+    // This is over here so we can calculate with the geometry size
+    VectorInt2 _render_target_size;
+};
 
 class UIHierarchyNode
 {
@@ -35,15 +56,12 @@ public:
 
     };
 
-    static std::unique_ptr<IUIContent> MakeContentCanvas(
-        // Children source callback
-        );
-    static std::unique_ptr<IUIContent> MakeContentStack(
+    static std::shared_ptr<IUIContent> MakeContentCanvas();
+    static std::shared_ptr<IUIContent> MakeContentStack(
         // Horizontal or vertical
-        // Margin for children
-        // Children source callback
+        // Margin for children?
         );
-    static std::unique_ptr<IUIContent> MakeContentText(
+    static std::shared_ptr<IUIContent> MakeContentText(
         std::shared_ptr<TextBlock>& in_text_block
         );
 
@@ -52,7 +70,7 @@ public:
         ID3D12GraphicsCommandList* const in_command_list
         );
     static std::unique_ptr<UITexture> MakeTextureRenderTarget(
-        DrawySystem* const in_draw_system,
+        DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list,
         const VectorInt2& in_size
         );
@@ -71,7 +89,7 @@ public:
 
     UIHierarchyNode(
         const LayoutData& in_layout_data,
-        std::unique_ptr<IUIContent>& in_content,
+        std::shared_ptr<IUIContent>& in_content,
         std::unique_ptr<UITexture>& in_texture,
         const TFlag in_flag = TFlag::TVisible
         );
@@ -84,8 +102,11 @@ public:
     const bool GetFlag(const TFlag in_flag);
     void SetFlag(const TFlag in_flag, const bool in_value);
 
+    // nullptr if _bUseBackBuffer is true
+    std::shared_ptr<HeapWrapperItem> GetShaderResourceHeapWrapperItem() const;
+
     void AddChild(
-        std::unique_ptr<UIHierarchyNode>& in_node,
+        std::shared_ptr<UIHierarchyNode>& in_node,
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list
         );
@@ -95,17 +116,41 @@ public:
 
     // UIManager has register UIHierarchyNode by name?
 
-private:
-    struct ChildData
-    {
-        std::unique_ptr<UIHierarchyNode> _node;
-        // Need to track if state changed, so not using GeometryGeneric
-        //std::unique_ptr<GeometryGeneric> _geometry;
-        std::unique_ptr<UIGeometry> _geometry;
-    };
+    const bool DrawHierarchyRoot(
+        DrawSystem* const in_draw_system,
+        DrawSystemFrame* const in_frame,
+        Shader* const in_shader,
+        const float in_ui_scale,
+        const bool in_needs_to_draw // If something else is drawing to the render target, we always need to draw
+        );
 
-    std::vector<std::shared_ptr<ChildData>> _child_data_array;
-    std::unique_ptr<IUIContent> _content;
+    // return True if we needed to draw, ie, the texture may have changed
+    const bool DrawHierarchy(
+        DrawSystem* const in_draw_system,
+        DrawSystemFrame* const in_frame,
+        Shader* const in_shader,
+        const float in_ui_scale,
+        const VectorInt2& in_new_size
+        );
+
+private:
+    const bool DrawInternal(
+        DrawSystem* const in_draw_system,
+        DrawSystemFrame* const in_frame,
+        Shader* const in_shader,
+        const float in_ui_scale,
+        const bool in_needs_to_draw,
+        const VectorInt2& in_parent_size
+        );
+
+    const bool UpdateChildData(
+        DrawSystem* const in_draw_system,
+        DrawSystemFrame* const in_frame
+        );
+
+private:
+    std::vector<std::shared_ptr<UIHierarchyNodeChildData>> _child_data_array;
+    std::shared_ptr<IUIContent> _content;
     std::unique_ptr<UITexture> _texture;
 
     LayoutData _layout_data;

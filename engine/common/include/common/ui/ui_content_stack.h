@@ -5,10 +5,7 @@
 class UIContentStack : public IUIContent
 {
 public:
-    UIContentStack(
-    );
-    ~UIContentStack();
-
-private:
+    UIContentStack();
+    virtual ~UIContentStack();
 
 };
