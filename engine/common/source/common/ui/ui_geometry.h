@@ -36,8 +36,8 @@ public:
     // Return true if geometry changed/ updated
     const bool Update(
         DrawSystemFrame* const in_frame,
-        const VectorFloat4 in_pos,
-        const VectorFloat4 in_uv
+        const VectorFloat4& in_pos,
+        const VectorFloat4& in_uv
         );
 
     GeometryGeneric* GetGeometry();

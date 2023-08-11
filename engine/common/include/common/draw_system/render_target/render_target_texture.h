@@ -63,7 +63,7 @@ private:
         ID3D12Device2* const in_device,
         const VectorInt2& in_screen_size
         ) override;
-    virtual void StartRender(ID3D12GraphicsCommandList* const in_command_list) override;
+    virtual void StartRender(ID3D12GraphicsCommandList* const in_command_list, const bool in_allow_clear) override;
     virtual void EndRender(ID3D12GraphicsCommandList* const in_command_list) override;
     void TransitionResource(
         ID3D12GraphicsCommandList* const in_command_list,

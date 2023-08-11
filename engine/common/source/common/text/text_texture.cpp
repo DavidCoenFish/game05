@@ -65,8 +65,8 @@ std::shared_ptr<TextCell> TextTexture::MakeCell(
     const uint32_t in_bearing_y
     )
 {
-    DSC_ASSERT(in_width <= _texture_dimention, "invalid param");
-    DSC_ASSERT(in_height <= _texture_dimention, "invalid param");
+    DSC_ASSERT((int)in_width <= _texture_dimention, "invalid param");
+    DSC_ASSERT((int)in_height <= _texture_dimention, "invalid param");
 
     TextGlyphRow* found_row = nullptr;
     const int desired_height = in_height + (0 != (in_height & 0x03) ? 4 - (in_height & 0x03) : 0);
@@ -75,9 +75,9 @@ std::shared_ptr<TextCell> TextTexture::MakeCell(
     {
         TextGlyphRow& row = **iter;
         if ((desired_height == row.GetHeight()) && 
-            (row.GetTextureHighestX() + in_width <= _texture_dimention))
+            (row.GetTextureHighestX() + (int)in_width <= _texture_dimention))
         {
-            if (row.GetTextureHighestX() + in_width == _texture_dimention)
+            if (row.GetTextureHighestX() + (int)in_width == _texture_dimention)
             {
                 _array_glyph_row_full.push_back(*iter);
                 _array_glyph_row.erase(iter);
@@ -120,7 +120,7 @@ std::shared_ptr<TextCell> TextTexture::MakeCell(
         auto temp = std::make_shared<TextGlyphRow>(mask_index, desired_height, _highest_pos_y[mask_index]);
         _highest_pos_y[mask_index] += desired_height;
 
-        if (in_width == _texture_dimention)
+        if ((int)in_width == _texture_dimention)
         {
             _array_glyph_row_full.push_back(temp);
         }

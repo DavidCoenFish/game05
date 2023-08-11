@@ -8,6 +8,7 @@
 
 namespace
 {
+
     void GeneratedVertexData(
         std::vector<uint8_t>& out_vertex_raw_data,
         const VectorFloat4 in_pos,
@@ -22,15 +23,15 @@ namespace
 
         //0.0f, 1.0f,
         VectorHelper::AppendValue(out_vertex_raw_data, in_pos[0]);
-        VectorHelper::AppendValue(out_vertex_raw_data, in_pos[1]);
+        VectorHelper::AppendValue(out_vertex_raw_data, in_pos[3]);
         VectorHelper::AppendValue(out_vertex_raw_data, in_uv[0]);
-        VectorHelper::AppendValue(out_vertex_raw_data, in_uv[1]);
+        VectorHelper::AppendValue(out_vertex_raw_data, in_uv[3]);
 
         //1.0f, 0.0f,
         VectorHelper::AppendValue(out_vertex_raw_data, in_pos[2]);
-        VectorHelper::AppendValue(out_vertex_raw_data, in_pos[3]);
+        VectorHelper::AppendValue(out_vertex_raw_data, in_pos[1]);
         VectorHelper::AppendValue(out_vertex_raw_data, in_uv[2]);
-        VectorHelper::AppendValue(out_vertex_raw_data, in_uv[3]);
+        VectorHelper::AppendValue(out_vertex_raw_data, in_uv[1]);
 
         //1.0f, 1.0f,
         VectorHelper::AppendValue(out_vertex_raw_data, in_pos[2]);
@@ -54,7 +55,7 @@ std::shared_ptr<GeometryGeneric> UIGeometry::GeometryHelper(
 
     auto geometry = in_draw_system->MakeGeometryGeneric(
         in_command_list,
-        D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
+        D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP,
         UIManager::GetInputElementDesc(),
         vertex_data,
         4
@@ -104,15 +105,17 @@ UIGeometry::~UIGeometry()
 
 const bool UIGeometry::Update(
     DrawSystemFrame* const in_frame,
-    const VectorFloat4 in_pos,
-    const VectorFloat4 in_uv
+    const VectorFloat4& in_pos,
+    const VectorFloat4& in_uv
     )
 {
-    if ((_uv == in_uv) &&
-        (_pos == in_pos))
+    if ((_pos == in_pos) &&
+        (_uv == in_uv))
     {
         return false;
     }
+    _pos = in_pos;
+    _uv = in_uv;
 
     std::vector<uint8_t> vertex_data;
     GeneratedVertexData(vertex_data, _pos, _uv);

@@ -57,19 +57,19 @@ public:
             CD3DX12_DEPTH_STENCIL_DESC()// CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT)
             );
 
-        std::vector<std::shared_ptr<ShaderResourceInfo>> array_shader_resource_info;
-        array_shader_resource_info.push_back(
-            ShaderResourceInfo::FactorySampler(nullptr, D3D12_SHADER_VISIBILITY_PIXEL)
-            );
+            std::vector<std::shared_ptr<ShaderResourceInfo>> array_shader_resource_info;
+            array_shader_resource_info.push_back(
+                ShaderResourceInfo::FactorySampler(nullptr, D3D12_SHADER_VISIBILITY_PIXEL)
+                );
 
-        _shader = in_draw_system->MakeShader(
-            in_command_list,
-            shader_pipeline_state_data,
-            vertex_shader_data,
-            nullptr,
-            pixel_shader_data,
-            array_shader_resource_info
-            );
+            _shader = in_draw_system->MakeShader(
+                in_command_list,
+                shader_pipeline_state_data,
+                vertex_shader_data,
+                nullptr,
+                pixel_shader_data,
+                array_shader_resource_info
+                );
     }
 
     void DrawHelper(

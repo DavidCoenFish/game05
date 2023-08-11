@@ -13,7 +13,7 @@ public:
     // Was trying to hide device, but resizing render texture?
     //ID3D12Device2* const GetDevice();
     const int GetBackBufferIndex();
-    void SetRenderTarget(IRenderTarget* const in_render_target);
+    void SetRenderTarget(IRenderTarget* const in_render_target, const bool in_allow_clear = true);
     void SetShader(Shader* const in_shader);
     void Draw(GeometryGeneric* const in_geometry);
     // thread_group_count as the number of steps for each thread to do

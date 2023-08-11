@@ -18,7 +18,7 @@ UITexture::UITexture(
     if (false == in_use_back_buffer)
     {
         const std::vector<RenderTargetFormatData> target_format_data_array({
-            RenderTargetFormatData(DXGI_FORMAT_R32G32B32A32_FLOAT)
+            RenderTargetFormatData(DXGI_FORMAT_B8G8R8A8_UNORM)
             });
 
         _render_target_texture = in_draw_system->MakeRenderTargetTexture(

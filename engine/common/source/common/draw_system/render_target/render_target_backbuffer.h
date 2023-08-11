@@ -21,7 +21,7 @@ public:
         );
 
 private:
-    virtual void StartRender(ID3D12GraphicsCommandList* const in_command_list) override;
+    virtual void StartRender(ID3D12GraphicsCommandList* const in_command_list, const bool in_allow_clear) override;
     virtual void EndRender(ID3D12GraphicsCommandList* const in_command_list) override;
     virtual void GetFormatData(
         DXGI_FORMAT&in_depth_format,

@@ -3,9 +3,9 @@
 class UICoord
 {
 public:
-    UICoord(
-        const float in_ratio,
-        const float in_em_offset
+    explicit UICoord(
+        const float in_ratio = 0.0f,
+        const float in_em_offset = 0.0f
         );
     ~UICoord();
 

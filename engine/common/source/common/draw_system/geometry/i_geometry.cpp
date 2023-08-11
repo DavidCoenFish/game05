@@ -10,7 +10,7 @@ void IGeometry::DrawImplementation(
     ID3D12GraphicsCommandList* const in_command_list,
     const UINT in_vertex_count,
     const D3D_PRIMITIVE_TOPOLOGY in_primitive_topology,
-    D3D12_VERTEX_BUFFER_VIEW&in_vertex_buffer_view
+    D3D12_VERTEX_BUFFER_VIEW& in_vertex_buffer_view
     )
 {
     PIXBeginEvent(
@@ -91,7 +91,7 @@ void IGeometry::DeviceRestoredImplementation(
         auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(
             in_vertex_buffer.Get(),
             D3D12_RESOURCE_STATE_COPY_DEST,
-            D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE
+            D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER
             );
         in_command_list->ResourceBarrier(
             1,
@@ -125,7 +125,7 @@ void IGeometry::UploadVertexData(
     {
         auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(
             in_vertex_buffer.Get(),
-            D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
+            D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
             D3D12_RESOURCE_STATE_COPY_DEST
         );
         in_command_list->ResourceBarrier(
@@ -152,7 +152,7 @@ void IGeometry::UploadVertexData(
         auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(
             in_vertex_buffer.Get(),
             D3D12_RESOURCE_STATE_COPY_DEST,
-            D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE
+            D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER
         );
         in_command_list->ResourceBarrier(
             1,

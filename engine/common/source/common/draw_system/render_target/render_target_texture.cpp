@@ -271,7 +271,7 @@ void RenderTargetTexture::OnResize(
     return;
 }
 
-void RenderTargetTexture::StartRender(ID3D12GraphicsCommandList* const in_command_list)
+void RenderTargetTexture::StartRender(ID3D12GraphicsCommandList* const in_command_list, const bool in_allow_clear)
 {
     TransitionResource(
         in_command_list,
@@ -307,6 +307,7 @@ void RenderTargetTexture::StartRender(ID3D12GraphicsCommandList* const in_comman
         depth_stencil_descriptor
         );
 
+    if (true == in_allow_clear)
     {
         PIXBeginEvent(
             in_command_list,

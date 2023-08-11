@@ -489,10 +489,10 @@
     <ClInclude Include="source\common\ui\ui_geometry.h">
       <Filter>souce\common\ui</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\ui\ui_texture.h">
-      <Filter>souce\common\ui</Filter>
-    </ClInclude>
     <ClInclude Include="include\common\ui\ui_content_texture.h">
+      <Filter>include\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_texture.h">
       <Filter>include\common\ui</Filter>
     </ClInclude>
   </ItemGroup>

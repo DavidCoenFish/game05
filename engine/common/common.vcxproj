@@ -151,6 +151,7 @@
     <ClInclude Include="include\common\ui\ui_coord.h" />
     <ClInclude Include="include\common\ui\ui_hierarchy_node.h" />
     <ClInclude Include="include\common\ui\ui_manager.h" />
+    <ClInclude Include="include\common\ui\ui_texture.h" />
     <ClInclude Include="include\common\util\command_line.h" />
     <ClInclude Include="include\common\util\timer.h" />
     <ClInclude Include="include\common\util\utf8.h" />
@@ -183,7 +184,6 @@
     <ClInclude Include="source\common\text\text_locale.h" />
     <ClInclude Include="source\common\text\text_texture.h" />
     <ClInclude Include="source\common\ui\ui_geometry.h" />
-    <ClInclude Include="source\common\ui\ui_texture.h" />
     <ClInclude Include="source\common\window\window_helper.h" />
   </ItemGroup>
   <ItemGroup>

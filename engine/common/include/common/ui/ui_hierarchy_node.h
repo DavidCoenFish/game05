@@ -17,8 +17,8 @@ class VectorFloat4;
 struct UIHierarchyNodeChildData
 {
     UIHierarchyNodeChildData(
-        std::shared_ptr<UIHierarchyNode>& in_node,
-        std::shared_ptr<UIGeometry>& in_geometry,
+        const std::shared_ptr<UIHierarchyNode>& in_node,
+        const std::shared_ptr<UIGeometry>& in_geometry,
         const VectorInt2& in_render_target_size
         );
 
@@ -35,6 +35,16 @@ class UIHierarchyNode
 public:
     struct LayoutData
     {
+        static LayoutData FactoryFull();
+        LayoutData(
+            const UICoord& in_size_x,
+            const UICoord& in_size_y,
+            const UICoord& in_attach_x,
+            const UICoord& in_attach_y,
+            const UICoord& in_pivot_x,
+            const UICoord& in_pivot_y
+            );
+
         // Data for how we calculate our size relative to parent
         UICoord _data_size[2];
         UICoord _data_attach[2];
@@ -64,23 +74,30 @@ public:
     static std::shared_ptr<IUIContent> MakeContentText(
         std::shared_ptr<TextBlock>& in_text_block
         );
+    static std::shared_ptr<IUIContent> MakeContentTexture(
+        DrawSystem* const in_draw_system,
+        ID3D12GraphicsCommandList* const in_command_list,
+        const std::shared_ptr<HeapWrapperItem>& in_shader_resource_view_handle
+        );
 
-    static std::unique_ptr<UITexture> MakeTextureBackBuffer(
+    static std::shared_ptr<UITexture> MakeTextureBackBuffer(
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list
         );
-    static std::unique_ptr<UITexture> MakeTextureRenderTarget(
+    static std::shared_ptr<UITexture> MakeTextureRenderTarget(
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list,
         const VectorInt2& in_size
         );
 
+    // [-1.0f ... 1.0f]
     static VectorFloat4 CalculatePos(
         const VectorInt2& in_parent_size,
         const LayoutData& in_layout_data,
         const float in_ui_scale
         );
 
+    // [0 ... in_parent_size (ie, pixels)]
     static VectorInt2 CalculateSizeInt(
         const VectorInt2& in_parent_size,
         const LayoutData& in_layout_data,
@@ -89,8 +106,8 @@ public:
 
     UIHierarchyNode(
         const LayoutData& in_layout_data,
-        std::shared_ptr<IUIContent>& in_content,
-        std::unique_ptr<UITexture>& in_texture,
+        const std::shared_ptr<IUIContent>& in_content,
+        const std::shared_ptr<UITexture>& in_texture,
         const TFlag in_flag = TFlag::TVisible
         );
     ~UIHierarchyNode();
@@ -140,7 +157,8 @@ private:
         Shader* const in_shader,
         const float in_ui_scale,
         const bool in_needs_to_draw,
-        const VectorInt2& in_parent_size
+        const VectorInt2& in_parent_size,
+        const bool in_allow_clear = true
         );
 
     const bool UpdateChildData(
@@ -151,7 +169,7 @@ private:
 private:
     std::vector<std::shared_ptr<UIHierarchyNodeChildData>> _child_data_array;
     std::shared_ptr<IUIContent> _content;
-    std::unique_ptr<UITexture> _texture;
+    std::shared_ptr<UITexture> _texture;
 
     LayoutData _layout_data;
 

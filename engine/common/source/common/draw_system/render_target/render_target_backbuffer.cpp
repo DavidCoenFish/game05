@@ -106,7 +106,7 @@ RenderTargetBackBuffer::RenderTargetBackBuffer(
     return;
 }
 
-void RenderTargetBackBuffer::StartRender(ID3D12GraphicsCommandList* const in_command_list)
+void RenderTargetBackBuffer::StartRender(ID3D12GraphicsCommandList* const in_command_list, const bool in_allow_clear)
 {
     if (_current_state != D3D12_RESOURCE_STATE_RENDER_TARGET)
     {
@@ -151,6 +151,7 @@ void RenderTargetBackBuffer::StartRender(ID3D12GraphicsCommandList* const in_com
             );
     }
 
+    if (true == in_allow_clear)
     {
         PIXBeginEvent(
             in_command_list,

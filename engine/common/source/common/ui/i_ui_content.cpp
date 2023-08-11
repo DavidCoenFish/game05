@@ -87,10 +87,11 @@ void IUIContent::Draw(
     DrawSystemFrame* const in_frame,
     UITexture* const in_texture,
     std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
-    Shader* const in_shader
+    Shader* const in_shader,
+    const bool in_allow_clear
     )
 {
-    in_frame->SetRenderTarget(in_texture->GetRenderTarget());
+    in_frame->SetRenderTarget(in_texture->GetRenderTarget(), in_allow_clear);
     for (auto& child_data : in_child_data_array)
     {
         in_shader->SetShaderResourceViewHandle(
@@ -100,8 +101,6 @@ void IUIContent::Draw(
         in_frame->SetShader(in_shader);
         in_frame->Draw(child_data->_geometry->GetGeometry());
     }
-
-    in_texture->SetHasDrawn(true);
 
     return;
 }

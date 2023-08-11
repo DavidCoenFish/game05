@@ -8,11 +8,11 @@ VectorFloat4::VectorFloat4(
     const float in_z,
     const float in_w
     ) : _data{ in_x, in_y, in_z, in_w}
-
 {
     return;
 }
-float&VectorFloat4::operator[](const int in_index)
+
+float& VectorFloat4::operator[](const int in_index)
 {
     if ((0 <= in_index) && (in_index < Index::Count))
     {

@@ -33,7 +33,7 @@ const int DrawSystemFrame::GetBackBufferIndex()
     return _draw_system.GetBackBufferIndex();
 }
 
-void DrawSystemFrame::SetRenderTarget(IRenderTarget* const in_render_target)
+void DrawSystemFrame::SetRenderTarget(IRenderTarget* const in_render_target, const bool in_allow_clear)
 {
     if (_render_target)
     {
@@ -42,7 +42,7 @@ void DrawSystemFrame::SetRenderTarget(IRenderTarget* const in_render_target)
     _render_target = in_render_target;
     if (_render_target)
     {
-        _render_target->StartRender(_command_list);
+        _render_target->StartRender(_command_list, in_allow_clear);
     }
     return;
 }

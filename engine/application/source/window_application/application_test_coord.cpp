@@ -13,10 +13,15 @@
 #include "common/draw_system/shader/shader_pipeline_state_data.h"
 #include "common/file_system/file_system.h"
 #include "common/log/log.h"
+#include "common/math/vector_int2.h"
 #include "common/math/vector_int4.h"
+#include "common/ui/ui_content_canvas.h"
+#include "common/ui/ui_content_texture.h"
+#include "common/ui/ui_hierarchy_node.h"
+#include "common/ui/ui_manager.h"
+#include "common/ui/ui_texture.h"
 #include "common/util/vector_helper.h"
 #include "common/window/window_application_param.h"
-#include "common/ui/ui_manager.h"
 
 IWindowApplication* const ApplicationTestCoord::Factory(
     const HWND in_hwnd,
@@ -44,6 +49,7 @@ ApplicationTestCoord::ApplicationTestCoord(
         this
         );
 
+    // DrawSystem
     {
         RenderTargetFormatData render_target_format_data(
             DXGI_FORMAT_B8G8R8A8_UNORM,
@@ -62,11 +68,6 @@ ApplicationTestCoord::ApplicationTestCoord(
     _draw_resource = std::make_unique<DrawResource>();
 
     auto command_list = _draw_system->CreateCustomCommandList();
-    _draw_resource->_ui_manager = std::make_unique<UIManager>(
-        _draw_system.get(),
-        command_list->GetCommandList(),
-        in_application_param._root_path
-        );
 
     // Render target
     {
@@ -200,10 +201,10 @@ ApplicationTestCoord::ApplicationTestCoord(
 
         {
             const auto vertex_data = VectorHelper::FactoryArrayLiteral({
-                0.5f, 0.0f, 0.0f, 0.0f,
-                0.5f, 0.5f, 0.0f, 1.0f,
-                1.0f, 0.0f, 1.0f, 0.0f,
-                1.0f, 0.5f, 1.0f, 1.0f,
+                0.5f, 0.0f, 0.0f, 1.0f,
+                0.5f, 0.5f, 0.0f, 0.0f,
+                1.0f, 0.0f, 1.0f, 1.0f,
+                1.0f, 0.5f, 1.0f, 0.0f,
 
                 });
             _draw_resource->_panel_geometry[1] = _draw_system->MakeGeometryGeneric(
@@ -259,6 +260,83 @@ ApplicationTestCoord::ApplicationTestCoord(
             );
 
     }
+
+    // UI
+    _draw_resource->_ui_manager = std::make_unique<UIManager>(
+        _draw_system.get(),
+        command_list->GetCommandList(),
+        in_application_param._root_path
+        );
+     {
+        _draw_resource->_ui_hierarchy_node = std::make_shared<UIHierarchyNode>(
+            UIHierarchyNode::LayoutData::FactoryFull(),
+            UIHierarchyNode::MakeContentCanvas(),
+            UIHierarchyNode::MakeTextureBackBuffer(
+                _draw_system.get(),
+                command_list->GetCommandList()
+                )
+            );
+
+        {
+            _draw_resource->_ui_texture[0] = std::dynamic_pointer_cast<UIContentTexture>(UIHierarchyNode::MakeContentTexture(
+                _draw_system.get(),
+                command_list->GetCommandList(),
+                _draw_resource->_render_target->GetShaderResourceHeapWrapperItem()
+                ));
+            auto node = std::make_shared<UIHierarchyNode>(
+                UIHierarchyNode::LayoutData::LayoutData(
+                    UICoord(0.25f, 0.0f),
+                    UICoord(0.25f, 0.0f),
+                    UICoord(0.75f, 0.0f),
+                    UICoord(0.25f, 0.0f),
+                    UICoord(0.0f, 0.0f),
+                    UICoord(0.0f, 0.0f)
+                    ),
+                _draw_resource->_ui_texture[0],
+                UIHierarchyNode::MakeTextureRenderTarget(
+                    _draw_system.get(),
+                    command_list->GetCommandList(),
+                    VectorInt2(4,4)
+                    )
+                );
+
+            _draw_resource->_ui_hierarchy_node->AddChild(
+                node,
+                _draw_system.get(),
+                command_list->GetCommandList()
+                );
+        }
+
+        {
+            _draw_resource->_ui_texture[1] = std::dynamic_pointer_cast<UIContentTexture>(UIHierarchyNode::MakeContentTexture(
+                _draw_system.get(),
+                command_list->GetCommandList(),
+                _draw_resource->_texture->GetHeapWrapperItem()
+                ));
+            auto node = std::make_shared<UIHierarchyNode>(
+                UIHierarchyNode::LayoutData::LayoutData(
+                    UICoord(0.25f, 0.0f),
+                    UICoord(0.25f, 0.0f),
+                    UICoord(0.75f, 0.0f),
+                    UICoord(0.0f, 0.0f),
+                    UICoord(0.0f, 0.0f),
+                    UICoord(0.0f, 0.0f)
+                    ),
+                _draw_resource->_ui_texture[1],
+                UIHierarchyNode::MakeTextureRenderTarget(
+                    _draw_system.get(),
+                    command_list->GetCommandList(),
+                    VectorInt2(4, 4)
+                    )
+                );
+
+            _draw_resource->_ui_hierarchy_node->AddChild(
+                node,
+                _draw_system.get(),
+                command_list->GetCommandList()
+                );
+        }
+     }
 }
 
 ApplicationTestCoord::~ApplicationTestCoord()
@@ -305,35 +383,18 @@ void ApplicationTestCoord::Update()
         frame->SetShader(_draw_resource->_present_shader.get());
         frame->Draw(_draw_resource->_panel_geometry[1].get());
 
-#if 0
-        // Draw uv manager 2 render texture of triangle
-        _draw_resource->_ui_manager->DrawBlock(
-            frame.get(),
-            _screen_size,
-            VectorInt4(
-                _screen_size.GetX() * 3 / 4, 
-                _screen_size.GetY() * 1 / 4, 
-                _screen_size.GetX() * 4 / 4,
-                _screen_size.GetY() * 2 / 4
-                ),
-            VectorFloat4(0.0f, 0.0f, 1.0f, 1.0f),
-            _draw_resource->_render_target->GetShaderResourceHeapWrapperItem()
-            );
+        #if 1
+        // Draw ui hierarchy
+        //_draw_resource->_ui_texture[0]->SetTexture(_draw_resource->_render_target->GetShaderResourceHeapWrapperItem());
+        //_draw_resource->_ui_texture[1]->SetTexture(_draw_resource->_texture->GetHeapWrapperItem());
 
-        // Draw uv manager 3 with texture
-        _draw_resource->_ui_manager->DrawBlock(
+        _draw_resource->_ui_manager->DrawHierarchy(
+            _draw_system.get(),
             frame.get(),
-            _screen_size,
-            VectorInt4(
-                _screen_size.GetX() * 3 / 4,
-                _screen_size.GetY() * 0 / 4,
-                _screen_size.GetX() * 4 / 4,
-                _screen_size.GetY() * 1 / 4
-            ),
-            VectorFloat4(0.0f, 0.0f, 1.0f, 1.0f),
-            _draw_resource->_texture->GetHeapWrapperItem()
+            _draw_resource->_ui_hierarchy_node.get(),
+            1.0f
             );
-#endif
+        #endif
     }
 }
 
