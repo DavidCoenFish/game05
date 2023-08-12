@@ -12,6 +12,20 @@ class UIManagerImplementation;
 class VectorInt2;
 class VectorInt4;
 
+struct UIManagerDrawData
+{
+    explicit UIManagerDrawData(
+        const float in_ui_scale = 8.0f,
+        const std::string& in_locale = "",
+        const float in_time_delta = 0.0f
+        );
+    float _ui_scale;
+    std::string _locale;
+    float _time_delta;
+    //i_ui_data_server
+    // access locale data via data server, ie, data server gives us string, it can deal with locale
+};
+
 class UIManager
 {
 public:
@@ -52,8 +66,7 @@ public:
         DrawSystem* const in_draw_system,
         DrawSystemFrame* const in_frame,
         UIHierarchyNode* const in_node,
-        const float in_ui_scale, //in_pixels_per_em//pixels per em?,
-        const bool in_needs_to_draw = true// If something else is drawing to the render target, we always need to draw
+        const UIManagerDrawData& in_data
         );
 
 private:

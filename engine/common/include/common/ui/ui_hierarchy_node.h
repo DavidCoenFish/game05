@@ -2,6 +2,7 @@
 
 #include "common/ui/ui_coord.h"
 #include "common/math/vector_int2.h"
+#include "common/math/vector_float4.h"
 
 class DrawSystem;
 class DrawSystemFrame;
@@ -12,7 +13,7 @@ class TextBlock;
 class UIGeometry;
 class UIHierarchyNode;
 class UITexture;
-class VectorFloat4;
+struct UIManagerDrawData;
 
 struct UIHierarchyNodeChildData
 {
@@ -82,12 +83,16 @@ public:
 
     static std::shared_ptr<UITexture> MakeTextureBackBuffer(
         DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list
+        ID3D12GraphicsCommandList* const in_command_list,
+        const bool in_allow_clear = false,
+        const bool in_always_dirty = false
         );
     static std::shared_ptr<UITexture> MakeTextureRenderTarget(
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list,
-        const VectorInt2& in_size
+        const VectorFloat4& in_clear_colour = VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f),
+        const bool in_allow_clear = false,
+        const bool in_always_dirty = false
         );
 
     // [-1.0f ... 1.0f]
@@ -128,17 +133,12 @@ public:
         ID3D12GraphicsCommandList* const in_command_list
         );
     void ClearChildren();
-    // id by name? don't support remove? dynamic child source is from content?
-    //void RemoveChild(UIHierarchyNode* const in_node);
-
-    // UIManager has register UIHierarchyNode by name?
 
     const bool DrawHierarchyRoot(
         DrawSystem* const in_draw_system,
         DrawSystemFrame* const in_frame,
         Shader* const in_shader,
-        const float in_ui_scale,
-        const bool in_needs_to_draw // If something else is drawing to the render target, we always need to draw
+        const UIManagerDrawData& in_data
         );
 
     // return True if we needed to draw, ie, the texture may have changed
@@ -146,8 +146,8 @@ public:
         DrawSystem* const in_draw_system,
         DrawSystemFrame* const in_frame,
         Shader* const in_shader,
-        const float in_ui_scale,
-        const VectorInt2& in_new_size
+        const VectorInt2& in_new_size,
+        const UIManagerDrawData& in_data
         );
 
 private:
@@ -155,10 +155,8 @@ private:
         DrawSystem* const in_draw_system,
         DrawSystemFrame* const in_frame,
         Shader* const in_shader,
-        const float in_ui_scale,
-        const bool in_needs_to_draw,
         const VectorInt2& in_parent_size,
-        const bool in_allow_clear = true
+        const UIManagerDrawData& in_data
         );
 
     const bool UpdateChildData(

@@ -31,8 +31,7 @@ private:
         DrawSystemFrame* const in_frame,
         UITexture* const in_texture,
         std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
-        Shader* const in_shader, 
-        const bool in_allow_clear
+        Shader* const in_shader
         ) override;
 
 private:

@@ -62,7 +62,7 @@ const bool IUIContent::Update(
     DrawSystem* const in_draw_system,
     DrawSystemFrame* const in_frame,
     Shader* const in_shader,
-    const float in_ui_scale,
+    const UIManagerDrawData& in_data,
     std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array
     )
 {
@@ -73,9 +73,9 @@ const bool IUIContent::Update(
             in_draw_system,
             in_frame,
             in_shader,
-            in_ui_scale,
-            child_data->_render_target_size
-        ))
+            child_data->_render_target_size,
+            in_data
+            ))
         {
             result = true;
         }
@@ -87,11 +87,13 @@ void IUIContent::Draw(
     DrawSystemFrame* const in_frame,
     UITexture* const in_texture,
     std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
-    Shader* const in_shader,
-    const bool in_allow_clear
+    Shader* const in_shader
     )
 {
-    in_frame->SetRenderTarget(in_texture->GetRenderTarget(), in_allow_clear);
+    in_frame->SetRenderTarget(
+        in_texture->GetRenderTarget(), 
+        in_texture->GetAllowClear()
+        );
     for (auto& child_data : in_child_data_array)
     {
         in_shader->SetShaderResourceViewHandle(

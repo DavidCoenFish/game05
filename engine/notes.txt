@@ -94,7 +94,26 @@ i info
 x exit
 
 todo:
-- application coord test, add two panels bottom right
+X application coord test, add two panels bottom right
 - have a stack of text, the fps, build details, build time and version
 - have a stack of buttons, mask out rounded corners and icon, drop shadow
+- copy texture resource
+
+i_ui_data
+i_ui_data_server
+    i_ui_data GetData(key)
+// formatting hints by class name? or no layout in model
+//ui_data_string_small_right_no_wrap_auto_scroll
+ui_data_string
+ui_data_container // array of ui_data
+ui_data_icon_button // icon id (string), lable, enable flag, on click, on navigate?
+ui_data_expander // string, 
+
+translation_collection
+    string GetDefaultLocale()
+    vector<string> GetLocaleList(locale) // return array of keys? or array of pair<key,value>
+    std::string GetValue(locale, key)
+    void AppendData(locale, array<key, value>);
+    void ClearData()
+
 

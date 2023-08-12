@@ -10,6 +10,7 @@
 #include "common/ui/ui_content_texture.h"
 #include "common/ui/ui_coord.h"
 #include "common/ui/ui_geometry.h"
+#include "common/ui/ui_manager.h"
 #include "common/ui/ui_texture.h"
 #include "common/math/vector_int2.h"
 #include "common/math/vector_float4.h"
@@ -92,26 +93,35 @@ std::shared_ptr<IUIContent> UIHierarchyNode::MakeContentTexture(
 
 std::shared_ptr<UITexture> UIHierarchyNode::MakeTextureBackBuffer(
     DrawSystem* const in_draw_system,
-    ID3D12GraphicsCommandList* const in_command_list
+    ID3D12GraphicsCommandList* const in_command_list,
+    const bool in_allow_clear,
+    const bool in_always_dirty
     )
 {
     return std::make_shared<UITexture>(
         in_draw_system,
-        in_command_list
+        in_command_list,
+        true,
+        in_always_dirty,
+        in_allow_clear
         );
 }
 
 std::shared_ptr<UITexture> UIHierarchyNode::MakeTextureRenderTarget(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list,
-    const VectorInt2& in_size
+    const VectorFloat4& in_clear_colour,
+    const bool in_allow_clear,
+    const bool in_always_dirty
     )
 {
     return std::make_shared<UITexture>(
         in_draw_system,
         in_command_list,
-        in_size,
-        false
+        false,
+        in_always_dirty,
+        in_allow_clear,
+        in_clear_colour
         );
 }
 
@@ -248,8 +258,7 @@ const bool UIHierarchyNode::DrawHierarchyRoot(
     DrawSystem* const in_draw_system,
     DrawSystemFrame* const in_frame,
     Shader* const in_shader,
-    const float in_ui_scale,
-    const bool in_needs_to_draw
+    const UIManagerDrawData& in_data
     )
 {
     const auto parent_size = _texture->GetSize();
@@ -257,10 +266,8 @@ const bool UIHierarchyNode::DrawHierarchyRoot(
         in_draw_system,
         in_frame,
         in_shader,
-        in_ui_scale,
-        in_needs_to_draw,
         parent_size,
-        false
+        in_data
         );
 }
 
@@ -268,17 +275,16 @@ const bool UIHierarchyNode::DrawHierarchy(
     DrawSystem* const in_draw_system,
     DrawSystemFrame* const in_frame,
     Shader* const in_shader,
-    const float in_ui_scale,
-    const VectorInt2& in_new_size
+    const VectorInt2& in_new_size,
+    const UIManagerDrawData& in_data
     )
 {
     return DrawInternal(
         in_draw_system,
         in_frame,
         in_shader,
-        in_ui_scale,
-        false,
-        in_new_size
+        in_new_size,
+        in_data
         );
 }
 
@@ -286,15 +292,14 @@ const bool UIHierarchyNode::DrawInternal(
     DrawSystem* const in_draw_system,
     DrawSystemFrame* const in_frame,
     Shader* const in_shader,
-    const float in_ui_scale,
-    const bool in_needs_to_draw,
     const VectorInt2& in_parent_size,
-    const bool in_allow_clear
+    const UIManagerDrawData& in_data
     )
 {
-    bool needs_to_draw = in_needs_to_draw;
+    bool needs_to_draw = false;
 
-    if ((false == _texture->GetHasDrawn()) ||
+    if ((true == _texture->GetAlwaysDirty()) ||
+        (false == _texture->GetHasDrawn()) ||
         (true == _content->GetNeedsToDraw()))
     {
         needs_to_draw = true;
@@ -309,7 +314,7 @@ const bool UIHierarchyNode::DrawInternal(
         in_frame,
         _child_data_array,
         in_parent_size,
-        in_ui_scale
+        in_data._ui_scale
         ))
     {
         needs_to_draw = true;
@@ -319,7 +324,7 @@ const bool UIHierarchyNode::DrawInternal(
         in_draw_system,
         in_frame,
         in_shader,
-        in_ui_scale,
+        in_data,
         _child_data_array
         ))
     {
@@ -342,8 +347,7 @@ const bool UIHierarchyNode::DrawInternal(
             in_frame,
             _texture.get(),
             _child_data_array,
-            in_shader,
-            in_allow_clear
+            in_shader
             );
         _texture->SetHasDrawn(true);
     }

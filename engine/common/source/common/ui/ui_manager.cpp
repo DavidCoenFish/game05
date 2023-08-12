@@ -33,6 +33,18 @@ namespace
     });
 }
 
+UIManagerDrawData::UIManagerDrawData(
+    const float in_ui_scale,
+    const std::string& in_locale,
+    const float in_time_delta
+    )
+    : _ui_scale(in_ui_scale)
+    , _locale(in_locale)
+    , _time_delta(in_time_delta)
+{
+    // Nop
+}
+
 class UIManagerImplementation
 {
 public:
@@ -89,16 +101,14 @@ public:
         DrawSystem* const in_draw_system,
         DrawSystemFrame* const in_frame,
         UIHierarchyNode* const in_node,
-        const float in_ui_scale,
-        const bool in_needs_to_draw // If something else is drawing to the render target, we always need to draw
+        const UIManagerDrawData& in_data
         )
     {
         in_node->DrawHierarchyRoot(
             in_draw_system,
             in_frame,
             _shader.get(),
-            in_ui_scale,
-            in_needs_to_draw
+            in_data
             );
 
         return;
@@ -185,16 +195,14 @@ void UIManager::DrawHierarchy(
     DrawSystem* const in_draw_system,
     DrawSystemFrame* const in_frame,
     UIHierarchyNode* const in_node,
-    const float in_ui_scale,
-    const bool in_needs_to_draw
-)
+    const UIManagerDrawData& in_data
+    )
 {
     _implementation->DrawHierarchy(
         in_draw_system,
         in_frame,
         in_node,
-        in_ui_scale,
-        in_needs_to_draw
+        in_data
         );
     return;
 }

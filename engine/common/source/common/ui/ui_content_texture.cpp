@@ -32,11 +32,13 @@ void UIContentTexture::Draw(
     DrawSystemFrame* const in_frame,
     UITexture* const in_texture,
     std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&,
-    Shader* const in_shader,
-    const bool in_allow_clear
+    Shader* const in_shader
     )
 {
-    in_frame->SetRenderTarget(in_texture->GetRenderTarget(), in_allow_clear);
+    in_frame->SetRenderTarget(
+        in_texture->GetRenderTarget(), 
+        in_texture->GetAllowClear()
+        );
     in_shader->SetShaderResourceViewHandle(
         0,
         _shader_resource_view_handle

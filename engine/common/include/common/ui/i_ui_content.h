@@ -6,6 +6,7 @@ class Shader;
 class UITexture;
 class VectorInt2;
 struct UIHierarchyNodeChildData;
+struct UIManagerDrawData;
 
 class IUIContent
 {
@@ -27,7 +28,7 @@ public:
         DrawSystem* const in_draw_system,
         DrawSystemFrame* const in_frame,
         Shader* const in_shader,
-        const float in_ui_scale,
+        const UIManagerDrawData& in_data,
         std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array
         );
 
@@ -35,8 +36,7 @@ public:
         DrawSystemFrame* const in_frame,
         UITexture* const in_texture,
         std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
-        Shader* const in_shader,
-        const bool in_allow_clear
+        Shader* const in_shader
         );
 
     //CalculateChildDimentions

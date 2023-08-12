@@ -273,7 +273,9 @@ ApplicationTestCoord::ApplicationTestCoord(
             UIHierarchyNode::MakeContentCanvas(),
             UIHierarchyNode::MakeTextureBackBuffer(
                 _draw_system.get(),
-                command_list->GetCommandList()
+                command_list->GetCommandList(),
+                false, // Allow_clear
+                true // Always dirty
                 )
             );
 
@@ -295,8 +297,7 @@ ApplicationTestCoord::ApplicationTestCoord(
                 _draw_resource->_ui_texture[0],
                 UIHierarchyNode::MakeTextureRenderTarget(
                     _draw_system.get(),
-                    command_list->GetCommandList(),
-                    VectorInt2(4,4)
+                    command_list->GetCommandList()
                     )
                 );
 
@@ -325,8 +326,7 @@ ApplicationTestCoord::ApplicationTestCoord(
                 _draw_resource->_ui_texture[1],
                 UIHierarchyNode::MakeTextureRenderTarget(
                     _draw_system.get(),
-                    command_list->GetCommandList(),
-                    VectorInt2(4, 4)
+                    command_list->GetCommandList()
                     )
                 );
 
@@ -392,7 +392,7 @@ void ApplicationTestCoord::Update()
             _draw_system.get(),
             frame.get(),
             _draw_resource->_ui_hierarchy_node.get(),
-            1.0f
+            UIManagerDrawData(1.0f)
             );
         #endif
     }
