@@ -1,48 +1,19 @@
 #pragma once
 
-class DrawSystem;
-class DrawSystemFrame;
-class Shader;
-class UITexture;
-class VectorInt2;
-struct UIHierarchyNodeChildData;
-struct UIManagerDrawData;
+class IUIData;
 
-class IUIContent
+class IUIProviderData
 {
 public:
-    IUIContent();
-    virtual ~IUIContent();
-    
-    virtual const bool GetNeedsToDraw() const;
+    virtual ~IUIProviderData();
 
-    virtual const bool UpdatePosSizeForChildren( // add vectorint2 size for render target to child data?
-        DrawSystemFrame* const in_frame,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
-        const VectorInt2& in_parent_size,
-        const float in_ui_scale
-        );
+    virtual std::shared_ptr<IUIData> GetData(
+        const std::string& in_key
+        ) const = 0;
 
-    // ChildrenDraw
-    virtual const bool Update(
-        DrawSystem* const in_draw_system,
-        DrawSystemFrame* const in_frame,
-        Shader* const in_shader,
-        const UIManagerDrawData& in_data,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array
-        );
-
-    virtual void Draw(
-        DrawSystemFrame* const in_frame,
-        UITexture* const in_texture,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
-        Shader* const in_shader
-        );
-
-    //CalculateChildDimentions
-    //Draw
-    //OnClick?
-    //OnSelect?
-    //UpdateChildrenIfRequired?
+    virtual const std::string GetRootPage() const = 0;
+    virtual const std::vector<std::string> GetPageTemplateArray(
+        const std::string& in_page
+        ) const = 0;
 
 };

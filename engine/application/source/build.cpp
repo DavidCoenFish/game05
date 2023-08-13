@@ -1,26 +1,36 @@
 #include "application_pch.h"
-#include "Build.h"
+#include "build.h"
 
 /*
    including txt files without the build marking itself dirty consecutively seems to work?
    want some way of getting when the build was done into the build with out dirtying the build and forcing a rebuild....
 */
 
-const char* const Build::GetBuildDescription( void )
+const char* const Build::GetBuildHost( void )
 {
    return 
 #include "..\..\version\output\build_host.txt"
-//       " "
-//#include "..\..\version\output\BuildHash.txt"
-#if defined(_DEBUG)
-       " DEBUG"
-#endif
-#if defined(NDEBUG)
-       " RELEASE"
-#endif
        ;
 }
-const char* const Build::GetBuildTime( void )
+
+const char* const Build::GetBuildConfiguration(void)
+{
+    return
+#if defined(_DEBUG)
+    "DEBUG"
+#endif
+#if defined(NDEBUG)
+    "RELEASE"
+#endif
+        ;
+}
+
+const char* const Build::GetBuildPlatform(void)
+{
+    return "Win64";
+}
+
+const char* const Build::GetBuildTime(void)
 {
    return 
        __DATE__ 
@@ -28,7 +38,7 @@ const char* const Build::GetBuildTime( void )
        __TIME__
        ;
 }
-const char* const Build::GetBuildVersion( void )
+const char* const Build::GetBuildVersion(void)
 {
    return 
 #include "..\..\version\output\build_version.txt"

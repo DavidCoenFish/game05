@@ -1,48 +1,24 @@
 #pragma once
 
-class DrawSystem;
-class DrawSystemFrame;
-class Shader;
-class UITexture;
-class VectorInt2;
-struct UIHierarchyNodeChildData;
-struct UIManagerDrawData;
+#include "common/ui/ui_data/i_ui_data.h"
 
-class IUIContent
+class UIDataContainer : public IUIData
 {
 public:
-    IUIContent();
-    virtual ~IUIContent();
-    
-    virtual const bool GetNeedsToDraw() const;
-
-    virtual const bool UpdatePosSizeForChildren( // add vectorint2 size for render target to child data?
-        DrawSystemFrame* const in_frame,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
-        const VectorInt2& in_parent_size,
-        const float in_ui_scale
+    UIDataContainer(
+        const std::vector<std::shared_ptr<IUIData>>& in_array_data
         );
+    virtual ~UIDataContainer();
 
-    // ChildrenDraw
-    virtual const bool Update(
-        DrawSystem* const in_draw_system,
-        DrawSystemFrame* const in_frame,
-        Shader* const in_shader,
-        const UIManagerDrawData& in_data,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array
-        );
+    const int GetChangeID() const { return _change_id; }
+    const std::vector<std::shared_ptr<IUIData>>& GetDataConst() const { return _array_data; }
+    std::vector<std::shared_ptr<IUIData>>& ModifyData();
 
-    virtual void Draw(
-        DrawSystemFrame* const in_frame,
-        UITexture* const in_texture,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
-        Shader* const in_shader
-        );
+private:
+    virtual const std::string GetClassName() const { return "UIDataContainer"; }
 
-    //CalculateChildDimentions
-    //Draw
-    //OnClick?
-    //OnSelect?
-    //UpdateChildrenIfRequired?
+private:
+    int _change_id;
+    std::vector<std::shared_ptr<IUIData>> _array_data;
 
 };

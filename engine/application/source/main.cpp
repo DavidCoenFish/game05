@@ -67,9 +67,6 @@ static const TTaskFactory GetTaskFactory(const std::string& in_task_factory_key)
 
 static const int RunTask(HINSTANCE in_instance, int in_cmd_show)
 {
-    in_instance;
-    in_cmd_show;
-
     auto command_line = CommandLine::Factory(Utf8::Utf16ToUtf8(GetCommandLineW()));
     if (nullptr == command_line)
     {
@@ -78,7 +75,7 @@ static const int RunTask(HINSTANCE in_instance, int in_cmd_show)
 
     auto log = Log::FactoryCommandLine(command_line);
 
-    LOG_MESSAGE("Build %s %s %s", Build::GetBuildVersion(), Build::GetBuildTime(), Build::GetBuildDescription());
+    LOG_MESSAGE("Build %s %s %s %s %s", Build::GetBuildVersion(), Build::GetBuildTime(), Build::GetBuildHost(), Build::GetBuildConfiguration(), Build::GetBuildPlatform());
 
     int result = 0;
     std::string task_name("empty");

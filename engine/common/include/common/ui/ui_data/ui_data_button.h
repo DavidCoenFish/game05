@@ -1,48 +1,32 @@
 #pragma once
 
-class DrawSystem;
-class DrawSystemFrame;
-class Shader;
-class UITexture;
-class VectorInt2;
-struct UIHierarchyNodeChildData;
-struct UIManagerDrawData;
+#include "common/ui/ui_data/i_ui_data.h"
 
-class IUIContent
+class UIDataButton : public IUIData
 {
 public:
-    IUIContent();
-    virtual ~IUIContent();
-    
-    virtual const bool GetNeedsToDraw() const;
-
-    virtual const bool UpdatePosSizeForChildren( // add vectorint2 size for render target to child data?
-        DrawSystemFrame* const in_frame,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
-        const VectorInt2& in_parent_size,
-        const float in_ui_scale
+    UIDataButton(
+        const bool in_enabled,
+        const std::string& in_label_key,
+        const std::function<void(UIDataButton*)>& in_on_click,
+        const std::function<void(UIDataButton*)>& in_on_focus
         );
+    virtual ~UIDataButton();
 
-    // ChildrenDraw
-    virtual const bool Update(
-        DrawSystem* const in_draw_system,
-        DrawSystemFrame* const in_frame,
-        Shader* const in_shader,
-        const UIManagerDrawData& in_data,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array
-        );
+    const std::string GetLabelKey() const { return _label_key; }
+    const bool GetEnabled() const { return _enabled; }
 
-    virtual void Draw(
-        DrawSystemFrame* const in_frame,
-        UITexture* const in_texture,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
-        Shader* const in_shader
-        );
+    void OnClick();
+    void OnFocus();
 
-    //CalculateChildDimentions
-    //Draw
-    //OnClick?
-    //OnSelect?
-    //UpdateChildrenIfRequired?
+private:
+    virtual const std::string GetClassName() const { return "UIDataButton"; }
+
+private:
+    bool _enabled;
+    std::string _label_key;
+    // TODO: or make virtual
+    std::function<void(UIDataButton*)> _on_click;
+    std::function<void(UIDataButton*)> _on_focus;
 
 };

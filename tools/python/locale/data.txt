@@ -1,0 +1,25 @@
+_id	en	es	hi	ar	pt	bn	ru	ja	pa	de	jw	zh-cn	zh-tw	id	te	vi	ko	fr	mr	ta
+	English	Spanish	Hindi	Arabic	Portuguese	Bengali	Russian	Japanese	Punjabi	German	Javanese	Chinese (Simplified)	Chinese (Traditional)	Indonesian	Telugu	Vietnamese	Korean	French	Marathi	Tamil
+en	English	Inglés	अंग्रेज़ी	إنجليزي	Inglês	ইংরেজি	Английский	英語	ਅੰਗਰੇਜ਼ੀ	Englisch	Inggris	英语	英語	Bahasa inggris	ఆంగ్ల	Tiếng Anh	영어	Anglais	इंग्रजी	ஆங்கிலம்
+es	Spanish	Español	स्पैनिश	الأسبانية	Espanhol	স্পেনীয়	испанский	スペイン語	ਸਪੈਨਿਸ਼	Spanisch	Spanyol	西班牙语	西班牙語	Orang Spanyol	స్పానిష్	người Tây Ban Nha	스페인의	Espagnol	स्पॅनिश	ஸ்பானிஷ்
+hi	Hindi	hindi	हिंदी	الهندية	hindi	হিন্দি	хинди	ヒンディー語	ਹਿੰਦੀ	Hindi	Hindi	印地语	印地語	Hindi	హిందీ	Tiếng Hindi	힌디 어	hindi	हिंदी	இந்தி
+ar	Arabic	Arábica	अरबी	عربي	árabe	আরবি	арабский	アラビア語	ਅਰਬੀ	Arabisch	Arab	阿拉伯	阿拉伯	Arab	అరబిక్	tiếng Ả Rập	아라비아 말	arabe	अरबी	அரபு
+pt	Portuguese	portugués	पुर्तगाली	البرتغالية	Português	পর্তুগীজ	португальский	ポルトガル語	ਪੁਰਤਗਾਲੀ	Portugiesisch	Portugis	葡萄牙语	葡萄牙語	Portugis	పోర్చుగీస్	Bồ Đào Nha	포르투갈 인	Portugais	पोर्तुगीज	போர்த்துகீசியம்
+bn	Bengali	bengalí	बंगाली	البنغالية	bengali	বাংলা	Бенгальский	ベンガル語	ਬੰਗਾਲੀ	Bengali	Bengali	孟加拉	孟加拉	Benggala	బెంగాలీ	Tiếng Bengal	벵골 사람	bengali	बंगाली	பெங்காலி
+ru	Russian	ruso	रूसी	الروسية	russo	রাশিয়ান	Русский	ロシア	ਰਸ਼ੀਅਨ	Russisch	Rusia	俄语	俄語	Rusia	రష్యన్	tiếng Nga	러시아인	russe	रशियन	ரஷ்ய
+ja	Japanese	japonés	जापानी	اليابانية	japonês	জাপানি	Японский	日本語	ਜਪਾਨੀ	japanisch	Jepang	日本人	日本人	Jepang	జపనీస్	tiếng Nhật	일본어	Japonais	जपानी	ஜப்பானியர்கள்
+pa	Punjabi	punjabi	पंजाबी	البنجابية	Punjabi	পাঞ্জাবি	Пенджаби	パンジャブ	ਪੰਜਾਬੀ	Punjabi	Punjabi	旁遮普	旁遮普	Punjabi	పంజాబీ	Punjabi	펀 자브	Punjabi	पंजाबी	பஞ்சாபி
+de	German	Alemán	जर्मन	ألمانية	Alemão	জার্মান	Немецкий	ドイツ人	ਜਰਮਨ	Deutsch	Jerman	德语	德語	Jerman	జర్మన్	tiếng Đức	독일 사람	Allemand	जर्मन	ஜெர்மன்
+jw	Javanese	javanés	जावानीस	الجاوية	Javanês	জাভানিজ	Яванский	Javanese	ਜਾਵਨੀਸ	Javaner	Jawa	爪哇人	爪哇人	Jawa	జావానీస్	Java	자바어	Javanais	जावानीज	ஜாவானீஸ்
+zh-cn	Chinese Simplified	Chino simplificado	सरलीकृत चीनी	الصينية المبسطة	Chinês simplificado	সরলীকৃত চীনা	Китайский упрощенный	中国語（簡体字	ਚੀਨੀ ਸਰਲੀਕ੍ਰਿਤ	Vereinfachtes Chinesisch	Cina Sederhana	简体中文	簡體中文	Bahasa Tiongkok yang disederhanakan	సులభమైన చైనా భాష	Trung Quốc đơn giản hóa	중국어 (간체	Chinois simplifié	चिनी सरलीकृत	சீன எளிமைப்படுத்தப்பட்டது
+zh-tw	Chinese Traditional	Chino tradicional	चीनी पारंपरिक	تقاليد صينية	Chinês tradicional	প্রথাগত চীনা	Китайский традиционный	中国の伝統的な	ਚੀਨੀ ਰਵਾਇਤੀ	Chinesische Tradition	Tradisional Tionghoa	中国传统的	中國傳統的	Cina tradisional	చైనీస్ సాంప్రదాయ	Truyền thống Trung Hoa	중국 전통	Chinois (Traditionnel	पारंपारिक चीनी	சீன பாரம்பரிய
+id	Indonesian	indonesio	इन्डोनेशियाई	إندونيسي	indonésio	ইন্দোনেশিয়ান	индонезийский	インドネシア語	ਇੰਡੋਨੇਸ਼ੀਆਈ	Indonesisch	Indonesia	印度尼西亚	印度尼西亞	bahasa Indonesia	ఇండోనేషియా	Indonesia	인도네시아 인	indonésien	इंडोनेशियन	இந்தோனேசிய
+te	Telugu	Telugu	तेलुगू	التيلجو	Telugu	তেলুগু	телугу	テルグ語	ਤੇਲਗੂ	Telugu	Telugu	泰卢固语	泰盧固語	Telugu	తెలుగు	Telugu	텔루구 어	Telugu	तेलगू	தெலுங்கு
+vi	Vietnamese	vietnamita	वियतनामी	الفيتنامي	vietnamita	ভিয়েতনামী	вьетнамский	ベトナム人	ਵੀਅਤਨਾਮੀ	Vietnamesisch	Vietnam	越南人	越南人	Orang Vietnam	వియత్నామీస్	Tiếng Việt	베트남어	vietnamien	व्हिएतनामी	வியட்நாமிய
+ko	Korean	coreano	कोरियाई	الكورية	coreano	কোরিয়ান	Корейский	韓国語	ਕੋਰੀਅਨ	Koreanisch	Korea	韩国人	韓國人	Korea	కొరియన్	Hàn Quốc	한국인	coréen	कोरियन	கொரிய
+fr	French	Francés	फ्रांसीसी	فرنسي	Francês	ফরাসি	Французский	フランス語	ਫ੍ਰੈਂਚ	Französisch	Prancis	法语	法語	Perancis	ఫ్రెంచ్	người Pháp	프랑스 국민	Français	फ्रेंच	பிரஞ்சு
+mr	Marathi	Marathi	मराठी	المهاراتية	Marathi	মারাঠি	Маратхи	マラーティー	ਮਰਾਠੀ	Marathi	Marathi	马拉地语	馬拉地語	Marathi	మరాఠీ	Marathi	마라 티	Marathi	मराठी	மராத்தி
+ta	Tamil	Tamil	तामिल	التاميل	tâmil	তামিল	Тамильский	タミル語	ਤਾਮਿਲ	Tamil	Tamil	泰米尔人	泰米爾人	Tamil	తమిళ	Tamil	타밀 사람	Tamil	तमिळ	தமிழ்
+DEBUG	DEBUG	DEPURAR	डीबग	تصحيح	DEPURAR	ডিবাগ	ОТЛАЖИВАТЬ	デバッグ	ਡੀਬੱਗ	DEBUGGEN	Debug	调试	調試	Debug	డీబగ్	Gỡ lỗi	디버그	DÉBOGUER	डीबग	பிழைத்திருத்தம்
+RELEASE	RELEASE	LIBERAR	मुक्त करना	يطلق	LIBERAR	মুক্তি	ВЫПУСКАТЬ	リリース	ਜਾਰੀ ਕਰੋ	FREIGEBEN	Rilis	发布	發布	MELEPASKAN	విడుదల	GIẢI PHÓNG	풀어 주다	LIBÉRER	रीलिझ	வெளியீடு
+Win64	Win64	Win64	WIN64	Win64	Win64	উইন 64	Win64	Win64	ਵਿਨ 64	Win64	Win64	Win64	Win64	Win64	WIN64	Win64	Win64	Win64	Win64	வின் 64

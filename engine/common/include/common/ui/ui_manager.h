@@ -7,6 +7,7 @@ class DrawSystemFrame;
 class GeometryGeneric;
 class HeapWrapperItem;
 class IRenderTarget;
+class IUIProviderData;
 class UIHierarchyNode;
 class UIManagerImplementation;
 class VectorInt2;
@@ -67,6 +68,25 @@ public:
         DrawSystemFrame* const in_frame,
         UIHierarchyNode* const in_node,
         const UIManagerDrawData& in_data
+        );
+
+    void AddHierarchyNodeFactory(
+        const std::string& in_template_name,
+        const std::function< std::shared_ptr<UIHierarchyNode>(
+            UIManager* const,
+            DrawSystem* const,
+            ID3D12GraphicsCommandList* const,
+            IUIProviderData* const,
+            const std::string& // key_base
+            )>& in_factory
+        );
+
+    std::shared_ptr<UIHierarchyNode> MakeHierarchyNode(
+        const std::string& in_template_name, // ui data class name
+        const std::string& in_provider_data_key_base,
+        DrawSystem* const in_draw_system,
+        ID3D12GraphicsCommandList* const in_command_list,
+        IUIProviderData* const in_provider_data
         );
 
 private:

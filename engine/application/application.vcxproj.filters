@@ -165,6 +165,12 @@
     <ClCompile Include="source\window_application\application_test_coord.cpp">
       <Filter>source\window_application</Filter>
     </ClCompile>
+    <ClCompile Include="source\default_locale.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\default_ui_template.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Build.h">
@@ -208,6 +214,12 @@
     </ClInclude>
     <ClInclude Include="source\window_application\application_test_coord.h">
       <Filter>source\window_application</Filter>
+    </ClInclude>
+    <ClInclude Include="source\default_locale.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\default_ui_template.h">
+      <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

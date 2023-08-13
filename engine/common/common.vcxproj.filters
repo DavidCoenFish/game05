@@ -238,6 +238,30 @@
     <ClCompile Include="source\common\ui\ui_content_texture.cpp">
       <Filter>souce\common\ui</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\ui\ui_data\i_ui_provider_data.cpp">
+      <Filter>souce\common\ui\ui_data</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_data\ui_data_button.cpp">
+      <Filter>souce\common\ui\ui_data</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_data\ui_data_container.cpp">
+      <Filter>souce\common\ui\ui_data</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_data\ui_data_icon_button.cpp">
+      <Filter>souce\common\ui\ui_data</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_data\ui_data_string.cpp">
+      <Filter>souce\common\ui\ui_data</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_data\i_ui_data.cpp">
+      <Filter>souce\common\ui\ui_data</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\util\locale_system.cpp">
+      <Filter>souce\common\util</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_data\ui_data_template.cpp">
+      <Filter>souce\common\ui\ui_data</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -495,6 +519,30 @@
     <ClInclude Include="include\common\ui\ui_texture.h">
       <Filter>include\common\ui</Filter>
     </ClInclude>
+    <ClInclude Include="include\common\ui\ui_data\i_ui_provider_data.h">
+      <Filter>include\common\ui\ui_data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_data\ui_data_button.h">
+      <Filter>include\common\ui\ui_data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_data\ui_data_container.h">
+      <Filter>include\common\ui\ui_data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_data\ui_data_icon_button.h">
+      <Filter>include\common\ui\ui_data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_data\ui_data_string.h">
+      <Filter>include\common\ui\ui_data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_data\i_ui_data.h">
+      <Filter>include\common\ui\ui_data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\util\locale_system.h">
+      <Filter>include\common\util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_data\ui_data_template.h">
+      <Filter>include\common\ui\ui_data</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="souce">
@@ -604,6 +652,12 @@
     </Filter>
     <Filter Include="include\common\ui">
       <UniqueIdentifier>{189f9b8c-03fa-4d5a-b32c-a20b2f09f8ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\ui\ui_data">
+      <UniqueIdentifier>{97f56c3b-f5d7-43b1-b707-20f08dc55cb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\ui\ui_data">
+      <UniqueIdentifier>{2e915536-bbd6-44d6-80e5-07e6d5f840f5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

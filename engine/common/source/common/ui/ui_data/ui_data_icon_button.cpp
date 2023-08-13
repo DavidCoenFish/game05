@@ -1,48 +1,25 @@
-#pragma once
+#include "common/common_pch.h"
+#include "common/ui/ui_data/ui_data_icon_button.h"
 
-class DrawSystem;
-class DrawSystemFrame;
-class Shader;
-class UITexture;
-class VectorInt2;
-struct UIHierarchyNodeChildData;
-struct UIManagerDrawData;
-
-class IUIContent
+UIDataIconButton::UIDataIconButton(
+    const std::string& in_icon_key,
+    const bool in_enabled,
+    const std::string& in_label_key,
+    const std::function<void(UIDataButton*)>& in_on_click,
+    const std::function<void(UIDataButton*)>& in_on_focus
+    )
+    : UIDataButton(
+        in_enabled,
+        in_label_key,
+        in_on_click,
+        in_on_focus
+        )
+    , _icon_key(in_icon_key)
 {
-public:
-    IUIContent();
-    virtual ~IUIContent();
-    
-    virtual const bool GetNeedsToDraw() const;
+    // Nop
+}
 
-    virtual const bool UpdatePosSizeForChildren( // add vectorint2 size for render target to child data?
-        DrawSystemFrame* const in_frame,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
-        const VectorInt2& in_parent_size,
-        const float in_ui_scale
-        );
-
-    // ChildrenDraw
-    virtual const bool Update(
-        DrawSystem* const in_draw_system,
-        DrawSystemFrame* const in_frame,
-        Shader* const in_shader,
-        const UIManagerDrawData& in_data,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array
-        );
-
-    virtual void Draw(
-        DrawSystemFrame* const in_frame,
-        UITexture* const in_texture,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
-        Shader* const in_shader
-        );
-
-    //CalculateChildDimentions
-    //Draw
-    //OnClick?
-    //OnSelect?
-    //UpdateChildrenIfRequired?
-
-};
+UIDataIconButton::~UIDataIconButton()
+{
+    // Nop
+}

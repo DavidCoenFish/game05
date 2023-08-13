@@ -1,48 +1,21 @@
 #pragma once
 
-class DrawSystem;
-class DrawSystemFrame;
-class Shader;
-class UITexture;
-class VectorInt2;
-struct UIHierarchyNodeChildData;
-struct UIManagerDrawData;
+#include "common/ui/ui_data/i_ui_data.h"
 
-class IUIContent
+class UIDataString : public IUIData
 {
 public:
-    IUIContent();
-    virtual ~IUIContent();
-    
-    virtual const bool GetNeedsToDraw() const;
-
-    virtual const bool UpdatePosSizeForChildren( // add vectorint2 size for render target to child data?
-        DrawSystemFrame* const in_frame,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
-        const VectorInt2& in_parent_size,
-        const float in_ui_scale
+    UIDataString(
+        const std::string& in_key
         );
+    virtual ~UIDataString();
 
-    // ChildrenDraw
-    virtual const bool Update(
-        DrawSystem* const in_draw_system,
-        DrawSystemFrame* const in_frame,
-        Shader* const in_shader,
-        const UIManagerDrawData& in_data,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array
-        );
+    const std::string GetKey() const { return _key; }
 
-    virtual void Draw(
-        DrawSystemFrame* const in_frame,
-        UITexture* const in_texture,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
-        Shader* const in_shader
-        );
+private:
+    virtual const std::string GetClassName() const { return "UIDataString"; }
 
-    //CalculateChildDimentions
-    //Draw
-    //OnClick?
-    //OnSelect?
-    //UpdateChildrenIfRequired?
+private:
+    std::string _key;
 
 };

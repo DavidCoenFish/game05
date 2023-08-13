@@ -1,48 +1,31 @@
 #pragma once
 
-class DrawSystem;
-class DrawSystemFrame;
-class Shader;
-class UITexture;
-class VectorInt2;
-struct UIHierarchyNodeChildData;
-struct UIManagerDrawData;
+class LocaleSystemImplementation;
 
-class IUIContent
+class LocaleSystem
 {
 public:
-    IUIContent();
-    virtual ~IUIContent();
-    
-    virtual const bool GetNeedsToDraw() const;
+    LocaleSystem();
+    ~LocaleSystem();
 
-    virtual const bool UpdatePosSizeForChildren( // add vectorint2 size for render target to child data?
-        DrawSystemFrame* const in_frame,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
-        const VectorInt2& in_parent_size,
-        const float in_ui_scale
+    const std::string& GetValue(
+        const std::string& in_locale,
+        const std::string& in_key
         );
 
-    // ChildrenDraw
-    virtual const bool Update(
-        DrawSystem* const in_draw_system,
-        DrawSystemFrame* const in_frame,
-        Shader* const in_shader,
-        const UIManagerDrawData& in_data,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array
+    const std::vector<std::string> GatherLocale() const;
+
+    struct Data
+    {
+        std::string _key;
+        std::string _value;
+    };
+    void Append(
+        const std::string& in_locale,
+        const std::vector<Data>& in_data
         );
 
-    virtual void Draw(
-        DrawSystemFrame* const in_frame,
-        UITexture* const in_texture,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
-        Shader* const in_shader
-        );
-
-    //CalculateChildDimentions
-    //Draw
-    //OnClick?
-    //OnSelect?
-    //UpdateChildrenIfRequired?
+private:
+    std::unique_ptr<LocaleSystemImplementation> _implementation;
 
 };

@@ -1,48 +1,25 @@
 #pragma once
 
-class DrawSystem;
-class DrawSystemFrame;
-class Shader;
-class UITexture;
-class VectorInt2;
-struct UIHierarchyNodeChildData;
-struct UIManagerDrawData;
+#include "common/ui/ui_data/ui_data_button.h"
 
-class IUIContent
+class UIDataIconButton : public UIDataButton
 {
 public:
-    IUIContent();
-    virtual ~IUIContent();
-    
-    virtual const bool GetNeedsToDraw() const;
+    UIDataIconButton(
+        const std::string& in_icon_key,
+        const bool in_enabled,
+        const std::string& in_label_key,
+        const std::function<void(UIDataButton*)>& in_on_click,
+        const std::function<void(UIDataButton*)>& in_on_focus
+    );
+    virtual ~UIDataIconButton();
 
-    virtual const bool UpdatePosSizeForChildren( // add vectorint2 size for render target to child data?
-        DrawSystemFrame* const in_frame,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
-        const VectorInt2& in_parent_size,
-        const float in_ui_scale
-        );
+    const std::string GetIconKey() const { return _icon_key; }
 
-    // ChildrenDraw
-    virtual const bool Update(
-        DrawSystem* const in_draw_system,
-        DrawSystemFrame* const in_frame,
-        Shader* const in_shader,
-        const UIManagerDrawData& in_data,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array
-        );
+private:
+    virtual const std::string GetClassName() const { return "UIDataIconButton"; }
 
-    virtual void Draw(
-        DrawSystemFrame* const in_frame,
-        UITexture* const in_texture,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
-        Shader* const in_shader
-        );
-
-    //CalculateChildDimentions
-    //Draw
-    //OnClick?
-    //OnSelect?
-    //UpdateChildrenIfRequired?
+private:
+    std::string _icon_key;
 
 };
