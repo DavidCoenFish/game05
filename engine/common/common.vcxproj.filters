@@ -262,6 +262,9 @@
     <ClCompile Include="source\common\ui\ui_data\ui_data_template.cpp">
       <Filter>souce\common\ui\ui_data</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\ui\ui_data\ui_data_locale.cpp">
+      <Filter>souce\common\ui\ui_data</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -541,6 +544,9 @@
       <Filter>include\common\util</Filter>
     </ClInclude>
     <ClInclude Include="include\common\ui\ui_data\ui_data_template.h">
+      <Filter>include\common\ui\ui_data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_data\ui_data_locale.h">
       <Filter>include\common\ui\ui_data</Filter>
     </ClInclude>
   </ItemGroup>

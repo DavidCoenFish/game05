@@ -6,16 +6,16 @@ class UIDataString : public IUIData
 {
 public:
     UIDataString(
-        const std::string& in_key
+        const std::string& in_value
         );
     virtual ~UIDataString();
 
-    const std::string GetKey() const { return _key; }
+    const std::string GetKey() const { return _value; }
 
 private:
     virtual const std::string GetClassName() const { return "UIDataString"; }
 
 private:
-    std::string _key;
+    std::string _value;
 
 };

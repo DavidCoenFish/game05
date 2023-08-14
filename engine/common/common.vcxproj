@@ -91,6 +91,7 @@
     <ClCompile Include="source\common\ui\ui_data\ui_data_button.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_container.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_icon_button.cpp" />
+    <ClCompile Include="source\common\ui\ui_data\ui_data_locale.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_string.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_template.cpp" />
     <ClCompile Include="source\common\ui\ui_geometry.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="include\common\ui\ui_data\ui_data_button.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_container.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_icon_button.h" />
+    <ClInclude Include="include\common\ui\ui_data\ui_data_locale.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_string.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_template.h" />
     <ClInclude Include="include\common\ui\ui_hierarchy_node.h" />

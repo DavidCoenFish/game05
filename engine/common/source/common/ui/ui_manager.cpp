@@ -15,6 +15,7 @@
 #include "common/math/vector_int4.h"
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_hierarchy_node.h"
+#include "common/ui/ui_data/i_ui_provider_data.h"
 #include "common/util/vector_helper.h"
 
 namespace
@@ -47,6 +48,15 @@ UIManagerDrawData::UIManagerDrawData(
 
 class UIManagerImplementation
 {
+private:
+    typedef std::function<std::shared_ptr<UIHierarchyNode>(
+            UIManager* const,
+            DrawSystem* const,
+            ID3D12GraphicsCommandList* const,
+            IUIProviderData* const,
+            const std::string& // key_base
+            )> TNodeFactory;
+
 public:
     UIManagerImplementation(
         DrawSystem* const in_draw_system,
@@ -114,8 +124,71 @@ public:
         return;
     }
 
+    void AddHierarchyNodeFactory(
+        const std::string& in_template_name,
+        const TNodeFactory& in_factory
+        )
+    {
+        _map_hierarchy_node_factory[in_template_name] = in_factory;
+    }
+
+    std::shared_ptr<UIHierarchyNode> MakeHierarchyNode(
+        UIManager* const in_ui_manager,
+        const std::string& in_template_name,
+        const std::string& in_provider_data_key_base,
+        DrawSystem* const in_draw_system,
+        ID3D12GraphicsCommandList* const in_command_list,
+        IUIProviderData* const in_provider_data
+        )
+    {
+        auto found = _map_hierarchy_node_factory.find(in_template_name);
+        if (found != _map_hierarchy_node_factory.end())
+        {
+            return found->second(
+                in_ui_manager,
+                in_draw_system,
+                in_command_list,
+                in_provider_data,
+                in_provider_data_key_base
+                );
+        }
+        return nullptr;
+    }
+
+    void BuildPage(
+        UIManager* const in_ui_manager,
+        UIHierarchyNode* const in_parent,
+        const std::string& in_page_name, 
+        const std::string& in_provider_data_key_base,
+        DrawSystem* const in_draw_system,
+        ID3D12GraphicsCommandList* const in_command_list,
+        IUIProviderData* const in_provider_data
+        )
+    {
+        const auto data_array = in_provider_data->GetPageTemplateArray(
+            in_page_name,
+            in_provider_data_key_base
+            );
+        for (const auto& item : data_array)
+        {
+            in_parent->AddChild(
+                MakeHierarchyNode(
+                    in_ui_manager,
+                    item._template_name,
+                    item._data_provider_root,
+                    in_draw_system,
+                    in_command_list,
+                    in_provider_data
+                    ),
+                in_draw_system,
+                in_command_list
+                );
+        }
+    }
+
 private:
     std::shared_ptr<Shader> _shader;
+    std::map<std::string, TNodeFactory> _map_hierarchy_node_factory;
 
 };
 
@@ -203,6 +276,60 @@ void UIManager::DrawHierarchy(
         in_frame,
         in_node,
         in_data
+        );
+    return;
+}
+
+void UIManager::AddHierarchyNodeFactory(
+    const std::string& in_template_name,
+    const std::function< std::shared_ptr<UIHierarchyNode>(
+        UIManager* const,
+        DrawSystem* const,
+        ID3D12GraphicsCommandList* const,
+        IUIProviderData* const,
+        const std::string& // key_base
+        )>& in_factory
+    )
+{
+    _implementation->AddHierarchyNodeFactory(in_template_name, in_factory);
+}
+
+std::shared_ptr<UIHierarchyNode> UIManager::MakeHierarchyNode(
+    const std::string& in_template_name,
+    const std::string& in_provider_data_key_base,
+    DrawSystem* const in_draw_system,
+    ID3D12GraphicsCommandList* const in_command_list,
+    IUIProviderData* const in_provider_data
+    )
+{
+    return _implementation->MakeHierarchyNode(
+        this,
+        in_template_name,
+        in_provider_data_key_base,
+        in_draw_system,
+        in_command_list,
+        in_provider_data
+        );
+}
+
+
+void UIManager::BuildPage(
+    UIHierarchyNode* const in_parent,
+    const std::string& in_template_name, 
+    const std::string& in_provider_data_key_base,
+    DrawSystem* const in_draw_system,
+    ID3D12GraphicsCommandList* const in_command_list,
+    IUIProviderData* const in_provider_data
+    )
+{
+    _implementation->BuildPage(
+        this,
+        in_parent,
+        in_template_name, 
+        in_provider_data_key_base,
+        in_draw_system,
+        in_command_list,
+        in_provider_data
         );
     return;
 }

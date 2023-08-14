@@ -229,7 +229,7 @@ std::shared_ptr<HeapWrapperItem> UIHierarchyNode::GetShaderResourceHeapWrapperIt
 }
 
 void UIHierarchyNode::AddChild(
-    std::shared_ptr<UIHierarchyNode>& in_node,
+    const std::shared_ptr<UIHierarchyNode>& in_node,
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list
     )

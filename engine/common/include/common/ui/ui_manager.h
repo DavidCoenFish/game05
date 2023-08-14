@@ -82,7 +82,16 @@ public:
         );
 
     std::shared_ptr<UIHierarchyNode> MakeHierarchyNode(
-        const std::string& in_template_name, // ui data class name
+        const std::string& in_template_name,
+        const std::string& in_provider_data_key_base,
+        DrawSystem* const in_draw_system,
+        ID3D12GraphicsCommandList* const in_command_list,
+        IUIProviderData* const in_provider_data
+        );
+
+    void BuildPage(
+        UIHierarchyNode* const in_parent,
+        const std::string& in_template_name, 
         const std::string& in_provider_data_key_base,
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list,
