@@ -12,6 +12,8 @@
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_texture.h"
+#include "common/ui/ui_data/i_ui_provider_data.h"
+#include "common/ui/ui_data/i_ui_data.h"
 #include "common/math/vector_int2.h"
 #include "common/math/vector_float4.h"
 
@@ -357,11 +359,30 @@ const bool UIHierarchyNode::DrawInternal(
 
 const bool UIHierarchyNode::UpdateChildData(
     DrawSystem* const in_draw_system,
-    DrawSystemFrame* const in_frame
+    DrawSystemFrame* const in_frame,
+    const IUIProviderData* const in_ui_provider_data
     )
 {
+    //std::string _data_provider_key;
+    //int _data_provider_change_id;
+    if ((_data_provider_key.empty()) || (nullptr == in_ui_provider_data))
+    {
+        return false;
+    }
+
+    auto data_value = in_ui_provider_data->GetData(_data_provider_key);
+    const int change_id = data_value->GetChangeID();
+    if (_data_provider_change_id == change_id)
+    {
+        return false;
+    }
+
+    _data_provider_change_id = change_id;
+    //std::vector<std::shared_ptr<UIHierarchyNodeChildData>> _child_data_array;
+
+    // we need to rebuild _child_data_array
     in_draw_system;
     in_frame;
 
-    return false;
+    return true;
 }

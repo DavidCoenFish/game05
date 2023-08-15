@@ -17,7 +17,7 @@ public:
     const std::string GetIconKey() const { return _icon_key; }
 
 private:
-    virtual const std::string GetClassName() const { return "UIDataIconButton"; }
+    virtual const std::string GetTemplateName() const { return "UIDataIconButton"; }
 
 private:
     std::string _icon_key;

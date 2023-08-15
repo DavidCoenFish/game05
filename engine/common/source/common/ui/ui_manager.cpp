@@ -37,11 +37,15 @@ namespace
 UIManagerDrawData::UIManagerDrawData(
     const float in_ui_scale,
     const std::string& in_locale,
-    const float in_time_delta
+    const float in_time_delta,
+    const IUIProviderData* const in_ui_provider_data,
+    UIManager* const in_ui_manager
     )
     : _ui_scale(in_ui_scale)
     , _locale(in_locale)
     , _time_delta(in_time_delta)
+    , _ui_provider_data(in_ui_provider_data)
+    , _ui_manager(in_ui_manager)
 {
     // Nop
 }

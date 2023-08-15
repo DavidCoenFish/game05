@@ -13,7 +13,7 @@ public:
     const std::string GetKey() const { return _value; }
 
 private:
-    virtual const std::string GetClassName() const { return "UIDataString"; }
+    virtual const std::string GetTemplateName() const { return "UIDataString"; }
 
 private:
     std::string _value;

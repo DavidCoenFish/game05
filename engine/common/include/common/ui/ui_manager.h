@@ -9,20 +9,26 @@ class HeapWrapperItem;
 class IRenderTarget;
 class IUIProviderData;
 class UIHierarchyNode;
+class UIManager;
 class UIManagerImplementation;
 class VectorInt2;
 class VectorInt4;
+struct UIHierarchyNodeChildData;
 
 struct UIManagerDrawData
 {
     explicit UIManagerDrawData(
         const float in_ui_scale = 8.0f,
         const std::string& in_locale = "",
-        const float in_time_delta = 0.0f
+        const float in_time_delta = 0.0f,
+        const IUIProviderData* const in_ui_provider_data = nullptr,
+        UIManager* const in_ui_manager = nullptr
         );
     float _ui_scale;
     std::string _locale;
     float _time_delta;
+    const IUIProviderData* const _ui_provider_data;
+    UIManager* const _ui_manager;
     //i_ui_data_server
     // access locale data via data server, ie, data server gives us string, it can deal with locale
 };
@@ -69,7 +75,7 @@ public:
         UIHierarchyNode* const in_node,
         const UIManagerDrawData& in_data
         );
-
+#if 0
     void AddHierarchyNodeFactory(
         const std::string& in_template_name,
         const std::function< std::shared_ptr<UIHierarchyNode>(
@@ -97,7 +103,33 @@ public:
         ID3D12GraphicsCommandList* const in_command_list,
         IUIProviderData* const in_provider_data
         );
+#else
+    typedef std::function<
+        void(
+            UIManager* const in_ui_manager,
+            UIHierarchyNode& in_parent_node, // call AddChild, ClearChildren
+            const IUIData* const in_ui_data,
+            const IUIProviderData* const in_provider_data,
+            const std::string& in_provider_data_key_base,
+            DrawSystem* const in_draw_system,
+            ID3D12GraphicsCommandList* const in_command_list,
+        )> TNodeFactory;
 
+    void AddHierarchyNodeFactory(
+        const std::string& in_template_name,
+        const TNodeFactory& in_node_factory
+        );
+
+    void AppendHierarchyNodeChild(
+        UIHierarchyNode& in_parent_node, // call AddChild, ClearChildren
+        const IUIData* const in_ui_data, // get template name to map to NodeFactory
+        const IUIProviderData* const in_provider_data,
+        const std::string& in_provider_data_key_base,
+        DrawSystem* const in_draw_system,
+        ID3D12GraphicsCommandList* const in_command_list
+        );
+
+#endif
 private:
     std::unique_ptr<UIManagerImplementation> _implementation;
 

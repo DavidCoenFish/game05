@@ -11,11 +11,10 @@ public:
         );
     virtual ~UIDataTemplate();
 
-    const std::string GetTemplateName() const { return _template_name; }
     const std::string GetProviderDataKeyBase() const { return _provider_data_key_base; }
 
 private:
-    virtual const std::string GetClassName() const { return "UIDataTemplate"; }
+    virtual const std::string GetTemplateName() const { return _template_name; }
 
 private:
     std::string _template_name;

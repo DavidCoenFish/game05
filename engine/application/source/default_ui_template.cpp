@@ -1,6 +1,7 @@
 #include "application_pch.h"
 #include "default_ui_template.h"
 
+#include "common/macro.h"
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_hierarchy_node.h"
 
@@ -10,7 +11,7 @@ namespace
             UIManager* const in_ui_manager,
             DrawSystem* const in_draw_system,
             ID3D12GraphicsCommandList* const in_command_list,
-            IUIProviderData* const in_provider_data,
+            IUIProviderData* const ,//in_provider_data,
             const std::string& in_key_base
             )
     {

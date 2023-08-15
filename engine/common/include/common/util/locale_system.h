@@ -8,7 +8,7 @@ public:
     LocaleSystem();
     ~LocaleSystem();
 
-    const std::string& GetValue(
+    const std::string GetValue(
         const std::string& in_locale,
         const std::string& in_key
         );

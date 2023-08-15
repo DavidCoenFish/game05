@@ -15,7 +15,7 @@ public:
     std::vector<std::shared_ptr<IUIData>>& ModifyData();
 
 private:
-    virtual const std::string GetClassName() const { return "UIDataContainer"; }
+    virtual const std::string GetTemplateName() const { return "UIDataContainer"; }
 
 private:
     int _change_id;

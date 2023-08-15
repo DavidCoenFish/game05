@@ -20,7 +20,7 @@ public:
     void OnFocus();
 
 private:
-    virtual const std::string GetClassName() const { return "UIDataButton"; }
+    virtual const std::string GetTemplateName() const { return "UIDataButton"; }
 
 private:
     bool _enabled;

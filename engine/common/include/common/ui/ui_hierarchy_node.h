@@ -161,7 +161,8 @@ private:
 
     const bool UpdateChildData(
         DrawSystem* const in_draw_system,
-        DrawSystemFrame* const in_frame
+        DrawSystemFrame* const in_frame,
+        const IUIProviderData* const in_ui_provider_data
         );
 
 private:
@@ -177,5 +178,8 @@ private:
     // Shift into content?
     //std::function<void(UIHierarchyNode*)> _click_callback;
     //std::function<void(UIHierarchyNode*)> _focus_callback;
+
+    std::string _data_provider_key;
+    int _data_provider_change_id;
 
 };

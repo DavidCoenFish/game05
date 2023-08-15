@@ -2,9 +2,9 @@
 #include "common/ui/ui_data/ui_data_string.h"
 
 UIDataString::UIDataString(
-    const std::string& in_key
+    const std::string& in_value
     )
-    : _key(in_key)
+    : _value(in_value)
 {
     // Nop
 }

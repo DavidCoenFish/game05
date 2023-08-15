@@ -32,7 +32,7 @@ public:
         ) const;
 
 private:
-    virtual const std::string GetClassName() const { return "UIDataLocale"; }
+    virtual const std::string GetTemplateName() const { return "UIDataLocale"; }
 
 private:
     std::vector<Data> _data;

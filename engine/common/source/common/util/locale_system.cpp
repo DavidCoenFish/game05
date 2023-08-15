@@ -110,7 +110,7 @@ LocaleSystem::~LocaleSystem()
     // Nop
 }
 
-const std::string& LocaleSystem::GetValue(
+const std::string LocaleSystem::GetValue(
     const std::string& in_locale,
     const std::string& in_key
     )

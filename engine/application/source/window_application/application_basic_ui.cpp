@@ -13,6 +13,7 @@
 #include "common/macro.h"
 #include "common/math/vector_int2.h"
 #include "common/math/vector_int4.h"
+#include "common/text/text_manager.h"
 #include "common/ui/ui_content_canvas.h"
 #include "common/ui/ui_content_texture.h"
 #include "common/ui/ui_hierarchy_node.h"
