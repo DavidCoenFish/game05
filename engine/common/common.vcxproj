@@ -81,13 +81,13 @@
     <ClCompile Include="source\common\text\text_glyph_row.cpp" />
     <ClCompile Include="source\common\text\text_texture.cpp" />
     <ClCompile Include="source\common\ui\i_ui_content.cpp" />
+    <ClCompile Include="source\common\ui\i_ui_model.cpp" />
     <ClCompile Include="source\common\ui\ui_content_canvas.cpp" />
     <ClCompile Include="source\common\ui\ui_content_stack.cpp" />
     <ClCompile Include="source\common\ui\ui_content_text.cpp" />
     <ClCompile Include="source\common\ui\ui_content_texture.cpp" />
     <ClCompile Include="source\common\ui\ui_coord.cpp" />
     <ClCompile Include="source\common\ui\ui_data\i_ui_data.cpp" />
-    <ClCompile Include="source\common\ui\ui_data\i_ui_provider_data.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_button.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_container.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_icon_button.cpp" />
@@ -97,6 +97,7 @@
     <ClCompile Include="source\common\ui\ui_geometry.cpp" />
     <ClCompile Include="source\common\ui\ui_hierarchy_node.cpp" />
     <ClCompile Include="source\common\ui\ui_manager.cpp" />
+    <ClCompile Include="source\common\ui\ui_root_input_state.cpp" />
     <ClCompile Include="source\common\ui\ui_texture.cpp" />
     <ClCompile Include="source\common\util\command_line.cpp" />
     <ClCompile Include="source\common\util\locale_system.cpp" />
@@ -153,13 +154,13 @@
     <ClInclude Include="include\common\text\text_face.h" />
     <ClInclude Include="include\common\text\text_manager.h" />
     <ClInclude Include="include\common\ui\i_ui_content.h" />
+    <ClInclude Include="include\common\ui\i_ui_model.h" />
     <ClInclude Include="include\common\ui\ui_content_canvas.h" />
     <ClInclude Include="include\common\ui\ui_content_stack.h" />
     <ClInclude Include="include\common\ui\ui_content_text.h" />
     <ClInclude Include="include\common\ui\ui_content_texture.h" />
     <ClInclude Include="include\common\ui\ui_coord.h" />
     <ClInclude Include="include\common\ui\ui_data\i_ui_data.h" />
-    <ClInclude Include="include\common\ui\ui_data\i_ui_provider_data.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_button.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_container.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_icon_button.h" />
@@ -202,6 +203,7 @@
     <ClInclude Include="source\common\text\text_locale.h" />
     <ClInclude Include="source\common\text\text_texture.h" />
     <ClInclude Include="source\common\ui\ui_geometry.h" />
+    <ClInclude Include="source\common\ui\ui_root_input_state.h" />
     <ClInclude Include="source\common\window\window_helper.h" />
   </ItemGroup>
   <ItemGroup>

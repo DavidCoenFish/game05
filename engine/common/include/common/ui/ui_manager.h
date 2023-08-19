@@ -4,6 +4,124 @@
 
 class DrawSystem;
 class DrawSystemFrame;
+class IUIModel;
+class UIManager;
+class UIManagerImplementation;
+
+struct UIManagerTemplateFactoryParam
+{
+    DrawSystem* _draw_system;
+    ID3D12GraphicsCommandList* _command_list;
+};
+
+struct UIManagerUpdateLayoutParam
+{
+    DrawSystem* _draw_system;
+    ID3D12GraphicsCommandList* _command_list;
+    IUIModel* _ui_model;
+    UIManager* _ui_manager;
+    float _time_delta;
+    float _ui_scale;
+    std::string _locale;
+};
+
+struct UIManagerDealInputParam
+{
+    int _navigation_left_repeat;
+    int _navigation_right_repeat;
+    int _navigation_up_repeat;
+    int _navigation_down_repeat;
+    bool _action_currently_down;
+    bool _action_transition_up; //action key released this update
+
+    bool _mouse_valid;
+    bool _mouse_left_down;
+    bool _mouse_right_down;
+    int _mouse_x;
+    int _mouse_x_delta;
+    int _mouse_y;
+    int _mouse_y_delta;
+    float _mouse_scroll;
+
+};
+
+struct UIManagerDrawParam
+{
+    DrawSystem* const _draw_system;
+    DrawSystemFrame* _frame;
+
+    // Need some way of detecticting if device was reset
+    //const bool in_force_total_redraw = false
+};
+
+class UIManager
+{
+public:
+    UIManager(
+        DrawSystem* const in_draw_system,
+        ID3D12GraphicsCommandList* const in_command_list,
+        const std::filesystem::path& in_root_path
+        );
+    ~UIManager();
+
+    // Get the InputElementDescArray to match the ui manager shader
+    static const std::vector<D3D12_INPUT_ELEMENT_DESC>& GetInputElementDescArray();
+    static void BuildGeometryData(
+        std::vector<uint8_t>& out_vertex_data,
+        // Left bottom, right top (pos, uv)
+        const VectorFloat4& in_pos = VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f),
+        const VectorFloat4& in_uv = VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f) // atention Y inverted
+        );
+
+    //Add template
+    typedef std::function< void(
+        std::shared_ptr<UIHierarchyNode>& in_out_target,
+        UIManagerTemplateFactoryParam& in_param
+        )> TTemplateFactory;
+    void AddTemplateFactory(
+        const std::string& in_template_name,
+        const TTemplateFactory& in_factory
+        );
+
+    // Update layout
+    void UpdateLayout(
+        std::shared_ptr<UIHierarchyNode>& in_out_target,
+        UIManagerUpdateLayoutParam& in_param,
+        const std::string& in_model_key,
+        // Should the top level node draw to the backbuffer, or an internal texture
+        const bool in_draw_to_texture = false
+        );
+
+    // Deal input
+    void DealInput(
+        UIHierarchyNode& in_root,
+        UIManagerDealInputParam& in_param
+        );
+
+    // Draw
+    void Draw(
+        UIHierarchyNode& in_root,
+        UIManagerDrawParam& in_param
+        );
+
+private:
+    std::unique_ptr<UIManagerImplementation> _implementation;
+
+};
+
+
+
+
+
+
+
+
+#if 0
+
+#include "common/math/vector_float4.h"
+
+class DrawSystem;
+class DrawSystemFrame;
 class GeometryGeneric;
 class HeapWrapperItem;
 class IRenderTarget;
@@ -134,3 +252,5 @@ private:
     std::unique_ptr<UIManagerImplementation> _implementation;
 
 };
+
+#endif

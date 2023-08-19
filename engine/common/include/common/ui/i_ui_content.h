@@ -8,28 +8,26 @@ class VectorInt2;
 struct UIHierarchyNodeChildData;
 struct UIManagerDrawData;
 
+struct UIManagerDealInputParam;
+
 class IUIContent
 {
 public:
     IUIContent();
     virtual ~IUIContent();
     
-    virtual const bool GetNeedsToDraw() const;
+    //virtual const bool GetNeedsUpdateLayout() const;
+    virtual const bool GetNeedsDraw() const;
 
-    virtual const bool UpdatePosSizeForChildren( // add vectorint2 size for render target to child data?
-        DrawSystemFrame* const in_frame,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
-        const VectorInt2& in_parent_size,
-        const float in_ui_scale
+    virtual void UpdateLayout(
+        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_out_child_data_array,
+        UIManagerUpdateLayoutParam& in_param,
+        const std::string& in_model_key
         );
 
-    // ChildrenDraw
-    virtual const bool Update(
-        DrawSystem* const in_draw_system,
-        DrawSystemFrame* const in_frame,
-        Shader* const in_shader,
-        const UIManagerDrawData& in_data,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array
+    // so, what owns state of current focus, what click stated on
+    virtual void DealInput(
+        UIManagerDealInputParam& in_param
         );
 
     virtual void Draw(
@@ -38,11 +36,5 @@ public:
         std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
         Shader* const in_shader
         );
-
-    //CalculateChildDimentions
-    //Draw
-    //OnClick?
-    //OnSelect?
-    //UpdateChildrenIfRequired?
 
 };

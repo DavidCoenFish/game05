@@ -9,22 +9,6 @@ class GeometryGeneric;
 class UIGeometry
 {
 public:
-    static std::shared_ptr<GeometryGeneric> GeometryHelper(
-        DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list,
-        // Left bottom, right top (pos, uv)
-        const VectorFloat4& in_pos = VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f),
-        const VectorFloat4& in_uv = VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f) // atention Y inverted
-        );
-    static void GeometryUpdateHelper(
-        DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list,
-        GeometryGeneric* const in_geometry,
-        // Left bottom, right top (pos, uv)
-        const VectorFloat4& in_pos = VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f),
-        const VectorFloat4& in_uv = VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f) // atention Y inverted
-        );
-
     UIGeometry(
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list, 

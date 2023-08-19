@@ -238,9 +238,6 @@
     <ClCompile Include="source\common\ui\ui_content_texture.cpp">
       <Filter>souce\common\ui</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\ui\ui_data\i_ui_provider_data.cpp">
-      <Filter>souce\common\ui\ui_data</Filter>
-    </ClCompile>
     <ClCompile Include="source\common\ui\ui_data\ui_data_button.cpp">
       <Filter>souce\common\ui\ui_data</Filter>
     </ClCompile>
@@ -264,6 +261,12 @@
     </ClCompile>
     <ClCompile Include="source\common\ui\ui_data\ui_data_locale.cpp">
       <Filter>souce\common\ui\ui_data</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\i_ui_model.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_root_input_state.cpp">
+      <Filter>souce\common\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -522,9 +525,6 @@
     <ClInclude Include="include\common\ui\ui_texture.h">
       <Filter>include\common\ui</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\ui\ui_data\i_ui_provider_data.h">
-      <Filter>include\common\ui\ui_data</Filter>
-    </ClInclude>
     <ClInclude Include="include\common\ui\ui_data\ui_data_button.h">
       <Filter>include\common\ui\ui_data</Filter>
     </ClInclude>
@@ -548,6 +548,12 @@
     </ClInclude>
     <ClInclude Include="include\common\ui\ui_data\ui_data_locale.h">
       <Filter>include\common\ui\ui_data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\i_ui_model.h">
+      <Filter>include\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\ui\ui_root_input_state.h">
+      <Filter>souce\common\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
