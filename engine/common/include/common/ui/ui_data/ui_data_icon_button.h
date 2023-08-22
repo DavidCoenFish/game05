@@ -18,6 +18,7 @@ public:
 
 private:
     virtual const std::string GetTemplateName() const { return "UIDataIconButton"; }
+    virtual const int GetChangeID() const override;
 
 private:
     std::string _icon_key;

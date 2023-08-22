@@ -99,6 +99,11 @@ X application coord test, add two panels bottom right
 - have a stack of buttons, mask out rounded corners and icon, drop shadow
 - copy texture resource
 
+longterm:
+- split shader in shader_common and shader_instance, with shader instance having the memory handles of the constant buffer
+- change GetShaderResourceHeapWrapperItem to true raw pointer, use raw ptr more often
+
+
 i_ui_data
 i_ui_data_server
     i_ui_data GetData(key)

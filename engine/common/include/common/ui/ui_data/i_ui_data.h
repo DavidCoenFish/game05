@@ -6,7 +6,7 @@ public:
     virtual ~IUIData();
 
     virtual const std::string GetTemplateName() const = 0;
-    virtual const int GetChangeID() const = 0;
+    virtual const int GetChangeID() const;
 
     // This could work, but doesn't allow multiple templates per ui data class, ie, UIDataTemplate, which may be wanted for layout flexibility
     //virtual BuildChildren(

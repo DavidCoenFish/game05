@@ -15,6 +15,7 @@ public:
 
 private:
     virtual const std::string GetTemplateName() const { return _template_name; }
+    virtual const int GetChangeID() const override;
 
 private:
     std::string _template_name;

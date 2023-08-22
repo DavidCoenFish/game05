@@ -7,7 +7,7 @@ class LocaleSystem;
 class TextManager;
 class UIManager;
 class UIHierarchyNode;
-class UIProviderData;
+class UIModel;
 
 class ApplicationBasicUI : public IWindowApplication
 {
@@ -35,10 +35,10 @@ private:
 
     struct DrawResource
     {
-        std::unique_ptr<UIProviderData> _ui_provider_data;
         std::unique_ptr<TextManager> _text_manager;
         std::unique_ptr<LocaleSystem> _locale_system;
         std::unique_ptr<UIManager> _ui_manager;
+        std::unique_ptr<UIModel> _ui_model;
         std::shared_ptr<UIHierarchyNode> _ui_hierarchy_node;
     };
     std::unique_ptr<DrawResource> _draw_resource;

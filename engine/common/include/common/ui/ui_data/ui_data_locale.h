@@ -33,6 +33,7 @@ public:
 
 private:
     virtual const std::string GetTemplateName() const { return "UIDataLocale"; }
+    virtual const int GetChangeID() const override;
 
 private:
     std::vector<Data> _data;

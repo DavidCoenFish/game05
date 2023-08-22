@@ -25,7 +25,7 @@ public:
         );
 
 private:
-    virtual const bool GetNeedsToDraw() const override;
+    virtual const bool GetNeedsDraw() const override;
 
     virtual void Draw(
         DrawSystemFrame* const in_frame,

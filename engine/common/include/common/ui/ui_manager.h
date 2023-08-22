@@ -5,26 +5,45 @@
 class DrawSystem;
 class DrawSystemFrame;
 class IUIModel;
+class LocaleSystem;
+class UIHierarchyNode;
 class UIManager;
 class UIManagerImplementation;
 
-struct UIManagerTemplateFactoryParam
+struct UIContentFactoryParam
 {
+    explicit UIContentFactoryParam(
+        DrawSystem* const in_draw_system = nullptr,
+        ID3D12GraphicsCommandList* const in_command_list = nullptr
+        );
     DrawSystem* _draw_system;
     ID3D12GraphicsCommandList* _command_list;
 };
 
 struct UIManagerUpdateLayoutParam
 {
+    explicit UIManagerUpdateLayoutParam(
+        DrawSystem* const in_draw_system = nullptr,
+        ID3D12GraphicsCommandList* const in_command_list = nullptr,
+        IUIModel* const in_ui_model = nullptr,
+        UIManager* const in_ui_manager = nullptr,
+        LocaleSystem* const in_locale_system = nullptr,
+        const float in_ui_scale = 1.0f,
+        const float in_time_delta = 0.0f,
+        const std::string& in_locale = std::string()
+        );
+
     DrawSystem* _draw_system;
     ID3D12GraphicsCommandList* _command_list;
     IUIModel* _ui_model;
     UIManager* _ui_manager;
-    float _time_delta;
+    LocaleSystem* _locale_system;
     float _ui_scale;
+    float _time_delta;
     std::string _locale;
 };
 
+// Does UIRootInputState hold this data?
 struct UIManagerDealInputParam
 {
     int _navigation_left_repeat;
@@ -47,8 +66,13 @@ struct UIManagerDealInputParam
 
 struct UIManagerDrawParam
 {
+    explicit UIManagerDrawParam(
+        DrawSystem* const in_draw_system = nullptr,
+        DrawSystemFrame* const in_frame = nullptr
+        );
+
     DrawSystem* const _draw_system;
-    DrawSystemFrame* _frame;
+    DrawSystemFrame* const _frame;
 
     // Need some way of detecticting if device was reset
     //const bool in_force_total_redraw = false
@@ -75,33 +99,43 @@ public:
 
     //Add template
     typedef std::function< void(
-        std::shared_ptr<UIHierarchyNode>& in_out_target,
-        UIManagerTemplateFactoryParam& in_param
-        )> TTemplateFactory;
-    void AddTemplateFactory(
-        const std::string& in_template_name,
-        const TTemplateFactory& in_factory
+        std::unique_ptr<IUIContent>& in_out_content,
+        const UIContentFactoryParam& in_param
+        )> TContentFactory;
+        // is clear flag and colour part of the node layout update?
+    void AddContentFactory(
+        const std::string& in_content_name,
+        const TContentFactory& in_factory
         );
 
-    // Update layout
+    // Update layout, in_out_target can start out as null to kick things off
+    void UpdateLayoutRoot(
+        std::shared_ptr<UIHierarchyNode>& in_out_target,
+        const UIManagerUpdateLayoutParam& in_param,
+        const std::string& in_model_key = "", // Use empty string "" for root?
+        const bool in_draw_to_texture = false, // Draw to texture or backbuffer?
+        const VectorInt2& in_texture_size = VectorInt2(0,0) // If in_draw_to_texture is true, size to use for texture
+        );
+
     void UpdateLayout(
         std::shared_ptr<UIHierarchyNode>& in_out_target,
-        UIManagerUpdateLayoutParam& in_param,
-        const std::string& in_model_key,
-        // Should the top level node draw to the backbuffer, or an internal texture
-        const bool in_draw_to_texture = false
+        const UIManagerUpdateLayoutParam& in_param,
+        const VectorInt2& in_parent_size,
+        const VectorFloat4& in_screen_coords,
+        const std::string& in_model_key
         );
+
 
     // Deal input
     void DealInput(
         UIHierarchyNode& in_root,
-        UIManagerDealInputParam& in_param
+        const UIManagerDealInputParam& in_param
         );
 
     // Draw
     void Draw(
         UIHierarchyNode& in_root,
-        UIManagerDrawParam& in_param
+        const UIManagerDrawParam& in_param
         );
 
 private:

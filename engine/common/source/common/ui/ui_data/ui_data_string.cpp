@@ -13,3 +13,9 @@ UIDataString::~UIDataString()
 {
     // Nop
 }
+
+const int UIDataString::GetChangeID() const
+{
+    return 0;
+}
+

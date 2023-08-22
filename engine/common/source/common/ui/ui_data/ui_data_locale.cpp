@@ -45,3 +45,10 @@ const std::string UIDataLocale::GetString(
     }
     return result;
 }
+
+const int UIDataLocale::GetChangeID() const
+{
+    return 0;
+}
+
+

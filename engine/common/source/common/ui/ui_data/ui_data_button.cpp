@@ -35,3 +35,9 @@ void UIDataButton::OnFocus()
         _on_focus(this);
     }
 }
+
+const int UIDataButton::GetChangeID() const
+{
+    return 0;
+}
+

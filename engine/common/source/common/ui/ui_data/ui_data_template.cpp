@@ -15,3 +15,9 @@ UIDataTemplate::~UIDataTemplate()
 {
     return;
 }
+
+const int UIDataTemplate::GetChangeID() const
+{
+    return 0;
+}
+

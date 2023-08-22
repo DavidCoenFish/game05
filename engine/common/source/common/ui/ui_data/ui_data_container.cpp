@@ -21,3 +21,8 @@ std::vector<std::shared_ptr<IUIData>>& UIDataContainer::ModifyData()
     return _array_data;
 }
 
+const int UIDataContainer::GetChangeID() const
+{
+    return _change_id;
+}
+

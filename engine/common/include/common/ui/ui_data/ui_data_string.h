@@ -14,6 +14,7 @@ public:
 
 private:
     virtual const std::string GetTemplateName() const { return "UIDataString"; }
+    virtual const int GetChangeID() const override;
 
 private:
     std::string _value;

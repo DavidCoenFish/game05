@@ -7,6 +7,8 @@
 class IUIContent;
 class UIRootInputState;
 class UITexture;
+struct UIContentFactoryParam;
+struct UIManagerDrawParam;
 struct UIManagerUpdateLayoutParam;
 
 struct UIHierarchyNodeChildData
@@ -75,8 +77,12 @@ public:
 
     const LayoutData& GetLayoutData() const { return _layout_data; }
     LayoutData& GetLayoutDataModify();
+
     const VectorInt2 GetSize() const;
-    const VectorFloat4 GetInputScreenSize() const;
+
+    // This may be difficult with scrolling uv going up the chain, but post update could have the accurate screen location
+    const VectorFloat4 GetScreenCoords() const;
+
     UIRootInputState& GetOrMakeRootInputState();
 
     //return true if all bits of flga are set
@@ -93,16 +99,22 @@ public:
         );
     void ClearChildren();
 
+    typedef std::function< void(
+        std::unique_ptr<IUIContent>& in_out_content,
+        const UIContentFactoryParam& in_param
+        )> TContentFactory;
     void UpdateLayout(
-        UIManagerUpdateLayoutParam& in_param,
-        const std::string& in_model_key
-        // how to calculate screen pos, what holds the parent uv data?
+        const UIManagerUpdateLayoutParam& in_param,
+        const IUIData* const in_data,
+        const TContentFactory& in_factory,
+        const std::string& in_model_key = "", // Use empty string "" for root?
+        // Should the top level node draw to the backbuffer, or an internal texture
+        const bool in_draw_to_texture = false
         );
 
     // return True if we needed to draw, ie, the texture may have changed
     const bool Draw(
-        DrawSystem* const in_draw_system,
-        DrawSystemFrame* const in_frame,
+        const UIManagerDrawParam& in_draw_param,
         Shader* const in_shader
         );
 

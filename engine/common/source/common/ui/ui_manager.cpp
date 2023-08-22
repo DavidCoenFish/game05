@@ -9,7 +9,41 @@
 #include "common/file_system/file_system.h"
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_hierarchy_node.h"
+#include "common/ui/i_ui_model.h"
+#include "common/ui/ui_data/i_ui_data.h"
 #include "common/util/vector_helper.h"
+
+UIManagerUpdateLayoutParam::UIManagerUpdateLayoutParam(
+    DrawSystem* const in_draw_system,
+    ID3D12GraphicsCommandList* const in_command_list,
+    IUIModel* const in_ui_model,
+    UIManager* const in_ui_manager,
+    LocaleSystem* const in_locale_system,
+    const float in_ui_scale,
+    const float in_time_delta,
+    const std::string& in_locale
+    )
+    : _draw_system(in_draw_system)
+    , _command_list(in_command_list)
+    , _ui_model(in_ui_model)
+    , _ui_manager(in_ui_manager)
+    , _locale_system(in_locale_system)
+    , _ui_scale(in_ui_scale)
+    , _time_delta(in_time_delta)
+    , _locale(in_locale)
+{
+    // Nop
+}
+
+UIManagerDrawParam::UIManagerDrawParam(
+    DrawSystem* const in_draw_system,
+    DrawSystemFrame* const in_frame
+    )
+    : _draw_system(in_draw_system)
+    , _frame(in_frame)
+{
+    // Nop
+}
 
 namespace
 {
@@ -100,42 +134,68 @@ public:
         return;
     }
 
-    void AddTemplateFactory(
-        const std::string& in_template_name,
-        const UIManager::TTemplateFactory& in_factory
+    void AddContentFactory(
+        const std::string& in_content_name,
+        const UIManager::TContentFactory& in_factory
         )
     {
-        _map_template_factory[in_template_name] = in_factory;
+        _map_content_factory[in_content_name] = in_factory;
         return;
     }
 
     // Update layout
     void UpdateLayout(
         std::shared_ptr<UIHierarchyNode>& in_out_target,
-        UIManagerUpdateLayoutParam& in_param,
+        const UIManagerUpdateLayoutParam& in_param,
         const std::string& in_model_key,
         const bool in_draw_to_texture
         )
     {
+        auto data = in_param._ui_model->GetData(in_model_key);
+        if (nullptr == data)
+        {
+            in_out_target = nullptr;
+            return;
+        }
+        auto found = _map_content_factory.find(data->GetTemplateName());
+        if (found == _map_content_factory.end())
+        {
+            in_out_target = nullptr;
+            return;
+        }
+
+        if (nullptr == in_out_target)
+        {
+            in_out_target = std::make_shared<UIHierarchyNode>();
+        }
+
+        in_out_target->UpdateLayout(
+            
+            );
     }
 
     void DealInput(
         UIHierarchyNode& in_root,
-        UIManagerDealInputParam& in_param
+        const UIManagerDealInputParam& in_param
         )
     {
     }
 
     void Draw(
         UIHierarchyNode& in_root,
-        UIManagerDrawParam& in_param
+        const UIManagerDrawParam& in_param
         )
     {
+        in_root.Draw(
+            in_param._draw_system,
+            in_param._frame,
+            _shader.get()
+            );
     }
 
 private:
     std::shared_ptr<Shader> _shader;
-    std::map<std::string, UIManager::TTemplateFactory> _map_template_factory;
+    std::map<std::string, UIManager::TContentFactory> _map_content_factory;
 
 };
 
@@ -178,14 +238,13 @@ void UIManager::BuildGeometryData(
     return;
 }
 
-//Add template
-void UIManager::AddTemplateFactory(
-    const std::string& in_template_name,
-    const TTemplateFactory& in_factory
+void UIManager::AddContentFactory(
+    const std::string& in_content_name,
+    const TContentFactory& in_factory
     )
 {
-    _implementation->AddTemplateFactory(
-        in_template_name,
+    _implementation->AddContentFactory(
+        in_content_name,
         in_factory
         );
     return;
@@ -194,7 +253,7 @@ void UIManager::AddTemplateFactory(
 // Update layout
 void UIManager::UpdateLayout(
     std::shared_ptr<UIHierarchyNode>& in_out_target,
-    UIManagerUpdateLayoutParam& in_param,
+    const UIManagerUpdateLayoutParam& in_param,
     const std::string& in_model_key,
     const bool in_draw_to_texture
     )
@@ -211,7 +270,7 @@ void UIManager::UpdateLayout(
 // Deal input
 void UIManager::DealInput(
     UIHierarchyNode& in_root,
-    UIManagerDealInputParam& in_param
+    const UIManagerDealInputParam& in_param
     )
 {
     _implementation->DealInput(
@@ -224,7 +283,7 @@ void UIManager::DealInput(
 // Draw
 void UIManager::Draw(
     UIHierarchyNode& in_root,
-    UIManagerDrawParam& in_param
+    const UIManagerDrawParam& in_param
     )
 {
     _implementation->Draw(

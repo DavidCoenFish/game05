@@ -10,12 +10,12 @@ public:
         );
     virtual ~UIDataContainer();
 
-    const int GetChangeID() const { return _change_id; }
     const std::vector<std::shared_ptr<IUIData>>& GetDataConst() const { return _array_data; }
     std::vector<std::shared_ptr<IUIData>>& ModifyData();
 
 private:
     virtual const std::string GetTemplateName() const { return "UIDataContainer"; }
+    virtual const int GetChangeID() const override;
 
 private:
     int _change_id;

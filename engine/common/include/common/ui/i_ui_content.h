@@ -8,26 +8,31 @@ class VectorInt2;
 struct UIHierarchyNodeChildData;
 struct UIManagerDrawData;
 
+struct UIManagerUpdateLayoutParam;
 struct UIManagerDealInputParam;
+
 
 class IUIContent
 {
 public:
     IUIContent();
     virtual ~IUIContent();
-    
-    //virtual const bool GetNeedsUpdateLayout() const;
+
+    virtual const bool GetClearBackground(
+        VectorFloat4& out_clear_colour
+        ) const;
+
     virtual const bool GetNeedsDraw() const;
 
     virtual void UpdateLayout(
         std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_out_child_data_array,
-        UIManagerUpdateLayoutParam& in_param,
+        const UIManagerUpdateLayoutParam& in_param,
         const std::string& in_model_key
         );
 
     // so, what owns state of current focus, what click stated on
     virtual void DealInput(
-        UIManagerDealInputParam& in_param
+        const UIManagerDealInputParam& in_param
         );
 
     virtual void Draw(

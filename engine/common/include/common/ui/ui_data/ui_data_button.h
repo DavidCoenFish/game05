@@ -21,6 +21,7 @@ public:
 
 private:
     virtual const std::string GetTemplateName() const { return "UIDataButton"; }
+    virtual const int GetChangeID() const override;
 
 private:
     bool _enabled;
