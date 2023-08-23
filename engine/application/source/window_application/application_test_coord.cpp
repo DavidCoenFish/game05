@@ -262,6 +262,7 @@ ApplicationTestCoord::ApplicationTestCoord(
     }
 
     // UI
+#if 0
     _draw_resource->_ui_manager = std::make_unique<UIManager>(
         _draw_system.get(),
         command_list->GetCommandList(),
@@ -337,6 +338,7 @@ ApplicationTestCoord::ApplicationTestCoord(
                 );
         }
      }
+#endif
 }
 
 ApplicationTestCoord::~ApplicationTestCoord()
@@ -383,7 +385,7 @@ void ApplicationTestCoord::Update()
         frame->SetShader(_draw_resource->_present_shader.get());
         frame->Draw(_draw_resource->_panel_geometry[1].get());
 
-        #if 1
+        #if 0
         // Draw ui hierarchy
         //_draw_resource->_ui_texture[0]->SetTexture(_draw_resource->_render_target->GetShaderResourceHeapWrapperItem());
         //_draw_resource->_ui_texture[1]->SetTexture(_draw_resource->_texture->GetHeapWrapperItem());

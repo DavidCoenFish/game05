@@ -5,7 +5,8 @@ UIDataButton::UIDataButton(
     const bool in_enabled,
     const std::string& in_label_key,
     const std::function<void(UIDataButton*)>& in_on_click,
-    const std::function<void(UIDataButton*)>& in_on_focus
+    const std::function<void(UIDataButton*)>& in_on_focus,
+    const std::string& in_template_name
     )
     : _enabled(in_enabled)
     , _label_key(in_label_key)

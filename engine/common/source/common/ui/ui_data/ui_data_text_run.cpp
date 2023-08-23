@@ -1,9 +1,9 @@
 #include "common/common_pch.h"
-#include "common/ui/ui_data/ui_data_locale.h"
+#include "common/ui/ui_data/ui_data_text_run.h"
 
 #include "common/util/locale_system.h"
 
- UIDataLocale::Data::Data(
+ UIDataTextRun::Data::Data(
     const std::string& in_data,
     const bool in_is_locale_key
     )
@@ -13,20 +13,22 @@
     // Nop
 }
 
-UIDataLocale::UIDataLocale(
-    const std::vector<Data>& in_data
+UIDataTextRun::UIDataTextRun(
+    const std::vector<Data>& in_data,
+    const std::string& in_template_name
     )
     : _data(in_data)
+    , _template_name(in_template_name)
 {
     // Nop
 }
 
-UIDataLocale::~UIDataLocale()
+UIDataTextRun::~UIDataTextRun()
 {
     // Nop
 }
 
-const std::string UIDataLocale::GetString(
+const std::string UIDataTextRun::GetString(
     LocaleSystem* const in_locale_system,
     const std::string& in_locale
     ) const
@@ -46,7 +48,7 @@ const std::string UIDataLocale::GetString(
     return result;
 }
 
-const int UIDataLocale::GetChangeID() const
+const int UIDataTextRun::GetChangeID() const
 {
     return 0;
 }

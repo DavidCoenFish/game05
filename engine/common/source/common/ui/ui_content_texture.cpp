@@ -50,7 +50,7 @@ void UIContentTexture::Draw(
     return;
 }
 
-const bool UIContentTexture::GetNeedsToDraw() const
+const bool UIContentTexture::GetNeedsDraw() const
 {
     return _dirty;
 }

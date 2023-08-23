@@ -22,8 +22,7 @@
 #include "common/ui/ui_texture.h"
 #include "common/ui/ui_data/i_ui_data.h"
 #include "common/ui/ui_data/ui_data_container.h"
-#include "common/ui/ui_data/ui_data_locale.h"
-#include "common/ui/ui_data/ui_data_string.h"
+#include "common/ui/ui_data/ui_data_text_run.h"
 #include "common/ui/ui_data/ui_data_template.h"
 #include "common/util/locale_system.h"
 #include "common/util/vector_helper.h"
@@ -38,11 +37,10 @@ public:
             std::string(Build::GetBuildTime()) + " " + Build::GetBuildVersion()
             );
 
-        // How to get this to one line?
-        _data_map["build_info"] = std::make_shared<UIDataLocale>(std::vector<UIDataLocale::Data>({
-            UIDataLocale::Data(Build::GetBuildHost()),
-            UIDataLocale::Data(Build::GetBuildConfiguration(), true),
-            UIDataLocale::Data(Build::GetBuildPlatform(), true)
+        _data_map["build_info"] = std::make_shared<UIDataTextRun>(std::vector<UIDataTextRun::Data>({
+            UIDataTextRun::Data(Build::GetBuildHost()),
+            UIDataTextRun::Data(Build::GetBuildConfiguration(), true),
+            UIDataTextRun::Data(Build::GetBuildPlatform(), true)
             }));
 
         _data_map["build_fps"] = std::make_shared<UIDataString>("0.0s");

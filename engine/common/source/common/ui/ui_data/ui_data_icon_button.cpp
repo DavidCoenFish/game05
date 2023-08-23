@@ -6,7 +6,8 @@ UIDataIconButton::UIDataIconButton(
     const bool in_enabled,
     const std::string& in_label_key,
     const std::function<void(UIDataButton*)>& in_on_click,
-    const std::function<void(UIDataButton*)>& in_on_focus
+    const std::function<void(UIDataButton*)>& in_on_focus,
+    const std::string& in_template_name
     )
     : UIDataButton(
         in_enabled,
@@ -15,6 +16,7 @@ UIDataIconButton::UIDataIconButton(
         in_on_focus
         )
     , _icon_key(in_icon_key)
+    , _template_name(in_template_name)
 {
     // Nop
 }

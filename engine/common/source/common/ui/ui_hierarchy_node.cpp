@@ -4,6 +4,7 @@
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/draw_system_frame.h"
 #include "common/draw_system/shader/shader.h"
+#include "common/ui/i_ui_model.h"
 #include "common/ui/ui_content_canvas.h"
 #include "common/ui/ui_content_stack.h"
 #include "common/ui/ui_content_text.h"
@@ -12,10 +13,31 @@
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_texture.h"
-#include "common/ui/ui_data/i_ui_provider_data.h"
 #include "common/ui/ui_data/i_ui_data.h"
 #include "common/math/vector_int2.h"
 #include "common/math/vector_float4.h"
+
+UIHierarchyNodeUpdateLayoutParam::UIHierarchyNodeUpdateLayoutParam(
+    const std::string& in_locale,
+    const float in_ui_scale,
+    const float in_time_delta,
+    const std::map<std::string, TContentFactory>& in_map_content_factory,
+    DrawSystem* const in_draw_system,
+    ID3D12GraphicsCommandList* const in_command_list,
+    const IUIModel* const in_ui_model,
+    LocaleSystem* const in_locale_system
+    )
+    : _locale(in_locale)
+    , _ui_scale(in_ui_scale)
+    , _time_delta(in_time_delta)
+    , _map_content_factory(in_map_content_factory)
+    , _draw_system(in_draw_system)
+    , _command_list(in_command_list)
+    , _ui_model(in_ui_model)
+    , _locale_system(in_locale_system)
+{
+    // Nop
+}
 
 UIHierarchyNode::LayoutData UIHierarchyNode::LayoutData::FactoryFull()
 {
@@ -48,67 +70,17 @@ UIHierarchyNode::LayoutData::LayoutData(
 
 UIHierarchyNodeChildData::UIHierarchyNodeChildData(
     const std::shared_ptr<UIHierarchyNode>& in_node,
-    const std::shared_ptr<UIGeometry>& in_geometry,
-    const VectorInt2& in_render_target_size
+    const std::shared_ptr<UIGeometry>& in_geometry//,
+    //const VectorInt2& in_render_target_size
     )
     : _node(in_node)
     , _geometry(in_geometry)
-    , _render_target_size(in_render_target_size)
+    //, _render_target_size(in_render_target_size)
 {
     // Nop
 }
 
-
-std::shared_ptr<IUIContent> UIHierarchyNode::MakeContentCanvas()
-{
-    return std::make_shared<UIContentCanvas>();
-}
-
-std::shared_ptr<IUIContent> UIHierarchyNode::MakeContentStack(
-    // Horizontal or vertical
-    // Margin for children
-    // Children source callback
-    )
-{
-    return std::make_shared<UIContentStack>();
-}
-
-std::shared_ptr<IUIContent> UIHierarchyNode::MakeContentText(
-    std::shared_ptr<TextBlock>& in_text_block
-    )
-{
-    return std::make_shared<UIContentText>(in_text_block);
-}
-
-std::shared_ptr<IUIContent> UIHierarchyNode::MakeContentTexture(
-    DrawSystem* const in_draw_system,
-    ID3D12GraphicsCommandList* const in_command_list,
-    const std::shared_ptr<HeapWrapperItem>& in_shader_resource_view_handle
-    )
-{
-    return std::make_shared<UIContentTexture>(
-        in_draw_system,
-        in_command_list,
-        in_shader_resource_view_handle
-        );
-}
-
-std::shared_ptr<UITexture> UIHierarchyNode::MakeTextureBackBuffer(
-    DrawSystem* const in_draw_system,
-    ID3D12GraphicsCommandList* const in_command_list,
-    const bool in_allow_clear,
-    const bool in_always_dirty
-    )
-{
-    return std::make_shared<UITexture>(
-        in_draw_system,
-        in_command_list,
-        true,
-        in_always_dirty,
-        in_allow_clear
-        );
-}
-
+/*
 std::shared_ptr<UITexture> UIHierarchyNode::MakeTextureRenderTarget(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list,
@@ -177,6 +149,7 @@ VectorInt2 UIHierarchyNode::CalculateSizeInt(
         sizeY
         );
 }
+*/
 
 UIHierarchyNode::UIHierarchyNode(
     const LayoutData& in_layout_data,
@@ -197,7 +170,13 @@ UIHierarchyNode::~UIHierarchyNode()
     // Nop
 }
 
-const VectorInt2 UIHierarchyNode::GetSize() const
+
+//LayoutData& UIHierarchyNode::GetLayoutDataModify()
+//{
+//    
+//}
+
+const VectorInt2 UIHierarchyNode::GetTargetSize() const
 {
     return _texture->GetSize();
 }
@@ -241,12 +220,9 @@ void UIHierarchyNode::AddChild(
         in_command_list
         );
 
-    const VectorInt2 pos;
-
     auto child = std::make_shared<UIHierarchyNodeChildData>(
         in_node,
-        geometry,
-        pos
+        geometry
         );
     _child_data_array.push_back(child);
 }
@@ -256,6 +232,7 @@ void UIHierarchyNode::ClearChildren()
     _child_data_array.clear();
 }
 
+/*
 const bool UIHierarchyNode::DrawHierarchyRoot(
     DrawSystem* const in_draw_system,
     DrawSystemFrame* const in_frame,
@@ -386,3 +363,4 @@ const bool UIHierarchyNode::UpdateChildData(
 
     return true;
 }
+*/

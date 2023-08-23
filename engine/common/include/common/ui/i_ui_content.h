@@ -5,6 +5,7 @@ class DrawSystemFrame;
 class Shader;
 class UITexture;
 class VectorInt2;
+class VectorFloat4;
 struct UIHierarchyNodeChildData;
 struct UIManagerDrawData;
 
@@ -24,16 +25,16 @@ public:
 
     virtual const bool GetNeedsDraw() const;
 
-    virtual void UpdateLayout(
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_out_child_data_array,
-        const UIManagerUpdateLayoutParam& in_param,
-        const std::string& in_model_key
-        );
+    //virtual void UpdateLayout(
+    //    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_out_child_data_array,
+    //    const UIManagerUpdateLayoutParam& in_param,
+    //    const std::string& in_model_key
+    //    );
 
-    // so, what owns state of current focus, what click stated on
-    virtual void DealInput(
-        const UIManagerDealInputParam& in_param
-        );
+    //// so, what owns state of current focus, what click stated on
+    //virtual void DealInput(
+    //    const UIManagerDealInputParam& in_param
+    //    );
 
     virtual void Draw(
         DrawSystemFrame* const in_frame,

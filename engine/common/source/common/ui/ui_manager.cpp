@@ -3,6 +3,7 @@
 
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/draw_system_frame.h"
+#include "common/draw_system/render_target/i_render_target.h"
 #include "common/draw_system/shader/shader.h"
 #include "common/draw_system/shader/shader_resource.h"
 #include "common/draw_system/shader/shader_resource_info.h"
@@ -16,82 +17,39 @@
 UIManagerUpdateLayoutParam::UIManagerUpdateLayoutParam(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list,
-    IUIModel* const in_ui_model,
-    UIManager* const in_ui_manager,
+    const IUIModel* const in_ui_model,
     LocaleSystem* const in_locale_system,
     const float in_ui_scale,
     const float in_time_delta,
-    const std::string& in_locale
+    const std::string& in_locale,
+    const std::string& in_model_key,
+    const bool in_draw_to_texture,
+    const VectorInt2& in_texture_size
     )
     : _draw_system(in_draw_system)
     , _command_list(in_command_list)
     , _ui_model(in_ui_model)
-    , _ui_manager(in_ui_manager)
     , _locale_system(in_locale_system)
     , _ui_scale(in_ui_scale)
     , _time_delta(in_time_delta)
     , _locale(in_locale)
+    , _model_key(in_model_key)
+    , _draw_to_texture(in_draw_to_texture)
+    , _texture_size(in_texture_size)
 {
     // Nop
 }
 
 UIManagerDrawParam::UIManagerDrawParam(
     DrawSystem* const in_draw_system,
-    DrawSystemFrame* const in_frame
+    DrawSystemFrame* const in_frame,
+    TextManager* const in_text_manager
     )
     : _draw_system(in_draw_system)
     , _frame(in_frame)
+    , _text_manager(in_text_manager)
 {
     // Nop
-}
-
-namespace
-{
-    static const std::vector<D3D12_INPUT_ELEMENT_DESC> s_input_element_desc_array({
-        D3D12_INPUT_ELEMENT_DESC
-        {
-            "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, \
-                D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 // UINT InstanceDataStepRate;
-        },
-        D3D12_INPUT_ELEMENT_DESC
-        {
-            "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, \
-                D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 // UINT InstanceDataStepRate;
-        }
-    });
-
-    void BuildGeometryData(
-        std::vector<uint8_t>& out_vertex_data,
-        const VectorFloat4& in_pos,
-        const VectorFloat4& in_uv
-        )
-    {
-        //0.0f, 0.0f,
-        VectorHelper::AppendValue(out_vertex_data, in_pos[0]);
-        VectorHelper::AppendValue(out_vertex_data, in_pos[1]);
-        VectorHelper::AppendValue(out_vertex_data, in_uv[0]);
-        VectorHelper::AppendValue(out_vertex_data, in_uv[1]);
-
-        //0.0f, 1.0f,
-        VectorHelper::AppendValue(out_vertex_data, in_pos[0]);
-        VectorHelper::AppendValue(out_vertex_data, in_pos[3]);
-        VectorHelper::AppendValue(out_vertex_data, in_uv[0]);
-        VectorHelper::AppendValue(out_vertex_data, in_uv[3]);
-
-        //1.0f, 0.0f,
-        VectorHelper::AppendValue(out_vertex_data, in_pos[2]);
-        VectorHelper::AppendValue(out_vertex_data, in_pos[1]);
-        VectorHelper::AppendValue(out_vertex_data, in_uv[2]);
-        VectorHelper::AppendValue(out_vertex_data, in_uv[1]);
-
-        //1.0f, 1.0f,
-        VectorHelper::AppendValue(out_vertex_data, in_pos[2]);
-        VectorHelper::AppendValue(out_vertex_data, in_pos[3]);
-        VectorHelper::AppendValue(out_vertex_data, in_uv[2]);
-        VectorHelper::AppendValue(out_vertex_data, in_uv[3]);
-
-        return;
-    }
 }
 
 class UIManagerImplementation
@@ -108,7 +66,7 @@ public:
         std::vector < DXGI_FORMAT > render_target_format;
         render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
         ShaderPipelineStateData shader_pipeline_state_data(
-            s_input_element_desc_array,
+            UIGeometry::GetInputElementDescArray(),
             D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
             DXGI_FORMAT_UNKNOWN,
             // DXGI_FORMAT_D32_FLOAT,
@@ -145,32 +103,50 @@ public:
 
     // Update layout
     void UpdateLayout(
-        std::shared_ptr<UIHierarchyNode>& in_out_target,
-        const UIManagerUpdateLayoutParam& in_param,
-        const std::string& in_model_key,
-        const bool in_draw_to_texture
+        std::shared_ptr<UIHierarchyNode>& in_out_target_or_null,
+        const UIManagerUpdateLayoutParam& in_param
         )
     {
-        auto data = in_param._ui_model->GetData(in_model_key);
+        auto data = in_param._ui_model->GetData(in_param._model_key);
         if (nullptr == data)
         {
-            in_out_target = nullptr;
+            in_out_target_or_null = nullptr;
             return;
         }
+
+        // This could be pushed down into node, but trying to avoid empty nodes for missing templates
         auto found = _map_content_factory.find(data->GetTemplateName());
         if (found == _map_content_factory.end())
         {
-            in_out_target = nullptr;
+            in_out_target_or_null = nullptr;
             return;
         }
 
-        if (nullptr == in_out_target)
+        if (nullptr == in_out_target_or_null)
         {
-            in_out_target = std::make_shared<UIHierarchyNode>();
+            in_out_target_or_null = std::make_shared<UIHierarchyNode>();
         }
 
-        in_out_target->UpdateLayout(
-            
+        UIHierarchyNodeUpdateLayoutParam node_update_layout_param(
+            in_param._locale,
+            in_param._ui_scale,
+            in_param._time_delta,
+            _map_content_factory,
+            in_param._draw_system,
+            in_param._command_list,
+            in_param._ui_model,
+            in_param._locale_system
+            );
+
+        in_out_target_or_null->UpdateLayout(
+            data,
+            in_param._model_key,
+            found->second,
+            in_param._draw_to_texture,
+            in_param._draw_to_texture ? 
+                in_param._texture_size : 
+                in_param._draw_system->GetRenderTargetBackBuffer()->GetSize(),
+            node_update_layout_param
             );
     }
 
@@ -179,6 +155,8 @@ public:
         const UIManagerDealInputParam& in_param
         )
     {
+        in_param; in_root;
+        DSC_TODO("deal input");
     }
 
     void Draw(
@@ -187,8 +165,7 @@ public:
         )
     {
         in_root.Draw(
-            in_param._draw_system,
-            in_param._frame,
+            in_param,
             _shader.get()
             );
     }
@@ -220,7 +197,7 @@ UIManager::~UIManager()
 // Get the InputElementDescArray to match the ui manager shader
 const std::vector<D3D12_INPUT_ELEMENT_DESC>& UIManager::GetInputElementDescArray()
 {
-    return s_input_element_desc_array;
+    return UIGeometry::GetInputElementDescArray();
 }
 
 void UIManager::BuildGeometryData(
@@ -230,7 +207,7 @@ void UIManager::BuildGeometryData(
     const VectorFloat4& in_uv
     )
 {
-    BuildGeometryData(
+    UIGeometry::BuildGeometryData(
         out_vertex_data,
         in_pos,
         in_uv
@@ -252,17 +229,13 @@ void UIManager::AddContentFactory(
 
 // Update layout
 void UIManager::UpdateLayout(
-    std::shared_ptr<UIHierarchyNode>& in_out_target,
-    const UIManagerUpdateLayoutParam& in_param,
-    const std::string& in_model_key,
-    const bool in_draw_to_texture
+    std::shared_ptr<UIHierarchyNode>& in_out_target_or_null,
+    const UIManagerUpdateLayoutParam& in_param
     )
 {
     _implementation->UpdateLayout(
-        in_out_target, 
-        in_param,
-        in_model_key,
-        in_draw_to_texture
+        in_out_target_or_null, 
+        in_param
         );
     return;
 }

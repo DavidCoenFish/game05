@@ -9,7 +9,8 @@ public:
         const bool in_enabled,
         const std::string& in_label_key,
         const std::function<void(UIDataButton*)>& in_on_click,
-        const std::function<void(UIDataButton*)>& in_on_focus
+        const std::function<void(UIDataButton*)>& in_on_focus,
+        const std::string& in_template_name = std::string("UIDataButton")
         );
     virtual ~UIDataButton();
 
@@ -20,10 +21,11 @@ public:
     void OnFocus();
 
 private:
-    virtual const std::string GetTemplateName() const { return "UIDataButton"; }
+    virtual const std::string GetTemplateName() const { return _template_name; }
     virtual const int GetChangeID() const override;
 
 private:
+    std::string _template_name;
     bool _enabled;
     std::string _label_key;
     // TODO: or make virtual

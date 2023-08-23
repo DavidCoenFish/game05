@@ -5,10 +5,10 @@
 class LocaleSystem;
 
 /*
-well, since i keep on wanting to concatinate locale keys, set it up as an array
-if too excessive to have single keys in a data object, could add a UIDataLocaleKey class?
+runs of text could be [string, locale key, icon, ...?]
+runs of text could have style [bold, italic], font scale
 */
-class UIDataLocale : public IUIData
+class UIDataTextRun : public IUIData
 {
 public:
     struct Data
@@ -21,10 +21,11 @@ public:
         bool _is_locale_key;
     };
 
-    UIDataLocale(
-        const std::vector<Data>& in_data
+    UIDataTextRun(
+        const std::vector<Data>& in_data,
+        const std::string& in_template_name = std::string("UIDataTextRun")
         );
-    virtual ~UIDataLocale();
+    virtual ~UIDataTextRun();
 
     const std::string GetString(
         LocaleSystem* const in_locale_system,
@@ -32,10 +33,11 @@ public:
         ) const;
 
 private:
-    virtual const std::string GetTemplateName() const { return "UIDataLocale"; }
+    virtual const std::string GetTemplateName() const { return _template_name; }
     virtual const int GetChangeID() const override;
 
 private:
+    std::string _template_name;
     std::vector<Data> _data;
 
 };

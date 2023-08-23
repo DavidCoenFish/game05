@@ -20,11 +20,19 @@ IUIContent::~IUIContent()
     // Nop
 }
 
-const bool IUIContent::GetNeedsToDraw() const
+const bool IUIContent::GetClearBackground(
+    VectorFloat4&
+    ) const
 {
     return false;
 }
 
+const bool IUIContent::GetNeedsDraw() const
+{
+    return false;
+}
+
+/*
 const bool IUIContent::UpdatePosSizeForChildren( // add vectorint2 size for render target to child data?
     DrawSystemFrame* const in_frame,
     std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
@@ -82,6 +90,7 @@ const bool IUIContent::Update(
     }
     return result;
 }
+*/
 
 void IUIContent::Draw(
     DrawSystemFrame* const in_frame,

@@ -1,11 +1,14 @@
 #pragma once
 
+#include "common/math/vector_int2.h"
 #include "common/math/vector_float4.h"
 
 class DrawSystem;
 class DrawSystemFrame;
+class IUIContent;
 class IUIModel;
 class LocaleSystem;
+class TextManager;
 class UIHierarchyNode;
 class UIManager;
 class UIManagerImplementation;
@@ -14,10 +17,12 @@ struct UIContentFactoryParam
 {
     explicit UIContentFactoryParam(
         DrawSystem* const in_draw_system = nullptr,
-        ID3D12GraphicsCommandList* const in_command_list = nullptr
+        ID3D12GraphicsCommandList* const in_command_list = nullptr,
+        TextManager* const _text_manager = nullptr
         );
-    DrawSystem* _draw_system;
-    ID3D12GraphicsCommandList* _command_list;
+    DrawSystem* const _draw_system;
+    ID3D12GraphicsCommandList* const _command_list;
+    TextManager* const _text_manager;
 };
 
 struct UIManagerUpdateLayoutParam
@@ -25,22 +30,27 @@ struct UIManagerUpdateLayoutParam
     explicit UIManagerUpdateLayoutParam(
         DrawSystem* const in_draw_system = nullptr,
         ID3D12GraphicsCommandList* const in_command_list = nullptr,
-        IUIModel* const in_ui_model = nullptr,
-        UIManager* const in_ui_manager = nullptr,
+        const IUIModel* const in_ui_model = nullptr,
         LocaleSystem* const in_locale_system = nullptr,
         const float in_ui_scale = 1.0f,
         const float in_time_delta = 0.0f,
-        const std::string& in_locale = std::string()
+        const std::string& in_locale = std::string(),
+        const std::string& in_model_key = "", // Use empty string "" for root?
+        const bool in_draw_to_texture = false, // Draw to texture or backbuffer?
+        const VectorInt2& in_texture_size = VectorInt2(0,0) // If in_draw_to_texture is true, size to use for texture
         );
 
-    DrawSystem* _draw_system;
-    ID3D12GraphicsCommandList* _command_list;
-    IUIModel* _ui_model;
-    UIManager* _ui_manager;
-    LocaleSystem* _locale_system;
+    DrawSystem* const _draw_system;
+    ID3D12GraphicsCommandList* const _command_list;
+    const IUIModel* const _ui_model;
+    LocaleSystem* const _locale_system;
     float _ui_scale;
     float _time_delta;
     std::string _locale;
+    std::string _model_key;
+    bool _draw_to_texture;
+    VectorInt2 _texture_size;
+
 };
 
 // Does UIRootInputState hold this data?
@@ -68,11 +78,13 @@ struct UIManagerDrawParam
 {
     explicit UIManagerDrawParam(
         DrawSystem* const in_draw_system = nullptr,
-        DrawSystemFrame* const in_frame = nullptr
+        DrawSystemFrame* const in_frame = nullptr,
+        TextManager* const in_text_manager = nullptr
         );
 
     DrawSystem* const _draw_system;
     DrawSystemFrame* const _frame;
+    TextManager* const _text_manager;
 
     // Need some way of detecticting if device was reset
     //const bool in_force_total_redraw = false
@@ -88,7 +100,7 @@ public:
         );
     ~UIManager();
 
-    // Get the InputElementDescArray to match the ui manager shader
+    // Expose the input element desc for the ui manager shader to allow more use of the shader
     static const std::vector<D3D12_INPUT_ELEMENT_DESC>& GetInputElementDescArray();
     static void BuildGeometryData(
         std::vector<uint8_t>& out_vertex_data,
@@ -97,34 +109,23 @@ public:
         const VectorFloat4& in_uv = VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f) // atention Y inverted
         );
 
-    //Add template
+    //Add content factories, layout templates can be expressed through the content class
     typedef std::function< void(
         std::unique_ptr<IUIContent>& in_out_content,
         const UIContentFactoryParam& in_param
         )> TContentFactory;
-        // is clear flag and colour part of the node layout update?
+    // Clear flag and background colour moved to IUIContent
     void AddContentFactory(
         const std::string& in_content_name,
         const TContentFactory& in_factory
         );
 
     // Update layout, in_out_target can start out as null to kick things off
-    void UpdateLayoutRoot(
-        std::shared_ptr<UIHierarchyNode>& in_out_target,
-        const UIManagerUpdateLayoutParam& in_param,
-        const std::string& in_model_key = "", // Use empty string "" for root?
-        const bool in_draw_to_texture = false, // Draw to texture or backbuffer?
-        const VectorInt2& in_texture_size = VectorInt2(0,0) // If in_draw_to_texture is true, size to use for texture
-        );
-
+    // Don't recurse through this method, intended for kicking off the root node
     void UpdateLayout(
-        std::shared_ptr<UIHierarchyNode>& in_out_target,
-        const UIManagerUpdateLayoutParam& in_param,
-        const VectorInt2& in_parent_size,
-        const VectorFloat4& in_screen_coords,
-        const std::string& in_model_key
+        std::shared_ptr<UIHierarchyNode>& in_out_target_or_null,
+        const UIManagerUpdateLayoutParam& in_param
         );
-
 
     // Deal input
     void DealInput(
@@ -142,149 +143,3 @@ private:
     std::unique_ptr<UIManagerImplementation> _implementation;
 
 };
-
-
-
-
-
-
-
-
-#if 0
-
-#include "common/math/vector_float4.h"
-
-class DrawSystem;
-class DrawSystemFrame;
-class GeometryGeneric;
-class HeapWrapperItem;
-class IRenderTarget;
-class IUIProviderData;
-class UIHierarchyNode;
-class UIManager;
-class UIManagerImplementation;
-class VectorInt2;
-class VectorInt4;
-struct UIHierarchyNodeChildData;
-
-struct UIManagerDrawData
-{
-    explicit UIManagerDrawData(
-        const float in_ui_scale = 8.0f,
-        const std::string& in_locale = "",
-        const float in_time_delta = 0.0f,
-        const IUIProviderData* const in_ui_provider_data = nullptr,
-        UIManager* const in_ui_manager = nullptr
-        );
-    float _ui_scale;
-    std::string _locale;
-    float _time_delta;
-    const IUIProviderData* const _ui_provider_data;
-    UIManager* const _ui_manager;
-    //i_ui_data_server
-    // access locale data via data server, ie, data server gives us string, it can deal with locale
-};
-
-class UIManager
-{
-public:
-    static const std::vector<D3D12_INPUT_ELEMENT_DESC>& GetInputElementDesc();
-
-    UIManager(
-        DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list,
-        const std::filesystem::path& in_root_path
-        );
-    ~UIManager();
-
-    static std::shared_ptr<GeometryGeneric> GeometryHelper(
-        DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list,
-        // Left bottom, right top (pos, uv)
-        const VectorFloat4& in_pos = VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f),
-        const VectorFloat4& in_uv = VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f)
-        );
-    static void GeometryUpdateHelper(
-        DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list,
-        GeometryGeneric* const in_geometry,
-        // Left bottom, right top (pos, uv)
-        const VectorFloat4& in_pos = VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f),
-        const VectorFloat4& in_uv = VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f) // atention Y inverted
-        );
-
-    // Expose block drawing to current frame and whatever render target is already set on the frame
-    void DrawHelper(
-        DrawSystemFrame* const in_frame,
-        IRenderTarget* const in_render_target,
-        GeometryGeneric* const in_geometry,
-        const std::shared_ptr<HeapWrapperItem>& in_texture_handle
-        );
-
-    void DrawHierarchy(
-        DrawSystem* const in_draw_system,
-        DrawSystemFrame* const in_frame,
-        UIHierarchyNode* const in_node,
-        const UIManagerDrawData& in_data
-        );
-#if 0
-    void AddHierarchyNodeFactory(
-        const std::string& in_template_name,
-        const std::function< std::shared_ptr<UIHierarchyNode>(
-            UIManager* const,
-            DrawSystem* const,
-            ID3D12GraphicsCommandList* const,
-            IUIProviderData* const,
-            const std::string& // key_base
-            )>& in_factory
-        );
-
-    std::shared_ptr<UIHierarchyNode> MakeHierarchyNode(
-        const std::string& in_template_name,
-        const std::string& in_provider_data_key_base,
-        DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list,
-        IUIProviderData* const in_provider_data
-        );
-
-    void BuildPage(
-        UIHierarchyNode* const in_parent,
-        const std::string& in_template_name, 
-        const std::string& in_provider_data_key_base,
-        DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list,
-        IUIProviderData* const in_provider_data
-        );
-#else
-    typedef std::function<
-        void(
-            UIManager* const in_ui_manager,
-            UIHierarchyNode& in_parent_node, // call AddChild, ClearChildren
-            const IUIData* const in_ui_data,
-            const IUIProviderData* const in_provider_data,
-            const std::string& in_provider_data_key_base,
-            DrawSystem* const in_draw_system,
-            ID3D12GraphicsCommandList* const in_command_list,
-        )> TNodeFactory;
-
-    void AddHierarchyNodeFactory(
-        const std::string& in_template_name,
-        const TNodeFactory& in_node_factory
-        );
-
-    void AppendHierarchyNodeChild(
-        UIHierarchyNode& in_parent_node, // call AddChild, ClearChildren
-        const IUIData* const in_ui_data, // get template name to map to NodeFactory
-        const IUIProviderData* const in_provider_data,
-        const std::string& in_provider_data_key_base,
-        DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list
-        );
-
-#endif
-private:
-    std::unique_ptr<UIManagerImplementation> _implementation;
-
-};
-
-#endif

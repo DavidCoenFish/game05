@@ -1,10 +1,15 @@
 #include "common/common_pch.h"
 #include "common/ui/ui_data/ui_data_string.h"
 
+#include "common/util/locale_system.h"
+
 UIDataString::UIDataString(
-    const std::string& in_value
+    const std::string& in_data,
+    const std::string& in_template_name
     )
-    : _value(in_value)
+    : _data(in_data)
+    , _template_name(in_template_name)
+    , _change_id(0)
 {
     // Nop
 }
@@ -14,8 +19,18 @@ UIDataString::~UIDataString()
     // Nop
 }
 
-const int UIDataString::GetChangeID() const
+void UIDataString::SetString(const std::string& in_data)
 {
-    return 0;
+    if (_data == in_data)
+    {
+        return;
+    }
+    _change_id += 1;
+    _data = in_data;
+    return;
 }
 
+const int UIDataString::GetChangeID() const
+{
+    return _change_id;
+}
