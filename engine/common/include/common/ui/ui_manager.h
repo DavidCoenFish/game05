@@ -6,6 +6,7 @@
 class DrawSystem;
 class DrawSystemFrame;
 class IUIContent;
+class IUIData;
 class IUIModel;
 class LocaleSystem;
 class TextManager;
@@ -18,10 +19,12 @@ struct UIContentFactoryParam
     explicit UIContentFactoryParam(
         DrawSystem* const in_draw_system = nullptr,
         ID3D12GraphicsCommandList* const in_command_list = nullptr,
-        TextManager* const _text_manager = nullptr
+        const IUIData* const in_ui_data = nullptr,
+        TextManager* const in_text_manager = nullptr
         );
     DrawSystem* const _draw_system;
     ID3D12GraphicsCommandList* const _command_list;
+    const IUIData* const _ui_data;
     TextManager* const _text_manager;
 };
 
@@ -32,11 +35,13 @@ struct UIManagerUpdateLayoutParam
         ID3D12GraphicsCommandList* const in_command_list = nullptr,
         const IUIModel* const in_ui_model = nullptr,
         LocaleSystem* const in_locale_system = nullptr,
+        TextManager* const in_text_manager = nullptr,
         const float in_ui_scale = 1.0f,
         const float in_time_delta = 0.0f,
         const std::string& in_locale = std::string(),
         const std::string& in_model_key = "", // Use empty string "" for root?
         const bool in_draw_to_texture = false, // Draw to texture or backbuffer?
+        const bool in_always_dirty = false,
         const VectorInt2& in_texture_size = VectorInt2(0,0) // If in_draw_to_texture is true, size to use for texture
         );
 
@@ -44,11 +49,13 @@ struct UIManagerUpdateLayoutParam
     ID3D12GraphicsCommandList* const _command_list;
     const IUIModel* const _ui_model;
     LocaleSystem* const _locale_system;
+    TextManager* const _text_manager;
     float _ui_scale;
     float _time_delta;
     std::string _locale;
     std::string _model_key;
     bool _draw_to_texture;
+    bool _always_dirty;
     VectorInt2 _texture_size;
 
 };

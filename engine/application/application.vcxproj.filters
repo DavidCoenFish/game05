@@ -171,7 +171,7 @@
     <ClCompile Include="source\default_locale.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="source\default_ui_template.cpp">
+    <ClCompile Include="source\default_ui_component_factory.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="source\window_application\application_basic_ui.cpp">
@@ -224,7 +224,7 @@
     <ClInclude Include="source\default_locale.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="source\default_ui_template.h">
+    <ClInclude Include="source\default_ui_component_factory.h">
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="source\window_application\application_basic_ui.h">

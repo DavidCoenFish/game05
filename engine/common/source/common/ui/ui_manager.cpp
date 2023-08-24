@@ -14,27 +14,45 @@
 #include "common/ui/ui_data/i_ui_data.h"
 #include "common/util/vector_helper.h"
 
+UIContentFactoryParam::UIContentFactoryParam(
+    DrawSystem* const in_draw_system,
+    ID3D12GraphicsCommandList* const in_command_list,
+    const IUIData* const in_ui_data,
+    TextManager* const in_text_manager
+    )
+    : _draw_system(in_draw_system)
+    , _command_list(in_command_list)
+    , _ui_data(in_ui_data)
+    , _text_manager(in_text_manager)
+{
+    // Nop
+}
+
 UIManagerUpdateLayoutParam::UIManagerUpdateLayoutParam(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list,
     const IUIModel* const in_ui_model,
     LocaleSystem* const in_locale_system,
+    TextManager* const in_text_manager,
     const float in_ui_scale,
     const float in_time_delta,
     const std::string& in_locale,
     const std::string& in_model_key,
     const bool in_draw_to_texture,
+    const bool in_always_dirty,
     const VectorInt2& in_texture_size
     )
     : _draw_system(in_draw_system)
     , _command_list(in_command_list)
     , _ui_model(in_ui_model)
     , _locale_system(in_locale_system)
+    , _text_manager(in_text_manager)
     , _ui_scale(in_ui_scale)
     , _time_delta(in_time_delta)
     , _locale(in_locale)
     , _model_key(in_model_key)
     , _draw_to_texture(in_draw_to_texture)
+    , _always_dirty(in_always_dirty)
     , _texture_size(in_texture_size)
 {
     // Nop
@@ -114,13 +132,13 @@ public:
             return;
         }
 
-        // This could be pushed down into node, but trying to avoid empty nodes for missing templates
-        auto found = _map_content_factory.find(data->GetTemplateName());
-        if (found == _map_content_factory.end())
-        {
-            in_out_target_or_null = nullptr;
-            return;
-        }
+        //// This could be pushed down into node, but trying to avoid empty nodes for missing templates
+        //auto found = _map_content_factory.find(data->GetTemplateName());
+        //if (found == _map_content_factory.end())
+        //{
+        //    in_out_target_or_null = nullptr;
+        //    return;
+        //}
 
         if (nullptr == in_out_target_or_null)
         {
@@ -141,8 +159,8 @@ public:
         in_out_target_or_null->UpdateLayout(
             data,
             in_param._model_key,
-            found->second,
             in_param._draw_to_texture,
+            in_param._always_dirty,
             in_param._draw_to_texture ? 
                 in_param._texture_size : 
                 in_param._draw_system->GetRenderTargetBackBuffer()->GetSize(),

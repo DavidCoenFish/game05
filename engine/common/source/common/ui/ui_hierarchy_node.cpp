@@ -25,7 +25,8 @@ UIHierarchyNodeUpdateLayoutParam::UIHierarchyNodeUpdateLayoutParam(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list,
     const IUIModel* const in_ui_model,
-    LocaleSystem* const in_locale_system
+    LocaleSystem* const in_locale_system,
+    TextManager* const in_text_manager
     )
     : _locale(in_locale)
     , _ui_scale(in_ui_scale)
@@ -35,6 +36,7 @@ UIHierarchyNodeUpdateLayoutParam::UIHierarchyNodeUpdateLayoutParam(
     , _command_list(in_command_list)
     , _ui_model(in_ui_model)
     , _locale_system(in_locale_system)
+    , _text_manager(in_text_manager)
 {
     // Nop
 }
@@ -70,97 +72,22 @@ UIHierarchyNode::LayoutData::LayoutData(
 
 UIHierarchyNodeChildData::UIHierarchyNodeChildData(
     const std::shared_ptr<UIHierarchyNode>& in_node,
-    const std::shared_ptr<UIGeometry>& in_geometry//,
-    //const VectorInt2& in_render_target_size
+    const std::shared_ptr<UIGeometry>& in_geometry
     )
     : _node(in_node)
     , _geometry(in_geometry)
-    //, _render_target_size(in_render_target_size)
 {
     // Nop
 }
 
-/*
-std::shared_ptr<UITexture> UIHierarchyNode::MakeTextureRenderTarget(
-    DrawSystem* const in_draw_system,
-    ID3D12GraphicsCommandList* const in_command_list,
-    const VectorFloat4& in_clear_colour,
-    const bool in_allow_clear,
-    const bool in_always_dirty
-    )
-{
-    return std::make_shared<UITexture>(
-        in_draw_system,
-        in_command_list,
-        false,
-        in_always_dirty,
-        in_allow_clear,
-        in_clear_colour
-        );
-}
-
-VectorFloat4 UIHierarchyNode::CalculatePos(
-    const VectorInt2& in_parent_size,
-    const LayoutData& in_layout_data,
-    const float in_ui_scale
-    )
-{
-    const float x = (float)in_parent_size.GetX();
-    const float y = (float)in_parent_size.GetY();
-
-    //UICoord _data_size[2];
-    const float sizeX = in_layout_data._data_size[0].Calculate(x, in_ui_scale);
-    const float sizeY = in_layout_data._data_size[1].Calculate(y, in_ui_scale);
-
-    //UICoord _data_attach[2];
-    const float attachX = in_layout_data._data_attach[0].Calculate(x, in_ui_scale);
-    const float attachY = in_layout_data._data_attach[1].Calculate(y, in_ui_scale);
-
-    //UICoord _data_pivot[2];
-    const float pivotX = in_layout_data._data_pivot[0].Calculate(sizeX, in_ui_scale);
-    const float pivotY = in_layout_data._data_pivot[1].Calculate(sizeY, in_ui_scale);
-
-    const float childX = attachX - pivotX;
-    const float childY = attachY - pivotY;
-
-    return VectorFloat4(
-        (childX / x) * 2.0f - 1.0f,
-        (childY / y) * 2.0f - 1.0f,
-        ((childX + sizeX) / x) * 2.0f - 1.0f,
-        ((childY + sizeY) / y) * 2.0f - 1.0f
-        );
-}
-
-VectorInt2 UIHierarchyNode::CalculateSizeInt(
-    const VectorInt2& in_parent_size,
-    const LayoutData& in_layout_data,
-    const float in_ui_scale
-    )
-{
-    const float x = (float)in_parent_size.GetX();
-    const float y = (float)in_parent_size.GetY();
-
-    //UICoord _data_size[2];
-    const int sizeX = (int)ceil(in_layout_data._data_size[0].Calculate(x, in_ui_scale));
-    const int sizeY = (int)ceil(in_layout_data._data_size[1].Calculate(y, in_ui_scale));
-
-    return VectorInt2(
-        sizeX,
-        sizeY
-        );
-}
-*/
-
 UIHierarchyNode::UIHierarchyNode(
     const LayoutData& in_layout_data,
-    const std::shared_ptr<IUIContent>& in_content,
-    const std::shared_ptr<UITexture>& in_texture,
-    const TFlag in_flag
+    std::unique_ptr<IUIContent>& in_content,
+    std::unique_ptr<UITexture>& in_texture
     )
     : _layout_data(in_layout_data)
-    , _content(in_content)
-    , _texture(in_texture)
-    , _flag(in_flag)
+    , _content(std::move(in_content))
+    , _texture(std::move(in_texture))
 {
     // Nop
 }
@@ -170,39 +97,33 @@ UIHierarchyNode::~UIHierarchyNode()
     // Nop
 }
 
-
-//LayoutData& UIHierarchyNode::GetLayoutDataModify()
-//{
-//    
-//}
-
 const VectorInt2 UIHierarchyNode::GetTargetSize() const
 {
     return _texture->GetSize();
 }
 
 //return true if all bits of flga are set
-const bool UIHierarchyNode::GetFlag(const TFlag in_flag)
-{
-    if (((int)_flag & (int)in_flag) == (int)in_flag)
-    {
-        return true;
-    }
-    return false;
-}
-
-void UIHierarchyNode::SetFlag(const TFlag in_flag, const bool in_value)
-{
-    if (true == in_value)
-    {
-        _flag = (TFlag)((int)_flag | (int)in_flag);
-    }
-    else
-    {
-        _flag = (TFlag)((int)_flag & ~(int)in_flag);
-    }
-    return;
-}
+//const bool UIHierarchyNode::GetFlag(const TFlag in_flag)
+//{
+//    if (((int)_flag & (int)in_flag) == (int)in_flag)
+//    {
+//        return true;
+//    }
+//    return false;
+//}
+//
+//void UIHierarchyNode::SetFlag(const TFlag in_flag, const bool in_value)
+//{
+//    if (true == in_value)
+//    {
+//        _flag = (TFlag)((int)_flag | (int)in_flag);
+//    }
+//    else
+//    {
+//        _flag = (TFlag)((int)_flag & ~(int)in_flag);
+//    }
+//    return;
+//}
 
 std::shared_ptr<HeapWrapperItem> UIHierarchyNode::GetShaderResourceHeapWrapperItem() const
 {
@@ -230,6 +151,126 @@ void UIHierarchyNode::AddChild(
 void UIHierarchyNode::ClearChildren()
 {
     _child_data_array.clear();
+}
+
+void UIHierarchyNode::UpdateLayout(
+    const IUIData* const in_data,
+    const std::string& in_model_key,
+    const bool in_draw_to_texture,
+    const bool in_always_dirty,
+    const VectorInt2& in_parent_size,
+    const UIHierarchyNodeUpdateLayoutParam& in_param
+    )
+{
+    bool needs_draw = false;
+    auto found = in_param._map_content_factory.find(in_data->GetTemplateName());
+    if (found == in_param._map_content_factory.end())
+    {
+        if (_content)
+        {
+            needs_draw = true;
+        }
+        _content.reset();
+    }
+    else
+    {
+        UIContentFactoryParam content_factory_param(
+            in_param._draw_system,
+            in_param._command_list,
+            in_data,
+            in_param._text_manager
+            );
+        // Return true for change?
+        if (true == (found->second)(_content, content_factory_param))
+        {
+            needs_draw = true;
+        }
+    }
+
+    if (nullptr != _content)
+    {
+        // return true for change?
+        VectorInt2 texture_size;
+        if (true == _content->UpdateLayout(
+            texture_size,
+            _layout_data,
+            in_parent_size
+            ))
+        {
+            needs_draw = true;
+        }
+
+        VectorFloat4 clear_colour;
+        const bool do_clear = _content->GetClearBackground(clear_colour);
+        _texture->Update(
+            in_param._draw_system,
+            in_param._command_list,
+            texture_size,
+            in_draw_to_texture,
+            in_always_dirty,
+            do_clear,
+            clear_colour
+            );
+
+        // return true for change? example case, child count reduced but no other content change
+        if (true == _content->UpdateChildren(
+            _child_data_array,
+            in_param._draw_system,
+            in_param._command_list,
+            texture_size,
+            in_data,
+            in_model_key
+            ))
+        {
+            needs_draw = true;
+        }
+    }
+
+    // set texture to dirty on content change
+    if ((true == needs_draw) && (_texture))
+    {
+        _texture->SetHasDrawn(false);
+    }
+
+    return;
+}
+
+// Return True if we needed to draw, ie, the texture may have changed
+const bool UIHierarchyNode::Draw(
+    const UIManagerDrawParam& in_draw_param,
+    Shader* const in_shader
+    )
+{
+    bool needed_to_draw = false;
+    for (auto& iter : _child_data_array)
+    {
+        if (true == iter->_node->Draw(in_draw_param, in_shader))
+        {
+            needed_to_draw = true;
+        }
+    }
+
+    if ((true == needed_to_draw) ||
+        (false == _texture->GetHasDrawn()) ||
+        (true == _texture->GetAlwaysDirty())
+        )
+    {
+        needed_to_draw = true;
+        in_draw_param._frame->SetRenderTarget(
+            _texture->GetRenderTarget(),
+            _texture->GetAllowClear()
+            );
+        for (auto& iter : _child_data_array)
+        {
+            in_shader->SetShaderResourceViewHandle(0, iter->_node->GetShaderResourceHeapWrapperItem());
+            in_draw_param._frame->SetShader(in_shader);
+            in_draw_param._frame->Draw(iter->_geometry->GetGeometry());
+        }
+
+        _texture->SetHasDrawn(true);
+    }
+
+    return needed_to_draw;
 }
 
 /*

@@ -1,5 +1,5 @@
 #include "application_pch.h"
-#include "default_ui_template.h"
+#include "default_ui_component_factory.h"
 
 #include "common/macro.h"
 #include "common/math/vector_int4.h"
@@ -68,7 +68,7 @@ namespace
 
     void FactoryCanvas(
         std::unique_ptr<IUIContent>& in_out_content,
-        const UIContentFactoryParam& in_param
+        const UIContentFactoryParam&
         )
     {
         UIContentCanvas* canvas = dynamic_cast<UIContentCanvas*>(in_out_content.get());
@@ -127,7 +127,7 @@ namespace
     {
     }
 }
-void DefaultUITemplate::Populate(
+void DefaultUIComponentFactory::Populate(
     UIManager& in_ui_manager
     )
 {

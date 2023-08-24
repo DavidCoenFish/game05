@@ -22,6 +22,14 @@ public:
     virtual const bool GetClearBackground(
         VectorFloat4& out_clear_colour
         ) const;
+    //virtual const bool UpdateUiTexture(
+    //    DrawSystem* const in_draw_system,
+    //    ID3D12GraphicsCommandList* const in_command_list,
+    //    const bool in_draw_texture, // false : draw to backbuffer
+    //    const bool in_always_dirty,
+    //    const VectorInt2& in_texture_size,
+    //    UITexture& in_out_ui_texture
+    //    ) const;
 
     virtual const bool GetNeedsDraw() const;
 

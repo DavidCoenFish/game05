@@ -138,7 +138,7 @@
     </ClCompile>
     <ClCompile Include="source\build.cpp" />
     <ClCompile Include="source\default_locale.cpp" />
-    <ClCompile Include="source\default_ui_template.cpp" />
+    <ClCompile Include="source\default_ui_component_factory.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\scene_component\scene_component_background.cpp" />
     <ClCompile Include="source\scene_component\scene_component_camera_ray.cpp" />
@@ -157,7 +157,7 @@
     <ClInclude Include="source\application_pch.h" />
     <ClInclude Include="source\build.h" />
     <ClInclude Include="source\default_locale.h" />
-    <ClInclude Include="source\default_ui_template.h" />
+    <ClInclude Include="source\default_ui_component_factory.h" />
     <ClInclude Include="source\host_define.h" />
     <ClInclude Include="source\scene_component\scene_component_background.h" />
     <ClInclude Include="source\scene_component\scene_component_camera_ray.h" />

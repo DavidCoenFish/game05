@@ -29,6 +29,16 @@ public:
     const VectorInt2 GetSize() const;
     const bool GetUseBackBuffer() const { return _use_back_buffer; }
 
+    void Update(
+        DrawSystem* const in_draw_system,
+        ID3D12GraphicsCommandList* const in_command_list,
+        const VectorInt2& in_size,
+        const bool in_draw_to_texture = false,
+        const bool in_always_dirty = false,
+        const bool in_allow_clear = false,
+        const VectorFloat4& in_clear_colour = VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f)
+        );
+
     void SetSize(
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list,

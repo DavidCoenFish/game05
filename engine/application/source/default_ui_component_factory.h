@@ -2,7 +2,7 @@
 
 class UIManager;
 
-namespace DefaultUITemplate
+namespace DefaultUIComponentFactory
 {
     void Populate(
         UIManager& in_ui_manager
