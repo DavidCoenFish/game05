@@ -4,7 +4,7 @@ class DrawSystem;
 class DrawSystemFrame;
 class Shader;
 class TextBlock;
-class TextFace;
+class TextFont;
 class TextLocale;
 class TextManagerImplementation;
 
@@ -20,8 +20,9 @@ public:
         );
     ~TextManager();
 
-    std::shared_ptr<TextFace> MakeTextFace(
-        const std::filesystem::path& in_font_file_path
+    // Find or make a new text face
+    std::shared_ptr<TextFont> MakeFont(
+        const std::filesystem::path& in_font_rel_path
         );
 
     void DrawText(

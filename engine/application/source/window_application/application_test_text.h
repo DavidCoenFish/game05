@@ -9,7 +9,7 @@ class ShaderResource;
 class SceneComponentScreenQuad;
 class UIManager;
 class TextBlock;
-class TextFace;
+class TextFont;
 class TextManager;
 //class UiBlock;
 
@@ -45,7 +45,7 @@ private:
         std::shared_ptr<Shader> _background_shader;
 
         std::shared_ptr<UIManager> _ui_manager;
-        std::shared_ptr<TextFace> _text_face;
+        std::shared_ptr<TextFont> _text_face;
         std::shared_ptr<TextBlock> _text_block;
         //std::shared_ptr<UiBlock> _ui_block;
         //std::shared_ptr<RenderTargetTexture> _ui_render_target;

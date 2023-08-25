@@ -8,7 +8,7 @@
 #include "common/draw_system/shader/shader_resource_info.h"
 #include "common/file_system/file_system.h"
 #include "common/text/text_block.h"
-#include "common/text/text_face.h"
+#include "common/text/text_font.h"
 #include "common/text/text_glyph_row.h"
 #include "common/text/text_locale.h"
 #include "common/text/text_texture.h"
@@ -79,6 +79,7 @@ public:
         ID3D12GraphicsCommandList* const in_command_list,
         const std::filesystem::path& in_root_path
         )
+        : _root_path(in_root_path)
     {
         FT_Error error;
         error = FT_Init_FreeType(&_library);
@@ -127,22 +128,24 @@ public:
 
     ~TextManagerImplementation()
     {
-        _map_path_face.clear();
+        _map_path_font.clear();
         FT_Done_FreeType(_library);
     }
 
-    std::shared_ptr<TextFace> MakeTextFace(
-        const std::filesystem::path& in_font_file_path
+    std::shared_ptr<TextFont> MakeFont(
+        const std::filesystem::path& in_font_rel_path
         )
     {
-        auto found = _map_path_face.find(in_font_file_path);
-        if (found != _map_path_face.end())
+        auto found = _map_path_font.find(in_font_rel_path);
+        if (found != _map_path_font.end())
         {
             return found->second;
         }
 
-        auto text_face = std::make_shared<TextFace>(_library, in_font_file_path, _texture.get());
-        _map_path_face[in_font_file_path] = text_face;
+        const std::filesystem::path font_path = _root_path / in_font_rel_path;
+
+        auto text_face = std::make_shared<TextFont>(_library, font_path, _texture.get());
+        _map_path_font[in_font_rel_path] = text_face;
 
         return text_face;
     }
@@ -173,7 +176,7 @@ public:
     // Assert if there are any TextGeometry?
     void RestGlyphUsage()
     {
-        for (auto iter : _map_path_face)
+        for (auto iter : _map_path_font)
         {
             iter.second->RestGlyphUsage();
         }
@@ -191,9 +194,10 @@ public:
     }
 
 private:
+    std::filesystem::path _root_path;
     FT_Library _library;
 
-    std::map<std::filesystem::path, std::shared_ptr<TextFace>> _map_path_face;
+    std::map<std::filesystem::path, std::shared_ptr<TextFont>> _map_path_font;
 
     std::shared_ptr<Shader> _shader;
     std::shared_ptr<TextTexture> _texture;
@@ -223,12 +227,12 @@ TextManager::~TextManager()
     // Nop
 }
 
-std::shared_ptr<TextFace> TextManager::MakeTextFace(
-    const std::filesystem::path& in_font_file_path
+std::shared_ptr<TextFont> TextManager::MakeFont(
+    const std::filesystem::path& in_font_rel_path
     )
 {
-    return _implementation->MakeTextFace(
-        in_font_file_path
+    return _implementation->MakeFont(
+        in_font_rel_path
         );
 }
 

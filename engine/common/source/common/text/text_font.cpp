@@ -1,5 +1,5 @@
 #include "common/common_pch.h"
-#include "common/text/text_face.h"
+#include "common/text/text_font.h"
 
 #include "common/draw_system/draw_system.h"
 #include "common/file_system/file_system.h"
@@ -30,12 +30,12 @@ namespace
     };
 }
 
-class TextFaceImplementation
+class TextFontImplementation
 {
     typedef std::map<uint32_t, std::shared_ptr<TextCell>> TMapGlyphCell;
 
 public:
-    TextFaceImplementation(
+    TextFontImplementation(
         FT_Library in_library,
         const std::filesystem::path& in_font_file_path,
         TextTexture* const in_text_texture
@@ -61,7 +61,7 @@ public:
         _harf_buzz_font = hb_ft_font_create(_face, NULL);
     }
 
-    ~TextFaceImplementation()
+    ~TextFontImplementation()
     {
         hb_font_destroy(_harf_buzz_font);
         FT_Done_Face(_face);
@@ -76,8 +76,8 @@ public:
         const VectorInt2& in_containter_size,
         const bool in_width_limit_enabled = false,
         const int in_width_limit = 0,
-        const TextEnum::HorizontalLineAlignment::Enum in_horizontal_line_alignment = TextEnum::HorizontalLineAlignment::Enum::Left,
-        const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment = TextEnum::VerticalBlockAlignment::Enum::Top
+        const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment = TextEnum::HorizontalLineAlignment::Left,
+        const TextEnum::VerticalBlockAlignment in_vertical_block_alignment = TextEnum::VerticalBlockAlignment::Top
         )
     {
         auto map_glyph_cell = FindMapGlyphCell(in_glyph_size);
@@ -340,7 +340,6 @@ private:
                 ((item._pos_low_high[3] / (float)in_containter_size.GetY()) * 2.0f) - 1.0f
                 );
 
-#if 1
             //0.0f, 0.0f,
             VectorHelper::AppendValue(out_vertex_raw_data, pos[0]);
             VectorHelper::AppendValue(out_vertex_raw_data, pos[1]);
@@ -382,51 +381,6 @@ private:
             VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[2]);
             VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[3]);
             VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
-
-#else
-            // Warning, inverted Y
-            //0.0f, 0.0f,
-            VectorHelper::AppendValue(out_vertex_raw_data, pos[0]);
-            VectorHelper::AppendValue(out_vertex_raw_data, -(pos[1]));
-            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[0]);
-            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[1]);
-            VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
-
-            //1.0f, 0.0f,
-            VectorHelper::AppendValue(out_vertex_raw_data, pos[2]);
-            VectorHelper::AppendValue(out_vertex_raw_data, -(pos[1]));
-            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[2]);
-            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[1]);
-            VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
-
-            //0.0f, 1.0f,
-            VectorHelper::AppendValue(out_vertex_raw_data, pos[0]);
-            VectorHelper::AppendValue(out_vertex_raw_data, -(pos[3]));
-            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[0]);
-            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[3]);
-            VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
-
-            //1.0f, 0.0f,
-            VectorHelper::AppendValue(out_vertex_raw_data, pos[2]);
-            VectorHelper::AppendValue(out_vertex_raw_data, -(pos[1]));
-            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[2]);
-            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[1]);
-            VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
-
-            //1.0f, 1.0f,
-            VectorHelper::AppendValue(out_vertex_raw_data, pos[2]);
-            VectorHelper::AppendValue(out_vertex_raw_data, -(pos[3]));
-            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[2]);
-            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[3]);
-            VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
-
-            //0.0f, 1.0f,
-            VectorHelper::AppendValue(out_vertex_raw_data, pos[0]);
-            VectorHelper::AppendValue(out_vertex_raw_data, -(pos[3]));
-            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[0]);
-            VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[3]);
-            VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
-#endif
         }
 
         return;
@@ -456,19 +410,11 @@ private:
         return buffer;
     }
 
-    //std::vector<PreVertexData> pre_vertex_data;
-    //VectorFloat4 bounds(1.0f, 1.0f, -1.0f, -1.0f);
-
     void ShapeText(
         std::vector<PreVertexData>* const out_pre_vertex_data_or_null,
         VectorFloat4& out_bounds,
         hb_buffer_t* in_buffer,
         TMapGlyphCell& in_out_map_glyph_cell
-        //std::vector<uint8_t>& out_vertex_raw_data,
-        //const VectorInt2& in_containter_size,
-        //const int in_glyph_size,
-        //const TextEnum::HorizontalLineAlignment::Enum in_horizontal_line_alignment,
-        //const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment
         )
     {    
         hb_shape(_harf_buzz_font, in_buffer, NULL, 0);
@@ -517,7 +463,6 @@ private:
 private:
     FT_Face _face;
     hb_font_t* _harf_buzz_font;
-    //std::vector<hb_feature_t> _features;
 
     TextTexture* _text_texture;
 
@@ -526,25 +471,25 @@ private:
 
 };
 
-TextFace::TextFace(
+TextFont::TextFont(
     FT_Library in_library,
     const std::filesystem::path& in_font_file_path,
     TextTexture* const in_text_texture
     )
 {
-    _implementation = std::make_unique<TextFaceImplementation>(
+    _implementation = std::make_unique<TextFontImplementation>(
         in_library,
         in_font_file_path,
         in_text_texture
         );
 }
 
-TextFace::~TextFace()
+TextFont::~TextFont()
 {
     _implementation.reset();
 }
 
-std::shared_ptr<TextBlock> TextFace::MakeBlock(
+std::shared_ptr<TextBlock> TextFont::MakeBlock(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list,
     const std::string& in_string_utf8,
@@ -553,8 +498,8 @@ std::shared_ptr<TextBlock> TextFace::MakeBlock(
     const VectorInt2& in_containter_size,
     const bool in_width_limit_enabled,
     const int in_width_limit,
-    const TextEnum::HorizontalLineAlignment::Enum in_horizontal_line_alignment,
-    const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment
+    const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
+    const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
     )
 {
     return _implementation->MakeBlock(
@@ -571,7 +516,7 @@ std::shared_ptr<TextBlock> TextFace::MakeBlock(
         );
 }
 
-VectorFloat2 TextFace::CalculateTextBounds(
+VectorFloat2 TextFont::CalculateTextBounds(
     const std::string& in_string_utf8,
     const TextLocale* const in_locale_token,
     const int in_font_size
@@ -584,7 +529,7 @@ VectorFloat2 TextFace::CalculateTextBounds(
         );
 }
 
-void TextFace::RestGlyphUsage()
+void TextFont::RestGlyphUsage()
 {
     _implementation->RestGlyphUsage();
     return;

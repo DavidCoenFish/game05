@@ -75,7 +75,7 @@
     <ClCompile Include="source\common\task\task_window.cpp" />
     <ClCompile Include="source\common\text\text_block.cpp" />
     <ClCompile Include="source\common\text\text_cell.cpp" />
-    <ClCompile Include="source\common\text\text_face.cpp" />
+    <ClCompile Include="source\common\text\text_font.cpp" />
     <ClCompile Include="source\common\text\text_locale.cpp" />
     <ClCompile Include="source\common\text\text_manager.cpp" />
     <ClCompile Include="source\common\text\text_glyph_row.cpp" />
@@ -151,7 +151,7 @@
     <ClInclude Include="include\common\task\task_window.h" />
     <ClInclude Include="include\common\text\text_block.h" />
     <ClInclude Include="include\common\text\text_enum.h" />
-    <ClInclude Include="include\common\text\text_face.h" />
+    <ClInclude Include="include\common\text\text_font.h" />
     <ClInclude Include="include\common\text\text_manager.h" />
     <ClInclude Include="include\common\ui\i_ui_content.h" />
     <ClInclude Include="include\common\ui\i_ui_model.h" />

@@ -7,27 +7,21 @@ namespace TextEnum
     //    None = 0, // don't 
     //    HardLimitWidth
     //};
-    struct HorizontalLineAlignment
+    enum class HorizontalLineAlignment
     {
-        enum Enum
-        {
-            Left,
-            Middle,
-            Right
-        };
+        Left,
+        Middle,
+        Right
     };
-    struct VerticalBlockAlignment
+    enum class VerticalBlockAlignment
     {
-        enum Enum
-        {
-            // Use text bounds
-            Top,
-            Middle, 
-            Bottom,
-            // Use glyph size
-            MiddleEM, 
-            TopEM,
-            BottomEM,
-        };
+        // Use text bounds
+        Top,
+        Middle, 
+        Bottom,
+        // Use glyph size
+        MiddleEM, 
+        TopEM,
+        BottomEM,
     };
 }

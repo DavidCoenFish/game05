@@ -189,12 +189,16 @@ void UIHierarchyNode::UpdateLayout(
 
     if (nullptr != _content)
     {
-        // return true for change?
-        VectorInt2 texture_size;
-        if (true == _content->UpdateLayout(
+        // return true for change? example case, child count reduced but no other content change
+        if (true == _content->Update(
             texture_size,
             _layout_data,
-            in_parent_size
+            in_parent_size,
+            _child_data_array,
+            in_param._draw_system,
+            in_param._command_list,
+            in_data,
+            in_model_key
             ))
         {
             needs_draw = true;
@@ -211,19 +215,6 @@ void UIHierarchyNode::UpdateLayout(
             do_clear,
             clear_colour
             );
-
-        // return true for change? example case, child count reduced but no other content change
-        if (true == _content->UpdateChildren(
-            _child_data_array,
-            in_param._draw_system,
-            in_param._command_list,
-            texture_size,
-            in_data,
-            in_model_key
-            ))
-        {
-            needs_draw = true;
-        }
     }
 
     // set texture to dirty on content change

@@ -181,7 +181,7 @@
     <ClCompile Include="source\common\util\vector_helper.cpp">
       <Filter>souce\common\util</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\text\text_face.cpp">
+    <ClCompile Include="source\common\text\text_font.cpp">
       <Filter>souce\common\text</Filter>
     </ClCompile>
     <ClCompile Include="source\common\text\text_manager.cpp">
@@ -465,7 +465,7 @@
     <ClInclude Include="include\common\draw_system\render_target\i_render_target.h">
       <Filter>include\common\draw_system\render_target</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\text\text_face.h">
+    <ClInclude Include="include\common\text\text_font.h">
       <Filter>include\common\text</Filter>
     </ClInclude>
     <ClInclude Include="include\common\text\text_manager.h">

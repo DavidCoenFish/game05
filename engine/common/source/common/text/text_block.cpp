@@ -22,8 +22,8 @@ public:
         const VectorInt2& in_containter_size,
         const bool in_width_limit_enabled,
         const int in_width_limit,
-        const TextEnum::HorizontalLineAlignment::Enum in_horizontal_line_alignment,
-        const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment,
+        const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
+        const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
         const std::vector<uint8_t>& in_vertex_raw_data
         )
         : _geometry_dirty(false)
@@ -92,7 +92,7 @@ public:
     }
 
     void SetHorizontalLineAlignment(
-        const TextEnum::HorizontalLineAlignment::Enum in_horizontal_line_alignment
+        const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment
         )
     {
         if (_horizontal_line_alignment != in_horizontal_line_alignment)
@@ -104,7 +104,7 @@ public:
     }
 
     void SetVerticalBlockAlignment(
-        const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment
+        const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
         )
     {
         if (_vertical_block_alignment != in_vertical_block_alignment)
@@ -115,10 +115,10 @@ public:
         return;
     }
 
-    // Which is better, two pass, or one function that coould do two things
     void Update(
         DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list
+        ID3D12GraphicsCommandList* const in_command_list,
+        TextFont& in_text_font
     )
     {
         //TODO, move up?
@@ -152,8 +152,8 @@ private:
     VectorInt2 _container_size;
     bool _width_limit_enabled;
     int _width_limit;
-    TextEnum::HorizontalLineAlignment::Enum _horizontal_line_alignment;
-    TextEnum::VerticalBlockAlignment::Enum _vertical_block_alignment;
+    TextEnum::HorizontalLineAlignment _horizontal_line_alignment;
+    TextEnum::VerticalBlockAlignment _vertical_block_alignment;
 
 };
 
@@ -165,8 +165,8 @@ TextBlock::TextBlock(
     const VectorInt2& in_containter_size,
     const bool in_width_limit_enabled,
     const int in_width_limit,
-    const TextEnum::HorizontalLineAlignment::Enum in_horizontal_line_alignment,
-    const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment,
+    const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
+    const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
     const std::vector<uint8_t>& in_vertex_raw_data
     )
 {
@@ -224,7 +224,7 @@ void TextBlock::SetWidthLimit(
 }
 
 void TextBlock::SetHorizontalLineAlignment(
-    const TextEnum::HorizontalLineAlignment::Enum in_horizontal_line_alignment
+    const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment
     )
 {
     _implementation->SetHorizontalLineAlignment(
@@ -234,7 +234,7 @@ void TextBlock::SetHorizontalLineAlignment(
 }
 
 void TextBlock::SetVerticalBlockAlignment(
-    const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment
+    const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
     )
 {
     _implementation->SetVerticalBlockAlignment(
@@ -245,12 +245,14 @@ void TextBlock::SetVerticalBlockAlignment(
 
 void TextBlock::Update(
     DrawSystem* const in_draw_system,
-    ID3D12GraphicsCommandList* const in_command_list
+    ID3D12GraphicsCommandList* const in_command_list,
+    TextFont& in_text_font
     )
 {
     _implementation->Update(
         in_draw_system, 
-        in_command_list
+        in_command_list,
+        in_text_font
         );
     return;
 }

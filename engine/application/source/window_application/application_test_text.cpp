@@ -22,7 +22,7 @@
 #include "common/math/vector_int2.h"
 #include "common/math/vector_int4.h"
 #include "common/text/text_block.h"
-#include "common/text/text_face.h"
+#include "common/text/text_font.h"
 #include "common/text/text_manager.h"
 #include "common/ui/ui_manager.h"
 #include "common/util/timer.h"
@@ -134,8 +134,8 @@ ApplicationTestText::ApplicationTestText(
         in_application_param._root_path
         );
 
-    _draw_resources->_text_face = _text_manager->MakeTextFace(
-        in_application_param._root_path / "data" / "open_sans.ttf"
+    _draw_resources->_text_face = _text_manager->MakeTextFont(
+        std::filesystem::path("data") / "open_sans.ttf"
         );
 
     _draw_resources->_text_block = _draw_resources->_text_face->MakeBlock(

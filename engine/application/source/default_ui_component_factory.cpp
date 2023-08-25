@@ -3,46 +3,19 @@
 
 #include "common/macro.h"
 #include "common/math/vector_int4.h"
+#include "common/text/text_manager.h"
+#include "common/text/text_enum.h"
+#include "common/text/text_font.h"
+#include "common/text/text_block.h"
 #include "common/ui/ui_content_canvas.h"
 #include "common/ui/ui_content_stack.h"
 #include "common/ui/ui_content_text.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_manager.h"
+#include "common/ui/ui_data/ui_data_string.h"
 
 namespace
 {
-/*
-    std::shared_ptr<UIHierarchyNode> FactoryBackgroundInfo(
-            UIManager* const in_ui_manager,
-            DrawSystem* const in_draw_system,
-            ID3D12GraphicsCommandList* const in_command_list,
-            IUIProviderData* const ,//in_provider_data,
-            const std::string& in_key_base
-            )
-    {
-        in_key_base;
-        DSC_TODO("generate content for stack");
-
-        //stack panel in bottom right corner, data source "build_info"
-        auto node = std::make_shared<UIHierarchyNode>(
-            UIHierarchyNode::LayoutData::LayoutData(
-                UICoord(1.0f, -2.0f),
-                UICoord(1.0f, -2.0f),
-                UICoord(1.0f, -1.0f),
-                UICoord(0.0f, 1.0f),
-                UICoord(1.0f, 0.0f),
-                UICoord(0.0f, 0.0f)
-                ),
-            UIHierarchyNode::MakeContentStack(),
-            UIHierarchyNode::MakeTextureRenderTarget(
-                in_draw_system,
-                in_command_list
-                )
-            );
-
-        return node;
-    }
-*/
     enum class AlignmentHorizontal
     {
         TLeft,
@@ -66,6 +39,8 @@ namespace
         //TFlowTopBottomLeftRight
     };
 
+    typedef const std::filesystem::path (*TGetPath)();
+
     void FactoryCanvas(
         std::unique_ptr<IUIContent>& in_out_content,
         const UIContentFactoryParam&
@@ -80,24 +55,56 @@ namespace
     }
 
     template<
+        TGetPath GetPath,
         int FontSize = 16,
-        AlignmentHorizontal Horizontal = AlignmentHorizontal::TMiddle, 
-        AlignmentVertical Vertical = AlignmentVertical::TMiddle
-        // function pointer to get default face?
+        TextEnum::HorizontalLineAlignment Horizontal = TextEnum::HorizontalLineAlignment::Middle,
+        TextEnum::VerticalBlockAlignment Vertical = TextEnum::VerticalBlockAlignment::MiddleEM
         >
+    //DrawSystem* const _draw_system;
+    //ID3D12GraphicsCommandList* const _command_list;
+    //const IUIData* const _ui_data;
+    //TextManager* const _text_manager;
+
     void FactoryString(
         std::unique_ptr<IUIContent>& in_out_content,
         const UIContentFactoryParam& in_param
         )
     {
+        UIDataString* const data = dynamic_cast<UIDataString*>(in_param._ui_data);
+        if (nullptr == data)
+        {
+            in_out_content.reset();
+            return true;
+        }
         bool dirty = false;
         UIContentText* text = dynamic_cast<UIContentText*>(in_out_content.get());
         if (nullptr == text)
         {
-            in_out_content = std::make_unique<UIContentText>();
+
+            auto text_unique = std::make_unique<UIContentText>();
+            text = text_unique.get();
+            in_out_content = std::move(text_unique);
             dirty = true;
         }
-        // do we have the right face
+
+        text->SetText(data->GetString());
+        text->SetAlignment(Horizontal, Vertical);
+        text->SetFont(
+            in_param._text_manager->MakeFont(GetPath()),
+            FontSize
+            );
+
+
+        //if (true == text->FactoryUpdate(
+        //    GetPath(),
+        //    data,
+        //    FontSize,
+        //    Horizontal,
+        //    Vertical
+        //    ))
+        //{
+        //    dirty = true;
+        //}
     }
 
     template<

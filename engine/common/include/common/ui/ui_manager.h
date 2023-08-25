@@ -20,12 +20,14 @@ struct UIContentFactoryParam
         DrawSystem* const in_draw_system = nullptr,
         ID3D12GraphicsCommandList* const in_command_list = nullptr,
         const IUIData* const in_ui_data = nullptr,
-        TextManager* const in_text_manager = nullptr
+        TextManager* const in_text_manager = nullptr,
+        const float in_ui_scale = 1.0f
         );
     DrawSystem* const _draw_system;
     ID3D12GraphicsCommandList* const _command_list;
     const IUIData* const _ui_data;
     TextManager* const _text_manager;
+    float _ui_scale;
 };
 
 struct UIManagerUpdateLayoutParam
@@ -117,7 +119,7 @@ public:
         );
 
     //Add content factories, layout templates can be expressed through the content class
-    typedef std::function< void(
+    typedef std::function< const bool(
         std::unique_ptr<IUIContent>& in_out_content,
         const UIContentFactoryParam& in_param
         )> TContentFactory;

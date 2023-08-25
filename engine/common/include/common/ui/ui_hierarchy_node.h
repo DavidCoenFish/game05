@@ -38,7 +38,7 @@ struct UIHierarchyNodeChildData
 
 struct UIHierarchyNodeUpdateLayoutParam
 {
-    typedef std::function< void(
+    typedef std::function< const bool(
         std::unique_ptr<IUIContent>& in_out_content,
         const UIContentFactoryParam& in_param
         )> TContentFactory;
@@ -140,7 +140,7 @@ public:
         );
     void ClearChildren();
 
-    typedef std::function< void(
+    typedef std::function< const bool(
         std::unique_ptr<IUIContent>& in_out_content,
         const UIContentFactoryParam& in_param
         )> TContentFactory;
