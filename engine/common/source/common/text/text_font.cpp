@@ -27,6 +27,7 @@ namespace
         VectorFloat4 _pos_low_high;
         VectorFloat4 _uv_low_high;
         VectorFloat4 _mask;
+        int _line_index;
     };
 }
 
@@ -67,78 +68,13 @@ public:
         FT_Done_Face(_face);
     }
 
-    std::shared_ptr<TextBlock> MakeBlock(
-        DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list,
+    VectorInt2 CalculateTextBounds(
         const std::string& in_string_utf8,
         const TextLocale* const in_locale_token,
-        const int in_glyph_size,
-        const VectorInt2& in_containter_size,
-        const bool in_width_limit_enabled = false,
-        const int in_width_limit = 0,
-        const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment = TextEnum::HorizontalLineAlignment::Left,
-        const TextEnum::VerticalBlockAlignment in_vertical_block_alignment = TextEnum::VerticalBlockAlignment::Top
-        )
-    {
-        auto map_glyph_cell = FindMapGlyphCell(in_glyph_size);
-        SetScale(in_glyph_size);
-
-        hb_buffer_t* const buffer = MakeBuffer(
-            in_string_utf8,
-            in_locale_token
-            );
-
-        std::vector<PreVertexData> pre_vertex_data;
-        VectorFloat4 bounds(
-            std::numeric_limits<float>::max(),
-            std::numeric_limits<float>::max(),
-            std::numeric_limits<float>::min(),
-            std::numeric_limits<float>::min()
-            );
-        ShapeText(
-            &pre_vertex_data,
-            bounds,
-            buffer,
-            *map_glyph_cell
-            );
-        hb_buffer_destroy(buffer);
-
-        PerformAlign(
-            pre_vertex_data,
-            bounds,
-            in_glyph_size,
-            in_containter_size,
-            in_horizontal_line_alignment,
-            in_vertical_block_alignment
-            );
-
-        std::vector<uint8_t> vertex_raw_data;
-        BuildVertexData(
-            vertex_raw_data,
-            pre_vertex_data,
-            in_containter_size
-            );
-
-        auto result = std::make_shared<TextBlock>(
-            in_draw_system,
-            in_command_list,
-            in_string_utf8,
-            in_locale_token,
-            in_containter_size,
-            in_width_limit_enabled,
-            in_width_limit,
-            in_horizontal_line_alignment,
-            in_vertical_block_alignment,
-            vertex_raw_data
-            );
-
-        return result;
-    }
-
-    VectorFloat2 CalculateTextBounds(
-        const std::string& in_string_utf8,
-        const TextLocale* const in_locale_token,
-        const int in_font_size
+        const int in_font_size,
+        const bool in_width_limit_enabled,
+        const int in_width_limit,
+        const int in_width_limit_new_line_height
         )
     {
         auto map_glyph_cell = FindMapGlyphCell(in_font_size);
@@ -150,24 +86,97 @@ public:
             );
 
         std::vector<PreVertexData> pre_vertex_data;
-        VectorFloat4 bounds(
+        VectorFloat2 vertical_bounds(
             std::numeric_limits<float>::max(),
-            std::numeric_limits<float>::max(),
-            std::numeric_limits<float>::min(),
             std::numeric_limits<float>::min()
-        );
+            );
+        std::vector<VectorFloat2> horizontal_bounds;
+        horizontal_bounds.push_back(VectorFloat2(std::numeric_limits<float>::max(), std::numeric_limits<float>::min()));
         ShapeText(
             &pre_vertex_data,
-            bounds,
+            vertical_bounds,
+            horizontal_bounds,
             buffer,
-            *map_glyph_cell
+            *map_glyph_cell,
+            in_width_limit_enabled,
+            in_width_limit,
+            in_width_limit_new_line_height
         );
         hb_buffer_destroy(buffer);
 
-        return VectorFloat2(
-            bounds[2] - bounds[0],
-            bounds[3] - bounds[1]
+        VectorFloat2 horizontal(
+            std::numeric_limits<float>::max(),
+            std::numeric_limits<float>::min()
             );
+        for (const auto& iter : horizontal_bounds)
+        {
+            horizontal[0] = std::min(horizontal[0], iter[0]);
+            horizontal[1] = std::max(horizontal[1], iter[1]);
+        }
+
+        return VectorInt2(
+            int(ceil(horizontal[1] - horizontal[0])),
+            int(ceil(vertical_bounds[1] - vertical_bounds[0]))
+            );
+    }
+
+    void GenerateGeometry(
+        std::vector<uint8_t>& out_vertex_raw_data,
+        const std::string& in_string_utf8,
+        const TextLocale* const in_locale_token,
+        const int in_font_size,
+        const VectorInt2& in_containter_size,
+        const bool in_width_limit_enabled,
+        const int in_width_limit,
+        const int in_width_limit_new_line_height,
+        const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
+        const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
+        )
+    {
+        auto map_glyph_cell = FindMapGlyphCell(in_font_size);
+        SetScale(in_font_size);
+
+        hb_buffer_t* const buffer = MakeBuffer(
+            in_string_utf8,
+            in_locale_token
+            );
+
+        std::vector<PreVertexData> pre_vertex_data;
+        VectorFloat2 vertical_bounds(
+            std::numeric_limits<float>::max(),
+            std::numeric_limits<float>::min()
+            );
+        std::vector<VectorFloat2> horizontal_bounds;
+        horizontal_bounds.push_back(VectorFloat2(std::numeric_limits<float>::max(), std::numeric_limits<float>::min()));
+        ShapeText(
+            &pre_vertex_data,
+            vertical_bounds,
+            horizontal_bounds,
+            buffer,
+            *map_glyph_cell,
+            in_width_limit_enabled,
+            in_width_limit,
+            in_width_limit_new_line_height
+        );
+        hb_buffer_destroy(buffer);
+
+        PerformAlign(
+            pre_vertex_data,
+            vertical_bounds,
+            horizontal_bounds,
+            in_font_size,
+            in_containter_size,
+            in_horizontal_line_alignment,
+            in_vertical_block_alignment
+            );
+
+        BuildVertexData(
+            out_vertex_raw_data,
+            pre_vertex_data,
+            in_containter_size
+            );
+
+        return;
     }
 
     void RestGlyphUsage()
@@ -227,17 +236,18 @@ private:
 
     void AddVertexData(
         std::vector<PreVertexData>* const out_pre_vertex_data_or_null,
-        VectorFloat4& out_pos_bounds,
+        VectorFloat2& out_vertical_bounds,
+        std::vector<VectorFloat2>& out_horizontal_bounds,
         TextCell* in_cell,
         const float in_pos_x,
-        const float in_pos_y
+        const float in_pos_y,
+        const int line_index
         )
     {
         const VectorInt2 width_height = in_cell->GetWidthHeight();
         const VectorInt2 bearing = in_cell->GetBearing();
         const VectorFloat4 uv = in_cell->GetUV();
         const VectorFloat4 mask = in_cell->GetMask();
-
 
         const float pos_x = in_pos_x + bearing.GetX();
         const float pos_y = in_pos_y - (width_height.GetY() - bearing.GetY());
@@ -253,40 +263,53 @@ private:
             out_pre_vertex_data_or_null->push_back(PreVertexData({
                 pos,
                 uv,
-                mask
+                mask,
+                line_index
                 }));
         }
 
-        out_pos_bounds[0] = std::min(out_pos_bounds[0], pos[0]);
-        out_pos_bounds[1] = std::min(out_pos_bounds[1], pos[1]);
-        out_pos_bounds[2] = std::max(out_pos_bounds[2], pos[2]);
-        out_pos_bounds[3] = std::max(out_pos_bounds[3], pos[3]);
+        out_vertical_bounds[0] = std::min(out_vertical_bounds[0], pos[1]);
+        out_vertical_bounds[1] = std::max(out_vertical_bounds[1], pos[3]);
+
+        while (line_index < (int)out_horizontal_bounds.size())
+        {
+            out_horizontal_bounds.push_back(VectorFloat2(std::numeric_limits<float>::max(), std::numeric_limits<float>::min()));
+        }
+
+        out_horizontal_bounds[line_index][0] = std::min(out_horizontal_bounds[line_index][0], pos[0]);
+        out_horizontal_bounds[line_index][1] = std::max(out_horizontal_bounds[line_index][1], pos[2]);
 
         return;
     }
 
     void PerformAlign(
         std::vector<PreVertexData>& in_pre_vertex_data,
-        const VectorFloat4& in_bounds,
+        const VectorFloat2& in_vertical_bounds,
+        const std::vector<VectorFloat2>& in_horizontal_line_bounds,
         const int in_glyph_size,
         const VectorInt2& in_containter_size,
-        const TextEnum::HorizontalLineAlignment::Enum in_horizontal_line_alignment,
-        const TextEnum::VerticalBlockAlignment::Enum in_vertical_block_alignment
+        const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
+        const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
         )
     {
-        VectorFloat2 delta;
-        switch (in_horizontal_line_alignment)
+        float vertical_delta = 0.0f;
+        const int line_count = (int)in_horizontal_line_bounds.size();
+        std::vector<float> horizontal_line_delta(line_count);
+        for (int index = 0; index < line_count; ++index)
         {
-        default:
-            break;
-        case TextEnum::HorizontalLineAlignment::Left:
-            break;
-        case TextEnum::HorizontalLineAlignment::Middle:
-            delta[0] = (in_containter_size[0] - in_bounds[2]) * 0.5f;
-            break;
-        case TextEnum::HorizontalLineAlignment::Right:
-            delta[0] = (in_containter_size[0] - in_bounds[2]);
-            break;
+            switch (in_horizontal_line_alignment)
+            {
+            default:
+                break;
+            case TextEnum::HorizontalLineAlignment::Left:
+                break;
+            case TextEnum::HorizontalLineAlignment::Middle:
+                horizontal_line_delta[index] = (in_containter_size[0] - in_horizontal_line_bounds[index][1]) * 0.5f;
+                break;
+            case TextEnum::HorizontalLineAlignment::Right:
+                horizontal_line_delta[index] = (in_containter_size[0] - in_horizontal_line_bounds[index][1]);
+                break;
+            }
         }
         switch (in_vertical_block_alignment)
         {
@@ -297,32 +320,34 @@ private:
         case TextEnum::VerticalBlockAlignment::BottomEM:
             break;
         case TextEnum::VerticalBlockAlignment::Middle:
-            delta[1] = ((in_containter_size[1] + in_containter_size[3]) - (in_bounds[1] + in_bounds[3])) * 0.5f;
+            vertical_delta = ((in_containter_size[1] + in_containter_size[3]) - (in_vertical_bounds[0] + in_vertical_bounds[1])) * 0.5f;
             break;
         case TextEnum::VerticalBlockAlignment::MiddleEM:
             {
                 float temp = ((float)(in_glyph_size / 2)) / ((float)in_containter_size[1]);
-                delta[1] = in_containter_size[1] - (temp * 0.5f);
+                vertical_delta = in_containter_size[1] - (temp * 0.5f);
             }
             break;
         case TextEnum::VerticalBlockAlignment::Top:
-            delta[1] = in_containter_size[1] - in_bounds[3];
+            vertical_delta = in_containter_size[1] - in_vertical_bounds[1];
             break;
         case TextEnum::VerticalBlockAlignment::TopEM:
             {
                 float temp = ((float)(in_glyph_size / 2)) / ((float)in_containter_size[1]);
-                delta[1] = in_containter_size[1] - temp;
+                vertical_delta = in_containter_size[1] - temp;
             }
         break;
         }
 
         for (auto& item : in_pre_vertex_data)
         {
-            item._pos_low_high[0] += delta[0];
-            item._pos_low_high[1] += delta[1];
-            item._pos_low_high[2] += delta[0];
-            item._pos_low_high[3] += delta[1];
+            const float horizontal_delta = horizontal_line_delta[item._line_index];
+            item._pos_low_high[0] += horizontal_delta;
+            item._pos_low_high[1] += vertical_delta;
+            item._pos_low_high[2] += horizontal_delta;
+            item._pos_low_high[3] += vertical_delta;
         }
+        return;
     }
 
     void BuildVertexData(
@@ -412,9 +437,13 @@ private:
 
     void ShapeText(
         std::vector<PreVertexData>* const out_pre_vertex_data_or_null,
-        VectorFloat4& out_bounds,
+        VectorFloat2& out_vertical_bounds,
+        std::vector<VectorFloat2>& out_horizontal_bounds,
         hb_buffer_t* in_buffer,
-        TMapGlyphCell& in_out_map_glyph_cell
+        TMapGlyphCell& in_out_map_glyph_cell,
+        const bool in_width_limit_enabled,
+        const int in_width_limit,
+        const int in_width_limit_new_line_height
         )
     {    
         hb_shape(_harf_buzz_font, in_buffer, NULL, 0);
@@ -429,32 +458,123 @@ private:
         }
         float cursor_x = 0;
         float cursor_y = 0;
-        for (unsigned int i = 0; i < glyph_count; i++) 
+        if (true == in_width_limit_enabled)
         {
-            hb_codepoint_t codepoint = glyph_info[i].codepoint;
-            //LOG_MESSAGE_DEBUG("ShapeText2[%d]", glyph_info[i].codepoint);
+            // Work out what line each glpyh should be on
+            unsigned int current_cluster = std::numeric_limits<unsigned int>::max();// -1;
+            std::vector<unsigned int > new_line_clusert_index; // start a new line each time you hit this cluster
+            for (unsigned int i = 0; i < glyph_count; i++) 
+            {
+                hb_glyph_info_t& info = glyph_info[i];
+                bool start_new_line = false;
 
-            float x_offset = (float)glyph_pos[i].x_offset / 64.0f;
-            float y_offset = (float)glyph_pos[i].y_offset / 64.0f;
-            float x_advance = (float)glyph_pos[i].x_advance / 64.0f;
-            float y_advance = (float)glyph_pos[i].y_advance / 64.0f;
-            // draw_glyph(glyphid, cursor_x + x_offset, cursor_y + y_offset);
-            FT_Error error = FT_Load_Glyph(_face, codepoint, FT_LOAD_DEFAULT);
-            error;
-            FT_GlyphSlot slot = _face->glyph;
-            FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL);
+                // Have at least one cluster per line
+                if (std::numeric_limits<unsigned int>::max() == current_cluster)
+                {
+                    current_cluster = info.cluster;
+                }
+                else if (info.cluster != current_cluster)
+                {
+                    float trace_x = cursor_x;
+                    for (unsigned int ahead = i + 0; ahead < glyph_count; ahead++) 
+                    {
+                        float x_advance = (float)glyph_pos[ahead].x_advance / 64.0f;
+                        trace_x += x_advance;
 
-            auto cell = FindOrMakeCell(codepoint, slot, in_out_map_glyph_cell);
-            AddVertexData(
-                out_pre_vertex_data_or_null,
-                out_bounds,
-                cell, 
-                cursor_x + x_offset, 
-                cursor_y + y_offset
-                );
+                        // We want to break the line if cluster goes past in_width_limit, and we can break on the cluster
+                        const hb_glyph_flags_t flag = hb_glyph_info_get_glyph_flags(&glyph_info[ahead]);
+                        if ((in_width_limit < trace_x) &&
+                            (0 == (flag & HB_GLYPH_FLAG_UNSAFE_TO_BREAK)))
+                        {
+                            new_line_clusert_index.push_back(glyph_info[ahead].cluster);
+                            current_cluster = std::numeric_limits<unsigned int>::max();
+                            i = ahead;
+                            cursor_x = 0.0f;
+                            start_new_line = true;
+                            break;
+                        }
+                    }
+                }
 
-            cursor_x += x_advance;
-            cursor_y += y_advance;
+                if (false == start_new_line)
+                {
+                    float x_advance = (float)glyph_pos[i].x_advance / 64.0f;
+                    cursor_x += x_advance;
+                }
+            }
+
+            // Now place each glyph
+            int line_index = 0;
+            cursor_x = 0.0f;
+            cursor_y = 0.0f;
+            for (unsigned int i = 0; i < glyph_count; i++) 
+            {
+                // Start new line
+                if ((line_index < (int)new_line_clusert_index.size()) &&
+                    (new_line_clusert_index[line_index] == glyph_info[i].cluster))
+                {
+                    line_index += 1;
+                    cursor_x = 0.0f;
+                    cursor_y += in_width_limit_new_line_height;
+                }
+
+                hb_codepoint_t codepoint = glyph_info[i].codepoint;
+
+                float x_offset = (float)glyph_pos[i].x_offset / 64.0f;
+                float y_offset = (float)glyph_pos[i].y_offset / 64.0f;
+                float x_advance = (float)glyph_pos[i].x_advance / 64.0f;
+                float y_advance = (float)glyph_pos[i].y_advance / 64.0f;
+
+                FT_Error error = FT_Load_Glyph(_face, codepoint, FT_LOAD_DEFAULT);
+                error;
+                FT_GlyphSlot slot = _face->glyph;
+                FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL);
+
+                auto cell = FindOrMakeCell(codepoint, slot, in_out_map_glyph_cell);
+                AddVertexData(
+                    out_pre_vertex_data_or_null,
+                    out_vertical_bounds,
+                    out_horizontal_bounds,
+                    cell, 
+                    cursor_x + x_offset, 
+                    cursor_y + y_offset,
+                    line_index
+                    );
+
+                cursor_x += x_advance;
+                cursor_y += y_advance;
+            }
+        }
+        else
+        {
+            for (unsigned int i = 0; i < glyph_count; i++) 
+            {
+                hb_codepoint_t codepoint = glyph_info[i].codepoint;
+
+                float x_offset = (float)glyph_pos[i].x_offset / 64.0f;
+                float y_offset = (float)glyph_pos[i].y_offset / 64.0f;
+                float x_advance = (float)glyph_pos[i].x_advance / 64.0f;
+                float y_advance = (float)glyph_pos[i].y_advance / 64.0f;
+
+                FT_Error error = FT_Load_Glyph(_face, codepoint, FT_LOAD_DEFAULT);
+                error;
+                FT_GlyphSlot slot = _face->glyph;
+                FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL);
+
+                auto cell = FindOrMakeCell(codepoint, slot, in_out_map_glyph_cell);
+                AddVertexData(
+                    out_pre_vertex_data_or_null,
+                    out_vertical_bounds,
+                    out_horizontal_bounds,
+                    cell, 
+                    cursor_x + x_offset, 
+                    cursor_y + y_offset,
+                    0
+                    );
+
+                cursor_x += x_advance;
+                cursor_y += y_advance;
+            }
         }
 
         return;
@@ -489,45 +609,53 @@ TextFont::~TextFont()
     _implementation.reset();
 }
 
-std::shared_ptr<TextBlock> TextFont::MakeBlock(
-    DrawSystem* const in_draw_system,
-    ID3D12GraphicsCommandList* const in_command_list,
+VectorInt2 TextFont::CalculateTextBounds(
+    const std::string& in_string_utf8,
+    const TextLocale* const in_locale_token,
+    const int in_font_size,
+    const bool in_width_limit_enabled,
+    const int in_width_limit,
+    const int in_width_limit_new_line_height
+    )
+{
+    return _implementation->CalculateTextBounds(
+        in_string_utf8,
+        in_locale_token,
+        in_font_size,
+        in_width_limit_enabled,
+        in_width_limit,
+        in_width_limit_new_line_height
+        );
+}
+
+void TextFont::GenerateGeometry(
+    std::vector<uint8_t>& out_vertex_raw_data,
     const std::string& in_string_utf8,
     const TextLocale* const in_locale_token,
     const int in_font_size,
     const VectorInt2& in_containter_size,
     const bool in_width_limit_enabled,
     const int in_width_limit,
+    const int in_width_limit_new_line_height,
     const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
     const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
     )
 {
-    return _implementation->MakeBlock(
-        in_draw_system,
-        in_command_list,
+    _implementation->GenerateGeometry(
+        out_vertex_raw_data,
         in_string_utf8,
         in_locale_token,
         in_font_size,
         in_containter_size,
         in_width_limit_enabled,
         in_width_limit,
+        in_width_limit_new_line_height,
         in_horizontal_line_alignment,
         in_vertical_block_alignment
         );
+    return;
 }
 
-VectorFloat2 TextFont::CalculateTextBounds(
-    const std::string& in_string_utf8,
-    const TextLocale* const in_locale_token,
-    const int in_font_size
-    )
-{
-    return _implementation->CalculateTextBounds(
-        in_string_utf8,
-        in_locale_token,
-        in_font_size
-        );
-}
 
 void TextFont::RestGlyphUsage()
 {

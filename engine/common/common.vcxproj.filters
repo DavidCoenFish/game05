@@ -232,7 +232,7 @@
     <ClCompile Include="source\common\ui\ui_content_stack.cpp">
       <Filter>souce\common\ui</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\ui\ui_content_text.cpp">
+    <ClCompile Include="source\common\ui\ui_content_string.cpp">
       <Filter>souce\common\ui</Filter>
     </ClCompile>
     <ClCompile Include="source\common\ui\ui_content_texture.cpp">
@@ -501,7 +501,7 @@
     <ClInclude Include="include\common\ui\ui_content_stack.h">
       <Filter>include\common\ui</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\ui\ui_content_text.h">
+    <ClInclude Include="include\common\ui\ui_content_string.h">
       <Filter>include\common\ui</Filter>
     </ClInclude>
     <ClInclude Include="include\common\ui\ui_coord.h">

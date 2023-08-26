@@ -9,7 +9,7 @@
 #include "common/text/text_block.h"
 #include "common/ui/ui_content_canvas.h"
 #include "common/ui/ui_content_stack.h"
-#include "common/ui/ui_content_text.h"
+#include "common/ui/ui_content_string.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_data/ui_data_string.h"
@@ -60,57 +60,44 @@ namespace
         TextEnum::HorizontalLineAlignment Horizontal = TextEnum::HorizontalLineAlignment::Middle,
         TextEnum::VerticalBlockAlignment Vertical = TextEnum::VerticalBlockAlignment::MiddleEM
         >
-    //DrawSystem* const _draw_system;
-    //ID3D12GraphicsCommandList* const _command_list;
-    //const IUIData* const _ui_data;
-    //TextManager* const _text_manager;
-
-    void FactoryString(
+    const bool FactoryString(
         std::unique_ptr<IUIContent>& in_out_content,
         const UIContentFactoryParam& in_param
         )
     {
-        UIDataString* const data = dynamic_cast<UIDataString*>(in_param._ui_data);
-        if (nullptr == data)
-        {
-            in_out_content.reset();
-            return true;
-        }
+        //UIDataString* const data = dynamic_cast<UIDataString*>(in_param._ui_data);
+        //if (nullptr == data)
+        //{
+        //    in_out_content.reset();
+        //    return true;
+        //}
+        UIContentString* string = dynamic_cast<UIContentString*>(in_out_content.get());
         bool dirty = false;
-        UIContentText* text = dynamic_cast<UIContentText*>(in_out_content.get());
-        if (nullptr == text)
+        if (nullptr == string)
         {
-
-            auto text_unique = std::make_unique<UIContentText>();
-            text = text_unique.get();
-            in_out_content = std::move(text_unique);
+            auto temp = std::make_unique<UIContentString>();
+            string = temp.get();
+            in_out_content = std::move(temp);
             dirty = true;
         }
 
-        text->SetText(data->GetString());
-        text->SetAlignment(Horizontal, Vertical);
-        text->SetFont(
-            in_param._text_manager->MakeFont(GetPath()),
-            FontSize
-            );
+        if (true == string->SetFont(GetPath(), FontSize))
+        {
+            dirty = true;
+        }
 
+        if (true == string->SetAlignment(Horizontal, Vertical))
+        {
+            dirty = true;
+        }
 
-        //if (true == text->FactoryUpdate(
-        //    GetPath(),
-        //    data,
-        //    FontSize,
-        //    Horizontal,
-        //    Vertical
-        //    ))
-        //{
-        //    dirty = true;
-        //}
+        return dirty;
     }
 
     template<
         int FontSize = 16
         >
-    void FactoryTextRun(
+    const bool FactoryTextRun(
         std::unique_ptr<IUIContent>& in_out_content,
         const UIContentFactoryParam& in_param
         )
@@ -127,7 +114,7 @@ namespace
         int MarginTop = 8,
         int MarginBottom = 8
         >
-    void FactoryStack(
+    const bool FactoryStack(
         std::unique_ptr<IUIContent>& in_out_content,
         const UIContentFactoryParam& in_param
         )

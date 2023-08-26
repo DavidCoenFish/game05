@@ -21,12 +21,13 @@ public:
         );
     ~TextFont();
 
-    VectorFloat2 CalculateTextBounds(
+    VectorInt2 CalculateTextBounds(
         const std::string& in_string_utf8,
         const TextLocale* const in_locale_token,
         const int in_font_size,
         const bool in_width_limit_enabled = false,
-        const int in_width_limit = 0
+        const int in_width_limit = 0,
+        const int in_width_limit_new_line_height = 0
         );
 
     void GenerateGeometry(
@@ -37,6 +38,7 @@ public:
         const VectorInt2& in_containter_size,
         const bool in_width_limit_enabled = false,
         const int in_width_limit = 0,
+        const int in_width_limit_new_line_height = 0,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment = TextEnum::HorizontalLineAlignment::Left,
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment = TextEnum::VerticalBlockAlignment::Top
         );

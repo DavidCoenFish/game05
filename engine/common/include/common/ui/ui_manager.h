@@ -18,16 +18,10 @@ struct UIContentFactoryParam
 {
     explicit UIContentFactoryParam(
         DrawSystem* const in_draw_system = nullptr,
-        ID3D12GraphicsCommandList* const in_command_list = nullptr,
-        const IUIData* const in_ui_data = nullptr,
-        TextManager* const in_text_manager = nullptr,
-        const float in_ui_scale = 1.0f
+        ID3D12GraphicsCommandList* const in_command_list = nullptr
         );
     DrawSystem* const _draw_system;
     ID3D12GraphicsCommandList* const _command_list;
-    const IUIData* const _ui_data;
-    TextManager* const _text_manager;
-    float _ui_scale;
 };
 
 struct UIManagerUpdateLayoutParam

@@ -9,6 +9,7 @@
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_texture.h"
+#include "common/ui/ui_manager.h"
 
 IUIContent::IUIContent()
 {
@@ -93,24 +94,25 @@ const bool IUIContent::Update(
 */
 
 void IUIContent::Draw(
-    DrawSystemFrame* const in_frame,
+    const UIManagerDrawParam& in_param,
     UITexture* const in_texture,
     std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
     Shader* const in_shader
     )
 {
-    in_frame->SetRenderTarget(
+    in_param._frame->SetRenderTarget(
         in_texture->GetRenderTarget(), 
         in_texture->GetAllowClear()
         );
+
     for (auto& child_data : in_child_data_array)
     {
         in_shader->SetShaderResourceViewHandle(
             0, 
             child_data->_node->GetShaderResourceHeapWrapperItem()
             );
-        in_frame->SetShader(in_shader);
-        in_frame->Draw(child_data->_geometry->GetGeometry());
+        in_param._frame->SetShader(in_shader);
+        in_param._frame->Draw(child_data->_geometry->GetGeometry());
     }
 
     return;

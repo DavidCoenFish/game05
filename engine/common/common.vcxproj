@@ -84,7 +84,7 @@
     <ClCompile Include="source\common\ui\i_ui_model.cpp" />
     <ClCompile Include="source\common\ui\ui_content_canvas.cpp" />
     <ClCompile Include="source\common\ui\ui_content_stack.cpp" />
-    <ClCompile Include="source\common\ui\ui_content_text.cpp" />
+    <ClCompile Include="source\common\ui\ui_content_string.cpp" />
     <ClCompile Include="source\common\ui\ui_content_texture.cpp" />
     <ClCompile Include="source\common\ui\ui_coord.cpp" />
     <ClCompile Include="source\common\ui\ui_data\i_ui_data.cpp" />
@@ -157,7 +157,7 @@
     <ClInclude Include="include\common\ui\i_ui_model.h" />
     <ClInclude Include="include\common\ui\ui_content_canvas.h" />
     <ClInclude Include="include\common\ui\ui_content_stack.h" />
-    <ClInclude Include="include\common\ui\ui_content_text.h" />
+    <ClInclude Include="include\common\ui\ui_content_string.h" />
     <ClInclude Include="include\common\ui\ui_content_texture.h" />
     <ClInclude Include="include\common\ui\ui_coord.h" />
     <ClInclude Include="include\common\ui\ui_data\i_ui_data.h" />

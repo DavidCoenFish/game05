@@ -15,7 +15,8 @@ class TextFont;
 class TextBlock
 {
 public:
-    // Object is to be ready for use after contruction, so we create geometry with DrawSystem? allow for update however
+    // Object is to be ready for use after contruction? so we create geometry with DrawSystem? allow for update however
+    // one main use case is ui, which may not have the container size ready? or change ui to not creat a text block till ready
     TextBlock(
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list,
@@ -33,7 +34,7 @@ public:
     ~TextBlock();
 
     // Get the natural size required by the text using current width limit if enabled
-    VectorInt2 GetTextBounds() const;
+    VectorInt2 GetTextBounds();
 
     void SetFont(
         TextFont& in_text_font,
@@ -69,7 +70,7 @@ public:
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
         );
 
-    // return true if we needed to change geometry
+    // Return true if we needed to change geometry
     const bool Update(
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list

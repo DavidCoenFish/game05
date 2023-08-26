@@ -41,19 +41,19 @@ UIHierarchyNodeUpdateLayoutParam::UIHierarchyNodeUpdateLayoutParam(
     // Nop
 }
 
-UIHierarchyNode::LayoutData UIHierarchyNode::LayoutData::FactoryFull()
+UIHierarchyNodeLayoutData UIHierarchyNodeLayoutData::FactoryFull()
 {
-    return LayoutData(
-        UICoord(1.0f, 0.0f),
-        UICoord(1.0f, 0.0f),
-        UICoord(0.0f, 0.0f),
-        UICoord(0.0f, 0.0f),
-        UICoord(0.0f, 0.0f),
-        UICoord(0.0f, 0.0f)
+    return UIHierarchyNodeLayoutData(
+        UICoord(UICoord::ParentSource::X, 1.0f, 0.0f),
+        UICoord(UICoord::ParentSource::Y, 1.0f, 0.0f),
+        UICoord(UICoord::ParentSource::X, 0.0f, 0.0f),
+        UICoord(UICoord::ParentSource::Y, 0.0f, 0.0f),
+        UICoord(UICoord::ParentSource::X, 0.0f, 0.0f),
+        UICoord(UICoord::ParentSource::Y, 0.0f, 0.0f)
         );
 }
 
-UIHierarchyNode::LayoutData::LayoutData(
+UIHierarchyNodeLayoutData::UIHierarchyNodeLayoutData(
     const UICoord& in_size_x,
     const UICoord& in_size_y,
     const UICoord& in_attach_x,
@@ -80,14 +80,14 @@ UIHierarchyNodeChildData::UIHierarchyNodeChildData(
     // Nop
 }
 
-UIHierarchyNode::UIHierarchyNode(
-    const LayoutData& in_layout_data,
-    std::unique_ptr<IUIContent>& in_content,
-    std::unique_ptr<UITexture>& in_texture
-    )
-    : _layout_data(in_layout_data)
-    , _content(std::move(in_content))
-    , _texture(std::move(in_texture))
+UIHierarchyNode::UIHierarchyNode()
+    //const LayoutData& in_layout_data,
+    //std::unique_ptr<IUIContent>& in_content,
+    //std::unique_ptr<UITexture>& in_texture
+    //)
+    //: _layout_data(in_layout_data)
+    //, _content(std::move(in_content))
+    //, _texture(std::move(in_texture))
 {
     // Nop
 }
@@ -176,9 +176,7 @@ void UIHierarchyNode::UpdateLayout(
     {
         UIContentFactoryParam content_factory_param(
             in_param._draw_system,
-            in_param._command_list,
-            in_data,
-            in_param._text_manager
+            in_param._command_list
             );
         // Return true for change?
         if (true == (found->second)(_content, content_factory_param))
@@ -189,16 +187,16 @@ void UIHierarchyNode::UpdateLayout(
 
     if (nullptr != _content)
     {
+        VectorInt2 texture_size;
         // return true for change? example case, child count reduced but no other content change
         if (true == _content->Update(
             texture_size,
             _layout_data,
-            in_parent_size,
             _child_data_array,
-            in_param._draw_system,
-            in_param._command_list,
+            in_parent_size,
             in_data,
-            in_model_key
+            in_model_key,
+            in_param
             ))
         {
             needs_draw = true;
@@ -247,18 +245,16 @@ const bool UIHierarchyNode::Draw(
         )
     {
         needed_to_draw = true;
-        in_draw_param._frame->SetRenderTarget(
-            _texture->GetRenderTarget(),
-            _texture->GetAllowClear()
-            );
-        for (auto& iter : _child_data_array)
-        {
-            in_shader->SetShaderResourceViewHandle(0, iter->_node->GetShaderResourceHeapWrapperItem());
-            in_draw_param._frame->SetShader(in_shader);
-            in_draw_param._frame->Draw(iter->_geometry->GetGeometry());
-        }
 
-        _texture->SetHasDrawn(true);
+        _content->Draw(
+            in_draw_param,
+            _texture.get(),
+            _child_data_array,
+            in_shader
+            );
+
+        in_texture->SetHasDrawn(true);
+
     }
 
     return needed_to_draw;

@@ -67,26 +67,29 @@ struct UIHierarchyNodeUpdateLayoutParam
 
 };
 
+
+struct UIHierarchyNodeLayoutData
+{
+    static UIHierarchyNodeLayoutData FactoryFull();
+    explicit UIHierarchyNodeLayoutData(
+        const UICoord& in_size_x = UICoord(UICoord::ParentSource::X),
+        const UICoord& in_size_y = UICoord(UICoord::ParentSource::Y),
+        const UICoord& in_attach_x = UICoord(UICoord::ParentSource::X),
+        const UICoord& in_attach_y = UICoord(UICoord::ParentSource::Y),
+        const UICoord& in_pivot_x = UICoord(UICoord::ParentSource::X),
+        const UICoord& in_pivot_y = UICoord(UICoord::ParentSource::Y)
+        );
+
+    // Data for how we calculate our size relative to parent
+    UICoord _data_size[2];
+    UICoord _data_attach[2];
+    UICoord _data_pivot[2];
+
+};
+
 class UIHierarchyNode
 {
 public:
-    struct LayoutData
-    {
-        static LayoutData FactoryFull();
-        explicit LayoutData(
-            const UICoord& in_size_x = UICoord(),
-            const UICoord& in_size_y = UICoord(),
-            const UICoord& in_attach_x = UICoord(),
-            const UICoord& in_attach_y = UICoord(),
-            const UICoord& in_pivot_x = UICoord(),
-            const UICoord& in_pivot_y = UICoord()
-            );
-
-        // Data for how we calculate our size relative to parent
-        UICoord _data_size[2];
-        UICoord _data_attach[2];
-        UICoord _data_pivot[2];
-    };
 
     //enum class TFlag
     //{
@@ -107,16 +110,18 @@ public:
 
     //};
 
-    explicit UIHierarchyNode(
-        const LayoutData& in_layout_data = LayoutData(),
-        std::unique_ptr<IUIContent>& in_content = nullptr,
-        std::unique_ptr<UITexture>& in_texture = nullptr//,
-        //const TFlag in_flag = TFlag::TDefault
-        );
+    UIHierarchyNode();
+
+    //explicit UIHierarchyNode(
+    //    const LayoutData& in_layout_data = LayoutData(),
+    //    std::unique_ptr<IUIContent>& in_content = std::unique_ptr<IUIContent>(),
+    //    std::unique_ptr<UITexture>& in_texture = std::unique_ptr<UITexture>()//,
+    //    //const TFlag in_flag = TFlag::TDefault
+    //    );
     ~UIHierarchyNode();
 
-    const LayoutData& GetLayoutData() const { return _layout_data; }
-    LayoutData& GetLayoutDataModify();
+    const UIHierarchyNodeLayoutData& GetLayoutData() const { return _layout_data; }
+    UIHierarchyNodeLayoutData& GetLayoutDataModify();
 
     const VectorInt2 GetTargetSize() const;
 
@@ -166,7 +171,7 @@ private:
     std::unique_ptr<UIRootInputState> _root_input_state;
 
     // would not this, and the parent size, determin our texture size? layout needs to be full screen for backbuffer?
-    LayoutData _layout_data;
+    UIHierarchyNodeLayoutData _layout_data;
 
     // Dynamic data as well as static? [visible, focusable, block input travel to children, children from content, focused, mouse over, mouse down
     //TFlag _flag;

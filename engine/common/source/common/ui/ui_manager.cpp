@@ -16,16 +16,10 @@
 
 UIContentFactoryParam::UIContentFactoryParam(
     DrawSystem* const in_draw_system,
-    ID3D12GraphicsCommandList* const in_command_list,
-    const IUIData* const in_ui_data,
-    TextManager* const in_text_manager,
-    const float in_ui_scale
+    ID3D12GraphicsCommandList* const in_command_list
     )
     : _draw_system(in_draw_system)
     , _command_list(in_command_list)
-    , _ui_data(in_ui_data)
-    , _text_manager(in_text_manager)
-    , _ui_scale(in_ui_scale)
 {
     // Nop
 }
