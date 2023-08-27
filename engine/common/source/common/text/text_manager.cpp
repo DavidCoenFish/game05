@@ -132,14 +132,14 @@ public:
         FT_Done_FreeType(_library);
     }
 
-    std::shared_ptr<TextFont> MakeFont(
+    TextFont* const MakeFont(
         const std::filesystem::path& in_font_rel_path
         )
     {
         auto found = _map_path_font.find(in_font_rel_path);
         if (found != _map_path_font.end())
         {
-            return found->second;
+            return found->second.get();
         }
 
         const std::filesystem::path font_path = _root_path / in_font_rel_path;
@@ -147,7 +147,7 @@ public:
         auto text_face = std::make_shared<TextFont>(_library, font_path, _texture.get());
         _map_path_font[in_font_rel_path] = text_face;
 
-        return text_face;
+        return text_face.get();
     }
 
     void UpdateTextBlock(
@@ -156,10 +156,15 @@ public:
         TextBlock* const in_text_block
         )
     {
-        in_text_block->Update(
-            in_draw_system,
-            in_command_list
-            );
+        bool geometry_dirty = false;
+        if (nullptr != in_text_block)
+        {
+            in_text_block->GetGeometry(
+                geometry_dirty,
+                in_draw_system,
+                in_command_list
+                );
+        }
     }
 
     void DrawText(
@@ -168,9 +173,15 @@ public:
         TextBlock* const in_text_block
         )
     {
+        bool geometry_dirty = false;
+        auto geometry = in_text_block->GetGeometry(
+            geometry_dirty,
+            in_draw_system,
+            in_draw_system_frame->GetCommandList()
+            );
         _texture->Update(in_draw_system, in_draw_system_frame);
         in_draw_system_frame->SetShader(_shader.get());
-        in_draw_system_frame->Draw(in_text_block->GetGeometry());
+        in_draw_system_frame->Draw(geometry);
     }
 
     // Assert if there are any TextGeometry?
@@ -227,7 +238,7 @@ TextManager::~TextManager()
     // Nop
 }
 
-std::shared_ptr<TextFont> TextManager::MakeFont(
+TextFont* const TextManager::MakeFont(
     const std::filesystem::path& in_font_rel_path
     )
 {

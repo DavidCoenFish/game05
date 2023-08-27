@@ -12,14 +12,17 @@
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/i_ui_model.h"
 #include "common/ui/ui_data/i_ui_data.h"
+#include "common/text/text_manager.h"
 #include "common/util/vector_helper.h"
 
 UIContentFactoryParam::UIContentFactoryParam(
     DrawSystem* const in_draw_system,
-    ID3D12GraphicsCommandList* const in_command_list
+    ID3D12GraphicsCommandList* const in_command_list,
+    TextManager* const in_text_manager
     )
     : _draw_system(in_draw_system)
     , _command_list(in_command_list)
+    , _text_manager(in_text_manager)
 {
     // Nop
 }

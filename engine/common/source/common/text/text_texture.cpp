@@ -68,6 +68,11 @@ std::shared_ptr<TextCell> TextTexture::MakeCell(
     DSC_ASSERT((int)in_width <= _texture_dimention, "invalid param");
     DSC_ASSERT((int)in_height <= _texture_dimention, "invalid param");
 
+    if ((0 == in_width) || (0 ==in_height))
+    {
+        return nullptr;
+    }
+
     TextGlyphRow* found_row = nullptr;
     const int desired_height = in_height + (0 != (in_height & 0x03) ? 4 - (in_height & 0x03) : 0);
     //for (auto& iter: _array_glyph_row)

@@ -7,6 +7,7 @@
 #include "common/draw_system/heap_wrapper/heap_wrapper_item.h"
 #include "common/ui/ui_texture.h"
 #include "common/ui/ui_geometry.h"
+#include "common/ui/ui_manager.h"
 
 UIContentTexture::UIContentTexture(
     DrawSystem* const in_draw_system,
@@ -29,13 +30,13 @@ UIContentTexture::~UIContentTexture()
 }
 
 void UIContentTexture::Draw(
-    DrawSystemFrame* const in_frame,
+    const UIManagerDrawParam& in_param,
     UITexture* const in_texture,
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&,
+    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&,// in_child_data_array, // Todo, a ui_content which draws the texture of each child?
     Shader* const in_shader
     )
 {
-    in_frame->SetRenderTarget(
+    in_param._frame->SetRenderTarget(
         in_texture->GetRenderTarget(), 
         in_texture->GetAllowClear()
         );
@@ -43,9 +44,11 @@ void UIContentTexture::Draw(
         0,
         _shader_resource_view_handle
     );
-    in_frame->SetShader(in_shader);
-    in_frame->Draw(_geometry->GetGeometry());
+    in_param._frame->SetShader(in_shader);
+    in_param._frame->Draw(_geometry->GetGeometry());
+
     _dirty = false;
+    //SetDrawn();
 
     return;
 }
@@ -54,6 +57,11 @@ const bool UIContentTexture::GetNeedsDraw() const
 {
     return _dirty;
 }
+
+//void UIContentTexture::SetDrawn()
+//{
+//    _dirty = false;
+//}
 
 void UIContentTexture::SetTexture(
     const std::shared_ptr<HeapWrapperItem>& in_shader_resource_view_handle

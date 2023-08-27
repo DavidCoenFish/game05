@@ -21,7 +21,7 @@ public:
     ~TextManager();
 
     // Find or make a new text face
-    std::shared_ptr<TextFont> MakeFont(
+    TextFont* const MakeFont(
         const std::filesystem::path& in_font_rel_path
         );
 

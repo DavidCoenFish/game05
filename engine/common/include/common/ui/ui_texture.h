@@ -55,6 +55,16 @@ public:
     const bool GetAlwaysDirty() const { return _always_dirty; }
 
 private:
+    void UpdateUsingBackBuffer(
+        const bool in_use_back_buffer,
+        DrawSystem* const in_draw_system,
+        ID3D12GraphicsCommandList* const in_command_list,
+        const VectorInt2& in_size,
+        const bool in_allow_clear = false,
+        const VectorFloat4& in_clear_colour = VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f)
+        );
+
+private:
     bool _use_back_buffer; // use the application backbuffer as render target
     bool _allow_clear; // when render target is set active, do we clear
     bool _always_dirty; //if we share a render target, like the backbuffer, we may need to always draw

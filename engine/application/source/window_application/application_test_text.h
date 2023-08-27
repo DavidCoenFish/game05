@@ -45,8 +45,7 @@ private:
         std::shared_ptr<Shader> _background_shader;
 
         std::shared_ptr<UIManager> _ui_manager;
-        std::shared_ptr<TextFont> _text_face;
-        std::shared_ptr<TextBlock> _text_block;
+        std::unique_ptr<TextBlock> _text_block;
         //std::shared_ptr<UiBlock> _ui_block;
         //std::shared_ptr<RenderTargetTexture> _ui_render_target;
         //std::shared_ptr<GeometryGeneric> _ui_geometry;

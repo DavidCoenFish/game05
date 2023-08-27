@@ -33,66 +33,26 @@ const bool IUIContent::GetNeedsDraw() const
     return false;
 }
 
-/*
-const bool IUIContent::UpdatePosSizeForChildren( // add vectorint2 size for render target to child data?
-    DrawSystemFrame* const in_frame,
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
-    const VectorInt2& in_parent_size,
-    const float in_ui_scale
-    )
+void IUIContent::SetDrawn()
 {
-    bool result = false;
-    for (auto& child_data : in_child_data_array)
-    {
-        const auto child_pos = UIHierarchyNode::CalculatePos(
-            in_parent_size,
-            child_data->_node->GetLayoutData(),
-            in_ui_scale
-        );
-        if (true == child_data->_geometry->Update(
-            in_frame,
-            child_pos,
-            VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f)
-        ))
-        {
-            result = true;
-        }
-        child_data->_render_target_size = UIHierarchyNode::CalculateSizeInt(
-            in_parent_size,
-            child_data->_node->GetLayoutData(),
-            in_ui_scale
-        );
-    }
-    return result;
+    // Nop
 }
-
 
 const bool IUIContent::Update(
-    DrawSystem* const in_draw_system,
-    DrawSystemFrame* const in_frame,
-    Shader* const in_shader,
-    const UIManagerDrawData& in_data,
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array
+    VectorInt2&,
+    UIHierarchyNodeLayoutData&,
+    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&,
+    const VectorInt2&,
+    const IUIData* const,
+    const std::string&,
+    const UIHierarchyNodeUpdateLayoutParam&
     )
 {
-    bool result = false;
-    for (auto& child_data : in_child_data_array)
-    {
-        if (true == child_data->_node->DrawHierarchy(
-            in_draw_system,
-            in_frame,
-            in_shader,
-            child_data->_render_target_size,
-            in_data
-            ))
-        {
-            result = true;
-        }
-    }
-    return result;
+    return false;
 }
-*/
 
+
+// Default implementation, draw each child's texture on the child's geometry to our node's texture
 void IUIContent::Draw(
     const UIManagerDrawParam& in_param,
     UITexture* const in_texture,
@@ -114,6 +74,8 @@ void IUIContent::Draw(
         in_param._frame->SetShader(in_shader);
         in_param._frame->Draw(child_data->_geometry->GetGeometry());
     }
+
+    SetDrawn();
 
     return;
 }

@@ -126,7 +126,7 @@ public:
         );
     void ResizeRenderTargetTexture(
         ID3D12GraphicsCommandList* const in_command_list,
-        const std::shared_ptr<RenderTargetTexture>& in_render_target_texture,
+        RenderTargetTexture* const in_render_target_texture,
         const VectorInt2& in_size
         );
 

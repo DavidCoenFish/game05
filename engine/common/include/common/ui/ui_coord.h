@@ -7,6 +7,7 @@ class UICoord
 public:
     enum class ParentSource
     {
+        None,
         X,
         Y,
         Min,
@@ -14,7 +15,7 @@ public:
     };
 
     explicit UICoord(
-        const ParentSource in_parent_source,
+        const ParentSource in_parent_source = ParentSource::None,
         const float in_ratio = 0.0f,
         const float in_em_offset = 0.0f
         );

@@ -12,13 +12,12 @@
 #include "common/text/text_font.h"
 #include "common/text/text_locale.h"
 #include "common/text/text_manager.h"
+#include "common/text/text_pre_vertex.h"
 
 class TextBlockImplementation
 {
 public:
     TextBlockImplementation(
-        DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list,
         TextFont& in_text_font,
         const int in_font_size,
         const std::string& in_string_utf8,
@@ -42,10 +41,7 @@ public:
         , _horizontal_line_alignment(in_horizontal_line_alignment)
         , _vertical_block_alignment(in_vertical_block_alignment)
     {
-        Update(
-            in_draw_system,
-            in_command_list
-            );
+        
     }
 
     // Get the natural size required by the text using current width limit if enabled
@@ -54,106 +50,124 @@ public:
         if (true == _calculate_dirty)
         {
             _calculate_dirty = false;
-            _text_bounds = _text_font->CalculateTextBounds(
+
+            _pre_vertex_data = std::make_unique<TextPreVertex>((float)_font_size);
+            VectorFloat2 cursor;
+            _text_font->CalculateTextBounds(
+                *_pre_vertex_data,
+                cursor,
                 _string_utf8,
                 _locale_token,
                 _font_size,
                 _width_limit_enabled,
                 _width_limit
                 );
+            _text_bounds = _pre_vertex_data->GetBounds();
         }
 
         return _text_bounds;
     }
 
-    void SetFont(
+    const bool SetFont(
         TextFont& in_text_font,
         const int in_font_size
         )
     {
+        bool dirty = false;
         if ((_font_size != in_font_size) ||
             (_text_font != &in_text_font))
         {
+            dirty = true;
             _calculate_dirty = true;
             _geometry_dirty = true;
             _font_size = in_font_size;
             _text_font = &in_text_font;
         }
-        return;
+        return dirty;
     }
 
-    void SetText(
+    const bool SetText(
         const std::string& in_string_utf8,
         const TextLocale* const in_locale_token
         )
     {
+        bool dirty = false;
         if ((_string_utf8 != in_string_utf8) ||
             (_locale_token != in_locale_token))
         {
+            dirty = true;
             _calculate_dirty = true;
             _geometry_dirty = true;
             _string_utf8 = in_string_utf8;
             _locale_token = in_locale_token;
         }
-        return;
+        return dirty;
     }
 
-    void SetTextContainerSize(
+    const bool SetTextContainerSize(
         const VectorInt2& in_container_size
         )
     {
+        bool dirty = false;
         if (_container_size != in_container_size)
         {
+            dirty = true;
             _container_size = in_container_size;
             _geometry_dirty = true;
         }
-        return;
+        return dirty;
     }
 
-    void SetWidthLimit(
+    const bool SetWidthLimit(
         const bool in_width_limit_enabled,
         const int in_width_limit
         )
     {
+        bool dirty = false;
         if ((_width_limit_enabled != in_width_limit_enabled) ||
             (_width_limit != in_width_limit))
         {
+            dirty = true;
             _width_limit_enabled = in_width_limit_enabled;
             _width_limit = in_width_limit;
             _calculate_dirty = true;
             _geometry_dirty = true;
         }
-        return;
+        return dirty;
     }
 
-    void SetHorizontalLineAlignment(
+    const bool SetHorizontalLineAlignment(
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment
         )
     {
+        bool dirty = false;
         if (_horizontal_line_alignment != in_horizontal_line_alignment)
         {
+            dirty = true;
             _horizontal_line_alignment = in_horizontal_line_alignment;
             _calculate_dirty = true;
             _geometry_dirty = true;
         }
-        return;
+        return dirty;
     }
 
-    void SetVerticalBlockAlignment(
+    const bool SetVerticalBlockAlignment(
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
         )
     {
+        bool dirty = false;
         if (_vertical_block_alignment != in_vertical_block_alignment)
         {
+            dirty = true;
             _vertical_block_alignment = in_vertical_block_alignment;
             _calculate_dirty = true;
             _geometry_dirty = true;
         }
-        return;
+        return dirty;
     }
 
 
-    void Set(
+    const bool Set(
         TextFont& in_text_font,
         const int in_font_size,
         const std::string& in_string_utf8,
@@ -165,78 +179,91 @@ public:
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
         )
     {
-        SetFont(
+        bool dirty = false;
+        if (true == SetFont(
             in_text_font,
             in_font_size
-            );
-        SetText(
+            ))
+        {
+            dirty = true;
+        }
+        if (true == SetText(
             in_string_utf8,
             in_locale_token
-            );
-        SetTextContainerSize(
+            ))
+        {
+            dirty = true;
+        }
+        if (true == SetTextContainerSize(
             in_size
-            );
-        SetWidthLimit(
+            ))
+        {
+            dirty = true;
+        }
+        if (true == SetWidthLimit(
             in_width_limit_enabled,
             in_width_limit
-            );
-        SetHorizontalLineAlignment(
+            ))
+        {
+            dirty = true;
+        }
+        if (true == SetHorizontalLineAlignment(
             in_horizontal_line_alignment
-            );
-        SetVerticalBlockAlignment(
+            ))
+        {
+            dirty = true;
+        }
+        if (true == SetVerticalBlockAlignment(
             in_vertical_block_alignment
-            );
-        return;
+            ))
+        {
+            dirty = true;
+        }
+        return dirty;
     }
 
-    const bool Update(
+    GeometryGeneric* const GetGeometry(
+        bool& out_geometry_dirty,
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list
         )
     {
-        if (false == _geometry_dirty)
-        {
-            return false;
-        }
-        _geometry_dirty = false;
+        GetTextBounds();
 
-        std::vector<uint8_t> vertex_raw_data;
-        _text_font->GenerateGeometry(
-            vertex_raw_data,
-            _string_utf8,
-            _locale_token,
-            _font_size,
-            _container_size,
-            _width_limit_enabled,
-            _width_limit,
-            _font_size, // new line height
-            _horizontal_line_alignment,
-            _vertical_block_alignment
-            );
-        if (nullptr == _geometry)
+        if (true == _geometry_dirty)
         {
-            _geometry = in_draw_system->MakeGeometryGeneric(
-                in_command_list,
-                D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
-                TextManager::GetInputElementDesc(),
+            _geometry_dirty = false;
+            out_geometry_dirty = true;
+
+            std::vector<uint8_t> vertex_raw_data;
+            _pre_vertex_data->BuildVertexData(
                 vertex_raw_data,
-                8
+                _font_size,
+                _container_size,
+                _horizontal_line_alignment,
+                _vertical_block_alignment
                 );
-        } 
-        else
-        {
-            in_draw_system->UpdateGeometryGeneric(
-                in_command_list,
-                _geometry.get(),
-                vertex_raw_data
-                );
+
+            if (nullptr == _geometry)
+            {
+                _geometry = in_draw_system->MakeGeometryGeneric(
+                    in_command_list,
+                    D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
+                    TextManager::GetInputElementDesc(),
+                    vertex_raw_data,
+                    8
+                    );
+            }
+            else
+            {
+                in_draw_system->UpdateGeometryGeneric(
+                    in_command_list,
+                    _geometry.get(),
+                    vertex_raw_data
+                    );
+            }
         }
 
-        return true;
-    }
-
-    GeometryGeneric* const GetGeometry() const
-    {
         return _geometry.get();
     }
 
@@ -254,12 +281,11 @@ private:
     int _width_limit;
     TextEnum::HorizontalLineAlignment _horizontal_line_alignment;
     TextEnum::VerticalBlockAlignment _vertical_block_alignment;
+    std::unique_ptr<TextPreVertex> _pre_vertex_data;
 
 };
 
 TextBlock::TextBlock(
-    DrawSystem* const in_draw_system,
-    ID3D12GraphicsCommandList* const in_command_list,
     TextFont& in_text_font,
     const int in_font_size,
     const std::string& in_string_utf8,
@@ -272,8 +298,6 @@ TextBlock::TextBlock(
     )
 {
     _implementation = std::make_unique<TextBlockImplementation>(
-        in_draw_system,
-        in_command_list,
         in_text_font,
         in_font_size,
         in_string_utf8,
@@ -297,67 +321,67 @@ VectorInt2 TextBlock::GetTextBounds()
     return _implementation->GetTextBounds();
 }
 
-void TextBlock::SetFont(
+const bool TextBlock::SetFont(
     TextFont& in_text_font,
     const int in_font_size
     )
 {
-    _implementation->SetFont(
+    return _implementation->SetFont(
         in_text_font,
         in_font_size
         );
 }
 
-void TextBlock::SetText(
+const bool TextBlock::SetText(
     const std::string& in_string_utf8,
     const TextLocale* const in_locale_token
     )
 {
-    _implementation->SetText(
+    return _implementation->SetText(
         in_string_utf8,
         in_locale_token
         );
 }
 
-void TextBlock::SetTextContainerSize(
+const bool TextBlock::SetTextContainerSize(
     const VectorInt2& in_size
     )
 {
-    _implementation->SetTextContainerSize(
+    return _implementation->SetTextContainerSize(
         in_size
         );
 }
 
-void TextBlock::SetWidthLimit(
+const bool TextBlock::SetWidthLimit(
     const bool in_width_limit_enabled,
     const int in_width_limit
     )
 {
-    _implementation->SetWidthLimit(
+    return _implementation->SetWidthLimit(
         in_width_limit_enabled,
         in_width_limit
         );
 }
 
-void TextBlock::SetHorizontalLineAlignment(
+const bool TextBlock::SetHorizontalLineAlignment(
     const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment
     )
 {
-    _implementation->SetHorizontalLineAlignment(
+    return _implementation->SetHorizontalLineAlignment(
         in_horizontal_line_alignment
         );
 }
 
-void TextBlock::SetVerticalBlockAlignment(
+const bool TextBlock::SetVerticalBlockAlignment(
     const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
     )
 {
-    _implementation->SetVerticalBlockAlignment(
+    return _implementation->SetVerticalBlockAlignment(
         in_vertical_block_alignment
         );
 }
 
-void TextBlock::Set(
+const bool TextBlock::Set(
     TextFont& in_text_font,
     const int in_font_size,
     const std::string& in_string_utf8,
@@ -369,7 +393,7 @@ void TextBlock::Set(
     const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
     )
 {
-    _implementation->Set(
+    return _implementation->Set(
         in_text_font,
         in_font_size,
         in_string_utf8,
@@ -382,18 +406,15 @@ void TextBlock::Set(
         );
 }
 
-const bool TextBlock::Update(
+GeometryGeneric* const TextBlock::GetGeometry(
+    bool& out_geometry_dirty,
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list
     )
 {
-    return _implementation->Update(
-        in_draw_system, 
+    return _implementation->GetGeometry(
+        out_geometry_dirty,
+        in_draw_system,
         in_command_list
         );
-}
-
-GeometryGeneric* const TextBlock::GetGeometry() const
-{
-    return _implementation->GetGeometry();
 }

@@ -134,21 +134,18 @@ ApplicationTestText::ApplicationTestText(
         in_application_param._root_path
         );
 
-    _draw_resources->_text_face = _text_manager->MakeTextFont(
+        TextFont* const _text_face = _text_manager->MakeFont(
         std::filesystem::path("data") / "open_sans.ttf"
         );
 
-    _draw_resources->_text_block = _draw_resources->_text_face->MakeBlock(
-        _draw_system.get(),
-        command_list->GetCommandList(),
-        "abcdefg",
-        nullptr,
+    _draw_resources->_text_block = std::make_unique<TextBlock>(
+        *_text_face,
         64,
-        VectorInt2(800, 600), //s_text_block_size,
-        false, //const bool in_width_limit_enabled,
-        0, //const int in_width_limit,
-        TextEnum::HorizontalLineAlignment::Middle,
-        TextEnum::VerticalBlockAlignment::Middle
+        "X",
+        nullptr,
+        VectorInt2(800, 600),
+        true,
+        128
         );
 
     return;

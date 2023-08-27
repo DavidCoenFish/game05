@@ -27,7 +27,9 @@ public:
         ) const;
 
     virtual const bool GetNeedsDraw() const;
+    virtual void SetDrawn();
 
+    // if we are going to use this to auto scroll text, need some way of compunicating uv. layout_data? or the ui_geometry?
     virtual const bool Update(
         VectorInt2& out_texture_size,
         UIHierarchyNodeLayoutData& out_layout_data,
@@ -38,6 +40,10 @@ public:
         const UIHierarchyNodeUpdateLayoutParam& in_param
         );
 
+    /*
+    passing in_child_data_array as some components may want things from the child
+    default implementation is to draw all children onto in_texture
+    */
     virtual void Draw(
         const UIManagerDrawParam& in_param,
         UITexture* const in_texture,

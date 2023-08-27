@@ -268,6 +268,9 @@
     <ClCompile Include="source\common\ui\ui_data\ui_data_string.cpp">
       <Filter>souce\common\ui\ui_data</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\text\text_pre_vertex.cpp">
+      <Filter>souce\common\text</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -554,6 +557,9 @@
     </ClInclude>
     <ClInclude Include="include\common\ui\ui_data\ui_data_string.h">
       <Filter>include\common\ui\ui_data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\text\text_pre_vertex.h">
+      <Filter>include\common\text</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

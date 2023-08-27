@@ -3,7 +3,7 @@
 #include "window_application/application_basic_ui.h"
 #include "build.h"
 #include "default_locale.h"
-#include "default_ui_template.h"
+#include "default_ui_component_factory.h"
 
 #include "common/draw_system/custom_command_list.h"
 #include "common/draw_system/draw_system.h"
@@ -22,8 +22,9 @@
 #include "common/ui/ui_texture.h"
 #include "common/ui/ui_data/i_ui_data.h"
 #include "common/ui/ui_data/ui_data_container.h"
-#include "common/ui/ui_data/ui_data_text_run.h"
+#include "common/ui/ui_data/ui_data_string.h"
 #include "common/ui/ui_data/ui_data_template.h"
+#include "common/ui/ui_data/ui_data_text_run.h"
 #include "common/util/locale_system.h"
 #include "common/util/vector_helper.h"
 #include "common/window/window_application_param.h"
@@ -133,7 +134,7 @@ ApplicationBasicUI::ApplicationBasicUI(
         command_list->GetCommandList(),
         in_application_param._root_path
         );
-    DefaultUITemplate::Populate(*_draw_resource->_ui_manager);
+    DefaultUIComponentFactory::Populate(*_draw_resource->_ui_manager);
 
     _draw_resource->_ui_model = std::make_unique<UIModel>();
 }

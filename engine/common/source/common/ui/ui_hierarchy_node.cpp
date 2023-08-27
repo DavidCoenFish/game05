@@ -7,13 +7,14 @@
 #include "common/ui/i_ui_model.h"
 #include "common/ui/ui_content_canvas.h"
 #include "common/ui/ui_content_stack.h"
-#include "common/ui/ui_content_text.h"
+#include "common/ui/ui_content_string.h"
 #include "common/ui/ui_content_texture.h"
 #include "common/ui/ui_coord.h"
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_texture.h"
 #include "common/ui/ui_data/i_ui_data.h"
+#include "common/ui/ui_root_input_state.h"
 #include "common/math/vector_int2.h"
 #include "common/math/vector_float4.h"
 
@@ -176,7 +177,8 @@ void UIHierarchyNode::UpdateLayout(
     {
         UIContentFactoryParam content_factory_param(
             in_param._draw_system,
-            in_param._command_list
+            in_param._command_list,
+            in_param._text_manager
             );
         // Return true for change?
         if (true == (found->second)(_content, content_factory_param))
@@ -230,21 +232,25 @@ const bool UIHierarchyNode::Draw(
     Shader* const in_shader
     )
 {
-    bool needed_to_draw = false;
+    bool needs_to_draw = false;
     for (auto& iter : _child_data_array)
     {
-        if (true == iter->_node->Draw(in_draw_param, in_shader))
+        if (true == iter->_node->Draw(
+            in_draw_param,
+            in_shader
+            ))
         {
-            needed_to_draw = true;
+            needs_to_draw = true;
         }
     }
 
-    if ((true == needed_to_draw) ||
+    if ((true == needs_to_draw) ||
         (false == _texture->GetHasDrawn()) ||
-        (true == _texture->GetAlwaysDirty())
+        (true == _texture->GetAlwaysDirty()) ||
+        (true == _content->GetNeedsDraw())
         )
     {
-        needed_to_draw = true;
+        needs_to_draw = true;
 
         _content->Draw(
             in_draw_param,
@@ -253,11 +259,11 @@ const bool UIHierarchyNode::Draw(
             in_shader
             );
 
-        in_texture->SetHasDrawn(true);
+        _texture->SetHasDrawn(true);
 
     }
 
-    return needed_to_draw;
+    return needs_to_draw;
 }
 
 /*

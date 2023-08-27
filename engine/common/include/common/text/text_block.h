@@ -17,18 +17,17 @@ class TextBlock
 public:
     // Object is to be ready for use after contruction? so we create geometry with DrawSystem? allow for update however
     // one main use case is ui, which may not have the container size ready? or change ui to not creat a text block till ready
+    // Move to lazy init of geometry as ui use case will not know the container size at construction
     TextBlock(
-        DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list,
         TextFont& in_text_font,
         const int in_font_size,
         const std::string& in_string_utf8,
         const TextLocale* const in_locale_token,
         const VectorInt2& in_containter_size,
-        const bool in_width_limit_enabled,
-        const int in_width_limit,
-        const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
-        const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
+        const bool in_width_limit_enabled = false,
+        const int in_width_limit = 0,
+        const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment = TextEnum::HorizontalLineAlignment::Left,
+        const TextEnum::VerticalBlockAlignment in_vertical_block_alignment = TextEnum::VerticalBlockAlignment::Top
         );
 
     ~TextBlock();
@@ -36,29 +35,29 @@ public:
     // Get the natural size required by the text using current width limit if enabled
     VectorInt2 GetTextBounds();
 
-    void SetFont(
+    const bool SetFont(
         TextFont& in_text_font,
         const int in_font_size
         );
-    void SetText(
+    const bool SetText(
         const std::string& in_string_utf8,
         const TextLocale* const in_locale_token
         );
-    void SetTextContainerSize(
+    const bool SetTextContainerSize(
         const VectorInt2& in_size
         );
-    void SetWidthLimit(
+    const bool SetWidthLimit(
         const bool in_width_limit_enabled,
         const int in_width_limit
         );
-    void SetHorizontalLineAlignment(
+    const bool SetHorizontalLineAlignment(
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment
         );
-    void SetVerticalBlockAlignment(
+    const bool SetVerticalBlockAlignment(
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
         );
 
-    void Set(
+    const bool Set(
         TextFont& in_text_font,
         const int in_font_size,
         const std::string& in_string_utf8,
@@ -70,13 +69,12 @@ public:
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
         );
 
-    // Return true if we needed to change geometry
-    const bool Update(
+    // Rather than a seperate Update function, that could be forgoten, have the update in the getter, results in out_geometry_dirty
+    GeometryGeneric* const GetGeometry(
+        bool& out_geometry_dirty,
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list
         );
-
-    GeometryGeneric* const GetGeometry() const;
 
 private:
     std::unique_ptr<TextBlockImplementation> _implementation;

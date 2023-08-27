@@ -79,6 +79,7 @@
     <ClCompile Include="source\common\text\text_locale.cpp" />
     <ClCompile Include="source\common\text\text_manager.cpp" />
     <ClCompile Include="source\common\text\text_glyph_row.cpp" />
+    <ClCompile Include="source\common\text\text_pre_vertex.cpp" />
     <ClCompile Include="source\common\text\text_texture.cpp" />
     <ClCompile Include="source\common\ui\i_ui_content.cpp" />
     <ClCompile Include="source\common\ui\i_ui_model.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="include\common\text\text_enum.h" />
     <ClInclude Include="include\common\text\text_font.h" />
     <ClInclude Include="include\common\text\text_manager.h" />
+    <ClInclude Include="include\common\text\text_pre_vertex.h" />
     <ClInclude Include="include\common\ui\i_ui_content.h" />
     <ClInclude Include="include\common\ui\i_ui_model.h" />
     <ClInclude Include="include\common\ui\ui_content_canvas.h" />

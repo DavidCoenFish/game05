@@ -9,7 +9,6 @@ class UIGeometry;
 class UITexture;
 struct UIHierarchyNodeChildData;
 
-
 class UIContentTexture : public IUIContent
 {
 public:
@@ -26,9 +25,10 @@ public:
 
 private:
     virtual const bool GetNeedsDraw() const override;
+    //virtual void SetDrawn() override;
 
     virtual void Draw(
-        DrawSystemFrame* const in_frame,
+        const UIManagerDrawParam& in_param,
         UITexture* const in_texture,
         std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
         Shader* const in_shader

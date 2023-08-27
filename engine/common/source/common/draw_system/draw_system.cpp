@@ -273,14 +273,13 @@ std::shared_ptr<RenderTargetTexture> DrawSystem::MakeRenderTargetTexture(
 
 void DrawSystem::ResizeRenderTargetTexture(
     ID3D12GraphicsCommandList* const in_command_list,
-    const std::shared_ptr<RenderTargetTexture>& in_render_target_texture,
+    RenderTargetTexture* const in_render_target_texture,
     const VectorInt2& in_size
     )
 {
-    auto render_target_texture = in_render_target_texture.get();
-    if ((nullptr != render_target_texture) && (nullptr != _device_resources))
+    if ((nullptr != in_render_target_texture) && (nullptr != _device_resources))
     {
-        render_target_texture->Resize(
+        in_render_target_texture->Resize(
             in_command_list,
             _device_resources->GetD3dDevice(),
             in_size
