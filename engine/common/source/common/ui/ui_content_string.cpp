@@ -18,10 +18,11 @@ UIContentString::~UIContentString()
 
 const bool UIContentString::SetFont(
     TextFont& in_font, 
-    const int in_font_size
+    const int in_font_size,
+    const int in_new_line_height
     )
 {
-    return _text_block->SetFont(in_font, in_font_size);
+    return _text_block->SetFont(in_font, in_font_size, in_new_line_height);
 }
 
 const bool UIContentString::SetAlignment(

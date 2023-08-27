@@ -263,14 +263,14 @@
     <CopyFileToFolders Include="task\test_text\application.json">
       <Filter>task\test_text</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="data\open_sans.ttf">
-      <Filter>data</Filter>
-    </CopyFileToFolders>
     <CopyFileToFolders Include="task\test_coord\application.json">
       <Filter>task\test_coord</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="task\basic_ui\application.json">
       <Filter>task\basic_ui</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="data\code2000.ttf">
+      <Filter>data</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>

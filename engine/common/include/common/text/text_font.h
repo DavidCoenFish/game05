@@ -30,7 +30,7 @@ public:
         const int in_font_size,
         const bool in_width_limit_enabled = false,
         const int in_width_limit = 0,
-        const int in_width_limit_new_line_height = 0
+        const int in_new_line_height = 0
         );
 
     void RestGlyphUsage();

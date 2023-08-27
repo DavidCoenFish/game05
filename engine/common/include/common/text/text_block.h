@@ -21,6 +21,7 @@ public:
     TextBlock(
         TextFont& in_text_font,
         const int in_font_size,
+        const int in_new_line_height,
         const std::string& in_string_utf8,
         const TextLocale* const in_locale_token,
         const VectorInt2& in_containter_size,
@@ -37,7 +38,8 @@ public:
 
     const bool SetFont(
         TextFont& in_text_font,
-        const int in_font_size
+        const int in_font_size,
+        const int in_new_line_height
         );
     const bool SetText(
         const std::string& in_string_utf8,
@@ -60,6 +62,7 @@ public:
     const bool Set(
         TextFont& in_text_font,
         const int in_font_size,
+        const int in_new_line_height,
         const std::string& in_string_utf8,
         const TextLocale* const in_locale_token,
         const VectorInt2& in_size,

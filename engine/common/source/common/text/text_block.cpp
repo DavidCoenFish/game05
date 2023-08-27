@@ -20,6 +20,7 @@ public:
     TextBlockImplementation(
         TextFont& in_text_font,
         const int in_font_size,
+        const int in_new_line_height,
         const std::string& in_string_utf8,
         const TextLocale* const in_locale_token,
         const VectorInt2& in_containter_size,
@@ -33,6 +34,7 @@ public:
         , _geometry()
         , _text_font(&in_text_font)
         , _font_size(in_font_size)
+        , _new_line_height(in_new_line_height)
         , _string_utf8(in_string_utf8)
         , _locale_token(in_locale_token)
         , _container_size(in_containter_size)
@@ -60,7 +62,8 @@ public:
                 _locale_token,
                 _font_size,
                 _width_limit_enabled,
-                _width_limit
+                _width_limit,
+                _new_line_height
                 );
             _text_bounds = _pre_vertex_data->GetBounds();
         }
@@ -70,18 +73,22 @@ public:
 
     const bool SetFont(
         TextFont& in_text_font,
-        const int in_font_size
+        const int in_font_size,
+        const int in_new_line_height
         )
     {
         bool dirty = false;
         if ((_font_size != in_font_size) ||
-            (_text_font != &in_text_font))
+            (_text_font != &in_text_font) || 
+            (_new_line_height != in_new_line_height)
+            )
         {
             dirty = true;
             _calculate_dirty = true;
             _geometry_dirty = true;
             _font_size = in_font_size;
             _text_font = &in_text_font;
+            _new_line_height = in_new_line_height;
         }
         return dirty;
     }
@@ -170,6 +177,7 @@ public:
     const bool Set(
         TextFont& in_text_font,
         const int in_font_size,
+        const int in_new_line_height,
         const std::string& in_string_utf8,
         const TextLocale* const in_locale_token,
         const VectorInt2& in_size,
@@ -182,7 +190,8 @@ public:
         bool dirty = false;
         if (true == SetFont(
             in_text_font,
-            in_font_size
+            in_font_size,
+            in_new_line_height
             ))
         {
             dirty = true;
@@ -273,6 +282,7 @@ private:
     std::shared_ptr<GeometryGeneric> _geometry;
     TextFont* _text_font;
     int _font_size;
+    int _new_line_height;
     std::string _string_utf8;
     const TextLocale* _locale_token;
     VectorInt2 _text_bounds;
@@ -288,6 +298,7 @@ private:
 TextBlock::TextBlock(
     TextFont& in_text_font,
     const int in_font_size,
+    const int in_new_line_height,
     const std::string& in_string_utf8,
     const TextLocale* const in_locale_token,
     const VectorInt2& in_containter_size,
@@ -300,6 +311,7 @@ TextBlock::TextBlock(
     _implementation = std::make_unique<TextBlockImplementation>(
         in_text_font,
         in_font_size,
+        in_new_line_height,
         in_string_utf8,
         in_locale_token,
         in_containter_size,
@@ -323,12 +335,14 @@ VectorInt2 TextBlock::GetTextBounds()
 
 const bool TextBlock::SetFont(
     TextFont& in_text_font,
-    const int in_font_size
+    const int in_font_size,
+    const int in_new_line_height
     )
 {
     return _implementation->SetFont(
         in_text_font,
-        in_font_size
+        in_font_size,
+        in_new_line_height
         );
 }
 
@@ -384,6 +398,7 @@ const bool TextBlock::SetVerticalBlockAlignment(
 const bool TextBlock::Set(
     TextFont& in_text_font,
     const int in_font_size,
+    const int in_new_line_height,
     const std::string& in_string_utf8,
     const TextLocale* const in_locale_token,
     const VectorInt2& in_size,
@@ -396,6 +411,7 @@ const bool TextBlock::Set(
     return _implementation->Set(
         in_text_font,
         in_font_size,
+        in_new_line_height,
         in_string_utf8,
         in_locale_token,
         in_size,

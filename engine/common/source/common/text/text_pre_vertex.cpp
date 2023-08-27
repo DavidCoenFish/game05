@@ -8,35 +8,21 @@
 TextPreVertex::TextPreVertex(
     const float _default_line_height
     )
-    : _vertical_bounds(std::numeric_limits<float>::max(), std::numeric_limits<float>::min())
-    , _line_vertical_bounds(std::numeric_limits<float>::max(), std::numeric_limits<float>::min())
+    : _vertical_bounds(std::numeric_limits<float>::max(), -std::numeric_limits<float>::max())
+    , _line_vertical_bounds(std::numeric_limits<float>::max(), -std::numeric_limits<float>::max())
     , _bound_dirty(true)
     , _line_dirty(false)
     , _line_index(0)
     , _default_line_height(_default_line_height)
     , _current_line_height(0.0f)
 {
-    _horizontal_bounds.push_back(VectorFloat2(std::numeric_limits<float>::max(), std::numeric_limits<float>::min()));
+    _horizontal_bounds.push_back(VectorFloat2(std::numeric_limits<float>::max(), -std::numeric_limits<float>::max()));
 }
 
 TextPreVertex::~TextPreVertex()
 {
     // Nop
 }
-
-//void TextPreVertex::Reset()
-//{
-//    _pre_vertex_data.clear();
-//
-//    _vertical_bounds = VectorFloat2(std::numeric_limits<float>::max(), std::numeric_limits<float>::min());
-//    _line_vertical_bounds = VectorFloat2(std::numeric_limits<float>::max(), std::numeric_limits<float>::min());
-//    _bound_dirty = true;
-//    _line_dirty = false;
-//    _line_index = 0;
-//    _current_line_height = 0.0f;
-//{
-//    _horizontal_bounds.push_back(VectorFloat2(std::numeric_limits<float>::max(), std::numeric_limits<float>::min()));
-//}
 
 void TextPreVertex::Reserve(const unsigned int glyph_count)
 {
@@ -75,12 +61,12 @@ void TextPreVertex::AddPreVertex(
         _line_index
         }));
 
-    _vertical_bounds[0] = std::min(_vertical_bounds[0], pos[1]);
-    _vertical_bounds[1] = std::max(_vertical_bounds[1], pos[3]);
+    _line_vertical_bounds[0] = std::min(_line_vertical_bounds[0], pos[1]);
+    _line_vertical_bounds[1] = std::max(_line_vertical_bounds[1], pos[3]);
 
     while ((int)_horizontal_bounds.size() <= _line_index)
     {
-        _horizontal_bounds.push_back(VectorFloat2(std::numeric_limits<float>::max(), std::numeric_limits<float>::min()));
+        _horizontal_bounds.push_back(VectorFloat2(std::numeric_limits<float>::max(), -std::numeric_limits<float>::max()));
     }
 
     _horizontal_bounds[_line_index][0] = std::min(_horizontal_bounds[_line_index][0], pos[0]);
@@ -99,7 +85,7 @@ void TextPreVertex::StartNewLine(
 
     _line_index += 1;
     _current_line_height = 0.0f;
-    _line_vertical_bounds = VectorFloat2(std::numeric_limits<float>::max(), std::numeric_limits<float>::min());
+    _line_vertical_bounds = VectorFloat2(std::numeric_limits<float>::max(), -std::numeric_limits<float>::max());
 }
 
 const VectorInt2 TextPreVertex::GetBounds()
@@ -111,7 +97,7 @@ const VectorInt2 TextPreVertex::GetBounds()
         _bound_dirty = false;
         VectorFloat2 horizontal(
             std::numeric_limits<float>::max(),
-            std::numeric_limits<float>::min()
+            -std::numeric_limits<float>::max()
             );
         for (const auto& iter : _horizontal_bounds)
         {

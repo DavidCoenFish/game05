@@ -65,7 +65,7 @@ public:
         const int in_font_size,
         const bool in_width_limit_enabled,
         const int in_width_limit,
-        const int in_width_limit_new_line_height
+        const int in_new_line_height
         )
     {
         auto map_glyph_cell = FindMapGlyphCell(in_font_size);
@@ -84,7 +84,7 @@ public:
             *map_glyph_cell,
             in_width_limit_enabled,
             in_width_limit,
-            in_width_limit_new_line_height
+            in_new_line_height
         );
         hb_buffer_destroy(buffer);
     }
@@ -209,7 +209,7 @@ private:
                     float trace_x = cursor_x;
                     for (unsigned int ahead = i + 0; ahead < glyph_count; ahead++) 
                     {
-                        float x_advance = (float)glyph_pos[ahead].x_advance / 64.0f;
+                        const float x_advance = (float)glyph_pos[ahead].x_advance / 64.0f;
                         trace_x += x_advance;
 
                         // We want to break the line if cluster goes past in_width_limit, and we can break on the cluster
@@ -217,30 +217,34 @@ private:
                         if ((in_width_limit < trace_x) &&
                             (0 == (flag & HB_GLYPH_FLAG_UNSAFE_TO_BREAK)))
                         {
+                            // we don't set current_cluster to max (flag empty) as the new line is not empty, it will start with our "ahead" cluster
                             width_line_clusert_index.push_back(glyph_info[ahead].cluster);
-                            current_cluster = std::numeric_limits<unsigned int>::max();
                             i = ahead;
-                            cursor_x = 0.0f;
+                            cursor_x = x_advance;
                             start_new_line = true;
                             break;
                         }
+                    }
+                    if (false == start_new_line)
+                    {
+                        // If we did not find a width limited new line, just break? no more work?
+                        break;
                     }
                 }
 
                 if (false == start_new_line)
                 {
-                    // If we did not find a width limited new line, just break? no more work?
-                    break;
+                    const float x_advance = (float)glyph_pos[i].x_advance / 64.0f;
+                    cursor_x += x_advance;
                 }
             }
         }
         // Now place each glyph
         int line_index = 0;
 
-        unsigned int last_checked_cluster_index = 0;
         for (unsigned int i = 0; i < glyph_count; i++) 
         {
-            // catch any new line characters from the input string, TODO: is cluster realy the byte offset of in_string_utf8, or the unicode char index
+            // catch any new line characters from the input string
             const unsigned int current_cluster = glyph_info[i].cluster;
             if (in_string_utf8[current_cluster] == '\n')
             {
@@ -322,7 +326,7 @@ void TextFont::CalculateTextBounds(
     const int in_font_size,
     const bool in_width_limit_enabled,
     const int in_width_limit,
-    const int in_width_limit_new_line_height
+    const int in_new_line_height
     )
 {
     _implementation->CalculateTextBounds(
@@ -333,7 +337,7 @@ void TextFont::CalculateTextBounds(
         in_font_size,
         in_width_limit_enabled,
         in_width_limit,
-        in_width_limit_new_line_height
+        in_new_line_height
         );
     return;
 }

@@ -58,12 +58,13 @@ namespace
 
     const std::filesystem::path GetDeafuleFontPath()
     {
-        return std::filesystem::path("data") / "open_sans.ttf";
+        return std::filesystem::path("data") / "code2000.ttf"; //"deja_vu_sans.ttf"; //"open_sans.ttf";
     }
 
     template<
         TGetPath GetPath = GetDeafuleFontPath,
         int FontSize = 16,
+        int NewLineHeight = 16,
         TextEnum::HorizontalLineAlignment Horizontal = TextEnum::HorizontalLineAlignment::Middle,
         TextEnum::VerticalBlockAlignment Vertical = TextEnum::VerticalBlockAlignment::MiddleEM
         >
@@ -82,6 +83,7 @@ namespace
             auto text_block = std::make_unique<TextBlock>(
                 *font,
                 FontSize,
+                NewLineHeight,
                 "",
                 nullptr,
                 VectorInt2(),
@@ -95,7 +97,7 @@ namespace
         }
         else
         {
-            if (true == string->SetFont(*font, FontSize))
+            if (true == string->SetFont(*font, FontSize, NewLineHeight))
             {
                 dirty = true;
             }

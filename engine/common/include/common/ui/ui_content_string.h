@@ -17,7 +17,8 @@ public:
     // return true if we have a text block which this is a new value, else true
     const bool SetFont(
         TextFont& in_font, 
-        const int in_font_size
+        const int in_font_size,
+        const int in_new_line_height
         );
 
     const bool SetAlignment(

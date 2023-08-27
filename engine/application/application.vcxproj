@@ -346,7 +346,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="data\open_sans.ttf">
+    <CopyFileToFolders Include="data\code2000.ttf">
       <FileType>Document</FileType>
     </CopyFileToFolders>
   </ItemGroup>
