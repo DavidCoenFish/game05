@@ -5,10 +5,10 @@
 #include "common/draw_system/draw_system_frame.h"
 #include "common/draw_system/shader/shader.h"
 #include "common/ui/i_ui_model.h"
-#include "common/ui/ui_content_canvas.h"
-#include "common/ui/ui_content_stack.h"
-#include "common/ui/ui_content_string.h"
-#include "common/ui/ui_content_texture.h"
+#include "common/ui/ui_content/ui_content_canvas.h"
+#include "common/ui/ui_content/ui_content_stack.h"
+#include "common/ui/ui_content/ui_content_string.h"
+#include "common/ui/ui_content/ui_content_texture.h"
 #include "common/ui/ui_coord.h"
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_manager.h"
@@ -60,15 +60,18 @@ UIHierarchyNodeLayoutData::UIHierarchyNodeLayoutData(
     const UICoord& in_attach_x,
     const UICoord& in_attach_y,
     const UICoord& in_pivot_x,
-    const UICoord& in_pivot_y
+    const UICoord& in_pivot_y,
+    const VectorFloat2& in_uv_scroll
     )
+    : _uv_scroll(in_uv_scroll)
 {
     _data_size[0] = in_size_x;
     _data_size[1] = in_size_y;
     _data_attach[0] = in_attach_x;
     _data_attach[1] = in_attach_y;
     _data_pivot[0] = in_pivot_x;
-    _data_pivot[0] = in_pivot_y;
+    _data_pivot[1] = in_pivot_y;
+    return;
 }
 
 UIHierarchyNodeChildData::UIHierarchyNodeChildData(
@@ -206,6 +209,7 @@ void UIHierarchyNode::UpdateLayout(
 
         VectorFloat4 clear_colour;
         const bool do_clear = _content->GetClearBackground(clear_colour);
+        // Texture
         _texture->Update(
             in_param._draw_system,
             in_param._command_list,
@@ -215,6 +219,29 @@ void UIHierarchyNode::UpdateLayout(
             do_clear,
             clear_colour
             );
+
+        // update geometry for each child
+        for (auto& child_data : _child_data_array)
+        {
+            VectorFloat4 pos;
+            VectorFloat4 uv;
+
+            child_data->_node->GetGeometryData(
+                pos,
+                uv,
+                in_parent_size,
+                texture_size
+                );
+            if (true == child_data->_geometry->Update(
+                in_param._draw_system,
+                in_param._command_list,
+                pos,
+                uv
+                ))
+            {
+                needs_draw = true;
+            }
+        }
     }
 
     // set texture to dirty on content change

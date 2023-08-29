@@ -121,6 +121,12 @@ translation_collection
     void AppendData(locale, array<key, value>);
     void ClearData()
 
+so the problem, is when does layout size/ geometry get updated.
+UIManager::UpdateLayout // Make UIHierarchyNode if needed, get things ready for draw
+    UIHierarchyNode::UpdateLayout
+        // Create, delete, change content type
+        // Update content
+        // Update Texture
 
-
+when is the geometry updated, geometry is part of the children data next to the node
 

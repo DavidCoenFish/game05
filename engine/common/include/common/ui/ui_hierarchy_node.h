@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common/ui/ui_coord.h"
+#include "common/math/vector_float2.h"
 #include "common/math/vector_float4.h"
 #include "common/math/vector_int2.h"
 
@@ -77,7 +78,8 @@ struct UIHierarchyNodeLayoutData
         const UICoord& in_attach_x = UICoord(UICoord::ParentSource::X),
         const UICoord& in_attach_y = UICoord(UICoord::ParentSource::Y),
         const UICoord& in_pivot_x = UICoord(UICoord::ParentSource::X),
-        const UICoord& in_pivot_y = UICoord(UICoord::ParentSource::Y)
+        const UICoord& in_pivot_y = UICoord(UICoord::ParentSource::Y),
+        const VectorFloat2& in_uv_scroll = VectorFloat2()
         );
 
     // Data for how we calculate our size relative to parent
@@ -85,6 +87,7 @@ struct UIHierarchyNodeLayoutData
     UICoord _data_attach[2];
     UICoord _data_pivot[2];
 
+    VectorFloat2 _uv_scroll;
 };
 
 class UIHierarchyNode

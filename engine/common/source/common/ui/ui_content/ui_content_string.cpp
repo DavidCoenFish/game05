@@ -1,7 +1,11 @@
 #include "common/common_pch.h"
-#include "common/ui/ui_content_string.h"
+#include "common/ui/ui_content/ui_content_string.h"
 
 #include "common/text/text_block.h"
+#include "common/text/text_manager.h"
+#include "common/ui/ui_data/ui_data_string.h"
+#include "common/ui/ui_hierarchy_node.h"
+
 
 UIContentString::UIContentString(
     std::unique_ptr<TextBlock>& in_text_block
@@ -44,7 +48,26 @@ const bool UIContentString::Update(
     const UIHierarchyNodeUpdateLayoutParam& in_param
     )
 {
+    out_child_data_array.clear();
+
     //set textblock text from in_data
-    return false;
+    const UIDataString* const data_string = dynamic_cast<const UIDataString*>(in_data);
+
+    bool dirty = false;
+    std::string data;
+    if (nullptr != data_string)
+    {
+        data = data_string->GetString();
+    }
+    auto* locale = in_param._text_manager->GetLocaleToken(in_param._locale);
+    if (true == _text_block->SetText(
+        data,
+        locale
+        ))
+    {
+        dirty = true;
+    }
+
+    return dirty;
 }
 

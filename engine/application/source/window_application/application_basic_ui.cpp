@@ -50,7 +50,9 @@ public:
             _data_map["build_fps"],
             _data_map["build_info"],
             _data_map["build_version"]
-            }));
+            }),
+            "stack_vertical_bottom_right"
+            );
 
         _data_map[""] = std::make_shared<UIDataContainer>(std::vector<std::shared_ptr<IUIData>>({
             _data_map["build"]

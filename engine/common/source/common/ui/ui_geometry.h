@@ -28,7 +28,8 @@ public:
 
     // Return true if geometry changed/ updated
     const bool Update(
-        DrawSystemFrame* const in_frame,
+        DrawSystem* const in_draw_system,
+        ID3D12GraphicsCommandList* const in_command_list, 
         const VectorFloat4& in_pos,
         const VectorFloat4& in_uv
         );

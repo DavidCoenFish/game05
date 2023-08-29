@@ -7,10 +7,10 @@
 #include "common/text/text_enum.h"
 #include "common/text/text_font.h"
 #include "common/text/text_block.h"
-#include "common/ui/i_ui_content.h"
-#include "common/ui/ui_content_canvas.h"
-#include "common/ui/ui_content_stack.h"
-#include "common/ui/ui_content_string.h"
+#include "common/ui/ui_content/i_ui_content.h"
+#include "common/ui/ui_content/ui_content_canvas.h"
+#include "common/ui/ui_content/ui_content_stack.h"
+#include "common/ui/ui_content/ui_content_string.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_data/ui_data_string.h"
@@ -144,10 +144,9 @@ void DefaultUIComponentFactory::Populate(
     UIManager& in_ui_manager
     )
 {
-    in_ui_manager.AddContentFactory("canvas", FactoryCanvas);
     in_ui_manager.AddContentFactory("UIDataString", FactoryString<>);
     in_ui_manager.AddContentFactory("UIDataTextRun", FactoryTextRun<>);
-    in_ui_manager.AddContentFactory("UIDataContainer", FactoryStack<>);
+    in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas);
     in_ui_manager.AddContentFactory("stack_vertical_bottom_right", FactoryStack<
         StackOrientation::TVertical,
         AlignmentHorizontal::TRight,

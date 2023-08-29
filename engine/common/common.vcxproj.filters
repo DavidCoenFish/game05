@@ -223,21 +223,6 @@
     <ClCompile Include="source\common\ui\ui_texture.cpp">
       <Filter>souce\common\ui</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\ui\i_ui_content.cpp">
-      <Filter>souce\common\ui</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_content_canvas.cpp">
-      <Filter>souce\common\ui</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_content_stack.cpp">
-      <Filter>souce\common\ui</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_content_string.cpp">
-      <Filter>souce\common\ui</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_content_texture.cpp">
-      <Filter>souce\common\ui</Filter>
-    </ClCompile>
     <ClCompile Include="source\common\ui\ui_data\ui_data_button.cpp">
       <Filter>souce\common\ui\ui_data</Filter>
     </ClCompile>
@@ -270,6 +255,21 @@
     </ClCompile>
     <ClCompile Include="source\common\text\text_pre_vertex.cpp">
       <Filter>souce\common\text</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_content\ui_content_canvas.cpp">
+      <Filter>souce\common\ui\ui_content</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_content\ui_content_stack.cpp">
+      <Filter>souce\common\ui\ui_content</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_content\ui_content_string.cpp">
+      <Filter>souce\common\ui\ui_content</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_content\ui_content_texture.cpp">
+      <Filter>souce\common\ui\ui_content</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_content\i_ui_content.cpp">
+      <Filter>souce\common\ui\ui_content</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -501,29 +501,14 @@
     <ClInclude Include="source\common\text\text_locale.h">
       <Filter>souce\common\text</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\ui\ui_content_stack.h">
-      <Filter>include\common\ui</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_content_string.h">
-      <Filter>include\common\ui</Filter>
-    </ClInclude>
     <ClInclude Include="include\common\ui\ui_coord.h">
       <Filter>include\common\ui</Filter>
     </ClInclude>
     <ClInclude Include="include\common\ui\ui_hierarchy_node.h">
       <Filter>include\common\ui</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\ui\i_ui_content.h">
-      <Filter>include\common\ui</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_content_canvas.h">
-      <Filter>include\common\ui</Filter>
-    </ClInclude>
     <ClInclude Include="source\common\ui\ui_geometry.h">
       <Filter>souce\common\ui</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_content_texture.h">
-      <Filter>include\common\ui</Filter>
     </ClInclude>
     <ClInclude Include="include\common\ui\ui_texture.h">
       <Filter>include\common\ui</Filter>
@@ -560,6 +545,21 @@
     </ClInclude>
     <ClInclude Include="include\common\text\text_pre_vertex.h">
       <Filter>include\common\text</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_content\ui_content_canvas.h">
+      <Filter>include\common\ui\ui_content</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_content\ui_content_stack.h">
+      <Filter>include\common\ui\ui_content</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_content\ui_content_string.h">
+      <Filter>include\common\ui\ui_content</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_content\ui_content_texture.h">
+      <Filter>include\common\ui\ui_content</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_content\i_ui_content.h">
+      <Filter>include\common\ui\ui_content</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -676,6 +676,12 @@
     </Filter>
     <Filter Include="souce\common\ui\ui_data">
       <UniqueIdentifier>{2e915536-bbd6-44d6-80e5-07e6d5f840f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\ui\ui_content">
+      <UniqueIdentifier>{9da10cb7-8caf-4629-a953-a7be43ecd01b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\ui\ui_content">
+      <UniqueIdentifier>{cd80b2d5-46fe-46b6-bda1-eb0783177f17}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

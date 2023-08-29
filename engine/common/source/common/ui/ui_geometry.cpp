@@ -105,7 +105,8 @@ UIGeometry::~UIGeometry()
 }
 
 const bool UIGeometry::Update(
-    DrawSystemFrame* const in_frame,
+    DrawSystem* const in_draw_system,
+    ID3D12GraphicsCommandList* const in_command_list, 
     const VectorFloat4& in_pos,
     const VectorFloat4& in_uv
     )
@@ -121,7 +122,8 @@ const bool UIGeometry::Update(
     std::vector<uint8_t> vertex_data;
     GeneratedVertexData(vertex_data, _pos, _uv);
 
-    in_frame->UpdateGeometryGeneric(
+    in_draw_system->UpdateGeometryGeneric(
+        in_command_list,
         _geometry.get(),
         vertex_data
         );
