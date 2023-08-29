@@ -28,6 +28,12 @@ SET TIMESTAMP=%_yyyy%-%_mm%-%_dd%T%_hour%:%_minute%:%_second%
 
 FOR /F "usebackq" %%i IN (`hostname`) DO SET HOST_NAME=%%i
 
+ECHO %GIT% push
+%GIT% push
+IF 0 NEQ %ERRORLEVEL% (
+  ECHO ERRORLEVEL %ERRORLEVEL%
+  exit /b -1
+)
 
 ECHO %GIT% pull
 %GIT% pull
