@@ -15,6 +15,7 @@ public:
     const float GetZ() const;
     const float GetW() const;
     const bool operator==(const VectorFloat4& in_rhs) const;
+    const bool operator!=(const VectorFloat4& in_rhs) const;
     VectorFloat4& operator=(const VectorFloat4& in_rhs);
 
 private:

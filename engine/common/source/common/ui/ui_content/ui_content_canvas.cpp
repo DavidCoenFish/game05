@@ -14,6 +14,7 @@ UIContentCanvas::~UIContentCanvas()
     // Nop
 }
 
+/*
 const bool UIContentCanvas::Update(
     VectorInt2& out_texture_size,
     UIHierarchyNodeLayoutData& out_layout_data,
@@ -28,7 +29,7 @@ const bool UIContentCanvas::Update(
     if (nullptr != data_container)
     {
         const auto& container = data_container->GetDataConst();
-        const int count = container.size();
+        const int count = (int)container.size();
         out_child_data_array.resize(count);
         for (int index = 0; index < count; ++index)
         {
@@ -67,3 +68,4 @@ const bool UIContentCanvas::Update(
         out_child_data_array.empty();
     }
 }
+*/

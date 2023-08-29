@@ -16,6 +16,7 @@
 #include "window_application/application_test_coord.h"
 #include "window_application/application_test_line.h"
 #include "window_application/application_test_text.h"
+#include "window_application/application_test_text_run.h"
 #include "window_application/application_test_triangle.h"
 
 #include <json/json.hpp>
@@ -51,6 +52,7 @@ static std::map< std::string, TWindowApplicationFactory >& GetWindowApplicationF
             {"TestCoord", ApplicationTestCoord::Factory},
             {"TestLine", ApplicationTestLine::Factory},
             {"TestText", ApplicationTestText::Factory},
+            {"TestTextRun", ApplicationTestTextRun::Factory},
             {"TestTriangle", ApplicationTestTriangle::Factory}
         });
     return s_map;

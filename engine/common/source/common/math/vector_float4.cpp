@@ -63,6 +63,12 @@ const bool VectorFloat4::operator==(const VectorFloat4& in_rhs) const
     return true;
 }
 
+const bool VectorFloat4::operator!=(const VectorFloat4& in_rhs) const
+{
+    return !operator==(in_rhs);
+}
+
+
 VectorFloat4& VectorFloat4::operator=(const VectorFloat4& in_rhs)
 {
     for (int index = 0; index < Index::Count; ++index)

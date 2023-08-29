@@ -1,5 +1,5 @@
 #include "common/common_pch.h"
-#include "common/text/text_block.h"
+#include "common/text/text_run.h"
 
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/draw_system_frame.h"
@@ -14,36 +14,44 @@
 #include "common/text/text_manager.h"
 #include "common/text/text_pre_vertex.h"
 
-class TextBlockImplementation
+TextRunData::TextRunData(
+    const std::string& in_string_utf8,
+    TextLocale* const in_locale_token,
+    TextFont* const in_text_font,
+    const int in_font_size,
+    const int in_new_line_height,
+    const VectorFloat4& in_colour
+    )
+    : _string_utf8(in_string_utf8)
+    , _locale_token(in_locale_token)
+    , _text_font(in_text_font)
+    , _font_size(in_font_size)
+    , _new_line_height(in_new_line_height)
+    , _colour(in_colour)
+{
+    // Nop
+}
+
+class TextRunImplementation
 {
 public:
-    TextBlockImplementation(
-        TextFont& in_text_font,
-        const int in_font_size,
-        const int in_new_line_height,
-        const std::string& in_string_utf8,
-        const TextLocale* const in_locale_token,
+    TextRunImplementation(
+        const std::vector<std::shared_ptr<TextRunData>>& in_text_run_array,
         const VectorInt2& in_containter_size,
         const bool in_width_limit_enabled,
         const int in_width_limit,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
-        const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
-        const VectorFloat4& in_colour
+        const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
         )
         : _calculate_dirty(true)
         , _geometry_dirty(true)
         , _geometry()
-        , _text_font(&in_text_font)
-        , _font_size(in_font_size)
-        , _new_line_height(in_new_line_height)
-        , _string_utf8(in_string_utf8)
-        , _locale_token(in_locale_token)
+        , _text_run_array(in_text_run_array)
         , _container_size(in_containter_size)
         , _width_limit_enabled(in_width_limit_enabled)
         , _width_limit(in_width_limit)
         , _horizontal_line_alignment(in_horizontal_line_alignment)
         , _vertical_block_alignment(in_vertical_block_alignment)
-        , _colour(in_colour)
     {
         // Nop
     }
@@ -55,60 +63,46 @@ public:
         {
             _calculate_dirty = false;
 
-            _pre_vertex_data = std::make_unique<TextPreVertex>((float)_font_size);
+            int font_size = 0;
+            if (0 < _text_run_array.size())
+            {
+                font_size = _text_run_array[0]->_font_size;
+            }
+
+            _pre_vertex_data = std::make_unique<TextPreVertex>((float)font_size);
             VectorFloat2 cursor;
-            _text_font->CalculateTextBounds(
-                *_pre_vertex_data,
-                cursor,
-                _string_utf8,
-                _locale_token,
-                _font_size,
-                _width_limit_enabled,
-                _width_limit,
-                _new_line_height
-                );
+            for (const auto& item : _text_run_array)
+            {
+                const TextRunData& run = *item;
+                run._text_font->CalculateTextBounds(
+                    *_pre_vertex_data,
+                    cursor,
+                    run._string_utf8,
+                    run._locale_token,
+                    run._font_size,
+                    _width_limit_enabled,
+                    _width_limit,
+                    run._new_line_height,
+                    run._colour
+                    );
+            }
             _text_bounds = _pre_vertex_data->GetBounds();
         }
 
         return _text_bounds;
     }
 
-    const bool SetFont(
-        TextFont& in_text_font,
-        const int in_font_size,
-        const int in_new_line_height
+    const bool SetTextRunArray(
+        const std::vector<std::shared_ptr<TextRunData>>& in_text_run_array
         )
     {
         bool dirty = false;
-        if ((_font_size != in_font_size) ||
-            (_text_font != &in_text_font) || 
-            (_new_line_height != in_new_line_height)
-            )
+        if (_text_run_array != in_text_run_array)
         {
             dirty = true;
+            _text_run_array = in_text_run_array;
             _calculate_dirty = true;
             _geometry_dirty = true;
-            _font_size = in_font_size;
-            _text_font = &in_text_font;
-            _new_line_height = in_new_line_height;
-        }
-        return dirty;
-    }
-
-    const bool SetText(
-        const std::string& in_string_utf8,
-        const TextLocale* const in_locale_token
-        )
-    {
-        bool dirty = false;
-        if ((_string_utf8 != in_string_utf8) ||
-            (_locale_token != in_locale_token))
-        {
-            dirty = true;
-            _calculate_dirty = true;
-            _geometry_dirty = true;
-            _string_utf8 = in_string_utf8;
-            _locale_token = in_locale_token;
         }
         return dirty;
     }
@@ -154,7 +148,6 @@ public:
         {
             dirty = true;
             _horizontal_line_alignment = in_horizontal_line_alignment;
-            _calculate_dirty = true;
             _geometry_dirty = true;
         }
         return dirty;
@@ -169,54 +162,24 @@ public:
         {
             dirty = true;
             _vertical_block_alignment = in_vertical_block_alignment;
-            _calculate_dirty = true;
             _geometry_dirty = true;
         }
         return dirty;
     }
-
-    const bool SetColour(
-        const VectorFloat4& in_colour
-        )
-    {
-        bool dirty = false;
-        if (_colour != in_colour)
-        {
-            dirty = true;
-            _colour = in_colour;
-            _calculate_dirty = true;
-            _geometry_dirty = true;
-        }
-        return dirty;
-    }
-
 
     const bool Set(
-        TextFont& in_text_font,
-        const int in_font_size,
-        const int in_new_line_height,
-        const std::string& in_string_utf8,
-        const TextLocale* const in_locale_token,
+        const std::vector<std::shared_ptr<TextRunData>>& in_text_run_array,
         const VectorInt2& in_size,
         const bool in_width_limit_enabled,
         const int in_width_limit,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
-        const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
-        const VectorFloat4& in_colour
+        const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
         )
     {
         bool dirty = false;
-        if (true == SetFont(
-            in_text_font,
-            in_font_size,
-            in_new_line_height
-            ))
-        {
-            dirty = true;
-        }
-        if (true == SetText(
-            in_string_utf8,
-            in_locale_token
+
+        if (true == SetTextRunArray(
+            in_text_run_array
             ))
         {
             dirty = true;
@@ -246,12 +209,6 @@ public:
         {
             dirty = true;
         }
-        if (true == SetColour(
-            in_colour
-            ))
-        {
-            dirty = true;
-        }
         return dirty;
     }
 
@@ -268,10 +225,16 @@ public:
             _geometry_dirty = false;
             out_geometry_dirty = true;
 
+            int font_size = 0;
+            if (0 < _text_run_array.size())
+            {
+                font_size = _text_run_array[0]->_font_size;
+            }
+
             std::vector<uint8_t> vertex_raw_data;
             _pre_vertex_data->BuildVertexData(
                 vertex_raw_data,
-                _font_size,
+                font_size,
                 _container_size,
                 _horizontal_line_alignment,
                 _vertical_block_alignment
@@ -304,87 +267,57 @@ private:
     bool _calculate_dirty;
     bool _geometry_dirty;
     std::shared_ptr<GeometryGeneric> _geometry;
-    TextFont* _text_font;
-    int _font_size;
-    int _new_line_height;
-    std::string _string_utf8;
-    const TextLocale* _locale_token;
+    std::vector<std::shared_ptr<TextRunData>> _text_run_array;
     VectorInt2 _text_bounds;
     VectorInt2 _container_size;
     bool _width_limit_enabled;
     int _width_limit;
     TextEnum::HorizontalLineAlignment _horizontal_line_alignment;
     TextEnum::VerticalBlockAlignment _vertical_block_alignment;
-    VectorFloat4 _colour;
     std::unique_ptr<TextPreVertex> _pre_vertex_data;
 
 };
 
-TextBlock::TextBlock(
-    TextFont& in_text_font,
-    const int in_font_size,
-    const int in_new_line_height,
-    const std::string& in_string_utf8,
-    const TextLocale* const in_locale_token,
+TextRun::TextRun(
+    const std::vector<std::shared_ptr<TextRunData>>& in_text_run_array,
     const VectorInt2& in_containter_size,
     const bool in_width_limit_enabled,
     const int in_width_limit,
     const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
-    const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
-    const VectorFloat4& in_colour
+    const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
     )
 {
-    _implementation = std::make_unique<TextBlockImplementation>(
-        in_text_font,
-        in_font_size,
-        in_new_line_height,
-        in_string_utf8,
-        in_locale_token,
+    _implementation = std::make_unique<TextRunImplementation>(
+        in_text_run_array,
         in_containter_size,
         in_width_limit_enabled,
         in_width_limit,
         in_horizontal_line_alignment,
-        in_vertical_block_alignment,
-        in_colour
+        in_vertical_block_alignment
         );
 }
 
-TextBlock::~TextBlock()
+TextRun::~TextRun()
 {
     // Nop
 }
 
 // Get the natural size required by the text using current width limit if enabled
-VectorInt2 TextBlock::GetTextBounds()
+VectorInt2 TextRun::GetTextBounds()
 {
     return _implementation->GetTextBounds();
 }
 
-const bool TextBlock::SetFont(
-    TextFont& in_text_font,
-    const int in_font_size,
-    const int in_new_line_height
+const bool TextRun::SetTextRunArray(
+    const std::vector<std::shared_ptr<TextRunData>>& in_text_run_array
     )
 {
-    return _implementation->SetFont(
-        in_text_font,
-        in_font_size,
-        in_new_line_height
+    return _implementation->SetTextRunArray(
+        in_text_run_array
         );
 }
 
-const bool TextBlock::SetText(
-    const std::string& in_string_utf8,
-    const TextLocale* const in_locale_token
-    )
-{
-    return _implementation->SetText(
-        in_string_utf8,
-        in_locale_token
-        );
-}
-
-const bool TextBlock::SetTextContainerSize(
+const bool TextRun::SetTextContainerSize(
     const VectorInt2& in_size
     )
 {
@@ -393,7 +326,7 @@ const bool TextBlock::SetTextContainerSize(
         );
 }
 
-const bool TextBlock::SetWidthLimit(
+const bool TextRun::SetWidthLimit(
     const bool in_width_limit_enabled,
     const int in_width_limit
     )
@@ -404,7 +337,7 @@ const bool TextBlock::SetWidthLimit(
         );
 }
 
-const bool TextBlock::SetHorizontalLineAlignment(
+const bool TextRun::SetHorizontalLineAlignment(
     const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment
     )
 {
@@ -413,7 +346,7 @@ const bool TextBlock::SetHorizontalLineAlignment(
         );
 }
 
-const bool TextBlock::SetVerticalBlockAlignment(
+const bool TextRun::SetVerticalBlockAlignment(
     const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
     )
 {
@@ -422,45 +355,26 @@ const bool TextBlock::SetVerticalBlockAlignment(
         );
 }
 
-const bool TextBlock::SetColour(
-    const VectorFloat4& in_colour
-    )
-{
-    return _implementation->SetColour(
-        in_colour
-        );
-}
-
-const bool TextBlock::Set(
-    TextFont& in_text_font,
-    const int in_font_size,
-    const int in_new_line_height,
-    const std::string& in_string_utf8,
-    const TextLocale* const in_locale_token,
+const bool TextRun::Set(
+    const std::vector<std::shared_ptr<TextRunData>>& in_text_run_array,
     const VectorInt2& in_size,
     const bool in_width_limit_enabled,
     const int in_width_limit,
     const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
-    const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
-    const VectorFloat4& in_colour
+    const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
     )
 {
     return _implementation->Set(
-        in_text_font,
-        in_font_size,
-        in_new_line_height,
-        in_string_utf8,
-        in_locale_token,
+        in_text_run_array,
         in_size,
         in_width_limit_enabled,
         in_width_limit,
         in_horizontal_line_alignment,
-        in_vertical_block_alignment,
-        in_colour
+        in_vertical_block_alignment
         );
 }
 
-GeometryGeneric* const TextBlock::GetGeometry(
+GeometryGeneric* const TextRun::GetGeometry(
     bool& out_geometry_dirty,
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list

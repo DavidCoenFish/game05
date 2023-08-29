@@ -65,7 +65,8 @@ public:
         const int in_font_size,
         const bool in_width_limit_enabled,
         const int in_width_limit,
-        const int in_new_line_height
+        const int in_new_line_height,
+        const VectorFloat4& in_colour
         )
     {
         auto map_glyph_cell = FindMapGlyphCell(in_font_size);
@@ -84,7 +85,8 @@ public:
             *map_glyph_cell,
             in_width_limit_enabled,
             in_width_limit,
-            in_new_line_height
+            in_new_line_height,
+            in_colour
         );
         hb_buffer_destroy(buffer);
     }
@@ -116,7 +118,8 @@ private:
 
     void SetScale(const int in_glyph_size)
     {
-        FT_Set_Char_Size(_face, 0, in_glyph_size * 64, 72, 72);
+        //FT_Set_Char_Size(_face, in_glyph_size * 64, in_glyph_size * 64, 72, 72);
+        FT_Set_Pixel_Sizes(_face, in_glyph_size, in_glyph_size);
         return;
     }
 
@@ -176,7 +179,8 @@ private:
         TMapGlyphCell& in_out_map_glyph_cell,
         const bool in_width_limit_enabled,
         const int in_width_limit,
-        const int in_width_limit_new_line_height
+        const int in_width_limit_new_line_height,
+        const VectorFloat4& in_colour
         )
     {    
         hb_shape(_harf_buzz_font, in_buffer, NULL, 0);
@@ -262,10 +266,10 @@ private:
 
             hb_codepoint_t codepoint = glyph_info[i].codepoint;
 
-            float x_offset = (float)glyph_pos[i].x_offset / 64.0f;
-            float y_offset = (float)glyph_pos[i].y_offset / 64.0f;
-            float x_advance = (float)glyph_pos[i].x_advance / 64.0f;
-            float y_advance = (float)glyph_pos[i].y_advance / 64.0f;
+            const float x_offset = (float)glyph_pos[i].x_offset / 64.0f;
+            const float y_offset = (float)glyph_pos[i].y_offset / 64.0f;
+            //float x_advance = (float)glyph_pos[i].x_advance / 64.0f;
+            //float y_advance = (float)glyph_pos[i].y_advance / 64.0f;
 
             FT_Error error = FT_Load_Glyph(_face, codepoint, FT_LOAD_DEFAULT);
             error;
@@ -279,9 +283,13 @@ private:
                     cell, 
                     in_out_cursor[0] + x_offset, 
                     in_out_cursor[1] + y_offset,
-                    (float)in_width_limit_new_line_height
+                    (float)in_width_limit_new_line_height,
+                    in_colour
                     );
             }
+            const float x_advance = (float)slot->advance.x / 64.0f;
+            const float y_advance = (float)slot->advance.y / 64.0f;
+
             in_out_cursor[0] += x_advance;
             in_out_cursor[1] += y_advance;
         }
@@ -326,7 +334,8 @@ void TextFont::CalculateTextBounds(
     const int in_font_size,
     const bool in_width_limit_enabled,
     const int in_width_limit,
-    const int in_new_line_height
+    const int in_new_line_height,
+    const VectorFloat4& in_colour
     )
 {
     _implementation->CalculateTextBounds(
@@ -337,7 +346,8 @@ void TextFont::CalculateTextBounds(
         in_font_size,
         in_width_limit_enabled,
         in_width_limit,
-        in_new_line_height
+        in_new_line_height,
+        in_colour
         );
     return;
 }

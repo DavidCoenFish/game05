@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common/text/text_enum.h"
+#include "common/math/vector_float4.h"
 
 class DrawSystem;
 class TextBlock;
@@ -30,7 +31,8 @@ public:
         const int in_font_size,
         const bool in_width_limit_enabled = false,
         const int in_width_limit = 0,
-        const int in_new_line_height = 0
+        const int in_new_line_height = 0,
+        const VectorFloat4& in_colour = VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f)
         );
 
     void RestGlyphUsage();

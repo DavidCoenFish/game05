@@ -55,6 +55,9 @@
     <Filter Include="task\basic_ui">
       <UniqueIdentifier>{c6467352-450d-4c7e-9d24-44b2375026f8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="task\test_text_run">
+      <UniqueIdentifier>{134758ff-3b36-40a8-ba07-36561565daa8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Script\util_make_host_define.cmd">
@@ -108,12 +111,6 @@
     </None>
     <None Include="shader\polar_util.hlsli">
       <Filter>shader</Filter>
-    </None>
-    <None Include="task\test_text\text_interpolant.hlsli">
-      <Filter>task\test_text</Filter>
-    </None>
-    <None Include="task\test_text\background_interpolant.hlsli">
-      <Filter>task\test_text</Filter>
     </None>
     <None Include="shader\text_interpolant.hlsli">
       <Filter>shader</Filter>
@@ -177,6 +174,9 @@
     <ClCompile Include="source\window_application\application_basic_ui.cpp">
       <Filter>source\window_application</Filter>
     </ClCompile>
+    <ClCompile Include="source\window_application\application_test_text_run.cpp">
+      <Filter>source\window_application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Build.h">
@@ -230,6 +230,9 @@
     <ClInclude Include="source\window_application\application_basic_ui.h">
       <Filter>source\window_application</Filter>
     </ClInclude>
+    <ClInclude Include="source\window_application\application_test_text_run.h">
+      <Filter>source\window_application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\cut.ico">
@@ -271,6 +274,9 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="data\code2000.ttf">
       <Filter>data</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="task\test_text_run\application.json">
+      <Filter>task\test_text_run</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
@@ -340,12 +346,6 @@
     <FxCompile Include="shader\screen_quad_vertex.hlsl">
       <Filter>shader</Filter>
     </FxCompile>
-    <FxCompile Include="task\test_text\text_pixel.hlsl">
-      <Filter>task\test_text</Filter>
-    </FxCompile>
-    <FxCompile Include="task\test_text\text_vertex.hlsl">
-      <Filter>task\test_text</Filter>
-    </FxCompile>
     <FxCompile Include="task\test_text\background_pixel.hlsl">
       <Filter>task\test_text</Filter>
     </FxCompile>
@@ -372,6 +372,9 @@
     </FxCompile>
     <FxCompile Include="task\test_coord\present_vertex.hlsl">
       <Filter>task\test_coord</Filter>
+    </FxCompile>
+    <FxCompile Include="task\test_text_run\background_pixel.hlsl">
+      <Filter>task\test_text_run</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

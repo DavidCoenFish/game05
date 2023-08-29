@@ -27,6 +27,7 @@ public:
         );
 
 private:
+/*
     virtual const bool Update(
         VectorInt2& out_texture_size,
         UIHierarchyNodeLayoutData& out_layout_data,
@@ -36,7 +37,7 @@ private:
         const std::string& in_model_key,
         const UIHierarchyNodeUpdateLayoutParam& in_param
         ) override;
-
+*/
 private:
     //TextFont* _font;
     //int _font_size;

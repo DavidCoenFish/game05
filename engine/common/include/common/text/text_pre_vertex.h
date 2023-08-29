@@ -22,6 +22,7 @@ public:
         VectorFloat4 _pos_low_high;
         VectorFloat4 _uv_low_high;
         VectorFloat4 _mask;
+        VectorFloat4 _colour;
         int _line_index;
     };
 
@@ -38,7 +39,8 @@ public:
         const TextCell* const in_cell,
         const float in_pos_x,
         const float in_pos_y,
-        const float _line_height
+        const float _line_height,
+        const VectorFloat4& _colour
         );
 
     void StartNewLine(
@@ -49,7 +51,7 @@ public:
 
     void BuildVertexData(
         std::vector<uint8_t>& out_vertex_raw_data,
-        const int in_glyph_size,
+        const int in_glyph_size, // Used for alignments MiddleEM, TopEM, BottomEM
         const VectorInt2& in_containter_size,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment

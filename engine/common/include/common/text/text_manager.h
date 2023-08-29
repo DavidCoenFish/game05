@@ -7,6 +7,7 @@ class TextBlock;
 class TextFont;
 class TextLocale;
 class TextManagerImplementation;
+class TextRun;
 
 class TextManager
 {
@@ -31,10 +32,10 @@ public:
         TextBlock* const in_text_block
         );
 
-    void UpdateTextBlock(
+    void DrawTextRun(
         DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list,
-        TextBlock* const in_text_block
+        DrawSystemFrame* const in_draw_system_frame,
+        TextRun* const in_text_run
         );
 
     // Assert if there are any live TextBlocks

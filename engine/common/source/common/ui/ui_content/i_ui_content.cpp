@@ -38,6 +38,7 @@ void IUIContent::SetDrawn()
     // Nop
 }
 
+/*
 const bool IUIContent::Update(
     VectorInt2&,
     UIHierarchyNodeLayoutData&,
@@ -50,6 +51,7 @@ const bool IUIContent::Update(
 {
     return false;
 }
+*/
 
 
 // Default implementation, draw each child's texture on the child's geometry to our node's texture

@@ -13,10 +13,14 @@ Pixel main(Interpolant in_input)
     Pixel result;
 
     float4 texel = g_texture.Sample(g_sampler_state, in_input._uv);
-    float colour = dot(texel, in_input._mask);
-    result._colour = float4(0.0, 0.0, 0.0, colour);
-    //result._colour = float4(colour, colour, colour, 1.0);
-    //result._colour = float4(in_input._uv.x, in_input._uv.y, 0.0, colour);
+    float alpha = dot(texel, in_input._mask);
+    // Premultiplied alpha blending
+    result._colour = float4(
+        in_input._colour.x,
+        in_input._colour.y,
+        in_input._colour.z,
+        in_input._colour.w * alpha
+        );
 
     return result;
 }

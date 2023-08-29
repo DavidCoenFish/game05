@@ -12,6 +12,7 @@
 #include "common/text/text_glyph_row.h"
 #include "common/text/text_locale.h"
 #include "common/text/text_texture.h"
+#include "common/text/text_run.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -32,6 +33,11 @@ namespace
         D3D12_INPUT_ELEMENT_DESC
         {
             "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, \
+                D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 // UINT InstanceDataStepRate;
+        },
+        D3D12_INPUT_ELEMENT_DESC
+        {
+            "COLOR", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, \
                 D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 // UINT InstanceDataStepRate;
         }
     });
@@ -150,23 +156,6 @@ public:
         return text_face.get();
     }
 
-    void UpdateTextBlock(
-        DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list,
-        TextBlock* const in_text_block
-        )
-    {
-        bool geometry_dirty = false;
-        if (nullptr != in_text_block)
-        {
-            in_text_block->GetGeometry(
-                geometry_dirty,
-                in_draw_system,
-                in_command_list
-                );
-        }
-    }
-
     void DrawText(
         DrawSystem* const in_draw_system,
         DrawSystemFrame* const in_draw_system_frame,
@@ -175,6 +164,23 @@ public:
     {
         bool geometry_dirty = false;
         auto geometry = in_text_block->GetGeometry(
+            geometry_dirty,
+            in_draw_system,
+            in_draw_system_frame->GetCommandList()
+            );
+        _texture->Update(in_draw_system, in_draw_system_frame);
+        in_draw_system_frame->SetShader(_shader.get());
+        in_draw_system_frame->Draw(geometry);
+    }
+
+    void DrawTextRun(
+        DrawSystem* const in_draw_system,
+        DrawSystemFrame* const in_draw_system_frame,
+        TextRun* const in_text_run
+        )
+    {
+        bool geometry_dirty = false;
+        auto geometry = in_text_run->GetGeometry(
             geometry_dirty,
             in_draw_system,
             in_draw_system_frame->GetCommandList()
@@ -260,19 +266,19 @@ void TextManager::DrawText(
         );
 }
 
-void TextManager::UpdateTextBlock(
+void TextManager::DrawTextRun(
     DrawSystem* const in_draw_system,
-    ID3D12GraphicsCommandList* const in_command_list,
-    TextBlock* const in_text_block
+    DrawSystemFrame* const in_draw_system_frame,
+    TextRun* const in_text_run
     )
 {
-    _implementation->UpdateTextBlock(
+    _implementation->DrawTextRun(
         in_draw_system,
-        in_command_list,
-        in_text_block
+        in_draw_system_frame,
+        in_text_run
         );
-    return;
 }
+
 
 // Assert if there are any TextGeometry
 void TextManager::RestGlyphUsage()

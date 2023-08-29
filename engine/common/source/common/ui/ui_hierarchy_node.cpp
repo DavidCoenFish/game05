@@ -18,6 +18,7 @@
 #include "common/math/vector_int2.h"
 #include "common/math/vector_float4.h"
 
+/*
 UIHierarchyNodeUpdateLayoutParam::UIHierarchyNodeUpdateLayoutParam(
     const std::string& in_locale,
     const float in_ui_scale,
@@ -41,6 +42,7 @@ UIHierarchyNodeUpdateLayoutParam::UIHierarchyNodeUpdateLayoutParam(
 {
     // Nop
 }
+*/
 
 UIHierarchyNodeLayoutData UIHierarchyNodeLayoutData::FactoryFull()
 {
@@ -157,6 +159,7 @@ void UIHierarchyNode::ClearChildren()
     _child_data_array.clear();
 }
 
+/*
 void UIHierarchyNode::UpdateLayout(
     const IUIData* const in_data,
     const std::string& in_model_key,
@@ -252,6 +255,7 @@ void UIHierarchyNode::UpdateLayout(
 
     return;
 }
+*/
 
 // Return True if we needed to draw, ie, the texture may have changed
 const bool UIHierarchyNode::Draw(

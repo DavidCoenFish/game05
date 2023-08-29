@@ -8,44 +8,54 @@ class DrawSystemFrame;
 class GeometryGeneric;
 class HeapWrapperItem;
 class Shader;
-class TextBlockImplementation;
+class TextRunImplementation;
 class TextLocale;
 class VectorInt2;
 class TextFont;
 
-class TextBlock
+struct TextRunData
+{
+    explicit TextRunData(
+        const std::string& in_string_utf8 = std::string(""),
+        TextLocale* const in_locale_token = nullptr,
+        TextFont* const in_text_font = nullptr,
+        const int in_font_size = 0,
+        const int in_new_line_height = 0,
+        const VectorFloat4& in_colour = VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f)
+        );
+    //const bool operator==(const TextRunData& in_rhs) const;
+
+    std::string _string_utf8;
+    TextLocale* const _locale_token;
+    TextFont* const _text_font;
+    int _font_size;
+    int _new_line_height;
+    VectorFloat4 _colour;
+};
+
+class TextRun
 {
 public:
-    // Object is to be ready for use after contruction? so we create geometry with DrawSystem? allow for update however
-    // one main use case is ui, which may not have the container size ready? or change ui to not creat a text block till ready
-    // Move to lazy init of geometry as ui use case will not know the container size at construction
-    TextBlock(
-        TextFont& in_text_font,
-        const int in_font_size,
-        const int in_new_line_height,
-        const std::string& in_string_utf8,
-        const TextLocale* const in_locale_token,
+    // Do we keep the defaults, and each run has the settings? or simplify so we just have global settings at top, and data for each run
+    TextRun(
+        const std::vector<std::shared_ptr<TextRunData>>& in_text_run_array,
         const VectorInt2& in_containter_size,
         const bool in_width_limit_enabled = false,
         const int in_width_limit = 0,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment = TextEnum::HorizontalLineAlignment::Left,
-        const TextEnum::VerticalBlockAlignment in_vertical_block_alignment = TextEnum::VerticalBlockAlignment::Top,
-        const VectorFloat4& in_colour = VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f)
+        const TextEnum::VerticalBlockAlignment in_vertical_block_alignment = TextEnum::VerticalBlockAlignment::Top
         );
 
-    ~TextBlock();
+    ~TextRun();
+
+        //const std::string& in_string_utf8,
+        //const TextLocale* const in_locale_token,
 
     // Get the natural size required by the text using current width limit if enabled
     VectorInt2 GetTextBounds();
 
-    const bool SetFont(
-        TextFont& in_text_font,
-        const int in_font_size,
-        const int in_new_line_height
-        );
-    const bool SetText(
-        const std::string& in_string_utf8,
-        const TextLocale* const in_locale_token
+    const bool SetTextRunArray(
+        const std::vector<std::shared_ptr<TextRunData>>& in_text_run_array
         );
     const bool SetTextContainerSize(
         const VectorInt2& in_size
@@ -60,22 +70,14 @@ public:
     const bool SetVerticalBlockAlignment(
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
         );
-    const bool SetColour(
-        const VectorFloat4& in_colour
-        );
 
     const bool Set(
-        TextFont& in_text_font,
-        const int in_font_size,
-        const int in_new_line_height,
-        const std::string& in_string_utf8,
-        const TextLocale* const in_locale_token,
+        const std::vector<std::shared_ptr<TextRunData>>& in_text_run_array,
         const VectorInt2& in_size,
         const bool in_width_limit_enabled,
         const int in_width_limit,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
-        const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
-        const VectorFloat4& in_colour
+        const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
         );
 
     // Rather than a seperate Update function, that could be forgoten, have the update in the getter, results in out_geometry_dirty
@@ -86,6 +88,6 @@ public:
         );
 
 private:
-    std::unique_ptr<TextBlockImplementation> _implementation;
+    std::unique_ptr<TextRunImplementation> _implementation;
 
 };

@@ -38,6 +38,7 @@ const bool UIContentString::SetAlignment(
         _text_block->SetVerticalBlockAlignment(in_vertical));
 }
 
+/*
 const bool UIContentString::Update(
     VectorInt2& out_texture_size,
     UIHierarchyNodeLayoutData& out_layout_data,
@@ -70,4 +71,4 @@ const bool UIContentString::Update(
 
     return dirty;
 }
-
+*/

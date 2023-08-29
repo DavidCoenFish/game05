@@ -135,7 +135,8 @@ public:
         {
             in_out_target_or_null = std::make_shared<UIHierarchyNode>();
         }
-
+        DSC_TODO("implementation");
+        /*
         UIHierarchyNodeUpdateLayoutParam node_update_layout_param(
             in_param._locale,
             in_param._ui_scale,
@@ -157,6 +158,7 @@ public:
                 in_param._draw_system->GetRenderTargetBackBuffer()->GetSize(),
             node_update_layout_param
             );
+        */
     }
 
     void DealInput(

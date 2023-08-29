@@ -1,0 +1,16 @@
+{
+   "_tasks": [
+      {
+         "_factory": "Window",
+         "_data": [
+            {
+                "_name": "Test Text Run",
+                "_fullScreen": false,
+                "_width": 800,
+                "_height": 600,
+                "_factory": "TestTextRun"
+            }
+         ]
+      }
+   ]
+}

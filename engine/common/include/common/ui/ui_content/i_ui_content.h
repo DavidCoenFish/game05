@@ -30,15 +30,15 @@ public:
     virtual void SetDrawn();
 
     // if we are going to use this to auto scroll text, need some way of compunicating uv. layout_data? or the ui_geometry?
-    virtual const bool Update(
-        VectorInt2& out_texture_size,
-        UIHierarchyNodeLayoutData& out_layout_data,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& out_child_data_array,
-        const VectorInt2& in_parent_size,
-        const IUIData* const in_data,
-        const std::string& in_model_key,
-        const UIHierarchyNodeUpdateLayoutParam& in_param
-        );
+    //virtual const bool Update(
+    //    VectorInt2& out_texture_size,
+    //    UIHierarchyNodeLayoutData& out_layout_data,
+    //    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& out_child_data_array,
+    //    const VectorInt2& in_parent_size,
+    //    const IUIData* const in_data,
+    //    const std::string& in_model_key,
+    //    const UIHierarchyNodeUpdateLayoutParam& in_param
+    //    );
 
     /*
     passing in_child_data_array as some components may want things from the child

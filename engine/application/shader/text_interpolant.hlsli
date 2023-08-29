@@ -10,4 +10,7 @@ struct Interpolant
     // [0 ... 1]
     float4 _mask : COLOR0;
 
+    // [0 ... 1]
+    float4 _colour : COLOR1;
+
 };

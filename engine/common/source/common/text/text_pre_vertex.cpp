@@ -33,7 +33,8 @@ void TextPreVertex::AddPreVertex(
     const TextCell* const in_cell,
     const float in_pos_x,
     const float in_pos_y,
-    const float _line_height
+    const float _line_height,
+    const VectorFloat4& _colour
     )
 {
     _line_dirty = true;
@@ -58,6 +59,7 @@ void TextPreVertex::AddPreVertex(
         pos,
         uv,
         mask,
+        _colour,
         _line_index
         }));
 
@@ -187,6 +189,7 @@ void TextPreVertex::BuildVertexData(
         VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[0]);
         VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[1]);
         VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
+        VectorHelper::AppendValue(out_vertex_raw_data, item._colour);
 
         //0.0f, 1.0f,
         VectorHelper::AppendValue(out_vertex_raw_data, pos[0]);
@@ -194,6 +197,7 @@ void TextPreVertex::BuildVertexData(
         VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[0]);
         VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[3]);
         VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
+        VectorHelper::AppendValue(out_vertex_raw_data, item._colour);
 
         //1.0f, 0.0f,
         VectorHelper::AppendValue(out_vertex_raw_data, pos[2]);
@@ -201,6 +205,7 @@ void TextPreVertex::BuildVertexData(
         VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[2]);
         VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[1]);
         VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
+        VectorHelper::AppendValue(out_vertex_raw_data, item._colour);
 
         //1.0f, 0.0f,
         VectorHelper::AppendValue(out_vertex_raw_data, pos[2]);
@@ -208,6 +213,7 @@ void TextPreVertex::BuildVertexData(
         VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[2]);
         VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[1]);
         VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
+        VectorHelper::AppendValue(out_vertex_raw_data, item._colour);
 
         //0.0f, 1.0f,
         VectorHelper::AppendValue(out_vertex_raw_data, pos[0]);
@@ -215,6 +221,7 @@ void TextPreVertex::BuildVertexData(
         VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[0]);
         VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[3]);
         VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
+        VectorHelper::AppendValue(out_vertex_raw_data, item._colour);
 
         //1.0f, 1.0f,
         VectorHelper::AppendValue(out_vertex_raw_data, pos[2]);
@@ -222,6 +229,7 @@ void TextPreVertex::BuildVertexData(
         VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[2]);
         VectorHelper::AppendValue(out_vertex_raw_data, item._uv_low_high[3]);
         VectorHelper::AppendValue(out_vertex_raw_data, item._mask);
+        VectorHelper::AppendValue(out_vertex_raw_data, item._colour);
     }
 
     return;

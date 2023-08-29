@@ -37,6 +37,7 @@ struct UIHierarchyNodeChildData
     //VectorInt2 _target_size;
 };
 
+/*
 struct UIHierarchyNodeUpdateLayoutParam
 {
     typedef std::function< const bool(
@@ -67,7 +68,47 @@ struct UIHierarchyNodeUpdateLayoutParam
     TextManager* const _text_manager;
 
 };
+*/
 
+struct UIHierarchyNodeUpdateHierarchy
+{
+    typedef std::function< const bool(
+        std::unique_ptr<IUIContent>& in_out_content,
+        const UIContentFactoryParam& in_param
+        )> TContentFactory;
+
+    explicit UIHierarchyNodeUpdateHierarchy(
+        const std::map<std::string, TContentFactory>& in_map_content_factory = std::map<std::string, TContentFactory>(),
+        DrawSystem* const in_draw_system = nullptr,
+        ID3D12GraphicsCommandList* const in_command_list = nullptr,
+        const IUIModel* const in_ui_model = nullptr,
+        LocaleSystem* const in_locale_system = nullptr,
+        TextManager* const in_text_manager = nullptr
+        );
+    const std::map<std::string, TContentFactory>& _map_content_factory;
+    DrawSystem* const _draw_system;
+    ID3D12GraphicsCommandList* const _command_list;
+    IUIModel* const _ui_model;
+    LocaleSystem* const _locale_system;
+    TextManager* const _text_manager;
+
+};
+
+struct UIHierarchyNodeUpdateDesiredSize
+{
+    explicit UIHierarchyNodeUpdateDesiredSize(
+        const float in_ui_scale = 1.0f,
+        const float in_time_delta = 0.0f
+        );
+    const float _ui_scale;
+    const float _time_delta;
+
+};
+
+struct UIHierarchyNodeUpdateSize
+{
+    explicit UIHierarchyNodeUpdateSize();
+};
 
 struct UIHierarchyNodeLayoutData
 {
@@ -87,6 +128,8 @@ struct UIHierarchyNodeLayoutData
     UICoord _data_attach[2];
     UICoord _data_pivot[2];
 
+    // uv = abs(_uv_scroll), and use range [-1...1] wrapped when advancing _uv_scroll, to allow saw tooth animation
+    // Scale update speed by desired size ratio to target size?
     VectorFloat2 _uv_scroll;
 };
 
@@ -148,20 +191,43 @@ public:
         );
     void ClearChildren();
 
-    typedef std::function< const bool(
-        std::unique_ptr<IUIContent>& in_out_content,
-        const UIContentFactoryParam& in_param
-        )> TContentFactory;
-    void UpdateLayout(
+    // create/ destroy nodes to match model, make content match type from factory, update content?
+    void UpdateHierarchy(
         const IUIData* const in_data,
         const std::string& in_model_key,
         const bool in_draw_to_texture,
         const bool in_always_dirty,
-        const VectorInt2& in_target_size,
-        const UIHierarchyNodeUpdateLayoutParam& in_param
+        const UIHierarchyNodeUpdateHierarchy& in_param
         );
 
-    // return True if we needed to draw, ie, the texture may have changed
+    // work out what size everything wants to be
+    void UpdateDesiredSize(
+        const VectorInt2& in_parent_desired_size,
+        const UIHierarchyNodeUpdateDesiredSize& in_param
+        );
+
+    // Set texture size, geometry size, _input_screen_size. when desired size is bigger than parent, auto or manual scroll
+    // Shrink parent if requested
+    // Clamping click area on parent would require passing vector of masked areas? or vector of unmasked? too much pain, don't clamp?
+    void UpdateSize(
+        const VectorInt2& in_parent_size,
+        const VectorFloat4& in_input_screen_parent,
+        const UIHierarchyNodeUpdateSize& in_param
+        );
+
+    //void UpdateLayout(
+    //    const IUIData* const in_data,
+    //    const std::string& in_model_key,
+    //    const bool in_draw_to_texture,
+    //    const bool in_always_dirty,
+    //    const VectorInt2& in_target_size,
+    //    const UIHierarchyNodeUpdateLayoutParam& in_param
+    //    );
+
+    // update hover, focus, button click, drag?
+    //void DealInput(UIRootInputState& input_state);
+
+    // return True if we needed to draw, ie, we have modified _texture
     const bool Draw(
         const UIManagerDrawParam& in_draw_param,
         Shader* const in_shader

@@ -125,8 +125,9 @@
     <CopyFileToFolders Include="task\test_text\application.json">
       <FileType>Document</FileType>
     </CopyFileToFolders>
-    <None Include="task\test_text\background_interpolant.hlsli" />
-    <None Include="task\test_text\text_interpolant.hlsli" />
+    <CopyFileToFolders Include="task\test_text_run\application.json">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\application.rc" />
@@ -150,6 +151,7 @@
     <ClCompile Include="source\window_application\application_test_coord.cpp" />
     <ClCompile Include="source\window_application\application_test_line.cpp" />
     <ClCompile Include="source\window_application\application_test_text.cpp" />
+    <ClCompile Include="source\window_application\application_test_text_run.cpp" />
     <ClCompile Include="source\window_application\application_test_triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +171,7 @@
     <ClInclude Include="source\window_application\application_test_coord.h" />
     <ClInclude Include="source\window_application\application_test_line.h" />
     <ClInclude Include="source\window_application\application_test_text.h" />
+    <ClInclude Include="source\window_application\application_test_text_run.h" />
     <ClInclude Include="source\window_application\application_test_triangle.h" />
   </ItemGroup>
   <ItemGroup>
@@ -328,13 +331,9 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
-    <FxCompile Include="task\test_text\text_pixel.hlsl">
+    <FxCompile Include="task\test_text_run\background_pixel.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-    </FxCompile>
-    <FxCompile Include="task\test_text\text_vertex.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="task\test_triangle\pixel_shader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
