@@ -98,6 +98,7 @@ X application coord test, add two panels bottom right
 - have a stack of text, the fps, build details, build time and version
 - have a stack of buttons, mask out rounded corners and icon, drop shadow
 - copy texture resource
+- transition effect, when reflecting model, how to trigger transition of node being closed, 
 
 longterm:
 - split shader in shader_common and shader_instance, with shader instance having the memory handles of the constant buffer
@@ -130,3 +131,8 @@ UIManager::UpdateLayout // Make UIHierarchyNode if needed, get things ready for 
 
 when is the geometry updated, geometry is part of the children data next to the node
 
+SMIL
+https://en.wikipedia.org/wiki/SVG_animation
+
+https://github.com/sammycage/lunasvg
+https://github.com/memononen/nanosvg

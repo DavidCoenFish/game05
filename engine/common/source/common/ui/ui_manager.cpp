@@ -27,7 +27,7 @@ UIContentFactoryParam::UIContentFactoryParam(
     // Nop
 }
 
-UIManagerUpdateLayoutParam::UIManagerUpdateLayoutParam(
+UIManagerUpdateParam::UIManagerUpdateParam(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list,
     const IUIModel* const in_ui_model,
@@ -36,7 +36,6 @@ UIManagerUpdateLayoutParam::UIManagerUpdateLayoutParam(
     const float in_ui_scale,
     const float in_time_delta,
     const std::string& in_locale,
-    const std::string& in_model_key,
     const bool in_draw_to_texture,
     const bool in_always_dirty,
     const VectorInt2& in_texture_size
@@ -49,7 +48,6 @@ UIManagerUpdateLayoutParam::UIManagerUpdateLayoutParam(
     , _ui_scale(in_ui_scale)
     , _time_delta(in_time_delta)
     , _locale(in_locale)
-    , _model_key(in_model_key)
     , _draw_to_texture(in_draw_to_texture)
     , _always_dirty(in_always_dirty)
     , _texture_size(in_texture_size)
@@ -119,12 +117,13 @@ public:
     }
 
     // Update layout
-    void UpdateLayout(
+    void Update(
         std::shared_ptr<UIHierarchyNode>& in_out_target_or_null,
-        const UIManagerUpdateLayoutParam& in_param
+        const UIManagerUpdateParam& in_param,
+        const std::string& in_model_key
         )
     {
-        auto data = in_param._ui_model->GetData(in_param._model_key);
+        auto data = in_param._ui_model->GetData(in_model_key);
         if (nullptr == data)
         {
             in_out_target_or_null = nullptr;
@@ -135,30 +134,38 @@ public:
         {
             in_out_target_or_null = std::make_shared<UIHierarchyNode>();
         }
-        DSC_TODO("implementation");
-        /*
-        UIHierarchyNodeUpdateLayoutParam node_update_layout_param(
-            in_param._locale,
-            in_param._ui_scale,
-            in_param._time_delta,
+
+        UIHierarchyNodeUpdateHierarchyParam update_hierarchy_param(
             _map_content_factory,
             in_param._draw_system,
             in_param._command_list,
             in_param._ui_model,
-            in_param._locale_system
+            in_param._locale_system,
+            in_param._text_manager
             );
 
-        in_out_target_or_null->UpdateLayout(
-            data,
-            in_param._model_key,
+        // create/ destroy nodes to match model, make content match type from factory, update content?
+        in_out_target_or_null->UpdateHierarchy(
+            update_hierarchy_param,
+            *data,
             in_param._draw_to_texture,
-            in_param._always_dirty,
-            in_param._draw_to_texture ? 
-                in_param._texture_size : 
-                in_param._draw_system->GetRenderTargetBackBuffer()->GetSize(),
-            node_update_layout_param
+            in_param._always_dirty
             );
-        */
+
+        VectorInt2 size = in_param._draw_to_texture ? in_param._texture_size : in_param._draw_system->GetRenderTargetBackBuffer()->GetSize();
+
+        UIHierarchyNodeUpdateDesiredSize desired_size_param;
+        in_out_target_or_null->UpdateDesiredSize(
+            size,
+            desired_size_param
+            );
+
+        UIHierarchyNodeUpdateSize size_param;
+        in_out_target_or_null->UpdateSize(
+            size,
+            VectorFloat4(0.0f, 0.0f, 1.0f, 1.0f),
+            size_param
+            );
     }
 
     void DealInput(
@@ -239,14 +246,16 @@ void UIManager::AddContentFactory(
 }
 
 // Update layout
-void UIManager::UpdateLayout(
+void UIManager::Update(
     std::shared_ptr<UIHierarchyNode>& in_out_target_or_null,
-    const UIManagerUpdateLayoutParam& in_param
+    const UIManagerUpdateParam& in_param,
+    const std::string& in_model_key
     )
 {
-    _implementation->UpdateLayout(
+    _implementation->Update(
         in_out_target_or_null, 
-        in_param
+        in_param,
+        in_model_key
         );
     return;
 }

@@ -75,28 +75,13 @@ void UIGeometry::BuildGeometryData(
 }
 
 UIGeometry::UIGeometry(
-    DrawSystem* const in_draw_system,
-    ID3D12GraphicsCommandList* const in_command_list,
     const VectorFloat4& in_pos,
     const VectorFloat4& in_uv
     )
     : _pos(in_pos)
     , _uv(in_uv)
 {
-    std::vector<uint8_t> vertex_data_raw;
-    GeneratedVertexData(
-        vertex_data_raw,
-        in_pos,
-        in_uv
-        );
-
-    _geometry = in_draw_system->MakeGeometryGeneric(
-        in_command_list,
-        D3D_PRIMITIVE_TOPOLOGY_LINESTRIP,
-        s_input_element_desc_array,
-        vertex_data_raw,
-        4
-        );
+    // Nop
 }
 
 UIGeometry::~UIGeometry()
@@ -106,7 +91,7 @@ UIGeometry::~UIGeometry()
 
 const bool UIGeometry::Update(
     DrawSystem* const in_draw_system,
-    ID3D12GraphicsCommandList* const in_command_list, 
+    ID3D12GraphicsCommandList* const in_command_list,
     const VectorFloat4& in_pos,
     const VectorFloat4& in_uv
     )
@@ -118,20 +103,49 @@ const bool UIGeometry::Update(
     }
     _pos = in_pos;
     _uv = in_uv;
+    if (_geometry)
+    {
+        std::vector<uint8_t> vertex_data_raw;
+        GeneratedVertexData(
+            vertex_data_raw,
+            _pos,
+            _uv
+            );
 
-    std::vector<uint8_t> vertex_data;
-    GeneratedVertexData(vertex_data, _pos, _uv);
+        in_draw_system->UpdateGeometryGeneric(
+            in_command_list,
+            _geometry.get(),
+            vertex_data_raw
+            );
 
-    in_draw_system->UpdateGeometryGeneric(
-        in_command_list,
-        _geometry.get(),
-        vertex_data
-        );
+    }
+
     return true;
 }
 
-GeometryGeneric* UIGeometry::GetGeometry()
+GeometryGeneric* UIGeometry::GetGeometry(
+    DrawSystem* const in_draw_system,
+    ID3D12GraphicsCommandList* const in_command_list
+    )
 {
+    if (nullptr == _geometry)
+    {
+        std::vector<uint8_t> vertex_data_raw;
+        GeneratedVertexData(
+            vertex_data_raw,
+            _pos,
+            _uv
+            );
+
+        _geometry = in_draw_system->MakeGeometryGeneric(
+            in_command_list,
+            D3D_PRIMITIVE_TOPOLOGY_LINESTRIP,
+            s_input_element_desc_array,
+            vertex_data_raw,
+            4
+            );
+    }
+
     return _geometry.get();
 }
 

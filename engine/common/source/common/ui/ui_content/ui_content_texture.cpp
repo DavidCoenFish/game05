@@ -10,18 +10,13 @@
 #include "common/ui/ui_manager.h"
 
 UIContentTexture::UIContentTexture(
-    DrawSystem* const in_draw_system,
-    ID3D12GraphicsCommandList* const in_command_list,
     const std::shared_ptr<HeapWrapperItem>& in_shader_resource_view_handle
     )
     : _shader_resource_view_handle()
     , _dirty(false)
 {
     SetTexture(in_shader_resource_view_handle);
-    _geometry = std::make_shared<UIGeometry>(
-        in_draw_system,
-        in_command_list
-        );
+    _geometry = std::make_shared<UIGeometry>();
 }
 
 UIContentTexture::~UIContentTexture()
@@ -36,16 +31,24 @@ void UIContentTexture::Draw(
     Shader* const in_shader
     )
 {
+    auto* render_target = in_texture->GetRenderTarget(
+        in_param._draw_system,
+        in_param._frame->GetCommandList()
+        );
+    auto* geometry = _geometry->GetGeometry(
+        in_param._draw_system,
+        in_param._frame->GetCommandList()
+        );
     in_param._frame->SetRenderTarget(
-        in_texture->GetRenderTarget(), 
+        render_target, 
         in_texture->GetAllowClear()
         );
     in_shader->SetShaderResourceViewHandle(
         0,
         _shader_resource_view_handle
-    );
+        );
     in_param._frame->SetShader(in_shader);
-    in_param._frame->Draw(_geometry->GetGeometry());
+    in_param._frame->Draw(geometry);
 
     _dirty = false;
     //SetDrawn();

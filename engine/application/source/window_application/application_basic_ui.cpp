@@ -164,9 +164,22 @@ void ApplicationBasicUI::Update()
 
         // Update ui layout
         {
-            _draw_resource->_ui_manager->UpdateLayout(
+            UIManagerUpdateParam update_param(
+                _draw_system.get(),
+                frame->GetCommandList(),
+                _draw_resource->_ui_model.get(),
+                _draw_resource->_locale_system.get(),
+                _draw_resource->_text_manager.get(),
+                1.0f, //in_ui_scale = 1.0f,
+                0.0f, //in_time_delta = 0.0f,
+                "", //in_locale = std::string(),
+                false, //in_draw_to_texture = false, // Draw to texture or backbuffer?
+                true //in_always_dirty = false,
+                //in_texture_size = VectorInt2(0,0) // If in_draw_to_texture is true, size to use for texture
+                );
+            _draw_resource->_ui_manager->Update(
                 _draw_resource->_ui_hierarchy_node,
-                UIManagerUpdateLayoutParam()
+                update_param
                 );
         }
 

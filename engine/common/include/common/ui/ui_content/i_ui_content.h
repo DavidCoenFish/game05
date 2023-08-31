@@ -14,7 +14,8 @@ struct UIManagerUpdateLayoutParam;
 struct UIManagerDealInputParam;
 struct UIHierarchyNodeChildData;
 struct UIHierarchyNodeLayoutData;
-struct UIHierarchyNodeUpdateLayoutParam;
+struct UIHierarchyNodeUpdateHierarchyParam;
+
 
 class IUIContent
 {
@@ -28,6 +29,14 @@ public:
 
     virtual const bool GetNeedsDraw() const;
     virtual void SetDrawn();
+
+    virtual const bool UpdateHierarchy(
+        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& out_child_data_array,
+        const IUIData& in_data,
+        const UIHierarchyNodeUpdateHierarchyParam& in_param
+        );
+
+    virtual const std::vector<std::shared_ptr<IUIData>> GetArrayData() const;
 
     // if we are going to use this to auto scroll text, need some way of compunicating uv. layout_data? or the ui_geometry?
     //virtual const bool Update(

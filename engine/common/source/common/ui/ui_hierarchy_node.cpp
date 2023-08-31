@@ -18,32 +18,6 @@
 #include "common/math/vector_int2.h"
 #include "common/math/vector_float4.h"
 
-/*
-UIHierarchyNodeUpdateLayoutParam::UIHierarchyNodeUpdateLayoutParam(
-    const std::string& in_locale,
-    const float in_ui_scale,
-    const float in_time_delta,
-    const std::map<std::string, TContentFactory>& in_map_content_factory,
-    DrawSystem* const in_draw_system,
-    ID3D12GraphicsCommandList* const in_command_list,
-    const IUIModel* const in_ui_model,
-    LocaleSystem* const in_locale_system,
-    TextManager* const in_text_manager
-    )
-    : _locale(in_locale)
-    , _ui_scale(in_ui_scale)
-    , _time_delta(in_time_delta)
-    , _map_content_factory(in_map_content_factory)
-    , _draw_system(in_draw_system)
-    , _command_list(in_command_list)
-    , _ui_model(in_ui_model)
-    , _locale_system(in_locale_system)
-    , _text_manager(in_text_manager)
-{
-    // Nop
-}
-*/
-
 UIHierarchyNodeLayoutData UIHierarchyNodeLayoutData::FactoryFull()
 {
     return UIHierarchyNodeLayoutData(
@@ -86,14 +60,40 @@ UIHierarchyNodeChildData::UIHierarchyNodeChildData(
     // Nop
 }
 
+UIHierarchyNodeUpdateHierarchyParam::UIHierarchyNodeUpdateHierarchyParam(
+    const std::map<std::string, TContentFactory>& in_map_content_factory,
+    DrawSystem* const in_draw_system,
+    ID3D12GraphicsCommandList* const in_command_list,
+    const IUIModel* const in_ui_model,
+    LocaleSystem* const in_locale_system,
+    TextManager* const in_text_manager
+    )
+    : _map_content_factory(in_map_content_factory)
+    , _draw_system(in_draw_system)
+    , _command_list(in_command_list)
+    , _ui_model(in_ui_model)
+    , _locale_system(in_locale_system)
+    , _text_manager(in_text_manager)
+{
+    // Nop
+}
+
+UIHierarchyNodeUpdateDesiredSize::UIHierarchyNodeUpdateDesiredSize(
+    const float in_ui_scale,
+    const float in_time_delta
+    )
+    : _ui_scale(in_ui_scale)
+    , _time_delta(in_time_delta)
+{
+    // Nop
+};
+
+UIHierarchyNodeUpdateSize::UIHierarchyNodeUpdateSize()
+{
+    // Nop
+};
+
 UIHierarchyNode::UIHierarchyNode()
-    //const LayoutData& in_layout_data,
-    //std::unique_ptr<IUIContent>& in_content,
-    //std::unique_ptr<UITexture>& in_texture
-    //)
-    //: _layout_data(in_layout_data)
-    //, _content(std::move(in_content))
-    //, _texture(std::move(in_texture))
 {
     // Nop
 }
@@ -142,11 +142,7 @@ void UIHierarchyNode::AddChild(
     ID3D12GraphicsCommandList* const in_command_list
     )
 {
-    auto geometry = std::make_shared<UIGeometry>(
-        in_draw_system,
-        in_command_list
-        );
-
+    auto geometry = std::make_shared<UIGeometry>();
     auto child = std::make_shared<UIHierarchyNodeChildData>(
         in_node,
         geometry
@@ -159,103 +155,93 @@ void UIHierarchyNode::ClearChildren()
     _child_data_array.clear();
 }
 
-/*
-void UIHierarchyNode::UpdateLayout(
-    const IUIData* const in_data,
-    const std::string& in_model_key,
+const bool UIHierarchyNode::UpdateHierarchy(
+    const UIHierarchyNodeUpdateHierarchyParam& in_param,
+    const IUIData& in_data,
     const bool in_draw_to_texture,
-    const bool in_always_dirty,
-    const VectorInt2& in_parent_size,
-    const UIHierarchyNodeUpdateLayoutParam& in_param
+    const bool in_always_dirty
     )
 {
-    bool needs_draw = false;
-    auto found = in_param._map_content_factory.find(in_data->GetTemplateName());
-    if (found == in_param._map_content_factory.end())
+    bool dirty = false;
+    auto factory = in_param._map_content_factory.find(in_data.GetTemplateName());
+    if (factory != in_param._map_content_factory.end())
     {
-        if (_content)
-        {
-            needs_draw = true;
-        }
-        _content.reset();
-    }
-    else
-    {
-        UIContentFactoryParam content_factory_param(
+        UIContentFactoryParam factory_param(
             in_param._draw_system,
             in_param._command_list,
             in_param._text_manager
             );
-        // Return true for change?
-        if (true == (found->second)(_content, content_factory_param))
-        {
-            needs_draw = true;
-        }
-    }
-
-    if (nullptr != _content)
-    {
-        VectorInt2 texture_size;
-        // return true for change? example case, child count reduced but no other content change
-        if (true == _content->Update(
-            texture_size,
-            _layout_data,
-            _child_data_array,
-            in_parent_size,
-            in_data,
-            in_model_key,
-            in_param
+        if (true == factory->second(
+            _content,
+            factory_param
             ))
         {
-            needs_draw = true;
+            dirty = true;
         }
+    }
+    else
+    {
+        if (_content)
+        {
+            _content.reset();
+            dirty = true;
+        }
+        return dirty;
+    }
 
-        VectorFloat4 clear_colour;
-        const bool do_clear = _content->GetClearBackground(clear_colour);
-        // Texture
-        _texture->Update(
+    if (true == _content->UpdateHierarchy(
+        _child_data_array,
+        in_data,
+        in_param
+        ))
+    {
+        dirty = true;
+    }
+
+    VectorFloat4 clear_colour;
+    const bool allow_clear = _content->GetClearBackground(clear_colour);
+
+    if (nullptr == _texture)
+    {
+        _texture = std::make_unique<UITexture>(
             in_param._draw_system,
-            in_param._command_list,
-            texture_size,
             in_draw_to_texture,
             in_always_dirty,
-            do_clear,
+            allow_clear,
             clear_colour
             );
-
-        // update geometry for each child
-        for (auto& child_data : _child_data_array)
+        dirty = true;
+    }
+    else
+    {
+        if (true == _texture->Update(
+            in_draw_to_texture,
+            in_always_dirty,
+            allow_clear,
+            clear_colour
+            ))
         {
-            VectorFloat4 pos;
-            VectorFloat4 uv;
-
-            child_data->_node->GetGeometryData(
-                pos,
-                uv,
-                in_parent_size,
-                texture_size
-                );
-            if (true == child_data->_geometry->Update(
-                in_param._draw_system,
-                in_param._command_list,
-                pos,
-                uv
-                ))
-            {
-                needs_draw = true;
-            }
+            dirty = true;
         }
     }
 
-    // set texture to dirty on content change
-    if ((true == needs_draw) && (_texture))
-    {
-        _texture->SetHasDrawn(false);
-    }
-
-    return;
+    return dirty;
 }
-*/
+
+void UIHierarchyNode::UpdateDesiredSize(
+    const VectorInt2& in_parent_desired_size,
+    const UIHierarchyNodeUpdateDesiredSize& in_param
+    )
+{
+}
+
+void UIHierarchyNode::UpdateSize(
+    const VectorInt2& in_parent_size,
+    const VectorFloat4& in_input_screen_parent,
+    const UIHierarchyNodeUpdateSize& in_param
+    )
+{
+}
 
 // Return True if we needed to draw, ie, the texture may have changed
 const bool UIHierarchyNode::Draw(
@@ -296,136 +282,3 @@ const bool UIHierarchyNode::Draw(
 
     return needs_to_draw;
 }
-
-/*
-const bool UIHierarchyNode::DrawHierarchyRoot(
-    DrawSystem* const in_draw_system,
-    DrawSystemFrame* const in_frame,
-    Shader* const in_shader,
-    const UIManagerDrawData& in_data
-    )
-{
-    const auto parent_size = _texture->GetSize();
-    return DrawInternal(
-        in_draw_system,
-        in_frame,
-        in_shader,
-        parent_size,
-        in_data
-        );
-}
-
-const bool UIHierarchyNode::DrawHierarchy(
-    DrawSystem* const in_draw_system,
-    DrawSystemFrame* const in_frame,
-    Shader* const in_shader,
-    const VectorInt2& in_new_size,
-    const UIManagerDrawData& in_data
-    )
-{
-    return DrawInternal(
-        in_draw_system,
-        in_frame,
-        in_shader,
-        in_new_size,
-        in_data
-        );
-}
-
-const bool UIHierarchyNode::DrawInternal(
-    DrawSystem* const in_draw_system,
-    DrawSystemFrame* const in_frame,
-    Shader* const in_shader,
-    const VectorInt2& in_parent_size,
-    const UIManagerDrawData& in_data
-    )
-{
-    bool needs_to_draw = false;
-
-    if ((true == _texture->GetAlwaysDirty()) ||
-        (false == _texture->GetHasDrawn()) ||
-        (true == _content->GetNeedsToDraw()))
-    {
-        needs_to_draw = true;
-    }
-
-    if (true == UpdateChildData(in_draw_system, in_frame))
-    {
-        needs_to_draw = true;
-    }
-
-    if (true == _content->UpdatePosSizeForChildren( // add vectorint2 size for render target to child data?
-        in_frame,
-        _child_data_array,
-        in_parent_size,
-        in_data._ui_scale
-        ))
-    {
-        needs_to_draw = true;
-    }
-
-    if (true == _content->Update(
-        in_draw_system,
-        in_frame,
-        in_shader,
-        in_data,
-        _child_data_array
-        ))
-    {
-        needs_to_draw = true;
-    }
-
-    if (in_parent_size != _texture->GetSize())
-    {
-        _texture->SetSize(
-            in_draw_system,
-            in_frame->GetCommandList(),
-            in_parent_size
-            );
-        needs_to_draw = true;
-    }
-
-    if (true == needs_to_draw)
-    {
-        _content->Draw(
-            in_frame,
-            _texture.get(),
-            _child_data_array,
-            in_shader
-            );
-        _texture->SetHasDrawn(true);
-    }
-
-    return needs_to_draw;
-}
-
-const bool UIHierarchyNode::UpdateChildData(
-    DrawSystem* const in_draw_system,
-    DrawSystemFrame* const in_frame,
-    const IUIProviderData* const in_ui_provider_data
-    )
-{
-    //std::string _data_provider_key;
-    //int _data_provider_change_id;
-    if ((_data_provider_key.empty()) || (nullptr == in_ui_provider_data))
-    {
-        return false;
-    }
-
-    auto data_value = in_ui_provider_data->GetData(_data_provider_key);
-    const int change_id = data_value->GetChangeID();
-    if (_data_provider_change_id == change_id)
-    {
-        return false;
-    }
-
-    _data_provider_change_id = change_id;
-    //std::vector<std::shared_ptr<UIHierarchyNodeChildData>> _child_data_array;
-
-    // we need to rebuild _child_data_array
-    in_draw_system;
-    in_frame;
-
-    return true;
-}
-*/

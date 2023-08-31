@@ -18,8 +18,6 @@ public:
         );
 
     UIGeometry(
-        DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list, 
         // Default to a full screen quad
         const VectorFloat4& in_pos = VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f),
         const VectorFloat4& in_uv = VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f)
@@ -29,12 +27,15 @@ public:
     // Return true if geometry changed/ updated
     const bool Update(
         DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list, 
+        ID3D12GraphicsCommandList* const in_command_list,
         const VectorFloat4& in_pos,
         const VectorFloat4& in_uv
         );
 
-    GeometryGeneric* GetGeometry();
+    GeometryGeneric* GetGeometry(
+        DrawSystem* const in_draw_system,
+        ID3D12GraphicsCommandList* const in_command_list
+        );
 
 private:
     std::shared_ptr<GeometryGeneric> _geometry;

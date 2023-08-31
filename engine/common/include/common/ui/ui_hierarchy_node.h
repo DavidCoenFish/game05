@@ -37,47 +37,14 @@ struct UIHierarchyNodeChildData
     //VectorInt2 _target_size;
 };
 
-/*
-struct UIHierarchyNodeUpdateLayoutParam
+struct UIHierarchyNodeUpdateHierarchyParam
 {
     typedef std::function< const bool(
         std::unique_ptr<IUIContent>& in_out_content,
         const UIContentFactoryParam& in_param
         )> TContentFactory;
 
-    explicit UIHierarchyNodeUpdateLayoutParam(
-        const std::string& in_locale = std::string(),
-        const float in_ui_scale = 1.0f,
-        const float in_time_delta = 0.0f,
-        const std::map<std::string, TContentFactory>& in_map_content_factory = std::map<std::string, TContentFactory>(),
-        DrawSystem* const in_draw_system = nullptr,
-        ID3D12GraphicsCommandList* const in_command_list = nullptr,
-        const IUIModel* const in_ui_model = nullptr,
-        LocaleSystem* const in_locale_system = nullptr,
-        TextManager* const in_text_manager = nullptr
-        );
-
-    std::string _locale;
-    float _ui_scale;
-    float _time_delta;
-    std::map<std::string, TContentFactory> _map_content_factory;
-    DrawSystem* const _draw_system;
-    ID3D12GraphicsCommandList* const _command_list;
-    const IUIModel* const _ui_model;
-    LocaleSystem* const _locale_system;
-    TextManager* const _text_manager;
-
-};
-*/
-
-struct UIHierarchyNodeUpdateHierarchy
-{
-    typedef std::function< const bool(
-        std::unique_ptr<IUIContent>& in_out_content,
-        const UIContentFactoryParam& in_param
-        )> TContentFactory;
-
-    explicit UIHierarchyNodeUpdateHierarchy(
+    explicit UIHierarchyNodeUpdateHierarchyParam(
         const std::map<std::string, TContentFactory>& in_map_content_factory = std::map<std::string, TContentFactory>(),
         DrawSystem* const in_draw_system = nullptr,
         ID3D12GraphicsCommandList* const in_command_list = nullptr,
@@ -88,7 +55,7 @@ struct UIHierarchyNodeUpdateHierarchy
     const std::map<std::string, TContentFactory>& _map_content_factory;
     DrawSystem* const _draw_system;
     ID3D12GraphicsCommandList* const _command_list;
-    IUIModel* const _ui_model;
+    const IUIModel* const _ui_model;
     LocaleSystem* const _locale_system;
     TextManager* const _text_manager;
 
@@ -192,12 +159,11 @@ public:
     void ClearChildren();
 
     // create/ destroy nodes to match model, make content match type from factory, update content?
-    void UpdateHierarchy(
-        const IUIData* const in_data,
-        const std::string& in_model_key,
+    const bool UpdateHierarchy(
+        const UIHierarchyNodeUpdateHierarchyParam& in_param,
+        const IUIData& in_data,
         const bool in_draw_to_texture,
-        const bool in_always_dirty,
-        const UIHierarchyNodeUpdateHierarchy& in_param
+        const bool in_always_dirty
         );
 
     // work out what size everything wants to be
@@ -215,17 +181,8 @@ public:
         const UIHierarchyNodeUpdateSize& in_param
         );
 
-    //void UpdateLayout(
-    //    const IUIData* const in_data,
-    //    const std::string& in_model_key,
-    //    const bool in_draw_to_texture,
-    //    const bool in_always_dirty,
-    //    const VectorInt2& in_target_size,
-    //    const UIHierarchyNodeUpdateLayoutParam& in_param
-    //    );
-
-    // update hover, focus, button click, drag?
-    //void DealInput(UIRootInputState& input_state);
+    // Update hover, focus, button click, drag?
+    void DealInput(UIRootInputState& input_state);
 
     // return True if we needed to draw, ie, we have modified _texture
     const bool Draw(

@@ -17,22 +17,21 @@ class UITexture
 public:
     UITexture(
         DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list,
-        const bool in_use_back_buffer = false,
+        const bool in_draw_to_texture = false,
         const bool in_always_dirty = false,
         const bool in_allow_clear = false,
         const VectorFloat4& in_clear_colour = VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f)
         );
     ~UITexture();
 
-    IRenderTarget* GetRenderTarget() const;
-    const VectorInt2 GetSize() const;
-    const bool GetUseBackBuffer() const { return _use_back_buffer; }
-
-    void Update(
+    IRenderTarget* GetRenderTarget(
         DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list,
-        const VectorInt2& in_size,
+        ID3D12GraphicsCommandList* const in_command_list
+        );
+    const VectorInt2 GetSize() const;
+    const bool GetDrawToTexture() const { return _draw_to_texture; }
+
+    const bool Update(
         const bool in_draw_to_texture = false,
         const bool in_always_dirty = false,
         const bool in_allow_clear = false,
@@ -55,23 +54,15 @@ public:
     const bool GetAlwaysDirty() const { return _always_dirty; }
 
 private:
-    void UpdateUsingBackBuffer(
-        const bool in_use_back_buffer,
-        DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list,
-        const VectorInt2& in_size,
-        const bool in_allow_clear = false,
-        const VectorFloat4& in_clear_colour = VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f)
-        );
+    bool _draw_to_texture; // true == use _render_target_texture else use the application backbuffer
+    bool _allow_clear; // When render target is set active, do we clear
+    bool _always_dirty; // If we share a render target, like the backbuffer, we may need to always draw
+    bool _has_drawn; // Internal flag to help know if data drawn to texture
+    VectorInt2 _size;
+    VectorFloat4 _clear_colour;
 
-private:
-    bool _use_back_buffer; // use the application backbuffer as render target
-    bool _allow_clear; // when render target is set active, do we clear
-    bool _always_dirty; //if we share a render target, like the backbuffer, we may need to always draw
-    bool _has_drawn; // internal flag to help know if data drawn to texture
-    DrawSystem* const _draw_system;
-
-    // If _bUseBackBuffer is false, we own out own render target texture
     std::shared_ptr<RenderTargetTexture> _render_target_texture;
+
+    DrawSystem* const _draw_system;
 
 };

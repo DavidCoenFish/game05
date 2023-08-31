@@ -26,9 +26,9 @@ struct UIContentFactoryParam
     TextManager* _text_manager;
 };
 
-struct UIManagerUpdateLayoutParam
+struct UIManagerUpdateParam
 {
-    explicit UIManagerUpdateLayoutParam(
+    explicit UIManagerUpdateParam(
         DrawSystem* const in_draw_system = nullptr,
         ID3D12GraphicsCommandList* const in_command_list = nullptr,
         const IUIModel* const in_ui_model = nullptr,
@@ -37,7 +37,6 @@ struct UIManagerUpdateLayoutParam
         const float in_ui_scale = 1.0f,
         const float in_time_delta = 0.0f,
         const std::string& in_locale = std::string(),
-        const std::string& in_model_key = "", // Use empty string "" for root?
         const bool in_draw_to_texture = false, // Draw to texture or backbuffer?
         const bool in_always_dirty = false,
         const VectorInt2& in_texture_size = VectorInt2(0,0) // If in_draw_to_texture is true, size to use for texture
@@ -51,7 +50,6 @@ struct UIManagerUpdateLayoutParam
     float _ui_scale;
     float _time_delta;
     std::string _locale;
-    std::string _model_key;
     bool _draw_to_texture;
     bool _always_dirty;
     VectorInt2 _texture_size;
@@ -125,11 +123,12 @@ public:
         const TContentFactory& in_factory
         );
 
-    // Update layout, in_out_target can start out as null to kick things off
+    // Update [heirearchy, desired size, layout], in_out_target can start out as null to kick things off
     // Don't recurse through this method, intended for kicking off the root node
-    void UpdateLayout(
+    void Update(
         std::shared_ptr<UIHierarchyNode>& in_out_target_or_null,
-        const UIManagerUpdateLayoutParam& in_param
+        const UIManagerUpdateParam& in_param,
+        const std::string& in_model_key = ""
         );
 
     // Deal input

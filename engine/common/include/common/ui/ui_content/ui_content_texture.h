@@ -13,8 +13,6 @@ class UIContentTexture : public IUIContent
 {
 public:
     UIContentTexture(
-        DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list,
         const std::shared_ptr<HeapWrapperItem>& in_shader_resource_view_handle
         );
     virtual ~UIContentTexture();
