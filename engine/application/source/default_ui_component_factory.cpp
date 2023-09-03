@@ -144,6 +144,7 @@ void DefaultUIComponentFactory::Populate(
     UIManager& in_ui_manager
     )
 {
+    //in_ui_manager.AddContentFactory("", FactoryDefault); // Make this built in to UIManager?
     in_ui_manager.AddContentFactory("UIDataString", FactoryString<>);
     in_ui_manager.AddContentFactory("UIDataTextRun", FactoryTextRun<>);
     in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas);

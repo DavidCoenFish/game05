@@ -1,14 +1,16 @@
 #pragma once
 
-#include "common/ui/ui_content/i_ui_content.h"
+#include "common/ui/ui_content/ui_content_default.h"
 
-class UIContentCanvas : public IUIContent
+class UIContentCanvas : public UIContentDefault
 {
 public:
     UIContentCanvas();
     virtual ~UIContentCanvas();
 
 private:
+    virtual const int GetClassTypeID() const override;
+
     //virtual const bool Update(
     //    VectorInt2& out_texture_size,
     //    UIHierarchyNodeLayoutData& out_layout_data,

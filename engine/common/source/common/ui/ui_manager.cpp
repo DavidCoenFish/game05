@@ -11,6 +11,7 @@
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/i_ui_model.h"
+#include "common/ui/ui_content/ui_content_default.h"
 #include "common/ui/ui_data/i_ui_data.h"
 #include "common/text/text_manager.h"
 #include "common/util/vector_helper.h"
@@ -67,6 +68,24 @@ UIManagerDrawParam::UIManagerDrawParam(
     // Nop
 }
 
+namespace
+{
+    const bool FactoryStack(
+        std::unique_ptr<IUIContent>& in_out_content,
+        const UIContentFactoryParam& //in_param
+        )
+    {
+        UIContentDefault* const content = dynamic_cast<UIContentDefault*>(in_out_content.get());
+        if ((nullptr == content) || (IUIContent::ClassTypeID<UIContentDefault>() != content->GetClassTypeID()))
+        {
+            in_out_content.reset(std::make_unique<UIContentDefault>());
+            return true;
+        }
+        return false;
+    }
+
+}
+
 class UIManagerImplementation
 {
 public:
@@ -104,6 +123,10 @@ public:
             pixel_shader_data,
             array_shader_resource_info
             );
+
+        // add a default content 
+        AddContentFactory("", FactoryDefault);
+
         return;
     }
 

@@ -1,18 +1,21 @@
 #pragma once
 
-#include "common/ui/ui_content/i_ui_content.h"
+#include "common/ui/ui_content/ui_content_default.h"
 #include "common/text/text_enum.h"
 
 class TextBlock;
 class TextFont;
 
-class UIContentString : public IUIContent
+class UIContentString : public UIContentDefault
 {
 public:
     UIContentString(
         std::unique_ptr<TextBlock>& in_text_block
         );
     ~UIContentString();
+
+private:
+    virtual const int GetClassTypeID() const override;
 
     // return true if we have a text block which this is a new value, else true
     const bool SetFont(

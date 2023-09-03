@@ -24,6 +24,11 @@ UIContentTexture::~UIContentTexture()
     // Nop
 }
 
+const int UIContentTexture::GetClassTypeID() const
+{
+    return ClassTypeID<UIContentTexture>();
+}
+
 void UIContentTexture::Draw(
     const UIManagerDrawParam& in_param,
     UITexture* const in_texture,

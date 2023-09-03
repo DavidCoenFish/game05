@@ -14,6 +14,11 @@ UIContentCanvas::~UIContentCanvas()
     // Nop
 }
 
+const int UIContentCanvas::GetClassTypeID() const
+{
+    return ClassTypeID<UIContentCanvas>();
+}
+
 /*
 const bool UIContentCanvas::Update(
     VectorInt2& out_texture_size,

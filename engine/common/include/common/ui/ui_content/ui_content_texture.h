@@ -1,6 +1,6 @@
 #pragma once
 
-#include "common/ui/ui_content/i_ui_content.h"
+#include "common/ui/ui_content/ui_content_default.h"
 
 class DrawSystemFrame;
 class HeapWrapperItem;
@@ -9,7 +9,7 @@ class UIGeometry;
 class UITexture;
 struct UIHierarchyNodeChildData;
 
-class UIContentTexture : public IUIContent
+class UIContentTexture : public UIContentDefault
 {
 public:
     UIContentTexture(
@@ -22,6 +22,8 @@ public:
         );
 
 private:
+    virtual const int GetClassTypeID() const override;
+
     virtual const bool GetNeedsDraw() const override;
     //virtual void SetDrawn() override;
 

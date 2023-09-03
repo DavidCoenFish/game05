@@ -136,3 +136,83 @@ https://en.wikipedia.org/wiki/SVG_animation
 
 https://github.com/sammycage/lunasvg
 https://github.com/memononen/nanosvg
+
+calculating desired size, what defines the layout?
+content text -> get text bounds + margin
+    does text get the chooice to flag wrap on parent width, or constant width? us a uv coord?
+content stack -> children + gap between children + margin
+
+
+UIHierarchyNode // N0 
+    _texture // T0 parent's texture what we draw the children to
+    _child_data_array A0
+        _node // N1 child node
+        _geometry // G1 geometry to draw the child nodes texture onto the parents texture
+    _content C0 // controls hierarchy, layout, texture size T0/ geometry size G0
+    //_layout_data
+
+Manager Draw
+    Node(N0)::Draw
+        for each A0
+            call Node(N1)::Draw 
+        Set T0 as render target
+        for each A0
+            render T1 with Geometry G1
+
+Manager Update(in_size)
+    Node(N0)::UpdateHierarchy
+        _content(C0) rebuild to match model
+        _content(C0)::BuildChildArray(A0)
+
+    // texture/ desired size may be bigger than max size allowed by input/ parent. deal with that by reducing range of uv on geometry to match
+    // but how to deal with that at the tope level, it doesn't have geometry (there is no G0), so do we start at N0 and work on A0
+    Node(N0)::UpdateSize(input size(S0))// like the render target size, use root node texture size? or is top level size input to the update
+        for each A0:
+            Node(N1)::CalculateSize(input size(S0)) // Content determins how recusion happens?
+                Content(C1)::CalculateSize(A1) // for stack, using it's layout data?
+                    what is max size after margin(S1a)
+                    for each A1:
+                        Node(N2) given S1a, what is the desired size -> S1_2, S1 for child
+                        //Node(N2)::CalculateSize(S1_2)? or 
+                        //Node(N2)::SetSize(S1_2)
+                        // stack may have an optional max size for child? or just let child grow... flags
+                        // flag for shrinking size to min, auto or manual scroll
+                // presume using _content(C1, A1) and does magic to shrink/ strech self to accomidate dealing with size(S0)
+                sets texture size(T1) with size from Content(C1)
+                sets geometry size(G1) with pos_uv from Content(C1)
+
+    // Sanity check 0: if to level node (N0) has content text (C0) that can't auto scroll or manual scroll if size is bigger than size(S0)
+    // Rule: top level component can not require scrolling? or default content for top level?
+
+    // Sanity check 1: if stack is top level, margin for auto scroll, again, there is no G0
+    // have a default content? and/or a UIContentRoot? UIDataRoot?
+
+    // Sanity check 2: so the root nod has a default/ root type. but now i want a child stack with margin and text.
+N(0) root
+    N(1) stack
+        N(2) text
+
+other than the locale needed for the TextManager, the ui is unaware of local, locale is internal to the model, model justs hands strings, or runs of strings
+to the ui manager.
+
+root node has a given target size, [px, py]
+root node has a content, if content thinks it larger than parent size, it might auto scroll or have manual scroll widgets in margin
+ so content contols texture size, to work out size it may need to know data about children
+ content controls geometry size, fitting the desired size into what is avliable
+ are these sizes expressed by layout? what about text. 
+ does layout express margin
+
+ node->GetDesiredSize(parent_size)
+ move calculation to layout? input size, calculate output size and offset, uv?
+
+ _container->CalculateSize(
+    out_texture_target_size, // VectorInt2
+    out_geometry_pos, // VectorFloat4
+    out_geometry_uv, // VectorFloat4
+    )
+
+
+
+
+
+

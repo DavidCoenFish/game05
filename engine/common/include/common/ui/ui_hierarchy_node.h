@@ -18,6 +18,7 @@ class UIGeometry;
 class UIHierarchyNode;
 class UIRootInputState;
 class UITexture;
+class UILayout;
 struct UIContentFactoryParam;
 struct UIManagerDrawParam;
 struct UIManagerUpdateLayoutParam;
@@ -75,29 +76,6 @@ struct UIHierarchyNodeUpdateDesiredSize
 struct UIHierarchyNodeUpdateSize
 {
     explicit UIHierarchyNodeUpdateSize();
-};
-
-struct UIHierarchyNodeLayoutData
-{
-    static UIHierarchyNodeLayoutData FactoryFull();
-    explicit UIHierarchyNodeLayoutData(
-        const UICoord& in_size_x = UICoord(UICoord::ParentSource::X),
-        const UICoord& in_size_y = UICoord(UICoord::ParentSource::Y),
-        const UICoord& in_attach_x = UICoord(UICoord::ParentSource::X),
-        const UICoord& in_attach_y = UICoord(UICoord::ParentSource::Y),
-        const UICoord& in_pivot_x = UICoord(UICoord::ParentSource::X),
-        const UICoord& in_pivot_y = UICoord(UICoord::ParentSource::Y),
-        const VectorFloat2& in_uv_scroll = VectorFloat2()
-        );
-
-    // Data for how we calculate our size relative to parent
-    UICoord _data_size[2];
-    UICoord _data_attach[2];
-    UICoord _data_pivot[2];
-
-    // uv = abs(_uv_scroll), and use range [-1...1] wrapped when advancing _uv_scroll, to allow saw tooth animation
-    // Scale update speed by desired size ratio to target size?
-    VectorFloat2 _uv_scroll;
 };
 
 class UIHierarchyNode
@@ -191,13 +169,15 @@ public:
         );
 
 private:
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>> _child_data_array;
     std::unique_ptr<IUIContent> _content;
+    std::vector<std::shared_ptr<UIHierarchyNodeChildData>> _child_data_array;
     std::unique_ptr<UITexture> _texture;
+    std::unique_ptr<UILayout> _layout;
+
+    // Allow top level node to hold some state for input like the focused node, or click active node, hover node?
     std::unique_ptr<UIRootInputState> _root_input_state;
 
-    // would not this, and the parent size, determin our texture size? layout needs to be full screen for backbuffer?
-    UIHierarchyNodeLayoutData _layout_data;
+    // Move to inside content? or add flags to deal with shiring x/y for text or stack
 
     // Dynamic data as well as static? [visible, focusable, block input travel to children, children from content, focused, mouse over, mouse down
     //TFlag _flag;

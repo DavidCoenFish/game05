@@ -10,3 +10,9 @@ UIContentStack::~UIContentStack()
 {
     // Nop
 }
+
+const int UIContentStack::GetClassTypeID() const
+{
+    return ClassTypeID<UIContentStack>();
+}
+

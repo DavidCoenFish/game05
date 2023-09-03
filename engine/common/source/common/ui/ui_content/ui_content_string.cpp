@@ -20,6 +20,11 @@ UIContentString::~UIContentString()
     return;
 }
 
+const int UIContentString::GetClassTypeID() const
+{
+    return ClassTypeID<UIContentString>();
+}
+
 const bool UIContentString::SetFont(
     TextFont& in_font, 
     const int in_font_size,
