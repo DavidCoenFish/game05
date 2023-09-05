@@ -189,8 +189,18 @@ Manager Update(in_size)
 
     // Sanity check 2: so the root nod has a default/ root type. but now i want a child stack with margin and text.
 N(0) root
+    N(1) text
+    //N(1) has text content C(1), if it is bigger than N(0) avaliable size, the auto scroll via geometry G(1)
+    //N(1) margin pushes around the C(1) internal text geometry?
+
+    // Sanity check 3: so the root nod has a default/ root type. but now i want a child stack with margin and text.
+N(0) root
     N(1) stack
-        N(2) text
+        N(2a) text
+        N(2b) text
+        N(2c) text
+    // _geometry(1) is used to draw stack N(1) texture T(1) onto root N(0)'s target, including N(1) margin/ clear colour
+    // stack N(1) content C(1) arranges all the children geometry G(2a,b,c) to effect a scolling panel inside T(1) as needed
 
 other than the locale needed for the TextManager, the ui is unaware of local, locale is internal to the model, model justs hands strings, or runs of strings
 to the ui manager.
@@ -213,6 +223,45 @@ root node has a content, if content thinks it larger than parent size, it might 
 
 
 
+what do we need to change to get rid of the need for a root component
 
+UIRootNode // R0
+    _texture // T0 texture or backbuffer this node draws
+    _child_node_array // A0
+        UIHierarchyNode // N1 
+            _texture // T1 texture or backbuffer this node draws to, or the render target for this node
+            _geometry // G1 geometry to draw the texture T0 onto the external/parent texture?
+            _content // C1 controls hierarchy, layout, texture size T0/ geometry size G0
+            _child_node_array // A1
+                _node // N2 child node
 
+UIHierarchyNode // N0 
+    _texture // T0 texture or backbuffer A0 draws to
+    //_input_state // I0 top level input state, which node is focused, node click started on, hover node
+    _child_node_array // A0
+        _geometry // G1 geometry to draw the texture T1 onto T0
+        _content // C1 controls size of T1 and G1. model returns an array of ui data for root
+        UIHierarchyNode // N1 child node
+            _texture // T1 texture or backbuffer A1 draws to
+            _child_node_array // A1
+
+UIManager::Update(array ui data U0, N0)
+    N0::UpdateHierarchy(array uiData U0)
+        match A0 length to U0
+        for each a, b, A0, U0
+            update a.C1 with b
+            get array U1 from b
+            N1::UpdateHierarchy(U1)
+    N0::UpdateLayout(T0.size)
+
+UIManager::Input(input, N0)
+    
+
+UIManager::Draw(node N0)
+    N0::Draw(shader)
+        for each of A0
+            N1::Draw(shader)
+        set T0 as render target
+        for each of A0
+            draw G1 with texture T1
 
