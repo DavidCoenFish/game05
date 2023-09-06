@@ -174,21 +174,6 @@ public:
             in_param._draw_to_texture,
             in_param._always_dirty
             );
-
-        VectorInt2 size = in_param._draw_to_texture ? in_param._texture_size : in_param._draw_system->GetRenderTargetBackBuffer()->GetSize();
-
-        UIHierarchyNodeUpdateDesiredSize desired_size_param;
-        in_out_target_or_null->UpdateDesiredSize(
-            size,
-            desired_size_param
-            );
-
-        UIHierarchyNodeUpdateSize size_param;
-        in_out_target_or_null->UpdateSize(
-            size,
-            VectorFloat4(0.0f, 0.0f, 1.0f, 1.0f),
-            size_param
-            );
     }
 
     void DealInput(

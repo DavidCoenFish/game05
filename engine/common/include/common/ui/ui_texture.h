@@ -16,7 +16,6 @@ class UITexture
 {
 public:
     UITexture(
-        DrawSystem* const in_draw_system,
         const bool in_draw_to_texture = false,
         const bool in_always_dirty = false,
         const bool in_allow_clear = false,
@@ -54,7 +53,7 @@ public:
     const bool GetAlwaysDirty() const { return _always_dirty; }
 
 private:
-    bool _draw_to_texture; // true == use _render_target_texture else use the application backbuffer
+    bool _draw_to_texture; // true == use _render_target_texture else use the application backbuffer via draw system
     bool _allow_clear; // When render target is set active, do we clear
     bool _always_dirty; // If we share a render target, like the backbuffer, we may need to always draw
     bool _has_drawn; // Internal flag to help know if data drawn to texture
@@ -62,7 +61,5 @@ private:
     VectorFloat4 _clear_colour;
 
     std::shared_ptr<RenderTargetTexture> _render_target_texture;
-
-    DrawSystem* const _draw_system;
 
 };

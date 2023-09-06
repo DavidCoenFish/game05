@@ -103,7 +103,7 @@ public:
         );
     ~UIManager();
 
-    // Expose the input element desc for the ui manager shader to allow more use of the shader
+    // UIGeometry is private, so expose via UIManager
     static const std::vector<D3D12_INPUT_ELEMENT_DESC>& GetInputElementDescArray();
     static void BuildGeometryData(
         std::vector<uint8_t>& out_vertex_data,
@@ -112,7 +112,7 @@ public:
         const VectorFloat4& in_uv = VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f) // atention Y inverted
         );
 
-    //Add content factories, layout templates can be expressed through the content class
+    // Add content factories, layout templates can be expressed through the content class
     typedef std::function< const bool(
         std::unique_ptr<IUIContent>& in_out_content,
         const UIContentFactoryParam& in_param

@@ -19,11 +19,15 @@
 #include "common/math/vector_float4.h"
 
 UIHierarchyNodeChildData::UIHierarchyNodeChildData(
-    const std::shared_ptr<UIHierarchyNode>& in_node,
-    const std::shared_ptr<UIGeometry>& in_geometry
+    std::unique_ptr<UIGeometry>& in_geometry,
+    std::unique_ptr<IUIContent>& in_content,
+    std::unique_ptr<UIHierarchyNode>& in_node,
+    const VectorFloat4& in_input_screen_size
     )
-    : _node(in_node)
-    , _geometry(in_geometry)
+    : _geometry(in_geometry)
+    , _content(in_content)
+    , _node(in_node)
+    , _input_screen_size(in_input_screen_size)
 {
     // Nop
 }
@@ -58,22 +62,18 @@ UIHierarchyNodeUpdateDesiredSize::UIHierarchyNodeUpdateDesiredSize(
 
 UIHierarchyNodeUpdateSize::UIHierarchyNodeUpdateSize()
 {
-    // Nop
+        // Nop
+
 };
 
 UIHierarchyNode::UIHierarchyNode()
 {
-    _layout = std::make_unique<UILayout>();
+    // Nop
 }
 
 UIHierarchyNode::~UIHierarchyNode()
 {
     // Nop
-}
-
-const VectorInt2 UIHierarchyNode::GetTargetSize() const
-{
-    return _texture->GetSize();
 }
 
 //return true if all bits of flga are set
@@ -225,13 +225,21 @@ void UIHierarchyNode::UpdateSize(
 
 }
 
+//UIManager::Draw(node N0)
+//    N0::Draw(shader)
+//        for each of A0
+//            N1::Draw(shader)
+//        set T0 as render target
+//        for each of A0
+//            draw G1 with texture T1
+
 // Return True if we needed to draw, ie, the texture may have changed
 const bool UIHierarchyNode::Draw(
     const UIManagerDrawParam& in_draw_param,
     Shader* const in_shader
     )
 {
-    bool needs_to_draw = false;
+    bool dirty = false;
     for (auto& iter : _child_data_array)
     {
         if (true == iter->_node->Draw(
@@ -239,28 +247,39 @@ const bool UIHierarchyNode::Draw(
             in_shader
             ))
         {
-            needs_to_draw = true;
+            dirty = true;
         }
     }
 
-    if ((true == needs_to_draw) ||
+    if ((true == dirty) ||
         (false == _texture->GetHasDrawn()) ||
-        (true == _texture->GetAlwaysDirty()) ||
-        (true == _content->GetNeedsDraw())
+        (true == _texture->GetAlwaysDirty())
         )
     {
-        needs_to_draw = true;
+        dirty = true;
 
-        _content->Draw(
-            in_draw_param,
-            _texture.get(),
-            _child_data_array,
-            in_shader
+        auto* render_target = _texture->GetRenderTarget(
+            in_draw_param._draw_system,
+            in_draw_param._frame->GetCommandList()
+            );
+        in_draw_param._frame->SetRenderTarget(
+            render_target, 
+            _texture->GetAllowClear()
             );
 
-        _texture->SetHasDrawn(true);
+        for (auto& iter : _child_data_array)
+        {
+            UIHierarchyNodeChildData& child_data = *iter;
+            child_data._content->Draw(
+                in_draw_param,
+                in_shader,
+                child_data._geometry.get(),
+                child_data._node->GetShaderResourceHeapWrapperItem()
+                );
+        }
 
+        _texture->SetHasDrawn(true);
     }
 
-    return needs_to_draw;
+    return dirty;
 }

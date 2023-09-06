@@ -6,14 +6,12 @@
 #include "common/draw_system/render_target/render_target_texture.h"
 
 UITexture::UITexture(
-    DrawSystem* const in_draw_system,
     const bool in_draw_to_texture,
     const bool in_always_dirty,
     const bool in_allow_clear,
     const VectorFloat4& in_clear_colour
     )
-    : _draw_system(in_draw_system)
-    , _draw_to_texture(in_draw_to_texture)
+    : _draw_to_texture(in_draw_to_texture)
     , _allow_clear(in_allow_clear)
     , _always_dirty(in_always_dirty)
     , _has_drawn(false)
@@ -55,7 +53,7 @@ IRenderTarget* UITexture::GetRenderTarget(
 
         return _render_target_texture.get();
     }
-    return _draw_system->GetRenderTargetBackBuffer();
+    return in_draw_system->GetRenderTargetBackBuffer();
 }
 
 const VectorInt2 UITexture::GetSize() const

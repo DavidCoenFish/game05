@@ -34,16 +34,6 @@ const bool UIContentDefault::GetClearBackground(
     return false;
 }
 
-const bool UIContentDefault::GetNeedsDraw() const
-{
-    return false;
-}
-
-void UIContentDefault::SetDrawn()
-{
-    // Nop
-}
-
 // Default implementation is to clear the children, or do we add a virtual get array UIData and make children based on that?
 const bool UIContentDefault::UpdateHierarchy(
     std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& out_child_data_array,
