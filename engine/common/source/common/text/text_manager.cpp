@@ -13,6 +13,7 @@
 #include "common/text/text_locale.h"
 #include "common/text/text_texture.h"
 #include "common/text/text_run.h"
+#include "common/locale/locale_enum.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -47,29 +48,42 @@ namespace
         HB_SCRIPT_LATIN,
         hb_language_from_string("en", -1)
         );
-    static std::map<std::string, std::shared_ptr<TextLocale>> s_map_text_locale({
-        {"ar", std::make_shared<TextLocale>(
+    static std::map<LocaleISO_639_1, std::shared_ptr<TextLocale>> s_map_text_locale({
+        {
+            LocaleISO_639_1::Arabic, 
+            std::make_shared<TextLocale>(
             HB_DIRECTION_RTL,
             HB_SCRIPT_ARABIC,
             hb_language_from_string("ar", -1)
         )},
-        {"ch", std::make_shared<TextLocale>(
+        {
+            LocaleISO_639_1::Chinese_Peoples_Republic_of_China,
+            std::make_shared<TextLocale>(
             HB_DIRECTION_LTR, //HB_DIRECTION_TTB,
             HB_SCRIPT_HAN,
             hb_language_from_string("ch", -1)
         )},
-        {"en", s_locale_en},
-        {"fr", std::make_shared<TextLocale>(
+        {
+            LocaleISO_639_1::English,
+            s_locale_en
+        },
+        {
+            LocaleISO_639_1::French,
+            std::make_shared<TextLocale>(
             HB_DIRECTION_LTR,
             HB_SCRIPT_LATIN,
             hb_language_from_string("fr", -1)
         )},
-        {"hi", std::make_shared<TextLocale>(
+        {
+            LocaleISO_639_1::Hindi,
+            std::make_shared<TextLocale>(
             HB_DIRECTION_LTR, //HB_DIRECTION_TTB,
             HB_SCRIPT_DEVANAGARI,
             hb_language_from_string("hi", -1)
         )},
-        {"ru", std::make_shared<TextLocale>(
+        {
+            LocaleISO_639_1::Russian,
+            std::make_shared<TextLocale>(
             HB_DIRECTION_LTR,
             HB_SCRIPT_CYRILLIC,
             hb_language_from_string("ru", -1)
@@ -171,6 +185,8 @@ public:
         _texture->Update(in_draw_system, in_draw_system_frame);
         in_draw_system_frame->SetShader(_shader.get());
         in_draw_system_frame->Draw(geometry);
+
+        return;
     }
 
     void DrawTextRun(
@@ -188,21 +204,45 @@ public:
         _texture->Update(in_draw_system, in_draw_system_frame);
         in_draw_system_frame->SetShader(_shader.get());
         in_draw_system_frame->Draw(geometry);
+
+        return;
+    }
+
+    void AddIcon(
+        const int in_icon_id,
+        const int in_width,
+        const int in_height,
+        const uint8_t* const in_buffer
+        )
+    {
+        auto cell = _texture->MakeIcon(
+            in_buffer,
+            in_width,
+            in_height
+            );
+        if (nullptr != cell)
+        {
+            _map_icon_cell[in_icon_id] = cell;
+        }
+
+        return;
     }
 
     // Assert if there are any TextGeometry?
-    void RestGlyphUsage()
+    void RestUsage()
     {
         for (auto iter : _map_path_font)
         {
             iter.second->RestGlyphUsage();
         }
-        _texture->RestGlyphUsage();
+        _texture->RestUsage();
+
+        return;
     }
 
-    const TextLocale* const GetLocaleToken(const std::string& in_locale_key) const
+    const TextLocale* const GetLocaleToken(const LocaleISO_639_1 in_locale) const
     {
-        const auto found = s_map_text_locale.find(in_locale_key);
+        const auto found = s_map_text_locale.find(in_locale);
         if (found != s_map_text_locale.end())
         {
             return found->second.get();
@@ -215,6 +255,8 @@ private:
     FT_Library _library;
 
     std::map<std::filesystem::path, std::shared_ptr<TextFont>> _map_path_font;
+
+    std::map<uint32_t, std::shared_ptr<TextCell>> _map_icon_cell;
 
     std::shared_ptr<Shader> _shader;
     std::shared_ptr<TextTexture> _texture;
@@ -279,16 +321,31 @@ void TextManager::DrawTextRun(
         );
 }
 
-
-// Assert if there are any TextGeometry
-void TextManager::RestGlyphUsage()
+void TextManager::AddIcon(
+    const int in_icon_id,
+    const int in_width,
+    const int in_height,
+    const uint8_t* const in_buffer
+    )
 {
-    _implementation->RestGlyphUsage();
+    _implementation->AddIcon(
+        in_icon_id,
+        in_width,
+        in_height,
+        in_buffer
+        );
     return;
 }
 
-const TextLocale* const TextManager::GetLocaleToken(const std::string& in_locale_key) const
+// Assert if there are any live TextBlocks, clear the font/icon texture
+void TextManager::RestUsage()
 {
-    return _implementation->GetLocaleToken(in_locale_key);
+    _implementation->RestUsage();
+    return;
+}
+
+const TextLocale* const TextManager::GetLocaleToken(const LocaleISO_639_1 in_locale) const
+{
+    return _implementation->GetLocaleToken(in_locale);
 }
 

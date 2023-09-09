@@ -1,5 +1,6 @@
 #pragma once
 
+#include "common/math/vector_int4.h"
 #include "common/math/vector_float2.h"
 #include "common/math/vector_float4.h"
 #include "common/text/text_enum.h"
@@ -19,7 +20,7 @@ class TextPreVertex
 public:
     struct PreVertexData
     {
-        VectorFloat4 _pos_low_high;
+        VectorInt4 _pos_low_high;
         VectorFloat4 _uv_low_high;
         VectorFloat4 _mask;
         VectorFloat4 _colour;
@@ -37,14 +38,14 @@ public:
 
     void AddPreVertex(
         const TextCell* const in_cell,
-        const float in_pos_x,
-        const float in_pos_y,
-        const float _line_height,
+        const int in_pos_x,
+        const int in_pos_y,
+        const int _line_height,
         const VectorFloat4& _colour
         );
 
     void StartNewLine(
-        VectorFloat2& in_out_cursor
+        VectorInt2& in_out_cursor
         );
 
     const VectorInt2 GetBounds();
@@ -62,16 +63,16 @@ private:
 
 private:
     std::vector<PreVertexData> _pre_vertex_data;
-    VectorFloat2 _vertical_bounds;
-    std::vector<VectorFloat2> _horizontal_bounds;
+    VectorInt2 _vertical_bounds;
+    std::vector<VectorInt2> _horizontal_bounds;
 
     bool _bound_dirty;
-    VectorFloat2 _bounds;
+    VectorInt2 _bounds;
     int _line_index;
 
     bool _line_dirty; // pre vertex added to line, but not adjusted for max height on line
-    VectorFloat2 _line_vertical_bounds;
-    float _default_line_height; // if nothing added to the line, use this height
-    float _current_line_height; // allow for things added to the line to be taller
+    VectorInt2 _line_vertical_bounds;
+    int _default_line_height; // if nothing added to the line, use this height
+    int _current_line_height; // allow for things added to the line to be taller
 
 };

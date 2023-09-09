@@ -1,8 +1,6 @@
 #include "common/common_pch.h"
-#include "common/util/locale_system.h"
-
-
-#pragma once
+#include "common/locale/locale_system.h"
+#include "common/locale/locale_enum.h"
 
 class LocaleSystemImplementation
 {
@@ -20,7 +18,7 @@ public:
     }
 
     const std::string GetValue(
-        const std::string& in_locale,
+        const LocaleISO_639_1 in_locale,
         const std::string& in_key
         )
     {
@@ -36,9 +34,9 @@ public:
         return std::string();
     }
 
-    const std::vector<std::string> GatherLocale() const
+    const std::vector<LocaleISO_639_1> GatherLocale() const
     {
-        std::vector<std::string> result;
+        std::vector<LocaleISO_639_1> result;
         for (auto iter : _locale_data_map)
         {
             result.push_back(iter.first);
@@ -47,7 +45,7 @@ public:
     }
 
     void Append(
-        const std::string& in_locale,
+        const LocaleISO_639_1 in_locale,
         const std::vector<LocaleSystem::Data>& in_data
         )
     {
@@ -75,7 +73,7 @@ public:
 
 private:
     TDataMap* const ReturnDataMap(
-        const std::string& in_locale
+        const LocaleISO_639_1 in_locale
         )
     {
         if (_last_locale == in_locale)
@@ -94,9 +92,9 @@ private:
     }
 
 private:
-    std::string _last_locale;
+    LocaleISO_639_1 _last_locale;
     TDataMap* _last_data_map;
-    std::map<std::string, std::shared_ptr<TDataMap>> _locale_data_map;
+    std::map<LocaleISO_639_1, std::shared_ptr<TDataMap>> _locale_data_map;
 
 };
 
@@ -111,20 +109,20 @@ LocaleSystem::~LocaleSystem()
 }
 
 const std::string LocaleSystem::GetValue(
-    const std::string& in_locale,
+    const LocaleISO_639_1 in_locale,
     const std::string& in_key
     )
 {
     return _implementation->GetValue(in_locale, in_key);
 }
 
-const std::vector<std::string> LocaleSystem::GatherLocale() const
+const std::vector<LocaleISO_639_1> LocaleSystem::GatherLocale() const
 {
     return _implementation->GatherLocale();
 }
 
 void LocaleSystem::Append(
-    const std::string& in_locale,
+    const LocaleISO_639_1 in_locale,
     const std::vector<Data>& in_data
     )
 {

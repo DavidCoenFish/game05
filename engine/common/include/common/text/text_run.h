@@ -12,10 +12,13 @@ class TextRunImplementation;
 class TextLocale;
 class VectorInt2;
 class TextFont;
+class IconFont;
 
 struct TextRunData
 {
     explicit TextRunData(
+        const int _icon_id = 0, // Zero if you are using a string and not an icon
+        IconFont* const in_icon_font = nullptr,
         const std::string& in_string_utf8 = std::string(""),
         TextLocale* const in_locale_token = nullptr,
         TextFont* const in_text_font = nullptr,
@@ -25,12 +28,16 @@ struct TextRunData
         );
     //const bool operator==(const TextRunData& in_rhs) const;
 
+    // if not zero, we are drawing an icon
+    int _icon_id;
+
     std::string _string_utf8;
     TextLocale* const _locale_token;
     TextFont* const _text_font;
     int _font_size;
-    int _new_line_height;
     VectorFloat4 _colour;
+
+    int _new_line_height;
 };
 
 class TextRun

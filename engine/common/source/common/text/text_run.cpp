@@ -15,6 +15,7 @@
 #include "common/text/text_pre_vertex.h"
 
 TextRunData::TextRunData(
+    const int _icon_id,
     const std::string& in_string_utf8,
     TextLocale* const in_locale_token,
     TextFont* const in_text_font,
@@ -22,7 +23,8 @@ TextRunData::TextRunData(
     const int in_new_line_height,
     const VectorFloat4& in_colour
     )
-    : _string_utf8(in_string_utf8)
+    : _icon_id(_icon_id)
+    , _string_utf8(in_string_utf8)
     , _locale_token(in_locale_token)
     , _text_font(in_text_font)
     , _font_size(in_font_size)
@@ -74,17 +76,24 @@ public:
             for (const auto& item : _text_run_array)
             {
                 const TextRunData& run = *item;
-                run._text_font->CalculateTextBounds(
-                    *_pre_vertex_data,
-                    cursor,
-                    run._string_utf8,
-                    run._locale_token,
-                    run._font_size,
-                    _width_limit_enabled,
-                    _width_limit,
-                    run._new_line_height,
-                    run._colour
-                    );
+                if (0 != run._icon_id)
+                {
+                    
+                }
+                else
+                {
+                    run._text_font->CalculateTextBounds(
+                        *_pre_vertex_data,
+                        cursor,
+                        run._string_utf8,
+                        run._locale_token,
+                        run._font_size,
+                        _width_limit_enabled,
+                        _width_limit,
+                        run._new_line_height,
+                        run._colour
+                        );
+                }
             }
             _text_bounds = _pre_vertex_data->GetBounds();
         }

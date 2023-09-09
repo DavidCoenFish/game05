@@ -1,6 +1,7 @@
 #pragma once
 
 class LocaleSystemImplementation;
+enum class LocaleISO_639_1;
 
 class LocaleSystem
 {
@@ -9,11 +10,11 @@ public:
     ~LocaleSystem();
 
     const std::string GetValue(
-        const std::string& in_locale,
+        const LocaleISO_639_1 in_locale,
         const std::string& in_key
         );
 
-    const std::vector<std::string> GatherLocale() const;
+    const std::vector<LocaleISO_639_1> GatherLocale() const;
 
     struct Data
     {
@@ -21,7 +22,7 @@ public:
         std::string _value;
     };
     void Append(
-        const std::string& in_locale,
+        const LocaleISO_639_1 in_locale,
         const std::vector<Data>& in_data
         );
 

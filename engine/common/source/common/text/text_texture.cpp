@@ -13,11 +13,12 @@ TextTexture::TextTexture(
     ID3D12GraphicsCommandList* const in_command_list,
     const int in_texture_dimention
     )
-    : _glyph_texture_dirty(false)
-    , _glyph_texture_dirty_low(0)
-    , _glyph_texture_dirty_high(0)
+    : _texture_dirty(false)
+    , _texture_dirty_low(0)
+    , _texture_dirty_high(0)
     , _texture_dimention(in_texture_dimention)
     , _highest_pos_y{0,0,0,0}
+    , _icon_max_pos_y(in_texture_dimention)
 {
     D3D12_RESOURCE_DESC desc = {
         D3D12_RESOURCE_DIMENSION_TEXTURE2D, //D3D12_RESOURCE_DIMENSION Dimension;
@@ -43,7 +44,7 @@ TextTexture::TextTexture(
     std::vector<uint8_t> glyph_texture_data;
     glyph_texture_data.resize(in_texture_dimention * in_texture_dimention * 4);
 
-    _glyph_texture = in_draw_system->MakeShaderResource(
+    _texture = in_draw_system->MakeShaderResource(
         in_command_list,
         in_draw_system->MakeHeapWrapperCbvSrvUav(), //const std::shared_ptr < HeapWrapperItem >&in_shader_resource,
         desc, //const D3D12_RESOURCE_DESC & in_desc,
@@ -75,7 +76,6 @@ std::shared_ptr<TextCell> TextTexture::MakeCell(
 
     TextGlyphRow* found_row = nullptr;
     const int desired_height = in_height + (0 != (in_height & 0x03) ? 4 - (in_height & 0x03) : 0);
-    //for (auto& iter: _array_glyph_row)
     for (auto iter = _array_glyph_row.begin(); iter != _array_glyph_row.end(); ++iter)
     {
         TextGlyphRow& row = **iter;
@@ -117,7 +117,7 @@ std::shared_ptr<TextCell> TextTexture::MakeCell(
             mask_index = 3;
         }
 
-        if (_texture_dimention < _highest_pos_y[mask_index] + desired_height)
+        if (_icon_max_pos_y < _highest_pos_y[mask_index] + desired_height)
         {
             return nullptr;
         }
@@ -137,22 +137,12 @@ std::shared_ptr<TextCell> TextTexture::MakeCell(
         found_row = temp.get();
     }
 
-#if 1
     VectorFloat4 uv = VectorFloat4(
         (float)found_row->GetTextureHighestX() / (float)_texture_dimention,
         (float)(found_row->GetTexturePosY() + in_height) / (float)_texture_dimention,
         (float)(found_row->GetTextureHighestX() + in_width) / (float)_texture_dimention,
         (float)found_row->GetTexturePosY() / (float)_texture_dimention
     );
-#else
-    VectorFloat4 uv = VectorFloat4(
-        (float)found_row->GetTextureHighestX() / (float)_texture_dimention,
-        (float)found_row->GetTexturePosY() / (float)_texture_dimention,
-        (float)(found_row->GetTextureHighestX() + in_width) / (float)_texture_dimention,
-        (float)(found_row->GetTexturePosY() + in_height) / (float)_texture_dimention
-    );
-
-#endif
 
     VectorFloat4 mask;
     mask[found_row->GetMaskIndex()] = 1.0f;
@@ -165,11 +155,11 @@ std::shared_ptr<TextCell> TextTexture::MakeCell(
         mask
         );
 
-    _glyph_texture_dirty = true;
-    _glyph_texture_dirty_low = std::min(_glyph_texture_dirty_low, found_row->GetTexturePosY());
-    _glyph_texture_dirty_high = std::max(_glyph_texture_dirty_high, found_row->GetTexturePosY() + desired_height);
+    _texture_dirty = true;
+    _texture_dirty_low = std::min(_texture_dirty_low, found_row->GetTexturePosY());
+    _texture_dirty_high = std::max(_texture_dirty_high, found_row->GetTexturePosY() + desired_height);
 
-    auto& dest_data = _glyph_texture->GetData();
+    auto& dest_data = _texture->GetData();
     for (uint32_t y = 0; y < in_height; ++y)
     {
         for (uint32_t x = 0; x < in_width; ++x)
@@ -184,19 +174,120 @@ std::shared_ptr<TextCell> TextTexture::MakeCell(
     return cell;
 }
 
+std::shared_ptr<TextCell> TextTexture::MakeIcon(
+    const uint8_t* const in_buffer,
+    const uint32_t in_width,
+    const uint32_t in_height
+    )
+{
+    DSC_ASSERT((int)in_width <= _texture_dimention, "invalid param");
+    DSC_ASSERT((int)in_height <= _texture_dimention, "invalid param");
+
+    if ((0 == in_width) || (0 ==in_height))
+    {
+        return nullptr;
+    }
+
+    TextGlyphRow* found_row = nullptr;
+    const int desired_height = in_height + (0 != (in_height & 0x03) ? 4 - (in_height & 0x03) : 0);
+    for (auto iter = _array_icon_row.begin(); iter != _array_icon_row.end(); ++iter)
+    {
+        TextGlyphRow& row = **iter;
+        if ((desired_height == row.GetHeight()) && 
+            (row.GetTextureHighestX() + (int)in_width <= _texture_dimention))
+        {
+            if (row.GetTextureHighestX() + (int)in_width == _texture_dimention)
+            {
+                _array_glyph_row_full.push_back(*iter);
+                _array_glyph_row.erase(iter);
+            }
+
+            found_row = &row;
+            break;
+        }
+    }
+
+    // make a new row
+    if (nullptr == found_row)
+    {
+        // Check icon is not overlapping font
+        const int new_max_pos_y = _icon_max_pos_y - in_height;
+        if ((new_max_pos_y < _highest_pos_y[0]) ||
+            (new_max_pos_y < _highest_pos_y[1]) ||
+            (new_max_pos_y < _highest_pos_y[2]) ||
+            (new_max_pos_y < _highest_pos_y[3]))
+        {
+            return nullptr;
+        }
+
+        _icon_max_pos_y = new_max_pos_y;
+
+        auto temp = std::make_shared<TextGlyphRow>(-1, desired_height, _icon_max_pos_y);
+
+        if ((int)in_width == _texture_dimention)
+        {
+            _array_icon_row_full.push_back(temp);
+        }
+        else
+        {
+            _array_icon_row.push_back(temp);
+        }
+
+        found_row = temp.get();
+    }
+
+    VectorFloat4 uv = VectorFloat4(
+        (float)found_row->GetTextureHighestX() / (float)_texture_dimention,
+        (float)(found_row->GetTexturePosY() + in_height) / (float)_texture_dimention,
+        (float)(found_row->GetTextureHighestX() + in_width) / (float)_texture_dimention,
+        (float)found_row->GetTexturePosY() / (float)_texture_dimention
+    );
+
+    VectorFloat4 mask(1.0f, 1.0f, 1.0f, 1.0f);
+
+    // add cell to end of row
+    auto cell = std::make_shared<TextCell>(
+        VectorInt2(in_width, in_height),
+        VectorInt2(),
+        uv,
+        mask
+        );
+
+    _texture_dirty = true;
+    _texture_dirty_low = std::min(_texture_dirty_low, found_row->GetTexturePosY());
+    _texture_dirty_high = std::max(_texture_dirty_high, found_row->GetTexturePosY() + desired_height);
+
+    auto& dest_data = _texture->GetData();
+    for (uint32_t y = 0; y < in_height; ++y)
+    {
+        for (uint32_t x = 0; x < in_width; ++x)
+        {
+            for (uint32_t b = 0; b < 4; ++b)
+            {
+                const int dest_data_index = ((((found_row->GetTexturePosY() + y) * _texture_dimention) + (found_row->GetTextureHighestX() + x)) * 4) + b;
+                const int buffer_index = (((y * in_width) + x) * 4) + b;
+                dest_data[dest_data_index] = in_buffer[buffer_index];
+            }
+        }
+    }
+
+    found_row->IncrementTextureHighestX(in_width);
+    return cell;
+}
+
 void TextTexture::Update(
     DrawSystem* const in_draw_system,
     DrawSystemFrame* const in_draw_system_frame
     )
 {
-    if (false == _glyph_texture_dirty)
+    if (false == _texture_dirty)
     {
         return;
     }
-    _glyph_texture_dirty = false;
+    _texture_dirty = false;
     in_draw_system->UploadShaderResource(
         in_draw_system_frame->GetCommandList(),
-        _glyph_texture.get()
+        _texture.get()
         );
     return;
 }
@@ -204,10 +295,10 @@ void TextTexture::Update(
 
 std::shared_ptr<HeapWrapperItem> TextTexture::GetShaderViewHeapWrapperItem() const
 {
-    return _glyph_texture->GetHeapWrapperItem();
+    return _texture->GetHeapWrapperItem();
 }
 
-void TextTexture::RestGlyphUsage()
+void TextTexture::RestUsage()
 {
     _array_glyph_row.clear();
     _array_glyph_row_full.clear();
@@ -215,4 +306,8 @@ void TextTexture::RestGlyphUsage()
     _highest_pos_y[1] = 0;
     _highest_pos_y[2] = 0;
     _highest_pos_y[3] = 0;
+
+    _array_icon_row.clear();
+    _array_icon_row_full.clear();
+    _icon_max_pos_y = _texture_dimention;
 }
