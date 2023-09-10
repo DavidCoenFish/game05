@@ -7,6 +7,7 @@
 #include "common/draw_system/shader/shader_resource.h"
 #include "common/draw_system/shader/shader_resource_info.h"
 #include "common/file_system/file_system.h"
+#include "common/text/icon_font.h"
 #include "common/text/text_block.h"
 #include "common/text/text_font.h"
 #include "common/text/text_glyph_row.h"
@@ -104,7 +105,7 @@ public:
         FT_Error error;
         error = FT_Init_FreeType(&_library);
 
-        _texture = std::make_shared<TextTexture>(
+        _texture = std::make_unique<TextTexture>(
             in_draw_system,
             in_command_list
             );
@@ -152,7 +153,7 @@ public:
         FT_Done_FreeType(_library);
     }
 
-    TextFont* const MakeFont(
+    TextFont* const GetTextFont(
         const std::filesystem::path& in_font_rel_path
         )
     {
@@ -168,6 +169,15 @@ public:
         _map_path_font[in_font_rel_path] = text_face;
 
         return text_face.get();
+    }
+
+    IconFont* const GetIconFont()
+    {
+        if (nullptr == _icon_font)
+        {
+            _icon_font = std::make_unique<IconFont>(_texture.get());
+        }
+        return _icon_font.get();
     }
 
     void DrawText(
@@ -259,7 +269,8 @@ private:
     std::map<uint32_t, std::shared_ptr<TextCell>> _map_icon_cell;
 
     std::shared_ptr<Shader> _shader;
-    std::shared_ptr<TextTexture> _texture;
+    std::unique_ptr<TextTexture> _texture;
+    std::unique_ptr<IconFont> _icon_font;
 
 };
 
@@ -286,13 +297,18 @@ TextManager::~TextManager()
     // Nop
 }
 
-TextFont* const TextManager::MakeFont(
+TextFont* const TextManager::GetTextFont(
     const std::filesystem::path& in_font_rel_path
     )
 {
-    return _implementation->MakeFont(
+    return _implementation->GetTextFont(
         in_font_rel_path
         );
+}
+
+IconFont* const TextManager::GetIconFont()
+{
+    return _implementation->GetIconFont();
 }
 
 void TextManager::DrawText(
@@ -321,21 +337,6 @@ void TextManager::DrawTextRun(
         );
 }
 
-void TextManager::AddIcon(
-    const int in_icon_id,
-    const int in_width,
-    const int in_height,
-    const uint8_t* const in_buffer
-    )
-{
-    _implementation->AddIcon(
-        in_icon_id,
-        in_width,
-        in_height,
-        in_buffer
-        );
-    return;
-}
 
 // Assert if there are any live TextBlocks, clear the font/icon texture
 void TextManager::RestUsage()

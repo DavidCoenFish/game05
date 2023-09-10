@@ -57,9 +57,9 @@ public:
         FT_Done_Face(_face);
     }
 
-    void CalculateTextBounds(
+    void BuildPreVertexData(
         TextPreVertex& text_pre_vertex,
-        VectorFloat2& in_out_cursor, // allow multiple fonts to append pre vertex data
+        VectorInt2& in_out_cursor, // allow multiple fonts to append pre vertex data
         const std::string& in_string_utf8,
         const TextLocale* const in_locale_token,
         const int in_font_size,
@@ -173,7 +173,7 @@ private:
 
     void ShapeText(
         TextPreVertex& in_out_text_pre_vertex,
-        VectorFloat2& in_out_cursor, // allow multiple fonts to append pre vertex data
+        VectorInt2& in_out_cursor, // allow multiple fonts to append pre vertex data
         const std::string& in_string_utf8,
         hb_buffer_t* in_buffer,
         TMapGlyphCell& in_out_map_glyph_cell,
@@ -195,7 +195,7 @@ private:
         std::vector<unsigned int> width_line_clusert_index; 
         if (true == in_width_limit_enabled)
         {
-            float cursor_x = in_out_cursor.GetX();
+            int cursor_x = in_out_cursor.GetX();
             // Work out what line each glpyh should be on
             unsigned int current_cluster = std::numeric_limits<unsigned int>::max();// -1;
             for (unsigned int i = 0; i < glyph_count; i++) 
@@ -210,10 +210,10 @@ private:
                 }
                 else if (info.cluster != current_cluster)
                 {
-                    float trace_x = cursor_x;
+                    int trace_x = cursor_x;
                     for (unsigned int ahead = i + 0; ahead < glyph_count; ahead++) 
                     {
-                        const float x_advance = (float)glyph_pos[ahead].x_advance / 64.0f;
+                        const int x_advance = glyph_pos[ahead].x_advance / 64;
                         trace_x += x_advance;
 
                         // We want to break the line if cluster goes past in_width_limit, and we can break on the cluster
@@ -238,7 +238,7 @@ private:
 
                 if (false == start_new_line)
                 {
-                    const float x_advance = (float)glyph_pos[i].x_advance / 64.0f;
+                    const int x_advance = glyph_pos[i].x_advance / 64;
                     cursor_x += x_advance;
                 }
             }
@@ -266,8 +266,8 @@ private:
 
             hb_codepoint_t codepoint = glyph_info[i].codepoint;
 
-            const float x_offset = (float)glyph_pos[i].x_offset / 64.0f;
-            const float y_offset = (float)glyph_pos[i].y_offset / 64.0f;
+            const int x_offset = glyph_pos[i].x_offset / 64;
+            const int y_offset = glyph_pos[i].y_offset / 64;
             //float x_advance = (float)glyph_pos[i].x_advance / 64.0f;
             //float y_advance = (float)glyph_pos[i].y_advance / 64.0f;
 
@@ -283,12 +283,12 @@ private:
                     cell, 
                     in_out_cursor[0] + x_offset, 
                     in_out_cursor[1] + y_offset,
-                    (float)in_width_limit_new_line_height,
+                    in_width_limit_new_line_height,
                     in_colour
                     );
             }
-            const float x_advance = (float)slot->advance.x / 64.0f;
-            const float y_advance = (float)slot->advance.y / 64.0f;
+            const int x_advance = slot->advance.x / 64;
+            const int y_advance = slot->advance.y / 64;
 
             in_out_cursor[0] += x_advance;
             in_out_cursor[1] += y_advance;
@@ -326,9 +326,9 @@ TextFont::~TextFont()
     _implementation.reset();
 }
 
-void TextFont::CalculateTextBounds(
-    TextPreVertex& text_pre_vertex,
-    VectorFloat2& in_out_cursor, // allow multiple fonts to append pre vertex data
+void TextFont::BuildPreVertexData(
+    TextPreVertex& in_out_text_pre_vertex,
+    VectorInt2& in_out_cursor, // allow multiple fonts to append pre vertex data
     const std::string& in_string_utf8,
     const TextLocale* const in_locale_token,
     const int in_font_size,
@@ -338,8 +338,8 @@ void TextFont::CalculateTextBounds(
     const VectorFloat4& in_colour
     )
 {
-    _implementation->CalculateTextBounds(
-        text_pre_vertex, 
+    _implementation->BuildPreVertexData(
+        in_out_text_pre_vertex, 
         in_out_cursor,
         in_string_utf8,
         in_locale_token,

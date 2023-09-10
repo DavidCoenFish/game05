@@ -3,6 +3,7 @@
 #include "common/ui/ui_data/i_ui_data.h"
 
 class LocaleSystem;
+enum class LocaleISO_639_1;
 
 /*
 runs of text could be [string, locale key, icon, ...?]
@@ -29,7 +30,7 @@ public:
 
     const std::string GetString(
         LocaleSystem* const in_locale_system,
-        const std::string& in_locale
+        const LocaleISO_639_1 in_locale
         ) const;
 
 private:

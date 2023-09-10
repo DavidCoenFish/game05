@@ -9,6 +9,7 @@
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/draw_system_frame.h"
 #include "common/file_system/file_system.h"
+#include "common/locale/locale_system.h"
 #include "common/log/log.h"
 #include "common/macro.h"
 #include "common/math/vector_int2.h"
@@ -25,7 +26,6 @@
 #include "common/ui/ui_data/ui_data_string.h"
 #include "common/ui/ui_data/ui_data_template.h"
 #include "common/ui/ui_data/ui_data_text_run.h"
-#include "common/util/locale_system.h"
 #include "common/util/vector_helper.h"
 #include "common/window/window_application_param.h"
 
@@ -34,30 +34,27 @@ class UIModel : public IUIModel
 public:
     UIModel()
     {
-        _data_map["build_version"] = std::make_shared<UIDataString>(
+        auto _data_map_build_version = std::make_shared<UIDataString>(
             std::string(Build::GetBuildTime()) + " " + Build::GetBuildVersion()
             );
 
-        _data_map["build_info"] = std::make_shared<UIDataTextRun>(std::vector<UIDataTextRun::Data>({
+        auto _data_map_build_info = std::make_shared<UIDataTextRun>(std::vector<UIDataTextRun::Data>({
             UIDataTextRun::Data(Build::GetBuildHost()),
             UIDataTextRun::Data(Build::GetBuildConfiguration(), true),
             UIDataTextRun::Data(Build::GetBuildPlatform(), true)
             }));
 
-        _data_map["build_fps"] = std::make_shared<UIDataString>("0.0s");
+        auto _data_map_build_fps = std::make_shared<UIDataString>("0.0s");
 
-        _data_map["build"] = std::make_shared<UIDataContainer>(std::vector<std::shared_ptr<IUIData>>({
-            _data_map["build_fps"],
-            _data_map["build_info"],
-            _data_map["build_version"]
-            }),
-            "stack_vertical_bottom_right"
-            );
-
-        _data_map[""] = std::make_shared<UIDataContainer>(std::vector<std::shared_ptr<IUIData>>({
-            _data_map["build"]
-            }));
-
+        _data_map[""] = std::vector<std::shared_ptr<IUIData>>({
+            std::make_shared<UIDataContainer>(std::vector<std::shared_ptr<IUIData>>({
+                _data_map_build_fps,
+                _data_map_build_info,
+                _data_map_build_version
+                }),
+                "stack_vertical_bottom_right"
+                )
+            });
     }
 
     virtual ~UIModel()
@@ -65,20 +62,22 @@ public:
         // Nop
     }
 
-    virtual const IUIData* const GetData(
-        const std::string& in_key
+    virtual const bool VisitDataArray(
+        const std::string& in_key,
+        const std::function<void(const std::vector<std::shared_ptr<IUIData>>&)>& in_visitor
         ) const override
     {
         const auto found = _data_map.find(in_key);
         if (found != _data_map.end())
         {
-            return found->second.get();
+            in_visitor(found->second);
+            return true;
         }
-        return nullptr;
+        return false;
     }
 
 private:
-    std::map<std::string, std::shared_ptr<IUIData>> _data_map;
+    std::map<std::string, std::vector<std::shared_ptr<IUIData>>> _data_map;
 
 };
 

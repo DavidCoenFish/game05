@@ -27,24 +27,30 @@ public:
 
     // These methods are intentionally private, the are intended to provide default implementation, but not be called from derrived
 private:
-    // Needed to check IUIContent* was only the default type IUIContent and nothing derrived (
-    virtual const int GetClassTypeID() const override;
 
     virtual const bool GetClearBackground(
         VectorFloat4& out_clear_colour
         ) const override;
 
+    virtual void* GetSourceUIDataToken() const override;
+
+    virtual const bool UpdateHierarchy(
+        const IUIData* const in_data,
+        UIHierarchyNodeChildData& in_out_child_data,
+        const UIHierarchyNodeUpdateHierarchyParam& in_param
+        ) override;
+
     //virtual const bool GetNeedsDraw() const override;
     //virtual void SetDrawn() override;
 
-    virtual const bool UpdateHierarchy(
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& out_child_data_array,
-        const IUIData& in_data,
-        const UIHierarchyNodeUpdateHierarchyParam& in_param
-        ) const override;
+    //virtual const bool UpdateHierarchy(
+    //    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& out_child_data_array,
+    //    const IUIData& in_data,
+    //    const UIHierarchyNodeUpdateHierarchyParam& in_param
+    //    ) const override;
 
-    // Warning, returning a reference, trying to avoid copy. alternative include visitor, change id 
-    virtual const std::vector<std::shared_ptr<IUIData>>& GetArrayData() const override;
+    //// Warning, returning a reference, trying to avoid copy. alternative include visitor, change id 
+    //virtual const std::vector<std::shared_ptr<IUIData>>& GetArrayData() const override;
 
     // if we are going to use this to auto scroll text, need some way of compunicating uv. layout_data? or the ui_geometry?
     //virtual const bool Update(
@@ -63,9 +69,12 @@ private:
     */
     virtual void Draw(
         const UIManagerDrawParam& in_param,
-        UITexture* const in_texture,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
-        Shader* const in_shader
+        Shader* const in_shader,
+        UIGeometry* const in_geometry,
+        const std::shared_ptr<HeapWrapperItem>& in_heap_wrapper_item
         ) override;
+
+private:
+    void* _source_ui_data_token;
 
 };

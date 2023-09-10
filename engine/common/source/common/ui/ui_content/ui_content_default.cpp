@@ -12,6 +12,7 @@
 #include "common/ui/ui_manager.h"
 
 UIContentDefault::UIContentDefault()
+: _source_ui_data_token(nullptr)
 {
     // Nop
 }
@@ -21,92 +22,90 @@ UIContentDefault::~UIContentDefault()
     // Nop
 }
 
-const int UIContentDefault::GetClassTypeID() const
-{
-    return ClassTypeID<UIContentDefault>();
-}
-
-
 const bool UIContentDefault::GetClearBackground(
     VectorFloat4&
     ) const
 {
     return false;
 }
+//
+//// Default implementation is to clear the children, or do we add a virtual get array UIData and make children based on that?
+//const bool UIContentDefault::UpdateHierarchy(
+//    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& out_child_data_array,
+//    const IUIData&,
+//    const UIHierarchyNodeUpdateHierarchyParam& in_param
+//    ) const
+//{
+//    bool dirty = false;
+//    const std::vector<std::shared_ptr<IUIData>>& array_data = GetArrayData();
+//    const int count = (int)array_data.size();
+//    dirty = (int)out_child_data_array.size() != count;
+//    out_child_data_array.resize(count);
+//    for (int index = 0; index < count; ++index)
+//    {
+//        if (nullptr == out_child_data_array[index])
+//        {
+//            out_child_data_array[index] = std::make_shared<UIHierarchyNodeChildData>(
+//                std::make_shared<UIHierarchyNode>(),
+//                std::make_shared<UIGeometry>()
+//                );
+//        }
+//
+//        if (true == out_child_data_array[index]->_node->UpdateHierarchy(
+//            in_param,
+//            *array_data[index],
+//            true,
+//            false
+//            ))
+//        {
+//            dirty = true;
+//        }
+//    }
+//    return dirty;
+//}
+//
+//const std::vector<std::shared_ptr<IUIData>>& UIContentDefault::GetArrayData() const
+//{
+//    static std::vector<std::shared_ptr<IUIData>> s_empty;
+//    return s_empty;
+//}
+//
 
-// Default implementation is to clear the children, or do we add a virtual get array UIData and make children based on that?
+void* UIContentDefault::GetSourceUIDataToken() const
+{
+    return _source_ui_data_token;
+}
+
 const bool UIContentDefault::UpdateHierarchy(
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& out_child_data_array,
-    const IUIData&,
-    const UIHierarchyNodeUpdateHierarchyParam& in_param
-    ) const
+    const IUIData* const in_data,
+    UIHierarchyNodeChildData& , //in_out_child_data,
+    const UIHierarchyNodeUpdateHierarchyParam& //in_param
+    )
 {
     bool dirty = false;
-    const std::vector<std::shared_ptr<IUIData>>& array_data = GetArrayData();
-    const int count = (int)array_data.size();
-    dirty = (int)out_child_data_array.size() != count;
-    out_child_data_array.resize(count);
-    for (int index = 0; index < count; ++index)
+    if (_source_ui_data_token == (void*)in_data)
     {
-        if (nullptr == out_child_data_array[index])
-        {
-            out_child_data_array[index] = std::make_shared<UIHierarchyNodeChildData>(
-                std::make_shared<UIHierarchyNode>(),
-                std::make_shared<UIGeometry>()
-                );
-        }
-
-        if (true == out_child_data_array[index]->_node->UpdateHierarchy(
-            in_param,
-            *array_data[index],
-            true,
-            false
-            ))
-        {
-            dirty = true;
-        }
+        dirty = true;
+        _source_ui_data_token = (void*)in_data;
     }
     return dirty;
 }
 
-const std::vector<std::shared_ptr<IUIData>>& UIContentDefault::GetArrayData() const
-{
-    static std::vector<std::shared_ptr<IUIData>> s_empty;
-    return s_empty;
-}
-
-// Default implementation, draw each child's texture on the child's geometry to our node's texture
 void UIContentDefault::Draw(
     const UIManagerDrawParam& in_param,
-    UITexture* const in_texture,
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
-    Shader* const in_shader
+    Shader* const in_shader,
+    UIGeometry* const in_geometry,
+    const std::shared_ptr<HeapWrapperItem>& in_heap_wrapper_item // The texture resource of the node for this content
     )
 {
-    auto* render_target = in_texture->GetRenderTarget(
+    in_shader->SetShaderResourceViewHandle(0, in_heap_wrapper_item);
+    auto geometry = in_geometry->GetGeometry(
         in_param._draw_system,
         in_param._frame->GetCommandList()
         );
-    in_param._frame->SetRenderTarget(
-        render_target, 
-        in_texture->GetAllowClear()
-        );
 
-    for (auto& child_data : in_child_data_array)
-    {
-        auto* geometry = child_data->_geometry->GetGeometry(
-            in_param._draw_system,
-            in_param._frame->GetCommandList()
-            );
-        in_shader->SetShaderResourceViewHandle(
-            0, 
-            child_data->_node->GetShaderResourceHeapWrapperItem()
-            );
-        in_param._frame->SetShader(in_shader);
-        in_param._frame->Draw(geometry);
-    }
-
-    SetDrawn();
+    in_param._frame->SetShader(in_shader);
+    in_param._frame->Draw(geometry);
 
     return;
 }

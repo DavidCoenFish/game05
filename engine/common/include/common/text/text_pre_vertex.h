@@ -1,12 +1,12 @@
 #pragma once
 
+#include "common/math/vector_int2.h"
 #include "common/math/vector_int4.h"
 #include "common/math/vector_float2.h"
 #include "common/math/vector_float4.h"
 #include "common/text/text_enum.h"
 
 class TextCell;
-class VectorInt2;
 
 /*
     better to make a new TextPreVertex than add a reset?
@@ -28,11 +28,9 @@ public:
     };
 
     TextPreVertex(
-        const float _default_line_height
+        const int _default_line_height
         );
     ~TextPreVertex();
-
-    //void Reset();
 
     void Reserve(const unsigned int glyph_count);
 
@@ -52,10 +50,10 @@ public:
 
     void BuildVertexData(
         std::vector<uint8_t>& out_vertex_raw_data,
-        const int in_glyph_size, // Used for alignments MiddleEM, TopEM, BottomEM
         const VectorInt2& in_containter_size,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
-        const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
+        const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
+        const int in_em_size // Used for alignments MiddleEM, TopEM, BottomEM
         );
 
 private:
@@ -70,9 +68,9 @@ private:
     VectorInt2 _bounds;
     int _line_index;
 
-    bool _line_dirty; // pre vertex added to line, but not adjusted for max height on line
+    bool _line_dirty; // Pre vertex added to line, but not adjusted for max height on line
     VectorInt2 _line_vertical_bounds;
-    int _default_line_height; // if nothing added to the line, use this height
-    int _current_line_height; // allow for things added to the line to be taller
+    int _default_line_height; // If nothing added to the line, use this height
+    int _current_line_height; // Allow for things added to the line to be taller
 
 };

@@ -20,11 +20,6 @@ UIContentString::~UIContentString()
     return;
 }
 
-const int UIContentString::GetClassTypeID() const
-{
-    return ClassTypeID<UIContentString>();
-}
-
 const bool UIContentString::SetFont(
     TextFont& in_font, 
     const int in_font_size,
@@ -35,12 +30,26 @@ const bool UIContentString::SetFont(
 }
 
 const bool UIContentString::SetAlignment(
-    TextEnum::HorizontalLineAlignment in_horizontal, 
-    TextEnum::VerticalBlockAlignment in_vertical
+    const TextEnum::HorizontalLineAlignment in_horizontal, 
+    const TextEnum::VerticalBlockAlignment in_vertical,
+    const int in_em_size
     )
 {
-    return (_text_block->SetHorizontalLineAlignment(in_horizontal) ||
-        _text_block->SetVerticalBlockAlignment(in_vertical));
+    bool dirty = false;
+    if (true == _text_block->SetHorizontalLineAlignment(in_horizontal))
+    {
+        dirty = true;
+    }
+    if (true == _text_block->SetVerticalBlockAlignment(in_vertical))
+    {
+        dirty = true;
+    }
+    if (true == _text_block->SetEMSize(in_em_size))
+    {
+        dirty = true;
+    }
+
+    return dirty;
 }
 
 /*

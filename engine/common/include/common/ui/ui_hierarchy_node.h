@@ -44,6 +44,7 @@ struct UIHierarchyNodeChildData
         std::unique_ptr<UIHierarchyNode>& in_node,
         const VectorFloat4& in_input_screen_size = VectorFloat4()
         );
+    ~UIHierarchyNodeChildData();
 
     // Need to track if state changed, so not using GeometryGeneric
     std::unique_ptr<UIGeometry> _geometry;
@@ -107,18 +108,18 @@ public:
     std::shared_ptr<HeapWrapperItem> GetShaderResourceHeapWrapperItem() const;
 
     void AddChild(
-        const std::shared_ptr<UIHierarchyNode>& in_node,
-        DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list
+        std::unique_ptr<IUIContent>& in_content
         );
     void ClearChildren();
 
     // create/ destroy nodes to match model, make content match type from factory, update content?
     const bool UpdateHierarchy(
         const UIHierarchyNodeUpdateHierarchyParam& in_param,
-        const IUIData& in_data,
+        const std::vector<std::shared_ptr<IUIData>>* const in_array_data_or_null,
         const bool in_draw_to_texture,
-        const bool in_always_dirty
+        const bool in_always_dirty,
+        const bool in_allow_clear = false,
+        const VectorFloat4& in_clear_colour = VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f)
         );
 
     // return True if we needed to draw, ie, we have modified _texture

@@ -13,6 +13,7 @@
 #include "common/draw_system/shader/shader_pipeline_state_data.h"
 #include "common/file_system/file_system.h"
 #include "common/log/log.h"
+#include "common/locale/locale_enum.h"
 #include "common/math/angle.h"
 #include "common/math/matrix_float33.h"
 #include "common/math/quaternion_float.h"
@@ -127,10 +128,10 @@ ApplicationTestText::ApplicationTestText(
         command_list->GetCommandList(),
         in_application_param._root_path
         );
-    TextFont* const _text_face = _draw_resources->_text_manager->MakeFont(
+    TextFont* const _text_face = _draw_resources->_text_manager->GetTextFont(
         std::filesystem::path("data") / "code2000.ttf"
         );
-    auto locale = _draw_resources->_text_manager->GetLocaleToken("hi");
+    auto locale = _draw_resources->_text_manager->GetLocaleToken(LocaleISO_639_1::Hindi);
     _draw_resources->_text_block = std::make_unique<TextBlock>(
         *_text_face,
         64,

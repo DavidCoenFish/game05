@@ -76,6 +76,7 @@
     <ClCompile Include="source\common\task\i_task.cpp" />
     <ClCompile Include="source\common\task\task_window.cpp" />
     <ClCompile Include="source\common\text\icon_font.cpp" />
+    <ClCompile Include="source\common\text\i_text_run_data.cpp" />
     <ClCompile Include="source\common\text\text_block.cpp" />
     <ClCompile Include="source\common\text\text_cell.cpp" />
     <ClCompile Include="source\common\text\text_font.cpp" />
@@ -84,6 +85,8 @@
     <ClCompile Include="source\common\text\text_glyph_row.cpp" />
     <ClCompile Include="source\common\text\text_pre_vertex.cpp" />
     <ClCompile Include="source\common\text\text_run.cpp" />
+    <ClCompile Include="source\common\text\text_run_data_icon.cpp" />
+    <ClCompile Include="source\common\text\text_run_data_string.cpp" />
     <ClCompile Include="source\common\text\text_texture.cpp" />
     <ClCompile Include="source\common\ui\i_ui_model.cpp" />
     <ClCompile Include="source\common\ui\ui_content\i_ui_content.cpp" />
@@ -158,6 +161,7 @@
     <ClInclude Include="include\common\task\i_task.h" />
     <ClInclude Include="include\common\task\task_window.h" />
     <ClInclude Include="include\common\text\icon_font.h" />
+    <ClInclude Include="include\common\text\i_text_run_data.h" />
     <ClInclude Include="include\common\text\text_block.h" />
     <ClInclude Include="include\common\text\text_enum.h" />
     <ClInclude Include="include\common\text\text_font.h" />
@@ -214,6 +218,8 @@
     <ClInclude Include="source\common\text\text_cell.h" />
     <ClInclude Include="source\common\text\text_glyph_row.h" />
     <ClInclude Include="source\common\text\text_locale.h" />
+    <ClInclude Include="source\common\text\text_run_data_icon.h" />
+    <ClInclude Include="source\common\text\text_run_data_string.h" />
     <ClInclude Include="source\common\text\text_texture.h" />
     <ClInclude Include="source\common\ui\ui_geometry.h" />
     <ClInclude Include="source\common\ui\ui_root_input_state.h" />

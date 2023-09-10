@@ -28,6 +28,7 @@ public:
         const int in_width_limit,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
+        const int in_em_size,
         const VectorFloat4& in_colour
         )
         : _calculate_dirty(true)
@@ -43,6 +44,7 @@ public:
         , _width_limit(in_width_limit)
         , _horizontal_line_alignment(in_horizontal_line_alignment)
         , _vertical_block_alignment(in_vertical_block_alignment)
+        , _em_size(in_em_size)
         , _colour(in_colour)
     {
         // Nop
@@ -55,9 +57,9 @@ public:
         {
             _calculate_dirty = false;
 
-            _pre_vertex_data = std::make_unique<TextPreVertex>((float)_font_size);
-            VectorFloat2 cursor;
-            _text_font->CalculateTextBounds(
+            _pre_vertex_data = std::make_unique<TextPreVertex>(_font_size);
+            VectorInt2 cursor;
+            _text_font->BuildPreVertexData(
                 *_pre_vertex_data,
                 cursor,
                 _string_utf8,
@@ -154,7 +156,7 @@ public:
         {
             dirty = true;
             _horizontal_line_alignment = in_horizontal_line_alignment;
-            _calculate_dirty = true;
+            //_calculate_dirty = true;
             _geometry_dirty = true;
         }
         return dirty;
@@ -169,7 +171,22 @@ public:
         {
             dirty = true;
             _vertical_block_alignment = in_vertical_block_alignment;
-            _calculate_dirty = true;
+            //_calculate_dirty = true;
+            _geometry_dirty = true;
+        }
+        return dirty;
+    }
+
+    const bool SetEMSize(
+        const int in_em_size
+        )
+    {
+        bool dirty = false;
+        if (_em_size != in_em_size)
+        {
+            dirty = true;
+            _em_size = in_em_size;
+            //_calculate_dirty = true;
             _geometry_dirty = true;
         }
         return dirty;
@@ -190,7 +207,6 @@ public:
         return dirty;
     }
 
-
     const bool Set(
         TextFont& in_text_font,
         const int in_font_size,
@@ -202,6 +218,7 @@ public:
         const int in_width_limit,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
+        const int in_em_size,
         const VectorFloat4& in_colour
         )
     {
@@ -246,6 +263,12 @@ public:
         {
             dirty = true;
         }
+        if (true == SetEMSize(
+            in_em_size
+            ))
+        {
+            dirty = true;
+        }
         if (true == SetColour(
             in_colour
             ))
@@ -271,10 +294,10 @@ public:
             std::vector<uint8_t> vertex_raw_data;
             _pre_vertex_data->BuildVertexData(
                 vertex_raw_data,
-                _font_size,
                 _container_size,
                 _horizontal_line_alignment,
-                _vertical_block_alignment
+                _vertical_block_alignment,
+                _font_size
                 );
 
             if (nullptr == _geometry)
@@ -315,6 +338,7 @@ private:
     int _width_limit;
     TextEnum::HorizontalLineAlignment _horizontal_line_alignment;
     TextEnum::VerticalBlockAlignment _vertical_block_alignment;
+    int _em_size;
     VectorFloat4 _colour;
     std::unique_ptr<TextPreVertex> _pre_vertex_data;
 
@@ -331,6 +355,7 @@ TextBlock::TextBlock(
     const int in_width_limit,
     const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
     const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
+    const int in_em_size,
     const VectorFloat4& in_colour
     )
 {
@@ -345,6 +370,7 @@ TextBlock::TextBlock(
         in_width_limit,
         in_horizontal_line_alignment,
         in_vertical_block_alignment,
+        in_em_size,
         in_colour
         );
 }
@@ -422,6 +448,15 @@ const bool TextBlock::SetVerticalBlockAlignment(
         );
 }
 
+const bool TextBlock::SetEMSize(
+    const int in_em_size
+    )
+{
+    return _implementation->SetEMSize(
+        in_em_size
+        );
+}
+
 const bool TextBlock::SetColour(
     const VectorFloat4& in_colour
     )
@@ -442,6 +477,7 @@ const bool TextBlock::Set(
     const int in_width_limit,
     const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
     const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
+    const int in_em_size,
     const VectorFloat4& in_colour
     )
 {
@@ -456,6 +492,7 @@ const bool TextBlock::Set(
         in_width_limit,
         in_horizontal_line_alignment,
         in_vertical_block_alignment,
+        in_em_size,
         in_colour
         );
 }

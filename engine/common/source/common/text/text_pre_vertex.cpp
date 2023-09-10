@@ -6,17 +6,17 @@
 #include "common/util/vector_helper.h"
 
 TextPreVertex::TextPreVertex(
-    const float _default_line_height
+    const int in_default_line_height
     )
-    : _vertical_bounds(std::numeric_limits<float>::max(), -std::numeric_limits<float>::max())
-    , _line_vertical_bounds(std::numeric_limits<float>::max(), -std::numeric_limits<float>::max())
+    : _vertical_bounds(std::numeric_limits<int>::max(), -std::numeric_limits<int>::max())
+    , _line_vertical_bounds(std::numeric_limits<int>::max(), -std::numeric_limits<int>::max())
     , _bound_dirty(true)
     , _line_dirty(false)
     , _line_index(0)
-    , _default_line_height(_default_line_height)
-    , _current_line_height(0.0f)
+    , _default_line_height(in_default_line_height)
+    , _current_line_height(0)
 {
-    _horizontal_bounds.push_back(VectorFloat2(std::numeric_limits<float>::max(), -std::numeric_limits<float>::max()));
+    _horizontal_bounds.push_back(VectorInt2(std::numeric_limits<int>::max(), -std::numeric_limits<int>::max()));
 }
 
 TextPreVertex::~TextPreVertex()
@@ -31,9 +31,9 @@ void TextPreVertex::Reserve(const unsigned int glyph_count)
 
 void TextPreVertex::AddPreVertex(
     const TextCell* const in_cell,
-    const float in_pos_x,
-    const float in_pos_y,
-    const float _line_height,
+    const int in_pos_x,
+    const int in_pos_y,
+    const int _line_height,
     const VectorFloat4& _colour
     )
 {
@@ -46,9 +46,9 @@ void TextPreVertex::AddPreVertex(
     const VectorFloat4 uv = in_cell->GetUV();
     const VectorFloat4 mask = in_cell->GetMask();
 
-    const float pos_x = in_pos_x + bearing.GetX();
-    const float pos_y = in_pos_y - (width_height.GetY() - bearing.GetY());
-    const VectorFloat4 pos = VectorFloat4(
+    const int pos_x = in_pos_x + bearing.GetX();
+    const int pos_y = in_pos_y - (width_height.GetY() - bearing.GetY());
+    const VectorInt4 pos = VectorInt4(
         pos_x,
         pos_y,
         pos_x + width_height.GetX(),
@@ -68,7 +68,7 @@ void TextPreVertex::AddPreVertex(
 
     while ((int)_horizontal_bounds.size() <= _line_index)
     {
-        _horizontal_bounds.push_back(VectorFloat2(std::numeric_limits<float>::max(), -std::numeric_limits<float>::max()));
+        _horizontal_bounds.push_back(VectorInt2(std::numeric_limits<int>::max(), -std::numeric_limits<int>::max()));
     }
 
     _horizontal_bounds[_line_index][0] = std::min(_horizontal_bounds[_line_index][0], pos[0]);
@@ -78,16 +78,16 @@ void TextPreVertex::AddPreVertex(
 }
 
 void TextPreVertex::StartNewLine(
-    VectorFloat2& in_out_cursor
+    VectorInt2& in_out_cursor
     )
 {
     FinishLine();
-    in_out_cursor[0] = 0.0f;
+    in_out_cursor[0] = 0;
     in_out_cursor[1] -= _current_line_height;
 
     _line_index += 1;
-    _current_line_height = 0.0f;
-    _line_vertical_bounds = VectorFloat2(std::numeric_limits<float>::max(), -std::numeric_limits<float>::max());
+    _current_line_height = 0;
+    _line_vertical_bounds = VectorInt2(std::numeric_limits<int>::max(), -std::numeric_limits<int>::max());
 }
 
 const VectorInt2 TextPreVertex::GetBounds()
@@ -97,9 +97,9 @@ const VectorInt2 TextPreVertex::GetBounds()
     if (true == _bound_dirty)
     {
         _bound_dirty = false;
-        VectorFloat2 horizontal(
-            std::numeric_limits<float>::max(),
-            -std::numeric_limits<float>::max()
+        VectorInt2 horizontal(
+            std::numeric_limits<int>::max(),
+            -std::numeric_limits<int>::max()
             );
         for (const auto& iter : _horizontal_bounds)
         {
@@ -111,24 +111,24 @@ const VectorInt2 TextPreVertex::GetBounds()
     }
 
     return VectorInt2(
-        int(ceil(_bounds[0])),
-        int(ceil(_bounds[1]))
+        _bounds[0],
+        _bounds[1]
         );
 }
 
 void TextPreVertex::BuildVertexData(
     std::vector<uint8_t>& out_vertex_raw_data,
-    const int in_glyph_size,
     const VectorInt2& in_containter_size,
     const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
-    const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
+    const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
+    const int in_em_size // Used for alignments MiddleEM, TopEM, BottomEM
     )
 {
     FinishLine();
 
-    float vertical_delta = 0.0f;
+    int vertical_delta = 0.0f;
     const int line_count = (int)_horizontal_bounds.size();
-    std::vector<float> horizontal_line_delta(line_count);
+    std::vector<int> horizontal_line_delta(line_count);
     for (int index = 0; index < line_count; ++index)
     {
         switch (in_horizontal_line_alignment)
@@ -158,8 +158,8 @@ void TextPreVertex::BuildVertexData(
         break;
     case TextEnum::VerticalBlockAlignment::MiddleEM:
         {
-            float temp = ((float)(in_glyph_size / 2)) / ((float)in_containter_size[1]);
-            vertical_delta = in_containter_size[1] - (temp * 0.5f);
+            const int temp = (int)(round((((float)in_em_size * 0.25f)) / ((float)in_containter_size[1])));
+            vertical_delta = (in_containter_size[1] / 2) - temp;
         }
         break;
     case TextEnum::VerticalBlockAlignment::Top:
@@ -167,8 +167,7 @@ void TextPreVertex::BuildVertexData(
         break;
     case TextEnum::VerticalBlockAlignment::TopEM:
         {
-            float temp = ((float)(in_glyph_size / 2)) / ((float)in_containter_size[1]);
-            vertical_delta = in_containter_size[1] - temp;
+            vertical_delta = in_containter_size[1] - in_em_size;
         }
     break;
     }
@@ -244,7 +243,7 @@ void TextPreVertex::FinishLine()
 
     _line_dirty = false;
     // use the default line height. this could be caused by an empty line. otherwise use max line height from things on line
-    if (0.0f == _current_line_height)
+    if (0 == _current_line_height)
     {
         _current_line_height = _default_line_height;
     }

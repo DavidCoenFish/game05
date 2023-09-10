@@ -1,7 +1,7 @@
 #include "common/common_pch.h"
 #include "common/ui/ui_data/ui_data_text_run.h"
 
-#include "common/util/locale_system.h"
+#include "common/locale/locale_system.h"
 
  UIDataTextRun::Data::Data(
     const std::string& in_data,
@@ -30,7 +30,7 @@ UIDataTextRun::~UIDataTextRun()
 
 const std::string UIDataTextRun::GetString(
     LocaleSystem* const in_locale_system,
-    const std::string& in_locale
+    const LocaleISO_639_1 in_locale
     ) const
 {
     std::string result;

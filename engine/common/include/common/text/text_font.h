@@ -23,9 +23,9 @@ public:
         );
     ~TextFont();
 
-    void CalculateTextBounds(
-        TextPreVertex& text_pre_vertex,
-        VectorFloat2& in_out_cursor, // allow multiple fonts to append pre vertex data
+    void BuildPreVertexData(
+        TextPreVertex& in_out_text_pre_vertex,
+        VectorInt2& in_out_cursor, // allow multiple fonts to append pre vertex data
         const std::string& in_string_utf8,
         const TextLocale* const in_locale_token,
         const int in_font_size,

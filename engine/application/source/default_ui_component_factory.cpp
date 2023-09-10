@@ -66,14 +66,15 @@ namespace
         int FontSize = 16,
         int NewLineHeight = 16,
         TextEnum::HorizontalLineAlignment Horizontal = TextEnum::HorizontalLineAlignment::Middle,
-        TextEnum::VerticalBlockAlignment Vertical = TextEnum::VerticalBlockAlignment::MiddleEM
+        TextEnum::VerticalBlockAlignment Vertical = TextEnum::VerticalBlockAlignment::MiddleEM,
+        int EMSize = 16
         >
     const bool FactoryString(
         std::unique_ptr<IUIContent>& in_out_content,
         const UIContentFactoryParam& in_param
         )
     {
-        auto font = in_param._text_manager->MakeFont(GetPath());
+        auto font = in_param._text_manager->GetTextFont(GetPath());
 
         UIContentString* string = dynamic_cast<UIContentString*>(in_out_content.get());
         bool dirty = false;
@@ -102,7 +103,7 @@ namespace
                 dirty = true;
             }
 
-            if (true == string->SetAlignment(Horizontal, Vertical))
+            if (true == string->SetAlignment(Horizontal, Vertical, EMSize))
             {
                 dirty = true;
             }

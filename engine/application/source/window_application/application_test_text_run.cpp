@@ -127,7 +127,7 @@ ApplicationTestTextRun::ApplicationTestTextRun(
         command_list->GetCommandList(),
         in_application_param._root_path
         );
-    TextFont* const _text_face = _draw_resources->_text_manager->MakeFont(
+    TextFont* const _text_face = _draw_resources->_text_manager->GetTextFont(
         std::filesystem::path("data") / "code2000.ttf"
         );
 #if 0
@@ -176,8 +176,8 @@ ApplicationTestTextRun::ApplicationTestTextRun(
             )
         });
 #else
-    const std::vector<std::shared_ptr<TextRunData>> text_run_array({
-        std::make_shared<TextRunData>(
+    const std::vector<std::shared_ptr<ITextRunData>> text_run_array({
+        TextRun::MakeTextRunDataString(
             "Red",
             nullptr,
             _text_face,
@@ -185,7 +185,7 @@ ApplicationTestTextRun::ApplicationTestTextRun(
             72,
             VectorFloat4(1.0f, 0.0f, 0.0f, 1.0f)
             ),
-        std::make_shared<TextRunData>(
+        TextRun::MakeTextRunDataString(
             " Green",
             nullptr,
             _text_face,
@@ -193,7 +193,7 @@ ApplicationTestTextRun::ApplicationTestTextRun(
             72,
             VectorFloat4(0.0f, 1.0f, 0.0f, 1.0f)
             ),
-        std::make_shared<TextRunData>(
+        TextRun::MakeTextRunDataString(
             " Blue\n",
             nullptr,
             _text_face,
@@ -201,35 +201,35 @@ ApplicationTestTextRun::ApplicationTestTextRun(
             72,
             VectorFloat4(0.0f, 0.0f, 1.0f, 1.0f)
             ),
-        std::make_shared<TextRunData>(
+        TextRun::MakeTextRunDataString(
             "Size64",
             nullptr,
             _text_face,
             64,
             72
             ),
-        std::make_shared<TextRunData>(
+        TextRun::MakeTextRunDataString(
             " Size32",
             nullptr,
             _text_face,
             32,
             40
             ),
-        std::make_shared<TextRunData>(
+        TextRun::MakeTextRunDataString(
             " Size24",
             nullptr,
             _text_face,
             24,
             32
             ),
-        std::make_shared<TextRunData>(
+        TextRun::MakeTextRunDataString(
             " Size16\n",
             nullptr,
             _text_face,
             16,
             24
             ),
-        std::make_shared<TextRunData>(
+        TextRun::MakeTextRunDataString(
             "Translucent",
             nullptr,
             _text_face,

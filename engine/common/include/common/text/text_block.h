@@ -30,6 +30,7 @@ public:
         const int in_width_limit = 0,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment = TextEnum::HorizontalLineAlignment::Left,
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment = TextEnum::VerticalBlockAlignment::Top,
+        const int in_em_size = 0,
         const VectorFloat4& in_colour = VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f)
         );
 
@@ -60,6 +61,9 @@ public:
     const bool SetVerticalBlockAlignment(
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
         );
+    const bool SetEMSize(
+        const int in_em_size
+        );
     const bool SetColour(
         const VectorFloat4& in_colour
         );
@@ -75,6 +79,7 @@ public:
         const int in_width_limit,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
+        const int in_em_size,
         const VectorFloat4& in_colour
         );
 

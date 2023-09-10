@@ -1,6 +1,7 @@
 #include "application_pch.h"
 #include "default_locale.h"
-#include "common/util/locale_system.h"
+#include "common/locale/locale_enum.h"
+#include "common/locale/locale_system.h"
 
 void DefaultLocale::Populate(
     LocaleSystem& in_locale_system
@@ -8,7 +9,8 @@ void DefaultLocale::Populate(
 {
     // en
     {
-        in_locale_system.Append("en",
+        in_locale_system.Append(
+            LocaleISO_639_1::English,
             std::vector<LocaleSystem::Data>({
                 {"en","English"},
                 {"es","Spanish"},
@@ -20,7 +22,7 @@ void DefaultLocale::Populate(
                 {"ja","Japanese"},
                 {"pa","Punjabi"},
                 {"de","German"},
-                {"jw","Javanese"},
+                {"jv","Javanese"},
                 {"zh-cn","Chinese Simplified"},
                 {"zh-tw","Chinese Traditional"},
                 {"id","Indonesian"},
@@ -38,7 +40,8 @@ void DefaultLocale::Populate(
 
     // es
     {
-        in_locale_system.Append("es",
+        in_locale_system.Append(
+            LocaleISO_639_1::Spanish,
             std::vector<LocaleSystem::Data>({
                 {"en","Ingl""\xc3""\xa9""s"},
                 {"es","Espa""\xc3""\xb1""ol"},
@@ -50,7 +53,7 @@ void DefaultLocale::Populate(
                 {"ja","japon""\xc3""\xa9""s"},
                 {"pa","punjabi"},
                 {"de","Alem""\xc3""\xa1""n"},
-                {"jw","javan""\xc3""\xa9""s"},
+                {"jv","javan""\xc3""\xa9""s"},
                 {"zh-cn","Chino simplificado"},
                 {"zh-tw","Chino tradicional"},
                 {"id","indonesio"},
@@ -68,7 +71,8 @@ void DefaultLocale::Populate(
 
     // hi
     {
-        in_locale_system.Append("hi",
+        in_locale_system.Append(
+            LocaleISO_639_1::Hindi,
             std::vector<LocaleSystem::Data>({
                 {"en","\xe0""\xa4""\x85""\xe0""\xa4""\x82""\xe0""\xa4""\x97""\xe0""\xa5""\x8d""\xe0""\xa4""\xb0""\xe0""\xa5""\x87""\xe0""\xa4""\x9c""\xe0""\xa4""\xbc""\xe0""\xa5""\x80"},
                 {"es","\xe0""\xa4""\xb8""\xe0""\xa5""\x8d""\xe0""\xa4""\xaa""\xe0""\xa5""\x88""\xe0""\xa4""\xa8""\xe0""\xa4""\xbf""\xe0""\xa4""\xb6"},
@@ -80,7 +84,7 @@ void DefaultLocale::Populate(
                 {"ja","\xe0""\xa4""\x9c""\xe0""\xa4""\xbe""\xe0""\xa4""\xaa""\xe0""\xa4""\xbe""\xe0""\xa4""\xa8""\xe0""\xa5""\x80"},
                 {"pa","\xe0""\xa4""\xaa""\xe0""\xa4""\x82""\xe0""\xa4""\x9c""\xe0""\xa4""\xbe""\xe0""\xa4""\xac""\xe0""\xa5""\x80"},
                 {"de","\xe0""\xa4""\x9c""\xe0""\xa4""\xb0""\xe0""\xa5""\x8d""\xe0""\xa4""\xae""\xe0""\xa4""\xa8"},
-                {"jw","\xe0""\xa4""\x9c""\xe0""\xa4""\xbe""\xe0""\xa4""\xb5""\xe0""\xa4""\xbe""\xe0""\xa4""\xa8""\xe0""\xa5""\x80""\xe0""\xa4""\xb8"},
+                {"jv","\xe0""\xa4""\x9c""\xe0""\xa4""\xbe""\xe0""\xa4""\xb5""\xe0""\xa4""\xbe""\xe0""\xa4""\xa8""\xe0""\xa5""\x80""\xe0""\xa4""\xb8"},
                 {"zh-cn","\xe0""\xa4""\xb8""\xe0""\xa4""\xb0""\xe0""\xa4""\xb2""\xe0""\xa5""\x80""\xe0""\xa4""\x95""\xe0""\xa5""\x83""\xe0""\xa4""\xa4"" ""\xe0""\xa4""\x9a""\xe0""\xa5""\x80""\xe0""\xa4""\xa8""\xe0""\xa5""\x80"},
                 {"zh-tw","\xe0""\xa4""\x9a""\xe0""\xa5""\x80""\xe0""\xa4""\xa8""\xe0""\xa5""\x80"" ""\xe0""\xa4""\xaa""\xe0""\xa4""\xbe""\xe0""\xa4""\xb0""\xe0""\xa4""\x82""\xe0""\xa4""\xaa""\xe0""\xa4""\xb0""\xe0""\xa4""\xbf""\xe0""\xa4""\x95"},
                 {"id","\xe0""\xa4""\x87""\xe0""\xa4""\xa8""\xe0""\xa5""\x8d""\xe0""\xa4""\xa1""\xe0""\xa5""\x8b""\xe0""\xa4""\xa8""\xe0""\xa5""\x87""\xe0""\xa4""\xb6""\xe0""\xa4""\xbf""\xe0""\xa4""\xaf""\xe0""\xa4""\xbe""\xe0""\xa4""\x88"},
@@ -98,7 +102,8 @@ void DefaultLocale::Populate(
 
     // ar
     {
-        in_locale_system.Append("ar",
+        in_locale_system.Append(
+            LocaleISO_639_1::Arabic,
             std::vector<LocaleSystem::Data>({
                 {"en","\xd8""\xa5""\xd9""\x86""\xd8""\xac""\xd9""\x84""\xd9""\x8a""\xd8""\xb2""\xd9""\x8a"},
                 {"es","\xd8""\xa7""\xd9""\x84""\xd8""\xa3""\xd8""\xb3""\xd8""\xa8""\xd8""\xa7""\xd9""\x86""\xd9""\x8a""\xd8""\xa9"},
@@ -110,7 +115,7 @@ void DefaultLocale::Populate(
                 {"ja","\xd8""\xa7""\xd9""\x84""\xd9""\x8a""\xd8""\xa7""\xd8""\xa8""\xd8""\xa7""\xd9""\x86""\xd9""\x8a""\xd8""\xa9"},
                 {"pa","\xd8""\xa7""\xd9""\x84""\xd8""\xa8""\xd9""\x86""\xd8""\xac""\xd8""\xa7""\xd8""\xa8""\xd9""\x8a""\xd8""\xa9"},
                 {"de","\xd8""\xa3""\xd9""\x84""\xd9""\x85""\xd8""\xa7""\xd9""\x86""\xd9""\x8a""\xd8""\xa9"},
-                {"jw","\xd8""\xa7""\xd9""\x84""\xd8""\xac""\xd8""\xa7""\xd9""\x88""\xd9""\x8a""\xd8""\xa9"},
+                {"jv","\xd8""\xa7""\xd9""\x84""\xd8""\xac""\xd8""\xa7""\xd9""\x88""\xd9""\x8a""\xd8""\xa9"},
                 {"zh-cn","\xd8""\xa7""\xd9""\x84""\xd8""\xb5""\xd9""\x8a""\xd9""\x86""\xd9""\x8a""\xd8""\xa9"" ""\xd8""\xa7""\xd9""\x84""\xd9""\x85""\xd8""\xa8""\xd8""\xb3""\xd8""\xb7""\xd8""\xa9"},
                 {"zh-tw","\xd8""\xaa""\xd9""\x82""\xd8""\xa7""\xd9""\x84""\xd9""\x8a""\xd8""\xaf"" ""\xd8""\xb5""\xd9""\x8a""\xd9""\x86""\xd9""\x8a""\xd8""\xa9"},
                 {"id","\xd8""\xa5""\xd9""\x86""\xd8""\xaf""\xd9""\x88""\xd9""\x86""\xd9""\x8a""\xd8""\xb3""\xd9""\x8a"},
@@ -128,7 +133,8 @@ void DefaultLocale::Populate(
 
     // pt
     {
-        in_locale_system.Append("pt",
+        in_locale_system.Append(
+            LocaleISO_639_1::Portuguese,
             std::vector<LocaleSystem::Data>({
                 {"en","Ingl""\xc3""\xaa""s"},
                 {"es","Espanhol"},
@@ -140,7 +146,7 @@ void DefaultLocale::Populate(
                 {"ja","japon""\xc3""\xaa""s"},
                 {"pa","Punjabi"},
                 {"de","Alem""\xc3""\xa3""o"},
-                {"jw","Javan""\xc3""\xaa""s"},
+                {"jv","Javan""\xc3""\xaa""s"},
                 {"zh-cn","Chin""\xc3""\xaa""s simplificado"},
                 {"zh-tw","Chin""\xc3""\xaa""s tradicional"},
                 {"id","indon""\xc3""\xa9""sio"},
@@ -158,7 +164,8 @@ void DefaultLocale::Populate(
 
     // bn
     {
-        in_locale_system.Append("bn",
+        in_locale_system.Append(
+            LocaleISO_639_1::Bengali,
             std::vector<LocaleSystem::Data>({
                 {"en","\xe0""\xa6""\x87""\xe0""\xa6""\x82""\xe0""\xa6""\xb0""\xe0""\xa7""\x87""\xe0""\xa6""\x9c""\xe0""\xa6""\xbf"},
                 {"es","\xe0""\xa6""\xb8""\xe0""\xa7""\x8d""\xe0""\xa6""\xaa""\xe0""\xa7""\x87""\xe0""\xa6""\xa8""\xe0""\xa7""\x80""\xe0""\xa6""\xaf""\xe0""\xa6""\xbc"},
@@ -170,7 +177,7 @@ void DefaultLocale::Populate(
                 {"ja","\xe0""\xa6""\x9c""\xe0""\xa6""\xbe""\xe0""\xa6""\xaa""\xe0""\xa6""\xbe""\xe0""\xa6""\xa8""\xe0""\xa6""\xbf"},
                 {"pa","\xe0""\xa6""\xaa""\xe0""\xa6""\xbe""\xe0""\xa6""\x9e""\xe0""\xa7""\x8d""\xe0""\xa6""\x9c""\xe0""\xa6""\xbe""\xe0""\xa6""\xac""\xe0""\xa6""\xbf"},
                 {"de","\xe0""\xa6""\x9c""\xe0""\xa6""\xbe""\xe0""\xa6""\xb0""\xe0""\xa7""\x8d""\xe0""\xa6""\xae""\xe0""\xa6""\xbe""\xe0""\xa6""\xa8"},
-                {"jw","\xe0""\xa6""\x9c""\xe0""\xa6""\xbe""\xe0""\xa6""\xad""\xe0""\xa6""\xbe""\xe0""\xa6""\xa8""\xe0""\xa6""\xbf""\xe0""\xa6""\x9c"},
+                {"jv","\xe0""\xa6""\x9c""\xe0""\xa6""\xbe""\xe0""\xa6""\xad""\xe0""\xa6""\xbe""\xe0""\xa6""\xa8""\xe0""\xa6""\xbf""\xe0""\xa6""\x9c"},
                 {"zh-cn","\xe0""\xa6""\xb8""\xe0""\xa6""\xb0""\xe0""\xa6""\xb2""\xe0""\xa7""\x80""\xe0""\xa6""\x95""\xe0""\xa7""\x83""\xe0""\xa6""\xa4"" ""\xe0""\xa6""\x9a""\xe0""\xa7""\x80""\xe0""\xa6""\xa8""\xe0""\xa6""\xbe"},
                 {"zh-tw","\xe0""\xa6""\xaa""\xe0""\xa7""\x8d""\xe0""\xa6""\xb0""\xe0""\xa6""\xa5""\xe0""\xa6""\xbe""\xe0""\xa6""\x97""\xe0""\xa6""\xa4"" ""\xe0""\xa6""\x9a""\xe0""\xa7""\x80""\xe0""\xa6""\xa8""\xe0""\xa6""\xbe"},
                 {"id","\xe0""\xa6""\x87""\xe0""\xa6""\xa8""\xe0""\xa7""\x8d""\xe0""\xa6""\xa6""\xe0""\xa7""\x8b""\xe0""\xa6""\xa8""\xe0""\xa7""\x87""\xe0""\xa6""\xb6""\xe0""\xa6""\xbf""\xe0""\xa6""\xaf""\xe0""\xa6""\xbc""\xe0""\xa6""\xbe""\xe0""\xa6""\xa8"},
@@ -188,7 +195,8 @@ void DefaultLocale::Populate(
 
     // ru
     {
-        in_locale_system.Append("ru",
+        in_locale_system.Append(
+            LocaleISO_639_1::Russian,
             std::vector<LocaleSystem::Data>({
                 {"en","\xd0""\x90""\xd0""\xbd""\xd0""\xb3""\xd0""\xbb""\xd0""\xb8""\xd0""\xb9""\xd1""\x81""\xd0""\xba""\xd0""\xb8""\xd0""\xb9"},
                 {"es","\xd0""\xb8""\xd1""\x81""\xd0""\xbf""\xd0""\xb0""\xd0""\xbd""\xd1""\x81""\xd0""\xba""\xd0""\xb8""\xd0""\xb9"},
@@ -200,7 +208,7 @@ void DefaultLocale::Populate(
                 {"ja","\xd0""\xaf""\xd0""\xbf""\xd0""\xbe""\xd0""\xbd""\xd1""\x81""\xd0""\xba""\xd0""\xb8""\xd0""\xb9"},
                 {"pa","\xd0""\x9f""\xd0""\xb5""\xd0""\xbd""\xd0""\xb4""\xd0""\xb6""\xd0""\xb0""\xd0""\xb1""\xd0""\xb8"},
                 {"de","\xd0""\x9d""\xd0""\xb5""\xd0""\xbc""\xd0""\xb5""\xd1""\x86""\xd0""\xba""\xd0""\xb8""\xd0""\xb9"},
-                {"jw","\xd0""\xaf""\xd0""\xb2""\xd0""\xb0""\xd0""\xbd""\xd1""\x81""\xd0""\xba""\xd0""\xb8""\xd0""\xb9"},
+                {"jv","\xd0""\xaf""\xd0""\xb2""\xd0""\xb0""\xd0""\xbd""\xd1""\x81""\xd0""\xba""\xd0""\xb8""\xd0""\xb9"},
                 {"zh-cn","\xd0""\x9a""\xd0""\xb8""\xd1""\x82""\xd0""\xb0""\xd0""\xb9""\xd1""\x81""\xd0""\xba""\xd0""\xb8""\xd0""\xb9"" ""\xd1""\x83""\xd0""\xbf""\xd1""\x80""\xd0""\xbe""\xd1""\x89""\xd0""\xb5""\xd0""\xbd""\xd0""\xbd""\xd1""\x8b""\xd0""\xb9"},
                 {"zh-tw","\xd0""\x9a""\xd0""\xb8""\xd1""\x82""\xd0""\xb0""\xd0""\xb9""\xd1""\x81""\xd0""\xba""\xd0""\xb8""\xd0""\xb9"" ""\xd1""\x82""\xd1""\x80""\xd0""\xb0""\xd0""\xb4""\xd0""\xb8""\xd1""\x86""\xd0""\xb8""\xd0""\xbe""\xd0""\xbd""\xd0""\xbd""\xd1""\x8b""\xd0""\xb9"},
                 {"id","\xd0""\xb8""\xd0""\xbd""\xd0""\xb4""\xd0""\xbe""\xd0""\xbd""\xd0""\xb5""\xd0""\xb7""\xd0""\xb8""\xd0""\xb9""\xd1""\x81""\xd0""\xba""\xd0""\xb8""\xd0""\xb9"},
@@ -218,7 +226,8 @@ void DefaultLocale::Populate(
 
     // ja
     {
-        in_locale_system.Append("ja",
+        in_locale_system.Append(
+            LocaleISO_639_1::Japanese,
             std::vector<LocaleSystem::Data>({
                 {"en","\xe8""\x8b""\xb1""\xe8""\xaa""\x9e"},
                 {"es","\xe3""\x82""\xb9""\xe3""\x83""\x9a""\xe3""\x82""\xa4""\xe3""\x83""\xb3""\xe8""\xaa""\x9e"},
@@ -230,7 +239,7 @@ void DefaultLocale::Populate(
                 {"ja","\xe6""\x97""\xa5""\xe6""\x9c""\xac""\xe8""\xaa""\x9e"},
                 {"pa","\xe3""\x83""\x91""\xe3""\x83""\xb3""\xe3""\x82""\xb8""\xe3""\x83""\xa3""\xe3""\x83""\x96"},
                 {"de","\xe3""\x83""\x89""\xe3""\x82""\xa4""\xe3""\x83""\x84""\xe4""\xba""\xba"},
-                {"jw","Javanese"},
+                {"jv","Javanese"},
                 {"zh-cn","\xe4""\xb8""\xad""\xe5""\x9b""\xbd""\xe8""\xaa""\x9e""\xef""\xbc""\x88""\xe7""\xb0""\xa1""\xe4""\xbd""\x93""\xe5""\xad""\x97"},
                 {"zh-tw","\xe4""\xb8""\xad""\xe5""\x9b""\xbd""\xe3""\x81""\xae""\xe4""\xbc""\x9d""\xe7""\xb5""\xb1""\xe7""\x9a""\x84""\xe3""\x81""\xaa"},
                 {"id","\xe3""\x82""\xa4""\xe3""\x83""\xb3""\xe3""\x83""\x89""\xe3""\x83""\x8d""\xe3""\x82""\xb7""\xe3""\x82""\xa2""\xe8""\xaa""\x9e"},
@@ -248,7 +257,8 @@ void DefaultLocale::Populate(
 
     // pa
     {
-        in_locale_system.Append("pa",
+        in_locale_system.Append(
+            LocaleISO_639_1::Punjabi,
             std::vector<LocaleSystem::Data>({
                 {"en","\xe0""\xa8""\x85""\xe0""\xa9""\xb0""\xe0""\xa8""\x97""\xe0""\xa8""\xb0""\xe0""\xa9""\x87""\xe0""\xa8""\x9c""\xe0""\xa8""\xbc""\xe0""\xa9""\x80"},
                 {"es","\xe0""\xa8""\xb8""\xe0""\xa8""\xaa""\xe0""\xa9""\x88""\xe0""\xa8""\xa8""\xe0""\xa8""\xbf""\xe0""\xa8""\xb8""\xe0""\xa8""\xbc"},
@@ -260,7 +270,7 @@ void DefaultLocale::Populate(
                 {"ja","\xe0""\xa8""\x9c""\xe0""\xa8""\xaa""\xe0""\xa8""\xbe""\xe0""\xa8""\xa8""\xe0""\xa9""\x80"},
                 {"pa","\xe0""\xa8""\xaa""\xe0""\xa9""\xb0""\xe0""\xa8""\x9c""\xe0""\xa8""\xbe""\xe0""\xa8""\xac""\xe0""\xa9""\x80"},
                 {"de","\xe0""\xa8""\x9c""\xe0""\xa8""\xb0""\xe0""\xa8""\xae""\xe0""\xa8""\xa8"},
-                {"jw","\xe0""\xa8""\x9c""\xe0""\xa8""\xbe""\xe0""\xa8""\xb5""\xe0""\xa8""\xa8""\xe0""\xa9""\x80""\xe0""\xa8""\xb8"},
+                {"jv","\xe0""\xa8""\x9c""\xe0""\xa8""\xbe""\xe0""\xa8""\xb5""\xe0""\xa8""\xa8""\xe0""\xa9""\x80""\xe0""\xa8""\xb8"},
                 {"zh-cn","\xe0""\xa8""\x9a""\xe0""\xa9""\x80""\xe0""\xa8""\xa8""\xe0""\xa9""\x80"" ""\xe0""\xa8""\xb8""\xe0""\xa8""\xb0""\xe0""\xa8""\xb2""\xe0""\xa9""\x80""\xe0""\xa8""\x95""\xe0""\xa9""\x8d""\xe0""\xa8""\xb0""\xe0""\xa8""\xbf""\xe0""\xa8""\xa4"},
                 {"zh-tw","\xe0""\xa8""\x9a""\xe0""\xa9""\x80""\xe0""\xa8""\xa8""\xe0""\xa9""\x80"" ""\xe0""\xa8""\xb0""\xe0""\xa8""\xb5""\xe0""\xa8""\xbe""\xe0""\xa8""\x87""\xe0""\xa8""\xa4""\xe0""\xa9""\x80"},
                 {"id","\xe0""\xa8""\x87""\xe0""\xa9""\xb0""\xe0""\xa8""\xa1""\xe0""\xa9""\x8b""\xe0""\xa8""\xa8""\xe0""\xa9""\x87""\xe0""\xa8""\xb8""\xe0""\xa8""\xbc""\xe0""\xa9""\x80""\xe0""\xa8""\x86""\xe0""\xa8""\x88"},
@@ -278,7 +288,8 @@ void DefaultLocale::Populate(
 
     // de
     {
-        in_locale_system.Append("de",
+        in_locale_system.Append(
+            LocaleISO_639_1::German,
             std::vector<LocaleSystem::Data>({
                 {"en","Englisch"},
                 {"es","Spanisch"},
@@ -290,7 +301,7 @@ void DefaultLocale::Populate(
                 {"ja","japanisch"},
                 {"pa","Punjabi"},
                 {"de","Deutsch"},
-                {"jw","Javaner"},
+                {"jv","Javaner"},
                 {"zh-cn","Vereinfachtes Chinesisch"},
                 {"zh-tw","Chinesische Tradition"},
                 {"id","Indonesisch"},
@@ -306,9 +317,10 @@ void DefaultLocale::Populate(
                 }));
     }
 
-    // jw
+    // jv
     {
-        in_locale_system.Append("jw",
+        in_locale_system.Append(
+            LocaleISO_639_1::Javanese,
             std::vector<LocaleSystem::Data>({
                 {"en","Inggris"},
                 {"es","Spanyol"},
@@ -320,7 +332,7 @@ void DefaultLocale::Populate(
                 {"ja","Jepang"},
                 {"pa","Punjabi"},
                 {"de","Jerman"},
-                {"jw","Jawa"},
+                {"jv","Jawa"},
                 {"zh-cn","Cina Sederhana"},
                 {"zh-tw","Tradisional Tionghoa"},
                 {"id","Indonesia"},
@@ -338,7 +350,8 @@ void DefaultLocale::Populate(
 
     // zh-cn
     {
-        in_locale_system.Append("zh-cn",
+        in_locale_system.Append(
+            LocaleISO_639_1::Chinese_Peoples_Republic_of_China,
             std::vector<LocaleSystem::Data>({
                 {"en","\xe8""\x8b""\xb1""\xe8""\xaf""\xad"},
                 {"es","\xe8""\xa5""\xbf""\xe7""\x8f""\xad""\xe7""\x89""\x99""\xe8""\xaf""\xad"},
@@ -350,7 +363,7 @@ void DefaultLocale::Populate(
                 {"ja","\xe6""\x97""\xa5""\xe6""\x9c""\xac""\xe4""\xba""\xba"},
                 {"pa","\xe6""\x97""\x81""\xe9""\x81""\xae""\xe6""\x99""\xae"},
                 {"de","\xe5""\xbe""\xb7""\xe8""\xaf""\xad"},
-                {"jw","\xe7""\x88""\xaa""\xe5""\x93""\x87""\xe4""\xba""\xba"},
+                {"jv","\xe7""\x88""\xaa""\xe5""\x93""\x87""\xe4""\xba""\xba"},
                 {"zh-cn","\xe7""\xae""\x80""\xe4""\xbd""\x93""\xe4""\xb8""\xad""\xe6""\x96""\x87"},
                 {"zh-tw","\xe4""\xb8""\xad""\xe5""\x9b""\xbd""\xe4""\xbc""\xa0""\xe7""\xbb""\x9f""\xe7""\x9a""\x84"},
                 {"id","\xe5""\x8d""\xb0""\xe5""\xba""\xa6""\xe5""\xb0""\xbc""\xe8""\xa5""\xbf""\xe4""\xba""\x9a"},
@@ -368,7 +381,8 @@ void DefaultLocale::Populate(
 
     // zh-tw
     {
-        in_locale_system.Append("zh-tw",
+        in_locale_system.Append(
+            LocaleISO_639_1::Chinese_Taiwan,
             std::vector<LocaleSystem::Data>({
                 {"en","\xe8""\x8b""\xb1""\xe8""\xaa""\x9e"},
                 {"es","\xe8""\xa5""\xbf""\xe7""\x8f""\xad""\xe7""\x89""\x99""\xe8""\xaa""\x9e"},
@@ -380,7 +394,7 @@ void DefaultLocale::Populate(
                 {"ja","\xe6""\x97""\xa5""\xe6""\x9c""\xac""\xe4""\xba""\xba"},
                 {"pa","\xe6""\x97""\x81""\xe9""\x81""\xae""\xe6""\x99""\xae"},
                 {"de","\xe5""\xbe""\xb7""\xe8""\xaa""\x9e"},
-                {"jw","\xe7""\x88""\xaa""\xe5""\x93""\x87""\xe4""\xba""\xba"},
+                {"jv","\xe7""\x88""\xaa""\xe5""\x93""\x87""\xe4""\xba""\xba"},
                 {"zh-cn","\xe7""\xb0""\xa1""\xe9""\xab""\x94""\xe4""\xb8""\xad""\xe6""\x96""\x87"},
                 {"zh-tw","\xe4""\xb8""\xad""\xe5""\x9c""\x8b""\xe5""\x82""\xb3""\xe7""\xb5""\xb1""\xe7""\x9a""\x84"},
                 {"id","\xe5""\x8d""\xb0""\xe5""\xba""\xa6""\xe5""\xb0""\xbc""\xe8""\xa5""\xbf""\xe4""\xba""\x9e"},
@@ -398,7 +412,8 @@ void DefaultLocale::Populate(
 
     // id
     {
-        in_locale_system.Append("id",
+        in_locale_system.Append(
+            LocaleISO_639_1::Indonesian,
             std::vector<LocaleSystem::Data>({
                 {"en","Bahasa inggris"},
                 {"es","Orang Spanyol"},
@@ -410,7 +425,7 @@ void DefaultLocale::Populate(
                 {"ja","Jepang"},
                 {"pa","Punjabi"},
                 {"de","Jerman"},
-                {"jw","Jawa"},
+                {"jv","Jawa"},
                 {"zh-cn","Bahasa Tiongkok yang disederhanakan"},
                 {"zh-tw","Cina tradisional"},
                 {"id","bahasa Indonesia"},
@@ -428,7 +443,8 @@ void DefaultLocale::Populate(
 
     // te
     {
-        in_locale_system.Append("te",
+        in_locale_system.Append(
+            LocaleISO_639_1::Telugu,
             std::vector<LocaleSystem::Data>({
                 {"en","\xe0""\xb0""\x86""\xe0""\xb0""\x82""\xe0""\xb0""\x97""\xe0""\xb1""\x8d""\xe0""\xb0""\xb2"},
                 {"es","\xe0""\xb0""\xb8""\xe0""\xb1""\x8d""\xe0""\xb0""\xaa""\xe0""\xb0""\xbe""\xe0""\xb0""\xa8""\xe0""\xb0""\xbf""\xe0""\xb0""\xb7""\xe0""\xb1""\x8d"},
@@ -440,7 +456,7 @@ void DefaultLocale::Populate(
                 {"ja","\xe0""\xb0""\x9c""\xe0""\xb0""\xaa""\xe0""\xb0""\xa8""\xe0""\xb1""\x80""\xe0""\xb0""\xb8""\xe0""\xb1""\x8d"},
                 {"pa","\xe0""\xb0""\xaa""\xe0""\xb0""\x82""\xe0""\xb0""\x9c""\xe0""\xb0""\xbe""\xe0""\xb0""\xac""\xe0""\xb1""\x80"},
                 {"de","\xe0""\xb0""\x9c""\xe0""\xb0""\xb0""\xe0""\xb1""\x8d""\xe0""\xb0""\xae""\xe0""\xb0""\xa8""\xe0""\xb1""\x8d"},
-                {"jw","\xe0""\xb0""\x9c""\xe0""\xb0""\xbe""\xe0""\xb0""\xb5""\xe0""\xb0""\xbe""\xe0""\xb0""\xa8""\xe0""\xb1""\x80""\xe0""\xb0""\xb8""\xe0""\xb1""\x8d"},
+                {"jv","\xe0""\xb0""\x9c""\xe0""\xb0""\xbe""\xe0""\xb0""\xb5""\xe0""\xb0""\xbe""\xe0""\xb0""\xa8""\xe0""\xb1""\x80""\xe0""\xb0""\xb8""\xe0""\xb1""\x8d"},
                 {"zh-cn","\xe0""\xb0""\xb8""\xe0""\xb1""\x81""\xe0""\xb0""\xb2""\xe0""\xb0""\xad""\xe0""\xb0""\xae""\xe0""\xb1""\x86""\xe0""\xb1""\x96""\xe0""\xb0""\xa8"" ""\xe0""\xb0""\x9a""\xe0""\xb1""\x86""\xe0""\xb1""\x96""\xe0""\xb0""\xa8""\xe0""\xb0""\xbe"" ""\xe0""\xb0""\xad""\xe0""\xb0""\xbe""\xe0""\xb0""\xb7"},
                 {"zh-tw","\xe0""\xb0""\x9a""\xe0""\xb1""\x88""\xe0""\xb0""\xa8""\xe0""\xb1""\x80""\xe0""\xb0""\xb8""\xe0""\xb1""\x8d"" ""\xe0""\xb0""\xb8""\xe0""\xb0""\xbe""\xe0""\xb0""\x82""\xe0""\xb0""\xaa""\xe0""\xb1""\x8d""\xe0""\xb0""\xb0""\xe0""\xb0""\xa6""\xe0""\xb0""\xbe""\xe0""\xb0""\xaf"},
                 {"id","\xe0""\xb0""\x87""\xe0""\xb0""\x82""\xe0""\xb0""\xa1""\xe0""\xb1""\x8b""\xe0""\xb0""\xa8""\xe0""\xb1""\x87""\xe0""\xb0""\xb7""\xe0""\xb0""\xbf""\xe0""\xb0""\xaf""\xe0""\xb0""\xbe"},
@@ -458,7 +474,8 @@ void DefaultLocale::Populate(
 
     // vi
     {
-        in_locale_system.Append("vi",
+        in_locale_system.Append(
+            LocaleISO_639_1::Vietnamese,
             std::vector<LocaleSystem::Data>({
                 {"en","Ti""\xe1""\xba""\xbf""ng Anh"},
                 {"es","ng""\xc6""\xb0""\xe1""\xbb""\x9d""i T""\xc3""\xa2""y Ban Nha"},
@@ -470,7 +487,7 @@ void DefaultLocale::Populate(
                 {"ja","ti""\xe1""\xba""\xbf""ng Nh""\xe1""\xba""\xad""t"},
                 {"pa","Punjabi"},
                 {"de","ti""\xe1""\xba""\xbf""ng ""\xc4""\x90""\xe1""\xbb""\xa9""c"},
-                {"jw","Java"},
+                {"jv","Java"},
                 {"zh-cn","Trung Qu""\xe1""\xbb""\x91""c ""\xc4""\x91""\xc6""\xa1""n gi""\xe1""\xba""\xa3""n h""\xc3""\xb3""a"},
                 {"zh-tw","Truy""\xe1""\xbb""\x81""n th""\xe1""\xbb""\x91""ng Trung Hoa"},
                 {"id","Indonesia"},
@@ -488,7 +505,8 @@ void DefaultLocale::Populate(
 
     // ko
     {
-        in_locale_system.Append("ko",
+        in_locale_system.Append(
+            LocaleISO_639_1::Korean,
             std::vector<LocaleSystem::Data>({
                 {"en","\xec""\x98""\x81""\xec""\x96""\xb4"},
                 {"es","\xec""\x8a""\xa4""\xed""\x8e""\x98""\xec""\x9d""\xb8""\xec""\x9d""\x98"},
@@ -500,7 +518,7 @@ void DefaultLocale::Populate(
                 {"ja","\xec""\x9d""\xbc""\xeb""\xb3""\xb8""\xec""\x96""\xb4"},
                 {"pa","\xed""\x8e""\x80"" ""\xec""\x9e""\x90""\xeb""\xb8""\x8c"},
                 {"de","\xeb""\x8f""\x85""\xec""\x9d""\xbc"" ""\xec""\x82""\xac""\xeb""\x9e""\x8c"},
-                {"jw","\xec""\x9e""\x90""\xeb""\xb0""\x94""\xec""\x96""\xb4"},
+                {"jv","\xec""\x9e""\x90""\xeb""\xb0""\x94""\xec""\x96""\xb4"},
                 {"zh-cn","\xec""\xa4""\x91""\xea""\xb5""\xad""\xec""\x96""\xb4"" (""\xea""\xb0""\x84""\xec""\xb2""\xb4"},
                 {"zh-tw","\xec""\xa4""\x91""\xea""\xb5""\xad"" ""\xec""\xa0""\x84""\xed""\x86""\xb5"},
                 {"id","\xec""\x9d""\xb8""\xeb""\x8f""\x84""\xeb""\x84""\xa4""\xec""\x8b""\x9c""\xec""\x95""\x84"" ""\xec""\x9d""\xb8"},
@@ -518,7 +536,8 @@ void DefaultLocale::Populate(
 
     // fr
     {
-        in_locale_system.Append("fr",
+        in_locale_system.Append(
+            LocaleISO_639_1::French,
             std::vector<LocaleSystem::Data>({
                 {"en","Anglais"},
                 {"es","Espagnol"},
@@ -530,7 +549,7 @@ void DefaultLocale::Populate(
                 {"ja","Japonais"},
                 {"pa","Punjabi"},
                 {"de","Allemand"},
-                {"jw","Javanais"},
+                {"jv","Javanais"},
                 {"zh-cn","Chinois simplifi""\xc3""\xa9"},
                 {"zh-tw","Chinois (Traditionnel"},
                 {"id","indon""\xc3""\xa9""sien"},
@@ -548,7 +567,8 @@ void DefaultLocale::Populate(
 
     // mr
     {
-        in_locale_system.Append("mr",
+        in_locale_system.Append(
+            LocaleISO_639_1::Marathi,
             std::vector<LocaleSystem::Data>({
                 {"en","\xe0""\xa4""\x87""\xe0""\xa4""\x82""\xe0""\xa4""\x97""\xe0""\xa5""\x8d""\xe0""\xa4""\xb0""\xe0""\xa4""\x9c""\xe0""\xa5""\x80"},
                 {"es","\xe0""\xa4""\xb8""\xe0""\xa5""\x8d""\xe0""\xa4""\xaa""\xe0""\xa5""\x85""\xe0""\xa4""\xa8""\xe0""\xa4""\xbf""\xe0""\xa4""\xb6"},
@@ -560,7 +580,7 @@ void DefaultLocale::Populate(
                 {"ja","\xe0""\xa4""\x9c""\xe0""\xa4""\xaa""\xe0""\xa4""\xbe""\xe0""\xa4""\xa8""\xe0""\xa5""\x80"},
                 {"pa","\xe0""\xa4""\xaa""\xe0""\xa4""\x82""\xe0""\xa4""\x9c""\xe0""\xa4""\xbe""\xe0""\xa4""\xac""\xe0""\xa5""\x80"},
                 {"de","\xe0""\xa4""\x9c""\xe0""\xa4""\xb0""\xe0""\xa5""\x8d""\xe0""\xa4""\xae""\xe0""\xa4""\xa8"},
-                {"jw","\xe0""\xa4""\x9c""\xe0""\xa4""\xbe""\xe0""\xa4""\xb5""\xe0""\xa4""\xbe""\xe0""\xa4""\xa8""\xe0""\xa5""\x80""\xe0""\xa4""\x9c"},
+                {"jv","\xe0""\xa4""\x9c""\xe0""\xa4""\xbe""\xe0""\xa4""\xb5""\xe0""\xa4""\xbe""\xe0""\xa4""\xa8""\xe0""\xa5""\x80""\xe0""\xa4""\x9c"},
                 {"zh-cn","\xe0""\xa4""\x9a""\xe0""\xa4""\xbf""\xe0""\xa4""\xa8""\xe0""\xa5""\x80"" ""\xe0""\xa4""\xb8""\xe0""\xa4""\xb0""\xe0""\xa4""\xb2""\xe0""\xa5""\x80""\xe0""\xa4""\x95""\xe0""\xa5""\x83""\xe0""\xa4""\xa4"},
                 {"zh-tw","\xe0""\xa4""\xaa""\xe0""\xa4""\xbe""\xe0""\xa4""\xb0""\xe0""\xa4""\x82""\xe0""\xa4""\xaa""\xe0""\xa4""\xbe""\xe0""\xa4""\xb0""\xe0""\xa4""\xbf""\xe0""\xa4""\x95"" ""\xe0""\xa4""\x9a""\xe0""\xa5""\x80""\xe0""\xa4""\xa8""\xe0""\xa5""\x80"},
                 {"id","\xe0""\xa4""\x87""\xe0""\xa4""\x82""\xe0""\xa4""\xa1""\xe0""\xa5""\x8b""\xe0""\xa4""\xa8""\xe0""\xa5""\x87""\xe0""\xa4""\xb6""\xe0""\xa4""\xbf""\xe0""\xa4""\xaf""\xe0""\xa4""\xa8"},
@@ -578,7 +598,8 @@ void DefaultLocale::Populate(
 
     // ta
     {
-        in_locale_system.Append("ta",
+        in_locale_system.Append(
+            LocaleISO_639_1::Tamil,
             std::vector<LocaleSystem::Data>({
                 {"en","\xe0""\xae""\x86""\xe0""\xae""\x99""\xe0""\xaf""\x8d""\xe0""\xae""\x95""\xe0""\xae""\xbf""\xe0""\xae""\xb2""\xe0""\xae""\xae""\xe0""\xaf""\x8d"},
                 {"es","\xe0""\xae""\xb8""\xe0""\xaf""\x8d""\xe0""\xae""\xaa""\xe0""\xae""\xbe""\xe0""\xae""\xa9""\xe0""\xae""\xbf""\xe0""\xae""\xb7""\xe0""\xaf""\x8d"},
@@ -590,7 +611,7 @@ void DefaultLocale::Populate(
                 {"ja","\xe0""\xae""\x9c""\xe0""\xae""\xaa""\xe0""\xaf""\x8d""\xe0""\xae""\xaa""\xe0""\xae""\xbe""\xe0""\xae""\xa9""\xe0""\xae""\xbf""\xe0""\xae""\xaf""\xe0""\xae""\xb0""\xe0""\xaf""\x8d""\xe0""\xae""\x95""\xe0""\xae""\xb3""\xe0""\xaf""\x8d"},
                 {"pa","\xe0""\xae""\xaa""\xe0""\xae""\x9e""\xe0""\xaf""\x8d""\xe0""\xae""\x9a""\xe0""\xae""\xbe""\xe0""\xae""\xaa""\xe0""\xae""\xbf"},
                 {"de","\xe0""\xae""\x9c""\xe0""\xaf""\x86""\xe0""\xae""\xb0""\xe0""\xaf""\x8d""\xe0""\xae""\xae""\xe0""\xae""\xa9""\xe0""\xaf""\x8d"},
-                {"jw","\xe0""\xae""\x9c""\xe0""\xae""\xbe""\xe0""\xae""\xb5""\xe0""\xae""\xbe""\xe0""\xae""\xa9""\xe0""\xaf""\x80""\xe0""\xae""\xb8""\xe0""\xaf""\x8d"},
+                {"jv","\xe0""\xae""\x9c""\xe0""\xae""\xbe""\xe0""\xae""\xb5""\xe0""\xae""\xbe""\xe0""\xae""\xa9""\xe0""\xaf""\x80""\xe0""\xae""\xb8""\xe0""\xaf""\x8d"},
                 {"zh-cn","\xe0""\xae""\x9a""\xe0""\xaf""\x80""\xe0""\xae""\xa9"" ""\xe0""\xae""\x8e""\xe0""\xae""\xb3""\xe0""\xae""\xbf""\xe0""\xae""\xae""\xe0""\xaf""\x88""\xe0""\xae""\xaa""\xe0""\xaf""\x8d""\xe0""\xae""\xaa""\xe0""\xae""\x9f""\xe0""\xaf""\x81""\xe0""\xae""\xa4""\xe0""\xaf""\x8d""\xe0""\xae""\xa4""\xe0""\xae""\xaa""\xe0""\xaf""\x8d""\xe0""\xae""\xaa""\xe0""\xae""\x9f""\xe0""\xaf""\x8d""\xe0""\xae""\x9f""\xe0""\xae""\xa4""\xe0""\xaf""\x81"},
                 {"zh-tw","\xe0""\xae""\x9a""\xe0""\xaf""\x80""\xe0""\xae""\xa9"" ""\xe0""\xae""\xaa""\xe0""\xae""\xbe""\xe0""\xae""\xb0""\xe0""\xae""\xae""\xe0""\xaf""\x8d""\xe0""\xae""\xaa""\xe0""\xae""\xb0""\xe0""\xae""\xbf""\xe0""\xae""\xaf"},
                 {"id","\xe0""\xae""\x87""\xe0""\xae""\xa8""\xe0""\xaf""\x8d""\xe0""\xae""\xa4""\xe0""\xaf""\x8b""\xe0""\xae""\xa9""\xe0""\xaf""\x87""\xe0""\xae""\x9a""\xe0""\xae""\xbf""\xe0""\xae""\xaf"},

@@ -14,9 +14,6 @@ public:
         );
     ~UIContentString();
 
-private:
-    virtual const int GetClassTypeID() const override;
-
     // return true if we have a text block which this is a new value, else true
     const bool SetFont(
         TextFont& in_font, 
@@ -25,8 +22,9 @@ private:
         );
 
     const bool SetAlignment(
-        TextEnum::HorizontalLineAlignment in_horizontal, 
-        TextEnum::VerticalBlockAlignment in_vertical
+        const TextEnum::HorizontalLineAlignment in_horizontal, 
+        const TextEnum::VerticalBlockAlignment in_vertical,
+        const int in_em_size
         );
 
 private:

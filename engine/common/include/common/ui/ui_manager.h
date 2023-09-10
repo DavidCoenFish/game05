@@ -39,7 +39,9 @@ struct UIManagerUpdateParam
         const std::string& in_locale = std::string(),
         const bool in_draw_to_texture = false, // Draw to texture or backbuffer?
         const bool in_always_dirty = false,
-        const VectorInt2& in_texture_size = VectorInt2(0,0) // If in_draw_to_texture is true, size to use for texture
+        const VectorInt2& in_texture_size = VectorInt2(0,0), // If in_draw_to_texture is true, size to use for texture
+        const bool in_allow_clear = false,
+        const VectorFloat4& in_clear_colour = VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f)
         );
 
     DrawSystem* const _draw_system;
@@ -53,6 +55,8 @@ struct UIManagerUpdateParam
     bool _draw_to_texture;
     bool _always_dirty;
     VectorInt2 _texture_size;
+    bool _allow_clear;
+    VectorFloat4 _clear_colour;
 
 };
 

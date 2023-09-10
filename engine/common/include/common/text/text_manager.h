@@ -24,9 +24,12 @@ public:
     ~TextManager();
 
     // Find or make a new text face
-    TextFont* const MakeFont(
+    TextFont* const GetTextFont(
         const std::filesystem::path& in_font_rel_path
         );
+
+    // An Icon is a small 4 channel image
+    IconFont* const GetIconFont();
 
     void DrawText(
         DrawSystem* const in_draw_system,
@@ -39,9 +42,6 @@ public:
         DrawSystemFrame* const in_draw_system_frame,
         TextRun* const in_text_run
         );
-
-    // An Icon is a small 4 channel image
-    IconFont* const GetIconFont();
 
     //void AddIcon(
     //    const int in_icon_id,

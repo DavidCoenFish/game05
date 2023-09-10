@@ -14,7 +14,6 @@
 #include "common/text/text_texture.h"
 #include "common/util/utf8.h"
 
-
 class IconFontImplementation
 {
 public:
@@ -53,13 +52,14 @@ public:
         return;
     }
 
-    void CalculateTextBounds(
+    void BuildPreVertexData(
         TextPreVertex& in_out_text_pre_vertex,
-        VectorInt& in_out_cursor, // allow multiple fonts to append pre vertex data
+        VectorInt2& in_out_cursor, // allow multiple fonts to append pre vertex data
         const int in_icon_id,
         const int in_new_line_height,
         const bool in_width_limit_enabled,
-        const int in_width_limit
+        const int in_width_limit,
+        const VectorFloat4 in_colour_tint
         )
     {
         auto found = _map_icon_cell.find(in_icon_id);
@@ -80,7 +80,7 @@ public:
             in_out_cursor[0], 
             in_out_cursor[1],
             in_new_line_height,
-            VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f)
+            in_colour_tint
             );
 
         in_out_cursor[0] += cell_width_height[0];
@@ -130,22 +130,24 @@ void IconFont::AddIcon(
         );
 }
 
-void IconFont::CalculateTextBounds(
+void IconFont::BuildPreVertexData(
     TextPreVertex& in_out_text_pre_vertex,
-    VectorFloat2& in_out_cursor, // allow multiple fonts to append pre vertex data
+    VectorInt2& in_out_cursor,
     const int in_icon_id,
     const int in_new_line_height,
     const bool in_width_limit_enabled,
-    const int in_width_limit
+    const int in_width_limit,
+    const VectorFloat4 in_colour_tint
     )
 {
-    _implementation->CalculateTextBounds(
+    _implementation->BuildPreVertexData(
         in_out_text_pre_vertex,
-        in_out_cursor, // allow multiple fonts to append pre vertex data
+        in_out_cursor,
         in_icon_id,
         in_new_line_height,
         in_width_limit_enabled,
-        in_width_limit
+        in_width_limit,
+        in_colour_tint
         );
     return;
 }

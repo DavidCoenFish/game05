@@ -9,8 +9,6 @@ public:
     virtual ~UIContentCanvas();
 
 private:
-    virtual const int GetClassTypeID() const override;
-
     //virtual const bool Update(
     //    VectorInt2& out_texture_size,
     //    UIHierarchyNodeLayoutData& out_layout_data,

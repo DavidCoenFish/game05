@@ -9,6 +9,5 @@ public:
     virtual ~UIContentStack();
 
 private:
-    virtual const int GetClassTypeID() const override;
 
 };

@@ -22,17 +22,12 @@ public:
         );
 
 private:
-    virtual const int GetClassTypeID() const override;
-
-    virtual const bool GetNeedsDraw() const override;
-    //virtual void SetDrawn() override;
-
-    virtual void Draw(
-        const UIManagerDrawParam& in_param,
-        UITexture* const in_texture,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
-        Shader* const in_shader
-        ) override;
+    //virtual void Draw(
+    //    const UIManagerDrawParam& in_param,
+    //    UITexture* const in_texture,
+    //    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
+    //    Shader* const in_shader
+    //    ) override;
 
 private:
     bool _dirty;

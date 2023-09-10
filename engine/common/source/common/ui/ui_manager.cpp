@@ -11,7 +11,7 @@
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/i_ui_model.h"
-#include "common/ui/ui_content/ui_content_default.h"
+#include "common/ui/ui_content/ui_content_stack.h"
 #include "common/ui/ui_data/i_ui_data.h"
 #include "common/text/text_manager.h"
 #include "common/util/vector_helper.h"
@@ -39,7 +39,9 @@ UIManagerUpdateParam::UIManagerUpdateParam(
     const std::string& in_locale,
     const bool in_draw_to_texture,
     const bool in_always_dirty,
-    const VectorInt2& in_texture_size
+    const VectorInt2& in_texture_size,
+    const bool in_allow_clear,
+    const VectorFloat4& in_clear_colour
     )
     : _draw_system(in_draw_system)
     , _command_list(in_command_list)
@@ -52,6 +54,8 @@ UIManagerUpdateParam::UIManagerUpdateParam(
     , _draw_to_texture(in_draw_to_texture)
     , _always_dirty(in_always_dirty)
     , _texture_size(in_texture_size)
+    , _allow_clear(in_allow_clear)
+    , _clear_colour(in_clear_colour)
 {
     // Nop
 }
@@ -75,10 +79,10 @@ namespace
         const UIContentFactoryParam& //in_param
         )
     {
-        UIContentDefault* const content = dynamic_cast<UIContentDefault*>(in_out_content.get());
-        if ((nullptr == content) || (IUIContent::ClassTypeID<UIContentDefault>() != content->GetClassTypeID()))
+        UIContentStack* const content = dynamic_cast<UIContentStack*>(in_out_content.get());
+        if (nullptr == content)
         {
-            in_out_content.reset(std::make_unique<UIContentDefault>());
+            in_out_content = std::make_unique<UIContentStack>();
             return true;
         }
         return false;
@@ -125,7 +129,7 @@ public:
             );
 
         // add a default content 
-        AddContentFactory("", FactoryDefault);
+        //AddContentFactory("", FactoryDefault);
 
         return;
     }
@@ -146,19 +150,7 @@ public:
         const std::string& in_model_key
         )
     {
-        auto data = in_param._ui_model->GetData(in_model_key);
-        if (nullptr == data)
-        {
-            in_out_target_or_null = nullptr;
-            return;
-        }
-
-        if (nullptr == in_out_target_or_null)
-        {
-            in_out_target_or_null = std::make_shared<UIHierarchyNode>();
-        }
-
-        UIHierarchyNodeUpdateHierarchyParam update_hierarchy_param(
+        UIHierarchyNodeUpdateHierarchyParam hierarchy_param(
             _map_content_factory,
             in_param._draw_system,
             in_param._command_list,
@@ -166,14 +158,28 @@ public:
             in_param._locale_system,
             in_param._text_manager
             );
+        if (false == in_param._ui_model->VisitDataArray(
+            in_model_key,
+            [&in_out_target_or_null, &in_param, &hierarchy_param](const std::vector<std::shared_ptr<IUIData>>& in_array_data){
+                if (nullptr == in_out_target_or_null)
+                {
+                    in_out_target_or_null = std::make_shared<UIHierarchyNode>();
+                }
 
-        // create/ destroy nodes to match model, make content match type from factory, update content?
-        in_out_target_or_null->UpdateHierarchy(
-            update_hierarchy_param,
-            *data,
-            in_param._draw_to_texture,
-            in_param._always_dirty
-            );
+                in_out_target_or_null->UpdateHierarchy(
+                    hierarchy_param,
+                    &in_array_data,
+                    in_param._draw_to_texture,
+                    in_param._always_dirty,
+                    in_param._allow_clear,
+                    in_param._clear_colour
+                    );
+
+            }))
+        {
+            in_out_target_or_null = nullptr;
+        }
+        return;
     }
 
     void DealInput(
