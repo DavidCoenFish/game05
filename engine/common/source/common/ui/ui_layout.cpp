@@ -33,3 +33,52 @@ UILayout::UILayout(
     return;
 }
 
+const VectorInt2 GetSize(const VectorInt2& in_parent_size, const float in_ui_scale) const
+{
+    return VectorInt2(
+        _data_size[0].
+        );
+}
+
+const bool UILayout::operator==(const UILayout& in_rhs) const
+{
+    if (_data_size[0] != in_rhs._data_size[0])
+    {
+        return false;
+    }
+    if (_data_size[1] != in_rhs._data_size[1])
+    {
+        return false;
+    }
+
+    if (_data_attach[0] != in_rhs._data_attach[0])
+    {
+        return false;
+    }
+    if (_data_attach[1] != in_rhs._data_attach[1])
+    {
+        return false;
+    }
+
+    if (_data_pivot[0] != in_rhs._data_pivot[0])
+    {
+        return false;
+    }
+    if (_data_pivot[1] != in_rhs._data_pivot[1])
+    {
+        return false;
+    }
+
+    if (_uv_scroll != in_rhs._uv_scroll)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+const bool UILayout::operator!=(const UILayout& in_rhs) const
+{
+    return !operator==(in_rhs);
+}
+

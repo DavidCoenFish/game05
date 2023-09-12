@@ -1,15 +1,17 @@
 #pragma once
 
-#include "common/ui/ui_content/ui_content_default.h"
+#include "common/ui/ui_content/i_ui_content.h"
+#include "common/ui/ui_layout.h"
 #include "common/text/text_enum.h"
 
 class TextBlock;
 class TextFont;
 
-class UIContentString : public UIContentDefault
+class UIContentString : public IUIContent
 {
 public:
     UIContentString(
+        const UILayout& in_layout,
         std::unique_ptr<TextBlock>& in_text_block
         );
     ~UIContentString();
@@ -40,11 +42,8 @@ private:
         ) override;
 */
 private:
-    //TextFont* _font;
-    //int _font_size;
-    //TextEnum::HorizontalLineAlignment _horizontal;
-    //TextEnum::VerticalBlockAlignment _vertical;
-
+    UILayout _layout;
+    //bool _use_parent_size_for_width_limit;
     std::unique_ptr<TextBlock> _text_block;
 
 };

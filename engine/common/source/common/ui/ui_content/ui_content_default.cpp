@@ -11,6 +11,32 @@
 #include "common/ui/ui_texture.h"
 #include "common/ui/ui_manager.h"
 
+
+
+void UIContentDefault::Draw(
+    const UIManagerDrawParam& in_param,
+    Shader* const in_shader,
+    UIGeometry* const in_geometry,
+    const std::shared_ptr<HeapWrapperItem>& in_heap_wrapper_item // The texture resource of the node for this content
+    )
+{
+    in_shader->SetShaderResourceViewHandle(0, in_heap_wrapper_item);
+    auto geometry = in_geometry->GetGeometry(
+        in_param._draw_system,
+        in_param._frame->GetCommandList()
+        );
+
+    in_param._frame->SetShader(in_shader);
+    in_param._frame->Draw(geometry);
+
+    return;
+}
+
+
+
+
+#if 0
+
 UIContentDefault::UIContentDefault()
 : _source_ui_data_token(nullptr)
 {
@@ -77,6 +103,7 @@ void* UIContentDefault::GetSourceUIDataToken() const
 }
 
 const bool UIContentDefault::UpdateHierarchy(
+    std::vector<std::shared_ptr<IUIData>>*& out_array_data_or_null,
     const IUIData* const in_data,
     UIHierarchyNodeChildData& , //in_out_child_data,
     const UIHierarchyNodeUpdateHierarchyParam& //in_param
@@ -109,3 +136,5 @@ void UIContentDefault::Draw(
 
     return;
 }
+
+#endif

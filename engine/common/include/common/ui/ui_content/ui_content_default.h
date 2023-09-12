@@ -18,7 +18,22 @@ struct UIHierarchyNodeChildData;
 struct UIHierarchyNodeLayoutData;
 struct UIHierarchyNodeUpdateHierarchyParam;
 
+/*
+    don't inherit functionality, but we can share methods/ components
+    default implementation
+*/
+namespace UIContentDefault
+{
+    void Draw(
+        const UIManagerDrawParam& in_param,
+        Shader* const in_shader,
+        UIGeometry* const in_geometry,
+        const std::shared_ptr<HeapWrapperItem>& in_heap_wrapper_item
+        );
+};
 
+
+#if 0
 class UIContentDefault : public IUIContent
 {
 public:
@@ -35,6 +50,7 @@ private:
     virtual void* GetSourceUIDataToken() const override;
 
     virtual const bool UpdateHierarchy(
+        std::vector<std::shared_ptr<IUIData>>*& out_array_data_or_null,
         const IUIData* const in_data,
         UIHierarchyNodeChildData& in_out_child_data,
         const UIHierarchyNodeUpdateHierarchyParam& in_param
@@ -78,3 +94,4 @@ private:
     void* _source_ui_data_token;
 
 };
+#endif

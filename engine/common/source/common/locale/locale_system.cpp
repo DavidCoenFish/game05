@@ -51,11 +51,11 @@ public:
     {
         TDataMap* data_map = nullptr;
         auto found = _locale_data_map.find(in_locale);
-        if (found != _locale_data_map.end())
+        if (found == _locale_data_map.end())
         {
             auto shared_data_map = std::make_shared<TDataMap>();
             _locale_data_map[in_locale] = shared_data_map;
-
+            data_map = shared_data_map.get();
         }
         else
         {

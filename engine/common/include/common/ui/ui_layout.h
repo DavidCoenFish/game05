@@ -5,8 +5,9 @@
 #include "common/math/vector_float4.h"
 #include "common/math/vector_int2.h"
 
-struct UILayout
+class UILayout
 {
+public:
     static UILayout FactoryFull();
     explicit UILayout(
         const UICoord& in_size_x = UICoord(UICoord::ParentSource::X),
@@ -18,6 +19,12 @@ struct UILayout
         const VectorFloat2& in_uv_scroll = VectorFloat2()
         );
 
+    const VectorInt2 GetSize(const VectorInt2& in_parent_size) const;
+
+    const bool operator==(const UILayout& in_rhs) const;
+    const bool operator!=(const UILayout& in_rhs) const;
+
+private:
     // Data for how we calculate our size relative to parent
     UICoord _data_size[2];
     UICoord _data_attach[2];

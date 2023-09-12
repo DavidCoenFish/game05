@@ -48,3 +48,26 @@ const float UICoord::Calculate(
 
     return ((parent_dim * _ratio) + (_em_offset * in_ui_scale));
 }
+
+const bool UICoord::operator==(const UICoord& in_rhs) const
+{
+    if (_parent_source != in_rhs._parent_source)
+    {
+        return false;
+    }
+    if (_ratio != in_rhs._ratio)
+    {
+        return false;
+    }
+    if (_em_offset != in_rhs._em_offset)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+const bool UICoord::operator!=(const UICoord& in_rhs) const
+{
+    return !operator==(in_rhs);
+}

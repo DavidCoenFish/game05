@@ -12,6 +12,7 @@
 #include "common/ui/ui_content/ui_content_stack.h"
 #include "common/ui/ui_content/ui_content_string.h"
 #include "common/ui/ui_hierarchy_node.h"
+#include "common/ui/ui_layout.h"
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_data/ui_data_string.h"
 
@@ -30,18 +31,68 @@ namespace
         TBottom,
     };
 
-    enum class StackOrientation
+    constexpr int s_default_font_size = 16;
+    constexpr int s_default_em_size = 16;
+    constexpr float s_default_margin = s_default_em_size * 0.5f; // in pixels, or in em?
+
+    typedef const std::filesystem::path& (*TGetPathRef)();
+
+    const std::filesystem::path& GetFontPathDefault()
     {
-        TVertical,
-        THorizontal,
-        //TGridLeftRightTopBottom?
-        //TGridTopBottomLeftRight?
-        //TFlowLeftRightTopBottom
-        //TFlowTopBottomLeftRight
-    };
+        static std::filesystem::path s_data = std::filesystem::path("data") / "code2000.ttf";
+        return s_data;
+    }
 
-    typedef const std::filesystem::path (*TGetPath)();
+    // Return copy or reference, want to avoid 
+    typedef const UILayout& (*TGetUILayoutRef)();
 
+    const UILayout& GetUILayoutDefault()
+    {
+        static UILayout s_layout = UILayout::FactoryFull();
+        return s_layout;
+    }
+    const UILayout& GetUILayoutFullScreenMargin()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 1.0f, s_default_margin * (-2.0f)),
+            UICoord(UICoord::ParentSource::Y, 1.0f, s_default_margin * (-2.0f)),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f)
+            );
+        return s_layout;
+    }
+    const UILayout& GetUILayoutFullScreenMarginBottomRight()
+    {
+        // Todo: is y up or down the screen for ui
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 1.0f, s_default_margin * (-2.0f)),
+            UICoord(UICoord::ParentSource::Y, 1.0f, s_default_margin * (-2.0f)),
+            UICoord(UICoord::ParentSource::X, 1.0f),
+            UICoord(UICoord::ParentSource::Y, -1.0f),
+            UICoord(UICoord::ParentSource::X, 1.0f),
+            UICoord(UICoord::ParentSource::Y, -1.0f)
+            );
+        return s_layout;
+    }
+
+    typedef const UICoord& (*TGetUICoordRef)();
+
+    const UICoord& GetUICoordDefaultX()
+    {
+        static UICoord s_coord(UICoord::ParentSource::X, 0.0f, s_default_margin);
+        return s_coord;
+    }
+    const UICoord& GetUICoordDefaultY()
+    {
+        static UICoord s_coord(UICoord::ParentSource::Y, 0.0f, s_default_margin);
+        return s_coord;
+    }
+
+    template<
+        TGetUILayoutRef GetLayoutRef = GetUILayoutDefault
+        >
     const bool FactoryCanvas(
         std::unique_ptr<IUIContent>& in_out_content,
         const UIContentFactoryParam&
@@ -50,19 +101,23 @@ namespace
         UIContentCanvas* canvas = dynamic_cast<UIContentCanvas*>(in_out_content.get());
         if (nullptr == canvas)
         {
-            in_out_content = std::make_unique<UIContentCanvas>();
+            in_out_content = std::make_unique<UIContentCanvas>(GetLayoutRef());
             return true;
         }
+        else
+        {
+            if (true == canvas->SetLayout(GetLayoutRef()))
+            {
+                return true;
+            }
+        }
+
         return false;
     }
 
-    const std::filesystem::path GetDeafuleFontPath()
-    {
-        return std::filesystem::path("data") / "code2000.ttf"; //"deja_vu_sans.ttf"; //"open_sans.ttf";
-    }
-
     template<
-        TGetPath GetPath = GetDeafuleFontPath,
+        TGetUILayoutRef GetLayout = GetUILayoutDefault,
+        TGetPathRef GetPath = GetFontPathDefault,
         int FontSize = 16,
         int NewLineHeight = 16,
         TextEnum::HorizontalLineAlignment Horizontal = TextEnum::HorizontalLineAlignment::Middle,
@@ -76,9 +131,9 @@ namespace
     {
         auto font = in_param._text_manager->GetTextFont(GetPath());
 
-        UIContentString* string = dynamic_cast<UIContentString*>(in_out_content.get());
+        UIContentString* content = dynamic_cast<UIContentString*>(in_out_content.get());
         bool dirty = false;
-        if (nullptr == string)
+        if (nullptr == content)
         {
             // Make something with the data we have on hand
             auto text_block = std::make_unique<TextBlock>(
@@ -93,17 +148,22 @@ namespace
                 Horizontal,
                 Vertical
                 );
-            in_out_content = std::move(std::make_unique<UIContentString>(text_block));
+            in_out_content = std::move(std::make_unique<UIContentString>(GetDefaultUILayout(), text_block));
             dirty = true;
         }
         else
         {
-            if (true == string->SetFont(*font, FontSize, NewLineHeight))
+            if (true == content->SetLayout(GetDefaultUILayout()))
             {
                 dirty = true;
             }
 
-            if (true == string->SetAlignment(Horizontal, Vertical, EMSize))
+            if (true == content->SetFont(*font, FontSize, NewLineHeight))
+            {
+                dirty = true;
+            }
+
+            if (true == content->SetAlignment(Horizontal, Vertical, EMSize))
             {
                 dirty = true;
             }
@@ -113,6 +173,7 @@ namespace
     }
 
     template<
+        TGetUILayoutRef GetLayout = GetUILayoutDefault,
         int FontSize = 16
         >
     const bool FactoryTextRun(
@@ -124,37 +185,53 @@ namespace
     }
 
     template<
-        StackOrientation Orientation = StackOrientation::TVertical, 
-        AlignmentHorizontal Horizontal = AlignmentHorizontal::TMiddle, 
-        AlignmentVertical Vertical = AlignmentVertical::TMiddle, 
-        bool ShrinkToFit = false, 
-        int MarginLeft = 8,
-        int MarginRight = 8,
-        int MarginTop = 8,
-        int MarginBottom = 8
+        TGetUILayoutRef GetLayout = GetUILayoutDefault,
+        StackOrientation Orientation = StackOrientation::TVertical,
+        TGetUICoordRef GetGap = GetUICoordDefaultY,
+        bool ShrinkToFit = false
         >
     const bool FactoryStack(
-        std::unique_ptr<IUIContent>&, //in_out_content,
+        std::unique_ptr<IUIContent>& in_out_content,
         const UIContentFactoryParam& //in_param
         )
     {
+        UIContentStack* content = dynamic_cast<UIContentStack*>(in_out_content.get());
+        bool dirty = false;
+        if (nullptr == content)
+        {
+            auto new_content = std::make_unique<UIContentStack>(
+                GetDefaultUILayout(),
+                Orientation,
+                GetGap(),
+                ShrinkToFit
+                );
+            in_out_content = std::move(std::make_unique<UIContentString>(new_content));
+        }
+        else
+        {
+            content->Set(
+                GetDefaultUILayout(),
+                Orientation,
+                GetGap(),
+                ShrinkToFit
+                );
+        }
+
         return false;
     }
 }
+
 void DefaultUIComponentFactory::Populate(
     UIManager& in_ui_manager
     )
 {
-    //in_ui_manager.AddContentFactory("", FactoryDefault); // Make this built in to UIManager?
-    in_ui_manager.AddContentFactory("UIDataString", FactoryString<>);
-    in_ui_manager.AddContentFactory("UIDataTextRun", FactoryTextRun<>);
-    in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas);
+    in_ui_manager.AddContentFactory("UIDataString", FactoryString<GetUILayoutDefault>);
+    in_ui_manager.AddContentFactory("UIDataTextRun", FactoryTextRun<GetUILayoutDefault>);
+    in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<GetUILayoutDefault>);
     in_ui_manager.AddContentFactory("stack_vertical_bottom_right", FactoryStack<
+        GetUILayoutFullScreenMarginBottomRight,
         StackOrientation::TVertical,
-        AlignmentHorizontal::TRight,
-        AlignmentVertical::TBottom
+        GetUICoordDefaultY
         >);
-    //UIDataTexture
-    //UIDataButton
-    //UIDataIconButton
+
 }

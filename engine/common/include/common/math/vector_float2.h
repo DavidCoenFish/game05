@@ -13,13 +13,15 @@ public:
     const float GetY() const;
     void NormaliseSelf();
     const bool operator==(const VectorFloat2& in_rhs) const;
+    const bool operator!=(const VectorFloat2& in_rhs) const;
 
 private:
     enum Index
     {
         X = 0,
         Y,
-        Count};
+        Count
+    };
 
 private:
     float _data[Index::Count];

@@ -76,3 +76,8 @@ const bool VectorFloat2::operator==(const VectorFloat2&in_rhs) const
     return true;
 }
 
+const bool VectorFloat2::operator!=(const VectorFloat2& in_rhs) const
+{
+    return !operator==(in_rhs);
+}
+

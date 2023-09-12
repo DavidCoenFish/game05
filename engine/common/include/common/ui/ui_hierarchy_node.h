@@ -34,6 +34,9 @@ UIHierarchyNode // N0
         UIHierarchyNode // N1 child node
             _texture // T1 texture or backbuffer A1 draws to
             _child_node_array // A1
+
+    _content->UpdateGeometry(in_parent_size, _geometry, node)
+    VectorInt2 UIHierarchyNode::GetDesiredSize(in_parent_size) // text may bt told to limit width to in_parent_size
 */
 
 struct UIHierarchyNodeChildData
@@ -120,6 +123,16 @@ public:
         const bool in_always_dirty,
         const bool in_allow_clear = false,
         const VectorFloat4& in_clear_colour = VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f)
+        );
+
+    void UpdateGeometry(
+        const VectorInt2& in_parent_size,
+        const float in_ui_scale
+        );
+
+    const VectorInt2 GetDesiredSize(
+        const VectorInt2& in_parent_size,
+        const float in_ui_scale
         );
 
     // return True if we needed to draw, ie, we have modified _texture

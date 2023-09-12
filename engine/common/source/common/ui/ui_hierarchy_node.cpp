@@ -68,12 +68,12 @@ UIHierarchyNodeUpdateDesiredSize::UIHierarchyNodeUpdateDesiredSize(
 
 UIHierarchyNodeUpdateSize::UIHierarchyNodeUpdateSize()
 {
-        // Nop
-
+    // Nop
 };
 
 UIHierarchyNode::UIHierarchyNode()
 {
+
     // Nop
 }
 
@@ -261,20 +261,50 @@ const bool UIHierarchyNode::UpdateHierarchy(
 
             if (nullptr != child->_content)
             {
+                std::vector<std::shared_ptr<IUIData>>* array_data_or_null = nullptr;
+
                 if (true == child->_content->UpdateHierarchy(
+                    array_data_or_null,
                     data.get(),
                     *(child.get()),
-                    in_param
+                    in_param,
                     ))
                 {
                     dirty = true;
                 }
+
+                VectorFloat4 clear_colour;
+                const bool allow_clear = child->_content->GetClearBackground(clear_colour);
+
+                child->_node->UpdateHierarchy(
+                    in_param,
+                    array_data_or_null,
+                    true,
+                    false,
+                    allow_clear,
+                    clear_colour
+                    );
             }
         }
     }
 
     return dirty;
 }
+
+void UIHierarchyNode::UpdateGeometry(
+    const VectorInt2& in_parent_size,
+    const float in_ui_scale
+    )
+{
+}
+
+const VectorInt2 UIHierarchyNode::GetDesiredSize(
+    const VectorInt2& in_parent_size,
+    const float in_ui_scale
+    )
+{
+}
+
 
 //void UIHierarchyNode::UpdateDesiredSize(
 //    const VectorInt2& in_parent_desired_size,

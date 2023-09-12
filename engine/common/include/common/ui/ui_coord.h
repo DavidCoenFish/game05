@@ -27,6 +27,9 @@ public:
         const float in_ui_scale
         ) const;
 
+    const bool operator==(const UICoord& in_rhs) const;
+    const bool operator!=(const UICoord& in_rhs) const;
+
 private:
     ParentSource _parent_source;
     float _ratio;

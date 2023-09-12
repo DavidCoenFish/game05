@@ -1,6 +1,6 @@
 #pragma once
 
-#include "common/ui/ui_content/ui_content_default.h"
+#include "common/ui/ui_content/i_ui_content.h"
 
 class DrawSystemFrame;
 class HeapWrapperItem;
@@ -9,10 +9,11 @@ class UIGeometry;
 class UITexture;
 struct UIHierarchyNodeChildData;
 
-class UIContentTexture : public UIContentDefault
+class UIContentTexture : public IUIContent
 {
 public:
     UIContentTexture(
+        const UILayout& in_layout,
         const std::shared_ptr<HeapWrapperItem>& in_shader_resource_view_handle
         );
     virtual ~UIContentTexture();
