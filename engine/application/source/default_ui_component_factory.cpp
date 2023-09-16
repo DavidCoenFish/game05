@@ -47,7 +47,7 @@ namespace
     // Return copy or reference, want to avoid 
     typedef const UILayout& (*TGetUILayoutRef)();
 
-    const UILayout& GetUILayoutDefault()
+    const UILayout& in_get_layout_ref()
     {
         static UILayout s_layout = UILayout::FactoryFull();
         return s_layout;
@@ -91,17 +91,17 @@ namespace
         return s_coord;
     }
 
-    typedef const VectorFloat4& (*TGetClearColour)();
-    const VectorFloat4& GetClearColour()
+    typedef const VectorFloat4& (*TGetColour)();
+    const VectorFloat4& GetColourTransparent()
     {
         static VectorFloat4 s_colour(0.0f, 0.0f, 0.0f, 0.0f);
         return s_colour;
     }
 
     template<
-        TGetUILayoutRef GetLayoutRef = GetUILayoutDefault,
-        bool ClearBackground = false,
-        TGetClearColour GetClearColour = GetClearColour
+        TGetUILayoutRef in_get_layout_ref = in_get_layout_ref,
+        bool in_clear_background = false,
+        TGetColour in_get_clear_colour_ref = GetColourTransparent
         >
     const bool FactoryCanvas(
         std::unique_ptr<IUIContent>& in_out_content,
@@ -112,17 +112,17 @@ namespace
         if (nullptr == canvas)
         {
             in_out_content = std::make_unique<UIContentCanvas>(
-                ClearBackground,
-                GetClearColour(),
-                GetLayoutRef());
+                in_clear_background,
+                in_get_clear_colour_ref(),
+                in_get_layout_ref());
             return true;
         }
         else
         {
             if (true == canvas->SetBase(
-                    ClearBackground,
-                    GetClearColour(),
-                    GetLayoutRef()))
+                in_clear_background,
+                in_get_clear_colour_ref(),
+                in_get_layout_ref()))
             {
                 return true;
             }
@@ -132,22 +132,22 @@ namespace
     }
 
     template<
-        TGetUILayoutRef GetLayout = GetUILayoutDefault,
-        TGetPathRef GetPath = GetFontPathDefault,
-        int FontSize = 16,
-        int NewLineHeight = 16,
-        TextEnum::HorizontalLineAlignment Horizontal = TextEnum::HorizontalLineAlignment::Middle,
-        TextEnum::VerticalBlockAlignment Vertical = TextEnum::VerticalBlockAlignment::MiddleEM,
-        int EMSize = 16,
-        bool ClearBackground = false,
-        TGetClearColour GetClearColour = GetClearColour
+        TGetUILayoutRef in_get_layout_ref = in_get_layout_ref,
+        TGetPathRef in_get_path_ref = GetFontPathDefault,
+        int in_font_size = 16,
+        int in_new_line_height = 16,
+        TextEnum::HorizontalLineAlignment in_horizontal = TextEnum::HorizontalLineAlignment::Middle,
+        TextEnum::VerticalBlockAlignment in_vertical = TextEnum::VerticalBlockAlignment::MiddleEM,
+        int in_em_size = 16,
+        bool in_clear_background = false,
+        TGetColour in_get_clear_colour_ref = GetColourTransparent
         >
     const bool FactoryString(
         std::unique_ptr<IUIContent>& in_out_content,
         const UIContentFactoryParam& in_param
         )
     {
-        auto font = in_param._text_manager->GetTextFont(GetPath());
+        auto font = in_param._text_manager->GetTextFont(in_get_path_ref());
 
         UIContentString* content = dynamic_cast<UIContentString*>(in_out_content.get());
         bool dirty = false;
@@ -156,21 +156,21 @@ namespace
             // Make something with the data we have on hand
             auto text_block = std::make_unique<TextBlock>(
                 *font,
-                FontSize,
-                NewLineHeight,
+                in_font_size,
+                in_new_line_height,
                 "",
                 nullptr,
                 VectorInt2(),
                 false,
                 0,
-                Horizontal,
-                Vertical,
-                EMSize
+                in_horizontal,
+                in_vertical,
+                in_em_size
                 );
             in_out_content = std::move(std::make_unique<UIContentString>(
-                ClearBackground,
-                GetClearColour(),
-                GetUILayoutDefault(), 
+                in_clear_background,
+                in_get_clear_colour_ref(),
+                in_get_layout_ref(), 
                 text_block
                 ));
             dirty = true;
@@ -178,19 +178,19 @@ namespace
         else
         {
             if (true == content->SetBase(
-                    ClearBackground,
-                    GetClearColour(),
-                    GetUILayoutDefault()))
+                    in_clear_background,
+                    in_get_clear_colour_ref(),
+                    in_get_layout_ref()))
             {
                 dirty = true;
             }
 
-            if (true == content->SetFont(*font, FontSize, NewLineHeight))
+            if (true == content->SetFont(*font, in_font_size, in_new_line_height))
             {
                 dirty = true;
             }
 
-            if (true == content->SetAlignment(Horizontal, Vertical, EMSize))
+            if (true == content->SetAlignment(in_horizontal, in_vertical, in_em_size))
             {
                 dirty = true;
             }
@@ -200,10 +200,10 @@ namespace
     }
 
     template<
-        TGetUILayoutRef GetLayout = GetUILayoutDefault,
-        int FontSize = 16,
-        bool ClearBackground = false,
-        TGetClearColour GetClearColour = GetClearColour
+        TGetUILayoutRef in_get_layout_ref = in_get_layout_ref,
+        int in_font_size = 16,
+        bool in_clear_background = false,
+        TGetColour in_get_clear_colour_ref = GetColourTransparent
         >
     const bool FactoryTextRun(
         std::unique_ptr<IUIContent>&, //in_out_content,
@@ -214,12 +214,12 @@ namespace
     }
 
     template<
-        TGetUILayoutRef GetLayout = GetUILayoutDefault,
-        StackOrientation Orientation = StackOrientation::TVertical,
-        TGetUICoordRef GetGap = GetUICoordDefaultY,
-        bool ShrinkToFit = false,
-        bool ClearBackground = false,
-        TGetClearColour GetClearColour = GetClearColour
+        TGetUILayoutRef in_get_layout_ref = in_get_layout_ref,
+        StackOrientation in_orientation = StackOrientation::TVertical,
+        TGetUICoordRef in_get_gap_ref = GetUICoordDefaultY,
+        bool in_shrink_to_fit = false,
+        bool in_clear_background = false,
+        TGetColour in_get_clear_colour_ref = GetColourTransparent
         >
     const bool FactoryStack(
         std::unique_ptr<IUIContent>& in_out_content,
@@ -232,24 +232,24 @@ namespace
         {
             dirty = true;
             auto new_content = std::make_unique<UIContentStack>(
-                ClearBackground,
-                GetClearColour(),
-                GetUILayoutDefault(),
-                Orientation,
-                GetGap(),
-                ShrinkToFit
+                in_clear_background,
+                in_get_clear_colour_ref(),
+                in_get_layout_ref(),
+                in_orientation,
+                in_get_gap_ref(),
+                in_shrink_to_fit
                 );
             in_out_content = std::move(new_content);
         }
         else
         {
             if (true == content->Set(
-                ClearBackground,
-                GetClearColour(),
-                GetUILayoutDefault(),
-                Orientation,
-                GetGap(),
-                ShrinkToFit
+                in_clear_background,
+                in_get_clear_colour_ref(),
+                in_get_layout_ref(),
+                in_orientation,
+                in_get_gap_ref(),
+                in_shrink_to_fit
                 ))
             {
                 dirty = true;
@@ -264,9 +264,9 @@ void DefaultUIComponentFactory::Populate(
     UIManager& in_ui_manager
     )
 {
-    in_ui_manager.AddContentFactory("UIDataString", FactoryString<GetUILayoutDefault>);
-    in_ui_manager.AddContentFactory("UIDataTextRun", FactoryTextRun<GetUILayoutDefault>);
-    in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<GetUILayoutDefault>);
+    in_ui_manager.AddContentFactory("UIDataString", FactoryString<in_get_layout_ref>);
+    in_ui_manager.AddContentFactory("UIDataTextRun", FactoryTextRun<in_get_layout_ref>);
+    in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<in_get_layout_ref>);
     in_ui_manager.AddContentFactory("stack_vertical_bottom_right", FactoryStack<
         GetUILayoutFullScreenMarginBottomRight,
         StackOrientation::TVertical,

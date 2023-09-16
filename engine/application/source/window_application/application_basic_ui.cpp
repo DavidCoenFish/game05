@@ -129,6 +129,12 @@ ApplicationBasicUI::ApplicationBasicUI(
 
     auto command_list = _draw_system->CreateCustomCommandList();
 
+    _draw_resource->_text_manager = std::make_unique<TextManager>(
+        _draw_system.get(),
+        command_list->GetCommandList(),
+        in_application_param._root_path
+        );
+
     // UI
     _draw_resource->_ui_manager = std::make_unique<UIManager>(
         _draw_system.get(),
