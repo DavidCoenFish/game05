@@ -8,9 +8,17 @@
 
 
 UIContentString::UIContentString(
+    const bool in_clear_background,
+    const VectorFloat4& in_clear_colour,
+    const UILayout& in_layout,
     std::unique_ptr<TextBlock>& in_text_block
     )
-    : _text_block(std::move(in_text_block))
+    : _content_default(
+        in_clear_background,
+        in_clear_colour,
+        in_layout
+        )
+    , _text_block(std::move(in_text_block))
 {
     return;
 }
@@ -18,6 +26,19 @@ UIContentString::UIContentString(
 UIContentString::~UIContentString()
 {
     return;
+}
+
+const bool UIContentString::SetBase(
+    const bool in_clear_background,
+    const VectorFloat4& in_clear_colour,
+    const UILayout& in_layout
+    )
+{
+    return _content_default.SetBase(
+        in_clear_background,
+        in_clear_colour,
+        in_layout
+        );
 }
 
 const bool UIContentString::SetFont(
@@ -51,6 +72,80 @@ const bool UIContentString::SetAlignment(
 
     return dirty;
 }
+
+// Make sorting children easier
+void UIContentString::SetSourceToken(void* in_source_ui_data_token)
+{
+    _content_default.SetSourceToken(in_source_ui_data_token);
+    return;
+}
+
+void* UIContentString::GetSourceToken() const
+{
+    return _content_default.GetSourceToken();
+}
+
+const bool UIContentString::SetLayout(const UILayout& in_layout)
+{
+    return _content_default.SetLayout(in_layout);
+}
+
+const bool UIContentString::UpdateHierarchy(
+    //std::vector<std::shared_ptr<IUIData>>*& out_array_data_or_null,
+    const IUIData* const in_data,
+    UIHierarchyNodeChildData& in_out_child_data,
+    const UIHierarchyNodeUpdateHierarchyParam& in_param
+    )
+{
+    return _content_default.UpdateHierarchy(
+        in_data,
+        in_out_child_data,
+        in_param
+        );
+}
+
+
+void UIContentString::UpdateSize(
+    const VectorInt2& in_parent_size,
+    const float in_ui_scale, 
+    UIGeometry& in_out_geometry, 
+    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+    )
+{
+    _content_default.UpdateSize(
+        in_parent_size,
+        in_ui_scale, 
+        in_out_geometry, 
+        in_out_node
+        );
+}
+
+const VectorInt2 UIContentString::GetDesiredSize(
+    const VectorInt2& in_parent_size,
+    const float in_ui_scale
+    )
+{
+    return _content_default.GetDesiredSize(
+        in_parent_size,
+        in_ui_scale
+        );
+}
+
+void UIContentString::Draw(
+    const UIManagerDrawParam& in_param,
+    Shader* const in_shader,
+    UIGeometry* const in_geometry,
+    const std::shared_ptr<HeapWrapperItem>& in_heap_wrapper_item
+    )
+{
+    _content_default.Draw(
+        in_param,
+        in_shader,
+        in_geometry,
+        in_heap_wrapper_item
+        );
+}
+
 
 /*
 const bool UIContentString::Update(

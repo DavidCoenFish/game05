@@ -113,7 +113,10 @@ public:
     void AddChild(
         std::unique_ptr<IUIContent>& in_content
         );
-    void ClearChildren();
+    const bool ClearChildren();
+
+    // Expose child data array to allow ui_content to specialise how hieararchy builds
+    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& GetChildData() { return _child_data_array; }
 
     // create/ destroy nodes to match model, make content match type from factory, update content?
     const bool UpdateHierarchy(
@@ -124,8 +127,12 @@ public:
         const bool in_allow_clear = false,
         const VectorFloat4& in_clear_colour = VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f)
         );
+    
+    const VectorInt2 GetTextureSize(
+        DrawSystem* const in_draw_system
+        ) const;
 
-    void UpdateGeometry(
+    void UpdateSize(
         const VectorInt2& in_parent_size,
         const float in_ui_scale
         );

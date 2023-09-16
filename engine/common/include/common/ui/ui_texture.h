@@ -27,7 +27,9 @@ public:
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list
         );
-    const VectorInt2 GetSize() const;
+    const VectorInt2 GetSize(
+        DrawSystem* const in_draw_system
+        ) const;
     const bool GetDrawToTexture() const { return _draw_to_texture; }
 
     const bool Update(

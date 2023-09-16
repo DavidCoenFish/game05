@@ -28,3 +28,11 @@ const int UIDataContainer::GetChangeID() const
     return _change_id;
 }
 
+void UIDataContainer::VisitDataArray(const std::function<void(const std::vector<std::shared_ptr<IUIData>>&)>& in_visitor) const
+{
+    if (in_visitor)
+    {
+        (in_visitor)(_array_data);
+    }
+    return;
+}

@@ -1,6 +1,7 @@
 #pragma once
 
 class VectorFloat2;
+class VectorInt2;
 
 class UICoord
 {
@@ -23,7 +24,11 @@ public:
 
     const float Calculate(
         const VectorFloat2& in_parent_size,
-        //const VectorInt2& in_parent_size,
+        const float in_ui_scale
+        ) const;
+
+    const int Calculate(
+        const VectorInt2& in_parent_size,
         const float in_ui_scale
         ) const;
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common/ui/ui_content/i_ui_content.h"
+#include "common/ui/ui_content/ui_content_default.h"
 
 class DrawSystemFrame;
 class HeapWrapperItem;
@@ -13,6 +14,8 @@ class UIContentTexture : public IUIContent
 {
 public:
     UIContentTexture(
+        const bool in_clear_background,
+        const VectorFloat4& in_clear_colour,
         const UILayout& in_layout,
         const std::shared_ptr<HeapWrapperItem>& in_shader_resource_view_handle
         );
@@ -31,6 +34,8 @@ private:
     //    ) override;
 
 private:
+    UIContentDefault _content_default;
+
     bool _dirty;
     std::shared_ptr<HeapWrapperItem> _shader_resource_view_handle;
     std::shared_ptr<UIGeometry> _geometry;

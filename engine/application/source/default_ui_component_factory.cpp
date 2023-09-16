@@ -3,6 +3,7 @@
 
 #include "common/macro.h"
 #include "common/math/vector_int4.h"
+#include "common/math/vector_float4.h"
 #include "common/text/text_manager.h"
 #include "common/text/text_enum.h"
 #include "common/text/text_font.h"
@@ -90,8 +91,17 @@ namespace
         return s_coord;
     }
 
+    typedef const VectorFloat4& (*TGetClearColour)();
+    const VectorFloat4& GetClearColour()
+    {
+        static VectorFloat4 s_colour(0.0f, 0.0f, 0.0f, 0.0f);
+        return s_colour;
+    }
+
     template<
-        TGetUILayoutRef GetLayoutRef = GetUILayoutDefault
+        TGetUILayoutRef GetLayoutRef = GetUILayoutDefault,
+        bool ClearBackground = false,
+        TGetClearColour GetClearColour = GetClearColour
         >
     const bool FactoryCanvas(
         std::unique_ptr<IUIContent>& in_out_content,
@@ -101,12 +111,18 @@ namespace
         UIContentCanvas* canvas = dynamic_cast<UIContentCanvas*>(in_out_content.get());
         if (nullptr == canvas)
         {
-            in_out_content = std::make_unique<UIContentCanvas>(GetLayoutRef());
+            in_out_content = std::make_unique<UIContentCanvas>(
+                ClearBackground,
+                GetClearColour(),
+                GetLayoutRef());
             return true;
         }
         else
         {
-            if (true == canvas->SetLayout(GetLayoutRef()))
+            if (true == canvas->SetBase(
+                    ClearBackground,
+                    GetClearColour(),
+                    GetLayoutRef()))
             {
                 return true;
             }
@@ -122,7 +138,9 @@ namespace
         int NewLineHeight = 16,
         TextEnum::HorizontalLineAlignment Horizontal = TextEnum::HorizontalLineAlignment::Middle,
         TextEnum::VerticalBlockAlignment Vertical = TextEnum::VerticalBlockAlignment::MiddleEM,
-        int EMSize = 16
+        int EMSize = 16,
+        bool ClearBackground = false,
+        TGetClearColour GetClearColour = GetClearColour
         >
     const bool FactoryString(
         std::unique_ptr<IUIContent>& in_out_content,
@@ -146,14 +164,23 @@ namespace
                 false,
                 0,
                 Horizontal,
-                Vertical
+                Vertical,
+                EMSize
                 );
-            in_out_content = std::move(std::make_unique<UIContentString>(GetDefaultUILayout(), text_block));
+            in_out_content = std::move(std::make_unique<UIContentString>(
+                ClearBackground,
+                GetClearColour(),
+                GetUILayoutDefault(), 
+                text_block
+                ));
             dirty = true;
         }
         else
         {
-            if (true == content->SetLayout(GetDefaultUILayout()))
+            if (true == content->SetBase(
+                    ClearBackground,
+                    GetClearColour(),
+                    GetUILayoutDefault()))
             {
                 dirty = true;
             }
@@ -174,7 +201,9 @@ namespace
 
     template<
         TGetUILayoutRef GetLayout = GetUILayoutDefault,
-        int FontSize = 16
+        int FontSize = 16,
+        bool ClearBackground = false,
+        TGetClearColour GetClearColour = GetClearColour
         >
     const bool FactoryTextRun(
         std::unique_ptr<IUIContent>&, //in_out_content,
@@ -188,7 +217,9 @@ namespace
         TGetUILayoutRef GetLayout = GetUILayoutDefault,
         StackOrientation Orientation = StackOrientation::TVertical,
         TGetUICoordRef GetGap = GetUICoordDefaultY,
-        bool ShrinkToFit = false
+        bool ShrinkToFit = false,
+        bool ClearBackground = false,
+        TGetClearColour GetClearColour = GetClearColour
         >
     const bool FactoryStack(
         std::unique_ptr<IUIContent>& in_out_content,
@@ -199,25 +230,33 @@ namespace
         bool dirty = false;
         if (nullptr == content)
         {
+            dirty = true;
             auto new_content = std::make_unique<UIContentStack>(
-                GetDefaultUILayout(),
+                ClearBackground,
+                GetClearColour(),
+                GetUILayoutDefault(),
                 Orientation,
                 GetGap(),
                 ShrinkToFit
                 );
-            in_out_content = std::move(std::make_unique<UIContentString>(new_content));
+            in_out_content = std::move(new_content);
         }
         else
         {
-            content->Set(
-                GetDefaultUILayout(),
+            if (true == content->Set(
+                ClearBackground,
+                GetClearColour(),
+                GetUILayoutDefault(),
                 Orientation,
                 GetGap(),
                 ShrinkToFit
-                );
+                ))
+            {
+                dirty = true;
+            }
         }
 
-        return false;
+        return dirty;
     }
 }
 

@@ -72,24 +72,6 @@ UIManagerDrawParam::UIManagerDrawParam(
     // Nop
 }
 
-namespace
-{
-    const bool FactoryStack(
-        std::unique_ptr<IUIContent>& in_out_content,
-        const UIContentFactoryParam& //in_param
-        )
-    {
-        UIContentStack* const content = dynamic_cast<UIContentStack*>(in_out_content.get());
-        if (nullptr == content)
-        {
-            in_out_content = std::make_unique<UIContentStack>();
-            return true;
-        }
-        return false;
-    }
-
-}
-
 class UIManagerImplementation
 {
 public:
@@ -175,6 +157,14 @@ public:
                     in_param._clear_colour
                     );
 
+                const VectorInt2 top_level_size = in_out_target_or_null->GetTextureSize(
+                    in_param._draw_system
+                    );
+
+                in_out_target_or_null->UpdateSize(
+                    top_level_size,
+                    in_param._ui_scale
+                    );
             }))
         {
             in_out_target_or_null = nullptr;

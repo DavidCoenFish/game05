@@ -33,10 +33,11 @@ UILayout::UILayout(
     return;
 }
 
-const VectorInt2 GetSize(const VectorInt2& in_parent_size, const float in_ui_scale) const
+const VectorInt2 UILayout::GetSize(const VectorInt2& in_parent_size, const float in_ui_scale) const
 {
     return VectorInt2(
-        _data_size[0].
+        _data_size[0].Calculate(in_parent_size, in_ui_scale),
+        _data_size[1].Calculate(in_parent_size, in_ui_scale)
         );
 }
 

@@ -56,9 +56,15 @@ IRenderTarget* UITexture::GetRenderTarget(
     return in_draw_system->GetRenderTargetBackBuffer();
 }
 
-const VectorInt2 UITexture::GetSize() const
+const VectorInt2 UITexture::GetSize(
+    DrawSystem* const in_draw_system
+    ) const
 {
-    return _size;
+    if (true == _draw_to_texture)
+    {
+        return _size;
+    }
+    return in_draw_system->GetRenderTargetBackBuffer()->GetSize();
 }
 
 const bool UITexture::Update(

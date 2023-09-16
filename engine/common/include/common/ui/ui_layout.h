@@ -19,7 +19,7 @@ public:
         const VectorFloat2& in_uv_scroll = VectorFloat2()
         );
 
-    const VectorInt2 GetSize(const VectorInt2& in_parent_size) const;
+    const VectorInt2 GetSize(const VectorInt2& in_parent_size, const float in_ui_scale) const;
 
     const bool operator==(const UILayout& in_rhs) const;
     const bool operator!=(const UILayout& in_rhs) const;

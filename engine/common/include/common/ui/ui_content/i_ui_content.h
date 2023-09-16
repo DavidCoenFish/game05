@@ -6,6 +6,8 @@ class HeapWrapperItem;
 class IUIData;
 class Shader;
 class UIGeometry;
+class UIHierarchyNode;
+class UILayout;
 class UITexture;
 class VectorInt2;
 class VectorFloat4;
@@ -24,23 +26,24 @@ public:
     IUIContent();
     virtual ~IUIContent();
 
-    virtual const bool GetClearBackground(
-        VectorFloat4& out_clear_colour
-        ) const = 0;
+    //virtual const bool GetClearBackground(
+    //    VectorFloat4& out_clear_colour
+    //    ) const = 0;
 
-    virtual void SetSourceUIDataToken(void* in_source_ui_data_token) = 0;
-    virtual void* GetSourceUIDataToken() const = 0;
+    // Make sorting children easier
+    virtual void SetSourceToken(void* in_source_ui_data_token) = 0;
+    virtual void* GetSourceToken() const = 0;
 
-    virtual void SetLayout(const UILayout& in_layout) = 0;
+    virtual const bool SetLayout(const UILayout& in_layout) = 0;
 
     virtual const bool UpdateHierarchy(
-        std::vector<std::shared_ptr<IUIData>>*& out_array_data_or_null,
+        //std::vector<std::shared_ptr<IUIData>>*& out_array_data_or_null,
         const IUIData* const in_data,
         UIHierarchyNodeChildData& in_out_child_data,
         const UIHierarchyNodeUpdateHierarchyParam& in_param
         ) = 0;
 
-    virtual void UpdateGeometry(
+    virtual void UpdateSize(
         const VectorInt2& in_parent_size,
         const float in_ui_scale, 
         UIGeometry& in_out_geometry, 

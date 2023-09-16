@@ -23,7 +23,6 @@ UICoord::~UICoord()
 
 const float UICoord::Calculate(
     const VectorFloat2& in_parent_size,
-    //const VectorInt2& in_parent_size,
     const float in_ui_scale
     ) const
 {
@@ -47,6 +46,33 @@ const float UICoord::Calculate(
     }
 
     return ((parent_dim * _ratio) + (_em_offset * in_ui_scale));
+}
+
+const int UICoord::Calculate(
+    const VectorInt2& in_parent_size,
+    const float in_ui_scale
+    ) const
+{
+    int parent_dim = 0;
+    switch(_parent_source)
+    {
+    default:
+        break;
+    case ParentSource::X:
+        parent_dim = in_parent_size.GetX();
+        break;
+    case ParentSource::Y:
+        parent_dim = in_parent_size.GetY();
+        break;
+    case ParentSource::Max:
+        parent_dim = std::max(in_parent_size.GetX(), in_parent_size.GetY());
+        break;
+    case ParentSource::Min:
+        parent_dim = std::min(in_parent_size.GetX(), in_parent_size.GetY());
+        break;
+    }
+
+    return static_cast<int>(round((parent_dim * _ratio) + (_em_offset * in_ui_scale)));
 }
 
 const bool UICoord::operator==(const UICoord& in_rhs) const

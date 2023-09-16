@@ -126,8 +126,8 @@ void TextPreVertex::BuildVertexData(
 {
     FinishLine();
 
-    int vertical_delta = 0.0f;
-    const int line_count = (int)_horizontal_bounds.size();
+    int vertical_delta = 0;
+    const int line_count = static_cast<int>(_horizontal_bounds.size());
     std::vector<int> horizontal_line_delta(line_count);
     for (int index = 0; index < line_count; ++index)
     {
@@ -138,7 +138,7 @@ void TextPreVertex::BuildVertexData(
         case TextEnum::HorizontalLineAlignment::Left:
             break;
         case TextEnum::HorizontalLineAlignment::Middle:
-            horizontal_line_delta[index] = (in_containter_size[0] - _horizontal_bounds[index][1]) * 0.5f;
+            horizontal_line_delta[index] = (in_containter_size[0] - _horizontal_bounds[index][1]) / 2;
             break;
         case TextEnum::HorizontalLineAlignment::Right:
             horizontal_line_delta[index] = (in_containter_size[0] - _horizontal_bounds[index][1]);
@@ -154,7 +154,7 @@ void TextPreVertex::BuildVertexData(
     case TextEnum::VerticalBlockAlignment::BottomEM:
         break;
     case TextEnum::VerticalBlockAlignment::Middle:
-        vertical_delta = ((in_containter_size[1] + in_containter_size[3]) - (_vertical_bounds[0] + _vertical_bounds[1])) * 0.5f;
+        vertical_delta = ((in_containter_size[1] + in_containter_size[3]) - (_vertical_bounds[0] + _vertical_bounds[1])) / 2;
         break;
     case TextEnum::VerticalBlockAlignment::MiddleEM:
         {
@@ -174,12 +174,12 @@ void TextPreVertex::BuildVertexData(
 
     for (const auto& item : _pre_vertex_data)
     {
-        const float horizontal_delta = horizontal_line_delta[item._line_index];
+        const int horizontal_delta = horizontal_line_delta[item._line_index];
         const VectorFloat4 pos = VectorFloat4(
-            (((item._pos_low_high[0] + horizontal_delta) / (float)in_containter_size.GetX()) * 2.0f) - 1.0f,
-            (((item._pos_low_high[1] + vertical_delta) / (float)in_containter_size.GetY()) * 2.0f) - 1.0f,
-            (((item._pos_low_high[2] + horizontal_delta) / (float)in_containter_size.GetX()) * 2.0f) - 1.0f,
-            (((item._pos_low_high[3] + vertical_delta) / (float)in_containter_size.GetY()) * 2.0f) - 1.0f
+            (((item._pos_low_high[0] + horizontal_delta) / static_cast<float>(in_containter_size.GetX())) * 2.0f) - 1.0f,
+            (((item._pos_low_high[1] + vertical_delta) / static_cast<float>(in_containter_size.GetY())) * 2.0f) - 1.0f,
+            (((item._pos_low_high[2] + horizontal_delta) / static_cast<float>(in_containter_size.GetX())) * 2.0f) - 1.0f,
+            (((item._pos_low_high[3] + vertical_delta) / static_cast<float>(in_containter_size.GetY())) * 2.0f) - 1.0f
             );
 
         //0.0f, 0.0f,

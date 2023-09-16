@@ -265,3 +265,17 @@ UIManager::Draw(node N0)
         for each of A0
             draw G1 with texture T1
 
+UIHierarchyNode // N0 
+    _texture // T0 texture or backbuffer A0 draws to
+    _child_node_array // A0
+        _geometry // G1 geometry to draw the texture T1 onto T0
+        _content // C1 controls size of T1 and G1. model returns an array of ui data for root
+        UIHierarchyNode // N1 child node
+            _texture // T1 texture or backbuffer A1 draws to
+            _child_node_array // A1
+
+C1 is a stack component, it uses G1 to draw on T0
+it calculates a size, and hands it down to N1, and N1::A1 calculates desired size. 
+C1 stacks together the desired children and gaps to make a size of T1 
+
+

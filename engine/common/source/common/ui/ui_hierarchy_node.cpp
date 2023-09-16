@@ -6,6 +6,7 @@
 #include "common/draw_system/shader/shader.h"
 #include "common/ui/i_ui_model.h"
 #include "common/ui/ui_content/ui_content_canvas.h"
+#include "common/ui/ui_content/ui_content_default.h"
 #include "common/ui/ui_content/ui_content_stack.h"
 #include "common/ui/ui_content/ui_content_string.h"
 #include "common/ui/ui_content/ui_content_texture.h"
@@ -73,8 +74,8 @@ UIHierarchyNodeUpdateSize::UIHierarchyNodeUpdateSize()
 
 UIHierarchyNode::UIHierarchyNode()
 {
+    _texture = std::make_unique<UITexture>();
 
-    // Nop
 }
 
 UIHierarchyNode::~UIHierarchyNode()
@@ -124,9 +125,15 @@ void UIHierarchyNode::AddChild(
     _child_data_array.push_back(child);
 }
 
-void UIHierarchyNode::ClearChildren()
+const bool UIHierarchyNode::ClearChildren()
 {
-    _child_data_array.clear();
+    bool dirty = false;
+    if (0 != _child_data_array.size())
+    {
+        dirty = true;
+        _child_data_array.clear();
+    }
+    return dirty;
 }
 
 const bool UIHierarchyNode::UpdateHierarchy(
@@ -167,6 +174,10 @@ const bool UIHierarchyNode::UpdateHierarchy(
     // Update child data array
     if (nullptr == in_array_data_or_null)
     {
+        if (0 != _child_data_array.size())
+        {
+            dirty = true;
+        }
         _child_data_array.clear();
     }
     else
@@ -178,7 +189,7 @@ const bool UIHierarchyNode::UpdateHierarchy(
         for (int index = target_length; index < (int)_child_data_array.size(); ++index)
         {
             auto child = _child_data_array[index];
-            map_temp_ownership[child->_content->GetSourceUIDataToken()] = child;
+            map_temp_ownership[child->_content->GetSourceToken()] = child;
             dirty = true;
         }
         _child_data_array.resize(target_length);
@@ -190,7 +201,7 @@ const bool UIHierarchyNode::UpdateHierarchy(
             const auto& child = _child_data_array[index];
             if (nullptr != child)
             {
-                void* source_child_token = child->_content->GetSourceUIDataToken();
+                void* source_child_token = child->_content->GetSourceToken();
                 void* data_token = (void*)&data;
                 if (data_token != source_child_token)
                 {
@@ -261,29 +272,29 @@ const bool UIHierarchyNode::UpdateHierarchy(
 
             if (nullptr != child->_content)
             {
-                std::vector<std::shared_ptr<IUIData>>* array_data_or_null = nullptr;
+                //std::vector<std::shared_ptr<IUIData>>* array_data_or_null = nullptr;
 
                 if (true == child->_content->UpdateHierarchy(
-                    array_data_or_null,
+                    //array_data_or_null,
                     data.get(),
                     *(child.get()),
-                    in_param,
+                    in_param
                     ))
                 {
                     dirty = true;
                 }
 
-                VectorFloat4 clear_colour;
-                const bool allow_clear = child->_content->GetClearBackground(clear_colour);
+                //VectorFloat4 clear_colour;
+                //const bool allow_clear = child->_content->GetClearBackground(clear_colour);
 
-                child->_node->UpdateHierarchy(
-                    in_param,
-                    array_data_or_null,
-                    true,
-                    false,
-                    allow_clear,
-                    clear_colour
-                    );
+                //child->_node->UpdateHierarchy(
+                //    in_param,
+                //    array_data_or_null,
+                //    true,
+                //    false,
+                //    allow_clear,
+                //    clear_colour
+                //    );
             }
         }
     }
@@ -291,7 +302,14 @@ const bool UIHierarchyNode::UpdateHierarchy(
     return dirty;
 }
 
-void UIHierarchyNode::UpdateGeometry(
+const VectorInt2 UIHierarchyNode::GetTextureSize(
+    DrawSystem* const in_draw_system
+    ) const
+{
+    return _texture->GetSize(in_draw_system);
+}
+
+void UIHierarchyNode::UpdateSize(
     const VectorInt2& in_parent_size,
     const float in_ui_scale
     )
@@ -303,6 +321,8 @@ const VectorInt2 UIHierarchyNode::GetDesiredSize(
     const float in_ui_scale
     )
 {
+    DSC_TODO("unimplemented");
+    return in_parent_size;
 }
 
 
