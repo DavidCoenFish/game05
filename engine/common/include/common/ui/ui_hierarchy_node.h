@@ -147,7 +147,8 @@ public:
     // return True if we needed to draw, ie, we have modified _texture
     const bool Draw(
         const UIManagerDrawParam& in_draw_param,
-        Shader* const in_shader
+        Shader* const in_shader,
+        IUIContent* const in_content_or_null = nullptr
         );
 
 private:

@@ -80,13 +80,6 @@ public:
         const float in_ui_scale
         );
 
-    void Draw(
-        const UIManagerDrawParam& in_param,
-        Shader* const in_shader,
-        UIGeometry* const in_geometry,
-        const std::shared_ptr<HeapWrapperItem>& in_heap_wrapper_item
-        );
-
 private:
     bool _clear_background;
     VectorFloat4 _clear_colour;

@@ -56,11 +56,9 @@ public:
         const float in_ui_scale
         ) = 0;
 
-    virtual void Draw(
-        const UIManagerDrawParam& in_param,
-        Shader* const in_shader,
-        UIGeometry* const in_geometry,
-        const std::shared_ptr<HeapWrapperItem>& in_heap_wrapper_item
-        ) = 0;
+    virtual const bool GetNeedsPreDraw() const;
+    virtual void PreDraw(
+        const UIManagerDrawParam& in_param
+        );
 
 };

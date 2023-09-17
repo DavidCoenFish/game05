@@ -75,6 +75,11 @@ public:
         return _text_bounds;
     }
 
+    TextFont* const GetFont() const
+    {
+        return _text_font;
+    }
+
     const bool SetFont(
         TextFont& in_text_font,
         const int in_font_size,
@@ -127,6 +132,11 @@ public:
             _geometry_dirty = true;
         }
         return dirty;
+    }
+
+    const bool GetWidthLimitEnabled() const
+    {
+        return _width_limit_enabled;
     }
 
     const bool SetWidthLimit(
@@ -386,6 +396,11 @@ VectorInt2 TextBlock::GetTextBounds()
     return _implementation->GetTextBounds();
 }
 
+TextFont* const TextBlock::GetFont() const
+{
+    return _implementation->GetFont();
+}
+
 const bool TextBlock::SetFont(
     TextFont& in_text_font,
     const int in_font_size,
@@ -417,6 +432,11 @@ const bool TextBlock::SetTextContainerSize(
     return _implementation->SetTextContainerSize(
         in_size
         );
+}
+
+const bool TextBlock::GetWidthLimitEnabled() const
+{
+    return _implementation->GetWidthLimitEnabled();
 }
 
 const bool TextBlock::SetWidthLimit(

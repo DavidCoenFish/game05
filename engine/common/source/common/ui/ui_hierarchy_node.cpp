@@ -346,52 +346,30 @@ void UIHierarchyNode::UpdateSize(
     return;
 }
 
-//const VectorInt2 UIHierarchyNode::GetDesiredSize(
-//    const VectorInt2& in_parent_size,
-//    const float in_ui_scale
-//    )
-//{
-//    DSC_TODO("unimplemented");
-//    return in_parent_size;
-//}
-
-
-//void UIHierarchyNode::UpdateDesiredSize(
-//    const VectorInt2& in_parent_desired_size,
-//    const UIHierarchyNodeUpdateDesiredSize& in_param
-//    )
-//{
-//}
-//
-//void UIHierarchyNode::UpdateSize(
-//    const VectorInt2& in_parent_size,
-//    const VectorFloat4& in_input_screen_parent,
-//    const UIHierarchyNodeUpdateSize& in_param
-//    )
-//{
-//}
-
-//UIManager::Draw(node N0)
-//    N0::Draw(shader)
-//        for each of A0
-//            N1::Draw(shader)
-//        set T0 as render target
-//        for each of A0
-//            draw G1 with texture T1
-
 // Return True if we needed to draw, ie, the texture may have changed
 const bool UIHierarchyNode::Draw(
     const UIManagerDrawParam& in_draw_param,
-    Shader* const in_shader
+    Shader* const in_shader,
+    IUIContent* const in_content_or_null
     )
 {
     bool dirty = false;
+
+    if (nullptr != in_content_or_null)
+    {
+        if (true == in_content_or_null->GetNeedsPreDraw())
+        {
+            dirty = true;
+        }
+    }
+
     // Ensure that child texture is ready
     for (auto& iter : _child_data_array)
     {
         if (true == iter->_node->Draw(
             in_draw_param,
-            in_shader
+            in_shader,
+            iter->_content.get()
             ))
         {
             dirty = true;
@@ -414,15 +392,25 @@ const bool UIHierarchyNode::Draw(
             _texture->GetAllowClear()
             );
 
+        if (nullptr != in_content_or_null)
+        {
+            in_content_or_null->PreDraw(
+                in_draw_param
+                );
+        }
+
         for (auto& iter : _child_data_array)
         {
             UIHierarchyNodeChildData& child_data = *iter;
-            child_data._content->Draw(
-                in_draw_param,
-                in_shader,
-                child_data._geometry.get(),
-                child_data._node->GetShaderResourceHeapWrapperItem()
+
+            in_shader->SetShaderResourceViewHandle(0, child_data._node->GetShaderResourceHeapWrapperItem());
+            auto geometry = child_data._geometry->GetGeometry(
+                in_draw_param._draw_system,
+                in_draw_param._frame->GetCommandList()
                 );
+
+            in_draw_param._frame->SetShader(in_shader);
+            in_draw_param._frame->Draw(geometry);
         }
 
         _texture->SetHasDrawn(true);

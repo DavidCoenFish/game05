@@ -45,13 +45,6 @@ private:
         const float in_ui_scale
         ) override;
 
-    virtual void Draw(
-        const UIManagerDrawParam& in_param,
-        Shader* const in_shader,
-        UIGeometry* const in_geometry,
-        const std::shared_ptr<HeapWrapperItem>& in_heap_wrapper_item
-        ) override;
-
 private:
     UIContentDefault _content_default;
 

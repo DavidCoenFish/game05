@@ -48,12 +48,20 @@ public:
 
         _data_map[""] = std::vector<std::shared_ptr<IUIData>>({
 
+#if 0 // Canvas test
             std::make_shared<UIDataContainer>(
                 std::vector<std::shared_ptr<IUIData>>(),
                 "UIDataContainer"
                 )
+#endif
 
-/*
+#if 1
+            std::make_shared<UIDataString>(
+                "Hello human"
+                )
+#endif
+
+#if 0 // Stack test
             std::make_shared<UIDataContainer>(std::vector<std::shared_ptr<IUIData>>({
                 _data_map_build_fps,
                 _data_map_build_info,
@@ -61,7 +69,7 @@ public:
                 }),
                 "stack_vertical_bottom_right"
                 )
-*/
+#endif
             });
     }
 
@@ -175,6 +183,8 @@ void ApplicationBasicUI::Update()
     {
         auto frame = _draw_system->CreateNewFrame();
 
+        frame->SetRenderTarget(_draw_system->GetRenderTargetBackBuffer());
+
         // Update ui layout
         {
             UIManagerUpdateParam update_param(
@@ -212,7 +222,8 @@ void ApplicationBasicUI::Update()
                 *_draw_resource->_ui_hierarchy_node,
                 UIManagerDrawParam(
                     _draw_system.get(),
-                    frame.get()
+                    frame.get(),
+                    _draw_resource->_text_manager.get()
                     )
                 );
         }

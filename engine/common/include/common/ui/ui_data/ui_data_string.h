@@ -19,7 +19,7 @@ public:
     virtual ~UIDataString();
 
     const std::string GetString() const { return _data; }
-    //const std::string GetLocale() const { return _locale; }
+    const LocaleISO_639_1 GetLocale() const { return _locale; }
     void SetString(const std::string& in_data);
 
 private:

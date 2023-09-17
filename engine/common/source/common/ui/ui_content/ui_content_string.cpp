@@ -1,17 +1,23 @@
 #include "common/common_pch.h"
 #include "common/ui/ui_content/ui_content_string.h"
 
+//#include "common/draw_system/draw_system_frame.h"
+//#include "common/draw_system/draw_system.h"
 #include "common/text/text_block.h"
 #include "common/text/text_manager.h"
 #include "common/ui/ui_data/ui_data_string.h"
 #include "common/ui/ui_hierarchy_node.h"
+#include "common/ui/ui_manager.h"
 
 
 UIContentString::UIContentString(
     const bool in_clear_background,
     const VectorFloat4& in_clear_colour,
     const UILayout& in_layout,
-    std::unique_ptr<TextBlock>& in_text_block
+    std::unique_ptr<TextBlock>& in_text_block,
+    const int in_font_size,
+    const int in_new_line_height,
+    const int in_em_size
     )
     : _content_default(
         in_clear_background,
@@ -19,6 +25,10 @@ UIContentString::UIContentString(
         in_layout
         )
     , _text_block(std::move(in_text_block))
+    , _font_size(in_font_size)
+    , _new_line_height(in_new_line_height)
+    , _em_size(in_em_size)
+    , _pre_draw_dirty(true)
 {
     return;
 }
@@ -34,29 +44,36 @@ const bool UIContentString::SetBase(
     const UILayout& in_layout
     )
 {
-    return _content_default.SetBase(
+    if (true == _content_default.SetBase(
         in_clear_background,
         in_clear_colour,
         in_layout
-        );
+        ))
+    {
+        _pre_draw_dirty = true;
+        return true;
+    }
+    return false;
 }
 
-const bool UIContentString::SetFont(
+const bool UIContentString::Set(
     TextFont& in_font, 
     const int in_font_size,
-    const int in_new_line_height
-    )
-{
-    return _text_block->SetFont(in_font, in_font_size, in_new_line_height);
-}
-
-const bool UIContentString::SetAlignment(
+    const int in_new_line_height,
     const TextEnum::HorizontalLineAlignment in_horizontal, 
     const TextEnum::VerticalBlockAlignment in_vertical,
     const int in_em_size
     )
 {
+    _font_size = in_font_size;
+    _new_line_height = in_new_line_height;
+    _em_size = in_em_size;
+
     bool dirty = false;
+    if (true == _text_block->SetFont(in_font, in_font_size, in_new_line_height))
+    {
+        dirty = true;
+    }
     if (true == _text_block->SetHorizontalLineAlignment(in_horizontal))
     {
         dirty = true;
@@ -68,6 +85,11 @@ const bool UIContentString::SetAlignment(
     if (true == _text_block->SetEMSize(in_em_size))
     {
         dirty = true;
+    }
+
+    if (true == dirty)
+    {
+        _pre_draw_dirty = true;
     }
 
     return dirty;
@@ -97,13 +119,30 @@ const bool UIContentString::UpdateHierarchy(
     const UIHierarchyNodeUpdateHierarchyParam& in_param
     )
 {
+#if 0
     return _content_default.UpdateHierarchy(
         in_data,
         in_out_child_data,
         in_param
         );
-}
+#else
+    bool dirty = false;
+    const UIDataString* const data_string = dynamic_cast<const UIDataString*>(in_data);
+    if (nullptr != data_string)
+    {
+        if (true == _text_block->SetText(
+            data_string->GetString(),
+            in_param._text_manager->GetLocaleToken(data_string->GetLocale())
+            ))
+        {
+            dirty = true;
+            _pre_draw_dirty = true;
+        }
+    }
 
+    return dirty;
+#endif
+}
 
 void UIContentString::UpdateSize(
     const VectorInt2& in_parent_size,
@@ -113,6 +152,20 @@ void UIContentString::UpdateSize(
     UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
+    _text_block->SetWidthLimit(
+        _text_block->GetWidthLimitEnabled(),
+        in_parent_size[0]
+        );
+    _text_block->SetEMSize(static_cast<int>(round(_em_size * in_ui_scale)));
+    _text_block->SetFont(
+        *(_text_block->GetFont()),
+        static_cast<int>(round(_font_size * in_ui_scale)),
+        static_cast<int>(round(_new_line_height * in_ui_scale))
+        );
+    _text_block->SetTextContainerSize(
+        in_parent_size
+        );
+
     _content_default.UpdateSize(
         in_parent_size,
         in_ui_scale, 
@@ -127,59 +180,41 @@ const VectorInt2 UIContentString::GetDesiredSize(
     const float in_ui_scale
     )
 {
+#if 0
     return _content_default.GetDesiredSize(
         in_parent_size,
         in_ui_scale
         );
-}
+#else
 
-void UIContentString::Draw(
-    const UIManagerDrawParam& in_param,
-    Shader* const in_shader,
-    UIGeometry* const in_geometry,
-    const std::shared_ptr<HeapWrapperItem>& in_heap_wrapper_item
-    )
-{
-    _content_default.Draw(
-        in_param,
-        in_shader,
-        in_geometry,
-        in_heap_wrapper_item
+    _text_block->SetWidthLimit(
+        _text_block->GetWidthLimitEnabled(),
+        in_parent_size[0]
         );
+
+    _text_block->SetEMSize(static_cast<int>(round(_em_size * in_ui_scale)));
+    _text_block->SetFont(
+        *(_text_block->GetFont()),
+        static_cast<int>(round(_font_size * in_ui_scale)),
+        static_cast<int>(round(_new_line_height * in_ui_scale))
+        );
+    return _text_block->GetTextBounds();
+#endif
 }
 
+const bool UIContentString::GetNeedsPreDraw() const
+{
+    return _pre_draw_dirty;
+}
 
-/*
-const bool UIContentString::Update(
-    VectorInt2& out_texture_size,
-    UIHierarchyNodeLayoutData& out_layout_data,
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& out_child_data_array,
-    const VectorInt2& in_parent_size,
-    const IUIData* const in_data,
-    const std::string& in_model_key,
-    const UIHierarchyNodeUpdateLayoutParam& in_param
+void UIContentString::PreDraw(
+    const UIManagerDrawParam& in_param
     )
 {
-    out_child_data_array.clear();
-
-    //set textblock text from in_data
-    const UIDataString* const data_string = dynamic_cast<const UIDataString*>(in_data);
-
-    bool dirty = false;
-    std::string data;
-    if (nullptr != data_string)
-    {
-        data = data_string->GetString();
-    }
-    auto* locale = in_param._text_manager->GetLocaleToken(in_param._locale);
-    if (true == _text_block->SetText(
-        data,
-        locale
-        ))
-    {
-        dirty = true;
-    }
-
-    return dirty;
+    in_param._text_manager->DrawText(
+        in_param._draw_system,
+        in_param._frame,
+        _text_block.get()
+        );
+    _pre_draw_dirty = false;
 }
-*/

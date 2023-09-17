@@ -140,18 +140,3 @@ const VectorInt2 UIContentStack::GetDesiredSize(
         in_ui_scale
         );
 }
-
-void UIContentStack::Draw(
-    const UIManagerDrawParam& in_param,
-    Shader* const in_shader,
-    UIGeometry* const in_geometry,
-    const std::shared_ptr<HeapWrapperItem>& in_heap_wrapper_item
-    )
-{
-    _content_default.Draw(
-        in_param,
-        in_shader,
-        in_geometry,
-        in_heap_wrapper_item
-        );
-}

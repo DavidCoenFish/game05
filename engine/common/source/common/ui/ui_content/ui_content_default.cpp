@@ -228,7 +228,7 @@ void UIContentDefault::UpdateSize(
     UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
-    VectorInt2 initial_size = _layout.GetSize(in_parent_size, in_ui_scale);
+    const VectorInt2 initial_size = _layout.GetSize(in_parent_size, in_ui_scale);
 
     // Default is to go through children and see if anyone needs a bigger size than what we calculate
     VectorInt2 max_desired_size;
@@ -281,29 +281,9 @@ void UIContentDefault::UpdateSize(
 }
 
 const VectorInt2 UIContentDefault::GetDesiredSize(
-    const VectorInt2& in_parent_size,
-    const float in_ui_scale
+    const VectorInt2&, //in_parent_size,
+    const float //in_ui_scale
     )
 {
-    DSC_TODO("unimplemented");
-    return in_parent_size;
-}
-
-void UIContentDefault::Draw(
-    const UIManagerDrawParam& in_param,
-    Shader* const in_shader,
-    UIGeometry* const in_geometry,
-    const std::shared_ptr<HeapWrapperItem>& in_heap_wrapper_item // The texture resource of the node for this content
-    )
-{
-    in_shader->SetShaderResourceViewHandle(0, in_heap_wrapper_item);
-    auto geometry = in_geometry->GetGeometry(
-        in_param._draw_system,
-        in_param._frame->GetCommandList()
-        );
-
-    in_param._frame->SetShader(in_shader);
-    in_param._frame->Draw(geometry);
-
-    return;
+    return VectorInt2();
 }

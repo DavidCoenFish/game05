@@ -1,6 +1,7 @@
 #pragma once
 class DrawSystem;
 class IRenderTarget;
+class IResource;
 class Shader;
 class GeometryGeneric;
 

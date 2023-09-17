@@ -39,6 +39,7 @@ public:
     // Get the natural size required by the text using current width limit if enabled
     VectorInt2 GetTextBounds();
 
+    TextFont* const GetFont() const;
     const bool SetFont(
         TextFont& in_text_font,
         const int in_font_size,
@@ -51,6 +52,7 @@ public:
     const bool SetTextContainerSize(
         const VectorInt2& in_size
         );
+    const bool GetWidthLimitEnabled() const;
     const bool SetWidthLimit(
         const bool in_width_limit_enabled,
         const int in_width_limit

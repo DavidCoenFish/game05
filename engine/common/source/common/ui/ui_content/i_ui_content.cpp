@@ -11,3 +11,15 @@ IUIContent::~IUIContent()
     // Nop
 }
 
+const bool IUIContent::GetNeedsPreDraw() const
+{
+    return false;
+}
+
+void IUIContent::PreDraw(
+    const UIManagerDrawParam&
+    )
+{
+}
+
+

@@ -176,7 +176,10 @@ namespace
                 in_clear_background,
                 in_get_clear_colour_ref(),
                 in_get_layout_ref(), 
-                text_block
+                text_block,
+                in_font_size,
+                in_new_line_height,
+                in_em_size
                 ));
             dirty = true;
         }
@@ -190,12 +193,14 @@ namespace
                 dirty = true;
             }
 
-            if (true == content->SetFont(*font, in_font_size, in_new_line_height))
-            {
-                dirty = true;
-            }
-
-            if (true == content->SetAlignment(in_horizontal, in_vertical, in_em_size))
+            if (true == content->Set(
+                *font, 
+                in_font_size, 
+                in_new_line_height,
+                in_horizontal, 
+                in_vertical, 
+                in_em_size
+                ))
             {
                 dirty = true;
             }
@@ -271,8 +276,8 @@ void DefaultUIComponentFactory::Populate(
 {
     in_ui_manager.AddContentFactory("UIDataString", FactoryString<>);
     in_ui_manager.AddContentFactory("UIDataTextRun", FactoryTextRun<>);
-    //in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<>);
-    in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<GetUILayoutFullScreenMargin, true, GetColourRed>);
+    in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<>);
+    //in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<GetUILayoutFullScreenMargin, true, GetColourRed>);
 
 
     in_ui_manager.AddContentFactory("stack_vertical_bottom_right", FactoryStack<

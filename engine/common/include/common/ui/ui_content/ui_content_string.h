@@ -14,7 +14,10 @@ public:
         const bool in_clear_background,
         const VectorFloat4& in_clear_colour,
         const UILayout& in_layout,
-        std::unique_ptr<TextBlock>& in_text_block
+        std::unique_ptr<TextBlock>& in_text_block,
+        const int in_font_size,
+        const int in_new_line_height,
+        const int in_em_size
         );
     ~UIContentString();
 
@@ -25,13 +28,10 @@ public:
         );
 
     // return true if we have a text block which this is a new value, else true
-    const bool SetFont(
+    const bool Set(
         TextFont& in_font, 
         const int in_font_size,
-        const int in_new_line_height
-        );
-
-    const bool SetAlignment(
+        const int in_new_line_height,
         const TextEnum::HorizontalLineAlignment in_horizontal, 
         const TextEnum::VerticalBlockAlignment in_vertical,
         const int in_em_size
@@ -64,11 +64,9 @@ private:
         const float in_ui_scale
         ) override;
 
-    virtual void Draw(
-        const UIManagerDrawParam& in_param,
-        Shader* const in_shader,
-        UIGeometry* const in_geometry,
-        const std::shared_ptr<HeapWrapperItem>& in_heap_wrapper_item
+    virtual const bool GetNeedsPreDraw() const override;
+    virtual void PreDraw(
+        const UIManagerDrawParam& in_param
         ) override;
 
 private:
@@ -76,5 +74,11 @@ private:
 
     //bool _use_parent_size_for_width_limit;
     std::unique_ptr<TextBlock> _text_block;
+
+    // these interact with UI scale, so we need a copy
+    int _font_size;
+    int _new_line_height;
+    int _em_size;
+    bool _pre_draw_dirty;
 
 };
