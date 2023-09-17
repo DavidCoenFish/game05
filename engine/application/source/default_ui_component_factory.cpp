@@ -47,7 +47,7 @@ namespace
     // Return copy or reference, want to avoid 
     typedef const UILayout& (*TGetUILayoutRef)();
 
-    const UILayout& in_get_layout_ref()
+    const UILayout& GetUILayoutFullScreen()
     {
         static UILayout s_layout = UILayout::FactoryFull();
         return s_layout;
@@ -97,9 +97,14 @@ namespace
         static VectorFloat4 s_colour(0.0f, 0.0f, 0.0f, 0.0f);
         return s_colour;
     }
+    const VectorFloat4& GetColourRed()
+    {
+        static VectorFloat4 s_colour(1.0f, 0.0f, 0.0f, 1.0f);
+        return s_colour;
+    }
 
     template<
-        TGetUILayoutRef in_get_layout_ref = in_get_layout_ref,
+        TGetUILayoutRef in_get_layout_ref = GetUILayoutFullScreen,
         bool in_clear_background = false,
         TGetColour in_get_clear_colour_ref = GetColourTransparent
         >
@@ -132,7 +137,7 @@ namespace
     }
 
     template<
-        TGetUILayoutRef in_get_layout_ref = in_get_layout_ref,
+        TGetUILayoutRef in_get_layout_ref = GetUILayoutFullScreen,
         TGetPathRef in_get_path_ref = GetFontPathDefault,
         int in_font_size = 16,
         int in_new_line_height = 16,
@@ -200,7 +205,7 @@ namespace
     }
 
     template<
-        TGetUILayoutRef in_get_layout_ref = in_get_layout_ref,
+        TGetUILayoutRef in_get_layout_ref = GetUILayoutFullScreen,
         int in_font_size = 16,
         bool in_clear_background = false,
         TGetColour in_get_clear_colour_ref = GetColourTransparent
@@ -214,7 +219,7 @@ namespace
     }
 
     template<
-        TGetUILayoutRef in_get_layout_ref = in_get_layout_ref,
+        TGetUILayoutRef in_get_layout_ref = GetUILayoutFullScreen,
         StackOrientation in_orientation = StackOrientation::TVertical,
         TGetUICoordRef in_get_gap_ref = GetUICoordDefaultY,
         bool in_shrink_to_fit = false,
@@ -264,13 +269,19 @@ void DefaultUIComponentFactory::Populate(
     UIManager& in_ui_manager
     )
 {
-    in_ui_manager.AddContentFactory("UIDataString", FactoryString<in_get_layout_ref>);
-    in_ui_manager.AddContentFactory("UIDataTextRun", FactoryTextRun<in_get_layout_ref>);
-    in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<in_get_layout_ref>);
+    in_ui_manager.AddContentFactory("UIDataString", FactoryString<>);
+    in_ui_manager.AddContentFactory("UIDataTextRun", FactoryTextRun<>);
+    //in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<>);
+    in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<GetUILayoutFullScreenMargin, true, GetColourRed>);
+
+
     in_ui_manager.AddContentFactory("stack_vertical_bottom_right", FactoryStack<
         GetUILayoutFullScreenMarginBottomRight,
         StackOrientation::TVertical,
-        GetUICoordDefaultY
+        GetUICoordDefaultY,
+        true,
+        true,
+        GetColourRed
         >);
 
 }

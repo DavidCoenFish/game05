@@ -41,6 +41,22 @@ const VectorInt2 UILayout::GetSize(const VectorInt2& in_parent_size, const float
         );
 }
 
+const VectorInt2 UILayout::GetAttach(const VectorInt2& in_size, const float in_ui_scale) const
+{
+    return VectorInt2(
+        _data_attach[0].Calculate(in_size, in_ui_scale),
+        _data_attach[1].Calculate(in_size, in_ui_scale)
+        );
+}
+
+const VectorInt2 UILayout::GetPivot(const VectorInt2& in_parent_size, const float in_ui_scale) const
+{
+    return VectorInt2(
+        _data_pivot[0].Calculate(in_parent_size, in_ui_scale),
+        _data_pivot[1].Calculate(in_parent_size, in_ui_scale)
+        );
+}
+
 const bool UILayout::operator==(const UILayout& in_rhs) const
 {
     if (_data_size[0] != in_rhs._data_size[0])

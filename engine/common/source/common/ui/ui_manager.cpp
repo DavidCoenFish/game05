@@ -148,14 +148,18 @@ public:
                     in_out_target_or_null = std::make_shared<UIHierarchyNode>();
                 }
 
-                in_out_target_or_null->UpdateHierarchy(
+                bool dirty = false;
+                if(true == in_out_target_or_null->UpdateHierarchy(
                     hierarchy_param,
                     &in_array_data,
                     in_param._draw_to_texture,
                     in_param._always_dirty,
                     in_param._allow_clear,
                     in_param._clear_colour
-                    );
+                    ))
+                {
+                    dirty = true;
+                }
 
                 const VectorInt2 top_level_size = in_out_target_or_null->GetTextureSize(
                     in_param._draw_system
@@ -163,7 +167,9 @@ public:
 
                 in_out_target_or_null->UpdateSize(
                     top_level_size,
-                    in_param._ui_scale
+                    in_param._ui_scale,
+                    in_param._time_delta,
+                    dirty
                     );
             }))
         {

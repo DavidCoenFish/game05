@@ -68,7 +68,8 @@ const bool UIContentCanvas::UpdateHierarchy(
 
 void UIContentCanvas::UpdateSize(
     const VectorInt2& in_parent_size,
-    const float in_ui_scale, 
+    const float in_ui_scale,
+    const float in_time_delta, 
     UIGeometry& in_out_geometry, 
     UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
@@ -76,6 +77,7 @@ void UIContentCanvas::UpdateSize(
     _content_default.UpdateSize(
         in_parent_size,
         in_ui_scale, 
+        in_time_delta,
         in_out_geometry, 
         in_out_node
         );

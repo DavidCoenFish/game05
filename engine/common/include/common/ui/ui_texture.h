@@ -40,10 +40,15 @@ public:
         );
 
     void SetSize(
-        DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list,
+        //DrawSystem* const in_draw_system,
+        //ID3D12GraphicsCommandList* const in_command_list,
         const VectorInt2& in_size
         );
+
+    void MarkDirty()
+    {
+        _has_drawn = false;
+    }
 
     // nullptr if _bUseBackBuffer is true
     std::shared_ptr<HeapWrapperItem> GetShaderResourceHeapWrapperItem() const;

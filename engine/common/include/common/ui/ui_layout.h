@@ -20,6 +20,9 @@ public:
         );
 
     const VectorInt2 GetSize(const VectorInt2& in_parent_size, const float in_ui_scale) const;
+    const VectorInt2 GetAttach(const VectorInt2& in_size, const float in_ui_scale) const;
+    const VectorInt2 GetPivot(const VectorInt2& in_parent_size, const float in_ui_scale) const;
+    VectorFloat2& GetScrollRef() { return _uv_scroll; }
 
     const bool operator==(const UILayout& in_rhs) const;
     const bool operator!=(const UILayout& in_rhs) const;

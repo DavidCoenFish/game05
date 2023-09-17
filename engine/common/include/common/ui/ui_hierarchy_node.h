@@ -134,13 +134,15 @@ public:
 
     void UpdateSize(
         const VectorInt2& in_parent_size,
-        const float in_ui_scale
+        const float in_ui_scale,
+        const float in_time_delta,
+        const bool in_mark_dirty
         );
 
-    const VectorInt2 GetDesiredSize(
-        const VectorInt2& in_parent_size,
-        const float in_ui_scale
-        );
+    //const VectorInt2 GetDesiredSize(
+    //    const VectorInt2& in_parent_size,
+    //    const float in_ui_scale
+    //    );
 
     // return True if we needed to draw, ie, we have modified _texture
     const bool Draw(

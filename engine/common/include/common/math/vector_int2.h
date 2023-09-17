@@ -14,6 +14,8 @@ public:
     const bool operator==(const VectorInt2& in_rhs) const;
     const bool operator!=(const VectorInt2& in_rhs) const;
 
+    static const VectorInt2 Max(const VectorInt2& in_lhs, const VectorInt2& in_rhs);
+
 private:
     enum Index
     {

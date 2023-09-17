@@ -242,10 +242,10 @@ const bool UIHierarchyNode::UpdateHierarchy(
         // ensure each content is created/ passed through factory
         for (int index = 0; index < target_length; ++index)
         {
-            const auto& data = (in_array_data_or_null->operator[](index));
+            const auto& data = *(in_array_data_or_null->operator[](index));
             auto& child = _child_data_array[index];
 
-            auto factory = in_param._map_content_factory.find(data->GetTemplateName());
+            auto factory = in_param._map_content_factory.find(data.GetTemplateName());
             if (factory != in_param._map_content_factory.end())
             {
                 UIContentFactoryParam factory_param(
@@ -259,6 +259,8 @@ const bool UIHierarchyNode::UpdateHierarchy(
                     ))
                 {
                     dirty = true;
+                    void* source_token = (void*)&data; //static_cast<void*>(&data); //reinterpret_cast<void*>(&data);
+                    child->_content->SetSourceToken(source_token);
                 }
             }
             else
@@ -276,7 +278,7 @@ const bool UIHierarchyNode::UpdateHierarchy(
 
                 if (true == child->_content->UpdateHierarchy(
                     //array_data_or_null,
-                    data.get(),
+                    &data,
                     *(child.get()),
                     in_param
                     ))
@@ -311,19 +313,47 @@ const VectorInt2 UIHierarchyNode::GetTextureSize(
 
 void UIHierarchyNode::UpdateSize(
     const VectorInt2& in_parent_size,
-    const float in_ui_scale
+    const float in_ui_scale,
+    const float in_time_delta,
+    const bool in_mark_dirty
     )
 {
+    _texture->SetSize(in_parent_size);
+    if (true == in_mark_dirty)
+    {
+        _texture->MarkDirty();
+    }
+
+    // for each child, work out the geometry and texture size for each content
+    for (auto& child_data_ptr : _child_data_array)
+    {
+        UIHierarchyNodeChildData& child_data = *child_data_ptr;
+
+        if (nullptr == child_data._content)
+        {
+            continue;
+        }
+
+        child_data._content->UpdateSize(
+            in_parent_size,
+            in_ui_scale,
+            in_time_delta,
+            *(child_data._geometry.get()),
+            *(child_data._node.get())
+            );
+    }
+
+    return;
 }
 
-const VectorInt2 UIHierarchyNode::GetDesiredSize(
-    const VectorInt2& in_parent_size,
-    const float in_ui_scale
-    )
-{
-    DSC_TODO("unimplemented");
-    return in_parent_size;
-}
+//const VectorInt2 UIHierarchyNode::GetDesiredSize(
+//    const VectorInt2& in_parent_size,
+//    const float in_ui_scale
+//    )
+//{
+//    DSC_TODO("unimplemented");
+//    return in_parent_size;
+//}
 
 
 //void UIHierarchyNode::UpdateDesiredSize(

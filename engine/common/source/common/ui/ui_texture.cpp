@@ -97,8 +97,8 @@ const bool UITexture::Update(
 }
 
 void UITexture::SetSize(
-    DrawSystem* const in_draw_system,
-    ID3D12GraphicsCommandList* const in_command_list,
+    //DrawSystem* const in_draw_system,
+    //ID3D12GraphicsCommandList* const in_command_list,
     const VectorInt2& in_size
     )
 {
@@ -111,11 +111,12 @@ void UITexture::SetSize(
     _size = in_size;
     if (nullptr != _render_target_texture)
     {
-        in_draw_system->ResizeRenderTargetTexture(
-            in_command_list,
-            _render_target_texture.get(),
-            _size
-            );
+        //in_draw_system->ResizeRenderTargetTexture(
+        //    in_command_list,
+        //    _render_target_texture.get(),
+        //    _size
+        //    );
+        _render_target_texture.reset();
     }
 
     return;

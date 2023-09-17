@@ -47,6 +47,13 @@ public:
         auto _data_map_build_fps = std::make_shared<UIDataString>("0.0s");
 
         _data_map[""] = std::vector<std::shared_ptr<IUIData>>({
+
+            std::make_shared<UIDataContainer>(
+                std::vector<std::shared_ptr<IUIData>>(),
+                "UIDataContainer"
+                )
+
+/*
             std::make_shared<UIDataContainer>(std::vector<std::shared_ptr<IUIData>>({
                 _data_map_build_fps,
                 _data_map_build_info,
@@ -54,6 +61,7 @@ public:
                 }),
                 "stack_vertical_bottom_right"
                 )
+*/
             });
     }
 

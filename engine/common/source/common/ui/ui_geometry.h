@@ -25,9 +25,9 @@ public:
     ~UIGeometry();
 
     // Return true if geometry changed/ updated
-    const bool Update(
-        DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list,
+    const bool Set(
+        //DrawSystem* const in_draw_system,
+        //ID3D12GraphicsCommandList* const in_command_list,
         const VectorFloat4& in_pos,
         const VectorFloat4& in_uv
         );
@@ -39,7 +39,7 @@ public:
 
 private:
     std::shared_ptr<GeometryGeneric> _geometry;
-    //bool _data_changed;
+    bool _data_changed;
     VectorFloat4 _pos;
     VectorFloat4 _uv;
 

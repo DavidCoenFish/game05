@@ -55,3 +55,11 @@ const bool VectorInt2::operator!=(const VectorInt2& in_rhs) const
 {
     return !(operator==(in_rhs));
 }
+
+const VectorInt2 VectorInt2::Max(const VectorInt2& in_lhs, const VectorInt2& in_rhs)
+{
+    return VectorInt2(
+        std::max(in_lhs._data[0], in_rhs._data[0]),
+        std::max(in_lhs._data[1], in_rhs._data[1])
+        );
+}

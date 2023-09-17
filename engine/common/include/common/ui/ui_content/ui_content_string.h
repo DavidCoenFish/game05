@@ -53,7 +53,8 @@ private:
 
     virtual void UpdateSize(
         const VectorInt2& in_parent_size,
-        const float in_ui_scale, 
+        const float in_ui_scale,
+        const float in_time_delta, 
         UIGeometry& in_out_geometry, 
         UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         ) override;

@@ -5,8 +5,8 @@
 class UIDataContainer : public IUIData
 {
 public:
-    UIDataContainer(
-        const std::vector<std::shared_ptr<IUIData>>& in_array_data,
+    explicit UIDataContainer(
+        const std::vector<std::shared_ptr<IUIData>>& in_array_data = std::vector<std::shared_ptr<IUIData>>(),
         const std::string& in_template_name = std::string("UIDataContainer")
         );
     virtual ~UIDataContainer();
