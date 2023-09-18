@@ -119,13 +119,6 @@ const bool UIContentString::UpdateHierarchy(
     const UIHierarchyNodeUpdateHierarchyParam& in_param
     )
 {
-#if 0
-    return _content_default.UpdateHierarchy(
-        in_data,
-        in_out_child_data,
-        in_param
-        );
-#else
     bool dirty = false;
     const UIDataString* const data_string = dynamic_cast<const UIDataString*>(in_data);
     if (nullptr != data_string)
@@ -140,11 +133,21 @@ const bool UIContentString::UpdateHierarchy(
         }
     }
 
+    if (true == _content_default.UpdateHierarchy(
+        in_data,
+        in_out_child_data,
+        in_param
+        ))
+    {
+        dirty = true;
+        _pre_draw_dirty = true;
+    }
+
     return dirty;
-#endif
 }
 
 void UIContentString::UpdateSize(
+    DrawSystem* const in_draw_system,
     const VectorInt2& in_parent_size,
     const float in_ui_scale,
     const float in_time_delta, 
@@ -152,54 +155,49 @@ void UIContentString::UpdateSize(
     UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
-    _text_block->SetWidthLimit(
-        _text_block->GetWidthLimitEnabled(),
-        in_parent_size[0]
-        );
-    _text_block->SetEMSize(static_cast<int>(round(_em_size * in_ui_scale)));
-    _text_block->SetFont(
-        *(_text_block->GetFont()),
-        static_cast<int>(round(_font_size * in_ui_scale)),
-        static_cast<int>(round(_new_line_height * in_ui_scale))
-        );
-    _text_block->SetTextContainerSize(
-        in_parent_size
-        );
-
     _content_default.UpdateSize(
+        in_draw_system,
+        *this,
         in_parent_size,
         in_ui_scale, 
         in_time_delta,
         in_out_geometry, 
         in_out_node
         );
+
+    _text_block->SetTextContainerSize(
+        in_out_node.GetTextureSize(in_draw_system)
+        );
 }
 
 const VectorInt2 UIContentString::GetDesiredSize(
     const VectorInt2& in_parent_size,
-    const float in_ui_scale
+    const float in_ui_scale,
+    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
-#if 0
-    return _content_default.GetDesiredSize(
-        in_parent_size,
-        in_ui_scale
-        );
-#else
-
-    _text_block->SetWidthLimit(
+    if (true == _text_block->SetWidthLimit(
         _text_block->GetWidthLimitEnabled(),
         in_parent_size[0]
-        );
+        ))
+    {
+        _pre_draw_dirty = true;
+    }
 
-    _text_block->SetEMSize(static_cast<int>(round(_em_size * in_ui_scale)));
-    _text_block->SetFont(
+    if (true == _text_block->SetEMSize(static_cast<int>(round(_em_size * in_ui_scale))))
+    {
+        _pre_draw_dirty = true;
+    }
+    if (true == _text_block->SetFont(
         *(_text_block->GetFont()),
         static_cast<int>(round(_font_size * in_ui_scale)),
         static_cast<int>(round(_new_line_height * in_ui_scale))
-        );
+        ))
+    {
+        _pre_draw_dirty = true;
+    }
+
     return _text_block->GetTextBounds();
-#endif
 }
 
 const bool UIContentString::GetNeedsPreDraw() const
@@ -211,10 +209,13 @@ void UIContentString::PreDraw(
     const UIManagerDrawParam& in_param
     )
 {
+#if 1
     in_param._text_manager->DrawText(
         in_param._draw_system,
         in_param._frame,
         _text_block.get()
         );
+#endif
     _pre_draw_dirty = false;
+    return;
 }

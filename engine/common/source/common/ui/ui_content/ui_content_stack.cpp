@@ -114,6 +114,7 @@ const bool UIContentStack::UpdateHierarchy(
 }
 
 void UIContentStack::UpdateSize(
+    DrawSystem* const in_draw_system,
     const VectorInt2& in_parent_size,
     const float in_ui_scale,
     const float in_time_delta, 
@@ -122,6 +123,8 @@ void UIContentStack::UpdateSize(
     )
 {
     return _content_default.UpdateSize(
+        in_draw_system,
+        *this,
         in_parent_size,
         in_ui_scale,
         in_time_delta,
@@ -132,11 +135,13 @@ void UIContentStack::UpdateSize(
 
 const VectorInt2 UIContentStack::GetDesiredSize(
     const VectorInt2& in_parent_size,
-    const float in_ui_scale
+    const float in_ui_scale,
+    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
     return _content_default.GetDesiredSize(
         in_parent_size,
-        in_ui_scale
+        in_ui_scale,
+        in_out_node
         );
 }

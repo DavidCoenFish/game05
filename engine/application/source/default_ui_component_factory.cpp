@@ -77,6 +77,19 @@ namespace
             );
         return s_layout;
     }
+    const UILayout& GetUILayoutQuadrant0()
+    {
+        // Todo: is y up or down the screen for ui
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 0.0f),
+            UICoord(UICoord::ParentSource::Y, 0.0f),
+            UICoord(UICoord::ParentSource::X, 0.0f),
+            UICoord(UICoord::ParentSource::Y, 0.0f)
+            );
+        return s_layout;
+    }
 
     typedef const UICoord& (*TGetUICoordRef)();
 
@@ -100,6 +113,11 @@ namespace
     const VectorFloat4& GetColourRed()
     {
         static VectorFloat4 s_colour(1.0f, 0.0f, 0.0f, 1.0f);
+        return s_colour;
+    }
+    const VectorFloat4& GetColourGreen()
+    {
+        static VectorFloat4 s_colour(0.0f, 1.0f, 0.0f, 1.0f);
         return s_colour;
     }
 
@@ -274,10 +292,22 @@ void DefaultUIComponentFactory::Populate(
     UIManager& in_ui_manager
     )
 {
-    in_ui_manager.AddContentFactory("UIDataString", FactoryString<>);
+    //in_ui_manager.AddContentFactory("UIDataString", FactoryString<>);
+    in_ui_manager.AddContentFactory("UIDataString", FactoryString<
+        GetUILayoutQuadrant0,
+        GetFontPathDefault,
+        64,
+        72,
+        TextEnum::HorizontalLineAlignment::Middle,
+        TextEnum::VerticalBlockAlignment::MiddleEM,
+        64,
+        true,
+        GetColourGreen
+        >);
     in_ui_manager.AddContentFactory("UIDataTextRun", FactoryTextRun<>);
-    in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<>);
-    //in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<GetUILayoutFullScreenMargin, true, GetColourRed>);
+    //in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<>);
+    in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<GetUILayoutFullScreenMargin, true, GetColourRed>);
+    //in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<GetUILayoutQuadrant0, true, GetColourRed>);
 
 
     in_ui_manager.AddContentFactory("stack_vertical_bottom_right", FactoryStack<

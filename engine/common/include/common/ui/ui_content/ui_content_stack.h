@@ -54,6 +54,7 @@ private:
         ) override;
 
     virtual void UpdateSize(
+        DrawSystem* const in_draw_system,
         const VectorInt2& in_parent_size,
         const float in_ui_scale,
         const float in_time_delta, 
@@ -63,7 +64,8 @@ private:
 
     virtual const VectorInt2 GetDesiredSize(
         const VectorInt2& in_parent_size,
-        const float in_ui_scale
+        const float in_ui_scale,
+        UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         ) override;
 
 private:

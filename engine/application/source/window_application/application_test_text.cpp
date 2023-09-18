@@ -131,13 +131,15 @@ ApplicationTestText::ApplicationTestText(
     TextFont* const _text_face = _draw_resources->_text_manager->GetTextFont(
         std::filesystem::path("data") / "code2000.ttf"
         );
-    auto locale = _draw_resources->_text_manager->GetLocaleToken(LocaleISO_639_1::Hindi);
+    //auto locale = _draw_resources->_text_manager->GetLocaleToken(LocaleISO_639_1::Hindi);
+    auto locale = _draw_resources->_text_manager->GetLocaleToken(LocaleISO_639_1::English);
     _draw_resources->_text_block = std::make_unique<TextBlock>(
         *_text_face,
         64,
         72,
+        "A",
         //"abcdefghijklmnopqrstuvwxyz",
-        "\xe0""\xa4""\x85""\xe0""\xa4""\x82""\xe0""\xa4""\x97""\xe0""\xa5""\x8d""\xe0""\xa4""\xb0""\xe0""\xa5""\x87""\xe0""\xa4""\x9c""\xe0""\xa4""\xbc""\xe0""\xa5""\x80",
+        //"\xe0""\xa4""\x85""\xe0""\xa4""\x82""\xe0""\xa4""\x97""\xe0""\xa5""\x8d""\xe0""\xa4""\xb0""\xe0""\xa5""\x87""\xe0""\xa4""\x9c""\xe0""\xa4""\xbc""\xe0""\xa5""\x80",
 
         // example utf8 from https://en.wikipedia.org/wiki/UTF-8, 4 char, first not in code2000.ttf
         //"\xF0""\xA8""\x89""\x9F" "\xE5""\x91""\x90" "\xE3""\x97""\x82" "\n" "\xE8""\xB6""\x8A",
@@ -145,7 +147,11 @@ ApplicationTestText::ApplicationTestText(
         locale,
         VectorInt2(800, 600),
         true,
-        128
+        128,
+        TextEnum::HorizontalLineAlignment::Middle,
+        TextEnum::VerticalBlockAlignment::MiddleEM,
+        64,
+        VectorFloat4(0.0, 1.0f, 0.0f, 1.0f)
         );
 
     return;

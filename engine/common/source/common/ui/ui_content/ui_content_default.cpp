@@ -221,6 +221,8 @@ const bool UIContentDefault::UpdateHierarchy(
 }
 
 void UIContentDefault::UpdateSize(
+    DrawSystem* const in_draw_system,
+    IUIContent& in_out_ui_content,
     const VectorInt2& in_parent_size,
     const float in_ui_scale,
     const float in_time_delta, 
@@ -230,18 +232,11 @@ void UIContentDefault::UpdateSize(
 {
     const VectorInt2 initial_size = _layout.GetSize(in_parent_size, in_ui_scale);
 
-    // Default is to go through children and see if anyone needs a bigger size than what we calculate
-    VectorInt2 max_desired_size;
-    for (auto iter: in_out_node.GetChildData())
-    {
-        UIHierarchyNodeChildData& child_data = *iter;
-        if (nullptr == child_data._content)
-        {
-            continue;
-        }
-        VectorInt2 desired_size = child_data._content->GetDesiredSize(initial_size, in_ui_scale);
-        max_desired_size = VectorInt2::Max(max_desired_size, desired_size);
-    }
+    VectorInt2 max_desired_size = in_out_ui_content.GetDesiredSize(
+        initial_size,
+        in_ui_scale,
+        in_out_node
+        );
 
     VectorFloat4 geometry_pos;
     VectorFloat4 geometry_uv;
@@ -271,6 +266,7 @@ void UIContentDefault::UpdateSize(
 
     // Recurse
     in_out_node.UpdateSize(
+        in_draw_system,
         texture_size, // by default, we use the generated size and scroll if required. a stack control may modify this
         in_ui_scale,
         in_time_delta,
@@ -281,9 +277,27 @@ void UIContentDefault::UpdateSize(
 }
 
 const VectorInt2 UIContentDefault::GetDesiredSize(
-    const VectorInt2&, //in_parent_size,
-    const float //in_ui_scale
+    const VectorInt2& in_initial_size,
+    const float in_ui_scale,
+    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
-    return VectorInt2();
+    VectorInt2 max_desired_size;
+    // Default is to go through children and see if anyone needs a bigger size than what we calculate
+    for (auto iter: in_out_node.GetChildData())
+    {
+        UIHierarchyNodeChildData& child_data = *iter;
+        if (nullptr == child_data._content)
+        {
+            continue;
+        }
+        VectorInt2 desired_size = child_data._content->GetDesiredSize(
+            in_initial_size, 
+            in_ui_scale, 
+            *child_data._node
+            );
+        max_desired_size = VectorInt2::Max(max_desired_size, desired_size);
+    }
+
+    return max_desired_size;
 }

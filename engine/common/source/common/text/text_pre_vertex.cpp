@@ -157,19 +157,14 @@ void TextPreVertex::BuildVertexData(
         vertical_delta = ((in_containter_size[1] + in_containter_size[3]) - (_vertical_bounds[0] + _vertical_bounds[1])) / 2;
         break;
     case TextEnum::VerticalBlockAlignment::MiddleEM:
-        {
-            const int temp = (int)(round((((float)in_em_size * 0.25f)) / ((float)in_containter_size[1])));
-            vertical_delta = (in_containter_size[1] / 2) - temp;
-        }
+        vertical_delta = ((in_containter_size[1] - (in_em_size / 2)) / 2);
         break;
     case TextEnum::VerticalBlockAlignment::Top:
         vertical_delta = in_containter_size[1] - _vertical_bounds[1];
         break;
     case TextEnum::VerticalBlockAlignment::TopEM:
-        {
-            vertical_delta = in_containter_size[1] - in_em_size;
-        }
-    break;
+        vertical_delta = in_containter_size[1] - in_em_size;
+        break;
     }
 
     for (const auto& item : _pre_vertex_data)

@@ -312,6 +312,7 @@ const VectorInt2 UIHierarchyNode::GetTextureSize(
 }
 
 void UIHierarchyNode::UpdateSize(
+    DrawSystem* const in_draw_system,
     const VectorInt2& in_parent_size,
     const float in_ui_scale,
     const float in_time_delta,
@@ -335,6 +336,7 @@ void UIHierarchyNode::UpdateSize(
         }
 
         child_data._content->UpdateSize(
+            in_draw_system,
             in_parent_size,
             in_ui_scale,
             in_time_delta,
@@ -363,7 +365,7 @@ const bool UIHierarchyNode::Draw(
         }
     }
 
-    // Ensure that child texture is ready
+    // Ensure that children textures are ready
     for (auto& iter : _child_data_array)
     {
         if (true == iter->_node->Draw(

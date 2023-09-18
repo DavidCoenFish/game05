@@ -193,6 +193,7 @@ public:
             in_draw_system_frame->GetCommandList()
             );
         _texture->Update(in_draw_system, in_draw_system_frame);
+        _shader->SetShaderResourceViewHandle(0, _texture->GetShaderViewHeapWrapperItem());
         in_draw_system_frame->SetShader(_shader.get());
         in_draw_system_frame->Draw(geometry);
 

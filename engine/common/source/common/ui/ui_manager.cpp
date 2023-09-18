@@ -166,6 +166,7 @@ public:
                     );
 
                 in_out_target_or_null->UpdateSize(
+                    in_param._draw_system,
                     top_level_size,
                     in_param._ui_scale,
                     in_param._time_delta,
