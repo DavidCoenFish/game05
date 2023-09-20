@@ -30,7 +30,8 @@ public:
         const int in_width_limit = 0,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment = TextEnum::HorizontalLineAlignment::Left,
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment = TextEnum::VerticalBlockAlignment::Top,
-        const VectorFloat4& in_colour = VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f)
+        const VectorFloat4& in_colour = VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+        const float in_ui_scale = 1.0f
         );
 
     ~TextBlock();
@@ -69,6 +70,9 @@ public:
     const bool SetColour(
         const VectorFloat4& in_colour
         );
+    const bool SetUIScale(
+        const float in_ui_scale
+        );
 
     const bool Set(
         TextFont& in_text_font,
@@ -81,7 +85,8 @@ public:
         const int in_width_limit,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
-        const VectorFloat4& in_colour
+        const VectorFloat4& in_colour,
+        const float in_ui_scale
         );
 
     // Rather than a seperate Update function, that could be forgoten, have the update in the getter, results in out_geometry_dirty

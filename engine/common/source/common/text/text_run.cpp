@@ -255,18 +255,20 @@ public:
     }
 
 private:
-    bool _calculate_dirty;
-    bool _geometry_dirty;
-    std::shared_ptr<GeometryGeneric> _geometry;
     std::vector<std::shared_ptr<ITextRunData>> _text_run_array;
-    VectorInt2 _text_bounds;
     VectorInt2 _container_size;
     bool _width_limit_enabled;
     int _width_limit;
     TextEnum::HorizontalLineAlignment _horizontal_line_alignment;
     TextEnum::VerticalBlockAlignment _vertical_block_alignment;
     int _em_size; // Vertical alignment can use a EM size 
+    float _ui_scale;
+
+    bool _calculate_dirty;
     std::unique_ptr<TextPreVertex> _pre_vertex_data;
+    VectorInt2 _text_bounds;
+    bool _geometry_dirty;
+    std::shared_ptr<GeometryGeneric> _geometry;
 
 };
 
@@ -275,7 +277,7 @@ std::shared_ptr<ITextRunData> TextRun::MakeTextRunDataString(
     TextLocale* const in_locale_token,
     TextFont* const in_text_font,
     const int in_font_size,
-    const int in_new_line_height,
+    const float in_new_line_gap_ratio,
     const VectorFloat4& in_colour
     )
 {
@@ -284,7 +286,7 @@ std::shared_ptr<ITextRunData> TextRun::MakeTextRunDataString(
         in_locale_token,
         in_text_font,
         in_font_size,
-        in_new_line_height,
+        in_new_line_gap_ratio,
         in_colour
         );
 }
@@ -311,7 +313,8 @@ TextRun::TextRun(
     const int in_width_limit,
     const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
     const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
-    const int in_em_size
+    const int in_em_size,
+    const float in_ui_scale
     )
 {
     _implementation = std::make_unique<TextRunImplementation>(
@@ -321,7 +324,8 @@ TextRun::TextRun(
         in_width_limit,
         in_horizontal_line_alignment,
         in_vertical_block_alignment,
-        in_em_size
+        in_em_size,
+        in_ui_scale
         );
 }
 
@@ -392,6 +396,15 @@ const bool TextRun::SetEMSize(
         );
 }
 
+const bool TextRun::SetUIScale(
+    const float in_ui_scale
+    )
+{
+    return _implementation->SetUIScale(
+        in_ui_scale
+        );
+}
+
 const bool TextRun::Set(
     const std::vector<std::shared_ptr<ITextRunData>>& in_text_run_array,
     const VectorInt2& in_size,
@@ -399,7 +412,8 @@ const bool TextRun::Set(
     const int in_width_limit,
     const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
     const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
-    const int in_em_size
+    const int in_em_size,
+    const float in_ui_scale
     )
 {
     return _implementation->Set(
@@ -409,7 +423,8 @@ const bool TextRun::Set(
         in_width_limit,
         in_horizontal_line_alignment,
         in_vertical_block_alignment,
-        in_em_size
+        in_em_size,
+        in_ui_scale
         );
 }
 

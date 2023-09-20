@@ -201,11 +201,14 @@ const bool UIHierarchyNode::UpdateHierarchy(
             const auto& child = _child_data_array[index];
             if (nullptr != child)
             {
-                void* source_child_token = child->_content->GetSourceToken();
+                void* source_child_token = child->_content ? child->_content->GetSourceToken() : nullptr;
                 void* data_token = (void*)&data;
                 if (data_token != source_child_token)
                 {
-                    map_temp_ownership[source_child_token] = child;
+                    if (nullptr != source_child_token)
+                    {
+                        map_temp_ownership[source_child_token] = child;
+                    }
                     _child_data_array[index].reset();
                 }
             }

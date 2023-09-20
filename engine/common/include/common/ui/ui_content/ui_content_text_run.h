@@ -4,21 +4,19 @@
 #include "common/ui/ui_content/ui_content_default.h"
 #include "common/text/text_enum.h"
 
-class TextBlock;
+class TextRun;
 class TextFont;
 
-class UIContentString : public IUIContent
+class UIContentTextRun : public IUIContent
 {
 public:
-    UIContentString(
+    UIContentTextRun(
         const bool in_clear_background,
         const VectorFloat4& in_clear_colour,
         const UILayout& in_layout,
-        std::unique_ptr<TextBlock>& in_text_block,
-        const int in_font_size,
-        const float in_new_line_gap_ratio
+        std::unique_ptr<TextRun>& in_text_run
         );
-    ~UIContentString();
+    ~UIContentTextRun();
 
     const bool SetBase(
         const bool in_clear_background,
@@ -26,11 +24,8 @@ public:
         const UILayout& in_layout
         );
 
-    // return true if we have a text block which this is a new value, else true
     const bool Set(
-        TextFont& in_font, 
-        const int in_font_size,
-        const float in_new_line_gap_ratio,
+        const std::vector<UIDataTextRun::Data>& in_data,
         const bool in_width_limit_enabled,
         const TextEnum::HorizontalLineAlignment in_horizontal, 
         const TextEnum::VerticalBlockAlignment in_vertical
@@ -72,8 +67,9 @@ private:
 
 private:
     UIContentDefault _content_default;
+    bool _pre_draw_dirty;
 
     //bool _use_parent_size_for_width_limit;
-    std::unique_ptr<TextBlock> _text_block;
+    std::unique_ptr<TextRun> _text_run;
 
 };

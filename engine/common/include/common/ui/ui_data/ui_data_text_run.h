@@ -28,10 +28,15 @@ public:
         );
     virtual ~UIDataTextRun();
 
-    const std::string GetString(
-        LocaleSystem* const in_locale_system,
-        const LocaleISO_639_1 in_locale
-        ) const;
+    //const std::string GetString(
+    //    LocaleSystem* const in_locale_system,
+    //    const LocaleISO_639_1 in_locale
+    //    ) const;
+
+    virtual void VisitDataArray(
+        const std::function<void(const std::vector<Data>&)>& in_visitor
+        ) const = 0;
+
 
 private:
     virtual const std::string GetTemplateName() const { return _template_name; }

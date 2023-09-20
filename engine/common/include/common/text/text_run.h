@@ -23,16 +23,15 @@ public:
         TextLocale* const in_locale_token = nullptr,
         TextFont* const in_text_font = nullptr,
         const int in_font_size = 0,
-        const int in_new_line_height = 0,
+        const float in_new_line_gap_ratio = 0.0f,
         const VectorFloat4& in_colour = VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f)
         );
     static std::shared_ptr<ITextRunData> MakeTextRunDataIcon(
         const int in_icon_id = 0,
         IconFont* const in_icon_font = nullptr,
-        const int in_new_line_height = 0,
-        const VectorFloat4& in_colour_tint = VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f)
+        const VectorFloat4& in_colour_tint = VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+        const float in_new_line_gap_ratio = 0.0f
         );
-
 
     // Do we keep the defaults, and each run has the settings? or simplify so we just have global settings at top, and data for each run
     TextRun(
@@ -42,7 +41,8 @@ public:
         const int in_width_limit = 0,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment = TextEnum::HorizontalLineAlignment::Left,
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment = TextEnum::VerticalBlockAlignment::Top,
-        const int in_em_size = 0
+        const int in_em_size = 0,
+        const float in_ui_scale = 1.0f
         );
 
     ~TextRun();
@@ -69,6 +69,9 @@ public:
     const bool SetEMSize(
         const int in_em_size
         );
+    const bool SetUIScale(
+        const float in_ui_scale
+        );
 
     const bool Set(
         const std::vector<std::shared_ptr<ITextRunData>>& in_text_run_array,
@@ -77,7 +80,8 @@ public:
         const int in_width_limit,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
-        const int in_em_size
+        const int in_em_size,
+        const float in_ui_scale
         );
 
     // Rather than a seperate Update function, that could be forgoten, have the update in the getter, results in out_geometry_dirty

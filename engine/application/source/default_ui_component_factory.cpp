@@ -289,17 +289,17 @@ void DefaultUIComponentFactory::Populate(
     UIManager& in_ui_manager
     )
 {
-    //in_ui_manager.AddContentFactory("UIDataString", FactoryString<>);
-    in_ui_manager.AddContentFactory("UIDataString", FactoryString<
-        GetUILayoutQuadrant0,
-        GetFontPathDefault,
-        64,
-        16,
-        TextEnum::HorizontalLineAlignment::Middle,
-        TextEnum::VerticalBlockAlignment::MiddleEM,
-        true,
-        GetColourGreen
-        >);
+    in_ui_manager.AddContentFactory("UIDataString", FactoryString<>);
+    //in_ui_manager.AddContentFactory("UIDataString", FactoryString<
+    //    GetUILayoutQuadrant0,
+    //    GetFontPathDefault,
+    //    64,
+    //    16,
+    //    TextEnum::HorizontalLineAlignment::Middle,
+    //    TextEnum::VerticalBlockAlignment::MiddleEM,
+    //    true,
+    //    GetColourGreen
+    //    >);
     in_ui_manager.AddContentFactory("UIDataTextRun", FactoryTextRun<>);
     //in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<>);
     in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<GetUILayoutFullScreenMargin, true, GetColourRed>);

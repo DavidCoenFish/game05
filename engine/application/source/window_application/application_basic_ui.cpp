@@ -48,20 +48,20 @@ public:
 
         _data_map[""] = std::vector<std::shared_ptr<IUIData>>({
 
-#if 1 // Canvas test
+#if 0 // Canvas test
             std::make_shared<UIDataContainer>(
                 std::vector<std::shared_ptr<IUIData>>(),
                 "UIDataContainer"
                 ),
 #endif
 
-#if 1 // String test
+#if 0 // String test
             std::make_shared<UIDataString>(
                 "A" //"Hello human"
                 )
 #endif
 
-#if 0 // Stack test
+#if 1 // Stack test
             std::make_shared<UIDataContainer>(std::vector<std::shared_ptr<IUIData>>({
                 _data_map_build_fps,
                 _data_map_build_info,

@@ -28,7 +28,8 @@ public:
         const int in_width_limit,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
-        const VectorFloat4& in_colour
+        const VectorFloat4& in_colour,
+        const float in_ui_scale
         )
         : _calculate_dirty(true)
         , _geometry_dirty(true)
@@ -44,6 +45,7 @@ public:
         , _horizontal_line_alignment(in_horizontal_line_alignment)
         , _vertical_block_alignment(in_vertical_block_alignment)
         , _colour(in_colour)
+        , _ui_scale(in_ui_scale)
     {
         // Nop
     }
@@ -62,10 +64,10 @@ public:
                 cursor,
                 _string_utf8,
                 _locale_token,
-                _font_size,
+                static_cast<int>(round(_font_size * _ui_scale)),
                 _width_limit_enabled,
                 _width_limit,
-                static_cast<int>(round(_font_size + (_font_size * _new_line_gap_ratio)))
+                static_cast<int>(round((_font_size + (_font_size * _new_line_gap_ratio)) * _ui_scale))
                 );
             _text_bounds = _pre_vertex_data->GetBounds();
         }
@@ -223,6 +225,21 @@ public:
         return dirty;
     }
 
+    const bool SetUIScale(
+        const float in_ui_scale
+        )
+    {
+        bool dirty = false;
+        if (_ui_scale != in_ui_scale)
+        {
+            dirty = true;
+            _ui_scale = in_ui_scale;
+            _calculate_dirty = true;
+            _geometry_dirty = true;
+        }
+        return dirty;
+    }
+
     const bool Set(
         TextFont& in_text_font,
         const int in_font_size,
@@ -234,7 +251,8 @@ public:
         const int in_width_limit,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
-        const VectorFloat4& in_colour
+        const VectorFloat4& in_colour,
+        const float in_ui_scale
         )
     {
         bool dirty = false;
@@ -290,6 +308,12 @@ public:
         }
         if (true == SetColour(
             in_colour
+            ))
+        {
+            dirty = true;
+        }
+        if (true == SetUIScale(
+            in_ui_scale
             ))
         {
             dirty = true;
@@ -358,6 +382,8 @@ private:
     TextEnum::HorizontalLineAlignment _horizontal_line_alignment;
     TextEnum::VerticalBlockAlignment _vertical_block_alignment;
     VectorFloat4 _colour;
+    float _ui_scale;
+
     std::unique_ptr<TextPreVertex> _pre_vertex_data;
 
 };
@@ -373,7 +399,8 @@ TextBlock::TextBlock(
     const int in_width_limit,
     const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
     const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
-    const VectorFloat4& in_colour
+    const VectorFloat4& in_colour,
+    const float in_ui_scale
     )
 {
     _implementation = std::make_unique<TextBlockImplementation>(
@@ -387,7 +414,8 @@ TextBlock::TextBlock(
         in_width_limit,
         in_horizontal_line_alignment,
         in_vertical_block_alignment,
-        in_colour
+        in_colour,
+        in_ui_scale
         );
 }
 
@@ -497,6 +525,15 @@ const bool TextBlock::SetColour(
         );
 }
 
+const bool TextBlock::SetUIScale(
+    const float in_ui_scale
+    )
+{
+    return _implementation->SetUIScale(
+        in_ui_scale
+        );
+}
+
 const bool TextBlock::Set(
     TextFont& in_text_font,
     const int in_font_size,
@@ -508,7 +545,8 @@ const bool TextBlock::Set(
     const int in_width_limit,
     const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
     const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
-    const VectorFloat4& in_colour
+    const VectorFloat4& in_colour,
+    const float in_ui_scale
     )
 {
     return _implementation->Set(
@@ -522,7 +560,8 @@ const bool TextBlock::Set(
         in_width_limit,
         in_horizontal_line_alignment,
         in_vertical_block_alignment,
-        in_colour
+        in_colour,
+        in_ui_scale
         );
 }
 

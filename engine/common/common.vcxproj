@@ -95,6 +95,7 @@
     <ClCompile Include="source\common\ui\ui_content\ui_content_stack.cpp" />
     <ClCompile Include="source\common\ui\ui_content\ui_content_string.cpp" />
     <ClCompile Include="source\common\ui\ui_content\ui_content_texture.cpp" />
+    <ClCompile Include="source\common\ui\ui_content\ui_content_text_run.cpp" />
     <ClCompile Include="source\common\ui\ui_coord.cpp" />
     <ClCompile Include="source\common\ui\ui_data\i_ui_data.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_button.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="include\common\ui\ui_content\ui_content_stack.h" />
     <ClInclude Include="include\common\ui\ui_content\ui_content_string.h" />
     <ClInclude Include="include\common\ui\ui_content\ui_content_texture.h" />
+    <ClInclude Include="include\common\ui\ui_content\ui_content_text_run.h" />
     <ClInclude Include="include\common\ui\ui_coord.h" />
     <ClInclude Include="include\common\ui\ui_data\i_ui_data.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_button.h" />
