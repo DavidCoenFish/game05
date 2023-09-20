@@ -20,7 +20,7 @@ public:
     TextBlockImplementation(
         TextFont& in_text_font,
         const int in_font_size,
-        const int in_new_line_height,
+        const float in_new_line_gap_ratio,
         const std::string& in_string_utf8,
         const TextLocale* const in_locale_token,
         const VectorInt2& in_containter_size,
@@ -28,7 +28,6 @@ public:
         const int in_width_limit,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
-        const int in_em_size,
         const VectorFloat4& in_colour
         )
         : _calculate_dirty(true)
@@ -36,7 +35,7 @@ public:
         , _geometry()
         , _text_font(&in_text_font)
         , _font_size(in_font_size)
-        , _new_line_height(in_new_line_height)
+        , _new_line_gap_ratio(in_new_line_gap_ratio)
         , _string_utf8(in_string_utf8)
         , _locale_token(in_locale_token)
         , _container_size(in_containter_size)
@@ -44,7 +43,6 @@ public:
         , _width_limit(in_width_limit)
         , _horizontal_line_alignment(in_horizontal_line_alignment)
         , _vertical_block_alignment(in_vertical_block_alignment)
-        , _em_size(in_em_size)
         , _colour(in_colour)
     {
         // Nop
@@ -67,7 +65,7 @@ public:
                 _font_size,
                 _width_limit_enabled,
                 _width_limit,
-                _new_line_height
+                static_cast<int>(round(_font_size + (_font_size * _new_line_gap_ratio)))
                 );
             _text_bounds = _pre_vertex_data->GetBounds();
         }
@@ -81,23 +79,46 @@ public:
     }
 
     const bool SetFont(
-        TextFont& in_text_font,
-        const int in_font_size,
-        const int in_new_line_height
+        TextFont& in_text_font
         )
     {
         bool dirty = false;
-        if ((_font_size != in_font_size) ||
-            (_text_font != &in_text_font) || 
-            (_new_line_height != in_new_line_height)
-            )
+        if (_text_font != &in_text_font)
+        {
+            dirty = true;
+            _calculate_dirty = true;
+            _geometry_dirty = true;
+            _text_font = &in_text_font;
+        }
+        return dirty;
+    }
+
+    const bool SetFontSize(
+        const int in_font_size
+        )
+    {
+        bool dirty = false;
+        if (_font_size != in_font_size)
         {
             dirty = true;
             _calculate_dirty = true;
             _geometry_dirty = true;
             _font_size = in_font_size;
-            _text_font = &in_text_font;
-            _new_line_height = in_new_line_height;
+        }
+        return dirty;
+    }
+
+    const bool SetNewLineGapRatio(
+        const float in_new_line_gap_ratio
+        )
+    {
+        bool dirty = false;
+        if (_new_line_gap_ratio != in_new_line_gap_ratio)
+        {
+            dirty = true;
+            _calculate_dirty = true;
+            _geometry_dirty = true;
+            _new_line_gap_ratio = in_new_line_gap_ratio;
         }
         return dirty;
     }
@@ -187,21 +208,6 @@ public:
         return dirty;
     }
 
-    const bool SetEMSize(
-        const int in_em_size
-        )
-    {
-        bool dirty = false;
-        if (_em_size != in_em_size)
-        {
-            dirty = true;
-            _em_size = in_em_size;
-            //_calculate_dirty = true;
-            _geometry_dirty = true;
-        }
-        return dirty;
-    }
-
     const bool SetColour(
         const VectorFloat4& in_colour
         )
@@ -220,7 +226,7 @@ public:
     const bool Set(
         TextFont& in_text_font,
         const int in_font_size,
-        const int in_new_line_height,
+        const float in_new_line_gap_ratio, // new line = in_font_size + (in_font_size * in_new_line_gap_ratio)
         const std::string& in_string_utf8,
         const TextLocale* const in_locale_token,
         const VectorInt2& in_size,
@@ -228,15 +234,24 @@ public:
         const int in_width_limit,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
-        const int in_em_size,
         const VectorFloat4& in_colour
         )
     {
         bool dirty = false;
         if (true == SetFont(
-            in_text_font,
-            in_font_size,
-            in_new_line_height
+            in_text_font
+            ))
+        {
+            dirty = true;
+        }
+        if (true == SetFontSize(
+            in_font_size
+            ))
+        {
+            dirty = true;
+        }
+        if (true == SetNewLineGapRatio(
+            in_new_line_gap_ratio
             ))
         {
             dirty = true;
@@ -269,12 +284,6 @@ public:
         }
         if (true == SetVerticalBlockAlignment(
             in_vertical_block_alignment
-            ))
-        {
-            dirty = true;
-        }
-        if (true == SetEMSize(
-            in_em_size
             ))
         {
             dirty = true;
@@ -339,7 +348,7 @@ private:
     std::shared_ptr<GeometryGeneric> _geometry;
     TextFont* _text_font;
     int _font_size;
-    int _new_line_height;
+    float _new_line_gap_ratio;
     std::string _string_utf8;
     const TextLocale* _locale_token;
     VectorInt2 _text_bounds;
@@ -348,7 +357,6 @@ private:
     int _width_limit;
     TextEnum::HorizontalLineAlignment _horizontal_line_alignment;
     TextEnum::VerticalBlockAlignment _vertical_block_alignment;
-    int _em_size;
     VectorFloat4 _colour;
     std::unique_ptr<TextPreVertex> _pre_vertex_data;
 
@@ -357,7 +365,7 @@ private:
 TextBlock::TextBlock(
     TextFont& in_text_font,
     const int in_font_size,
-    const int in_new_line_height,
+    const float in_new_line_gap_ratio, // new line = in_font_size + (in_font_size * in_new_line_gap_ratio)
     const std::string& in_string_utf8,
     const TextLocale* const in_locale_token,
     const VectorInt2& in_containter_size,
@@ -365,14 +373,13 @@ TextBlock::TextBlock(
     const int in_width_limit,
     const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
     const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
-    const int in_em_size,
     const VectorFloat4& in_colour
     )
 {
     _implementation = std::make_unique<TextBlockImplementation>(
         in_text_font,
         in_font_size,
-        in_new_line_height,
+        in_new_line_gap_ratio,
         in_string_utf8,
         in_locale_token,
         in_containter_size,
@@ -380,7 +387,6 @@ TextBlock::TextBlock(
         in_width_limit,
         in_horizontal_line_alignment,
         in_vertical_block_alignment,
-        in_em_size,
         in_colour
         );
 }
@@ -402,15 +408,29 @@ TextFont* const TextBlock::GetFont() const
 }
 
 const bool TextBlock::SetFont(
-    TextFont& in_text_font,
-    const int in_font_size,
-    const int in_new_line_height
+    TextFont& in_text_font
     )
 {
     return _implementation->SetFont(
-        in_text_font,
-        in_font_size,
-        in_new_line_height
+        in_text_font
+        );
+}
+
+const bool TextBlock::SetFontSize(
+    const int in_font_size
+    )
+{
+    return _implementation->SetFontSize(
+        in_font_size
+        );
+}
+
+const bool TextBlock::SetNewLineGapRatio(
+    const float in_new_line_gap_ratio // new line = in_font_size + (in_font_size * in_new_line_gap_ratio)
+    )
+{
+    return _implementation->SetNewLineGapRatio(
+        in_new_line_gap_ratio
         );
 }
 
@@ -468,15 +488,6 @@ const bool TextBlock::SetVerticalBlockAlignment(
         );
 }
 
-const bool TextBlock::SetEMSize(
-    const int in_em_size
-    )
-{
-    return _implementation->SetEMSize(
-        in_em_size
-        );
-}
-
 const bool TextBlock::SetColour(
     const VectorFloat4& in_colour
     )
@@ -489,7 +500,7 @@ const bool TextBlock::SetColour(
 const bool TextBlock::Set(
     TextFont& in_text_font,
     const int in_font_size,
-    const int in_new_line_height,
+    const float in_new_line_gap_ratio, // new line = in_font_size + (in_font_size * in_new_line_gap_ratio)
     const std::string& in_string_utf8,
     const TextLocale* const in_locale_token,
     const VectorInt2& in_size,
@@ -497,14 +508,13 @@ const bool TextBlock::Set(
     const int in_width_limit,
     const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
     const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
-    const int in_em_size,
     const VectorFloat4& in_colour
     )
 {
     return _implementation->Set(
         in_text_font,
         in_font_size,
-        in_new_line_height,
+        in_new_line_gap_ratio, 
         in_string_utf8,
         in_locale_token,
         in_size,
@@ -512,7 +522,6 @@ const bool TextBlock::Set(
         in_width_limit,
         in_horizontal_line_alignment,
         in_vertical_block_alignment,
-        in_em_size,
         in_colour
         );
 }

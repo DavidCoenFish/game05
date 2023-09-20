@@ -22,7 +22,7 @@ public:
     TextBlock(
         TextFont& in_text_font,
         const int in_font_size,
-        const int in_new_line_height,
+        const float in_new_line_gap_ratio, // new line = in_font_size + (in_font_size * in_new_line_gap_ratio)
         const std::string& in_string_utf8,
         const TextLocale* const in_locale_token,
         const VectorInt2& in_containter_size,
@@ -30,7 +30,6 @@ public:
         const int in_width_limit = 0,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment = TextEnum::HorizontalLineAlignment::Left,
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment = TextEnum::VerticalBlockAlignment::Top,
-        const int in_em_size = 0,
         const VectorFloat4& in_colour = VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f)
         );
 
@@ -41,9 +40,13 @@ public:
 
     TextFont* const GetFont() const;
     const bool SetFont(
-        TextFont& in_text_font,
-        const int in_font_size,
-        const int in_new_line_height
+        TextFont& in_text_font
+        );
+    const bool SetFontSize(
+        const int in_font_size
+        );
+    const bool SetNewLineGapRatio(
+        const float in_new_line_gap_ratio // new line = in_font_size + (in_font_size * in_new_line_gap_ratio)
         );
     const bool SetText(
         const std::string& in_string_utf8,
@@ -63,9 +66,6 @@ public:
     const bool SetVerticalBlockAlignment(
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment
         );
-    const bool SetEMSize(
-        const int in_em_size
-        );
     const bool SetColour(
         const VectorFloat4& in_colour
         );
@@ -73,7 +73,7 @@ public:
     const bool Set(
         TextFont& in_text_font,
         const int in_font_size,
-        const int in_new_line_height,
+        const float in_new_line_gap_ratio, // new line = in_font_size + (in_font_size * in_new_line_gap_ratio)
         const std::string& in_string_utf8,
         const TextLocale* const in_locale_token,
         const VectorInt2& in_size,
@@ -81,7 +81,6 @@ public:
         const int in_width_limit,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
-        const int in_em_size,
         const VectorFloat4& in_colour
         );
 

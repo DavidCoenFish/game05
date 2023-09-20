@@ -16,8 +16,7 @@ UIContentString::UIContentString(
     const UILayout& in_layout,
     std::unique_ptr<TextBlock>& in_text_block,
     const int in_font_size,
-    const int in_new_line_height,
-    const int in_em_size
+    const float in_new_line_gap_ratio
     )
     : _content_default(
         in_clear_background,
@@ -26,8 +25,7 @@ UIContentString::UIContentString(
         )
     , _text_block(std::move(in_text_block))
     , _font_size(in_font_size)
-    , _new_line_height(in_new_line_height)
-    , _em_size(in_em_size)
+    , _new_line_gap_ratio(in_new_line_gap_ratio)
     , _pre_draw_dirty(true)
 {
     return;
@@ -59,18 +57,24 @@ const bool UIContentString::SetBase(
 const bool UIContentString::Set(
     TextFont& in_font, 
     const int in_font_size,
-    const int in_new_line_height,
+    const float in_new_line_gap_ratio,
     const TextEnum::HorizontalLineAlignment in_horizontal, 
-    const TextEnum::VerticalBlockAlignment in_vertical,
-    const int in_em_size
+    const TextEnum::VerticalBlockAlignment in_vertical
     )
 {
     _font_size = in_font_size;
-    _new_line_height = in_new_line_height;
-    _em_size = in_em_size;
+    _new_line_gap_ratio = in_new_line_gap_ratio;
 
     bool dirty = false;
-    if (true == _text_block->SetFont(in_font, in_font_size, in_new_line_height))
+    if (true == _text_block->SetFont(in_font))
+    {
+        dirty = true;
+    }
+    if (true == _text_block->SetFontSize(in_font_size))
+    {
+        dirty = true;
+    }
+    if (true == _text_block->SetNewLineGapRatio(in_new_line_gap_ratio))
     {
         dirty = true;
     }
@@ -79,10 +83,6 @@ const bool UIContentString::Set(
         dirty = true;
     }
     if (true == _text_block->SetVerticalBlockAlignment(in_vertical))
-    {
-        dirty = true;
-    }
-    if (true == _text_block->SetEMSize(in_em_size))
     {
         dirty = true;
     }
@@ -184,15 +184,11 @@ const VectorInt2 UIContentString::GetDesiredSize(
         _pre_draw_dirty = true;
     }
 
-    if (true == _text_block->SetEMSize(static_cast<int>(round(_em_size * in_ui_scale))))
+    if (true == _text_block->SetFontSize(static_cast<int>(round(_font_size * in_ui_scale))))
     {
         _pre_draw_dirty = true;
     }
-    if (true == _text_block->SetFont(
-        *(_text_block->GetFont()),
-        static_cast<int>(round(_font_size * in_ui_scale)),
-        static_cast<int>(round(_new_line_height * in_ui_scale))
-        ))
+    if (true == _text_block->SetNewLineGapRatio(_new_line_gap_ratio))
     {
         _pre_draw_dirty = true;
     }

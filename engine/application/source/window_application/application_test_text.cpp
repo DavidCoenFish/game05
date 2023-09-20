@@ -136,7 +136,7 @@ ApplicationTestText::ApplicationTestText(
     _draw_resources->_text_block = std::make_unique<TextBlock>(
         *_text_face,
         64,
-        72,
+        0.125f,
         "A",
         //"abcdefghijklmnopqrstuvwxyz",
         //"\xe0""\xa4""\x85""\xe0""\xa4""\x82""\xe0""\xa4""\x97""\xe0""\xa5""\x8d""\xe0""\xa4""\xb0""\xe0""\xa5""\x87""\xe0""\xa4""\x9c""\xe0""\xa4""\xbc""\xe0""\xa5""\x80",
@@ -150,7 +150,6 @@ ApplicationTestText::ApplicationTestText(
         128,
         TextEnum::HorizontalLineAlignment::Middle,
         TextEnum::VerticalBlockAlignment::MiddleEM,
-        64,
         VectorFloat4(0.0, 1.0f, 0.0f, 1.0f)
         );
 

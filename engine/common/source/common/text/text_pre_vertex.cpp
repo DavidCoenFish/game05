@@ -83,7 +83,10 @@ void TextPreVertex::StartNewLine(
 {
     FinishLine();
     in_out_cursor[0] = 0;
-    in_out_cursor[1] -= _current_line_height;
+    if (0 != _line_index)
+    {
+        in_out_cursor[1] -= _current_line_height;
+    }
 
     _line_index += 1;
     _current_line_height = 0;
@@ -131,6 +134,7 @@ void TextPreVertex::BuildVertexData(
     std::vector<int> horizontal_line_delta(line_count);
     for (int index = 0; index < line_count; ++index)
     {
+        const int width =  _horizontal_bounds[index][1] -  _horizontal_bounds[index][0];
         switch (in_horizontal_line_alignment)
         {
         default:
@@ -138,7 +142,7 @@ void TextPreVertex::BuildVertexData(
         case TextEnum::HorizontalLineAlignment::Left:
             break;
         case TextEnum::HorizontalLineAlignment::Middle:
-            horizontal_line_delta[index] = (in_containter_size[0] - _horizontal_bounds[index][1]) / 2;
+            horizontal_line_delta[index] = ((in_containter_size[0] - width) / 2) - _horizontal_bounds[index][0];
             break;
         case TextEnum::HorizontalLineAlignment::Right:
             horizontal_line_delta[index] = (in_containter_size[0] - _horizontal_bounds[index][1]);
@@ -154,10 +158,10 @@ void TextPreVertex::BuildVertexData(
     case TextEnum::VerticalBlockAlignment::BottomEM:
         break;
     case TextEnum::VerticalBlockAlignment::Middle:
-        vertical_delta = ((in_containter_size[1] + in_containter_size[3]) - (_vertical_bounds[0] + _vertical_bounds[1])) / 2;
+        vertical_delta = ((in_containter_size[1]) - (_vertical_bounds[1] - _vertical_bounds[0])) / 2;
         break;
     case TextEnum::VerticalBlockAlignment::MiddleEM:
-        vertical_delta = ((in_containter_size[1] - (in_em_size / 2)) / 2);
+        vertical_delta = ((in_containter_size[1] - in_em_size) / 2);
         break;
     case TextEnum::VerticalBlockAlignment::Top:
         vertical_delta = in_containter_size[1] - _vertical_bounds[1];
@@ -237,27 +241,31 @@ void TextPreVertex::FinishLine()
     }
 
     _line_dirty = false;
-    // use the default line height. this could be caused by an empty line. otherwise use max line height from things on line
-    if (0 == _current_line_height)
-    {
-        _current_line_height = _default_line_height;
-    }
 
-    //move backward over _pre_vertex_data, items on _line_index
-    for (std::vector<PreVertexData>::reverse_iterator i = _pre_vertex_data.rbegin(); 
-        i != _pre_vertex_data.rend(); ++i ) 
+    if (0 != _line_index)
     {
-        PreVertexData& item = *i;
-        if (item._line_index != _line_index)
+        // use the default line height. this could be caused by an empty line. otherwise use max line height from things on line
+        if (0 == _current_line_height)
         {
-            break;
+            _current_line_height = _default_line_height;
         }
-        item._pos_low_high[1] -= _current_line_height;
-        item._pos_low_high[3] -= _current_line_height;
-    }
 
-    _line_vertical_bounds[0] -= _current_line_height;
-    _line_vertical_bounds[1] -= _current_line_height;
+        //move backward over _pre_vertex_data, items on _line_index
+        for (std::vector<PreVertexData>::reverse_iterator i = _pre_vertex_data.rbegin(); 
+            i != _pre_vertex_data.rend(); ++i ) 
+        {
+            PreVertexData& item = *i;
+            if (item._line_index != _line_index)
+            {
+                break;
+            }
+            item._pos_low_high[1] -= _current_line_height;
+            item._pos_low_high[3] -= _current_line_height;
+        }
+
+        _line_vertical_bounds[0] -= _current_line_height;
+        _line_vertical_bounds[1] -= _current_line_height;
+    }
 
     _vertical_bounds[0] = std::min(_vertical_bounds[0], _line_vertical_bounds[0]);
     _vertical_bounds[1] = std::max(_vertical_bounds[1], _line_vertical_bounds[1]);

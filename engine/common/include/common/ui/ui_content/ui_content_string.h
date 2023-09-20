@@ -16,8 +16,7 @@ public:
         const UILayout& in_layout,
         std::unique_ptr<TextBlock>& in_text_block,
         const int in_font_size,
-        const int in_new_line_height,
-        const int in_em_size
+        const float in_new_line_gap_ratio
         );
     ~UIContentString();
 
@@ -31,10 +30,9 @@ public:
     const bool Set(
         TextFont& in_font, 
         const int in_font_size,
-        const int in_new_line_height,
+        const float in_new_line_gap_ratio,
         const TextEnum::HorizontalLineAlignment in_horizontal, 
-        const TextEnum::VerticalBlockAlignment in_vertical,
-        const int in_em_size
+        const TextEnum::VerticalBlockAlignment in_vertical
         );
 
 private:
@@ -79,8 +77,7 @@ private:
 
     // these interact with UI scale, so we need a copy
     int _font_size;
-    int _new_line_height;
-    int _em_size;
+    float _new_line_gap_ratio;
     bool _pre_draw_dirty;
 
 };

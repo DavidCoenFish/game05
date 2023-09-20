@@ -158,10 +158,9 @@ namespace
         TGetUILayoutRef in_get_layout_ref = GetUILayoutFullScreen,
         TGetPathRef in_get_path_ref = GetFontPathDefault,
         int in_font_size = 16,
-        int in_new_line_height = 16,
+        int in_new_line_gap = 4,
         TextEnum::HorizontalLineAlignment in_horizontal = TextEnum::HorizontalLineAlignment::Middle,
         TextEnum::VerticalBlockAlignment in_vertical = TextEnum::VerticalBlockAlignment::MiddleEM,
-        int in_em_size = 16,
         bool in_clear_background = false,
         TGetColour in_get_clear_colour_ref = GetColourTransparent
         >
@@ -171,6 +170,7 @@ namespace
         )
     {
         auto font = in_param._text_manager->GetTextFont(in_get_path_ref());
+        const float new_line_gap_ratio = static_cast<float>(in_new_line_gap) / static_cast<float>(in_font_size);
 
         UIContentString* content = dynamic_cast<UIContentString*>(in_out_content.get());
         bool dirty = false;
@@ -180,15 +180,14 @@ namespace
             auto text_block = std::make_unique<TextBlock>(
                 *font,
                 in_font_size,
-                in_new_line_height,
+                new_line_gap_ratio,
                 "",
                 nullptr,
                 VectorInt2(),
                 false,
                 0,
                 in_horizontal,
-                in_vertical,
-                in_em_size
+                in_vertical
                 );
             in_out_content = std::move(std::make_unique<UIContentString>(
                 in_clear_background,
@@ -196,8 +195,7 @@ namespace
                 in_get_layout_ref(), 
                 text_block,
                 in_font_size,
-                in_new_line_height,
-                in_em_size
+                new_line_gap_ratio
                 ));
             dirty = true;
         }
@@ -214,10 +212,9 @@ namespace
             if (true == content->Set(
                 *font, 
                 in_font_size, 
-                in_new_line_height,
+                new_line_gap_ratio,
                 in_horizontal, 
-                in_vertical, 
-                in_em_size
+                in_vertical
                 ))
             {
                 dirty = true;
@@ -297,10 +294,9 @@ void DefaultUIComponentFactory::Populate(
         GetUILayoutQuadrant0,
         GetFontPathDefault,
         64,
-        72,
+        16,
         TextEnum::HorizontalLineAlignment::Middle,
         TextEnum::VerticalBlockAlignment::MiddleEM,
-        64,
         true,
         GetColourGreen
         >);
