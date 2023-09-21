@@ -280,7 +280,7 @@ private:
             if (nullptr != cell)
             {
                 in_out_text_pre_vertex.AddPreVertex(
-                    cell, 
+                    *cell, 
                     in_out_cursor[0] + x_offset, 
                     in_out_cursor[1] + y_offset,
                     in_width_limit_new_line_height,

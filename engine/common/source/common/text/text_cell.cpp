@@ -14,3 +14,19 @@ TextCell::TextCell(
 {
     // Nop
 }
+
+VectorInt2 TextCell::GetWidthHeight(const float in_ui_scale) const
+{
+    return VectorInt2(
+        static_cast<int>(round(_width_height.GetX() * in_ui_scale)),
+        static_cast<int>(round(_width_height.GetY() * in_ui_scale))
+        );
+}
+
+VectorInt2 TextCell::GetBearing(const float in_ui_scale) const
+{
+    return VectorInt2(
+        static_cast<int>(round(_bearing.GetX() * in_ui_scale)),
+        static_cast<int>(round(_bearing.GetY() * in_ui_scale))
+        );
+}

@@ -10,8 +10,8 @@ public:
     explicit TextRunDataIcon(
         const int in_icon_id = 0,
         IconFont* const in_icon_font = nullptr,
-        const float in_new_line_gap_ratio = 0.0f,
-        const VectorFloat4& in_colour_tint = VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f)
+        const VectorFloat4& in_colour_tint = VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+        const float in_new_line_gap_ratio = 0.0f
         );
 
 private:

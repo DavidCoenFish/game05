@@ -58,7 +58,8 @@ public:
                     *_pre_vertex_data,
                     cursor,
                     _width_limit_enabled,
-                    _width_limit
+                    _width_limit,
+                    _ui_scale
                     );
             }
             _text_bounds = _pre_vertex_data->GetBounds();
@@ -294,15 +295,15 @@ std::shared_ptr<ITextRunData> TextRun::MakeTextRunDataString(
 std::shared_ptr<ITextRunData> TextRun::MakeTextRunDataIcon(
     const int in_icon_id,
     IconFont* const in_icon_font,
-    const int in_new_line_height,
-    const VectorFloat4& in_colour_tint
+    const VectorFloat4& in_colour_tint,
+    const float in_new_line_gap_ratio
     )
 {
     return std::make_shared<TextRunDataIcon>(
         in_icon_id,
         in_icon_font,
-        in_new_line_height,
-        in_colour_tint
+        in_colour_tint,
+        in_new_line_gap_ratio
         );
 }
 

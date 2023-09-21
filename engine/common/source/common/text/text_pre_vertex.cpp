@@ -29,37 +29,79 @@ void TextPreVertex::Reserve(const unsigned int glyph_count)
     _pre_vertex_data.reserve(glyph_count + _pre_vertex_data.size());
 }
 
-void TextPreVertex::AddPreVertex(
-    const TextCell* const in_cell,
+void TextPreVertex::AddPreVertexScale(
+    const TextCell& in_cell,
     const int in_pos_x,
     const int in_pos_y,
-    const int _line_height,
-    const VectorFloat4& _colour
+    const float in_new_line_gap_ratio,
+    const VectorFloat4& in_colour,
+    const float in_ui_scale
+    )
+{
+    const VectorInt2 width_height = in_cell.GetWidthHeight(in_ui_scale);
+    const VectorInt2 bearing = in_cell.GetBearing(in_ui_scale);
+    const int line_height = static_cast<int>(round(width_height.GetY() * (1.0f + in_new_line_gap_ratio)));
+    AddPreVertex(
+        width_height,
+        bearing,
+        in_cell.GetUV(),
+        in_cell.GetMask(),
+        in_pos_x,
+        in_pos_y,
+        line_height,
+        in_colour
+        );
+}
+
+void TextPreVertex::AddPreVertex(
+    const TextCell& in_cell,
+    const int in_pos_x,
+    const int in_pos_y,
+    const int in_line_height,
+    const VectorFloat4& in_colour
+    )
+{
+    AddPreVertex(
+        in_cell.GetWidthHeight(),
+        in_cell.GetBearing(),
+        in_cell.GetUV(),
+        in_cell.GetMask(),
+        in_pos_x,
+        in_pos_y,
+        in_line_height,
+        in_colour
+        );
+}
+
+void TextPreVertex::AddPreVertex(
+    const VectorInt2& in_width_height,
+    const VectorInt2& in_bearing,
+    const VectorFloat4& in_uv,
+    const VectorFloat4& in_mask,
+    const int in_pos_x,
+    const int in_pos_y,
+    const int in_line_height,
+    const VectorFloat4& in_colour
     )
 {
     _line_dirty = true;
     _bound_dirty = true;
-    _current_line_height = std::max(_current_line_height, _line_height);
+    _current_line_height = std::max(_current_line_height, in_line_height);
 
-    const VectorInt2 width_height = in_cell->GetWidthHeight();
-    const VectorInt2 bearing = in_cell->GetBearing();
-    const VectorFloat4 uv = in_cell->GetUV();
-    const VectorFloat4 mask = in_cell->GetMask();
-
-    const int pos_x = in_pos_x + bearing.GetX();
-    const int pos_y = in_pos_y - (width_height.GetY() - bearing.GetY());
+    const int pos_x = in_pos_x + in_bearing.GetX();
+    const int pos_y = in_pos_y - (in_width_height.GetY() - in_bearing.GetY());
     const VectorInt4 pos = VectorInt4(
         pos_x,
         pos_y,
-        pos_x + width_height.GetX(),
-        pos_y + width_height.GetY()
+        pos_x + in_width_height.GetX(),
+        pos_y + in_width_height.GetY()
         );
 
     _pre_vertex_data.push_back(PreVertexData({
         pos,
-        uv,
-        mask,
-        _colour,
+        in_uv,
+        in_mask,
+        in_colour,
         _line_index
         }));
 

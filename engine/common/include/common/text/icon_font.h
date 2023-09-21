@@ -28,9 +28,10 @@ public:
         TextPreVertex& in_out_text_pre_vertex,
         VectorInt2& in_out_cursor, // Allow multiple fonts to append pre vertex data
         const int in_icon_id,
-        const int in_new_line_height = 0,
+        const float in_new_line_gap_ratio = 0.0f,
         const bool in_width_limit_enabled = false,
         const int in_width_limit = 0,
+        const float in_ui_scale = 1.0f,
         const VectorFloat4 in_colour_tint = VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f)
         );
 

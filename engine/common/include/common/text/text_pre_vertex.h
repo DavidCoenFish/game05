@@ -34,12 +34,32 @@ public:
 
     void Reserve(const unsigned int glyph_count);
 
-    void AddPreVertex(
-        const TextCell* const in_cell,
+    void AddPreVertexScale(
+        const TextCell& in_cell,
         const int in_pos_x,
         const int in_pos_y,
-        const int _line_height,
-        const VectorFloat4& _colour
+        const float in_new_line_gap_ratio,
+        const VectorFloat4& in_colour,
+        const float in_ui_scale
+        );
+
+    void AddPreVertex(
+        const TextCell& in_cell,
+        const int in_pos_x,
+        const int in_pos_y,
+        const int in_line_height,
+        const VectorFloat4& in_colour
+        );
+
+    void AddPreVertex(
+        const VectorInt2& in_width_height,
+        const VectorInt2& in_bearing,
+        const VectorFloat4& in_uv,
+        const VectorFloat4& in_mask,
+        const int in_pos_x,
+        const int in_pos_y,
+        const int in_line_height,
+        const VectorFloat4& in_colour
         );
 
     void StartNewLine(

@@ -54,11 +54,12 @@ public:
 
     void BuildPreVertexData(
         TextPreVertex& in_out_text_pre_vertex,
-        VectorInt2& in_out_cursor, // allow multiple fonts to append pre vertex data
+        VectorInt2& in_out_cursor, // Allow multiple fonts to append pre vertex data
         const int in_icon_id,
-        const int in_new_line_height,
+        const float in_new_line_gap_ratio,
         const bool in_width_limit_enabled,
         const int in_width_limit,
+        const float in_ui_scale,
         const VectorFloat4 in_colour_tint
         )
     {
@@ -69,18 +70,20 @@ public:
         }
         auto& cell = *(found->second);
         const VectorInt2 cell_width_height = cell.GetWidthHeight();
+        const int width = static_cast<int>(round(cell_width_height.GetX() * in_ui_scale));
         if ((true == in_width_limit_enabled) &&
-            (in_width_limit < (in_out_cursor.GetX() + cell_width_height.GetX())))
+            (in_width_limit < (in_out_cursor.GetX() + width)))
         {
             in_out_text_pre_vertex.StartNewLine(in_out_cursor);
         }
 
-        in_out_text_pre_vertex.AddPreVertex(
-            &cell,
+        in_out_text_pre_vertex.AddPreVertexScale(
+            cell,
             in_out_cursor[0], 
             in_out_cursor[1],
-            in_new_line_height,
-            in_colour_tint
+            in_new_line_gap_ratio,
+            in_colour_tint,
+            in_ui_scale
             );
 
         in_out_cursor[0] += cell_width_height[0];
@@ -132,11 +135,12 @@ void IconFont::AddIcon(
 
 void IconFont::BuildPreVertexData(
     TextPreVertex& in_out_text_pre_vertex,
-    VectorInt2& in_out_cursor,
+    VectorInt2& in_out_cursor, // Allow multiple fonts to append pre vertex data
     const int in_icon_id,
-    const int in_new_line_height,
+    const float in_new_line_gap_ratio,
     const bool in_width_limit_enabled,
     const int in_width_limit,
+    const float in_ui_scale,
     const VectorFloat4 in_colour_tint
     )
 {
@@ -144,9 +148,10 @@ void IconFont::BuildPreVertexData(
         in_out_text_pre_vertex,
         in_out_cursor,
         in_icon_id,
-        in_new_line_height,
+        in_new_line_gap_ratio,
         in_width_limit_enabled,
         in_width_limit,
+        in_ui_scale,
         in_colour_tint
         );
     return;

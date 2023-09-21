@@ -14,7 +14,9 @@ public:
         );
 
     VectorInt2 GetWidthHeight() const { return _width_height; }
+    VectorInt2 GetWidthHeight(const float in_ui_scale) const;
     VectorInt2 GetBearing() const { return _bearing; }
+    VectorInt2 GetBearing(const float in_ui_scale) const;
     VectorFloat4 GetUV() const { return _uv; }
     VectorFloat4 GetMask() const { return _mask; }
 

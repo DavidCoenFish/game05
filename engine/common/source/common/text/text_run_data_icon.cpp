@@ -3,10 +3,10 @@
 #include "common/text/icon_font.h"
 
 TextRunDataIcon::TextRunDataIcon(
-    const int in_icon_id, // Zero if you are using a string and not an icon
+    const int in_icon_id,
     IconFont* const in_icon_font,
-    const float in_new_line_gap_ratio,
-    const VectorFloat4& in_colour_tint
+    const VectorFloat4& in_colour_tint,
+    const float in_new_line_gap_ratio
     )
     : _icon_id(in_icon_id)
     , _icon_font(in_icon_font)
