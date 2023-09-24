@@ -209,11 +209,9 @@ void ApplicationBasicUI::Update()
                 _draw_resource->_text_manager.get(),
                 1.0f, //in_ui_scale = 1.0f,
                 delta_seconds, //in_time_delta = 0.0f,
-                false, //in_always_dirty = false,
+                true, //false, //in_always_dirty = false,
                 false, //in_draw_to_texture = false, // Draw to texture or backbuffer?
-                VectorInt2(0,0), //in_texture_size = VectorInt2(0,0) // If in_draw_to_texture is true, size to use for texture
-                true,
-                VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f)
+                VectorInt2(0,0) //in_texture_size = VectorInt2(0,0) // If in_draw_to_texture is true, size to use for texture
                 );
             _draw_resource->_ui_manager->Update(
                 _draw_resource->_ui_hierarchy_node,
@@ -229,7 +227,7 @@ void ApplicationBasicUI::Update()
                 UIManagerDealInputParam()
                 );
         }
-
+        #if 1
         // Draw
         if (nullptr != _draw_resource->_ui_hierarchy_node)
         {
@@ -242,6 +240,7 @@ void ApplicationBasicUI::Update()
                     )
                 );
         }
+        #endif
     }
 }
 

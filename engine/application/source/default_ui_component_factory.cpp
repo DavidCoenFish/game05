@@ -172,7 +172,7 @@ namespace
         int in_new_line_gap = 4,
         TextEnum::HorizontalLineAlignment in_horizontal = TextEnum::HorizontalLineAlignment::Middle,
         TextEnum::VerticalBlockAlignment in_vertical = TextEnum::VerticalBlockAlignment::MiddleEM,
-        bool in_clear_background = false,
+        bool in_clear_background = true,
         TGetColour in_get_clear_colour_ref = GetColourTransparent,
         bool in_width_limit = false,
         TGetColour in_get_text_colour_ref = GetColourBlack
@@ -303,17 +303,17 @@ void DefaultUIComponentFactory::Populate(
     UIManager& in_ui_manager
     )
 {
-    in_ui_manager.AddContentFactory("UIDataString", FactoryString<>);
-    //in_ui_manager.AddContentFactory("UIDataString", FactoryString<
-    //    GetUILayoutQuadrant0,
-    //    GetFontPathDefault,
-    //    64,
-    //    16,
-    //    TextEnum::HorizontalLineAlignment::Middle,
-    //    TextEnum::VerticalBlockAlignment::MiddleEM,
-    //    true,
-    //    GetColourGreen
-    //    >);
+    //in_ui_manager.AddContentFactory("UIDataString", FactoryString<>);
+    in_ui_manager.AddContentFactory("UIDataString", FactoryString<
+        GetUILayoutQuadrant0,
+        GetFontPathDefault,
+        64,
+        16,
+        TextEnum::HorizontalLineAlignment::Middle,
+        TextEnum::VerticalBlockAlignment::MiddleEM,
+        true,
+        GetColourGreen
+        >);
     in_ui_manager.AddContentFactory("UIDataTextRun", FactoryTextRun<>);
     //in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<>);
     in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<GetUILayoutFullScreenMargin, true, GetColourRed>);
