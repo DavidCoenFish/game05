@@ -91,7 +91,7 @@ public:
             DXGI_FORMAT_UNKNOWN,
             // DXGI_FORMAT_D32_FLOAT,
             render_target_format,
-            CD3DX12_BLEND_DESC(D3D12_DEFAULT),
+            ShaderPipelineStateData::FactoryBlendDescAlphaPremultiplied(),  //CD3DX12_BLEND_DESC(D3D12_DEFAULT),
             CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT),
             CD3DX12_DEPTH_STENCIL_DESC()// CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT)
             );

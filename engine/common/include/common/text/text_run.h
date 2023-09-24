@@ -60,6 +60,9 @@ public:
         const bool in_width_limit_enabled,
         const int in_width_limit
         );
+    const bool SetWidthLimitEnabled(
+        const bool in_width_limit_enabled
+        );
     const bool SetWidthLimitWidth(
         const int in_width_limit
         );

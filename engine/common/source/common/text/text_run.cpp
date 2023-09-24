@@ -122,6 +122,21 @@ public:
         return dirty;
     }
 
+    const bool SetWidthLimitEnabled(
+        const bool in_width_limit_enabled
+        )
+    {
+        bool dirty = false;
+        if (_width_limit_enabled != in_width_limit_enabled)
+        {
+            dirty = true;
+            _width_limit_enabled = in_width_limit_enabled;
+            _calculate_dirty = true;
+            _geometry_dirty = true;
+        }
+        return dirty;
+    }
+
     const bool SetWidthLimitWidth(
         const int in_width_limit
         )
@@ -420,6 +435,15 @@ const bool TextRun::SetWidthLimit(
     return _implementation->SetWidthLimit(
         in_width_limit_enabled,
         in_width_limit
+        );
+}
+
+const bool TextRun::SetWidthLimitEnabled(
+    const bool in_width_limit_enabled
+    )
+{
+    return _implementation->SetWidthLimitEnabled(
+        in_width_limit_enabled
         );
 }
 

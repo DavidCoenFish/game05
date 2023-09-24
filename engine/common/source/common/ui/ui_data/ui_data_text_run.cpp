@@ -171,11 +171,16 @@ namespace
                         return nullptr;
                     }
 
-                    const std::string string_utf8 = in_param._locale_system.GetValue(in_param._locale, token);
-
+                    LocaleISO_639_1 locale = in_param._locale;
+                    std::string string_utf8 = in_param._locale_system.GetValue(locale, token);
+                    if (true == string_utf8.empty())
+                    {
+                        locale = LocaleISO_639_1::Default;
+                        string_utf8 = token;
+                    }
                     return std::make_shared<TextRunDataString>(
                         string_utf8,
-                        in_param._text_manager.GetLocaleToken(in_param._locale),
+                        in_param._text_manager.GetLocaleToken(locale),
                         in_param._current_font,
                         in_param._current_style._font_size,
                         in_param._current_style._new_line_gap_ratio,
@@ -356,7 +361,8 @@ namespace
     {
         return std::make_shared<TextRunDataString>(
             in_string_utf8,
-            in_param._text_manager.GetLocaleToken(in_param._locale),
+            //in_param._text_manager.GetLocaleToken(in_param._locale),
+            in_param._text_manager.GetLocaleToken(LocaleISO_639_1::Default),
             in_param._current_font,
             in_param._current_style._font_size,
             in_param._current_style._new_line_gap_ratio,

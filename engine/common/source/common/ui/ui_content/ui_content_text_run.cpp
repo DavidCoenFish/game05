@@ -36,16 +36,46 @@ const bool UIContentTextRun::SetBase(
     const UILayout& in_layout
     )
 {
+    bool dirty = false;
     if (true == _content_default.SetBase(
         in_clear_background,
         in_clear_colour,
         in_layout
         ))
     {
-        return true;
+        dirty = true;
     }
-    return false;
+    return dirty;
 }
+
+const bool UIContentTextRun::Set(
+    const bool in_width_limit_enabled,
+    const TextEnum::HorizontalLineAlignment in_horizontal,
+    const TextEnum::VerticalBlockAlignment in_vertical,
+    const int in_em_size
+    )
+{
+    bool dirty = false;
+    if (true == _text_run->SetEMSize(in_em_size))
+    {
+        dirty = true;
+    }
+    if (true == _text_run->SetWidthLimitEnabled(in_width_limit_enabled))
+    {
+        dirty = true;
+    }
+    if (true == _text_run->SetHorizontalLineAlignment(in_horizontal))
+    {
+        dirty = true;
+    }
+    if (true == _text_run->SetVerticalBlockAlignment(in_vertical))
+    {
+        dirty = true;
+    }
+
+    return dirty;
+}
+
 
 // Make sorting children easier
 void UIContentTextRun::SetSourceToken(void* in_source_ui_data_token)

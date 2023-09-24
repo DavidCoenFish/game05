@@ -26,11 +26,10 @@ public:
         );
 
     const bool Set(
-        //const std::vector<UIDataTextRun::Data>& in_data,
-        const std::vector<std::shared_ptr<ITextRunData>>& in_text_run_array,
         const bool in_width_limit_enabled,
-        const TextEnum::HorizontalLineAlignment in_horizontal, 
-        const TextEnum::VerticalBlockAlignment in_vertical
+        const TextEnum::HorizontalLineAlignment in_horizontal,
+        const TextEnum::VerticalBlockAlignment in_vertical,
+        const int in_em_size
         );
 
 private:

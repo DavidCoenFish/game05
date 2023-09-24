@@ -52,25 +52,26 @@ public:
 #if 0 // Canvas test
             std::make_shared<UIDataContainer>(
                 std::vector<std::shared_ptr<IUIData>>(),
-                "UIDataContainer"
+                "UIDataContainerDebug"
                 ),
 #endif
 
-#if 1 // String test
+#if 0 // String test
             std::make_shared<UIDataString>(
                 "Hello human long text"
                 )
 #endif
 
-#if 0 // String test
+#if 0 // text run test
             std::make_shared<UIDataTextRun>(
-                "hello human <Locale DEBUG> <Locale Win64>",
-                LocaleISO_639_1::Arabic
+                "<Size 64>hello human <Locale DEBUG> <Locale Win64> and some more non localised text <Locale DEBUG>",
+                LocaleISO_639_1::Arabic,
+                "UIDataTextRunWrap"
                 )
 #endif
 
 
-#if 0 // Stack test
+#if 1 // Stack test
             std::make_shared<UIDataContainer>(std::vector<std::shared_ptr<IUIData>>({
                 _data_map_build_fps,
                 _data_map_build_info,

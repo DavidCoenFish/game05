@@ -102,8 +102,8 @@ void UIContentDefault::CalculateGeometry(
 
         const float length = (static_cast<float>(in_initial_size[1]) / static_cast<float>(in_desired_size[1]));//
         const float offset = (1.0f - length) * abs(new_value);
-        out_geometry_uv[0] = 1.0f - offset;
-        out_geometry_uv[2] = 1.0f - (offset + length);
+        out_geometry_uv[1] = 1.0f - offset;
+        out_geometry_uv[3] = 1.0f - (offset + length);
     }
 
     // Deal texture
@@ -142,17 +142,6 @@ const bool UIContentDefault::SetBase(
 
     return dirty;
 }
-
-//const bool UIContentDefault::GetClearBackground(
-//    VectorFloat4& out_clear_colour
-//    ) const
-//{
-//    if (_clear_background)
-//    {
-//        out_clear_colour = _clear_colour;
-//    }
-//    return _clear_background;
-//}
 
 // Make sorting children easier
 void UIContentDefault::SetSourceToken(void* in_source_ui_data_token)

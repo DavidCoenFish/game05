@@ -127,7 +127,7 @@ void DefaultLocale::Populate(
                 {"ta","\xd8""\xa7""\xd9""\x84""\xd8""\xaa""\xd8""\xa7""\xd9""\x85""\xd9""\x8a""\xd9""\x84"},
                 {"DEBUG","\xd8""\xaa""\xd8""\xb5""\xd8""\xad""\xd9""\x8a""\xd8""\xad"},
                 {"RELEASE","\xd9""\x8a""\xd8""\xb7""\xd9""\x84""\xd9""\x82"},
-                {"Win64","Win64"},
+                //{"Win64","Win64"},
                 }));
     }
 
