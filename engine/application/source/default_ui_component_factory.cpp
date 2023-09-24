@@ -121,6 +121,11 @@ namespace
         static VectorFloat4 s_colour(0.0f, 1.0f, 0.0f, 1.0f);
         return s_colour;
     }
+    const VectorFloat4& GetColourBlue()
+    {
+        static VectorFloat4 s_colour(0.0f, 0.0f, 1.0f, 1.0f);
+        return s_colour;
+    }
     const VectorFloat4& GetColourBlack()
     {
         static VectorFloat4 s_colour(0.0f, 0.0f, 0.0f, 1.0f);
@@ -312,7 +317,7 @@ void DefaultUIComponentFactory::Populate(
         TextEnum::HorizontalLineAlignment::Middle,
         TextEnum::VerticalBlockAlignment::MiddleEM,
         true,
-        GetColourGreen
+        GetColourWhite //GetColourTransparent //GetColourGreen
         >);
     in_ui_manager.AddContentFactory("UIDataTextRun", FactoryTextRun<>);
     //in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<>);

@@ -27,6 +27,9 @@ public:
     const bool operator==(const UILayout& in_rhs) const;
     const bool operator!=(const UILayout& in_rhs) const;
 
+    // Return true if UICoord don't match so values get set and scroll reset, else false and no change
+    const bool Update(const UILayout& in_rhs);
+
 private:
     // Data for how we calculate our size relative to parent
     UICoord _data_size[2];

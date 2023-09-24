@@ -58,7 +58,7 @@ public:
 
 #if 1 // String test
             std::make_shared<UIDataString>(
-                "Hello human"
+                "Hello human long text"
                 )
 #endif
 

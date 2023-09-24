@@ -25,6 +25,8 @@ namespace
     {
         return ((static_cast<float>(in_pos) / static_cast<float>(in_size)) * 2.0f) - 1.0f;
     }
+
+    constexpr float s_scroll_speed = 25.0f;
 }
 
 UIContentDefault::UIContentDefault(
@@ -80,11 +82,11 @@ void UIContentDefault::CalculateGeometry(
     {
         VectorFloat2& scroll = in_out_layout.GetScrollRef();
         const float delta_f = static_cast<float>(delta[0]);
-        float new_value = scroll[0] + (in_time_delta / delta_f);
+        float new_value = scroll[0] + (s_scroll_speed * in_time_delta / delta_f);
         new_value = fmodf(new_value + 1.0f, 2.0f) - 1.0f; // want range [-1.0 ... 1.0]
         scroll[0] = new_value;
 
-        const float length = (static_cast<float>(in_initial_size[0]) / delta_f);//
+        const float length = (static_cast<float>(in_initial_size[0]) / static_cast<float>(in_desired_size[0]));//
         const float offset = (1.0f - length) * abs(new_value);
         out_geometry_uv[0] = offset;
         out_geometry_uv[2] = offset + length;
@@ -94,11 +96,11 @@ void UIContentDefault::CalculateGeometry(
     {
         VectorFloat2& scroll = in_out_layout.GetScrollRef();
         const float delta_f = static_cast<float>(delta[1]);
-        float new_value = scroll[1] + (in_time_delta / delta_f);
+        float new_value = scroll[1] + (s_scroll_speed * in_time_delta / delta_f);
         new_value = fmodf(new_value + 1.0f, 2.0f) - 1.0f; // want range [-1.0 ... 1.0]
         scroll[1] = new_value;
 
-        const float length = (static_cast<float>(in_initial_size[1]) / delta_f);//
+        const float length = (static_cast<float>(in_initial_size[1]) / static_cast<float>(in_desired_size[1]));//
         const float offset = (1.0f - length) * abs(new_value);
         out_geometry_uv[0] = 1.0f - offset;
         out_geometry_uv[2] = 1.0f - (offset + length);
@@ -133,11 +135,9 @@ const bool UIContentDefault::SetBase(
         _clear_colour = in_clear_colour;
     }
 
-
-    if (_layout != in_layout)
+    if (true == _layout.Update(in_layout))
     {
         dirty = true;
-        _layout = in_layout;
     }
 
     return dirty;

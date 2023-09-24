@@ -99,3 +99,26 @@ const bool UILayout::operator!=(const UILayout& in_rhs) const
     return !operator==(in_rhs);
 }
 
+const bool UILayout::Update(const UILayout& in_rhs)
+{
+    bool dirty = false;
+    if ((_data_size[0] != in_rhs._data_size[0]) ||
+        (_data_size[1] != in_rhs._data_size[1]) ||
+        (_data_attach[0] != in_rhs._data_attach[0]) ||
+        (_data_attach[1] != in_rhs._data_attach[1]) ||
+        (_data_pivot[0] != in_rhs._data_pivot[0]) ||
+        (_data_pivot[1] != in_rhs._data_pivot[1]))
+    {
+        dirty = true;
+        _data_size[0] = in_rhs._data_size[0];
+        _data_size[1] = in_rhs._data_size[1];
+        _data_attach[0] = in_rhs._data_attach[0];
+        _data_attach[1] = in_rhs._data_attach[1];
+        _data_pivot[0] = in_rhs._data_pivot[0];
+        _data_pivot[1] = in_rhs._data_pivot[1];
+        _uv_scroll = VectorFloat2();
+    }
+
+    return dirty;
+}
+
