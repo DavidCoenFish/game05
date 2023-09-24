@@ -19,11 +19,10 @@ public:
 
 private:
     virtual const std::string GetTemplateName() const { return _template_name; }
-    virtual const int GetChangeID() const override;
+    //virtual const int GetChangeID() const override;
 
 private:
     std::string _template_name;
-    int _change_id;
 
     // or, array of UIModelKeys? or TContentFactory takes node to add children and set content, or just make/update content and have update children as func call
     std::vector<std::shared_ptr<IUIData>> _array_data;

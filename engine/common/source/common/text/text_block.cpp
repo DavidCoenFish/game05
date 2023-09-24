@@ -162,6 +162,22 @@ public:
         return _width_limit_enabled;
     }
 
+    const bool SetWidthLimitEnabled(
+        const bool in_width_limit_enabled
+        )
+    {
+        bool dirty = false;
+        if (_width_limit_enabled != in_width_limit_enabled)
+        {
+            dirty = true;
+            _width_limit_enabled = in_width_limit_enabled;
+            _calculate_dirty = true;
+            _geometry_dirty = true;
+        }
+        return dirty;
+    }
+
+
     const bool SetWidthLimit(
         const bool in_width_limit_enabled,
         const int in_width_limit
@@ -485,6 +501,15 @@ const bool TextBlock::SetTextContainerSize(
 const bool TextBlock::GetWidthLimitEnabled() const
 {
     return _implementation->GetWidthLimitEnabled();
+}
+
+const bool TextBlock::SetWidthLimitEnabled(
+    const bool in_width_limit_enabled
+    )
+{
+    return _implementation->SetWidthLimitEnabled(
+        in_width_limit_enabled
+        );
 }
 
 const bool TextBlock::SetWidthLimit(

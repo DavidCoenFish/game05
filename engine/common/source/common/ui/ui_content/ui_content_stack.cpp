@@ -101,7 +101,7 @@ const bool UIContentStack::SetLayout(const UILayout& in_layout)
 
 const bool UIContentStack::UpdateHierarchy(
     //std::vector<std::shared_ptr<IUIData>>*& out_array_data_or_null,
-    const IUIData* const in_data,
+    IUIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
     const UIHierarchyNodeUpdateHierarchyParam& in_param
     )
@@ -122,7 +122,7 @@ void UIContentStack::UpdateSize(
     UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
-    return _content_default.UpdateSize(
+    _content_default.UpdateSize(
         in_draw_system,
         *this,
         in_parent_size,

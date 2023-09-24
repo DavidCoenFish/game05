@@ -63,7 +63,7 @@ public:
     UILayout& GetLayout() { return _layout; }
 
     const bool UpdateHierarchy(
-        const IUIData* const in_data,
+        IUIData* const in_data,
         UIHierarchyNodeChildData& in_out_child_data,
         const UIHierarchyNodeUpdateHierarchyParam& in_param
         );

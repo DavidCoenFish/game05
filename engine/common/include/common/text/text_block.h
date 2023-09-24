@@ -57,6 +57,9 @@ public:
         const VectorInt2& in_size
         );
     const bool GetWidthLimitEnabled() const;
+    const bool SetWidthLimitEnabled(
+        const bool in_width_limit_enabled
+        );
     const bool SetWidthLimit(
         const bool in_width_limit_enabled,
         const int in_width_limit

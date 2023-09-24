@@ -9,6 +9,7 @@ public:
     LocaleSystem();
     ~LocaleSystem();
 
+    // Not const to allow cache of last locale
     const std::string GetValue(
         const LocaleISO_639_1 in_locale,
         const std::string& in_key

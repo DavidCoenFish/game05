@@ -12,6 +12,7 @@ UIDataButton::UIDataButton(
     , _label_key(in_label_key)
     , _on_click(in_on_click)
     , _on_focus(in_on_focus)
+    , _template_name(in_template_name)
 {
     // Nop
 }
@@ -37,8 +38,8 @@ void UIDataButton::OnFocus()
     }
 }
 
-const int UIDataButton::GetChangeID() const
-{
-    return 0;
-}
+//const int UIDataButton::GetChangeID() const
+//{
+//    return 0;
+//}
 

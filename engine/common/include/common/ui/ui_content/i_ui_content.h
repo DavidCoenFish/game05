@@ -37,8 +37,7 @@ public:
     virtual const bool SetLayout(const UILayout& in_layout) = 0;
 
     virtual const bool UpdateHierarchy(
-        //std::vector<std::shared_ptr<IUIData>>*& out_array_data_or_null,
-        const IUIData* const in_data,
+        IUIData* const in_data,
         UIHierarchyNodeChildData& in_out_child_data,
         const UIHierarchyNodeUpdateHierarchyParam& in_param
         ) = 0;
@@ -58,7 +57,7 @@ public:
         UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         ) = 0;
 
-    virtual const bool GetNeedsPreDraw() const;
+    //virtual const bool GetNeedsPreDraw() const;
     virtual void PreDraw(
         const UIManagerDrawParam& in_param
         );

@@ -14,9 +14,7 @@ public:
         const bool in_clear_background,
         const VectorFloat4& in_clear_colour,
         const UILayout& in_layout,
-        std::unique_ptr<TextBlock>& in_text_block,
-        const int in_font_size,
-        const float in_new_line_gap_ratio
+        std::unique_ptr<TextBlock>& in_text_block
         );
     ~UIContentString();
 
@@ -26,14 +24,15 @@ public:
         const UILayout& in_layout
         );
 
-    // return true if we have a text block which this is a new value, else true
+    // return true if modified, else false
     const bool Set(
         TextFont& in_font, 
         const int in_font_size,
         const float in_new_line_gap_ratio,
         const bool in_width_limit_enabled,
         const TextEnum::HorizontalLineAlignment in_horizontal, 
-        const TextEnum::VerticalBlockAlignment in_vertical
+        const TextEnum::VerticalBlockAlignment in_vertical,
+        const VectorFloat4& in_text_colour
         );
 
 private:
@@ -45,7 +44,7 @@ private:
 
     virtual const bool UpdateHierarchy(
         //std::vector<std::shared_ptr<IUIData>>*& out_array_data_or_null,
-        const IUIData* const in_data,
+        IUIData* const in_data,
         UIHierarchyNodeChildData& in_out_child_data,
         const UIHierarchyNodeUpdateHierarchyParam& in_param
         ) override;
@@ -65,7 +64,7 @@ private:
         UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         ) override;
 
-    virtual const bool GetNeedsPreDraw() const override;
+    //virtual const bool GetNeedsPreDraw() const override;
     virtual void PreDraw(
         const UIManagerDrawParam& in_param
         ) override;

@@ -27,7 +27,8 @@ public:
         const int in_width_limit,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
-        const int in_em_size
+        const int in_em_size,
+        const float in_ui_scale
         )
         : _calculate_dirty(true)
         , _geometry_dirty(true)
@@ -39,6 +40,7 @@ public:
         , _horizontal_line_alignment(in_horizontal_line_alignment)
         , _vertical_block_alignment(in_vertical_block_alignment)
         , _em_size(in_em_size)
+        , _ui_scale(in_ui_scale)
     {
         // Nop
     }
@@ -97,6 +99,11 @@ public:
         return dirty;
     }
 
+    const bool GetWidthLimitEnabled() const
+    {
+        return _width_limit_enabled;
+    }
+
     const bool SetWidthLimit(
         const bool in_width_limit_enabled,
         const int in_width_limit
@@ -111,6 +118,24 @@ public:
             _width_limit = in_width_limit;
             _calculate_dirty = true;
             _geometry_dirty = true;
+        }
+        return dirty;
+    }
+
+    const bool SetWidthLimitWidth(
+        const int in_width_limit
+        )
+    {
+        bool dirty = false;
+        if (_width_limit != in_width_limit)
+        {
+            _width_limit = in_width_limit;
+            if (true == _width_limit_enabled)
+            {
+                dirty = true;
+                _calculate_dirty = true;
+                _geometry_dirty = true;
+            }
         }
         return dirty;
     }
@@ -152,6 +177,22 @@ public:
         {
             dirty = true;
             _em_size = in_em_size;
+            _calculate_dirty = true;
+            _geometry_dirty = true;
+        }
+        return dirty;
+    }
+
+    const bool SetUIScale(
+        const float in_ui_scale
+        )
+    {
+        bool dirty = false;
+        if (_ui_scale != in_ui_scale)
+        {
+            dirty = true;
+            _ui_scale = in_ui_scale;
+            _calculate_dirty = true;
             _geometry_dirty = true;
         }
         return dirty;
@@ -164,7 +205,8 @@ public:
         const int in_width_limit,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
-        const int in_em_size
+        const int in_em_size,
+        const float in_ui_scale
         )
     {
         bool dirty = false;
@@ -202,6 +244,12 @@ public:
         }
         if (true == SetEMSize(
             in_em_size
+            ))
+        {
+            dirty = true;
+        }
+        if (true == SetUIScale(
+            in_ui_scale
             ))
         {
             dirty = true;
@@ -359,6 +407,11 @@ const bool TextRun::SetTextContainerSize(
         );
 }
 
+//const bool TextRun::GetWidthLimitEnabled() const
+//{
+//    return _implementation->GetWidthLimitEnabled();
+//}
+
 const bool TextRun::SetWidthLimit(
     const bool in_width_limit_enabled,
     const int in_width_limit
@@ -369,6 +422,16 @@ const bool TextRun::SetWidthLimit(
         in_width_limit
         );
 }
+
+const bool TextRun::SetWidthLimitWidth(
+    const int in_width_limit
+    )
+{
+    return _implementation->SetWidthLimitWidth(
+        in_width_limit
+        );
+}
+
 
 const bool TextRun::SetHorizontalLineAlignment(
     const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment

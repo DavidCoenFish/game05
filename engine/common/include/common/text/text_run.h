@@ -60,6 +60,9 @@ public:
         const bool in_width_limit_enabled,
         const int in_width_limit
         );
+    const bool SetWidthLimitWidth(
+        const int in_width_limit
+        );
     const bool SetHorizontalLineAlignment(
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment
         );

@@ -26,6 +26,7 @@
 #include "common/ui/ui_data/ui_data_string.h"
 #include "common/ui/ui_data/ui_data_template.h"
 #include "common/ui/ui_data/ui_data_text_run.h"
+#include "common/util/timer.h"
 #include "common/util/vector_helper.h"
 #include "common/window/window_application_param.h"
 
@@ -38,11 +39,11 @@ public:
             std::string(Build::GetBuildTime()) + " " + Build::GetBuildVersion()
             );
 
-        auto _data_map_build_info = std::make_shared<UIDataTextRun>(std::vector<UIDataTextRun::Data>({
-            UIDataTextRun::Data(Build::GetBuildHost()),
-            UIDataTextRun::Data(Build::GetBuildConfiguration(), true),
-            UIDataTextRun::Data(Build::GetBuildPlatform(), true)
-            }));
+        const std::string build_info_string = std::string(Build::GetBuildHost()) +
+            " <Locale " + Build::GetBuildConfiguration() + ">" + 
+            " <Locale " + Build::GetBuildPlatform() + ">";
+
+        auto _data_map_build_info = std::make_shared<UIDataTextRun>(build_info_string);
 
         auto _data_map_build_fps = std::make_shared<UIDataString>("0.0s");
 
@@ -55,13 +56,21 @@ public:
                 ),
 #endif
 
-#if 0 // String test
+#if 1 // String test
             std::make_shared<UIDataString>(
-                "A" //"Hello human"
+                "Hello human"
                 )
 #endif
 
-#if 1 // Stack test
+#if 0 // String test
+            std::make_shared<UIDataTextRun>(
+                "hello human <Locale DEBUG> <Locale Win64>",
+                LocaleISO_639_1::Arabic
+                )
+#endif
+
+
+#if 0 // Stack test
             std::make_shared<UIDataContainer>(std::vector<std::shared_ptr<IUIData>>({
                 _data_map_build_fps,
                 _data_map_build_info,
@@ -160,6 +169,8 @@ ApplicationBasicUI::ApplicationBasicUI(
     DefaultUIComponentFactory::Populate(*_draw_resource->_ui_manager);
 
     _draw_resource->_ui_model = std::make_unique<UIModel>();
+
+    _draw_resource->_timer = std::make_unique<Timer>();
 }
 
 ApplicationBasicUI::~ApplicationBasicUI()
@@ -181,6 +192,8 @@ void ApplicationBasicUI::Update()
     BaseType::Update();
     if (_draw_system)
     {
+        const float delta_seconds = _draw_resource->_timer->GetDeltaSeconds();
+
         auto frame = _draw_system->CreateNewFrame();
 
         frame->SetRenderTarget(_draw_system->GetRenderTargetBackBuffer());
@@ -191,14 +204,16 @@ void ApplicationBasicUI::Update()
                 _draw_system.get(),
                 frame->GetCommandList(),
                 _draw_resource->_ui_model.get(),
+                DefaultUIComponentFactory::GetDefaultTextStyle(),
                 _draw_resource->_locale_system.get(),
                 _draw_resource->_text_manager.get(),
                 1.0f, //in_ui_scale = 1.0f,
-                0.0f, //in_time_delta = 0.0f,
-                "", //in_locale = std::string(),
+                delta_seconds, //in_time_delta = 0.0f,
+                false, //in_always_dirty = false,
                 false, //in_draw_to_texture = false, // Draw to texture or backbuffer?
-                true //in_always_dirty = false,
-                //in_texture_size = VectorInt2(0,0) // If in_draw_to_texture is true, size to use for texture
+                VectorInt2(0,0), //in_texture_size = VectorInt2(0,0) // If in_draw_to_texture is true, size to use for texture
+                true,
+                VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f)
                 );
             _draw_resource->_ui_manager->Update(
                 _draw_resource->_ui_hierarchy_node,

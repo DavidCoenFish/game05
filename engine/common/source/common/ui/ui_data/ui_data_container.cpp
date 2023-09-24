@@ -5,8 +5,8 @@ UIDataContainer::UIDataContainer(
     const std::vector<std::shared_ptr<IUIData>>& in_array_data,
     const std::string& in_template_name
     )
-    : _change_id(0)
-    , _array_data(in_array_data)
+    //: _change_id(0)
+    : _array_data(in_array_data)
     , _template_name(in_template_name)
 {
     // Nop
@@ -19,14 +19,14 @@ UIDataContainer::~UIDataContainer()
 
 std::vector<std::shared_ptr<IUIData>>& UIDataContainer::ModifyData()
 {
-    _change_id += 1;
+    //_change_id += 1;
     return _array_data;
 }
 
-const int UIDataContainer::GetChangeID() const
-{
-    return _change_id;
-}
+//const int UIDataContainer::GetChangeID() const
+//{
+//    return _change_id;
+//}
 
 void UIDataContainer::VisitDataArray(const std::function<void(const std::vector<std::shared_ptr<IUIData>>&)>& in_visitor) const
 {

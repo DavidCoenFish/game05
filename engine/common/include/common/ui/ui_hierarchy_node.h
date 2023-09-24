@@ -19,7 +19,9 @@ class UIHierarchyNode;
 class UIRootInputState;
 class UITexture;
 class UILayout;
+
 struct UIContentFactoryParam;
+struct UIDataTextRunStyle;
 struct UIManagerDrawParam;
 struct UIManagerUpdateLayoutParam;
 
@@ -72,7 +74,8 @@ struct UIHierarchyNodeUpdateHierarchyParam
         ID3D12GraphicsCommandList* const in_command_list = nullptr,
         const IUIModel* const in_ui_model = nullptr,
         LocaleSystem* const in_locale_system = nullptr,
-        TextManager* const in_text_manager = nullptr
+        TextManager* const in_text_manager = nullptr,
+        const UIDataTextRunStyle* const in_default_text_style = nullptr
         );
     const std::map<std::string, TContentFactory>& _map_content_factory;
     DrawSystem* const _draw_system;
@@ -80,6 +83,7 @@ struct UIHierarchyNodeUpdateHierarchyParam
     const IUIModel* const _ui_model;
     LocaleSystem* const _locale_system;
     TextManager* const _text_manager;
+    const UIDataTextRunStyle* const _default_text_style;
 
 };
 
@@ -128,6 +132,8 @@ public:
         const VectorFloat4& in_clear_colour = VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f)
         );
     
+    void MarkTextureDirty();
+
     const VectorInt2 GetTextureSize(
         DrawSystem* const in_draw_system
         ) const;

@@ -177,7 +177,7 @@ const bool UIContentDefault::SetLayout(const UILayout& in_layout)
 
 const bool UIContentDefault::UpdateHierarchy(
     //std::vector<std::shared_ptr<IUIData>>*& out_array_data_or_null,
-    const IUIData* const in_data,
+    IUIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
     const UIHierarchyNodeUpdateHierarchyParam& in_param
     )

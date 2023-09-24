@@ -6,7 +6,7 @@ IUIData::~IUIData()
     // Nop
 }
 
-const int IUIData::GetChangeID() const
-{
-    return 0;
-}
+//const int IUIData::GetChangeID() const
+//{
+//    return 0;
+//}

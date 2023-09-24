@@ -9,7 +9,7 @@ UIDataString::UIDataString(
     : _data(in_data)
     , _locale(in_locale)
     , _template_name(in_template_name)
-    , _change_id(0)
+    //, _change_id(0)
 {
     // Nop
 }
@@ -25,12 +25,12 @@ void UIDataString::SetString(const std::string& in_data)
     {
         return;
     }
-    _change_id += 1;
+    //_change_id += 1;
     _data = in_data;
     return;
 }
 
-const int UIDataString::GetChangeID() const
-{
-    return _change_id;
-}
+//const int UIDataString::GetChangeID() const
+//{
+//    return _change_id;
+//}

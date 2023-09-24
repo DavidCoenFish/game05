@@ -16,6 +16,7 @@
 #include "common/ui/ui_layout.h"
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_data/ui_data_string.h"
+#include "common/ui/ui_data/ui_data_text_run.h"
 
 namespace
 {
@@ -33,8 +34,8 @@ namespace
     };
 
     constexpr int s_default_font_size = 16;
-    constexpr int s_default_em_size = 16;
-    constexpr float s_default_margin = s_default_em_size * 0.5f; // in pixels, or in em?
+    constexpr float s_default_newling_ratio = 0.125f;
+    constexpr float s_default_margin = s_default_font_size * 0.5f; // in pixels, or in em?
 
     typedef const std::filesystem::path& (*TGetPathRef)();
 
@@ -120,6 +121,16 @@ namespace
         static VectorFloat4 s_colour(0.0f, 1.0f, 0.0f, 1.0f);
         return s_colour;
     }
+    const VectorFloat4& GetColourBlack()
+    {
+        static VectorFloat4 s_colour(0.0f, 0.0f, 0.0f, 1.0f);
+        return s_colour;
+    }
+    const VectorFloat4& GetColourWhite()
+    {
+        static VectorFloat4 s_colour(1.0f, 1.0f, 1.0f, 1.0f);
+        return s_colour;
+    }
 
     template<
         TGetUILayoutRef in_get_layout_ref = GetUILayoutFullScreen,
@@ -162,7 +173,9 @@ namespace
         TextEnum::HorizontalLineAlignment in_horizontal = TextEnum::HorizontalLineAlignment::Middle,
         TextEnum::VerticalBlockAlignment in_vertical = TextEnum::VerticalBlockAlignment::MiddleEM,
         bool in_clear_background = false,
-        TGetColour in_get_clear_colour_ref = GetColourTransparent
+        TGetColour in_get_clear_colour_ref = GetColourTransparent,
+        bool in_width_limit = false,
+        TGetColour in_get_text_colour_ref = GetColourBlack
         >
     const bool FactoryString(
         std::unique_ptr<IUIContent>& in_out_content,
@@ -184,18 +197,17 @@ namespace
                 "",
                 nullptr,
                 VectorInt2(),
-                false,
+                in_width_limit,
                 0,
                 in_horizontal,
-                in_vertical
+                in_vertical,
+                in_get_text_colour_ref()
                 );
             in_out_content = std::move(std::make_unique<UIContentString>(
                 in_clear_background,
                 in_get_clear_colour_ref(),
                 in_get_layout_ref(), 
-                text_block,
-                in_font_size,
-                new_line_gap_ratio
+                text_block
                 ));
             dirty = true;
         }
@@ -213,8 +225,10 @@ namespace
                 *font, 
                 in_font_size, 
                 new_line_gap_ratio,
+                in_width_limit, 
                 in_horizontal, 
-                in_vertical
+                in_vertical,
+                in_get_text_colour_ref()
                 ))
             {
                 dirty = true;
@@ -315,4 +329,16 @@ void DefaultUIComponentFactory::Populate(
         GetColourRed
         >);
 
+}
+
+const UIDataTextRunStyle* const DefaultUIComponentFactory::GetDefaultTextStyle()
+{
+    static UIDataTextRunStyle s_data(
+        GetFontPathDefault(),
+        s_default_font_size,
+        s_default_newling_ratio,
+        GetColourBlack(),
+        GetColourWhite()
+        );
+    return &s_data;
 }

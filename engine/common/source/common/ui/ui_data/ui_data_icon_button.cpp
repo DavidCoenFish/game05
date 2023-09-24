@@ -26,8 +26,8 @@ UIDataIconButton::~UIDataIconButton()
     // Nop
 }
 
-const int UIDataIconButton::GetChangeID() const
-{
-    return 0;
-}
-
+//const int UIDataIconButton::GetChangeID() const
+//{
+//    return 0;
+//}
+//

@@ -32,14 +32,14 @@ UIManagerUpdateParam::UIManagerUpdateParam(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list,
     const IUIModel* const in_ui_model,
+    const UIDataTextRunStyle* const in_default_text_style,
     LocaleSystem* const in_locale_system,
     TextManager* const in_text_manager,
     const float in_ui_scale,
     const float in_time_delta,
-    const std::string& in_locale,
-    const bool in_draw_to_texture,
-    const bool in_always_dirty,
-    const VectorInt2& in_texture_size,
+    const bool in_draw_every_frame, // mark top level as dirty each frame, the destination render target may have other systems drawing to it
+    const bool in_draw_to_texture, // Draw to texture or backbuffer?
+    const VectorInt2& in_texture_size, // If in_draw_to_texture is true, size to use for texture
     const bool in_allow_clear,
     const VectorFloat4& in_clear_colour
     )
@@ -50,12 +50,12 @@ UIManagerUpdateParam::UIManagerUpdateParam(
     , _text_manager(in_text_manager)
     , _ui_scale(in_ui_scale)
     , _time_delta(in_time_delta)
-    , _locale(in_locale)
     , _draw_to_texture(in_draw_to_texture)
-    , _always_dirty(in_always_dirty)
+    , _draw_every_frame(in_draw_every_frame)
     , _texture_size(in_texture_size)
     , _allow_clear(in_allow_clear)
     , _clear_colour(in_clear_colour)
+    , _default_text_style(in_default_text_style)
 {
     // Nop
 }
@@ -138,7 +138,8 @@ public:
             in_param._command_list,
             in_param._ui_model,
             in_param._locale_system,
-            in_param._text_manager
+            in_param._text_manager,
+            in_param._default_text_style
             );
         if (false == in_param._ui_model->VisitDataArray(
             in_model_key,
@@ -153,7 +154,7 @@ public:
                     hierarchy_param,
                     &in_array_data,
                     in_param._draw_to_texture,
-                    in_param._always_dirty,
+                    in_param._draw_every_frame,
                     in_param._allow_clear,
                     in_param._clear_colour
                     ))

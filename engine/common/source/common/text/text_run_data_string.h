@@ -4,13 +4,15 @@
 
 class TextLocale;
 class TextFont;
-
+/// <summary>
+/// 
+/// </summary>
 class TextRunDataString : public ITextRunData
 {
 public:
     explicit TextRunDataString(
         const std::string& in_string_utf8 = std::string(""),
-        TextLocale* const in_locale_token = nullptr,
+        const TextLocale* const in_locale_token = nullptr,
         TextFont* const in_text_font = nullptr,
         const int in_font_size = 0,
         const float in_new_line_gap_ratio = 0.0f,
@@ -28,7 +30,7 @@ private:
 
 private:
     std::string _string_utf8;
-    TextLocale* const _locale_token;
+    const TextLocale* const _locale_token;
     TextFont* const _text_font;
     int _font_size;
     float _new_line_gap_ratio;

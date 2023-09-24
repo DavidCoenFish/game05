@@ -3,6 +3,10 @@
 #include "common/math/vector_int2.h"
 #include "common/math/vector_float4.h"
 
+/*
+    locale should be an aspect of the UIData, not the ui update param
+*/
+
 class DrawSystem;
 class DrawSystemFrame;
 class IUIContent;
@@ -13,6 +17,10 @@ class TextManager;
 class UIHierarchyNode;
 class UIManager;
 class UIManagerImplementation;
+
+//enum class LocaleISO_639_1;
+
+struct UIDataTextRunStyle;
 
 struct UIContentFactoryParam
 {
@@ -32,13 +40,13 @@ struct UIManagerUpdateParam
         DrawSystem* const in_draw_system = nullptr,
         ID3D12GraphicsCommandList* const in_command_list = nullptr,
         const IUIModel* const in_ui_model = nullptr,
+        const UIDataTextRunStyle* const in_default_text_style = nullptr,
         LocaleSystem* const in_locale_system = nullptr,
         TextManager* const in_text_manager = nullptr,
         const float in_ui_scale = 1.0f,
         const float in_time_delta = 0.0f,
-        const std::string& in_locale = std::string(),
+        const bool in_draw_every_frame = false, // mark top level as dirty each frame, the destination render target may have other systems drawing to it
         const bool in_draw_to_texture = false, // Draw to texture or backbuffer?
-        const bool in_always_dirty = false,
         const VectorInt2& in_texture_size = VectorInt2(0,0), // If in_draw_to_texture is true, size to use for texture
         const bool in_allow_clear = false,
         const VectorFloat4& in_clear_colour = VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f)
@@ -47,13 +55,13 @@ struct UIManagerUpdateParam
     DrawSystem* const _draw_system;
     ID3D12GraphicsCommandList* const _command_list;
     const IUIModel* const _ui_model;
+    const UIDataTextRunStyle* const _default_text_style;
     LocaleSystem* const _locale_system;
     TextManager* const _text_manager;
     float _ui_scale;
     float _time_delta;
-    std::string _locale;
     bool _draw_to_texture;
-    bool _always_dirty;
+    bool _draw_every_frame;
     VectorInt2 _texture_size;
     bool _allow_clear;
     VectorFloat4 _clear_colour;

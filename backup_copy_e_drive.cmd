@@ -29,6 +29,6 @@ SET DESTINATION=E:\backup\%TIMESTAMP%_game05
 
 ::/L list and dont copy
 ::/NJH no job header
-robocopy . %DESTINATION% /S /XD .dist .git .vs build /NS /NC /NFL /NDL /NP 
+robocopy . %DESTINATION% /S /XD .dist .git .vs .vscode build dist /NS /NC /NFL /NDL /NP 
 
 

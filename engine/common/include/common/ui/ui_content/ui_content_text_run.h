@@ -4,6 +4,7 @@
 #include "common/ui/ui_content/ui_content_default.h"
 #include "common/text/text_enum.h"
 
+class ITextRunData;
 class TextRun;
 class TextFont;
 
@@ -25,7 +26,8 @@ public:
         );
 
     const bool Set(
-        const std::vector<UIDataTextRun::Data>& in_data,
+        //const std::vector<UIDataTextRun::Data>& in_data,
+        const std::vector<std::shared_ptr<ITextRunData>>& in_text_run_array,
         const bool in_width_limit_enabled,
         const TextEnum::HorizontalLineAlignment in_horizontal, 
         const TextEnum::VerticalBlockAlignment in_vertical
@@ -40,7 +42,7 @@ private:
 
     virtual const bool UpdateHierarchy(
         //std::vector<std::shared_ptr<IUIData>>*& out_array_data_or_null,
-        const IUIData* const in_data,
+        IUIData* const in_data,
         UIHierarchyNodeChildData& in_out_child_data,
         const UIHierarchyNodeUpdateHierarchyParam& in_param
         ) override;
@@ -60,16 +62,15 @@ private:
         UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         ) override;
 
-    virtual const bool GetNeedsPreDraw() const override;
+    //virtual const bool GetNeedsPreDraw() const override;
     virtual void PreDraw(
         const UIManagerDrawParam& in_param
         ) override;
 
 private:
     UIContentDefault _content_default;
-    bool _pre_draw_dirty;
 
-    //bool _use_parent_size_for_width_limit;
+    int _change_id;
     std::unique_ptr<TextRun> _text_run;
 
 };

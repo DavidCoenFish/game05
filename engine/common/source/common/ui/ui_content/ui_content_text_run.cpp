@@ -1,8 +1,6 @@
 #include "common/common_pch.h"
 #include "common/ui/ui_content/ui_content_text_run.h"
 
-//#include "common/draw_system/draw_system_frame.h"
-//#include "common/draw_system/draw_system.h"
 #include "common/text/text_run.h"
 #include "common/text/text_manager.h"
 #include "common/ui/ui_data/ui_data_text_run.h"
@@ -22,7 +20,7 @@ UIContentTextRun::UIContentTextRun(
         in_layout
         )
     , _text_run(std::move(in_text_run))
-    , _pre_draw_dirty(true)
+    , _change_id(0)
 {
     return;
 }
@@ -44,7 +42,6 @@ const bool UIContentTextRun::SetBase(
         in_layout
         ))
     {
-        _pre_draw_dirty = true;
         return true;
     }
     return false;
@@ -68,23 +65,29 @@ const bool UIContentTextRun::SetLayout(const UILayout& in_layout)
 }
 
 const bool UIContentTextRun::UpdateHierarchy(
-    //std::vector<std::shared_ptr<IUIData>>*& out_array_data_or_null,
-    const IUIData* const in_data,
+    IUIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
     const UIHierarchyNodeUpdateHierarchyParam& in_param
     )
 {
     bool dirty = false;
-    const UIDataTextRun* const data_text_run = dynamic_cast<const UIDataTextRun*>(in_data);
+    UIDataTextRun* const data_text_run = dynamic_cast<UIDataTextRun*>(in_data);
     if (nullptr != data_text_run)
     {
-        if (true == _text_run->SetText(
-            data_string->GetString(),
-            in_param._text_manager->GetLocaleToken(data_string->GetLocale())
-            ))
+        if (true == data_text_run->VisitData(
+            *(in_param._text_manager),
+            *(in_param._locale_system),
+            *(in_param._default_text_style),
+            [this](const int in_change_id, const std::vector<std::shared_ptr<ITextRunData>>& in_data_array)->bool{
+                if (_change_id != in_change_id)
+                {
+                    _text_run->SetTextRunArray(in_data_array);
+                    return true;
+                }
+                return false;
+            }))
         {
             dirty = true;
-            _pre_draw_dirty = true;
         }
     }
 
@@ -95,7 +98,6 @@ const bool UIContentTextRun::UpdateHierarchy(
         ))
     {
         dirty = true;
-        _pre_draw_dirty = true;
     }
 
     return dirty;
@@ -120,7 +122,7 @@ void UIContentTextRun::UpdateSize(
         in_out_node
         );
 
-    _text_block->SetTextContainerSize(
+    _text_run->SetTextContainerSize(
         in_out_node.GetTextureSize(in_draw_system)
         );
 }
@@ -131,42 +133,27 @@ const VectorInt2 UIContentTextRun::GetDesiredSize(
     UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
-    if (true == _text_block->SetWidthLimit(
-        _text_block->GetWidthLimitEnabled(),
-        in_parent_size[0]
-        ))
-    {
-        _pre_draw_dirty = true;
-    }
+    _text_run->SetWidthLimitWidth(in_parent_size[0]);
+    _text_run->SetUIScale(in_ui_scale);
 
-    if (true == _text_block->SetFontSize(static_cast<int>(round(_font_size * in_ui_scale))))
-    {
-        _pre_draw_dirty = true;
-    }
-    if (true == _text_block->SetNewLineGapRatio(_new_line_gap_ratio))
-    {
-        _pre_draw_dirty = true;
-    }
-
-    return _text_block->GetTextBounds();
+    return _text_run->GetTextBounds();
 }
 
-const bool UIContentTextRun::GetNeedsPreDraw() const
-{
-    return _pre_draw_dirty;
-}
+//const bool UIContentTextRun::GetNeedsPreDraw() const
+//{
+//    return _pre_draw_dirty;
+//}
 
 void UIContentTextRun::PreDraw(
     const UIManagerDrawParam& in_param
     )
 {
 #if 1
-    in_param._text_manager->DrawText(
+    in_param._text_manager->DrawTextRun(
         in_param._draw_system,
         in_param._frame,
-        _text_block.get()
+        _text_run.get()
         );
 #endif
-    _pre_draw_dirty = false;
     return;
 }

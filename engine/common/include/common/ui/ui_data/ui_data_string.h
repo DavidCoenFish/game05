@@ -18,13 +18,14 @@ public:
         );
     virtual ~UIDataString();
 
-    const std::string GetString() const { return _data; }
+    // Todo: change to visitor to future proof threading
+    const std::string& GetStringRef() const { return _data; }
     const LocaleISO_639_1 GetLocale() const { return _locale; }
     void SetString(const std::string& in_data);
 
 private:
     virtual const std::string GetTemplateName() const { return _template_name; }
-    virtual const int GetChangeID() const override;
+    //virtual const int GetChangeID() const override;
 
 private:
     std::string _template_name;

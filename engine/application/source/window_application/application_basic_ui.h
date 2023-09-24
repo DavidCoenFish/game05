@@ -5,6 +5,7 @@
 class DrawSystem;
 class LocaleSystem;
 class TextManager;
+class Timer;
 class UIManager;
 class UIHierarchyNode;
 class UIModel;
@@ -39,6 +40,7 @@ private:
         std::unique_ptr<LocaleSystem> _locale_system;
         std::unique_ptr<UIManager> _ui_manager;
         std::unique_ptr<UIModel> _ui_model;
+        std::unique_ptr<Timer> _timer;
         std::shared_ptr<UIHierarchyNode> _ui_hierarchy_node;
     };
     std::unique_ptr<DrawResource> _draw_resource;

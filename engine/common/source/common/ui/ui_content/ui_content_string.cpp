@@ -3,6 +3,7 @@
 
 //#include "common/draw_system/draw_system_frame.h"
 //#include "common/draw_system/draw_system.h"
+#include "common/math/math.h"
 #include "common/text/text_block.h"
 #include "common/text/text_manager.h"
 #include "common/ui/ui_data/ui_data_string.h"
@@ -14,9 +15,7 @@ UIContentString::UIContentString(
     const bool in_clear_background,
     const VectorFloat4& in_clear_colour,
     const UILayout& in_layout,
-    std::unique_ptr<TextBlock>& in_text_block,
-    const int in_font_size,
-    const float in_new_line_gap_ratio
+    std::unique_ptr<TextBlock>& in_text_block
     )
     : _content_default(
         in_clear_background,
@@ -24,9 +23,6 @@ UIContentString::UIContentString(
         in_layout
         )
     , _text_block(std::move(in_text_block))
-    , _font_size(in_font_size)
-    , _new_line_gap_ratio(in_new_line_gap_ratio)
-    , _pre_draw_dirty(true)
 {
     return;
 }
@@ -48,7 +44,6 @@ const bool UIContentString::SetBase(
         in_layout
         ))
     {
-        _pre_draw_dirty = true;
         return true;
     }
     return false;
@@ -58,13 +53,12 @@ const bool UIContentString::Set(
     TextFont& in_font, 
     const int in_font_size,
     const float in_new_line_gap_ratio,
+    const bool in_width_limit_enabled,
     const TextEnum::HorizontalLineAlignment in_horizontal, 
-    const TextEnum::VerticalBlockAlignment in_vertical
+    const TextEnum::VerticalBlockAlignment in_vertical,
+    const VectorFloat4& in_text_colour
     )
 {
-    _font_size = in_font_size;
-    _new_line_gap_ratio = in_new_line_gap_ratio;
-
     bool dirty = false;
     if (true == _text_block->SetFont(in_font))
     {
@@ -78,6 +72,10 @@ const bool UIContentString::Set(
     {
         dirty = true;
     }
+    if (true == _text_block->SetWidthLimitEnabled(in_width_limit_enabled))
+    {
+        dirty = true;
+    }
     if (true == _text_block->SetHorizontalLineAlignment(in_horizontal))
     {
         dirty = true;
@@ -86,10 +84,9 @@ const bool UIContentString::Set(
     {
         dirty = true;
     }
-
-    if (true == dirty)
+    if (true == _text_block->SetColour(in_text_colour))
     {
-        _pre_draw_dirty = true;
+        dirty = true;
     }
 
     return dirty;
@@ -114,7 +111,7 @@ const bool UIContentString::SetLayout(const UILayout& in_layout)
 
 const bool UIContentString::UpdateHierarchy(
     //std::vector<std::shared_ptr<IUIData>>*& out_array_data_or_null,
-    const IUIData* const in_data,
+    IUIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
     const UIHierarchyNodeUpdateHierarchyParam& in_param
     )
@@ -124,12 +121,11 @@ const bool UIContentString::UpdateHierarchy(
     if (nullptr != data_string)
     {
         if (true == _text_block->SetText(
-            data_string->GetString(),
+            data_string->GetStringRef(),
             in_param._text_manager->GetLocaleToken(data_string->GetLocale())
             ))
         {
             dirty = true;
-            _pre_draw_dirty = true;
         }
     }
 
@@ -140,7 +136,6 @@ const bool UIContentString::UpdateHierarchy(
         ))
     {
         dirty = true;
-        _pre_draw_dirty = true;
     }
 
     return dirty;
@@ -165,9 +160,12 @@ void UIContentString::UpdateSize(
         in_out_node
         );
 
+    // Return true if needed? no, if the size of the texture changes, then texture is marked as needs to draw
     _text_block->SetTextContainerSize(
         in_out_node.GetTextureSize(in_draw_system)
         );
+
+    return;
 }
 
 const VectorInt2 UIContentString::GetDesiredSize(
@@ -176,29 +174,13 @@ const VectorInt2 UIContentString::GetDesiredSize(
     UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
-    if (true == _text_block->SetWidthLimit(
+    _text_block->SetWidthLimit(
         _text_block->GetWidthLimitEnabled(),
         in_parent_size[0]
-        ))
-    {
-        _pre_draw_dirty = true;
-    }
-
-    if (true == _text_block->SetFontSize(static_cast<int>(round(_font_size * in_ui_scale))))
-    {
-        _pre_draw_dirty = true;
-    }
-    if (true == _text_block->SetNewLineGapRatio(_new_line_gap_ratio))
-    {
-        _pre_draw_dirty = true;
-    }
+        );
+    _text_block->SetUIScale(in_ui_scale);
 
     return _text_block->GetTextBounds();
-}
-
-const bool UIContentString::GetNeedsPreDraw() const
-{
-    return _pre_draw_dirty;
 }
 
 void UIContentString::PreDraw(
@@ -212,6 +194,6 @@ void UIContentString::PreDraw(
         _text_block.get()
         );
 #endif
-    _pre_draw_dirty = false;
+    //_pre_draw_dirty = false;
     return;
 }

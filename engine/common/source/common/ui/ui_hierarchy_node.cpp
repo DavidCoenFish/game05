@@ -45,7 +45,8 @@ UIHierarchyNodeUpdateHierarchyParam::UIHierarchyNodeUpdateHierarchyParam(
     ID3D12GraphicsCommandList* const in_command_list,
     const IUIModel* const in_ui_model,
     LocaleSystem* const in_locale_system,
-    TextManager* const in_text_manager
+    TextManager* const in_text_manager,
+    const UIDataTextRunStyle* const in_default_text_style 
     )
     : _map_content_factory(in_map_content_factory)
     , _draw_system(in_draw_system)
@@ -53,6 +54,7 @@ UIHierarchyNodeUpdateHierarchyParam::UIHierarchyNodeUpdateHierarchyParam(
     , _ui_model(in_ui_model)
     , _locale_system(in_locale_system)
     , _text_manager(in_text_manager)
+    , _default_text_style(in_default_text_style)
 {
     // Nop
 }
@@ -245,7 +247,7 @@ const bool UIHierarchyNode::UpdateHierarchy(
         // ensure each content is created/ passed through factory
         for (int index = 0; index < target_length; ++index)
         {
-            const auto& data = *(in_array_data_or_null->operator[](index));
+            auto& data = *(in_array_data_or_null->operator[](index));
             auto& child = _child_data_array[index];
 
             auto factory = in_param._map_content_factory.find(data.GetTemplateName());
@@ -264,6 +266,7 @@ const bool UIHierarchyNode::UpdateHierarchy(
                     dirty = true;
                     void* source_token = (void*)&data; //static_cast<void*>(&data); //reinterpret_cast<void*>(&data);
                     child->_content->SetSourceToken(source_token);
+                    child->_node->MarkTextureDirty();
                 }
             }
             else
@@ -277,10 +280,7 @@ const bool UIHierarchyNode::UpdateHierarchy(
 
             if (nullptr != child->_content)
             {
-                //std::vector<std::shared_ptr<IUIData>>* array_data_or_null = nullptr;
-
                 if (true == child->_content->UpdateHierarchy(
-                    //array_data_or_null,
                     &data,
                     *(child.get()),
                     in_param
@@ -288,23 +288,17 @@ const bool UIHierarchyNode::UpdateHierarchy(
                 {
                     dirty = true;
                 }
-
-                //VectorFloat4 clear_colour;
-                //const bool allow_clear = child->_content->GetClearBackground(clear_colour);
-
-                //child->_node->UpdateHierarchy(
-                //    in_param,
-                //    array_data_or_null,
-                //    true,
-                //    false,
-                //    allow_clear,
-                //    clear_colour
-                //    );
             }
         }
     }
 
     return dirty;
+}
+
+void UIHierarchyNode::MarkTextureDirty()
+{
+    _texture->MarkDirty();
+    return;
 }
 
 const VectorInt2 UIHierarchyNode::GetTextureSize(
@@ -314,6 +308,7 @@ const VectorInt2 UIHierarchyNode::GetTextureSize(
     return _texture->GetSize(in_draw_system);
 }
 
+// todo: UpdateSize doesn't need to return, _texture marks self as needs to draw on size change
 void UIHierarchyNode::UpdateSize(
     DrawSystem* const in_draw_system,
     const VectorInt2& in_parent_size,
@@ -359,14 +354,6 @@ const bool UIHierarchyNode::Draw(
     )
 {
     bool dirty = false;
-
-    if (nullptr != in_content_or_null)
-    {
-        if (true == in_content_or_null->GetNeedsPreDraw())
-        {
-            dirty = true;
-        }
-    }
 
     // Ensure that children textures are ready
     for (auto& iter : _child_data_array)
