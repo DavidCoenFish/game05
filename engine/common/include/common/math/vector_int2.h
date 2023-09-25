@@ -27,3 +27,6 @@ private:
     int _data[Index::Count];
 
 };
+
+const VectorInt2 operator+(const VectorInt2& in_lhs, const VectorInt2& in_rhs);
+

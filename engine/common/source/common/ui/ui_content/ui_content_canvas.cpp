@@ -69,6 +69,8 @@ const bool UIContentCanvas::UpdateHierarchy(
 void UIContentCanvas::UpdateSize(
     DrawSystem* const in_draw_system,
     const VectorInt2& in_parent_size,
+    const VectorInt2& in_parent_offset,
+    const VectorInt2& in_parent_window,
     const float in_ui_scale,
     const float in_time_delta, 
     UIGeometry& in_out_geometry, 
@@ -79,6 +81,8 @@ void UIContentCanvas::UpdateSize(
         in_draw_system,
         *this,
         in_parent_size,
+        in_parent_offset,
+        in_parent_window,
         in_ui_scale, 
         in_time_delta,
         in_out_geometry, 

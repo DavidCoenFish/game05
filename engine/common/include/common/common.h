@@ -54,6 +54,7 @@
 //#include <set>
 //#include <stdexcept>
 #include <shared_mutex>
+#include <sstream>
 #include <string>
 //#include <variant>
 #include <vector>

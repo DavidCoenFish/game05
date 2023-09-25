@@ -3,10 +3,12 @@
 #include "common/ui/ui_content/i_ui_content.h"
 #include "common/ui/ui_content/ui_content_default.h"
 
+class VectorInt4;
+
 enum class StackOrientation
 {
-    TVertical,
-    THorizontal,
+    TVertical, // BottomTop
+    THorizontal, // LeftRight
     //TGridLeftRightTopBottom?
     //TGridTopBottomLeftRight?
     //TFlowLeftRightTopBottom
@@ -56,6 +58,8 @@ private:
     virtual void UpdateSize(
         DrawSystem* const in_draw_system,
         const VectorInt2& in_parent_size,
+        const VectorInt2& in_parent_offset,
+        const VectorInt2& in_parent_window,
         const float in_ui_scale,
         const float in_time_delta, 
         UIGeometry& in_out_geometry, 
@@ -68,6 +72,12 @@ private:
         UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         ) override;
 
+    const VectorInt2 GetStackDesiredSize(
+        const VectorInt2& in_parent_size,
+        const float in_ui_scale,
+        UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+        std::vector<VectorInt4>& out_child_desired_size_offset
+        );
 private:
     UIContentDefault _content_default;
     StackOrientation _orientation;

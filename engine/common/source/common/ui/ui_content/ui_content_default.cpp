@@ -53,6 +53,8 @@ void UIContentDefault::CalculateGeometry(
     VectorFloat4& out_geometry_uv,
     VectorInt2& out_texture_size,
     const VectorInt2& in_parent_size,
+    const VectorInt2& in_parent_offset,
+    const VectorInt2& in_parent_window,
     const float in_ui_scale,
     const float in_time_delta, 
     const VectorInt2& in_initial_size, //in_out_layout.GetSize, but can be shrunk?
@@ -60,7 +62,8 @@ void UIContentDefault::CalculateGeometry(
     UILayout& in_out_layout
     )
 {
-    const VectorInt2 pivot = in_out_layout.GetPivot(in_parent_size, in_ui_scale);
+    //const VectorInt2 pivot = in_out_layout.GetPivot(in_parent_size, in_ui_scale); 
+    const VectorInt2 pivot = in_out_layout.GetPivot(in_parent_window, in_ui_scale) + in_parent_offset; 
     const VectorInt2 attach = in_out_layout.GetAttach(in_initial_size, in_ui_scale);
 
     // Deal pos
@@ -176,12 +179,12 @@ const bool UIContentDefault::UpdateHierarchy(
     if (nullptr != data_container)
     {
         //const std::vector<std::shared_ptr<IUIData>>& array_data = data_container->GetDataConst();
-        data_container->VisitDataArray([
+        if (true == data_container->VisitDataArray([
             &in_out_child_data,
             &in_param,
             this
-            ](const std::vector<std::shared_ptr<IUIData>>& in_array_data){
-            in_out_child_data._node->UpdateHierarchy(
+            ](const std::vector<std::shared_ptr<IUIData>>& in_array_data)->bool{
+            return in_out_child_data._node->UpdateHierarchy(
                 in_param,
                 &in_array_data,
                 true,
@@ -189,7 +192,10 @@ const bool UIContentDefault::UpdateHierarchy(
                 _clear_background,
                 _clear_colour
                 );
-        });
+        }))
+        {
+            dirty =true;
+        }
     }
     else
     {
@@ -213,13 +219,16 @@ void UIContentDefault::UpdateSize(
     DrawSystem* const in_draw_system,
     IUIContent& in_out_ui_content,
     const VectorInt2& in_parent_size,
+    const VectorInt2& in_parent_offset,
+    const VectorInt2& in_parent_window,
     const float in_ui_scale,
     const float in_time_delta, 
     UIGeometry& in_out_geometry, 
     UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
-    const VectorInt2 initial_size = _layout.GetSize(in_parent_size, in_ui_scale);
+    //const VectorInt2 initial_size = _layout.GetSize(in_parent_size, in_ui_scale);
+    const VectorInt2 initial_size = _layout.GetSize(in_parent_window, in_ui_scale);
 
     VectorInt2 max_desired_size = in_out_ui_content.GetDesiredSize(
         initial_size,
@@ -236,6 +245,8 @@ void UIContentDefault::UpdateSize(
         geometry_uv,
         texture_size,
         in_parent_size,
+        in_parent_offset,
+        in_parent_window,
         in_ui_scale,
         in_time_delta, 
         initial_size,
@@ -257,6 +268,8 @@ void UIContentDefault::UpdateSize(
     in_out_node.UpdateSize(
         in_draw_system,
         texture_size, // by default, we use the generated size and scroll if required. a stack control may modify this
+        VectorInt2(),
+        texture_size,
         in_ui_scale,
         in_time_delta,
         dirty

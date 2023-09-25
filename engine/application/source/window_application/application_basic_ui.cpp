@@ -36,18 +36,30 @@ public:
     UIModel()
     {
         auto _data_map_build_version = std::make_shared<UIDataString>(
-            std::string(Build::GetBuildTime()) + " " + Build::GetBuildVersion()
+            std::string(Build::GetBuildTime()) + " " + Build::GetBuildVersion(),
+            LocaleISO_639_1::Default,
+            "UIDataStringRight"
             );
 
-        const std::string build_info_string = std::string(Build::GetBuildHost()) +
+        const std::string build_info_string = std::string(
+            Build::GetBuildHost()) +
             " <Locale " + Build::GetBuildConfiguration() + ">" + 
             " <Locale " + Build::GetBuildPlatform() + ">";
 
-        auto _data_map_build_info = std::make_shared<UIDataTextRun>(build_info_string);
+        auto _data_map_build_info = std::make_shared<UIDataTextRun>(
+            build_info_string,
+            LocaleISO_639_1::Default,
+            "UIDataTextRunRight"
+            );
 
-        auto _data_map_build_fps = std::make_shared<UIDataString>("0.0s");
+        auto _data_map_build_fps = std::make_shared<UIDataString>(
+            "0.0",
+            LocaleISO_639_1::Default,
+            "UIDataStringRight"
+            );
+        _data_map["fps"] = _data_map_build_fps;
 
-        _data_map[""] = std::vector<std::shared_ptr<IUIData>>({
+        _data_array_map[""] = std::vector<std::shared_ptr<IUIData>>({
 
 #if 0 // Canvas test
             std::make_shared<UIDataContainer>(
@@ -73,9 +85,9 @@ public:
 
 #if 1 // Stack test
             std::make_shared<UIDataContainer>(std::vector<std::shared_ptr<IUIData>>({
-                _data_map_build_fps,
                 _data_map_build_info,
-                _data_map_build_version
+                _data_map_build_version,
+                _data_map_build_fps
                 }),
                 "stack_vertical_bottom_right"
                 )
@@ -88,13 +100,14 @@ public:
         // Nop
     }
 
+private:
     virtual const bool VisitDataArray(
         const std::string& in_key,
         const std::function<void(const std::vector<std::shared_ptr<IUIData>>&)>& in_visitor
         ) const override
     {
-        const auto found = _data_map.find(in_key);
-        if (found != _data_map.end())
+        const auto found = _data_array_map.find(in_key);
+        if (found != _data_array_map.end())
         {
             in_visitor(found->second);
             return true;
@@ -102,8 +115,22 @@ public:
         return false;
     }
 
+    virtual IUIData* const GetData(
+        const std::string& in_key
+        ) const override
+    {
+        IUIData* result = nullptr;
+        const auto found = _data_map.find(in_key);
+        if (found != _data_map.end())
+        {
+            result = found->second.get();
+        }
+        return result;
+    }
+
 private:
-    std::map<std::string, std::vector<std::shared_ptr<IUIData>>> _data_map;
+    std::map<std::string, std::vector<std::shared_ptr<IUIData>>> _data_array_map;
+    std::map<std::string, std::shared_ptr<IUIData>> _data_map;
 
 };
 
@@ -193,7 +220,23 @@ void ApplicationBasicUI::Update()
     BaseType::Update();
     if (_draw_system)
     {
-        const float delta_seconds = _draw_resource->_timer->GetDeltaSeconds();
+        float delta_seconds_average = 0.0f;
+        const float delta_seconds = _draw_resource->_timer->GetDeltaSeconds(&delta_seconds_average);
+
+        // update fps
+        {
+            UIDataString* const data_string = _draw_resource->_ui_model->GetDataType<UIDataString>("fps");
+            if (nullptr != data_string)
+            {
+                std::stringstream stream;
+                //stream << std::fixed;
+                stream << std::setprecision(3);
+                stream << (delta_seconds ? 1.0f / delta_seconds_average : 0.0f);
+                std::string stream_string = stream.str();
+
+                data_string->SetString(stream_string);
+            }
+        }
 
         auto frame = _draw_system->CreateNewFrame();
 

@@ -287,6 +287,7 @@ const bool UIHierarchyNode::UpdateHierarchy(
                     ))
                 {
                     dirty = true;
+                    child->_node->MarkTextureDirty();
                 }
             }
         }
@@ -308,12 +309,8 @@ const VectorInt2 UIHierarchyNode::GetTextureSize(
     return _texture->GetSize(in_draw_system);
 }
 
-// todo: UpdateSize doesn't need to return, _texture marks self as needs to draw on size change
-void UIHierarchyNode::UpdateSize(
-    DrawSystem* const in_draw_system,
+void UIHierarchyNode::UpdateTextureSize(
     const VectorInt2& in_parent_size,
-    const float in_ui_scale,
-    const float in_time_delta,
     const bool in_mark_dirty
     )
 {
@@ -322,6 +319,20 @@ void UIHierarchyNode::UpdateSize(
     {
         _texture->MarkDirty();
     }
+}
+
+// todo: UpdateSize doesn't need to return, _texture marks self as needs to draw on size change
+void UIHierarchyNode::UpdateSize(
+    DrawSystem* const in_draw_system,
+    const VectorInt2& in_parent_size,
+    const VectorInt2& in_parent_offset,
+    const VectorInt2& in_parent_window,
+    const float in_ui_scale,
+    const float in_time_delta,
+    const bool in_mark_dirty
+    )
+{
+    UpdateTextureSize(in_parent_size, in_mark_dirty);
 
     // for each child, work out the geometry and texture size for each content
     for (auto& child_data_ptr : _child_data_array)
@@ -336,6 +347,8 @@ void UIHierarchyNode::UpdateSize(
         child_data._content->UpdateSize(
             in_draw_system,
             in_parent_size,
+            in_parent_offset,
+            in_parent_window,
             in_ui_scale,
             in_time_delta,
             *(child_data._geometry.get()),

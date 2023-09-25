@@ -63,3 +63,11 @@ const VectorInt2 VectorInt2::Max(const VectorInt2& in_lhs, const VectorInt2& in_
         std::max(in_lhs._data[1], in_rhs._data[1])
         );
 }
+
+const VectorInt2 operator+(const VectorInt2& in_lhs, const VectorInt2& in_rhs)
+{
+    return VectorInt2(
+        in_lhs.GetX() + in_rhs.GetX(),
+        in_lhs.GetY() + in_rhs.GetY()
+        );
+}

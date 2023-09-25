@@ -138,18 +138,20 @@ public:
         DrawSystem* const in_draw_system
         ) const;
 
+    void UpdateTextureSize(
+        const VectorInt2& in_parent_size,
+        const bool in_mark_dirty
+        );
+
     void UpdateSize(
         DrawSystem* const in_draw_system,
         const VectorInt2& in_parent_size,
+        const VectorInt2& in_parent_offset,
+        const VectorInt2& in_parent_window,
         const float in_ui_scale,
         const float in_time_delta,
         const bool in_mark_dirty
         );
-
-    //const VectorInt2 GetDesiredSize(
-    //    const VectorInt2& in_parent_size,
-    //    const float in_ui_scale
-    //    );
 
     // return True if we needed to draw, ie, we have modified _texture
     const bool Draw(

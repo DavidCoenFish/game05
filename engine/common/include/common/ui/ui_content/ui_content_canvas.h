@@ -35,6 +35,8 @@ private:
     virtual void UpdateSize(
         DrawSystem* const in_draw_system,
         const VectorInt2& in_parent_size,
+        const VectorInt2& in_parent_offset,
+        const VectorInt2& in_parent_window,
         const float in_ui_scale,
         const float in_time_delta, 
         UIGeometry& in_out_geometry, 

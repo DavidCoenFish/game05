@@ -13,7 +13,7 @@ public:
 
     // Visitor rather than accessor to alow easier multithreading in the funture
     //const std::vector<std::shared_ptr<IUIData>>& GetDataConst() const { return _array_data; }
-    void VisitDataArray(const std::function<void(const std::vector<std::shared_ptr<IUIData>>&)>& in_visitor) const;
+    const bool VisitDataArray(const std::function<bool(const std::vector<std::shared_ptr<IUIData>>&)>& in_visitor) const;
 
     std::vector<std::shared_ptr<IUIData>>& ModifyData();
 

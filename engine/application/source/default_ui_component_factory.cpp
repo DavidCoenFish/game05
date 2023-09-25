@@ -40,6 +40,7 @@ namespace
     constexpr float s_default_newling_ratio = 0.25f;
     constexpr int s_new_line_gap = 4; // Math::ScaleInt(s_default_font_size, s_default_newling_ratio);
     constexpr float s_default_margin = s_default_font_size * 0.5f; // in pixels, or in em?
+    constexpr float s_default_gap = s_default_font_size * 0.25f; // in pixels, or in em?
 
     typedef const std::filesystem::path& (*TGetPathRef)();
 
@@ -71,7 +72,7 @@ namespace
     }
     const UILayout& GetUILayoutFullScreenMarginBottomRight()
     {
-        // Todo: is y up or down the screen for ui
+        // Todo: is y up the screen for ui, y==0 is bottom, y==1 is top screen
         static UILayout s_layout(
             UICoord(UICoord::ParentSource::X, 1.0f, s_default_margin * (-2.0f)),
             UICoord(UICoord::ParentSource::Y, 1.0f, s_default_margin * (-2.0f)),
@@ -98,14 +99,14 @@ namespace
 
     typedef const UICoord& (*TGetUICoordRef)();
 
-    const UICoord& GetUICoordDefaultX()
+    const UICoord& GetUICoordDefaultMargin()
     {
-        static UICoord s_coord(UICoord::ParentSource::X, 0.0f, s_default_margin);
+        static UICoord s_coord(UICoord::ParentSource::None, 0.0f, s_default_margin);
         return s_coord;
     }
-    const UICoord& GetUICoordDefaultY()
+    const UICoord& GetUICoordDefaultGap()
     {
-        static UICoord s_coord(UICoord::ParentSource::Y, 0.0f, s_default_margin);
+        static UICoord s_coord(UICoord::ParentSource::None, 0.0f, s_default_gap);
         return s_coord;
     }
 
@@ -179,8 +180,8 @@ namespace
         TGetPathRef in_get_path_ref = GetFontPathDefault,
         int in_font_size = s_default_font_size,
         int in_new_line_gap = s_new_line_gap,
-        TextEnum::HorizontalLineAlignment in_horizontal = TextEnum::HorizontalLineAlignment::Middle,
-        TextEnum::VerticalBlockAlignment in_vertical = TextEnum::VerticalBlockAlignment::MiddleEM,
+        TextEnum::HorizontalLineAlignment in_horizontal = TextEnum::HorizontalLineAlignment::Left,
+        TextEnum::VerticalBlockAlignment in_vertical = TextEnum::VerticalBlockAlignment::Top,
         bool in_clear_background = true,
         TGetColour in_get_clear_colour_ref = GetColourTransparent,
         bool in_width_limit = false,
@@ -250,8 +251,8 @@ namespace
     template<
         TGetUILayoutRef in_get_layout_ref = GetUILayoutFullScreen,
         int in_em_size = s_default_font_size,
-        TextEnum::HorizontalLineAlignment in_horizontal = TextEnum::HorizontalLineAlignment::Middle,
-        TextEnum::VerticalBlockAlignment in_vertical = TextEnum::VerticalBlockAlignment::MiddleEM,
+        TextEnum::HorizontalLineAlignment in_horizontal = TextEnum::HorizontalLineAlignment::Left,
+        TextEnum::VerticalBlockAlignment in_vertical = TextEnum::VerticalBlockAlignment::Top,
         bool in_clear_background = true,
         TGetColour in_get_clear_colour_ref = GetColourTransparent,
         bool in_width_limit_enabled = false
@@ -310,7 +311,7 @@ namespace
     template<
         TGetUILayoutRef in_get_layout_ref = GetUILayoutFullScreen,
         StackOrientation in_orientation = StackOrientation::TVertical,
-        TGetUICoordRef in_get_gap_ref = GetUICoordDefaultY,
+        TGetUICoordRef in_get_gap_ref = GetUICoordDefaultGap,
         bool in_shrink_to_fit = false,
         bool in_clear_background = true,
         TGetColour in_get_clear_colour_ref = GetColourTransparent
@@ -359,10 +360,25 @@ void DefaultUIComponentFactory::Populate(
     )
 {
     in_ui_manager.AddContentFactory("UIDataString", FactoryString<>);
+    in_ui_manager.AddContentFactory("UIDataStringRight", FactoryString<
+        GetUILayoutFullScreen,
+        GetFontPathDefault,
+        s_default_font_size,
+        s_new_line_gap,
+        TextEnum::HorizontalLineAlignment::Right,
+        TextEnum::VerticalBlockAlignment::Top
+        >);
     in_ui_manager.AddContentFactory("UIDataTextRun", FactoryTextRun<>);
+    in_ui_manager.AddContentFactory("UIDataTextRunRight", FactoryTextRun<
+        GetUILayoutFullScreen,
+        s_default_font_size,
+        TextEnum::HorizontalLineAlignment::Right,
+        TextEnum::VerticalBlockAlignment::Top
+        >);
+
     in_ui_manager.AddContentFactory("UIDataTextRunWrap", FactoryTextRun<
         GetUILayoutQuadrant0,
-        16,
+        s_default_font_size,
         TextEnum::HorizontalLineAlignment::Left,
         TextEnum::VerticalBlockAlignment::Top,
         true,
@@ -376,7 +392,7 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("stack_vertical_bottom_right", FactoryStack<
         GetUILayoutFullScreenMarginBottomRight,
         StackOrientation::TVertical,
-        GetUICoordDefaultY,
+        GetUICoordDefaultGap,
         true,
         true,
         GetColourTransparent
