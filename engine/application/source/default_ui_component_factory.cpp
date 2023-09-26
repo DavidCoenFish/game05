@@ -40,7 +40,7 @@ namespace
     constexpr float s_default_newling_ratio = 0.25f;
     constexpr int s_new_line_gap = 4; // Math::ScaleInt(s_default_font_size, s_default_newling_ratio);
     constexpr float s_default_margin = s_default_font_size * 0.5f; // in pixels, or in em?
-    constexpr float s_default_gap = s_default_font_size * 0.25f; // in pixels, or in em?
+    constexpr float s_default_gap = s_default_font_size * 0.5f; // in pixels, or in em?
 
     typedef const std::filesystem::path& (*TGetPathRef)();
 
@@ -364,14 +364,14 @@ void DefaultUIComponentFactory::Populate(
         s_default_font_size,
         s_new_line_gap,
         TextEnum::HorizontalLineAlignment::Right,
-        TextEnum::VerticalBlockAlignment::TopEM
+        TextEnum::VerticalBlockAlignment::Top
         >);
     in_ui_manager.AddContentFactory("UIDataTextRun", FactoryTextRun<>);
     in_ui_manager.AddContentFactory("UIDataTextRunRight", FactoryTextRun<
         GetUILayoutFullScreen,
         s_default_font_size,
         TextEnum::HorizontalLineAlignment::Right,
-        TextEnum::VerticalBlockAlignment::TopEM
+        TextEnum::VerticalBlockAlignment::Top
         >);
 
     in_ui_manager.AddContentFactory("UIDataTextRunWrap", FactoryTextRun<

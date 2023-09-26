@@ -64,17 +64,7 @@ public:
                     _ui_scale
                     );
             }
-            _text_bounds = _pre_vertex_data->GetBounds();
-            switch(_vertical_block_alignment)
-            {
-            default:
-                break;
-            case TextEnum::VerticalBlockAlignment::BottomEM:
-            case TextEnum::VerticalBlockAlignment::MiddleEM:
-            case TextEnum::VerticalBlockAlignment::TopEM:
-                _text_bounds[1] = std::max(_em_size, _text_bounds[1]);
-                break;
-            }
+            _text_bounds = _pre_vertex_data->GetBounds(_vertical_block_alignment);
         }
 
         return _text_bounds;

@@ -66,7 +66,7 @@ public:
         VectorInt2& in_out_cursor
         );
 
-    const VectorInt2 GetBounds();
+    const VectorInt2 GetBounds(const TextEnum::VerticalBlockAlignment in_vertical_block_alignment);
 
     void BuildVertexData(
         std::vector<uint8_t>& out_vertex_raw_data,

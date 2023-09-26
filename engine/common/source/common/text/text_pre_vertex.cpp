@@ -135,7 +135,7 @@ void TextPreVertex::StartNewLine(
     _line_vertical_bounds = VectorInt2(std::numeric_limits<int>::max(), -std::numeric_limits<int>::max());
 }
 
-const VectorInt2 TextPreVertex::GetBounds()
+const VectorInt2 TextPreVertex::GetBounds( const TextEnum::VerticalBlockAlignment in_vertical_block_alignment)
 {
     FinishLine();
 
@@ -155,10 +155,20 @@ const VectorInt2 TextPreVertex::GetBounds()
         _bounds[1] = _vertical_bounds[1] - _vertical_bounds[0]; 
     }
 
-    return VectorInt2(
-        _bounds[0],
-        _bounds[1]
-        );
+    VectorInt2 result = _bounds;
+    switch(in_vertical_block_alignment)
+    {
+    default:
+        break;
+    case TextEnum::VerticalBlockAlignment::BottomEM:
+    case TextEnum::VerticalBlockAlignment::MiddleEM:
+    case TextEnum::VerticalBlockAlignment::TopEM:
+        result[1] = std::max(_default_line_height, _vertical_bounds[1]) - _vertical_bounds[0];
+        result[1] = std::max(result[1], _default_line_height);
+        break;
+    }
+
+    return result;
 }
 
 void TextPreVertex::BuildVertexData(
