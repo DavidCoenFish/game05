@@ -14,8 +14,7 @@ UIContentStack::UIContentStack(
     const VectorFloat4& in_clear_colour,
     const UILayout& in_layout,
     const StackOrientation in_orientation,
-    const UICoord& in_gap,
-    const bool in_shrink_to_fit
+    const UICoord& in_gap
     )
     : _content_default(
         in_clear_background, 
@@ -24,7 +23,6 @@ UIContentStack::UIContentStack(
         )
     , _orientation(in_orientation)
     , _gap(in_gap)
-    , _shrink_to_fit(in_shrink_to_fit)
 {
     // Nop
 }
@@ -39,8 +37,7 @@ const bool UIContentStack::Set(
     const VectorFloat4& in_clear_colour,
     const UILayout& in_layout,
     const StackOrientation in_orientation,
-    const UICoord& in_gap,
-    const bool in_shrink_to_fit
+    const UICoord& in_gap
     )
 {
     bool dirty = false;
@@ -64,12 +61,6 @@ const bool UIContentStack::Set(
     {
         dirty = true;
         _gap = in_gap;
-    }
-
-    if (_shrink_to_fit != in_shrink_to_fit)
-    {
-        dirty = true;
-        _shrink_to_fit = in_shrink_to_fit;
     }
 
     return dirty;
@@ -117,17 +108,17 @@ void UIContentStack::UpdateSize(
 {
     // the default UpdateSize recurses, we do want to do that, but with an offset to where to put things
 
-    const VectorInt2 initial_size = _content_default.GetLayout().GetSize(in_parent_size, in_ui_scale);
+    const VectorInt2 layout_size = _content_default.GetLayout().GetSize(in_parent_size, in_ui_scale);
     std::vector<VectorInt4> child_desired_size_offset;
 
     const VectorInt2 max_desired_size = GetStackDesiredSize(
-        initial_size,
+        layout_size,
         in_ui_scale,
         in_out_node,
         child_desired_size_offset
         );
 
-    const VectorInt2 actual_initial_size = _shrink_to_fit ? max_desired_size : initial_size;
+    const VectorInt2 actual_initial_size = _content_default.GetLayout().CalculateShrinkSize(layout_size, max_desired_size);
 
     VectorFloat4 geometry_pos;
     VectorFloat4 geometry_uv;
@@ -178,10 +169,10 @@ void UIContentStack::UpdateSize(
         default:
             break;
         case StackOrientation::TVertical:
-            window[0] = max_desired_size[0];
+            window[0] = actual_initial_size[0]; //max_desired_size[0];
             break;
         case StackOrientation::THorizontal:
-            window[1] = max_desired_size[1];
+            window[1] = actual_initial_size[1]; //max_desired_size[1];
             break;
         }
 

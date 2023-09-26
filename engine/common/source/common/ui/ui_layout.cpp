@@ -20,9 +20,13 @@ UILayout::UILayout(
     const UICoord& in_attach_y,
     const UICoord& in_pivot_x,
     const UICoord& in_pivot_y,
+    const bool in_shrink_width,
+    const bool in_shrink_height,
     const VectorFloat2& in_uv_scroll
     )
     : _uv_scroll(in_uv_scroll)
+    , _shrink_width(in_shrink_width)
+    , _shrink_height(in_shrink_height)
 {
     _data_size[0] = in_size_x;
     _data_size[1] = in_size_y;
@@ -38,6 +42,14 @@ const VectorInt2 UILayout::GetSize(const VectorInt2& in_parent_size, const float
     return VectorInt2(
         _data_size[0].Calculate(in_parent_size, in_ui_scale),
         _data_size[1].Calculate(in_parent_size, in_ui_scale)
+        );
+}
+
+const VectorInt2 UILayout::CalculateShrinkSize(const VectorInt2& in_layout_size, const VectorInt2& in_desired_size) const
+{
+    return VectorInt2(
+        _shrink_width ? std::min(in_layout_size.GetX(), in_desired_size.GetX()) : in_layout_size.GetX(),
+        _shrink_height ? std::min(in_layout_size.GetY(), in_desired_size.GetY()) : in_layout_size.GetY()
         );
 }
 
@@ -86,6 +98,16 @@ const bool UILayout::operator==(const UILayout& in_rhs) const
         return false;
     }
 
+    if (_shrink_width != in_rhs._shrink_width)
+    {
+        return false;
+    }
+
+    if (_shrink_height != in_rhs._shrink_height)
+    {
+        return false;
+    }
+
     if (_uv_scroll != in_rhs._uv_scroll)
     {
         return false;
@@ -107,7 +129,9 @@ const bool UILayout::Update(const UILayout& in_rhs)
         (_data_attach[0] != in_rhs._data_attach[0]) ||
         (_data_attach[1] != in_rhs._data_attach[1]) ||
         (_data_pivot[0] != in_rhs._data_pivot[0]) ||
-        (_data_pivot[1] != in_rhs._data_pivot[1]))
+        (_data_pivot[1] != in_rhs._data_pivot[1]) ||
+        (_shrink_width != in_rhs._shrink_width) ||
+        (_shrink_height != in_rhs._shrink_height))
     {
         dirty = true;
         _data_size[0] = in_rhs._data_size[0];
@@ -116,6 +140,8 @@ const bool UILayout::Update(const UILayout& in_rhs)
         _data_attach[1] = in_rhs._data_attach[1];
         _data_pivot[0] = in_rhs._data_pivot[0];
         _data_pivot[1] = in_rhs._data_pivot[1];
+        _shrink_width = in_rhs._shrink_width;
+        _shrink_height = in_rhs._shrink_height;
         _uv_scroll = VectorFloat2();
     }
 

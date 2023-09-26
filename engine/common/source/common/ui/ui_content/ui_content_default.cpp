@@ -227,14 +227,15 @@ void UIContentDefault::UpdateSize(
     UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
-    //const VectorInt2 initial_size = _layout.GetSize(in_parent_size, in_ui_scale);
-    const VectorInt2 initial_size = _layout.GetSize(in_parent_window, in_ui_scale);
+    const VectorInt2 layout_size = _layout.GetSize(in_parent_window, in_ui_scale);
 
     VectorInt2 max_desired_size = in_out_ui_content.GetDesiredSize(
-        initial_size,
+        layout_size,
         in_ui_scale,
         in_out_node
         );
+
+    const VectorInt2 actual_initial_size = _layout.CalculateShrinkSize(layout_size, max_desired_size);
 
     VectorFloat4 geometry_pos;
     VectorFloat4 geometry_uv;
@@ -249,7 +250,7 @@ void UIContentDefault::UpdateSize(
         in_parent_window,
         in_ui_scale,
         in_time_delta, 
-        initial_size,
+        actual_initial_size,
         max_desired_size,
         _layout
         );

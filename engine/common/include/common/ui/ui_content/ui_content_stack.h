@@ -23,8 +23,7 @@ public:
         const VectorFloat4& in_clear_colour,
         const UILayout& in_layout,
         const StackOrientation in_orientation,
-        const UICoord& in_gap,
-        const bool in_shrink_to_fit
+        const UICoord& in_gap
         );
     virtual ~UIContentStack();
 
@@ -33,8 +32,7 @@ public:
         const VectorFloat4& in_clear_colour,
         const UILayout& in_layout,
         const StackOrientation in_orientation,
-        const UICoord& in_gap,
-        const bool in_shrink_to_fit
+        const UICoord& in_gap
         );
 
 private:
@@ -82,6 +80,5 @@ private:
     UIContentDefault _content_default;
     StackOrientation _orientation;
     UICoord _gap;
-    bool _shrink_to_fit;
 
 };

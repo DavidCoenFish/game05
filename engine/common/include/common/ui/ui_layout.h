@@ -16,10 +16,14 @@ public:
         const UICoord& in_attach_y = UICoord(UICoord::ParentSource::Y),
         const UICoord& in_pivot_x = UICoord(UICoord::ParentSource::X),
         const UICoord& in_pivot_y = UICoord(UICoord::ParentSource::Y),
+        const bool in_shrink_width = false,
+        const bool in_shrink_height = false,
         const VectorFloat2& in_uv_scroll = VectorFloat2()
         );
 
     const VectorInt2 GetSize(const VectorInt2& in_parent_size, const float in_ui_scale) const;
+    const VectorInt2 CalculateShrinkSize(const VectorInt2& in_layout_size, const VectorInt2& in_desired_size) const;
+
     const VectorInt2 GetAttach(const VectorInt2& in_size, const float in_ui_scale) const;
     const VectorInt2 GetPivot(const VectorInt2& in_parent_size, const float in_ui_scale) const;
     VectorFloat2& GetScrollRef() { return _uv_scroll; }
@@ -35,6 +39,9 @@ private:
     UICoord _data_size[2];
     UICoord _data_attach[2];
     UICoord _data_pivot[2];
+
+    bool _shrink_width;
+    bool _shrink_height;
 
     // uv = abs(_uv_scroll), and use range [-1...1] wrapped when advancing _uv_scroll, to allow saw tooth animation
     // Scale update speed by desired size ratio to target size?

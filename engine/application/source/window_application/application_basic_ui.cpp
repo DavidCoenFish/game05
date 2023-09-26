@@ -220,8 +220,8 @@ void ApplicationBasicUI::Update()
     BaseType::Update();
     if (_draw_system)
     {
-        float delta_seconds_average = 0.0f;
-        const float delta_seconds = _draw_resource->_timer->GetDeltaSeconds(&delta_seconds_average);
+        float nice_fps = 0.0f;
+        const float delta_seconds = _draw_resource->_timer->GetDeltaSeconds(&nice_fps);
 
         // update fps
         {
@@ -229,9 +229,10 @@ void ApplicationBasicUI::Update()
             if (nullptr != data_string)
             {
                 std::stringstream stream;
-                //stream << std::fixed;
-                stream << std::setprecision(3);
-                stream << (delta_seconds ? 1.0f / delta_seconds_average : 0.0f);
+                stream << std::fixed;
+                stream << std::setprecision(1);
+                //stream << "fps: ";
+                stream << nice_fps;
                 std::string stream_string = stream.str();
 
                 data_string->SetString(stream_string);

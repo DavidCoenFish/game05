@@ -70,7 +70,7 @@ namespace
             );
         return s_layout;
     }
-    const UILayout& GetUILayoutFullScreenMarginBottomRight()
+    const UILayout& GetUILayoutFullScreenMarginBottomRightShrink()
     {
         // Todo: is y up the screen for ui, y==0 is bottom, y==1 is top screen
         static UILayout s_layout(
@@ -79,7 +79,8 @@ namespace
             UICoord(UICoord::ParentSource::X, 1.0f),
             UICoord(UICoord::ParentSource::Y, 0.0f),
             UICoord(UICoord::ParentSource::X, 1.0f, -s_default_margin),
-            UICoord(UICoord::ParentSource::Y, 0.0f, s_default_margin)
+            UICoord(UICoord::ParentSource::Y, 0.0f, s_default_margin),
+            true
             );
         return s_layout;
     }
@@ -312,7 +313,6 @@ namespace
         TGetUILayoutRef in_get_layout_ref = GetUILayoutFullScreen,
         StackOrientation in_orientation = StackOrientation::TVertical,
         TGetUICoordRef in_get_gap_ref = GetUICoordDefaultGap,
-        bool in_shrink_to_fit = false,
         bool in_clear_background = true,
         TGetColour in_get_clear_colour_ref = GetColourTransparent
         >
@@ -331,8 +331,7 @@ namespace
                 in_get_clear_colour_ref(),
                 in_get_layout_ref(),
                 in_orientation,
-                in_get_gap_ref(),
-                in_shrink_to_fit
+                in_get_gap_ref()
                 );
             in_out_content = std::move(new_content);
         }
@@ -343,8 +342,7 @@ namespace
                 in_get_clear_colour_ref(),
                 in_get_layout_ref(),
                 in_orientation,
-                in_get_gap_ref(),
-                in_shrink_to_fit
+                in_get_gap_ref()
                 ))
             {
                 dirty = true;
@@ -366,14 +364,14 @@ void DefaultUIComponentFactory::Populate(
         s_default_font_size,
         s_new_line_gap,
         TextEnum::HorizontalLineAlignment::Right,
-        TextEnum::VerticalBlockAlignment::Top
+        TextEnum::VerticalBlockAlignment::TopEM
         >);
     in_ui_manager.AddContentFactory("UIDataTextRun", FactoryTextRun<>);
     in_ui_manager.AddContentFactory("UIDataTextRunRight", FactoryTextRun<
         GetUILayoutFullScreen,
         s_default_font_size,
         TextEnum::HorizontalLineAlignment::Right,
-        TextEnum::VerticalBlockAlignment::Top
+        TextEnum::VerticalBlockAlignment::TopEM
         >);
 
     in_ui_manager.AddContentFactory("UIDataTextRunWrap", FactoryTextRun<
@@ -390,10 +388,9 @@ void DefaultUIComponentFactory::Populate(
 
 
     in_ui_manager.AddContentFactory("stack_vertical_bottom_right", FactoryStack<
-        GetUILayoutFullScreenMarginBottomRight,
+        GetUILayoutFullScreenMarginBottomRightShrink,
         StackOrientation::TVertical,
         GetUICoordDefaultGap,
-        true,
         true,
         GetColourTransparent
         >);

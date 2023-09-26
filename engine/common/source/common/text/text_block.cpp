@@ -70,6 +70,17 @@ public:
                 static_cast<int>(round((_font_size + (_font_size * _new_line_gap_ratio)) * _ui_scale))
                 );
             _text_bounds = _pre_vertex_data->GetBounds();
+
+            switch(_vertical_block_alignment)
+            {
+            default:
+                break;
+            case TextEnum::VerticalBlockAlignment::BottomEM:
+            case TextEnum::VerticalBlockAlignment::MiddleEM:
+            case TextEnum::VerticalBlockAlignment::TopEM:
+                _text_bounds[1] = std::max(_font_size, _text_bounds[1]);
+                break;
+            }
         }
 
         return _text_bounds;
@@ -220,7 +231,7 @@ public:
         {
             dirty = true;
             _vertical_block_alignment = in_vertical_block_alignment;
-            //_calculate_dirty = true;
+            _calculate_dirty = true;
             _geometry_dirty = true;
         }
         return dirty;
