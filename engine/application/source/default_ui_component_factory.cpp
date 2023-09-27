@@ -11,6 +11,7 @@
 #include "common/text/text_manager.h"
 #include "common/text/text_run.h"
 #include "common/ui/ui_content/i_ui_content.h"
+#include "common/ui/ui_content/ui_content_button.h"
 #include "common/ui/ui_content/ui_content_canvas.h"
 #include "common/ui/ui_content/ui_content_stack.h"
 #include "common/ui/ui_content/ui_content_string.h"
@@ -97,6 +98,30 @@ namespace
             );
         return s_layout;
     }
+    const UILayout& GetUILayoutBannerLeft()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 0.15f, 150.0f),
+            UICoord(UICoord::ParentSource::Y, 1.0f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 0.3333f),
+            UICoord(UICoord::ParentSource::Y, 0.5f)
+            );
+        return s_layout;
+    }
+    const UILayout& GetUILayoutRow()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 1.0f),
+            UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size * 2.0f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f)
+            );
+        return s_layout;
+    }
 
     typedef const UICoord& (*TGetUICoordRef)();
 
@@ -115,6 +140,11 @@ namespace
     const VectorFloat4& GetColourTransparent()
     {
         static VectorFloat4 s_colour(0.0f, 0.0f, 0.0f, 0.0f);
+        return s_colour;
+    }
+    const VectorFloat4& GetColourTransparentDark()
+    {
+        static VectorFloat4 s_colour(0.0f, 0.0f, 0.0f, 0.5f);
         return s_colour;
     }
     const VectorFloat4& GetColourRed()
@@ -165,6 +195,39 @@ namespace
         else
         {
             if (true == canvas->SetBase(
+                in_clear_background,
+                in_get_clear_colour_ref(),
+                in_get_layout_ref()))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    template<
+        TGetUILayoutRef in_get_layout_ref = GetUILayoutFullScreen,
+        bool in_clear_background = true,
+        TGetColour in_get_clear_colour_ref = GetColourTransparent
+        >
+    const bool FactoryButton(
+        std::unique_ptr<IUIContent>& in_out_content,
+        const UIContentFactoryParam&
+        )
+    {
+        UIContentButton* content = dynamic_cast<UIContentButton*>(in_out_content.get());
+        if (nullptr == content)
+        {
+            in_out_content = std::make_unique<UIContentButton>(
+                in_clear_background,
+                in_get_clear_colour_ref(),
+                in_get_layout_ref());
+            return true;
+        }
+        else
+        {
+            if (true == content->SetBase(
                 in_clear_background,
                 in_get_clear_colour_ref(),
                 in_get_layout_ref()))
@@ -383,9 +446,16 @@ void DefaultUIComponentFactory::Populate(
         GetColourTransparent,
         true
         >);
+
+    in_ui_manager.AddContentFactory("UIDataButton", FactoryCanvas<GetUILayoutRow, true, GetColourRed>);
+
     in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<>);
     in_ui_manager.AddContentFactory("UIDataContainerDebug", FactoryCanvas<GetUILayoutFullScreenMargin, true, GetColourRed>);
-
+    in_ui_manager.AddContentFactory("UIDataContainerLeftBanner", FactoryCanvas<
+        GetUILayoutBannerLeft, 
+        true, 
+        GetColourTransparentDark
+        >);
 
     in_ui_manager.AddContentFactory("stack_vertical_bottom_right", FactoryStack<
         GetUILayoutFullScreenMarginBottomRightShrink,
@@ -394,6 +464,16 @@ void DefaultUIComponentFactory::Populate(
         true,
         GetColourTransparent
         >);
+
+    in_ui_manager.AddContentFactory("stack_vertical_middle", FactoryStack<
+        GetUILayoutFullScreenMarginBottomRightShrink,
+        StackOrientation::TVertical,
+        GetUICoordDefaultGap,
+        true,
+        GetColourTransparent
+        >);
+
+        
 
 }
 

@@ -229,9 +229,6 @@
     <ClCompile Include="source\common\ui\ui_data\ui_data_container.cpp">
       <Filter>souce\common\ui\ui_data</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\ui\ui_data\ui_data_icon_button.cpp">
-      <Filter>souce\common\ui\ui_data</Filter>
-    </ClCompile>
     <ClCompile Include="source\common\ui\ui_data\ui_data_text_run.cpp">
       <Filter>souce\common\ui\ui_data</Filter>
     </ClCompile>
@@ -303,6 +300,9 @@
     </ClCompile>
     <ClCompile Include="source\common\util\hash.cpp">
       <Filter>souce\common\util</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_content\ui_content_button.cpp">
+      <Filter>souce\common\ui\ui_content</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -552,9 +552,6 @@
     <ClInclude Include="include\common\ui\ui_data\ui_data_container.h">
       <Filter>include\common\ui\ui_data</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\ui\ui_data\ui_data_icon_button.h">
-      <Filter>include\common\ui\ui_data</Filter>
-    </ClInclude>
     <ClInclude Include="include\common\ui\ui_data\i_ui_data.h">
       <Filter>include\common\ui\ui_data</Filter>
     </ClInclude>
@@ -629,6 +626,9 @@
     </ClInclude>
     <ClInclude Include="include\common\util\hash.h">
       <Filter>include\common\util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_content\ui_content_button.h">
+      <Filter>include\common\ui\ui_content</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

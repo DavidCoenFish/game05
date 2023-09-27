@@ -3,15 +3,13 @@
 
 UIDataButton::UIDataButton(
     const bool in_enabled,
-    const std::string& in_label_key,
-    const std::function<void(UIDataButton*)>& in_on_click,
-    const std::function<void(UIDataButton*)>& in_on_focus,
+    const std::shared_ptr<IUIData>& in_content,
+    const std::function<void(const VectorFloat2&)>& in_on_click,
     const std::string& in_template_name
     )
     : _enabled(in_enabled)
-    , _label_key(in_label_key)
+    , _content(in_content)
     , _on_click(in_on_click)
-    , _on_focus(in_on_focus)
     , _template_name(in_template_name)
 {
     // Nop
@@ -22,24 +20,21 @@ UIDataButton::~UIDataButton()
     // Nop
 }
 
-void UIDataButton::OnClick()
+const bool UIDataButton::Visit(const std::function<bool(
+    const bool,
+    const std::shared_ptr<IUIData>&,
+    const std::function<void(const VectorFloat2&)>&
+    )>& in_visitor) const
 {
-    if (_on_click)
+    bool dirty = false;
+    if (nullptr != in_visitor)
     {
-        _on_click(this);
+        dirty = (in_visitor)(
+            _enabled,
+            _content,
+            _on_click
+            );
     }
+    return dirty;
 }
-
-void UIDataButton::OnFocus()
-{
-    if (_on_focus)
-    {
-        _on_focus(this);
-    }
-}
-
-//const int UIDataButton::GetChangeID() const
-//{
-//    return 0;
-//}
 

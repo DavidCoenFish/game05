@@ -22,6 +22,7 @@
 #include "common/ui/i_ui_model.h"
 #include "common/ui/ui_texture.h"
 #include "common/ui/ui_data/i_ui_data.h"
+#include "common/ui/ui_data/ui_data_button.h"
 #include "common/ui/ui_data/ui_data_container.h"
 #include "common/ui/ui_data/ui_data_string.h"
 #include "common/ui/ui_data/ui_data_template.h"
@@ -61,37 +62,30 @@ public:
 
         _data_array_map[""] = std::vector<std::shared_ptr<IUIData>>({
 
-#if 0 // Canvas test
-            std::make_shared<UIDataContainer>(
-                std::vector<std::shared_ptr<IUIData>>(),
-                "UIDataContainerDebug"
-                ),
-#endif
-
-#if 0 // String test
-            std::make_shared<UIDataString>(
-                "Hello human long text"
-                )
-#endif
-
-#if 0 // text run test
-            std::make_shared<UIDataTextRun>(
-                "<Size 64>hello human <Locale DEBUG> <Locale Win64> and some more non localised text <Locale DEBUG>",
-                LocaleISO_639_1::Arabic,
-                "UIDataTextRunWrap"
-                )
-#endif
-
-
-#if 1 // Stack test
+            // Build info
             std::make_shared<UIDataContainer>(std::vector<std::shared_ptr<IUIData>>({
                 _data_map_build_info,
                 _data_map_build_version,
                 _data_map_build_fps
                 }),
                 "stack_vertical_bottom_right"
+                ),
+
+            // Left banner
+            std::make_shared<UIDataContainer>(
+                std::vector<std::shared_ptr<IUIData>>({
+                std::make_shared<UIDataContainer>(
+                    std::vector<std::shared_ptr<IUIData>>({
+                        std::make_shared<UIDataButton>(),
+                        std::make_shared<UIDataButton>(),
+                        std::make_shared<UIDataButton>(),
+                        std::make_shared<UIDataButton>()
+                    }),
+                    "stack_vertical_middle"
+                    )
+                }),
+                "UIDataContainerLeftBanner"
                 )
-#endif
             });
     }
 
