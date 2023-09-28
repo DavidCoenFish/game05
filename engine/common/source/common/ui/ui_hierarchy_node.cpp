@@ -386,12 +386,16 @@ const bool UIHierarchyNode::Draw(
         (true == _texture->GetAlwaysDirty())
         )
     {
-        dirty = true;
-
-        auto* render_target = _texture->GetRenderTarget(
+        auto* const render_target = _texture->GetRenderTarget(
             in_draw_param._draw_system,
             in_draw_param._frame->GetCommandList()
             );
+        if (nullptr == render_target)
+        {
+            return dirty;
+        }
+
+        dirty = true;
         in_draw_param._frame->SetRenderTarget(
             render_target, 
             _texture->GetAllowClear()

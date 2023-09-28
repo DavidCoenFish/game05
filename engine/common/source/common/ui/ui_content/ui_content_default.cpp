@@ -52,44 +52,42 @@ void UIContentDefault::CalculateGeometry(
     VectorFloat4& out_geometry_pos,
     VectorFloat4& out_geometry_uv,
     VectorInt2& out_texture_size,
+    VectorFloat2& in_out_scroll,
     const VectorInt2& in_parent_size,
     const VectorInt2& in_parent_offset,
     const VectorInt2& in_parent_window,
     const float in_ui_scale,
     const float in_time_delta, 
-    const VectorInt2& in_initial_size, //in_out_layout.GetSize, but can be shrunk?
     const VectorInt2& in_desired_size,
-    UILayout& in_out_layout
+    const UILayout& in_layout 
     )
 {
-    //const VectorInt2 pivot = in_out_layout.GetPivot(in_parent_size, in_ui_scale); 
-    const VectorInt2 pivot = in_out_layout.GetPivot(in_parent_window, in_ui_scale) + in_parent_offset; 
-    const VectorInt2 attach = in_out_layout.GetAttach(in_initial_size, in_ui_scale);
+    const VectorInt2 pivot = in_layout.GetPivot(in_parent_window, in_ui_scale) + in_parent_offset; 
+    const VectorInt2 attach = in_layout.GetAttach(in_parent_window, in_ui_scale);
 
     // Deal pos
     //VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f)
     out_geometry_pos = VectorFloat4(
         CalculatePos(pivot[0] - attach[0], in_parent_size[0]),
         CalculatePos(pivot[1] - attach[1], in_parent_size[1]),
-        CalculatePos(pivot[0] + in_initial_size[0] - attach[0], in_parent_size[0]),
-        CalculatePos(pivot[1] + in_initial_size[1] - attach[1], in_parent_size[1])
+        CalculatePos(pivot[0] + in_parent_window[0] - attach[0], in_parent_size[0]),
+        CalculatePos(pivot[1] + in_parent_window[1] - attach[1], in_parent_size[1])
         );
 
     // Deal uv
     out_geometry_uv = VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f);
     const VectorInt2 delta(
-        in_desired_size[0] - in_initial_size[0],
-        in_desired_size[1] - in_initial_size[1]
+        in_desired_size[0] - in_parent_window[0],
+        in_desired_size[1] - in_parent_window[1]
         );
     if (0 < delta[0])
     {
-        VectorFloat2& scroll = in_out_layout.GetScrollRef();
         const float delta_f = static_cast<float>(delta[0]);
-        float new_value = scroll[0] + (s_scroll_speed * in_time_delta / delta_f);
+        float new_value = in_out_scroll[0] + (s_scroll_speed * in_time_delta / delta_f);
         new_value = fmodf(new_value + 1.0f, 2.0f) - 1.0f; // want range [-1.0 ... 1.0]
-        scroll[0] = new_value;
+        in_out_scroll[0] = new_value;
 
-        const float length = (static_cast<float>(in_initial_size[0]) / static_cast<float>(in_desired_size[0]));//
+        const float length = (static_cast<float>(in_parent_window[0]) / static_cast<float>(in_desired_size[0]));//
         const float offset = (1.0f - length) * abs(new_value);
         out_geometry_uv[0] = offset;
         out_geometry_uv[2] = offset + length;
@@ -97,20 +95,19 @@ void UIContentDefault::CalculateGeometry(
 
     if (0 < delta[1])
     {
-        VectorFloat2& scroll = in_out_layout.GetScrollRef();
         const float delta_f = static_cast<float>(delta[1]);
-        float new_value = scroll[1] + (s_scroll_speed * in_time_delta / delta_f);
+        float new_value = in_out_scroll[1] + (s_scroll_speed * in_time_delta / delta_f);
         new_value = fmodf(new_value + 1.0f, 2.0f) - 1.0f; // want range [-1.0 ... 1.0]
-        scroll[1] = new_value;
+        in_out_scroll[1] = new_value;
 
-        const float length = (static_cast<float>(in_initial_size[1]) / static_cast<float>(in_desired_size[1]));//
+        const float length = (static_cast<float>(in_parent_window[1]) / static_cast<float>(in_desired_size[1]));//
         const float offset = (1.0f - length) * abs(new_value);
         out_geometry_uv[1] = 1.0f - offset;
         out_geometry_uv[3] = 1.0f - (offset + length);
     }
 
     // Deal texture
-    out_texture_size = VectorInt2::Max(in_initial_size, in_desired_size);
+    out_texture_size = VectorInt2::Max(in_parent_window, in_desired_size);
 
     return;
 }
@@ -138,9 +135,11 @@ const bool UIContentDefault::SetBase(
         _clear_colour = in_clear_colour;
     }
 
-    if (true == _layout.Update(in_layout))
+    if (_layout != in_layout)
     {
         dirty = true;
+        _layout == in_layout;
+        _uv_scroll = VectorFloat2();
     }
 
     return dirty;
@@ -168,7 +167,6 @@ const bool UIContentDefault::SetLayout(const UILayout& in_layout)
 }
 
 const bool UIContentDefault::UpdateHierarchy(
-    //std::vector<std::shared_ptr<IUIData>>*& out_array_data_or_null,
     IUIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
     const UIHierarchyNodeUpdateHierarchyParam& in_param
@@ -178,7 +176,6 @@ const bool UIContentDefault::UpdateHierarchy(
     const UIDataContainer* const data_container = dynamic_cast<const UIDataContainer*>(in_data);
     if (nullptr != data_container)
     {
-        //const std::vector<std::shared_ptr<IUIData>>& array_data = data_container->GetDataConst();
         if (true == data_container->VisitDataArray([
             &in_out_child_data,
             &in_param,
@@ -227,15 +224,13 @@ void UIContentDefault::UpdateSize(
     UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
-    const VectorInt2 layout_size = _layout.GetSize(in_parent_window, in_ui_scale);
-
     VectorInt2 max_desired_size = in_out_ui_content.GetDesiredSize(
-        layout_size,
+        in_parent_window,
         in_ui_scale,
         in_out_node
         );
-
-    const VectorInt2 actual_initial_size = _layout.CalculateShrinkSize(layout_size, max_desired_size);
+    //const VectorInt2 layout_size = _layout.GetSize(in_parent_window, in_ui_scale);
+    //const VectorInt2 actual_initial_size = _layout.CalculateShrinkSize(layout_size, max_desired_size);
 
     VectorFloat4 geometry_pos;
     VectorFloat4 geometry_uv;
@@ -245,12 +240,12 @@ void UIContentDefault::UpdateSize(
         geometry_pos,
         geometry_uv,
         texture_size,
+        _uv_scroll,
         in_parent_size,
         in_parent_offset,
         in_parent_window,
         in_ui_scale,
         in_time_delta, 
-        actual_initial_size,
         max_desired_size,
         _layout
         );
@@ -280,12 +275,15 @@ void UIContentDefault::UpdateSize(
 }
 
 const VectorInt2 UIContentDefault::GetDesiredSize(
-    const VectorInt2& in_initial_size,
+    const VectorInt2& in_parent_size,
     const float in_ui_scale,
     UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
     VectorInt2 max_desired_size;
+
+    const VectorInt2 layout_size = _layout.GetSize(in_parent_size, in_ui_scale);
+
     // Default is to go through children and see if anyone needs a bigger size than what we calculate
     for (auto iter: in_out_node.GetChildData())
     {
@@ -295,12 +293,14 @@ const VectorInt2 UIContentDefault::GetDesiredSize(
             continue;
         }
         VectorInt2 desired_size = child_data._content->GetDesiredSize(
-            in_initial_size, 
+            layout_size, 
             in_ui_scale, 
             *child_data._node
             );
         max_desired_size = VectorInt2::Max(max_desired_size, desired_size);
     }
+
+    max_desired_size = _layout.CalculateShrinkSize(layout_size, max_desired_size);
 
     return max_desired_size;
 }

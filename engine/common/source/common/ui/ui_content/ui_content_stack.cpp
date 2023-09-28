@@ -108,17 +108,14 @@ void UIContentStack::UpdateSize(
 {
     // the default UpdateSize recurses, we do want to do that, but with an offset to where to put things
 
-    const VectorInt2 layout_size = _content_default.GetLayout().GetSize(in_parent_size, in_ui_scale);
     std::vector<VectorInt4> child_desired_size_offset;
 
-    const VectorInt2 max_desired_size = GetStackDesiredSize(
-        layout_size,
+    const VectorInt2 desired_size = GetStackDesiredSize(
+        in_parent_window,
         in_ui_scale,
         in_out_node,
         child_desired_size_offset
         );
-
-    const VectorInt2 actual_initial_size = _content_default.GetLayout().CalculateShrinkSize(layout_size, max_desired_size);
 
     VectorFloat4 geometry_pos;
     VectorFloat4 geometry_uv;
@@ -128,13 +125,13 @@ void UIContentStack::UpdateSize(
         geometry_pos,
         geometry_uv,
         texture_size,
+        _content_default.GetUVScroll(),
         in_parent_size,
         in_parent_offset,
         in_parent_window,
         in_ui_scale,
         in_time_delta, 
-        actual_initial_size,
-        max_desired_size,
+        desired_size,
         _content_default.GetLayout()
         );
 
@@ -164,17 +161,17 @@ void UIContentStack::UpdateSize(
         VectorInt2 window(child_desired_offset.GetX(), child_desired_offset.GetY());
         const VectorInt2 offset(child_desired_offset.GetZ(), child_desired_offset.GetW());
 
-        switch(_orientation)
-        {
-        default:
-            break;
-        case StackOrientation::TVertical:
-            window[0] = actual_initial_size[0]; //max_desired_size[0];
-            break;
-        case StackOrientation::THorizontal:
-            window[1] = actual_initial_size[1]; //max_desired_size[1];
-            break;
-        }
+        //switch(_orientation)
+        //{
+        //default:
+        //    break;
+        //case StackOrientation::TVertical:
+        //    window[0] = actual_initial_size[0]; //max_desired_size[0];
+        //    break;
+        //case StackOrientation::THorizontal:
+        //    window[1] = actual_initial_size[1]; //max_desired_size[1];
+        //    break;
+        //}
 
         child_data._content->UpdateSize(
             in_draw_system,
@@ -240,6 +237,7 @@ const VectorInt2 UIContentStack::GetStackDesiredSize(
             {
                 children_stack[1] += gap;
             }
+            desired_size_offset[0] = in_initial_size[0];
             desired_size_offset[3] = children_stack[1];
             children_stack[0] = std::max(children_stack[0], std::min(child_desired[0], in_initial_size[0]));
             children_stack[1] += child_desired[1];
@@ -249,6 +247,7 @@ const VectorInt2 UIContentStack::GetStackDesiredSize(
             {
                 children_stack[0] += gap;
             }
+            desired_size_offset[1] = in_initial_size[1];
             desired_size_offset[2] = children_stack[0];
             children_stack[0] += child_desired[0];
             children_stack[1] = std::max(children_stack[1], std::min(child_desired[1], in_initial_size[1]));

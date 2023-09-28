@@ -447,7 +447,7 @@ void DefaultUIComponentFactory::Populate(
         true
         >);
 
-    in_ui_manager.AddContentFactory("UIDataButton", FactoryCanvas<GetUILayoutRow, true, GetColourRed>);
+    in_ui_manager.AddContentFactory("UIDataButton", FactoryButton<GetUILayoutRow, true, GetColourRed>);
 
     in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<>);
     in_ui_manager.AddContentFactory("UIDataContainerDebug", FactoryCanvas<GetUILayoutFullScreenMargin, true, GetColourRed>);

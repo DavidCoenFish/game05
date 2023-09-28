@@ -65,16 +65,6 @@ void UIContentTexture::Draw(
 }
 */
 
-//const bool UIContentTexture::GetNeedsDraw() const
-//{
-//    return _dirty;
-//}
-
-//void UIContentTexture::SetDrawn()
-//{
-//    _dirty = false;
-//}
-
 void UIContentTexture::SetTexture(
     const std::shared_ptr<HeapWrapperItem>& in_shader_resource_view_handle
     )

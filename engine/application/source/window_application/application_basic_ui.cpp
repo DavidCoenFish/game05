@@ -62,6 +62,7 @@ public:
 
         _data_array_map[""] = std::vector<std::shared_ptr<IUIData>>({
 
+#if 1
             // Build info
             std::make_shared<UIDataContainer>(std::vector<std::shared_ptr<IUIData>>({
                 _data_map_build_info,
@@ -70,7 +71,7 @@ public:
                 }),
                 "stack_vertical_bottom_right"
                 ),
-
+#endif
             // Left banner
             std::make_shared<UIDataContainer>(
                 std::vector<std::shared_ptr<IUIData>>({

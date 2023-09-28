@@ -32,7 +32,9 @@ IRenderTarget* UITexture::GetRenderTarget(
 {
     if (true == _draw_to_texture)
     {
-        if (nullptr == _render_target_texture)
+        if ((nullptr == _render_target_texture) &&
+            (0 < _size.GetX()) &&
+            (0 < _size.GetY()))
         {
             _has_drawn = false;
             const std::vector<RenderTargetFormatData> target_format_data_array({
