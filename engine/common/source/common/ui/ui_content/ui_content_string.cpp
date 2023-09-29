@@ -172,19 +172,28 @@ void UIContentString::UpdateSize(
     return;
 }
 
-const VectorInt2 UIContentString::GetDesiredSize(
-    const VectorInt2& in_parent_size,
+void UIContentString::GetDesiredSize(
+    VectorInt2& out_layout_size, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
+    VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
+    const VectorInt2& in_parent_window,
     const float in_ui_scale,
-    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+    UIHierarchyNode& // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
+    out_layout_size = _content_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
+
     _text_block->SetWidthLimit(
         _text_block->GetWidthLimitEnabled(),
-        in_parent_size[0]
+        out_layout_size[0]
         );
     _text_block->SetUIScale(in_ui_scale);
 
-    return _text_block->GetTextBounds();
+    out_desired_size = _text_block->GetTextBounds();
+
+    out_layout_size = _content_default.GetLayout().CalculateShrinkSize(out_layout_size, out_desired_size);
+    out_desired_size = VectorInt2::Max(out_layout_size, out_desired_size);
+
+    return;
 }
 
 void UIContentString::PreDraw(

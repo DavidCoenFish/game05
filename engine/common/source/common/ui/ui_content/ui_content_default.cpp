@@ -58,27 +58,28 @@ void UIContentDefault::CalculateGeometry(
     const VectorInt2& in_parent_window,
     const float in_ui_scale,
     const float in_time_delta, 
+    const VectorInt2& in_layout_size, // layout size != in_parent_window, unless layout size is 100% of the parent window...
     const VectorInt2& in_desired_size,
     const UILayout& in_layout 
     )
 {
     const VectorInt2 pivot = in_layout.GetPivot(in_parent_window, in_ui_scale) + in_parent_offset; 
-    const VectorInt2 attach = in_layout.GetAttach(in_parent_window, in_ui_scale);
+    const VectorInt2 attach = in_layout.GetAttach(in_layout_size, in_ui_scale);
 
     // Deal pos
     //VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f)
     out_geometry_pos = VectorFloat4(
         CalculatePos(pivot[0] - attach[0], in_parent_size[0]),
         CalculatePos(pivot[1] - attach[1], in_parent_size[1]),
-        CalculatePos(pivot[0] + in_parent_window[0] - attach[0], in_parent_size[0]),
-        CalculatePos(pivot[1] + in_parent_window[1] - attach[1], in_parent_size[1])
+        CalculatePos(pivot[0] + in_layout_size[0] - attach[0], in_parent_size[0]),
+        CalculatePos(pivot[1] + in_layout_size[1] - attach[1], in_parent_size[1])
         );
 
     // Deal uv
     out_geometry_uv = VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f);
     const VectorInt2 delta(
-        in_desired_size[0] - in_parent_window[0],
-        in_desired_size[1] - in_parent_window[1]
+        in_desired_size[0] - in_layout_size[0],
+        in_desired_size[1] - in_layout_size[1]
         );
     if (0 < delta[0])
     {
@@ -107,7 +108,7 @@ void UIContentDefault::CalculateGeometry(
     }
 
     // Deal texture
-    out_texture_size = VectorInt2::Max(in_parent_window, in_desired_size);
+    out_texture_size = VectorInt2::Max(in_layout_size, in_desired_size);
 
     return;
 }
@@ -224,7 +225,11 @@ void UIContentDefault::UpdateSize(
     UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
-    VectorInt2 max_desired_size = in_out_ui_content.GetDesiredSize(
+    VectorInt2 layout_size;
+    VectorInt2 desired_size;
+    in_out_ui_content.GetDesiredSize(
+        layout_size,
+        desired_size,
         in_parent_window,
         in_ui_scale,
         in_out_node
@@ -245,8 +250,9 @@ void UIContentDefault::UpdateSize(
         in_parent_offset,
         in_parent_window,
         in_ui_scale,
-        in_time_delta, 
-        max_desired_size,
+        in_time_delta,
+        layout_size,
+        desired_size,
         _layout
         );
 
@@ -274,15 +280,17 @@ void UIContentDefault::UpdateSize(
     return;
 }
 
-const VectorInt2 UIContentDefault::GetDesiredSize(
-    const VectorInt2& in_parent_size,
+void UIContentDefault::GetDesiredSize(
+    VectorInt2& out_layout_size,
+    VectorInt2& out_desired_size,
+    const VectorInt2& in_parent_window,
     const float in_ui_scale,
     UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
     VectorInt2 max_desired_size;
 
-    const VectorInt2 layout_size = _layout.GetSize(in_parent_size, in_ui_scale);
+    out_layout_size = _layout.GetSize(in_parent_window, in_ui_scale);
 
     // Default is to go through children and see if anyone needs a bigger size than what we calculate
     for (auto iter: in_out_node.GetChildData())
@@ -292,15 +300,20 @@ const VectorInt2 UIContentDefault::GetDesiredSize(
         {
             continue;
         }
-        VectorInt2 desired_size = child_data._content->GetDesiredSize(
-            layout_size, 
+        VectorInt2 child_layout_size;
+        VectorInt2 child_desired_size;
+        child_data._content->GetDesiredSize(
+            child_layout_size,
+            child_desired_size,
+            out_layout_size, 
             in_ui_scale, 
             *child_data._node
             );
-        max_desired_size = VectorInt2::Max(max_desired_size, desired_size);
+        max_desired_size = VectorInt2::Max(max_desired_size, child_desired_size);
     }
 
-    max_desired_size = _layout.CalculateShrinkSize(layout_size, max_desired_size);
+    out_layout_size = _layout.CalculateShrinkSize(out_layout_size, max_desired_size);
+    out_desired_size = VectorInt2::Max(out_layout_size, max_desired_size);
 
-    return max_desired_size;
+    return;
 }

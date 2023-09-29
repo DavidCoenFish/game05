@@ -48,6 +48,7 @@ public:
         const VectorInt2& in_parent_window,
         const float in_ui_scale,
         const float in_time_delta, 
+        const VectorInt2& in_layout_size, // layout size != in_parent_window, unless layout size is 100% of the parent window...
         const VectorInt2& in_desired_size,
         const UILayout& in_layout 
         );
@@ -84,8 +85,10 @@ public:
         UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         );
 
-    const VectorInt2 GetDesiredSize(
-        const VectorInt2& in_parent_size,
+    void GetDesiredSize(
+        VectorInt2& out_layout_size, // if layout has shrink enabled, and desired size was smaller than layout, the layout size can shrink
+        VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
+        const VectorInt2& in_parent_window,
         const float in_ui_scale,
         UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         );

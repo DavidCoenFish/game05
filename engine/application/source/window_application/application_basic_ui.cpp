@@ -64,6 +64,15 @@ public:
 
 #if 1
             // Build info
+            std::make_shared<UIDataContainer>(
+                std::vector<std::shared_ptr<IUIData>>({}),
+                "canvas_debug_quad0"
+                ),
+#endif
+
+
+#if 0
+            // Build info
             std::make_shared<UIDataContainer>(std::vector<std::shared_ptr<IUIData>>({
                 _data_map_build_info,
                 _data_map_build_version,
@@ -72,6 +81,8 @@ public:
                 "stack_vertical_bottom_right"
                 ),
 #endif
+
+#if 0
             // Left banner
             std::make_shared<UIDataContainer>(
                 std::vector<std::shared_ptr<IUIData>>({
@@ -85,8 +96,9 @@ public:
                     "stack_vertical_middle"
                     )
                 }),
-                "UIDataContainerLeftBanner"
+                "canvas_banner_left"
                 )
+#endif
             });
     }
 

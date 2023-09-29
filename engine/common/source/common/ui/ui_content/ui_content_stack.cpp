@@ -110,7 +110,11 @@ void UIContentStack::UpdateSize(
 
     std::vector<VectorInt4> child_desired_size_offset;
 
-    const VectorInt2 desired_size = GetStackDesiredSize(
+    VectorInt2 layout_size;
+    VectorInt2 desired_size;
+    GetStackDesiredSize(
+        layout_size,
+        desired_size,
         in_parent_window,
         in_ui_scale,
         in_out_node,
@@ -131,6 +135,7 @@ void UIContentStack::UpdateSize(
         in_parent_window,
         in_ui_scale,
         in_time_delta, 
+        layout_size,
         desired_size,
         _content_default.GetLayout()
         );
@@ -188,31 +193,30 @@ void UIContentStack::UpdateSize(
     return;
 }
 
-const VectorInt2 UIContentStack::GetDesiredSize(
+void UIContentStack::GetDesiredSize(
+    VectorInt2&, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
+    VectorInt2&, // if bigger than layout size, we need to scroll
     const VectorInt2&,
     const float,
     UIHierarchyNode& // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
-    return VectorInt2();
+    return;
 }
 
-const VectorInt2 UIContentStack::GetStackDesiredSize(
-    const VectorInt2& in_initial_size,
+void UIContentStack::GetStackDesiredSize(
+    VectorInt2& out_layout_size, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
+    VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
+    const VectorInt2& in_parent_window,
     const float in_ui_scale,
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     std::vector<VectorInt4>& out_child_desired_size_offset
     )
 {
-    //const VectorInt2 layout_desired_size = _content_default.GetLayout().GetSize(in_parent_size, in_ui_scale);
-    //const VectorInt2 layout_desired_size = _content_default.GetDesiredSize(
-    //    in_parent_size,
-    //    in_ui_scale,
-    //    in_out_node
-    //    );
+    out_layout_size = _content_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
+    const int gap = _gap.Calculate(in_parent_window, in_ui_scale);
 
-    const int gap = _gap.Calculate(in_initial_size, in_ui_scale);
-    VectorInt2 children_stack;
+    VectorInt2 max_desired_size;
     for (auto& child_data_ptr : in_out_node.GetChildData())
     {
         UIHierarchyNodeChildData& child_data = *child_data_ptr;
@@ -222,8 +226,12 @@ const VectorInt2 UIContentStack::GetStackDesiredSize(
             continue;
         }
 
-        const VectorInt2 child_desired = child_data._content->GetDesiredSize(
-            in_initial_size, 
+        VectorInt2 child_layout;
+        VectorInt2 child_desired;
+        child_data._content->GetDesiredSize(
+            child_layout,
+            child_desired,
+            out_layout_size, 
             in_ui_scale,
             *(child_data._node)
             );
@@ -233,29 +241,30 @@ const VectorInt2 UIContentStack::GetStackDesiredSize(
         default:
             break;
         case StackOrientation::TVertical:
-            if (0 != children_stack[1])
+            desired_size_offset[3] = max_desired_size[1];
+            if (0 != max_desired_size[1])
             {
-                children_stack[1] += gap;
+                max_desired_size[1] += gap;
             }
-            desired_size_offset[0] = in_initial_size[0];
-            desired_size_offset[3] = children_stack[1];
-            children_stack[0] = std::max(children_stack[0], std::min(child_desired[0], in_initial_size[0]));
-            children_stack[1] += child_desired[1];
+            max_desired_size[1] += child_desired[1];
+
             break;
         case StackOrientation::THorizontal:
-            if (0 != children_stack[0])
+            desired_size_offset[2] = max_desired_size[0];
+            if (0 != max_desired_size[0])
             {
-                children_stack[0] += gap;
+                max_desired_size[0] += gap;
             }
-            desired_size_offset[1] = in_initial_size[1];
-            desired_size_offset[2] = children_stack[0];
-            children_stack[0] += child_desired[0];
-            children_stack[1] = std::max(children_stack[1], std::min(child_desired[1], in_initial_size[1]));
+            max_desired_size[0] += child_desired[0];
+
             break;
         }
 
         out_child_desired_size_offset.push_back(desired_size_offset);
     }
 
-    return children_stack;
+    out_layout_size = _content_default.GetLayout().CalculateShrinkSize(out_layout_size, max_desired_size);
+    out_desired_size = VectorInt2::Max(out_layout_size, max_desired_size);
+
+    return;
 }

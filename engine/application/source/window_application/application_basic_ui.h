@@ -9,7 +9,9 @@ class Timer;
 class UIManager;
 class UIHierarchyNode;
 class UIModel;
-
+/// <summary>
+/// 
+/// </summary>
 class ApplicationBasicUI : public IWindowApplication
 {
 public:

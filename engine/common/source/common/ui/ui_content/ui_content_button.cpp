@@ -90,14 +90,18 @@ void UIContentButton::UpdateSize(
         );
 }
 
-const VectorInt2 UIContentButton::GetDesiredSize(
-    const VectorInt2& in_parent_size,
+void UIContentButton::GetDesiredSize(
+    VectorInt2& out_layout_size, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
+    VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
+    const VectorInt2& in_parent_window,
     const float in_ui_scale,
     UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
     return _content_default.GetDesiredSize(
-        in_parent_size,
+        out_layout_size,
+        out_desired_size,
+        in_parent_window,
         in_ui_scale,
         in_out_node
         );

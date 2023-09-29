@@ -43,8 +43,10 @@ private:
         UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         ) override;
 
-    virtual const VectorInt2 GetDesiredSize(
-        const VectorInt2& in_parent_size,
+    virtual void GetDesiredSize(
+        VectorInt2& out_layout_size, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
+        VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
+        const VectorInt2& in_parent_window,
         const float in_ui_scale,
         UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         ) override;

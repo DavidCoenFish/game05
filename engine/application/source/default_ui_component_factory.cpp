@@ -101,7 +101,7 @@ namespace
     const UILayout& GetUILayoutBannerLeft()
     {
         static UILayout s_layout(
-            UICoord(UICoord::ParentSource::X, 0.15f, 150.0f),
+            UICoord(UICoord::ParentSource::X, 0.0f, 300.0f),
             UICoord(UICoord::ParentSource::Y, 1.0f),
             UICoord(UICoord::ParentSource::X, 0.5f),
             UICoord(UICoord::ParentSource::Y, 0.5f),
@@ -450,8 +450,8 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("UIDataButton", FactoryButton<GetUILayoutRow, true, GetColourRed>);
 
     in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<>);
-    in_ui_manager.AddContentFactory("UIDataContainerDebug", FactoryCanvas<GetUILayoutFullScreenMargin, true, GetColourRed>);
-    in_ui_manager.AddContentFactory("UIDataContainerLeftBanner", FactoryCanvas<
+    in_ui_manager.AddContentFactory("canvas_debug_quad0", FactoryCanvas<GetUILayoutQuadrant0, true, GetColourRed>);
+    in_ui_manager.AddContentFactory("canvas_banner_left", FactoryCanvas<
         GetUILayoutBannerLeft, 
         true, 
         GetColourTransparentDark
