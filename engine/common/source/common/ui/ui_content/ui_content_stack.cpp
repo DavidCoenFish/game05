@@ -246,6 +246,7 @@ void UIContentStack::GetStackDesiredSize(
             {
                 max_desired_size[1] += gap;
             }
+            max_desired_size[0] = std::max(max_desired_size[0], child_desired[0]);
             max_desired_size[1] += child_desired[1];
 
             break;
@@ -256,6 +257,7 @@ void UIContentStack::GetStackDesiredSize(
                 max_desired_size[0] += gap;
             }
             max_desired_size[0] += child_desired[0];
+            max_desired_size[1] = std::max(max_desired_size[1], child_desired[1]);
 
             break;
         }
@@ -264,7 +266,8 @@ void UIContentStack::GetStackDesiredSize(
     }
 
     out_layout_size = _content_default.GetLayout().CalculateShrinkSize(out_layout_size, max_desired_size);
-    out_desired_size = VectorInt2::Max(out_layout_size, max_desired_size);
+    out_desired_size = max_desired_size;
+    //out_desired_size = VectorInt2::Max(out_layout_size, max_desired_size);
 
     return;
 }

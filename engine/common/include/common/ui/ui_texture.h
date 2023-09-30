@@ -68,5 +68,6 @@ private:
     VectorFloat4 _clear_colour;
 
     std::shared_ptr<RenderTargetTexture> _render_target_texture;
+    bool _render_target_dirty;
 
 };

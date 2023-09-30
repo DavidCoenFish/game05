@@ -177,7 +177,7 @@ void UIContentTextRun::GetDesiredSize(
     out_desired_size = _text_run->GetTextBounds();
 
     out_layout_size = _content_default.GetLayout().CalculateShrinkSize(out_layout_size, out_desired_size);
-    out_desired_size = VectorInt2::Max(out_layout_size, out_desired_size);
+    //out_desired_size = VectorInt2::Max(out_layout_size, out_desired_size);
 
     return;
 }

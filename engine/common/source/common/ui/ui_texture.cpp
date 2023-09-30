@@ -16,6 +16,7 @@ UITexture::UITexture(
     , _always_dirty(in_always_dirty)
     , _has_drawn(false)
     , _clear_colour(in_clear_colour)
+    , _render_target_dirty(false)
 {
     // Nop
 }
@@ -32,28 +33,41 @@ IRenderTarget* UITexture::GetRenderTarget(
 {
     if (true == _draw_to_texture)
     {
-        if ((nullptr == _render_target_texture) &&
-            (0 < _size.GetX()) &&
+        if ((0 < _size.GetX()) &&
             (0 < _size.GetY()))
         {
             _has_drawn = false;
-            const std::vector<RenderTargetFormatData> target_format_data_array({
-                RenderTargetFormatData(
-                    DXGI_FORMAT_B8G8R8A8_UNORM, 
-                    _allow_clear,
-                    _clear_colour
-                    )
-                });
 
-            _render_target_texture = in_draw_system->MakeRenderTargetTexture(
-                in_command_list,
-                target_format_data_array,
-                RenderTargetDepthData(),
-                _size
-                );
+            if (nullptr == _render_target_texture)
+            {
+                _render_target_dirty = false;
+                const std::vector<RenderTargetFormatData> target_format_data_array({
+                    RenderTargetFormatData(
+                        DXGI_FORMAT_B8G8R8A8_UNORM, 
+                        _allow_clear,
+                        _clear_colour
+                        )
+                    });
+
+                _render_target_texture = in_draw_system->MakeRenderTargetTexture(
+                    in_command_list,
+                    target_format_data_array,
+                    RenderTargetDepthData(),
+                    _size
+                    );
+            }
+            else if (true == _render_target_dirty)
+            {
+                _render_target_dirty = false;
+                in_draw_system->ResizeRenderTargetTexture(
+                    in_command_list,
+                    _render_target_texture.get(),
+                    _size
+                    );
+            }
+            return _render_target_texture.get();
         }
 
-        return _render_target_texture.get();
     }
     return in_draw_system->GetRenderTargetBackBuffer();
 }
@@ -111,15 +125,7 @@ void UITexture::SetSize(
 
     _has_drawn = false;
     _size = in_size;
-    if (nullptr != _render_target_texture)
-    {
-        //in_draw_system->ResizeRenderTargetTexture(
-        //    in_command_list,
-        //    _render_target_texture.get(),
-        //    _size
-        //    );
-        _render_target_texture.reset();
-    }
+    _render_target_dirty = true;
 
     return;
 }
@@ -127,6 +133,7 @@ void UITexture::SetSize(
 // nullptr if _bUseBackBuffer is true
 std::shared_ptr<HeapWrapperItem> UITexture::GetShaderResourceHeapWrapperItem() const
 {
+    DSC_ASSERT(_render_target_dirty == false, "we do not expect render target to be dirty if you are getting the shader resource");
     if ((true == _draw_to_texture) && (nullptr != _render_target_texture))
     {
         return _render_target_texture->GetShaderResourceHeapWrapperItem();

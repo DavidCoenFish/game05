@@ -81,6 +81,7 @@ namespace
             UICoord(UICoord::ParentSource::Y, 0.0f),
             UICoord(UICoord::ParentSource::X, 1.0f, -s_default_margin),
             UICoord(UICoord::ParentSource::Y, 0.0f, s_default_margin),
+            true,
             true
             );
         return s_layout;

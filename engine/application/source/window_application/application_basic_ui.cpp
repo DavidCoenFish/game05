@@ -62,23 +62,11 @@ public:
 
         _data_array_map[""] = std::vector<std::shared_ptr<IUIData>>({
 
-#if 1
+#if 0
             // Build info
             std::make_shared<UIDataContainer>(
                 std::vector<std::shared_ptr<IUIData>>({}),
                 "canvas_debug_quad0"
-                ),
-#endif
-
-
-#if 0
-            // Build info
-            std::make_shared<UIDataContainer>(std::vector<std::shared_ptr<IUIData>>({
-                _data_map_build_info,
-                _data_map_build_version,
-                _data_map_build_fps
-                }),
-                "stack_vertical_bottom_right"
                 ),
 #endif
 
@@ -97,8 +85,22 @@ public:
                     )
                 }),
                 "canvas_banner_left"
+                ),
+#endif
+
+
+#if 1
+            // Build info
+            std::make_shared<UIDataContainer>(std::vector<std::shared_ptr<IUIData>>({
+                _data_map_build_info,
+                _data_map_build_version,
+                _data_map_build_fps
+                }),
+                "stack_vertical_bottom_right"
                 )
 #endif
+
+
             });
     }
 
@@ -230,6 +232,7 @@ void ApplicationBasicUI::Update()
         float nice_fps = 0.0f;
         const float delta_seconds = _draw_resource->_timer->GetDeltaSeconds(&nice_fps);
 
+        #if 0
         // update fps
         {
             UIDataString* const data_string = _draw_resource->_ui_model->GetDataType<UIDataString>("fps");
@@ -245,6 +248,7 @@ void ApplicationBasicUI::Update()
                 data_string->SetString(stream_string);
             }
         }
+        #endif
 
         auto frame = _draw_system->CreateNewFrame();
 
