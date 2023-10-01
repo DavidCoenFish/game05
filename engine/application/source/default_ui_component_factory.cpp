@@ -125,7 +125,7 @@ namespace
             );
         return s_layout;
     }
-    const UILayout& GetUILayoutRight()
+    const UILayout& GetUILayoutBottomRightShrink()
     {
         static UILayout s_layout(
             UICoord(UICoord::ParentSource::X, 1.0f),
@@ -133,7 +133,9 @@ namespace
             UICoord(UICoord::ParentSource::X, 1.0f),
             UICoord(UICoord::ParentSource::Y, 0.0f),
             UICoord(UICoord::ParentSource::X, 1.0f),
-            UICoord(UICoord::ParentSource::Y, 0.0f)
+            UICoord(UICoord::ParentSource::Y, 0.0f),
+            true,
+            true
             );
         return s_layout;
     }
@@ -437,7 +439,7 @@ void DefaultUIComponentFactory::Populate(
 {
     in_ui_manager.AddContentFactory("UIDataString", FactoryString<>);
     in_ui_manager.AddContentFactory("string_small_right", FactoryString<
-        GetUILayoutRight,
+        GetUILayoutBottomRightShrink,
         GetFontPathDefault,
         s_default_font_size_small,
         s_new_line_gap_small,
@@ -447,7 +449,7 @@ void DefaultUIComponentFactory::Populate(
 
     in_ui_manager.AddContentFactory("UIDataTextRun", FactoryTextRun<>);
     in_ui_manager.AddContentFactory("text_run_small_right", FactoryTextRun<
-        GetUILayoutRight,
+        GetUILayoutBottomRightShrink,
         s_default_font_size_small,
         TextEnum::HorizontalLineAlignment::Left,
         TextEnum::VerticalBlockAlignment::Top

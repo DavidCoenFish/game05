@@ -71,7 +71,6 @@ private:
     Microsoft::WRL::ComPtr<IDXGISwapChain3> _swap_chain;
     std::unique_ptr<RenderTargetBackBuffer> _render_target_back_buffer[MAX_BACK_BUFFER_COUNT];
 
-
     struct FrameResources
     {
         explicit FrameResources(const UINT64 in_fence_value) : _fence_value(in_fence_value) {}
@@ -81,6 +80,5 @@ private:
     std::vector<std::shared_ptr<FrameResources>> _frame_resource_array;
     UINT64 _frame_fence_value;
     Microsoft::WRL::ComPtr<ID3D12Fence> _frame_fence;
-
 
 };

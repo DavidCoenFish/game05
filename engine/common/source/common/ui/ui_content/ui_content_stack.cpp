@@ -241,21 +241,21 @@ void UIContentStack::GetStackDesiredSize(
         default:
             break;
         case StackOrientation::TVertical:
-            desired_size_offset[3] = max_desired_size[1];
             if (0 != max_desired_size[1])
             {
                 max_desired_size[1] += gap;
             }
+            desired_size_offset[3] = max_desired_size[1];
             max_desired_size[0] = std::max(max_desired_size[0], child_desired[0]);
             max_desired_size[1] += child_desired[1];
 
             break;
         case StackOrientation::THorizontal:
-            desired_size_offset[2] = max_desired_size[0];
             if (0 != max_desired_size[0])
             {
                 max_desired_size[0] += gap;
             }
+            desired_size_offset[2] = max_desired_size[0];
             max_desired_size[0] += child_desired[0];
             max_desired_size[1] = std::max(max_desired_size[1], child_desired[1]);
 
@@ -263,6 +263,21 @@ void UIContentStack::GetStackDesiredSize(
         }
 
         out_child_desired_size_offset.push_back(desired_size_offset);
+    }
+
+    for (auto& iter : out_child_desired_size_offset)
+    {
+        switch(_orientation)
+        {
+        default:
+            break;
+        case StackOrientation::TVertical:
+            iter[0] = max_desired_size[0];
+            break;
+        case StackOrientation::THorizontal:
+            iter[1] = max_desired_size[1];
+            break;
+        }
     }
 
     out_layout_size = _content_default.GetLayout().CalculateShrinkSize(out_layout_size, max_desired_size);
