@@ -2,7 +2,8 @@ need to hold onto renderer IResource till command list is done.
 add to DrawSystem a ResourceBucket, which we keep alive till fence is passed
 make shader param instancable, is Shader::MakeParamInstance, Shader::SetParam
 
-- renderer resource bucket and fence
+X renderer resource bucket and fence
+    - fix stack
 - ui system button
 - shader param instance
 - ui fade in

@@ -38,8 +38,10 @@ namespace
     };
 
     constexpr int s_default_font_size = 16;
+    constexpr int s_default_font_size_small = 12;
     constexpr float s_default_newling_ratio = 0.25f;
     constexpr int s_new_line_gap = 4; // Math::ScaleInt(s_default_font_size, s_default_newling_ratio);
+    constexpr int s_new_line_gap_small = 3; // Math::ScaleInt(s_default_font_size, s_default_newling_ratio);
     constexpr float s_default_margin = s_default_font_size * 0.5f; // in pixels, or in em?
     constexpr float s_default_gap = s_default_font_size * 0.5f; // in pixels, or in em?
 
@@ -120,6 +122,18 @@ namespace
             UICoord(UICoord::ParentSource::Y, 0.5f),
             UICoord(UICoord::ParentSource::X, 0.5f),
             UICoord(UICoord::ParentSource::Y, 0.5f)
+            );
+        return s_layout;
+    }
+    const UILayout& GetUILayoutRight()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 1.0f),
+            UICoord(UICoord::ParentSource::Y, 1.0f),
+            UICoord(UICoord::ParentSource::X, 1.0f),
+            UICoord(UICoord::ParentSource::Y, 0.0f),
+            UICoord(UICoord::ParentSource::X, 1.0f),
+            UICoord(UICoord::ParentSource::Y, 0.0f)
             );
         return s_layout;
     }
@@ -422,19 +436,20 @@ void DefaultUIComponentFactory::Populate(
     )
 {
     in_ui_manager.AddContentFactory("UIDataString", FactoryString<>);
-    in_ui_manager.AddContentFactory("UIDataStringRight", FactoryString<
-        GetUILayoutFullScreen,
+    in_ui_manager.AddContentFactory("string_small_right", FactoryString<
+        GetUILayoutRight,
         GetFontPathDefault,
-        s_default_font_size,
-        s_new_line_gap,
-        TextEnum::HorizontalLineAlignment::Right,
+        s_default_font_size_small,
+        s_new_line_gap_small,
+        TextEnum::HorizontalLineAlignment::Left,
         TextEnum::VerticalBlockAlignment::Top
         >);
+
     in_ui_manager.AddContentFactory("UIDataTextRun", FactoryTextRun<>);
-    in_ui_manager.AddContentFactory("UIDataTextRunRight", FactoryTextRun<
-        GetUILayoutFullScreen,
-        s_default_font_size,
-        TextEnum::HorizontalLineAlignment::Right,
+    in_ui_manager.AddContentFactory("text_run_small_right", FactoryTextRun<
+        GetUILayoutRight,
+        s_default_font_size_small,
+        TextEnum::HorizontalLineAlignment::Left,
         TextEnum::VerticalBlockAlignment::Top
         >);
 
@@ -489,3 +504,9 @@ const UIDataTextRunStyle* const DefaultUIComponentFactory::GetDefaultTextStyle()
         );
     return &s_data;
 }
+
+const std::string DefaultUIComponentFactory::GetTextRunTagSmallFont()
+{
+    return std::string("<Size ") + std::to_string(s_default_font_size_small) + ">";
+}
+

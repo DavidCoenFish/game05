@@ -39,10 +39,11 @@ public:
         auto _data_map_build_version = std::make_shared<UIDataString>(
             std::string(Build::GetBuildTime()) + " " + Build::GetBuildVersion(),
             LocaleISO_639_1::Default,
-            "UIDataStringRight"
+            "string_small_right"
             );
 
         const std::string build_info_string = std::string(
+            DefaultUIComponentFactory::GetTextRunTagSmallFont() + 
             Build::GetBuildHost()) +
             " <Locale " + Build::GetBuildConfiguration() + ">" + 
             " <Locale " + Build::GetBuildPlatform() + ">";
@@ -50,13 +51,13 @@ public:
         auto _data_map_build_info = std::make_shared<UIDataTextRun>(
             build_info_string,
             LocaleISO_639_1::Default,
-            "UIDataTextRunRight"
+            "text_run_small_right"
             );
 
         auto _data_map_build_fps = std::make_shared<UIDataString>(
             "0.0",
             LocaleISO_639_1::Default,
-            "UIDataStringRight"
+            "string_small_right"
             );
         _data_map["fps"] = _data_map_build_fps;
 

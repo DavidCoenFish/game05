@@ -10,5 +10,6 @@ namespace DefaultUIComponentFactory
         );
 
     const UIDataTextRunStyle* const GetDefaultTextStyle();
+    const std::string GetTextRunTagSmallFont();
 
 };
