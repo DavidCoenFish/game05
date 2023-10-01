@@ -45,7 +45,6 @@
     <ClCompile Include="source\common\draw_system\render_target\render_target_depth_data.cpp" />
     <ClCompile Include="source\common\draw_system\render_target\render_target_format_data.cpp" />
     <ClCompile Include="source\common\draw_system\render_target\render_target_texture.cpp" />
-    <ClCompile Include="source\common\draw_system\resource_frame_owner.cpp" />
     <ClCompile Include="source\common\draw_system\screen_size_resources.cpp" />
     <ClCompile Include="source\common\draw_system\shader\constant_buffer.cpp" />
     <ClCompile Include="source\common\draw_system\shader\constant_buffer_info.cpp" />
@@ -216,7 +215,6 @@
     <ClInclude Include="source\common\draw_system\heap_wrapper\heap_wrapper_item.h" />
     <ClInclude Include="source\common\draw_system\heap_wrapper\heap_wrapper_page.h" />
     <ClInclude Include="source\common\draw_system\render_target\render_target_backbuffer.h" />
-    <ClInclude Include="source\common\draw_system\resource_frame_owner.h" />
     <ClInclude Include="source\common\draw_system\screen_size_resources.h" />
     <ClInclude Include="source\common\draw_system\shader\constant_buffer.h" />
     <ClInclude Include="source\common\log\i_log_consumer.h" />
