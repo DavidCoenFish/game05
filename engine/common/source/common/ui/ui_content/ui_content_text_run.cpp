@@ -111,6 +111,7 @@ const bool UIContentTextRun::UpdateHierarchy(
             [this](const int in_change_id, const std::vector<std::shared_ptr<ITextRunData>>& in_data_array)->bool{
                 if (_change_id != in_change_id)
                 {
+                    _change_id = in_change_id;
                     _text_run->SetTextRunArray(in_data_array);
                     return true;
                 }

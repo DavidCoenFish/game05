@@ -386,8 +386,10 @@ const bool UIHierarchyNode::Draw(
         (true == _texture->GetAlwaysDirty())
         )
     {
+        std::shared_ptr<IResource> frame_resource;
         auto* const render_target = _texture->GetRenderTarget(
             in_draw_param._draw_system,
+            frame_resource,
             in_draw_param._frame->GetCommandList()
             );
         if (nullptr == render_target)
@@ -398,6 +400,7 @@ const bool UIHierarchyNode::Draw(
         dirty = true;
         in_draw_param._frame->SetRenderTarget(
             render_target, 
+            frame_resource,
             _texture->GetAllowClear()
             );
 

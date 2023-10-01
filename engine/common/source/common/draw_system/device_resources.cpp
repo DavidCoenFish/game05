@@ -404,6 +404,7 @@ void DeviceResources::GetAdapter(
         throw std::exception("No Direct3D 12 device found");
     }
     * in_pp_adapter = adapter.Detach();
+    return;
 }
 
 // Return true if size changed
@@ -451,6 +452,17 @@ const bool DeviceResources::CreateWindowSizeDependentResources(
         _target_depth_data
         );
     return true;
+}
+
+void DeviceResources::AddFrameResource(
+    const std::shared_ptr<IResource>& in_resource
+    )
+{
+    if (_screen_size_resources)
+    {
+        _screen_size_resources->AddFrameResource(in_resource);
+    }
+    return;
 }
 
 void DeviceResources::MoveToNextFrame()
@@ -501,6 +513,7 @@ ID3D12GraphicsCommandList* DeviceResources::GetCustomCommandList(
             FALSE
             );
     }
+
     // Set the fence value for the next frame.
     _custom_command_list_fence_value += 1;
     return _custom_command_list.Get();

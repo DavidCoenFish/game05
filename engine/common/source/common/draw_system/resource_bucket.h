@@ -5,12 +5,14 @@
 struct CD3DX12_CPU_DESCRIPTOR_HANDLE;
 class RenderTargetBackBuffer;
 class DrawSystem;
-class IResource;
 class IRenderTarget;
 struct RenderTargetFormatData;
 struct RenderTargetDepthData;
 
-class ScreenSizeResources
+/// <summary>
+///  We want to extend the lifespan of 
+/// </summary>
+class ResourceBucket
 {
 public:
     ScreenSizeResources(
@@ -35,11 +37,6 @@ public:
         HRESULT&in_hr,
         const Microsoft::WRL::ComPtr < ID3D12CommandQueue >&in_command_queue
         );
-
-    void AddFrameResource(
-        const std::shared_ptr<IResource>& in_resource
-        );
-
     IRenderTarget* GetRenderTargetBackBuffer();
     void UpdateBackBufferIndex();
     const int GetBackBufferIndex() const
@@ -70,17 +67,4 @@ private:
     Microsoft::WRL::Wrappers::Event _fence_event;
     Microsoft::WRL::ComPtr<IDXGISwapChain3> _swap_chain;
     std::unique_ptr<RenderTargetBackBuffer> _render_target_back_buffer[MAX_BACK_BUFFER_COUNT];
-
-
-    struct FrameResources
-    {
-        explicit FrameResources(const UINT64 in_fence_value) : _fence_value(in_fence_value) {}
-        UINT64 _fence_value;
-        std::vector<std::shared_ptr<IResource>> _resource_array;
-    };
-    std::vector<std::shared_ptr<FrameResources>> _frame_resource_array;
-    UINT64 _frame_fence_value;
-    Microsoft::WRL::ComPtr<ID3D12Fence> _frame_fence;
-
-
 };

@@ -124,10 +124,14 @@ public:
         const VectorInt2& in_size,
         const bool in_resize_with_screen = false
         );
-    void ResizeRenderTargetTexture(
-        ID3D12GraphicsCommandList* const in_command_list,
-        RenderTargetTexture* const in_render_target_texture,
-        const VectorInt2& in_size
+    //void ResizeRenderTargetTexture(
+    //    ID3D12GraphicsCommandList* const in_command_list,
+    //    RenderTargetTexture* const in_render_target_texture,
+    //    const VectorInt2& in_size
+    //    );
+
+    void AddFrameResource(
+        const std::shared_ptr<IResource>& in_resource
         );
 
     std::shared_ptr<CustomCommandList> CreateCustomCommandList(

@@ -1,32 +1,15 @@
-X thread safe dag node
-X autotron
-X drag drop file rename snake case
-X vsix document
-X application framework
-X setup d3dx12 application
-X draw d3dx12 triangle
-X make dag fully thread safe
-X draw line d3dx12
-X draw sphere d3dx12
-X draw grid
-_ draw many lines
-  X from shader resource
-  X from unordered access
-  - compute shader write line pos, dir
-_ ui text
-_ draw bip simple
-_ draw bip generic
-_ bip animation
-_ compu shader many characters as spheres
-_ compu shader characters as generic bip
-_ compu shader collision
-_ minecraft equivlent terain render
-_ terrain collision
-_ flatland prototype
+need to hold onto renderer IResource till command list is done.
+add to DrawSystem a ResourceBucket, which we keep alive till fence is passed
+make shader param instancable, is Shader::MakeParamInstance, Shader::SetParam
 
-move draw_sytem to return unique ptr for resources? 
-can you put unique ptr in a std::map? std::vector
-change draw_sytem to take raw ptrs 
-fix ui manager to not use const buffer, memory is one to one for shader instance
-build geometry for ui block, rather than multipe shaders?
-
+- renderer resource bucket and fence
+- ui system button
+- shader param instance
+- ui fade in
+- ui fade/blur out effect for destroyed uitextures
+- slider (ui scale)
+- combobox dropdown (choose locale)
+- character selection screen
+- blob renderer
+- personality decal
+- shadow blob (folds upward to look around, laughs, eyes track mouse pointer...)

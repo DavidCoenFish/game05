@@ -232,7 +232,7 @@ void ApplicationBasicUI::Update()
         float nice_fps = 0.0f;
         const float delta_seconds = _draw_resource->_timer->GetDeltaSeconds(&nice_fps);
 
-        #if 0
+        #if 1
         // update fps
         {
             UIDataString* const data_string = _draw_resource->_ui_model->GetDataType<UIDataString>("fps");

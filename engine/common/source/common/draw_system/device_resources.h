@@ -58,6 +58,10 @@ public:
         VectorInt2* out_size = nullptr
         );
 
+    void AddFrameResource(
+        const std::shared_ptr<IResource>& in_resource
+        );
+
 private:
     void GetAdapter(
         IDXGIAdapter1** in_pp_adapter,

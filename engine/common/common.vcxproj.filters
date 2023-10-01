@@ -304,6 +304,9 @@
     <ClCompile Include="source\common\ui\ui_content\ui_content_button.cpp">
       <Filter>souce\common\ui\ui_content</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\draw_system\resource_frame_owner.cpp">
+      <Filter>souce\common\draw_system</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -629,6 +632,9 @@
     </ClInclude>
     <ClInclude Include="include\common\ui\ui_content\ui_content_button.h">
       <Filter>include\common\ui\ui_content</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\draw_system\resource_frame_owner.h">
+      <Filter>souce\common\draw_system</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

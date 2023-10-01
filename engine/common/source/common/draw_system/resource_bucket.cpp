@@ -40,7 +40,6 @@ ScreenSizeResources::ScreenSizeResources(
         std::max(in_size.GetX(), 1),
         std::max(in_size.GetY(), 1)
         )
-    , _frame_fence_value(0)
 {
     for (unsigned int index = 0; index < MAX_BACK_BUFFER_COUNT;++ index)
     {
@@ -159,15 +158,6 @@ ScreenSizeResources::ScreenSizeResources(
     {
         throw std::exception("CreateEvent");
     }
-
-    {
-        DX::ThrowIfFailed(in_device->CreateFence(
-            _frame_fence_value,
-            D3D12_FENCE_FLAG_NONE,
-            IID_PPV_ARGS(_frame_fence.ReleaseAndGetAddressOf())
-            ));
-        _frame_fence->SetName(L"FrameFence");
-    }
 }
 
 ScreenSizeResources::~ScreenSizeResources(){}
@@ -192,24 +182,6 @@ void ScreenSizeResources::Prepare(ID3D12GraphicsCommandList*&in_command_list)
         nullptr
         ));
     in_command_list = _command_list.Get();
-
-    // Release completed frame assets
-    const UINT64 completed_value = _frame_fence->GetCompletedValue();
-    _frame_resource_array.erase(
-        std::remove_if(
-            _frame_resource_array.begin(), 
-            _frame_resource_array.end(),
-            [completed_value](const std::shared_ptr<FrameResources>& item) { 
-                return item->_fence_value <= completed_value;
-            }), 
-        _frame_resource_array.end());
-
-    // Add somewhere to hold onto references of resources for the frame
-    _frame_resource_array.push_back(
-        std::make_shared<FrameResources>(_frame_fence_value)
-        );
-    _frame_fence_value += 1;
-
     return;
 }
 
@@ -283,29 +255,8 @@ const bool ScreenSizeResources::Present(
     {
         DX::ThrowIfFailed(in_hr);
     }
-
-    if (nullptr != _frame_fence)
-    {
-        in_command_queue->Signal(
-            _frame_fence.Get(),
-            _frame_fence_value
-            );
-    }
-
     return true;
 }
-
-void ScreenSizeResources::AddFrameResource(
-    const std::shared_ptr<IResource>& in_resource
-    )
-{
-    if (_frame_resource_array.size())
-    {
-        _frame_resource_array.back()->_resource_array.push_back(in_resource);
-    }
-    return;
-}
-
 
 IRenderTarget* ScreenSizeResources::GetRenderTargetBackBuffer()
 {
@@ -343,6 +294,5 @@ void ScreenSizeResources::MoveToNextFrame(const Microsoft::WRL::ComPtr < ID3D12C
     }
     // Set the fence value for the next frame.
     SetFenceValue(current_fence_value + 1);
-
 }
 

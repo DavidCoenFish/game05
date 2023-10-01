@@ -271,19 +271,29 @@ std::shared_ptr<RenderTargetTexture> DrawSystem::MakeRenderTargetTexture(
     return result;
 }
 
-void DrawSystem::ResizeRenderTargetTexture(
-    ID3D12GraphicsCommandList* const in_command_list,
-    RenderTargetTexture* const in_render_target_texture,
-    const VectorInt2& in_size
+//void DrawSystem::ResizeRenderTargetTexture(
+//    ID3D12GraphicsCommandList* const in_command_list,
+//    RenderTargetTexture* const in_render_target_texture,
+//    const VectorInt2& in_size
+//    )
+//{
+//    if ((nullptr != in_render_target_texture) && (nullptr != _device_resources))
+//    {
+//        in_render_target_texture->Resize(
+//            in_command_list,
+//            _device_resources->GetD3dDevice(),
+//            in_size
+//            );
+//    }
+//}
+
+void DrawSystem::AddFrameResource(
+    const std::shared_ptr<IResource>& in_resource
     )
 {
-    if ((nullptr != in_render_target_texture) && (nullptr != _device_resources))
+    if (nullptr != _device_resources)
     {
-        in_render_target_texture->Resize(
-            in_command_list,
-            _device_resources->GetD3dDevice(),
-            in_size
-            );
+        _device_resources->AddFrameResource(in_resource);
     }
 }
 

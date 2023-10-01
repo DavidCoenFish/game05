@@ -5,6 +5,7 @@
 
 class DrawSystem;
 class HeapWrapperItem;
+class IResource;
 class IRenderTarget;
 class RenderTargetTexture;
 class VectorInt2;
@@ -25,6 +26,7 @@ public:
 
     IRenderTarget* GetRenderTarget(
         DrawSystem* const in_draw_system,
+        std::shared_ptr<IResource>& out_frame_resource,
         ID3D12GraphicsCommandList* const in_command_list
         );
     const VectorInt2 GetSize(
@@ -68,6 +70,5 @@ private:
     VectorFloat4 _clear_colour;
 
     std::shared_ptr<RenderTargetTexture> _render_target_texture;
-    bool _render_target_dirty;
 
 };

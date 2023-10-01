@@ -33,7 +33,11 @@ const int DrawSystemFrame::GetBackBufferIndex()
     return _draw_system.GetBackBufferIndex();
 }
 
-void DrawSystemFrame::SetRenderTarget(IRenderTarget* const in_render_target, const bool in_allow_clear)
+void DrawSystemFrame::SetRenderTarget(
+    IRenderTarget* const in_render_target, 
+    const std::shared_ptr<IResource>& in_resource,
+    const bool in_allow_clear
+    )
 {
     if (_render_target == in_render_target)
     {
@@ -48,6 +52,10 @@ void DrawSystemFrame::SetRenderTarget(IRenderTarget* const in_render_target, con
     _render_target = in_render_target;
     if (_render_target)
     {
+        if (nullptr != in_resource)
+        {
+            _draw_system.AddFrameResource(in_resource);
+        }
         _render_target->StartRender(_command_list, in_allow_clear);
     }
     return;
