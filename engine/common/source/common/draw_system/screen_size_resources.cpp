@@ -3,21 +3,22 @@
 #include "common/direct_xtk12/d3dx12.h"
 #include "common/draw_system/render_target/render_target_backbuffer.h"
 #include "common/draw_system/screen_size_resources.h"
+#include "common/log/log.h"
 
 static const DXGI_FORMAT NoSRGB(DXGI_FORMAT in_fmt) noexcept
 {
     switch (in_fmt)
     {
+    default:
+        break;
     case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
         return DXGI_FORMAT_R8G8B8A8_UNORM;
     case DXGI_FORMAT_B8G8R8A8_UNORM_SRGB:
         return DXGI_FORMAT_B8G8R8A8_UNORM;
     case DXGI_FORMAT_B8G8R8X8_UNORM_SRGB:
         return DXGI_FORMAT_B8G8R8X8_UNORM;
-    default:
-        return in_fmt;
     }
-
+    return in_fmt;
 }
 
 ScreenSizeResources::ScreenSizeResources(
@@ -168,6 +169,8 @@ ScreenSizeResources::ScreenSizeResources(
             ));
         _frame_fence->SetName(L"FrameFence");
     }
+
+    return;
 }
 
 ScreenSizeResources::~ScreenSizeResources(){}
@@ -185,6 +188,8 @@ void ScreenSizeResources::SetFenceValue(const UINT64 in_value)
 
 void ScreenSizeResources::Prepare(ID3D12GraphicsCommandList*&in_command_list)
 {
+    LOG_MESSAGE_RENDER("ScreenSizeResources Prepare _frame_fence_value:%d", _frame_fence_value);
+
     // Reset command list and allocator.
     DX::ThrowIfFailed(_command_allocators[_back_buffer_index]->Reset());
     DX::ThrowIfFailed(_command_list->Reset(
@@ -195,12 +200,16 @@ void ScreenSizeResources::Prepare(ID3D12GraphicsCommandList*&in_command_list)
 
     // Release completed frame assets
     const UINT64 completed_value = _frame_fence->GetCompletedValue();
+    LOG_MESSAGE_RENDER("completed_value:%d", completed_value);
+
     _frame_resource_array.erase(
         std::remove_if(
             _frame_resource_array.begin(), 
             _frame_resource_array.end(),
             [completed_value](const std::shared_ptr<FrameResources>& item) { 
-                return item->_fence_value <= completed_value;
+                // Does this need to be "<" rather than "<=" as we don't signal at the right time?
+                // Infrequent crash on resize window to minimal with ui system on "<="
+                return item->_fence_value < completed_value;
             }), 
         _frame_resource_array.end());
 
@@ -284,6 +293,8 @@ const bool ScreenSizeResources::Present(
         DX::ThrowIfFailed(in_hr);
     }
 
+    LOG_MESSAGE_RENDER("ScreenSizeResources Present");
+
     if (nullptr != _frame_fence)
     {
         in_command_queue->Signal(
@@ -291,6 +302,7 @@ const bool ScreenSizeResources::Present(
             _frame_fence_value
             );
     }
+
 
     return true;
 }
@@ -316,6 +328,8 @@ void ScreenSizeResources::UpdateBackBufferIndex()
 {
     // Update the back buffer index.
     _back_buffer_index = _swap_chain->GetCurrentBackBufferIndex();
+
+    return;
 }
 
 void ScreenSizeResources::MoveToNextFrame(const Microsoft::WRL::ComPtr < ID3D12CommandQueue >&in_command_queue)
@@ -344,5 +358,6 @@ void ScreenSizeResources::MoveToNextFrame(const Microsoft::WRL::ComPtr < ID3D12C
     // Set the fence value for the next frame.
     SetFenceValue(current_fence_value + 1);
 
+    return;
 }
 

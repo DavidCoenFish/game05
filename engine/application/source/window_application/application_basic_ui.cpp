@@ -71,7 +71,7 @@ public:
                 ),
 #endif
 
-#if 0
+#if 1
             // Left banner
             std::make_shared<UIDataContainer>(
                 std::vector<std::shared_ptr<IUIData>>({

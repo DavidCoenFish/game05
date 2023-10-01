@@ -108,7 +108,7 @@ void UIContentStack::UpdateSize(
 {
     // the default UpdateSize recurses, we do want to do that, but with an offset to where to put things
 
-    std::vector<VectorInt4> child_desired_size_offset;
+    std::vector<VectorInt4> child_window_offset_array;
 
     VectorInt2 layout_size;
     VectorInt2 desired_size;
@@ -118,7 +118,7 @@ void UIContentStack::UpdateSize(
         in_parent_window,
         in_ui_scale,
         in_out_node,
-        child_desired_size_offset
+        child_window_offset_array
         );
 
     VectorFloat4 geometry_pos;
@@ -161,22 +161,10 @@ void UIContentStack::UpdateSize(
             continue;
         }
 
-        VectorInt4& child_desired_offset = child_desired_size_offset[trace];
+        VectorInt4& child_window_offset = child_window_offset_array[trace];
         trace += 1;
-        VectorInt2 window(child_desired_offset.GetX(), child_desired_offset.GetY());
-        const VectorInt2 offset(child_desired_offset.GetZ(), child_desired_offset.GetW());
-
-        //switch(_orientation)
-        //{
-        //default:
-        //    break;
-        //case StackOrientation::TVertical:
-        //    window[0] = actual_initial_size[0]; //max_desired_size[0];
-        //    break;
-        //case StackOrientation::THorizontal:
-        //    window[1] = actual_initial_size[1]; //max_desired_size[1];
-        //    break;
-        //}
+        VectorInt2 window(child_window_offset.GetX(), child_window_offset.GetY());
+        const VectorInt2 offset(child_window_offset.GetZ(), child_window_offset.GetW());
 
         child_data._content->UpdateSize(
             in_draw_system,
@@ -210,7 +198,7 @@ void UIContentStack::GetStackDesiredSize(
     const VectorInt2& in_parent_window,
     const float in_ui_scale,
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    std::vector<VectorInt4>& out_child_desired_size_offset
+    std::vector<VectorInt4>& out_child_window_offset
     )
 {
     out_layout_size = _content_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
@@ -235,7 +223,7 @@ void UIContentStack::GetStackDesiredSize(
             in_ui_scale,
             *(child_data._node)
             );
-        VectorInt4 desired_size_offset(child_desired.GetX(), child_desired.GetY(), 0, 0);
+        VectorInt4 window_offset(child_desired.GetX(), child_desired.GetY(), 0, 0);
         switch(_orientation)
         {
         default:
@@ -245,7 +233,7 @@ void UIContentStack::GetStackDesiredSize(
             {
                 max_desired_size[1] += gap;
             }
-            desired_size_offset[3] = max_desired_size[1];
+            window_offset[3] = max_desired_size[1];
             max_desired_size[0] = std::max(max_desired_size[0], child_desired[0]);
             max_desired_size[1] += child_desired[1];
 
@@ -255,34 +243,33 @@ void UIContentStack::GetStackDesiredSize(
             {
                 max_desired_size[0] += gap;
             }
-            desired_size_offset[2] = max_desired_size[0];
+            window_offset[2] = max_desired_size[0];
             max_desired_size[0] += child_desired[0];
             max_desired_size[1] = std::max(max_desired_size[1], child_desired[1]);
 
             break;
         }
 
-        out_child_desired_size_offset.push_back(desired_size_offset);
+        out_child_window_offset.push_back(window_offset);
     }
 
-    for (auto& iter : out_child_desired_size_offset)
+    out_layout_size = _content_default.GetLayout().CalculateShrinkSize(out_layout_size, max_desired_size);
+    out_desired_size = max_desired_size;
+
+    for (auto& iter : out_child_window_offset)
     {
         switch(_orientation)
         {
         default:
             break;
         case StackOrientation::TVertical:
-            iter[0] = max_desired_size[0];
+            iter[0] = out_layout_size[0];
             break;
         case StackOrientation::THorizontal:
-            iter[1] = max_desired_size[1];
+            iter[1] = out_layout_size[1];
             break;
         }
     }
-
-    out_layout_size = _content_default.GetLayout().CalculateShrinkSize(out_layout_size, max_desired_size);
-    out_desired_size = max_desired_size;
-    //out_desired_size = VectorInt2::Max(out_layout_size, max_desired_size);
 
     return;
 }

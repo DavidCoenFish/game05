@@ -78,7 +78,7 @@ private:
         const VectorInt2& in_parent_window,
         const float in_ui_scale,
         UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-        std::vector<VectorInt4>& out_child_desired_size_offset
+        std::vector<VectorInt4>& out_child_window_offset
         );
 private:
     UIContentDefault _content_default;

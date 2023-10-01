@@ -94,4 +94,5 @@ private:
     VectorInt2 _size;
     bool _resize_with_screen;
     std::vector < DXGI_FORMAT > _target_format_array;
+    int _id;
 };

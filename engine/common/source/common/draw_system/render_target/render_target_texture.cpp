@@ -4,6 +4,9 @@
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/heap_wrapper/heap_wrapper_item.h"
 #include "common/draw_system/render_target/render_target_texture.h"
+#include "common/log/log.h"
+
+static int s_id = 0;
 
 RenderTargetTexture::Resource::Resource(
     const D3D12_CLEAR_VALUE&in_clear_value,
@@ -14,13 +17,15 @@ RenderTargetTexture::Resource::Resource(
     const bool in_clear_color,
     const bool in_clear_depth,
     const bool in_clear_stencil
-    ) : _format(format), _render_target(in_render_target), _render_target_view_descriptor(\
-    in_render_target_view_descriptor), _shader_resource_view_descriptor(in_shader_resource_view_descriptor), \
-    _clear_value{ in_clear_value}
-,
-_clear_color(in_clear_color)
-, _clear_depth(in_clear_depth)
-, _clear_stencil(in_clear_stencil)
+    ) 
+    : _format(format)
+    , _render_target(in_render_target)
+    , _render_target_view_descriptor(in_render_target_view_descriptor)
+    , _shader_resource_view_descriptor(in_shader_resource_view_descriptor)
+    , _clear_value{ in_clear_value}
+    , _clear_color(in_clear_color)
+    , _clear_depth(in_clear_depth)
+    , _clear_stencil(in_clear_stencil)
 {
     return;
 }
@@ -47,7 +52,10 @@ RenderTargetTexture::RenderTargetTexture(
     , _current_state_depth_resource(D3D12_RESOURCE_STATE_COMMON)
     , _target_format_array()
     , _resize_with_screen(in_resize_with_screen)
+    , _id(s_id++)
 {
+    LOG_MESSAGE_RENDER("RenderTargetTexture ctor %d %d %d", _id, _size[0], _size[1]);
+
     for (const auto& iter : in_target_format_data_array)
     {
         D3D12_CLEAR_VALUE clear_value = iter.MakeClearValue();
@@ -80,6 +88,8 @@ RenderTargetTexture::RenderTargetTexture(
 
 RenderTargetTexture::~RenderTargetTexture()
 {
+    LOG_MESSAGE_RENDER("RenderTargetTexture dtor %d", _id);
+
     return;
 }
 
@@ -273,6 +283,8 @@ void RenderTargetTexture::OnResize(
 
 void RenderTargetTexture::StartRender(ID3D12GraphicsCommandList* const in_command_list, const bool in_allow_clear)
 {
+    LOG_MESSAGE_RENDER("RenderTargetTexture StartRender %d", _id);
+
     TransitionResource(
         in_command_list,
         D3D12_RESOURCE_STATE_RENDER_TARGET,
