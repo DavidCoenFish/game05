@@ -54,7 +54,7 @@ RenderTargetTexture::RenderTargetTexture(
     , _resize_with_screen(in_resize_with_screen)
     , _id(s_id++)
 {
-    LOG_MESSAGE_RENDER("RenderTargetTexture ctor %d %d %d", _id, _size[0], _size[1]);
+    //LOG_MESSAGE_RENDER("RenderTargetTexture ctor %d %d %d", _id, _size[0], _size[1]);
 
     for (const auto& iter : in_target_format_data_array)
     {
@@ -88,7 +88,7 @@ RenderTargetTexture::RenderTargetTexture(
 
 RenderTargetTexture::~RenderTargetTexture()
 {
-    LOG_MESSAGE_RENDER("RenderTargetTexture dtor %d", _id);
+    //LOG_MESSAGE_RENDER("RenderTargetTexture dtor %d", _id);
 
     return;
 }
@@ -283,7 +283,7 @@ void RenderTargetTexture::OnResize(
 
 void RenderTargetTexture::StartRender(ID3D12GraphicsCommandList* const in_command_list, const bool in_allow_clear)
 {
-    LOG_MESSAGE_RENDER("RenderTargetTexture StartRender %d", _id);
+    //LOG_MESSAGE_RENDER("RenderTargetTexture StartRender %d", _id);
 
     TransitionResource(
         in_command_list,

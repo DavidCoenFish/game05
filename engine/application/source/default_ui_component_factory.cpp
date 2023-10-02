@@ -56,12 +56,12 @@ namespace
     // Return copy or reference, want to avoid 
     typedef const UILayout& (*TGetUILayoutRef)();
 
-    const UILayout& GetUILayoutFullScreen()
+    const UILayout& GetUILayout()
     {
         static UILayout s_layout = UILayout::FactoryFull();
         return s_layout;
     }
-    const UILayout& GetUILayoutFullScreenMargin()
+    const UILayout& GetUILayoutMargin()
     {
         static UILayout s_layout(
             UICoord(UICoord::ParentSource::X, 1.0f, s_default_margin * (-2.0f)),
@@ -73,7 +73,7 @@ namespace
             );
         return s_layout;
     }
-    const UILayout& GetUILayoutFullScreenMarginBottomRightShrink()
+    const UILayout& GetUILayoutMarginBottomRightShrink()
     {
         // Todo: is y up the screen for ui, y==0 is bottom, y==1 is top screen
         static UILayout s_layout(
@@ -84,6 +84,21 @@ namespace
             UICoord(UICoord::ParentSource::X, 1.0f, -s_default_margin),
             UICoord(UICoord::ParentSource::Y, 0.0f, s_default_margin),
             true,
+            true
+            );
+        return s_layout;
+    }
+    const UILayout& GetUILayoutMarginMiddleShrinkVertical()
+    {
+        // Todo: is y up the screen for ui, y==0 is bottom, y==1 is top screen
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 1.0f, s_default_margin * (-2.0f)),
+            UICoord(UICoord::ParentSource::Y, 1.0f, s_default_margin * (-2.0f)),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            false,
             true
             );
         return s_layout;
@@ -191,7 +206,7 @@ namespace
     }
 
     template<
-        TGetUILayoutRef in_get_layout_ref = GetUILayoutFullScreen,
+        TGetUILayoutRef in_get_layout_ref = GetUILayout,
         bool in_clear_background = true,
         TGetColour in_get_clear_colour_ref = GetColourTransparent
         >
@@ -224,7 +239,7 @@ namespace
     }
 
     template<
-        TGetUILayoutRef in_get_layout_ref = GetUILayoutFullScreen,
+        TGetUILayoutRef in_get_layout_ref = GetUILayout,
         bool in_clear_background = true,
         TGetColour in_get_clear_colour_ref = GetColourTransparent
         >
@@ -257,7 +272,7 @@ namespace
     }
 
     template<
-        TGetUILayoutRef in_get_layout_ref = GetUILayoutFullScreen,
+        TGetUILayoutRef in_get_layout_ref = GetUILayout,
         TGetPathRef in_get_path_ref = GetFontPathDefault,
         int in_font_size = s_default_font_size,
         int in_new_line_gap = s_new_line_gap,
@@ -330,7 +345,7 @@ namespace
     }
 
     template<
-        TGetUILayoutRef in_get_layout_ref = GetUILayoutFullScreen,
+        TGetUILayoutRef in_get_layout_ref = GetUILayout,
         int in_em_size = s_default_font_size,
         TextEnum::HorizontalLineAlignment in_horizontal = TextEnum::HorizontalLineAlignment::Left,
         TextEnum::VerticalBlockAlignment in_vertical = TextEnum::VerticalBlockAlignment::Top,
@@ -390,7 +405,7 @@ namespace
     }
 
     template<
-        TGetUILayoutRef in_get_layout_ref = GetUILayoutFullScreen,
+        TGetUILayoutRef in_get_layout_ref = GetUILayout,
         StackOrientation in_orientation = StackOrientation::TVertical,
         TGetUICoordRef in_get_gap_ref = GetUICoordDefaultGap,
         bool in_clear_background = true,
@@ -476,7 +491,7 @@ void DefaultUIComponentFactory::Populate(
         >);
 
     in_ui_manager.AddContentFactory("stack_vertical_bottom_right", FactoryStack<
-        GetUILayoutFullScreenMarginBottomRightShrink,
+        GetUILayoutMarginBottomRightShrink,
         StackOrientation::TVertical,
         GetUICoordDefaultGap,
         true,
@@ -484,7 +499,7 @@ void DefaultUIComponentFactory::Populate(
         >);
 
     in_ui_manager.AddContentFactory("stack_vertical_middle", FactoryStack<
-        GetUILayoutFullScreenMarginBottomRightShrink,
+        GetUILayoutMarginMiddleShrinkVertical,
         StackOrientation::TVertical,
         GetUICoordDefaultGap,
         true,

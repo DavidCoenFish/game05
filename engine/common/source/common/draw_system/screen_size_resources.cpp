@@ -188,7 +188,7 @@ void ScreenSizeResources::SetFenceValue(const UINT64 in_value)
 
 void ScreenSizeResources::Prepare(ID3D12GraphicsCommandList*&in_command_list)
 {
-    LOG_MESSAGE_RENDER("ScreenSizeResources Prepare _frame_fence_value:%d", _frame_fence_value);
+    //LOG_MESSAGE_RENDER("ScreenSizeResources Prepare _frame_fence_value:%d", _frame_fence_value);
 
     // Reset command list and allocator.
     DX::ThrowIfFailed(_command_allocators[_back_buffer_index]->Reset());
@@ -200,7 +200,7 @@ void ScreenSizeResources::Prepare(ID3D12GraphicsCommandList*&in_command_list)
 
     // Release completed frame assets
     const UINT64 completed_value = _frame_fence->GetCompletedValue();
-    LOG_MESSAGE_RENDER("completed_value:%d", completed_value);
+    //LOG_MESSAGE_RENDER("completed_value:%d", completed_value);
 
     _frame_resource_array.erase(
         std::remove_if(
@@ -293,7 +293,7 @@ const bool ScreenSizeResources::Present(
         DX::ThrowIfFailed(in_hr);
     }
 
-    LOG_MESSAGE_RENDER("ScreenSizeResources Present");
+    //LOG_MESSAGE_RENDER("ScreenSizeResources Present");
 
     if (nullptr != _frame_fence)
     {
