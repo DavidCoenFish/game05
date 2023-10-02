@@ -163,6 +163,8 @@ ApplicationBasicUI::ApplicationBasicUI(
         in_hwnd,
         in_application_param
         )
+    , _scroll_key_state(0)
+    , _scroll_z(0)
 {
     LOG_MESSAGE(
         "ApplicationBasicUI  ctor %p",
@@ -279,10 +281,29 @@ void ApplicationBasicUI::Update()
         // Deal input
         if (nullptr != _draw_resource->_ui_hierarchy_node)
         {
+            int mouse_x = 0;
+            int mouse_y = 0;
+            bool mouse_left_button = false;
+            bool mouse_right_button = false;
+            const bool mouse_valid = GetMouseState(
+                mouse_x,
+                mouse_y,
+                mouse_left_button,
+                mouse_right_button
+                );
              _draw_resource->_ui_manager->DealInput(
                 *_draw_resource->_ui_hierarchy_node,
-                UIManagerDealInputParam()
+                UIManagerDealInputParam(
+                    mouse_valid,
+                    mouse_left_button,
+                    mouse_right_button,
+                    mouse_x,
+                    mouse_y,
+                    _scroll_z
+                    )
                 );
+            _scroll_key_state = 0;
+            _scroll_z = 0;
         }
         #if 1
         // Draw
@@ -315,6 +336,16 @@ void ApplicationBasicUI::OnWindowSizeChanged(
         _draw_system->OnResize();
     }
 
+    return;
+}
+
+void ApplicationBasicUI::OnScroll(
+    const int in_key_state,
+    const int in_z_delta
+    )
+{
+    _scroll_key_state |= in_key_state;
+    _scroll_z += in_z_delta;
     return;
 }
 

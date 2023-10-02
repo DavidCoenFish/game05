@@ -13,6 +13,7 @@
 #include "common/ui/ui_coord.h"
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_manager.h"
+#include "common/ui/ui_screen_space.h"
 #include "common/ui/ui_texture.h"
 #include "common/ui/ui_data/i_ui_data.h"
 #include "common/ui/ui_root_input_state.h"
@@ -23,14 +24,13 @@ UIHierarchyNodeChildData::UIHierarchyNodeChildData(
     std::unique_ptr<UIGeometry>& in_geometry,
     std::unique_ptr<IUIContent>& in_content,
     std::unique_ptr<UIHierarchyNode>& in_node,
-    const VectorFloat4& in_input_screen_size
+    std::unique_ptr<UIScreenSpace>& in_screen_space
     )
     : _geometry(std::move(in_geometry))
     , _content(std::move(in_content))
     , _node(std::move(in_node))
-    , _input_screen_size(in_input_screen_size)
+    , _screen_space(std::move(in_screen_space))
 {
-
     // Nop
 }
 
@@ -119,10 +119,12 @@ void UIHierarchyNode::AddChild(
 {
     auto geometry = std::make_unique<UIGeometry>();
     auto node = std::make_unique<UIHierarchyNode>();
+    auto screen_space = std::make_unique<UIScreenSpace>();
     auto child = std::make_shared<UIHierarchyNodeChildData>(
         geometry,
         in_content,
-        node
+        node,
+        screen_space
         );
     _child_data_array.push_back(child);
 }
@@ -235,10 +237,12 @@ const bool UIHierarchyNode::UpdateHierarchy(
                 auto geometry = std::make_unique<UIGeometry>();
                 std::unique_ptr<IUIContent> content;
                 auto node = std::make_unique<UIHierarchyNode>();
+                auto screen_space = std::make_unique<UIScreenSpace>();
                 _child_data_array[index] = std::make_shared<UIHierarchyNodeChildData>(
                     geometry,
                     content, 
-                    node
+                    node,
+                    screen_space
                     );
                 dirty = true;
             }
@@ -329,7 +333,8 @@ void UIHierarchyNode::UpdateSize(
     const VectorInt2& in_parent_window,
     const float in_ui_scale,
     const float in_time_delta,
-    const bool in_mark_dirty
+    const bool in_mark_dirty,
+    const UIScreenSpace& in_parent_screen_space
     )
 {
     UpdateTextureSize(in_parent_size, in_mark_dirty);
@@ -352,7 +357,9 @@ void UIHierarchyNode::UpdateSize(
             in_ui_scale,
             in_time_delta,
             *(child_data._geometry.get()),
-            *(child_data._node.get())
+            *(child_data._node.get()),
+            in_parent_screen_space,
+            *(child_data._screen_space.get())
             );
     }
 

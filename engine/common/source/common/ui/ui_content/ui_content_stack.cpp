@@ -103,7 +103,9 @@ void UIContentStack::UpdateSize(
     const float in_ui_scale,
     const float in_time_delta, 
     UIGeometry& in_out_geometry, 
-    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+    UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+    const UIScreenSpace& in_parent_screen_space,
+    UIScreenSpace& out_screen_space
     )
 {
     // the default UpdateSize recurses, we do want to do that, but with an offset to where to put things

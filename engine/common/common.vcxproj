@@ -110,6 +110,7 @@
     <ClCompile Include="source\common\ui\ui_layout.cpp" />
     <ClCompile Include="source\common\ui\ui_manager.cpp" />
     <ClCompile Include="source\common\ui\ui_root_input_state.cpp" />
+    <ClCompile Include="source\common\ui\ui_screen_space.cpp" />
     <ClCompile Include="source\common\ui\ui_texture.cpp" />
     <ClCompile Include="source\common\util\command_line.cpp" />
     <ClCompile Include="source\common\util\hash.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="include\common\text\text_manager.h" />
     <ClInclude Include="include\common\text\text_pre_vertex.h" />
     <ClInclude Include="include\common\text\text_run.h" />
+    <ClInclude Include="include\common\ui\i_ui_input.h" />
     <ClInclude Include="include\common\ui\i_ui_model.h" />
     <ClInclude Include="include\common\ui\ui_content\i_ui_content.h" />
     <ClInclude Include="include\common\ui\ui_content\ui_content_button.h" />
@@ -229,6 +231,7 @@
     <ClInclude Include="source\common\text\text_texture.h" />
     <ClInclude Include="source\common\ui\ui_geometry.h" />
     <ClInclude Include="source\common\ui\ui_root_input_state.h" />
+    <ClInclude Include="source\common\ui\ui_screen_space.h" />
     <ClInclude Include="source\common\window\window_helper.h" />
   </ItemGroup>
   <ItemGroup>

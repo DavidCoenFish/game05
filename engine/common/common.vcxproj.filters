@@ -304,6 +304,9 @@
     <ClCompile Include="source\common\ui\ui_content\ui_content_button.cpp">
       <Filter>souce\common\ui\ui_content</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\ui\ui_screen_space.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -629,6 +632,12 @@
     </ClInclude>
     <ClInclude Include="include\common\ui\ui_content\ui_content_button.h">
       <Filter>include\common\ui\ui_content</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\ui\ui_screen_space.h">
+      <Filter>souce\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\i_ui_input.h">
+      <Filter>include\common\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

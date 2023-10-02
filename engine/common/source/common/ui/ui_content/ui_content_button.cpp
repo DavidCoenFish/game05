@@ -74,7 +74,9 @@ void UIContentButton::UpdateSize(
     const float in_ui_scale,
     const float in_time_delta, 
     UIGeometry& in_out_geometry, 
-    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+    UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+    const UIScreenSpace& in_parent_screen_space,
+    UIScreenSpace& out_screen_space
     )
 {
     _content_default.UpdateSize(
@@ -86,7 +88,9 @@ void UIContentButton::UpdateSize(
         in_ui_scale, 
         in_time_delta,
         in_out_geometry, 
-        in_out_node
+        in_out_node,
+        in_parent_screen_space,
+        out_screen_space
         );
 }
 

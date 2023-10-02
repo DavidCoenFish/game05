@@ -179,14 +179,23 @@ LRESULT CALLBACK WndProc(HWND in_hwnd, UINT in_message, WPARAM in_wparam, LPARAM
 			application->OnSuspending();
 			}
 			return TRUE;
-		case PBT_APMRESUMESUSPEND:
-			if ((nullptr != application) && (false == application->GetMinimized()))
-			{
-			application->OnResuming();
-			}
-			return TRUE;
-		}
-		break;
+        case PBT_APMRESUMESUSPEND:
+            if ((nullptr != application) && (false == application->GetMinimized()))
+            {
+                application->OnResuming();
+            }
+            return TRUE;
+        }
+        break;
+
+    case WM_MOUSEWHEEL:
+        if (nullptr != application)
+        {
+            const int key_state = GET_KEYSTATE_WPARAM(in_wparam);
+            const int z_delta = GET_WHEEL_DELTA_WPARAM(in_wparam);
+            application->OnScroll(key_state, z_delta);
+        }
+        break;
 
 	case WM_DESTROY:
 		{

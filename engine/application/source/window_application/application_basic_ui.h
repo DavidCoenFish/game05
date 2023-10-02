@@ -31,6 +31,11 @@ private:
         const int in_width,
         const int in_height
         ) override;
+    //virtual void OnKey(const int in_vk_code, const int in_scan_code, const bool in_repeat_flag, const int in_repeat_count, bool in_up_flag) override;
+    virtual void OnScroll(
+        const int in_key_state,
+        const int in_z_delta
+        ) override;
 
 private:
     typedef IWindowApplication BaseType;
@@ -46,5 +51,7 @@ private:
         std::shared_ptr<UIHierarchyNode> _ui_hierarchy_node;
     };
     std::unique_ptr<DrawResource> _draw_resource;
+    int _scroll_key_state;
+    int _scroll_z;
 
 };

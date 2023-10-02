@@ -222,7 +222,9 @@ void UIContentDefault::UpdateSize(
     const float in_ui_scale,
     const float in_time_delta, 
     UIGeometry& in_out_geometry, 
-    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+    UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+    const UIScreenSpace& in_parent_screen_space,
+    UIScreenSpace& out_screen_space
     )
 {
     VectorInt2 layout_size;
@@ -234,8 +236,6 @@ void UIContentDefault::UpdateSize(
         in_ui_scale,
         in_out_node
         );
-    //const VectorInt2 layout_size = _layout.GetSize(in_parent_window, in_ui_scale);
-    //const VectorInt2 actual_initial_size = _layout.CalculateShrinkSize(layout_size, max_desired_size);
 
     VectorFloat4 geometry_pos;
     VectorFloat4 geometry_uv;
@@ -274,7 +274,8 @@ void UIContentDefault::UpdateSize(
         texture_size,
         in_ui_scale,
         in_time_delta,
-        dirty
+        dirty,
+        out_screen_space
         );
 
     return;

@@ -8,6 +8,7 @@ class Shader;
 class UIGeometry;
 class UIHierarchyNode;
 class UILayout;
+class UIScreenSpace;
 class UITexture;
 class VectorInt2;
 class VectorFloat4;
@@ -50,7 +51,9 @@ public:
         const float in_ui_scale,
         const float in_time_delta, 
         UIGeometry& in_out_geometry, 
-        UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+        UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text,
+        const UIScreenSpace& in_parent_screen_space,
+        UIScreenSpace& out_screen_space
         ) = 0;
 
     virtual void GetDesiredSize(

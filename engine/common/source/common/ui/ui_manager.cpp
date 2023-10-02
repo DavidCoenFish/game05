@@ -8,9 +8,12 @@
 #include "common/draw_system/shader/shader_resource.h"
 #include "common/draw_system/shader/shader_resource_info.h"
 #include "common/file_system/file_system.h"
+#include "common/log/log.h"
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/i_ui_model.h"
+#include "common/ui/ui_root_input_state.h"
+#include "common/ui/ui_screen_space.h"
 #include "common/ui/ui_content/ui_content_stack.h"
 #include "common/ui/ui_data/i_ui_data.h"
 #include "common/text/text_manager.h"
@@ -72,6 +75,31 @@ UIManagerDrawParam::UIManagerDrawParam(
     // Nop
 }
 
+
+UIManagerDealInputParam UIManagerDealInputParam::Factory()
+{
+    return UIManagerDealInputParam();
+}
+
+UIManagerDealInputParam::UIManagerDealInputParam(
+    const bool in_mouse_valid,
+    const bool in_mouse_left_down,
+    const bool in_mouse_right_down,
+    const int in_mouse_x,
+    const int in_mouse_y,
+    const float in_mouse_scroll
+    )
+    : _mouse_valid(in_mouse_valid)
+    , _mouse_left_down(in_mouse_left_down)
+    , _mouse_right_down(in_mouse_right_down)
+    , _mouse_x(in_mouse_x)
+    , _mouse_y(in_mouse_y)
+    , _mouse_scroll(in_mouse_scroll)
+{
+    // Nop
+}
+
+
 class UIManagerImplementation
 {
 public:
@@ -110,7 +138,7 @@ public:
             array_shader_resource_info
             );
 
-        // add a default content 
+        // Add a default content ?
         //AddContentFactory("", FactoryDefault);
 
         return;
@@ -132,6 +160,7 @@ public:
         const std::string& in_model_key
         )
     {
+        const UIScreenSpace parent_screen_space;
         UIHierarchyNodeUpdateHierarchyParam hierarchy_param(
             _map_content_factory,
             in_param._draw_system,
@@ -143,7 +172,7 @@ public:
             );
         if (false == in_param._ui_model->VisitDataArray(
             in_model_key,
-            [&in_out_target_or_null, &in_param, &hierarchy_param](const std::vector<std::shared_ptr<IUIData>>& in_array_data){
+            [&in_out_target_or_null, &in_param, &hierarchy_param, &parent_screen_space](const std::vector<std::shared_ptr<IUIData>>& in_array_data){
                 if (nullptr == in_out_target_or_null)
                 {
                     in_out_target_or_null = std::make_shared<UIHierarchyNode>();
@@ -173,7 +202,8 @@ public:
                     top_level_size,
                     in_param._ui_scale,
                     in_param._time_delta,
-                    dirty
+                    dirty,
+                    parent_screen_space
                     );
             }))
         {
@@ -188,7 +218,11 @@ public:
         )
     {
         in_param; in_root;
-        //DSC_TODO("deal input");
+        UIRootInputState& input_state = in_root.GetOrMakeRootInputState();
+        input_state.Update(in_param);
+
+        //LOG_MESSAGE_DEBUG("%d %d %d %d", in_param._mouse_x, in_param._mouse_y, in_param._mouse_left_down, in_param._mouse_right_down, in_param._mouse_scroll);
+        //where is the mouse
     }
 
     void Draw(

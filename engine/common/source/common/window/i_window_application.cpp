@@ -62,6 +62,37 @@ void IWindowApplication::OnKey(const int, const int, const bool, const int, bool
    return;
 }
 
+void IWindowApplication::OnScroll(const int, const int)
+{
+    return;
+}
+
+const bool IWindowApplication::GetMouseState(
+    int& out_x,
+    int& out_y,
+    bool& out_left_button,
+    bool& out_right_button
+    )
+{
+    bool valid = false;
+    POINT p{0,0};
+    if (GetCursorPos(&p))
+    {
+        if (ScreenToClient(_hwnd, &p))
+        {
+            valid = true;
+        }
+    }
+
+    out_x = p.x;
+    out_y = p.y;
+
+    out_left_button = (0 != GetAsyncKeyState(VK_LBUTTON));
+    out_right_button = (0 != GetAsyncKeyState(VK_RBUTTON));
+
+    return valid;
+}
+
 void IWindowApplication::Destroy(const int in_exitCode)
 {
 	if (nullptr != _task_window)

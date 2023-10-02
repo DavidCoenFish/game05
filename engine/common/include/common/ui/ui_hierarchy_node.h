@@ -19,6 +19,7 @@ class UIHierarchyNode;
 class UIRootInputState;
 class UITexture;
 class UILayout;
+class UIScreenSpace;
 
 struct UIContentFactoryParam;
 struct UIDataTextRunStyle;
@@ -47,7 +48,7 @@ struct UIHierarchyNodeChildData
         std::unique_ptr<UIGeometry>& in_geometry,
         std::unique_ptr<IUIContent>& in_content,
         std::unique_ptr<UIHierarchyNode>& in_node,
-        const VectorFloat4& in_input_screen_size = VectorFloat4()
+        std::unique_ptr<UIScreenSpace>& in_screen_space
         );
     ~UIHierarchyNodeChildData();
 
@@ -56,7 +57,7 @@ struct UIHierarchyNodeChildData
     // _content is out here rather than in _node to avoid top level node needing a root or do nothing content for layout
     std::unique_ptr<IUIContent> _content; 
     std::unique_ptr<UIHierarchyNode> _node;
-    VectorFloat4 _input_screen_size;
+    std::unique_ptr<UIScreenSpace> _screen_space;
     //std::unique_ptr<UILayout>(); //layout data here or in content?
 
 };
@@ -150,7 +151,8 @@ public:
         const VectorInt2& in_parent_window,
         const float in_ui_scale,
         const float in_time_delta,
-        const bool in_mark_dirty
+        const bool in_mark_dirty,
+        const UIScreenSpace& in_parent_screen_space
         );
 
     // return True if we needed to draw, ie, we have modified _texture

@@ -71,20 +71,31 @@ struct UIManagerUpdateParam
 // Does UIRootInputState hold this data?
 struct UIManagerDealInputParam
 {
-    int _navigation_left_repeat;
-    int _navigation_right_repeat;
-    int _navigation_up_repeat;
-    int _navigation_down_repeat;
-    bool _action_currently_down;
-    bool _action_transition_up; //action key released this update
+    static UIManagerDealInputParam Factory();
+
+    explicit UIManagerDealInputParam(
+        const bool in_mouse_valid = false,
+        const bool in_mouse_left_down = false,
+        const bool in_mouse_right_down = false,
+        const int in_mouse_x = 0,
+        const int in_mouse_y = 0,
+        const float in_mouse_scroll = 0.0f
+        );
+
+    //int _navigation_left_repeat;
+    //int _navigation_right_repeat;
+    //int _navigation_up_repeat;
+    //int _navigation_down_repeat;
+    //bool _action_currently_down;
+    //bool _action_transition_up; //action key released this update
 
     bool _mouse_valid;
     bool _mouse_left_down;
     bool _mouse_right_down;
     int _mouse_x;
-    int _mouse_x_delta;
+    //int _mouse_x_delta;
     int _mouse_y;
-    int _mouse_y_delta;
+    //int _mouse_y_delta;
     float _mouse_scroll;
 
 };
