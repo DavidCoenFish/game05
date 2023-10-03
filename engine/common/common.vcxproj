@@ -64,7 +64,7 @@
     <ClCompile Include="source\common\log\log_consumer_write_to_file.cpp" />
     <ClCompile Include="source\common\log\log_enum.cpp" />
     <ClCompile Include="source\common\math\angle.cpp" />
-    <ClCompile Include="source\common\math\math.cpp" />
+    <ClCompile Include="source\common\math\dsc_math.cpp" />
     <ClCompile Include="source\common\math\matrix_float33.cpp" />
     <ClCompile Include="source\common\math\quaternion_float.cpp" />
     <ClCompile Include="source\common\math\vector_float2.cpp" />
@@ -89,6 +89,7 @@
     <ClCompile Include="source\common\text\text_run_data_icon.cpp" />
     <ClCompile Include="source\common\text\text_run_data_string.cpp" />
     <ClCompile Include="source\common\text\text_texture.cpp" />
+    <ClCompile Include="source\common\ui\i_ui_input.cpp" />
     <ClCompile Include="source\common\ui\i_ui_model.cpp" />
     <ClCompile Include="source\common\ui\ui_content\i_ui_content.cpp" />
     <ClCompile Include="source\common\ui\ui_content\ui_content_button.cpp" />
@@ -153,7 +154,7 @@
     <ClInclude Include="include\common\log\log_enum.h" />
     <ClInclude Include="include\common\macro.h" />
     <ClInclude Include="include\common\math\angle.h" />
-    <ClInclude Include="include\common\math\math.h" />
+    <ClInclude Include="include\common\math\dsc_math.h" />
     <ClInclude Include="include\common\math\matrix_float33.h" />
     <ClInclude Include="include\common\math\quaternion_float.h" />
     <ClInclude Include="include\common\math\vector_float2.h" />

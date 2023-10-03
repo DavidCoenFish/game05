@@ -1,7 +1,7 @@
 #include "common/common_pch.h"
 #include "common/text/text_run_data_string.h"
 #include "common/text/text_font.h"
-#include "common/math/math.h"
+#include "common/math/dsc_math.h"
 
 TextRunDataString::TextRunDataString(
     const std::string& in_string_utf8,
@@ -34,10 +34,10 @@ void TextRunDataString::BuildPreVertexData(
         in_out_cursor,
         _string_utf8,
         _locale_token,
-        Math::ScaleInt(_font_size, in_ui_scale),
+        DscMath::ScaleInt(_font_size, in_ui_scale),
         in_width_limit_enabled,
         in_width_limit,
-        Math::ScaleInt(_font_size, (1.0f + _new_line_gap_ratio) * in_ui_scale),
+        DscMath::ScaleInt(_font_size, (1.0f + _new_line_gap_ratio) * in_ui_scale),
         _colour
         );
 }

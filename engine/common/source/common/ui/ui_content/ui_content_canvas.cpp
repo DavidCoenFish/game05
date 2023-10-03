@@ -59,6 +59,8 @@ const bool UIContentCanvas::UpdateHierarchy(
     const UIHierarchyNodeUpdateHierarchyParam& in_param
     )
 {
+    // currently UIDataContainer is handled by _content_default.UpdateHierarchy
+
     return _content_default.UpdateHierarchy(
         in_data,
         in_out_child_data, 

@@ -3,7 +3,7 @@
 
 //#include "common/draw_system/draw_system_frame.h"
 //#include "common/draw_system/draw_system.h"
-#include "common/math/math.h"
+#include "common/math/dsc_math.h"
 #include "common/text/text_block.h"
 #include "common/text/text_manager.h"
 #include "common/ui/ui_data/ui_data_string.h"
@@ -163,7 +163,9 @@ void UIContentString::UpdateSize(
         in_ui_scale, 
         in_time_delta,
         in_out_geometry, 
-        in_out_node
+        in_out_node,
+        in_parent_screen_space,
+        out_screen_space
         );
 
     // Return true if needed? no, if the size of the texture changes, then texture is marked as needs to draw

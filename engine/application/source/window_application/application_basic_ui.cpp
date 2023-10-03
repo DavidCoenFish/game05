@@ -34,7 +34,7 @@
 class UIModel : public IUIModel
 {
 public:
-    UIModel()
+    UIModel(IWindowApplication& in_application)
     {
         auto _data_map_build_version = std::make_shared<UIDataString>(
             std::string(Build::GetBuildTime()) + " " + Build::GetBuildVersion(),
@@ -80,7 +80,14 @@ public:
                         std::make_shared<UIDataButton>(),
                         std::make_shared<UIDataButton>(),
                         std::make_shared<UIDataButton>(),
-                        std::make_shared<UIDataButton>()
+                        std::make_shared<UIDataButton>(
+                            true,
+                            nullptr,
+                            [&in_application](const VectorFloat2&){
+                                in_application.Destroy(0);
+                                return;
+                            }
+                        )
                     }),
                     "stack_vertical_middle"
                     )
@@ -88,7 +95,6 @@ public:
                 "canvas_banner_left"
                 ),
 #endif
-
 
 #if 1
             // Build info
@@ -208,7 +214,7 @@ ApplicationBasicUI::ApplicationBasicUI(
         );
     DefaultUIComponentFactory::Populate(*_draw_resource->_ui_manager);
 
-    _draw_resource->_ui_model = std::make_unique<UIModel>();
+    _draw_resource->_ui_model = std::make_unique<UIModel>(*this);
 
     _draw_resource->_timer = std::make_unique<Timer>();
 }
@@ -294,6 +300,7 @@ void ApplicationBasicUI::Update()
              _draw_resource->_ui_manager->DealInput(
                 *_draw_resource->_ui_hierarchy_node,
                 UIManagerDealInputParam(
+                    _draw_system.get(),
                     mouse_valid,
                     mouse_left_button,
                     mouse_right_button,

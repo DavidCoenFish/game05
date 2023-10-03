@@ -82,14 +82,16 @@ UIManagerDealInputParam UIManagerDealInputParam::Factory()
 }
 
 UIManagerDealInputParam::UIManagerDealInputParam(
+    DrawSystem* const in_draw_system,
     const bool in_mouse_valid,
     const bool in_mouse_left_down,
     const bool in_mouse_right_down,
     const int in_mouse_x,
     const int in_mouse_y,
-    const float in_mouse_scroll
+    const int in_mouse_scroll
     )
-    : _mouse_valid(in_mouse_valid)
+    : _draw_system(in_draw_system)
+    , _mouse_valid(in_mouse_valid)
     , _mouse_left_down(in_mouse_left_down)
     , _mouse_right_down(in_mouse_right_down)
     , _mouse_x(in_mouse_x)
@@ -217,9 +219,13 @@ public:
         const UIManagerDealInputParam& in_param
         )
     {
-        in_param; in_root;
+        const VectorInt2 texture_size = in_root.GetTextureSize(in_param._draw_system);
         UIRootInputState& input_state = in_root.GetOrMakeRootInputState();
-        input_state.Update(in_param);
+        input_state.Update(in_param, texture_size);
+
+        in_root.DealInput(
+            input_state
+            );
 
         //LOG_MESSAGE_DEBUG("%d %d %d %d", in_param._mouse_x, in_param._mouse_y, in_param._mouse_left_down, in_param._mouse_right_down, in_param._mouse_scroll);
         //where is the mouse

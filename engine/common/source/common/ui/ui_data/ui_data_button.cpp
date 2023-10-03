@@ -20,21 +20,21 @@ UIDataButton::~UIDataButton()
     // Nop
 }
 
-const bool UIDataButton::Visit(const std::function<bool(
-    const bool,
-    const std::shared_ptr<IUIData>&,
-    const std::function<void(const VectorFloat2&)>&
-    )>& in_visitor) const
-{
-    bool dirty = false;
-    if (nullptr != in_visitor)
-    {
-        dirty = (in_visitor)(
-            _enabled,
-            _content,
-            _on_click
-            );
-    }
-    return dirty;
-}
+//const bool UIDataButton::Visit(const std::function<bool(
+//    const bool,
+//    const std::shared_ptr<IUIData>&,
+//    const std::function<void(const VectorFloat2&)>&
+//    )>& in_visitor) const
+//{
+//    bool dirty = false;
+//    if (nullptr != in_visitor)
+//    {
+//        dirty = (in_visitor)(
+//            _enabled,
+//            _content,
+//            _on_click
+//            );
+//    }
+//    return dirty;
+//}
 

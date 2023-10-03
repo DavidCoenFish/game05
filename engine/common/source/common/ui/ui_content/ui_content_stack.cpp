@@ -5,6 +5,7 @@
 #include "common/ui/ui_content/ui_content_default.h"
 #include "common/ui/ui_layout.h"
 #include "common/ui/ui_coord.h"
+#include "common/ui/ui_screen_space.h"
 #include "common/ui/ui_data/ui_data_container.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_geometry.h"
@@ -88,11 +89,20 @@ const bool UIContentStack::UpdateHierarchy(
     const UIHierarchyNodeUpdateHierarchyParam& in_param
     )
 {
-    return _content_default.UpdateHierarchy(
+    bool dirty = false;
+
+    // currently UIDataContainer is handled by _content_default.UpdateHierarchy
+
+    if (true == _content_default.UpdateHierarchy(
         in_data,
         in_out_child_data,
         in_param
-        );
+        ))
+    {
+        dirty = true;
+    }
+
+    return dirty;
 }
 
 void UIContentStack::UpdateSize(
@@ -153,6 +163,12 @@ void UIContentStack::UpdateSize(
     }
 
     in_out_node.UpdateTextureSize(texture_size, dirty);
+    out_screen_space.Update(
+        in_parent_screen_space,
+        geometry_pos,
+        geometry_uv
+        );
+
     int trace = 0;
     for (auto& child_data_ptr : in_out_node.GetChildData())
     {
@@ -176,7 +192,9 @@ void UIContentStack::UpdateSize(
             in_ui_scale,
             in_time_delta,
             *(child_data._geometry.get()),
-            *(child_data._node.get())
+            *(child_data._node.get()),
+            out_screen_space,
+            *(child_data._screen_space.get())
             );
     }
 

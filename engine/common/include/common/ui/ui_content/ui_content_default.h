@@ -12,6 +12,7 @@ class Shader;
 class UIGeometry;
 class UITexture;
 class UIHierarchyNode;
+class UIScreenSpace;
 class VectorInt2;
 class VectorFloat4;
 

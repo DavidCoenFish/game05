@@ -1,4 +1,7 @@
 #pragma once
+
+class VectorFloat2;
+
 class VectorFloat4
 {
 public:
@@ -17,6 +20,11 @@ public:
     const bool operator==(const VectorFloat4& in_rhs) const;
     const bool operator!=(const VectorFloat4& in_rhs) const;
     VectorFloat4& operator=(const VectorFloat4& in_rhs);
+
+    // Move to DscMath?
+    const bool Inside(
+        const VectorFloat2& in_value
+        ) const;
 
 private:
     enum Index

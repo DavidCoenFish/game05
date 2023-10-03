@@ -15,11 +15,16 @@ public:
         );
     virtual ~UIDataButton();
 
-    const bool Visit(const std::function<bool(
-        const bool,
-        const std::shared_ptr<IUIData>&,
-        const std::function<void(const VectorFloat2&)>&
-        )>& in_visitor) const;
+
+    // Was thinking of using visitor to make threading easier, but the entire data hierarchy needs to be thread protected as well
+    //const bool Visit(const std::function<bool(
+    //    const bool,
+    //    const std::shared_ptr<IUIData>&,
+    //    const std::function<void(const VectorFloat2&)>&
+    //    )>& in_visitor) const;
+
+    const bool GetEnabled() const { return _enabled; }
+    const std::function<void(const VectorFloat2&)>& GetOnClick() const { return _on_click; }
 
 private:
     virtual const std::string GetTemplateName() const { return _template_name; }

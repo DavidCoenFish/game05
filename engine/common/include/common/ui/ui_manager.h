@@ -74,12 +74,13 @@ struct UIManagerDealInputParam
     static UIManagerDealInputParam Factory();
 
     explicit UIManagerDealInputParam(
+        DrawSystem* const in_draw_system = nullptr,
         const bool in_mouse_valid = false,
         const bool in_mouse_left_down = false,
         const bool in_mouse_right_down = false,
         const int in_mouse_x = 0,
         const int in_mouse_y = 0,
-        const float in_mouse_scroll = 0.0f
+        const int in_mouse_scroll = 0
         );
 
     //int _navigation_left_repeat;
@@ -89,6 +90,7 @@ struct UIManagerDealInputParam
     //bool _action_currently_down;
     //bool _action_transition_up; //action key released this update
 
+    DrawSystem* _draw_system;
     bool _mouse_valid;
     bool _mouse_left_down;
     bool _mouse_right_down;
@@ -96,7 +98,7 @@ struct UIManagerDealInputParam
     //int _mouse_x_delta;
     int _mouse_y;
     //int _mouse_y_delta;
-    float _mouse_scroll;
+    int _mouse_scroll;
 
 };
 

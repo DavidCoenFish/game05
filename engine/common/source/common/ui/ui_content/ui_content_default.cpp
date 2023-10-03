@@ -16,6 +16,7 @@
 #include "common/ui/ui_content/ui_content_default.h"
 #include "common/ui/ui_layout.h"
 #include "common/ui/ui_coord.h"
+#include "common/ui/ui_screen_space.h"
 #include "common/ui/ui_data/ui_data_container.h"
 #include "common/ui/ui_hierarchy_node.h"
 
@@ -265,6 +266,12 @@ void UIContentDefault::UpdateSize(
     {
         dirty = true;
     }
+
+    out_screen_space.Update(
+        in_parent_screen_space,
+        geometry_pos,
+        geometry_uv
+        );
 
     // Recurse
     in_out_node.UpdateSize(

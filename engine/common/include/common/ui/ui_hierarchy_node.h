@@ -155,6 +155,11 @@ public:
         const UIScreenSpace& in_parent_screen_space
         );
 
+    void DealInput(
+        UIRootInputState& in_input_state,
+        const bool in_mouse_inside = true // => flag
+        );
+
     // return True if we needed to draw, ie, we have modified _texture
     const bool Draw(
         const UIManagerDrawParam& in_draw_param,

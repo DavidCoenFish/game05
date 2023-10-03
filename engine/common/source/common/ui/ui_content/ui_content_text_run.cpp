@@ -156,7 +156,9 @@ void UIContentTextRun::UpdateSize(
         in_ui_scale, 
         in_time_delta,
         in_out_geometry, 
-        in_out_node
+        in_out_node,
+        in_parent_screen_space,
+        out_screen_space
         );
 
     _text_run->SetTextContainerSize(

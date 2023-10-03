@@ -4,6 +4,7 @@
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/draw_system_frame.h"
 #include "common/draw_system/shader/shader.h"
+#include "common/ui/i_ui_input.h"
 #include "common/ui/i_ui_model.h"
 #include "common/ui/ui_content/ui_content_canvas.h"
 #include "common/ui/ui_content/ui_content_default.h"
@@ -107,6 +108,15 @@ UIHierarchyNode::~UIHierarchyNode()
 //    }
 //    return;
 //}
+
+UIRootInputState& UIHierarchyNode::GetOrMakeRootInputState()
+{
+    if (nullptr == _root_input_state)
+    {
+        _root_input_state = std::make_unique<UIRootInputState>();
+    }
+    return *_root_input_state;
+}
 
 std::shared_ptr<HeapWrapperItem> UIHierarchyNode::GetShaderResourceHeapWrapperItem() const
 {
@@ -363,6 +373,37 @@ void UIHierarchyNode::UpdateSize(
             );
     }
 
+    return;
+}
+
+void UIHierarchyNode::DealInput(
+    UIRootInputState& in_input_state,
+    const bool in_mouse_inside
+    )
+{
+    for(auto& child_data_ptr : _child_data_array)
+    {
+        UIHierarchyNodeChildData& child_data = *child_data_ptr;
+        const bool inside = in_mouse_inside && child_data._screen_space->GetClipRef().Inside(in_input_state.GetMousePosRef());
+        if ((true == inside) &&        
+            (false == in_input_state.GetMouseLeftDown()) &&
+            (true == in_input_state.GetMouseLeftDownChange()))
+        {
+            IUIInput* const input = dynamic_cast<IUIInput*>(child_data._content.get());
+            if (nullptr != input)
+            {
+                input->OnInputMouseClick(
+                    child_data._screen_space->GetPosRef(),
+                    in_input_state.GetMousePosRef()
+                    );
+            }
+        }
+
+        child_data_ptr->_node->DealInput(
+            in_input_state,
+            inside
+            );
+    }
     return;
 }
 

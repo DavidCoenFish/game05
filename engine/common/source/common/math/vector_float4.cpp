@@ -1,6 +1,7 @@
 #include "common/common_pch.h"
 
 #include "common/math/vector_float4.h"
+#include "common/math/vector_float2.h"
 
 VectorFloat4::VectorFloat4(
     const float in_x,
@@ -76,4 +77,14 @@ VectorFloat4& VectorFloat4::operator=(const VectorFloat4& in_rhs)
         _data[index] = in_rhs._data[index];
     }
     return (*this);
+}
+
+const bool VectorFloat4::Inside(
+    const VectorFloat2& in_value
+    ) const
+{
+    return ((_data[0] <= in_value[0]) &&
+            (_data[1] <= in_value[1]) &&
+            (in_value[0] < _data[2]) &&
+            (in_value[1] < _data[3]));
 }

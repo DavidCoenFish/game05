@@ -1,6 +1,6 @@
 #include "common/common_pch.h"
 #include "common/ui/ui_content/ui_content_button.h"
-#include "common/ui/ui_data/ui_data_container.h"
+#include "common/ui/ui_data/ui_data_button.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_geometry.h"
 
@@ -36,6 +36,28 @@ const bool UIContentButton::SetBase(
         );
 }
 
+const bool UIContentButton::Set(
+    const bool in_enabled,
+    const std::function<void(const VectorFloat2&)>& in_on_click
+    )
+{
+    bool dirty = false;
+    if (_enabled != in_enabled)
+    {
+        dirty = true;
+        _enabled == in_enabled;
+    }
+
+    _on_click = in_on_click;
+
+    //if (_on_click != in_on_click)
+    //{
+    //    _on_click == in_on_click;
+    //}
+
+    return dirty;
+}
+
 void UIContentButton::SetSourceToken(void* in_source_ui_data_token)
 {
     _content_default.SetSourceToken(in_source_ui_data_token);
@@ -59,11 +81,29 @@ const bool UIContentButton::UpdateHierarchy(
     const UIHierarchyNodeUpdateHierarchyParam& in_param
     )
 {
-    return _content_default.UpdateHierarchy(
+    bool dirty = false;
+    const UIDataButton* const data = dynamic_cast<const UIDataButton*>(in_data);
+    if (nullptr != data)
+    {
+        if (true == Set(
+            data->GetEnabled(),
+            data->GetOnClick()
+            ))
+        {
+            dirty = true;
+        }
+    }
+
+    if (true == _content_default.UpdateHierarchy(
         in_data,
         in_out_child_data, 
         in_param
-        );
+        ))
+    {
+        dirty = true;
+    }
+
+    return dirty;
 }
 
 void UIContentButton::UpdateSize(
@@ -109,4 +149,16 @@ void UIContentButton::GetDesiredSize(
         in_ui_scale,
         in_out_node
         );
+}
+
+void UIContentButton::OnInputMouseClick(
+    const VectorFloat4&, // in_screen_pos,
+    const VectorFloat2& in_mouse_pos
+    )
+{
+    if (nullptr != _on_click)
+    {
+        _on_click(in_mouse_pos);
+    }
+    return;
 }

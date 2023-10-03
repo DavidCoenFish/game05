@@ -2,7 +2,7 @@
 #include "default_ui_component_factory.h"
 
 #include "common/macro.h"
-#include "common/math/math.h"
+#include "common/math/dsc_math.h"
 #include "common/math/vector_int4.h"
 #include "common/math/vector_float4.h"
 #include "common/text/text_block.h"
@@ -40,8 +40,8 @@ namespace
     constexpr int s_default_font_size = 16;
     constexpr int s_default_font_size_small = 12;
     constexpr float s_default_newling_ratio = 0.25f;
-    constexpr int s_new_line_gap = 4; // Math::ScaleInt(s_default_font_size, s_default_newling_ratio);
-    constexpr int s_new_line_gap_small = 3; // Math::ScaleInt(s_default_font_size, s_default_newling_ratio);
+    constexpr int s_new_line_gap = 4; // DscMath::ScaleInt(s_default_font_size, s_default_newling_ratio);
+    constexpr int s_new_line_gap_small = 3; // DscMath::ScaleInt(s_default_font_size, s_default_newling_ratio);
     constexpr float s_default_margin = s_default_font_size * 0.5f; // in pixels, or in em?
     constexpr float s_default_gap = s_default_font_size * 0.5f; // in pixels, or in em?
 
