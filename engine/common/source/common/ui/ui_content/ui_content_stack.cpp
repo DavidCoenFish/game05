@@ -6,7 +6,6 @@
 #include "common/ui/ui_layout.h"
 #include "common/ui/ui_coord.h"
 #include "common/ui/ui_screen_space.h"
-#include "common/ui/ui_data/ui_data_container.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_geometry.h"
 
@@ -84,7 +83,7 @@ const bool UIContentStack::SetLayout(const UILayout& in_layout)
 }
 
 const bool UIContentStack::UpdateHierarchy(
-    IUIData* const in_data,
+    UIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
     const UIHierarchyNodeUpdateHierarchyParam& in_param
     )

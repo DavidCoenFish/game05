@@ -10,6 +10,7 @@
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_texture.h"
 #include "common/ui/ui_manager.h"
+#include "common/ui/ui_data/ui_data.h"
 
 #include "common/common_pch.h"
 #include "common/ui/ui_content/ui_content_stack.h"
@@ -17,7 +18,6 @@
 #include "common/ui/ui_layout.h"
 #include "common/ui/ui_coord.h"
 #include "common/ui/ui_screen_space.h"
-#include "common/ui/ui_data/ui_data_container.h"
 #include "common/ui/ui_hierarchy_node.h"
 
 namespace
@@ -169,20 +169,19 @@ const bool UIContentDefault::SetLayout(const UILayout& in_layout)
 }
 
 const bool UIContentDefault::UpdateHierarchy(
-    IUIData* const in_data,
+    UIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
     const UIHierarchyNodeUpdateHierarchyParam& in_param
     )
 {
     bool dirty = false;
-    const UIDataContainer* const data_container = dynamic_cast<const UIDataContainer*>(in_data);
-    if (nullptr != data_container)
+    if (nullptr != in_data)
     {
-        if (true == data_container->VisitDataArray([
+        if (true == in_data->VisitDataArray([
             &in_out_child_data,
             &in_param,
             this
-            ](const std::vector<std::shared_ptr<IUIData>>& in_array_data)->bool{
+            ](const std::vector<std::shared_ptr<UIData>>& in_array_data)->bool{
             return in_out_child_data._node->UpdateHierarchy(
                 in_param,
                 &in_array_data,

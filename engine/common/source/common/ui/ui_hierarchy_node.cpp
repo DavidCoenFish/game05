@@ -16,7 +16,7 @@
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_screen_space.h"
 #include "common/ui/ui_texture.h"
-#include "common/ui/ui_data/i_ui_data.h"
+#include "common/ui/ui_data/ui_data.h"
 #include "common/ui/ui_root_input_state.h"
 #include "common/math/vector_int2.h"
 #include "common/math/vector_float4.h"
@@ -152,7 +152,7 @@ const bool UIHierarchyNode::ClearChildren()
 
 const bool UIHierarchyNode::UpdateHierarchy(
     const UIHierarchyNodeUpdateHierarchyParam& in_param,
-    const std::vector<std::shared_ptr<IUIData>>* const in_array_data_or_null,
+    const std::vector<std::shared_ptr<UIData>>* const in_array_data_or_null,
     const bool in_draw_to_texture,
     const bool in_always_dirty,
     const bool in_allow_clear,

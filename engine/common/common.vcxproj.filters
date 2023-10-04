@@ -226,16 +226,13 @@
     <ClCompile Include="source\common\ui\ui_data\ui_data_button.cpp">
       <Filter>souce\common\ui\ui_data</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\ui\ui_data\ui_data_container.cpp">
-      <Filter>souce\common\ui\ui_data</Filter>
-    </ClCompile>
     <ClCompile Include="source\common\ui\ui_data\ui_data_text_run.cpp">
       <Filter>souce\common\ui\ui_data</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\ui\ui_data\i_ui_data.cpp">
+    <ClCompile Include="source\common\ui\ui_data\ui_data.cpp">
       <Filter>souce\common\ui\ui_data</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\ui\ui_data\ui_data_template.cpp">
+    <ClCompile Include="source\common\ui\ui_data\ui_data_effect.cpp">
       <Filter>souce\common\ui\ui_data</Filter>
     </ClCompile>
     <ClCompile Include="source\common\ui\i_ui_model.cpp">
@@ -555,13 +552,10 @@
     <ClInclude Include="include\common\ui\ui_data\ui_data_button.h">
       <Filter>include\common\ui\ui_data</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\ui\ui_data\ui_data_container.h">
+    <ClInclude Include="include\common\ui\ui_data\ui_data.h">
       <Filter>include\common\ui\ui_data</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\ui\ui_data\i_ui_data.h">
-      <Filter>include\common\ui\ui_data</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_data\ui_data_template.h">
+    <ClInclude Include="include\common\ui\ui_data\ui_data_effect.h">
       <Filter>include\common\ui\ui_data</Filter>
     </ClInclude>
     <ClInclude Include="include\common\ui\ui_data\ui_data_text_run.h">

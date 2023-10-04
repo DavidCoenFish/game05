@@ -21,11 +21,10 @@
 #include "common/ui/ui_manager.h"
 #include "common/ui/i_ui_model.h"
 #include "common/ui/ui_texture.h"
-#include "common/ui/ui_data/i_ui_data.h"
+#include "common/ui/ui_data/ui_data.h"
 #include "common/ui/ui_data/ui_data_button.h"
-#include "common/ui/ui_data/ui_data_container.h"
 #include "common/ui/ui_data/ui_data_string.h"
-#include "common/ui/ui_data/ui_data_template.h"
+#include "common/ui/ui_data/ui_data_effect.h"
 #include "common/ui/ui_data/ui_data_text_run.h"
 #include "common/util/timer.h"
 #include "common/util/vector_helper.h"
@@ -61,49 +60,49 @@ public:
             );
         _data_map["fps"] = _data_map_build_fps;
 
-        _data_array_map[""] = std::vector<std::shared_ptr<IUIData>>({
+        _data_array_map[""] = std::vector<std::shared_ptr<UIData>>({
 
 #if 0
             // Build info
             std::make_shared<UIDataContainer>(
-                std::vector<std::shared_ptr<IUIData>>({}),
+                std::vector<std::shared_ptr<UIData>>({}),
                 "canvas_debug_quad0"
                 ),
 #endif
 
 #if 1
             // Left banner
-            std::make_shared<UIDataContainer>(
-                std::vector<std::shared_ptr<IUIData>>({
-                std::make_shared<UIDataContainer>(
-                    std::vector<std::shared_ptr<IUIData>>({
-                        std::make_shared<UIDataButton>(),
-                        std::make_shared<UIDataButton>(),
-                        std::make_shared<UIDataButton>(),
+            std::make_shared<UIData>(
+                "canvas_banner_left",
+                std::vector<std::shared_ptr<UIData>>({
+                std::make_shared<UIData>(
+                    "stack_vertical_middle",
+                    std::vector<std::shared_ptr<UIData>>({
                         std::make_shared<UIDataButton>(
-                            true,
-                            nullptr,
                             [&in_application](const VectorFloat2&){
                                 in_application.Destroy(0);
                                 return;
-                            }
-                        )
-                    }),
-                    "stack_vertical_middle"
+                                },
+                            true
+                        ),
+                        std::make_shared<UIDataButton>(),
+                        std::make_shared<UIDataButton>(),
+                        std::make_shared<UIDataButton>()
+                    })
                     )
-                }),
-                "canvas_banner_left"
+                })
                 ),
 #endif
 
 #if 1
             // Build info
-            std::make_shared<UIDataContainer>(std::vector<std::shared_ptr<IUIData>>({
-                _data_map_build_info,
-                _data_map_build_version,
-                _data_map_build_fps
-                }),
-                "stack_vertical_bottom_right"
+            std::make_shared<UIData>(
+                "stack_vertical_bottom_right",
+                std::vector<std::shared_ptr<UIData>>({
+                    _data_map_build_info,
+                    _data_map_build_version,
+                    _data_map_build_fps
+                    })
                 )
 #endif
 
@@ -119,7 +118,7 @@ public:
 private:
     virtual const bool VisitDataArray(
         const std::string& in_key,
-        const std::function<void(const std::vector<std::shared_ptr<IUIData>>&)>& in_visitor
+        const std::function<void(const std::vector<std::shared_ptr<UIData>>&)>& in_visitor
         ) const override
     {
         const auto found = _data_array_map.find(in_key);
@@ -131,11 +130,11 @@ private:
         return false;
     }
 
-    virtual IUIData* const GetData(
+    virtual UIData* const GetData(
         const std::string& in_key
         ) const override
     {
-        IUIData* result = nullptr;
+        UIData* result = nullptr;
         const auto found = _data_map.find(in_key);
         if (found != _data_map.end())
         {
@@ -145,8 +144,8 @@ private:
     }
 
 private:
-    std::map<std::string, std::vector<std::shared_ptr<IUIData>>> _data_array_map;
-    std::map<std::string, std::shared_ptr<IUIData>> _data_map;
+    std::map<std::string, std::vector<std::shared_ptr<UIData>>> _data_array_map;
+    std::map<std::string, std::shared_ptr<UIData>> _data_map;
 
 };
 

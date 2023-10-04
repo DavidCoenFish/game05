@@ -1,6 +1,6 @@
 #pragma once
 
-class IUIData;
+class UIData;
 
 class IUIModel
 {
@@ -9,10 +9,10 @@ public:
 
     virtual const bool VisitDataArray(
         const std::string& in_key,
-        const std::function<void(const std::vector<std::shared_ptr<IUIData>>&)>& in_visitor
+        const std::function<void(const std::vector<std::shared_ptr<UIData>>&)>& in_visitor
         ) const = 0;
 
-    virtual IUIData* const GetData(
+    virtual UIData* const GetData(
         const std::string& in_key
         ) const = 0;
 
@@ -21,7 +21,7 @@ public:
         const std::string& in_key
         )
     {
-        IUIData* const data = GetData(in_key);
+        UIData* const data = GetData(in_key);
         return dynamic_cast<InType*>(data);
     }
 };

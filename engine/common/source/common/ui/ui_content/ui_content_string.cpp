@@ -110,8 +110,8 @@ const bool UIContentString::SetLayout(const UILayout& in_layout)
 }
 
 const bool UIContentString::UpdateHierarchy(
-    //std::vector<std::shared_ptr<IUIData>>*& out_array_data_or_null,
-    IUIData* const in_data,
+    //std::vector<std::shared_ptr<UIData>>*& out_array_data_or_null,
+    UIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
     const UIHierarchyNodeUpdateHierarchyParam& in_param
     )

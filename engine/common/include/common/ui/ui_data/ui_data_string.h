@@ -1,6 +1,6 @@
 #pragma once
 
-#include "common/ui/ui_data/i_ui_data.h"
+#include "common/ui/ui_data/ui_data.h"
 #include "common/locale/locale_enum.h"
 
 class LocaleSystem;
@@ -8,7 +8,7 @@ class LocaleSystem;
 /*
 want to let the text manager what locale hint to render text as, but is it worth copying around a locale string? or move to enum
 */
-class UIDataString : public IUIData
+class UIDataString : public UIData
 {
 public:
     UIDataString(
@@ -24,11 +24,6 @@ public:
     void SetString(const std::string& in_data);
 
 private:
-    virtual const std::string GetTemplateName() const { return _template_name; }
-    //virtual const int GetChangeID() const override;
-
-private:
-    std::string _template_name;
     std::string _data;
     LocaleISO_639_1 _locale;
     int _change_id;

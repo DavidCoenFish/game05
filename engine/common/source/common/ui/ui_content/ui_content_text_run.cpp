@@ -95,7 +95,7 @@ const bool UIContentTextRun::SetLayout(const UILayout& in_layout)
 }
 
 const bool UIContentTextRun::UpdateHierarchy(
-    IUIData* const in_data,
+    UIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
     const UIHierarchyNodeUpdateHierarchyParam& in_param
     )

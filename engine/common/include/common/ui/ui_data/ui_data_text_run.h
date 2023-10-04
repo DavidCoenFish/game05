@@ -1,6 +1,6 @@
 #pragma once
 
-#include "common/ui/ui_data/i_ui_data.h"
+#include "common/ui/ui_data/ui_data.h"
 #include "common/locale/locale_enum.h"
 #include "common/math/vector_float4.h"
 
@@ -31,7 +31,7 @@ struct UIDataTextRunStyle
 /*
 the ui system passes in 
 */
-class UIDataTextRun : public IUIData
+class UIDataTextRun : public UIData
 {
 public:
     // Use < and > as markup flags, and << as escapes (don't need >> as escape if set to auto consume > at end of a mate block)
@@ -69,12 +69,6 @@ public:
         );
 
 private:
-    virtual const std::string GetTemplateName() const { return _template_name; }
-    //virtual const int GetChangeID() const override;
-
-private:
-    std::string _template_name;
-
     std::string _markup_string_utf8;
     LocaleISO_639_1 _locale;
     int _change_id;

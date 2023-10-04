@@ -15,7 +15,7 @@
 #include "common/ui/ui_root_input_state.h"
 #include "common/ui/ui_screen_space.h"
 #include "common/ui/ui_content/ui_content_stack.h"
-#include "common/ui/ui_data/i_ui_data.h"
+#include "common/ui/ui_data/ui_data.h"
 #include "common/text/text_manager.h"
 #include "common/util/vector_helper.h"
 
@@ -174,7 +174,7 @@ public:
             );
         if (false == in_param._ui_model->VisitDataArray(
             in_model_key,
-            [&in_out_target_or_null, &in_param, &hierarchy_param, &parent_screen_space](const std::vector<std::shared_ptr<IUIData>>& in_array_data){
+            [&in_out_target_or_null, &in_param, &hierarchy_param, &parent_screen_space](const std::vector<std::shared_ptr<UIData>>& in_array_data){
                 if (nullptr == in_out_target_or_null)
                 {
                     in_out_target_or_null = std::make_shared<UIHierarchyNode>();

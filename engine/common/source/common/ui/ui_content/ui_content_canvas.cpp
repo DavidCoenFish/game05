@@ -1,6 +1,5 @@
 #include "common/common_pch.h"
 #include "common/ui/ui_content/ui_content_canvas.h"
-#include "common/ui/ui_data/ui_data_container.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_geometry.h"
 
@@ -53,8 +52,8 @@ const bool UIContentCanvas::SetLayout(const UILayout& in_layout)
 }
 
 const bool UIContentCanvas::UpdateHierarchy(
-    //std::vector<std::shared_ptr<IUIData>>*& out_array_data_or_null,
-    IUIData* const in_data,
+    //std::vector<std::shared_ptr<UIData>>*& out_array_data_or_null,
+    UIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
     const UIHierarchyNodeUpdateHierarchyParam& in_param
     )

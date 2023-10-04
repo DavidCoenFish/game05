@@ -45,14 +45,14 @@ const bool UIContentButton::Set(
     if (_enabled != in_enabled)
     {
         dirty = true;
-        _enabled == in_enabled;
+        _enabled = in_enabled;
     }
 
     _on_click = in_on_click;
 
     //if (_on_click != in_on_click)
     //{
-    //    _on_click == in_on_click;
+    //    _on_click = in_on_click;
     //}
 
     return dirty;
@@ -75,8 +75,8 @@ const bool UIContentButton::SetLayout(const UILayout& in_layout)
 }
 
 const bool UIContentButton::UpdateHierarchy(
-    //std::vector<std::shared_ptr<IUIData>>*& out_array_data_or_null,
-    IUIData* const in_data,
+    //std::vector<std::shared_ptr<UIData>>*& out_array_data_or_null,
+    UIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
     const UIHierarchyNodeUpdateHierarchyParam& in_param
     )

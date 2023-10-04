@@ -6,9 +6,11 @@ UIDataString::UIDataString(
     const LocaleISO_639_1 in_locale,
     const std::string& in_template_name
     )
-    : _data(in_data)
+    : UIData(
+        in_template_name
+        )
+    , _data(in_data)
     , _locale(in_locale)
-    , _template_name(in_template_name)
     //, _change_id(0)
 {
     // Nop

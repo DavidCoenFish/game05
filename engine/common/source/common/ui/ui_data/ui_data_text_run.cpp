@@ -452,7 +452,9 @@ UIDataTextRun::UIDataTextRun(
     const LocaleISO_639_1 in_locale,
     const std::string& in_template_name
     )
-    : _template_name(in_template_name)
+    : UIData(
+        in_template_name
+        )
     , _markup_string_utf8(in_markupStringUtf8)
     , _locale(in_locale)
     , _change_id(1)

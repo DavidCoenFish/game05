@@ -7,7 +7,7 @@ class DrawSystem;
 class DrawSystemFrame;
 class HeapWrapperItem;
 class IUIContent;
-class IUIData;
+class UIData;
 class Shader;
 class UIGeometry;
 class UITexture;
@@ -69,7 +69,7 @@ public:
     VectorFloat2& GetUVScroll() { return _uv_scroll; }
 
     const bool UpdateHierarchy(
-        IUIData* const in_data,
+        UIData* const in_data,
         UIHierarchyNodeChildData& in_out_child_data,
         const UIHierarchyNodeUpdateHierarchyParam& in_param
         );

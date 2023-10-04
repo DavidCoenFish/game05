@@ -8,7 +8,7 @@
 class DrawSystem;
 class DrawSystemFrame;
 class HeapWrapperItem;
-class IUIData;
+class UIData;
 class IUIContent;
 class IUIModel;
 class LocaleSystem;
@@ -126,7 +126,7 @@ public:
     // create/ destroy nodes to match model, make content match type from factory, update content?
     const bool UpdateHierarchy(
         const UIHierarchyNodeUpdateHierarchyParam& in_param,
-        const std::vector<std::shared_ptr<IUIData>>* const in_array_data_or_null,
+        const std::vector<std::shared_ptr<UIData>>* const in_array_data_or_null,
         const bool in_draw_to_texture,
         const bool in_always_dirty,
         const bool in_allow_clear = false,

@@ -3,7 +3,7 @@
 class DrawSystem;
 class DrawSystemFrame;
 class HeapWrapperItem;
-class IUIData;
+class UIData;
 class Shader;
 class UIGeometry;
 class UIHierarchyNode;
@@ -38,7 +38,7 @@ public:
     virtual const bool SetLayout(const UILayout& in_layout) = 0;
 
     virtual const bool UpdateHierarchy(
-        IUIData* const in_data,
+        UIData* const in_data,
         UIHierarchyNodeChildData& in_out_child_data,
         const UIHierarchyNodeUpdateHierarchyParam& in_param
         ) = 0;

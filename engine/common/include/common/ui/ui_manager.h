@@ -10,7 +10,7 @@
 class DrawSystem;
 class DrawSystemFrame;
 class IUIContent;
-class IUIData;
+class UIData;
 class IUIModel;
 class LocaleSystem;
 class TextManager;
