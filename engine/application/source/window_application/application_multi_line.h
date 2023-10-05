@@ -6,6 +6,7 @@
 
 class DrawSystem;
 class Shader;
+class ShaderConstantBuffer;
 class ShaderResource;
 class UnorderedAccess;
 class GeometryGeneric;
@@ -45,7 +46,9 @@ private:
     struct DrawResources
     {
         std::shared_ptr<Shader> _background_shader;
+        std::shared_ptr<ShaderConstantBuffer> _background_shader_constant_buffer;
         std::shared_ptr<Shader> _background_shader_grid;
+        std::shared_ptr<ShaderConstantBuffer> _background_shader_grid_constant_buffer;
         std::shared_ptr<GeometryGeneric> _background_geometry;
 
         std::shared_ptr<Shader> _multi_line_compute;
@@ -61,6 +64,7 @@ private:
 #endif
 
         std::shared_ptr<Shader> _multi_line_shader;
+        std::shared_ptr<ShaderConstantBuffer> _multi_line_shader_constant_buffer;
         std::shared_ptr<GeometryGeneric> _multi_line_geometry;
 
     };

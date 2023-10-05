@@ -5,6 +5,7 @@
 class DrawSystem;
 class Shader;
 class ShaderResource;
+class ShaderConstantBuffer;
 class SceneComponentScreenQuad;
 class SceneComponentCameraRay;
 class SceneComponentBackground;
@@ -54,8 +55,10 @@ private:
         std::shared_ptr<UnorderedAccess> _multi_line_data_dir_length;
         std::shared_ptr<UnorderedAccess> _multi_line_data_colour;
         std::shared_ptr<Shader> _multi_line_compute;
+        std::shared_ptr<ShaderConstantBuffer> _multi_line_compute_constant_buffer;
 
         std::shared_ptr<Shader> _multi_line_shader;
+        std::shared_ptr<ShaderConstantBuffer> _multi_line_shader_constant_buffer;
         std::shared_ptr<GeometryGeneric> _multi_line_geometry;
     };
     std::unique_ptr<DrawResources> _draw_resources;

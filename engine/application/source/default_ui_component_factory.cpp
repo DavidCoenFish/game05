@@ -453,6 +453,14 @@ void DefaultUIComponentFactory::Populate(
     )
 {
     in_ui_manager.AddContentFactory("UIDataString", FactoryString<>);
+    in_ui_manager.AddContentFactory("string_middle_em", FactoryString<
+        GetUILayout,
+        GetFontPathDefault,
+        s_default_font_size,
+        s_new_line_gap,
+        TextEnum::HorizontalLineAlignment::Middle,
+        TextEnum::VerticalBlockAlignment::MiddleEM
+        >);
     in_ui_manager.AddContentFactory("string_small_right", FactoryString<
         GetUILayoutBottomRightShrink,
         GetFontPathDefault,

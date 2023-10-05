@@ -6,6 +6,7 @@ class DrawSystemFrame;
 class GeometryGeneric;
 class HeapWrapperItem;
 class Shader;
+class ShaderConstantBuffer;
 class ShaderResource;
 class UnorderedAccess;
 
@@ -23,7 +24,9 @@ public:
         );
     SceneComponentBackground(
         const std::shared_ptr<Shader>& in_shader_background,
-        const std::shared_ptr<Shader>& in_shader_grid
+        const std::shared_ptr<ShaderConstantBuffer>& in_shader_background_constant_buffer,
+        const std::shared_ptr<Shader>& in_shader_grid,
+        const std::shared_ptr<ShaderConstantBuffer>& in_shader_grid_constant_buffer
         );
     ~SceneComponentBackground();
 
@@ -36,6 +39,9 @@ public:
 
 private:
     std::shared_ptr<Shader> _shader_background;
+    std::shared_ptr<ShaderConstantBuffer> _shader_background_constant_buffer;
+    
     std::shared_ptr<Shader> _shader_grid;
+    std::shared_ptr<ShaderConstantBuffer> _shader_grid_constant_buffer;
 
 };

@@ -10,6 +10,7 @@
 #include "common/draw_system/geometry/geometry_generic.h"
 #include "common/draw_system/render_target/render_target_texture.h"
 #include "common/draw_system/shader/shader.h"
+#include "common/draw_system/shader/shader_constant_buffer.h"
 #include "common/draw_system/shader/shader_pipeline_state_data.h"
 #include "common/file_system/file_system.h"
 #include "common/log/log.h"
@@ -120,6 +121,7 @@ ApplicationTestTextRun::ApplicationTestTextRun(
             array_shader_resource_info,
             array_shader_constants_info
             );
+        _draw_resources->_background_shader_constant_buffer = _draw_resources->_background_shader->MakeShaderConstantBuffer(_draw_system.get());
     }
 
     _draw_resources->_text_manager = std::make_unique<TextManager>(
@@ -276,13 +278,14 @@ void ApplicationTestTextRun::Update()
         frame->SetRenderTarget(_draw_system->GetRenderTargetBackBuffer());
 
         auto background_shader = _draw_resources->_background_shader.get();
-        if (nullptr != background_shader)
+        auto background_shader_constant_buffer = _draw_resources->_background_shader_constant_buffer.get();
+        if ((nullptr != background_shader) && (nullptr != background_shader_constant_buffer))
         {
-            auto& buffer0 = background_shader->GetConstant<BackgroundConstantBufferB0>(0);
+            auto& buffer0 = background_shader_constant_buffer->GetConstant<BackgroundConstantBufferB0>(0);
             buffer0._screen_width = _screen_width;
             buffer0._screen_height = _screen_height;
 
-            frame->SetShader(background_shader);
+            frame->SetShader(background_shader, background_shader_constant_buffer);
             frame->Draw(_draw_resources->_screen_quad->GetGeometry());
         }
         _draw_resources->_text_run->SetTextContainerSize(

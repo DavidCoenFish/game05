@@ -1,11 +1,7 @@
-need to hold onto renderer IResource till command list is done.
-add to DrawSystem a ResourceBucket, which we keep alive till fence is passed
 make shader param instancable, is Shader::MakeParamInstance, Shader::SetParam
 
-X ui system button
-- UIDataEffect // drop shadow
-- IUIDataContainer
 - shader param instance
+- UIDataEffect // drop shadow
 - ui fade in/ tint / background colour
 - ui fade/blur out effect for destroyed uitextures
 - Option dialog

@@ -49,6 +49,7 @@
     <ClCompile Include="source\common\draw_system\shader\constant_buffer.cpp" />
     <ClCompile Include="source\common\draw_system\shader\constant_buffer_info.cpp" />
     <ClCompile Include="source\common\draw_system\shader\shader.cpp" />
+    <ClCompile Include="source\common\draw_system\shader\shader_constant_buffer.cpp" />
     <ClCompile Include="source\common\draw_system\shader\shader_pipeline_state_data.cpp" />
     <ClCompile Include="source\common\draw_system\shader\shader_resource.cpp" />
     <ClCompile Include="source\common\draw_system\shader\shader_resource_info.cpp" />
@@ -139,8 +140,10 @@
     <ClInclude Include="include\common\draw_system\render_target\render_target_depth_data.h" />
     <ClInclude Include="include\common\draw_system\render_target\render_target_format_data.h" />
     <ClInclude Include="include\common\draw_system\render_target\render_target_texture.h" />
+    <ClInclude Include="include\common\draw_system\shader\constant_buffer.h" />
     <ClInclude Include="include\common\draw_system\shader\constant_buffer_info.h" />
     <ClInclude Include="include\common\draw_system\shader\shader.h" />
+    <ClInclude Include="include\common\draw_system\shader\shader_constant_buffer.h" />
     <ClInclude Include="include\common\draw_system\shader\shader_pipeline_state_data.h" />
     <ClInclude Include="include\common\draw_system\shader\shader_resource.h" />
     <ClInclude Include="include\common\draw_system\shader\shader_resource_info.h" />
@@ -217,7 +220,6 @@
     <ClInclude Include="source\common\draw_system\heap_wrapper\heap_wrapper_page.h" />
     <ClInclude Include="source\common\draw_system\render_target\render_target_backbuffer.h" />
     <ClInclude Include="source\common\draw_system\screen_size_resources.h" />
-    <ClInclude Include="source\common\draw_system\shader\constant_buffer.h" />
     <ClInclude Include="source\common\log\i_log_consumer.h" />
     <ClInclude Include="source\common\log\log_consumer_console.h" />
     <ClInclude Include="source\common\log\log_consumer_output_debug_string.h" />

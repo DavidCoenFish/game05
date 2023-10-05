@@ -1,18 +1,16 @@
 #include "common/common_pch.h"
+#include "common/draw_system/shader/constant_buffer.h"
 
 #include "common/direct_xtk12/d3dx12.h"
 #include "common/draw_system/heap_wrapper/heap_wrapper_item.h"
-#include "common/draw_system/shader/constant_buffer.h"
 
 ConstantBuffer::ConstantBuffer(
     const int in_frame_count,
-    const size_t in_constant_buffer_size,
     const std::shared_ptr < HeapWrapperItem >&in_heap_wrapper_item,
-    const void* const in_data,
+    const std::vector<uint8_t>& in_data,
     const D3D12_SHADER_VISIBILITY in_visiblity
     ) 
     : _frame_count(in_frame_count)
-    , _constant_buffer_size(in_constant_buffer_size)
     , _heap_wrapper_item(in_heap_wrapper_item)
     , _data(in_data)
     , _visiblity(in_visiblity)
@@ -55,7 +53,7 @@ void ConstantBuffer::DeviceRestored(ID3D12Device* const in_device)
         _constant_buffer_upload_heap[i]->SetName(L"Constant Buffer Upload Resource Heap");
         D3D12_CONSTANT_BUFFER_VIEW_DESC cbv_desc = {};
         cbv_desc.BufferLocation = _constant_buffer_upload_heap[i]->GetGPUVirtualAddress();
-        cbv_desc.SizeInBytes = (_constant_buffer_size + 255) &~255;
+        cbv_desc.SizeInBytes = (_data.size() + 255) & ~255;
         // CB size is required to be 256-byte aligned.
         in_device->CreateConstantBufferView(
             &cbv_desc,
@@ -102,14 +100,28 @@ void ConstantBuffer::Activate(
     }
     memcpy(
         _gpu_address[in_frame_index],
-        _data,
-        _constant_buffer_size
+        _data.data(),
+        _data.size()
         );
     return;
 }
 
 const int ConstantBuffer::GetNum32BitValues() const
 {
-    return (int)(_constant_buffer_size / 4);
+    return (int)(_data.size() / 4);
 }
 
+void ConstantBuffer::UpdateData(
+    const void* const in_data,
+    const size_t in_data_size
+    )
+{
+    in_data_size;
+    DSC_ASSERT(in_data_size == _data.size(), "param size doesn't match data size");
+    memcpy(
+        _data.data(),
+        in_data,
+        _data.size()
+        );
+    return;
+}

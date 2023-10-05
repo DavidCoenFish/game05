@@ -22,31 +22,10 @@ public:
         const std::vector<uint8_t>& in_data = std::vector<uint8_t>(),
         const D3D12_SHADER_VISIBILITY in_visiblity = D3D12_SHADER_VISIBILITY_ALL
         );
-    void UpdateData(
-        const void* const in_data,
-        const size_t in_data_size
-        );
+
     const D3D12_SHADER_VISIBILITY GetVisiblity() const
     {
         return _visiblity;
-    }
-
-    const size_t GetBufferSize() const
-    {
-        return _data.size();
-    }
-
-    const void* const GetBufferData() const
-    {
-        return _data.data();
-    }
-
-    template < class TYPE > 
-    TYPE& GetBufferDataAsType()
-    {
-        assert(sizeof(TYPE) == GetBufferSize());
-        TYPE* data = &_data[0];
-        return *data;
     }
 
 public:

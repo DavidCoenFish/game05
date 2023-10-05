@@ -8,6 +8,7 @@
 #include "common/draw_system/draw_system_frame.h"
 #include "common/draw_system/geometry/geometry_generic.h"
 #include "common/draw_system/shader/shader.h"
+#include "common/draw_system/shader/shader_constant_buffer.h"
 #include "common/draw_system/shader/shader_pipeline_state_data.h"
 #include "common/file_system/file_system.h"
 #include "common/log/log.h"
@@ -169,6 +170,7 @@ ApplicationTestLine::ApplicationTestLine(
             array_shader_resource_info,
             array_shader_constants_info
         );
+        _shader_background_constant_buffer = _shader_background->MakeShaderConstantBuffer(_draw_system.get());
     }
 
     // Shader grid
@@ -206,6 +208,7 @@ ApplicationTestLine::ApplicationTestLine(
             array_shader_resource_info,
             array_shader_constants_info
         );
+        _shader_grid_constant_buffer = _shader_grid->MakeShaderConstantBuffer(_draw_system.get());
     }
 
     // Shader axis
@@ -243,6 +246,7 @@ ApplicationTestLine::ApplicationTestLine(
             array_shader_resource_info,
             array_shader_constants_info
         );
+        _shader_axis_constant_buffer = _shader_axis->MakeShaderConstantBuffer(_draw_system.get());
     }
 
     // Shader sphere
@@ -284,6 +288,8 @@ ApplicationTestLine::ApplicationTestLine(
             array_shader_resource_info,
             array_shader_constants_info
         );
+        _shader_sphere_a_constant_buffer = _shader_sphere_a->MakeShaderConstantBuffer(_draw_system.get());
+
         _shader_sphere_b = _draw_system->MakeShader(
             command_list->GetCommandList(),
             shader_pipeline_state_data,
@@ -293,6 +299,7 @@ ApplicationTestLine::ApplicationTestLine(
             array_shader_resource_info,
             array_shader_constants_info
         );
+        _shader_sphere_b_constant_buffer = _shader_sphere_b->MakeShaderConstantBuffer(_draw_system.get());
     }
 
     // Geometry Screen Quad
@@ -452,9 +459,10 @@ void ApplicationTestLine::Update()
         // Draw background
 #if 1
         auto shader_background = _shader_background.get();
-        if (nullptr != shader_background)
+        auto shader_background_constant_buffer = _shader_background_constant_buffer.get();
+        if ((nullptr != shader_background) && (nullptr != shader_background_constant_buffer))
         {
-            auto& buffer0 = shader_background->GetConstant<ConstantBufferB0>(0);
+            auto& buffer0 = shader_background_constant_buffer->GetConstant<ConstantBufferB0>(0);
             buffer0._camera_at = _camera_at;
             buffer0._camera_up = _camera_up;
             buffer0._camera_pos = _camera_pos;
@@ -463,7 +471,7 @@ void ApplicationTestLine::Update()
             buffer0._camera_fov_vertical = _fov_vertical;
             buffer0._camera_unit_pixel_size = _unit_pixel_size;
 
-            auto& buffer_background1 = shader_background->GetConstant<ConstantBufferBackgroundB1>(1);
+            auto& buffer_background1 = shader_background_constant_buffer->GetConstant<ConstantBufferBackgroundB1>(1);
 
             buffer_background1._sun_azimuth_altitude = VectorFloat2(Angle::DegToRadian(45.0f), Angle::DegToRadian(45.0f));
             buffer_background1._sun_range = VectorFloat2(0.05f, 0.2f);//1.0f, 5.0f);
@@ -474,16 +482,17 @@ void ApplicationTestLine::Update()
             buffer_background1._ground_tint = VectorFloat3(32.0f / 255.0f, 16.0f / 255.0f, 2.0f / 255.0f);
             buffer_background1._fog_tint = VectorFloat3(200.0f / 255.0f, 200.0f / 255.0f, 200.0f / 255.0f);
         }
-        frame->SetShader(shader_background);
+        frame->SetShader(shader_background, shader_background_constant_buffer);
         frame->Draw(_geometry.get());
 #endif
 
         // Draw Grid
 #if 1
         auto shader_grid = _shader_grid.get();
-        if (nullptr != shader_grid)
+        auto shader_grid_constant_buffer = _shader_grid_constant_buffer.get();
+        if ((nullptr != shader_grid) && (nullptr != shader_grid_constant_buffer))
         {
-            auto& buffer0 = shader_grid->GetConstant<ConstantBufferB0>(0);
+            auto& buffer0 = shader_grid_constant_buffer->GetConstant<ConstantBufferB0>(0);
             buffer0._camera_at = _camera_at;
             buffer0._camera_up = _camera_up;
             buffer0._camera_pos = _camera_pos;
@@ -492,7 +501,7 @@ void ApplicationTestLine::Update()
             buffer0._camera_fov_vertical = _fov_vertical;
             buffer0._camera_unit_pixel_size = _unit_pixel_size;
 
-            frame->SetShader(shader_grid);
+            frame->SetShader(shader_grid, shader_grid_constant_buffer);
             frame->Draw(_geometry.get());
         }
 #endif
@@ -500,9 +509,10 @@ void ApplicationTestLine::Update()
         // Draw Axis
 #if 1
         auto shader_axis = _shader_axis.get();
-        if (nullptr != shader_axis)
+        auto shader_axis_constant_buffer = _shader_axis_constant_buffer.get();
+        if ((nullptr != shader_axis) && (nullptr != shader_axis_constant_buffer))
         {
-            auto& buffer0 = shader_axis->GetConstant<ConstantBufferB0>(0);
+            auto& buffer0 = shader_axis_constant_buffer->GetConstant<ConstantBufferB0>(0);
             buffer0._camera_at = _camera_at;
             buffer0._camera_up = _camera_up;
             buffer0._camera_pos = _camera_pos;
@@ -511,7 +521,7 @@ void ApplicationTestLine::Update()
             buffer0._camera_fov_vertical = _fov_vertical;
             buffer0._camera_unit_pixel_size = _unit_pixel_size;
 
-            frame->SetShader(shader_axis);
+            frame->SetShader(shader_axis, shader_axis_constant_buffer);
             frame->Draw(_geometry.get());
         }
 #endif
@@ -519,9 +529,10 @@ void ApplicationTestLine::Update()
         // Draw sphere
 #if 1
         auto shader_sphere = _shader_sphere_a.get();
-        if (nullptr != shader_sphere)
+        auto shader_sphere_constant_buffer = _shader_sphere_a_constant_buffer.get();
+        if ((nullptr != shader_sphere) && (nullptr != shader_sphere_constant_buffer))
         {
-            auto& buffer0 = shader_sphere->GetConstant<ConstantBufferB0>(0);
+            auto& buffer0 = shader_sphere_constant_buffer->GetConstant<ConstantBufferB0>(0);
             buffer0._camera_at = _camera_at;
             buffer0._camera_up = _camera_up;
             buffer0._camera_pos = _camera_pos;
@@ -530,19 +541,21 @@ void ApplicationTestLine::Update()
             buffer0._camera_fov_vertical = _fov_vertical;
             buffer0._camera_unit_pixel_size = _unit_pixel_size;
 
-            auto& buffer1 = shader_sphere->GetConstant<ConstantBufferSphereB1>(1);
+            auto& buffer1 = shader_sphere_constant_buffer->GetConstant<ConstantBufferSphereB1>(1);
             buffer1._sphere_pos = VectorFloat3(1.5f, 0.0f, 0.0f);
             buffer1._sphere_edge_thickness_pixels = 0.25f;
             buffer1._sphere_tint = VectorFloat3(0.0f, 0.0f, 0.0f);
             buffer1._sphere_radius = 0.5f;
 
-            frame->SetShader(shader_sphere);
+            frame->SetShader(shader_sphere, shader_sphere_constant_buffer);
             frame->Draw(_geometry.get());
         }
+
         shader_sphere = _shader_sphere_b.get();
-        if (nullptr != shader_sphere)
+        shader_sphere_constant_buffer = _shader_sphere_b_constant_buffer.get();
+        if ((nullptr != shader_sphere) && (nullptr != shader_sphere_constant_buffer))
         {
-            auto& buffer0 = shader_sphere->GetConstant<ConstantBufferB0>(0);
+            auto& buffer0 = shader_sphere_constant_buffer->GetConstant<ConstantBufferB0>(0);
             buffer0._camera_at = _camera_at;
             buffer0._camera_up = _camera_up;
             buffer0._camera_pos = _camera_pos;
@@ -551,13 +564,13 @@ void ApplicationTestLine::Update()
             buffer0._camera_fov_vertical = _fov_vertical;
             buffer0._camera_unit_pixel_size = _unit_pixel_size;
 
-            auto& buffer1 = shader_sphere->GetConstant<ConstantBufferSphereB1>(1);
+            auto& buffer1 = shader_sphere_constant_buffer->GetConstant<ConstantBufferSphereB1>(1);
             buffer1._sphere_pos = VectorFloat3(0.0f, 0.0f, 0.0f);
             buffer1._sphere_edge_thickness_pixels = 0.25f;
             buffer1._sphere_tint = VectorFloat3(0.0f, 0.0f, 0.0f);
             buffer1._sphere_radius = 1.0f;
 
-            frame->SetShader(shader_sphere);
+            frame->SetShader(shader_sphere, shader_sphere_constant_buffer);
             frame->Draw(_geometry.get());
         }
 

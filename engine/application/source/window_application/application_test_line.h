@@ -4,6 +4,7 @@
 
 class DrawSystem;
 class Shader;
+class ShaderConstantBuffer;
 class GeometryGeneric;
 class Timer;
 
@@ -40,10 +41,19 @@ private:
     std::shared_ptr < GeometryGeneric > _geometry;
 
     std::shared_ptr < Shader > _shader_background;
+    std::shared_ptr < ShaderConstantBuffer > _shader_background_constant_buffer;
+
     std::shared_ptr < Shader > _shader_axis;
+    std::shared_ptr < ShaderConstantBuffer > _shader_axis_constant_buffer;
+
     std::shared_ptr < Shader > _shader_sphere_a;
+    std::shared_ptr < ShaderConstantBuffer > _shader_sphere_a_constant_buffer;
+
     std::shared_ptr < Shader > _shader_sphere_b;
+    std::shared_ptr < ShaderConstantBuffer > _shader_sphere_b_constant_buffer;
+
     std::shared_ptr < Shader > _shader_grid;
+    std::shared_ptr < ShaderConstantBuffer > _shader_grid_constant_buffer;
 
     float _fov_vertical;
     float _fov_horizontal_calculated;

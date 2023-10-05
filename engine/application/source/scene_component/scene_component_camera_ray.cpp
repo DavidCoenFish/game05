@@ -7,6 +7,7 @@
 #include "common/draw_system/render_target/render_target_texture.h"
 #include "common/draw_system/shader/constant_buffer_info.h"
 #include "common/draw_system/shader/shader.h"
+#include "common/draw_system/shader/shader_constant_buffer.h"
 #include "common/draw_system/shader/shader_resource.h"
 #include "common/draw_system/shader/shader_pipeline_state_data.h"
 #include "common/file_system/file_system.h"
@@ -75,15 +76,18 @@ std::shared_ptr<SceneComponentCameraRay> SceneComponentCameraRay::Factory(
         array_shader_constants_info
         );
 
+    auto shader_camera_ray_constant_buffer = shader_camera_ray->MakeShaderConstantBuffer(in_draw_system);
 
     return std::make_shared<SceneComponentCameraRay>(
         shader_camera_ray,
+        shader_camera_ray_constant_buffer,
         render_target_texture
         );
 }
 
 SceneComponentCameraRay::SceneComponentCameraRay(
     const std::shared_ptr<Shader>& in_shader_camera_ray,
+    const std::shared_ptr<ShaderConstantBuffer>& in_shader_camera_ray_constant_buffer,
     const std::shared_ptr<RenderTargetTexture>& in_render_target_texture
     )
     : _constant_buffer({
@@ -96,6 +100,7 @@ SceneComponentCameraRay::SceneComponentCameraRay(
     })
     , _change_since_last_update(true)
     , _shader_camera_ray(in_shader_camera_ray)
+    , _shader_camera_ray_constant_buffer(in_shader_camera_ray_constant_buffer)
     , _render_target_texture(in_render_target_texture)
     , _input_q(false)
     , _input_w(false)
@@ -221,11 +226,13 @@ void SceneComponentCameraRay::Update(
             );
 
         auto shader_camera_ray = _shader_camera_ray.get();
-        if (nullptr != shader_camera_ray)
-        {
-            shader_camera_ray->GetConstant<CameraConstantBufferB0>(0) = _constant_buffer;
+        auto shader_camera_ray_constant_buffer = _shader_camera_ray_constant_buffer.get();
 
-            in_draw_system_frame->SetShader(shader_camera_ray);
+        if ((nullptr != shader_camera_ray) && (nullptr != shader_camera_ray_constant_buffer))
+        {
+            shader_camera_ray_constant_buffer->GetConstant<CameraConstantBufferB0>(0) = _constant_buffer;
+
+            in_draw_system_frame->SetShader(shader_camera_ray, shader_camera_ray_constant_buffer);
             in_draw_system_frame->Draw(in_screen_quad);
         }
 

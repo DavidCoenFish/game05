@@ -3,6 +3,7 @@ class DrawSystem;
 class IRenderTarget;
 class IResource;
 class Shader;
+class ShaderConstantBuffer;
 class GeometryGeneric;
 
 class DrawSystemFrame
@@ -19,7 +20,10 @@ public:
         const std::shared_ptr<IResource>& in_resource = nullptr,
         const bool in_allow_clear = true
         );
-    void SetShader(Shader* const in_shader);
+    void SetShader(
+        Shader* const in_shader,
+        ShaderConstantBuffer* const in_shader_constant_buffer = nullptr
+        );
     void Draw(GeometryGeneric* const in_geometry);
     // thread_group_count as the number of steps for each thread to do
     void Dispatch(

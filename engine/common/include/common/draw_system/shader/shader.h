@@ -3,11 +3,13 @@
 #include "common/draw_system/shader/constant_buffer_info.h"
 #include "common/draw_system/shader/shader_pipeline_state_data.h"
 
+class HeapWrapperItem;
+class ShaderConstantBuffer;
+
+struct ConstantBuffer;
 struct ConstantBufferInfo;
 struct ShaderResourceInfo;
-struct ConstantBuffer;
 struct UnorderedAccessInfo;
-class HeapWrapperItem;
 
 class Shader : public IResource
 {
@@ -29,8 +31,9 @@ public:
         );
     virtual ~Shader();
     void SetDebugName(const std::string&in_name);
-    void SetActivate(
+    void SetActive(
         ID3D12GraphicsCommandList* const in_command_list,
+        ShaderConstantBuffer* const in_shader_constant_buffer,
         const int in_frame_index
         );
     void SetShaderResourceViewHandle(
@@ -41,23 +44,10 @@ public:
         const int in_index,
         const std::shared_ptr < HeapWrapperItem >&in_unordered_access_view_handle
         );
-    void SetConstantBufferData(
-        const int in_index,
-        const std::vector<float>& in_data
-        );
-    template<typename CONSTANTS> CONSTANTS& GetConstant(const int in_index)
-    {
-        if ((0 <= in_index) && (in_index < _array_shader_constants_info.size()))
-        {
-            auto& shader_constant_info = *_array_shader_constants_info[in_index];
-            assert(sizeof(CONSTANTS) == shader_constant_info.GetBufferSize());
-            const void* const data = shader_constant_info.GetBufferData();
-            return (*((CONSTANTS*)data));
-        }
-        static CONSTANTS result;
-        return result;
-    }
 
+    std::shared_ptr<ShaderConstantBuffer> MakeShaderConstantBuffer(
+            DrawSystem* const in_draw_system
+            );
 
 private:
     virtual void OnDeviceLost() override;
@@ -67,15 +57,14 @@ private:
         ) override;
 
 private:
-    ShaderPipelineStateData _pipeline_state_data;
     std::shared_ptr<std::vector<uint8_t>> _vertex_shader_data;
     std::shared_ptr<std::vector<uint8_t>> _geometry_shader_data;
     std::shared_ptr<std::vector<uint8_t>> _pixel_shader_data;
-    std::vector<std::shared_ptr<ShaderResourceInfo>> _array_shader_resource_info;
-    std::vector<std::shared_ptr<ConstantBufferInfo>> _array_shader_constants_info;
     std::shared_ptr<std::vector<uint8_t>> _compute_shader_data;
+    ShaderPipelineStateData _pipeline_state_data;
+    std::vector<std::shared_ptr<ShaderResourceInfo>> _array_shader_resource_info;
+    std::vector<std::shared_ptr<ConstantBufferInfo>> _array_constants_buffer_info;
     std::vector<std::shared_ptr<UnorderedAccessInfo>> _array_unordered_access_info;
-    std::vector<std::shared_ptr<ConstantBuffer>> _array_constant_buffer;
     Microsoft::WRL::ComPtr<ID3D12RootSignature> _root_signature;
     Microsoft::WRL::ComPtr<ID3D12PipelineState> _pipeline_state;
     std::string _debug_name;

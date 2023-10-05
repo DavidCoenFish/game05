@@ -8,6 +8,7 @@
 #include "common/draw_system/draw_system_frame.h"
 #include "common/draw_system/geometry/geometry_generic.h"
 #include "common/draw_system/shader/shader.h"
+#include "common/draw_system/shader/shader_constant_buffer.h"
 #include "common/draw_system/shader/shader_pipeline_state_data.h"
 #include "common/draw_system/shader/shader_resource.h"
 #include "common/draw_system/shader/shader_resource_info.h"
@@ -154,6 +155,7 @@ ApplicationMultiLine::ApplicationMultiLine(
                     array_shader_resource_info,
                     array_shader_constants_info
                 );
+                _draw_resources->_background_shader_constant_buffer = _draw_resources->_background_shader->MakeShaderConstantBuffer(_draw_system.get());
             }
 
             // Shader background grid
@@ -190,6 +192,7 @@ ApplicationMultiLine::ApplicationMultiLine(
                     array_shader_resource_info,
                     array_shader_constants_info
                     );
+                _draw_resources->_background_shader_grid_constant_buffer = _draw_resources->_background_shader_grid->MakeShaderConstantBuffer(_draw_system.get());
             }
 
             // Geometry Screen Quad
@@ -610,6 +613,7 @@ ApplicationMultiLine::ApplicationMultiLine(
                     //compute_shader_data,
                     //array_unordered_access_info
                 );
+                _draw_resources->_multi_line_shader_constant_buffer = _draw_resources->_multi_line_shader->MakeShaderConstantBuffer(_draw_system.get());
             }
 
             // std::shared_ptr<GeometryGeneric> _multi_line_geometry;
@@ -788,9 +792,10 @@ void ApplicationMultiLine::Update()
         // Draw background
 #if 1
         auto shader_background = _draw_resources->_background_shader.get();
-        if (nullptr != shader_background)
+        auto shader_background_constant_buffer = _draw_resources->_background_shader_constant_buffer.get();
+        if ((nullptr != shader_background) && (nullptr != shader_background_constant_buffer))
         {
-            auto& buffer0 = shader_background->GetConstant<ConstantBufferB0>(0);
+            auto& buffer0 = shader_background_constant_buffer->GetConstant<ConstantBufferB0>(0);
             buffer0._camera_at = _camera_at;
             buffer0._camera_up = _camera_up;
             buffer0._camera_pos = _camera_pos;
@@ -799,7 +804,7 @@ void ApplicationMultiLine::Update()
             buffer0._camera_fov_vertical = _fov_vertical;
             buffer0._camera_unit_pixel_size = _unit_pixel_size;
 
-            auto& buffer_background1 = shader_background->GetConstant<ConstantBufferBackgroundB1>(1);
+            auto& buffer_background1 = shader_background_constant_buffer->GetConstant<ConstantBufferBackgroundB1>(1);
 
             buffer_background1._sun_azimuth_altitude = VectorFloat2(Angle::DegToRadian(45.0f), Angle::DegToRadian(45.0f));
             buffer_background1._sun_range = VectorFloat2(0.05f, 0.2f);//1.0f, 5.0f);
@@ -810,7 +815,7 @@ void ApplicationMultiLine::Update()
             buffer_background1._ground_tint = VectorFloat3(32.0f / 255.0f, 16.0f / 255.0f, 2.0f / 255.0f);
             buffer_background1._fog_tint = VectorFloat3(200.0f / 255.0f, 200.0f / 255.0f, 200.0f / 255.0f);
 
-            frame->SetShader(shader_background);
+            frame->SetShader(shader_background, shader_background_constant_buffer);
             frame->Draw(_draw_resources->_background_geometry.get());
         }
 #endif
@@ -818,9 +823,10 @@ void ApplicationMultiLine::Update()
         // Draw Grid
 #if 1
         auto shader_grid = _draw_resources->_background_shader_grid.get();
-        if (nullptr != shader_grid)
+        auto shader_grid_constant_buffer = _draw_resources->_background_shader_grid_constant_buffer.get();
+        if ((nullptr != shader_grid) && (nullptr != shader_grid_constant_buffer))
         {
-            auto& buffer0 = shader_grid->GetConstant<ConstantBufferB0>(0);
+            auto& buffer0 = shader_grid_constant_buffer->GetConstant<ConstantBufferB0>(0);
             buffer0._camera_at = _camera_at;
             buffer0._camera_up = _camera_up;
             buffer0._camera_pos = _camera_pos;
@@ -829,7 +835,7 @@ void ApplicationMultiLine::Update()
             buffer0._camera_fov_vertical = _fov_vertical;
             buffer0._camera_unit_pixel_size = _unit_pixel_size;
 
-            frame->SetShader(shader_grid);
+            frame->SetShader(shader_grid, shader_grid_constant_buffer);
             frame->Draw(_draw_resources->_background_geometry.get());
         }
 #endif
@@ -837,13 +843,14 @@ void ApplicationMultiLine::Update()
         // Draw Multi Line
 #if 1
         auto multi_line_shader = _draw_resources->_multi_line_shader.get();
-        if (nullptr != multi_line_shader)
+        auto multi_line_shader_constant_buffer = _draw_resources->_multi_line_shader_constant_buffer.get();
+        if ((nullptr != multi_line_shader) && (nullptr != multi_line_shader_constant_buffer))
         {
             frame->ResourceBarrier(_draw_resources->_multi_line_data_pos_thick.get(), D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
             frame->ResourceBarrier(_draw_resources->_multi_line_data_dir_length.get(), D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
             frame->ResourceBarrier(_draw_resources->_multi_line_data_colour.get(), D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
 
-            auto& buffer0 = multi_line_shader->GetConstant<ConstantBufferB0>(0);
+            auto& buffer0 = multi_line_shader_constant_buffer->GetConstant<ConstantBufferB0>(0);
             buffer0._camera_at = _camera_at;
             buffer0._camera_up = _camera_up;
             buffer0._camera_pos = _camera_pos;
@@ -853,7 +860,7 @@ void ApplicationMultiLine::Update()
             buffer0._camera_unit_pixel_size = _unit_pixel_size;
             buffer0._camera_radian_per_pixel = _radian_per_pixel;
 
-            frame->SetShader(multi_line_shader);
+            frame->SetShader(multi_line_shader, multi_line_shader_constant_buffer);
             frame->Draw(_draw_resources->_multi_line_geometry.get());
         }
 #endif

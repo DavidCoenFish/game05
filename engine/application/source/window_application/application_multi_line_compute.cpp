@@ -12,6 +12,7 @@
 #include "common/draw_system/draw_system_frame.h"
 #include "common/draw_system/geometry/geometry_generic.h"
 #include "common/draw_system/shader/shader.h"
+#include "common/draw_system/shader/shader_constant_buffer.h"
 #include "common/draw_system/shader/shader_pipeline_state_data.h"
 #include "common/draw_system/shader/shader_resource.h"
 #include "common/draw_system/shader/shader_resource_info.h"
@@ -186,6 +187,7 @@ ApplicationMultiLineCompute::ApplicationMultiLineCompute(
                 pComputeShaderData,
                 array_unordered_access_info
                 );
+            _draw_resources->_multi_line_compute_constant_buffer = _draw_resources->_multi_line_compute->MakeShaderConstantBuffer(_draw_system.get());
         }
 
         // Multi line shader and geometry
@@ -258,6 +260,7 @@ ApplicationMultiLineCompute::ApplicationMultiLineCompute(
                     array_shader_resource_info,
                     array_shader_constants_info
                     );
+                _draw_resources->_multi_line_shader_constant_buffer = _draw_resources->_multi_line_shader->MakeShaderConstantBuffer(_draw_system.get());
             }
 
             // std::shared_ptr<GeometryGeneric> _multi_line_geometry;
@@ -374,16 +377,17 @@ void ApplicationMultiLineCompute::Update()
         // Draw Multi Line Compute
 #if 1
         auto multi_line_compute = _draw_resources->_multi_line_compute.get();
-        if (nullptr != multi_line_compute)
+        auto multi_line_compute_constant_buffer = _draw_resources->_multi_line_compute_constant_buffer.get();
+        if ((nullptr != multi_line_compute) && (nullptr != multi_line_compute_constant_buffer))
         {
             frame->ResourceBarrier(_draw_resources->_multi_line_data_uv_low_uv_high.get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
             frame->ResourceBarrier(_draw_resources->_multi_line_data_pos_thick.get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
             frame->ResourceBarrier(_draw_resources->_multi_line_data_dir_length.get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
             frame->ResourceBarrier(_draw_resources->_multi_line_data_colour.get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
-            multi_line_compute->GetConstant<CameraConstantBufferB0>(0) = _draw_resources->_camera_ray->GetConstantBufferB0();
+            multi_line_compute_constant_buffer->GetConstant<CameraConstantBufferB0>(0) = _draw_resources->_camera_ray->GetConstantBufferB0();
 
-            frame->SetShader(multi_line_compute);
+            frame->SetShader(multi_line_compute, multi_line_compute_constant_buffer);
             frame->Dispatch(
                 s_texture_width / s_thread_x,
                 s_texture_height / s_thread_y
@@ -394,16 +398,17 @@ void ApplicationMultiLineCompute::Update()
         // Draw Multi Line
 #if 1
         auto multi_line_shader = _draw_resources->_multi_line_shader.get();
-        if (nullptr != multi_line_shader)
+        auto multi_line_shader_constant_buffer = _draw_resources->_multi_line_shader_constant_buffer.get();
+        if ((nullptr != multi_line_shader) && (nullptr != multi_line_shader_constant_buffer))
         {
             frame->ResourceBarrier(_draw_resources->_multi_line_data_uv_low_uv_high.get(), D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
             frame->ResourceBarrier(_draw_resources->_multi_line_data_pos_thick.get(), D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
             frame->ResourceBarrier(_draw_resources->_multi_line_data_dir_length.get(), D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
             frame->ResourceBarrier(_draw_resources->_multi_line_data_colour.get(), D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
 
-            multi_line_shader->GetConstant<CameraConstantBufferB0>(0) = _draw_resources->_camera_ray->GetConstantBufferB0();
+            multi_line_shader_constant_buffer->GetConstant<CameraConstantBufferB0>(0) = _draw_resources->_camera_ray->GetConstantBufferB0();
 
-            frame->SetShader(multi_line_shader);
+            frame->SetShader(multi_line_shader, multi_line_shader_constant_buffer);
             frame->Draw(_draw_resources->_multi_line_geometry.get());
         }
 #endif

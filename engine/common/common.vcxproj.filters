@@ -307,6 +307,9 @@
     <ClCompile Include="source\common\ui\i_ui_input.cpp">
       <Filter>souce\common\ui</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\draw_system\shader\shader_constant_buffer.cpp">
+      <Filter>souce\common\draw_system\shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -386,9 +389,6 @@
     </ClInclude>
     <ClInclude Include="source\common\draw_system\screen_size_resources.h">
       <Filter>souce\common\draw_system</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\draw_system\shader\constant_buffer.h">
-      <Filter>souce\common\draw_system\shader</Filter>
     </ClInclude>
     <ClInclude Include="source\common\draw_system\render_target\render_target_backbuffer.h">
       <Filter>souce\common\draw_system\render_target</Filter>
@@ -635,6 +635,12 @@
     </ClInclude>
     <ClInclude Include="include\common\ui\i_ui_input.h">
       <Filter>include\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\shader\shader_constant_buffer.h">
+      <Filter>include\common\draw_system\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\shader\constant_buffer.h">
+      <Filter>include\common\draw_system\shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

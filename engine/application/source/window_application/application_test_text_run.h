@@ -5,6 +5,7 @@ class DrawSystem;
 class GeometryGeneric;
 class RenderTargetTexture;
 class Shader;
+class ShaderConstantBuffer;
 class ShaderResource;
 class SceneComponentScreenQuad;
 class UIManager;
@@ -42,6 +43,7 @@ private:
     {
         std::shared_ptr<SceneComponentScreenQuad> _screen_quad;
         std::shared_ptr<Shader> _background_shader;
+        std::shared_ptr<ShaderConstantBuffer> _background_shader_constant_buffer;
 
         std::unique_ptr<TextManager> _text_manager;
         std::unique_ptr<TextRun> _text_run;

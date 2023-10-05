@@ -5,6 +5,7 @@ class DrawSystem;
 class DrawSystemFrame;
 class HeapWrapperItem;
 class Shader;
+class ShaderConstantBuffer;
 class ShaderResource;
 class GeometryGeneric;
 class RenderTargetTexture;
@@ -41,6 +42,7 @@ public:
 
     SceneComponentCameraRay(
         const std::shared_ptr<Shader>& in_shader_camera_ray,
+        const std::shared_ptr<ShaderConstantBuffer>& in_shader_camera_ray_constant_buffer,
         const std::shared_ptr<RenderTargetTexture>& in_render_target_texture
         );
 
@@ -74,6 +76,7 @@ private:
     bool _change_since_last_update;
 
     std::shared_ptr<Shader> _shader_camera_ray;
+    std::shared_ptr<ShaderConstantBuffer> _shader_camera_ray_constant_buffer;
     std::shared_ptr<RenderTargetTexture> _render_target_texture;
 
     // Camera Pos

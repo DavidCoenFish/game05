@@ -61,10 +61,14 @@ void DrawSystemFrame::SetRenderTarget(
     return;
 }
 
-void DrawSystemFrame::SetShader(Shader* const in_shader)
+void DrawSystemFrame::SetShader(
+    Shader* const in_shader,
+    ShaderConstantBuffer* const in_shader_constant_buffer
+    )
 {
-    in_shader->SetActivate(
+    in_shader->SetActive(
         _command_list,
+        in_shader_constant_buffer,
         _draw_system.GetBackBufferIndex()
         );
     return;

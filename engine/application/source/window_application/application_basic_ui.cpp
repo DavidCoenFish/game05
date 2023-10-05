@@ -83,7 +83,15 @@ public:
                                 in_application.Destroy(0);
                                 return;
                                 },
-                            true
+                            true,
+                            "UIDataButton",
+                            std::vector<std::shared_ptr<UIData>>({
+                                std::make_shared<UIDataString>(
+                                    "exit",
+                                    LocaleISO_639_1::Default,
+                                    "string_middle_em"
+                                    )
+                            })
                         ),
                         std::make_shared<UIDataButton>(),
                         std::make_shared<UIDataButton>(),

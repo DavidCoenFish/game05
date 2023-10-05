@@ -5,7 +5,7 @@
 #include "common/draw_system/shader/constant_buffer.h"
 #include "common/draw_system/shader/constant_buffer_info.h"
 #include "common/draw_system/shader/shader.h"
-#include "common/draw_system/shader/shader_resource_info.h"
+#include "common/draw_system/shader/shader_constant_buffer.h"
 #include "common/draw_system/shader/shader_resource_info.h"
 #include "common/draw_system/shader/unordered_access_info.h"
 
@@ -18,15 +18,12 @@ std::shared_ptr<ConstantBuffer> MakeConstantBuffer(
     {
         return nullptr;
     }
-    const size_t constant_buffer_size = in_constant_buffer_info->GetBufferSize();
-    const void* const data = in_constant_buffer_info->GetBufferData();
     const D3D12_SHADER_VISIBILITY visiblity = in_constant_buffer_info->GetVisiblity();
     const int frame_count = in_draw_system->GetBackBufferCount();
     auto constant_buffer = std::make_shared < ConstantBuffer > (
         frame_count,
-        constant_buffer_size,
         in_draw_system->MakeHeapWrapperCbvSrvUav(),
-        data,
+        in_constant_buffer_info->_data,
         visiblity
         );
     return constant_buffer;
@@ -108,14 +105,12 @@ static void RemoveDenyFlag(
 Microsoft::WRL::ComPtr<ID3D12RootSignature> MakeRootSignature(
     ID3D12Device* const in_device,
     const std::vector<std::shared_ptr<ShaderResourceInfo>>& in_shader_texture_info_array,
-    const std::vector<std::shared_ptr<ConstantBuffer>>& in_constant_buffer_array,
+    const std::vector<std::shared_ptr<ConstantBufferInfo>>& in_constant_buffer_info_array,
     const std::vector<std::shared_ptr<UnorderedAccessInfo>>& in_array_unordered_access_info
     )
 {
     Microsoft::WRL::ComPtr<ID3D12RootSignature> root_signature;
-    in_shader_texture_info_array;
-    in_constant_buffer_array;
-    in_array_unordered_access_info;
+
     D3D12_ROOT_SIGNATURE_FLAGS flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT | \
         D3D12_ROOT_SIGNATURE_FLAG_DENY_VERTEX_SHADER_ROOT_ACCESS | \
         D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS | \
@@ -127,10 +122,10 @@ Microsoft::WRL::ComPtr<ID3D12RootSignature> MakeRootSignature(
     std::vector<D3D12_STATIC_SAMPLER_DESC> static_sampler_desc_array;
     std::vector<std::shared_ptr<D3D12_DESCRIPTOR_RANGE1>> descriptor_range_array;
     // B0,b1,b2,...
-    if (0 < in_constant_buffer_array.size())
+    if (0 < in_constant_buffer_info_array.size())
     {
         int trace = 0;
-        for (const auto& iter : in_constant_buffer_array)
+        for (const auto& iter : in_constant_buffer_info_array)
         {
             auto descriptor_range = std::make_shared<D3D12_DESCRIPTOR_RANGE1>();
             descriptor_range_array.push_back(descriptor_range);
@@ -351,22 +346,11 @@ Shader::Shader(
     , _geometry_shader_data(in_geometry_shader_data)
     , _pixel_shader_data(in_pixel_shader_data)
     , _array_shader_resource_info(in_array_shader_resource_info)
-    , _array_shader_constants_info(in_array_shader_constants_info)
+    , _array_constants_buffer_info(in_array_shader_constants_info)
     , _compute_shader_data(in_compute_shader_data)
     , _array_unordered_access_info(in_array_unordered_access_info)
 {
-    for (auto&iter : _array_shader_constants_info)
-    {
-        auto result = MakeConstantBuffer(
-            in_draw_system,
-            iter
-            );
-        if (result)
-        {
-            _array_constant_buffer.push_back(result);
-        }
-    }
-    return;
+    // Nop
 }
 
 Shader::~Shader()
@@ -379,8 +363,9 @@ void Shader::SetDebugName(const std::string& in_name)
     _debug_name = in_name;
 }
 
-void Shader::SetActivate(
+void Shader::SetActive(
     ID3D12GraphicsCommandList* const in_command_list,
+    ShaderConstantBuffer* const in_shader_constant_buffer,
     const int in_frame_index
     )
 {
@@ -393,17 +378,17 @@ void Shader::SetActivate(
         in_command_list->SetComputeRootSignature(_root_signature.Get());
     }
     in_command_list->SetPipelineState(_pipeline_state.Get());
+
     int root_paramter_index = 0;
-    // B0,b1,b2,...
-    for (const auto& iter : _array_constant_buffer)
+    if (nullptr != in_shader_constant_buffer)
     {
-        iter->Activate(
+        in_shader_constant_buffer->SetActive(
             in_command_list,
-            root_paramter_index,
-            in_frame_index
+            in_frame_index,
+            root_paramter_index
             );
-        root_paramter_index += 1;
     }
+
     // U0,u1,u2,...
     for (const auto& iter : _array_unordered_access_info)
     {
@@ -448,31 +433,10 @@ void Shader::SetUnorderedAccessViewHandle(
     return;
 }
 
-void Shader::SetConstantBufferData(
-    const int in_index,
-    const std::vector < float >&in_data
-    )
-{
-    if ((0 <= in_index) && (in_index < (int) _array_shader_constants_info.size()))
-    {
-        auto&shader_constant_info =* _array_shader_constants_info[in_index];
-        const void* const data = &in_data[0];
-        shader_constant_info.UpdateData(
-            data,
-            sizeof (float) * in_data.size()
-            );
-    }
-    return;
-}
-
 void Shader::OnDeviceLost()
 {
     _root_signature.Reset();
     _pipeline_state.Reset();
-    for (auto&constant_buffer : _array_constant_buffer)
-    {
-        constant_buffer->DeviceLost();
-    }
 }
 
 void Shader::OnDeviceRestored(
@@ -480,14 +444,10 @@ void Shader::OnDeviceRestored(
     ID3D12Device2* const in_device
     )
 {
-    for (auto&constant_buffer : _array_constant_buffer)
-    {
-        constant_buffer->DeviceRestored(in_device);
-    }
     _root_signature = MakeRootSignature(
         in_device,
         _array_shader_resource_info,
-        _array_constant_buffer,
+        _array_constants_buffer_info,
         _array_unordered_access_info
         );
     if (true == _pipeline_state_data._compute_shader)
@@ -510,5 +470,31 @@ void Shader::OnDeviceRestored(
             );
     }
     return;
+}
+
+std::shared_ptr<ShaderConstantBuffer> Shader::MakeShaderConstantBuffer(
+    DrawSystem* const in_draw_system
+    )
+{
+    std::vector<std::shared_ptr<ConstantBuffer>> array_constant_buffer;
+
+    for (auto& iter : _array_constants_buffer_info)
+    {
+        auto result = MakeConstantBuffer(
+            in_draw_system,
+            iter
+            );
+        if (result)
+        {
+            array_constant_buffer.push_back(result);
+        }
+    }
+
+    auto shader_constant_buffer = std::make_shared<ShaderConstantBuffer>(
+        in_draw_system,
+        array_constant_buffer
+        );
+
+    return shader_constant_buffer;
 }
 
