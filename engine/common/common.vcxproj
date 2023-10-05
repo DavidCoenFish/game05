@@ -92,6 +92,7 @@
     <ClCompile Include="source\common\text\text_texture.cpp" />
     <ClCompile Include="source\common\ui\i_ui_input.cpp" />
     <ClCompile Include="source\common\ui\i_ui_model.cpp" />
+    <ClCompile Include="source\common\ui\ui_base_colour.cpp" />
     <ClCompile Include="source\common\ui\ui_content\i_ui_content.cpp" />
     <ClCompile Include="source\common\ui\ui_content\ui_content_button.cpp" />
     <ClCompile Include="source\common\ui\ui_content\ui_content_canvas.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="include\common\text\text_run.h" />
     <ClInclude Include="include\common\ui\i_ui_input.h" />
     <ClInclude Include="include\common\ui\i_ui_model.h" />
+    <ClInclude Include="include\common\ui\ui_base_colour.h" />
     <ClInclude Include="include\common\ui\ui_content\i_ui_content.h" />
     <ClInclude Include="include\common\ui\ui_content\ui_content_button.h" />
     <ClInclude Include="include\common\ui\ui_content\ui_content_canvas.h" />

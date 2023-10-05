@@ -456,6 +456,7 @@ const bool UIHierarchyNode::Draw(
         {
             in_content_or_null->PreDraw(
                 in_draw_param
+                //, _child_data_array
                 );
         }
 

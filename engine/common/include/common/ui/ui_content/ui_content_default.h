@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common/ui/ui_layout.h"
+#include "common/ui/ui_base_colour.h"
 #include "common/math/vector_float4.h"
 
 class DrawSystem;
@@ -9,6 +10,7 @@ class HeapWrapperItem;
 class IUIContent;
 class UIData;
 class Shader;
+class ShaderConstantBuffer;
 class UIGeometry;
 class UITexture;
 class UIHierarchyNode;
@@ -97,12 +99,16 @@ public:
         );
 
 private:
-    VectorFloat4 _clear_colour;
+    //VectorFloat4 _clear_colour;
+    //bool _clear_background;
+    UIBaseColour _base_colour;
+    //std::shader_ptr<ShaderConstantBuffer> _shader_constant_buffer;
+    float _time_accumulate_seconds;
+
     // uv = abs(_uv_scroll), and use range [-1...1] wrapped when advancing _uv_scroll, to allow saw tooth animation
     // Scale update speed by desired size ratio to target size?
     VectorFloat2 _uv_scroll;
     UILayout _layout;
     void* _source_token;
-    bool _clear_background;
 
 };

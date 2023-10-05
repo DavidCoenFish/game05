@@ -13,6 +13,7 @@ class IUIContent;
 class IUIModel;
 class LocaleSystem;
 class Shader;
+class ShaderConstantBuffer;
 class TextManager;
 class UIGeometry;
 class UIHierarchyNode;
@@ -29,17 +30,15 @@ struct UIManagerUpdateLayoutParam;
 /*
 UIHierarchyNode // N0 
     _texture // T0 texture or backbuffer A0 draws to
-    //_input_state // I0 top level input state, which node is focused, node click started on, hover node
+    [_input_state] // I0 top level input state, which node is focused, node click started on, hover node
     _child_node_array // A0
         _geometry // G1 geometry to draw the texture T1 onto T0
+        _shader_constant_buffer // S1 the shader constants
         _content // C1 controls size of T1 and G1. model returns an array of ui data for root
         //_layoutData // L0 layout data here or in content
         UIHierarchyNode // N1 child node
             _texture // T1 texture or backbuffer A1 draws to
             _child_node_array // A1
-
-    _content->UpdateGeometry(in_parent_size, _geometry, node)
-    VectorInt2 UIHierarchyNode::GetDesiredSize(in_parent_size) // text may bt told to limit width to in_parent_size
 */
 
 struct UIHierarchyNodeChildData
@@ -59,6 +58,8 @@ struct UIHierarchyNodeChildData
     std::unique_ptr<UIHierarchyNode> _node;
     std::unique_ptr<UIScreenSpace> _screen_space;
     //std::unique_ptr<UILayout>(); //layout data here or in content?
+
+    std::shader_ptr<ShaderConstantBuffer> _shader_constant_buffer;
 
 };
 

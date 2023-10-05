@@ -310,6 +310,9 @@
     <ClCompile Include="source\common\draw_system\shader\shader_constant_buffer.cpp">
       <Filter>souce\common\draw_system\shader</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\ui\ui_base_colour.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -641,6 +644,9 @@
     </ClInclude>
     <ClInclude Include="include\common\draw_system\shader\constant_buffer.h">
       <Filter>include\common\draw_system\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_base_colour.h">
+      <Filter>include\common\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
