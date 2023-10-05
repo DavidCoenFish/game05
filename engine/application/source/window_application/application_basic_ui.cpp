@@ -30,6 +30,21 @@
 #include "common/util/vector_helper.h"
 #include "common/window/window_application_param.h"
 
+namespace
+{
+    std::vector<std::shared_ptr<UIData>> BuildButtonData(const std::string& in_body)
+    {
+        return std::vector<std::shared_ptr<UIData>>({
+            std::make_shared<UIDataString>(
+                in_body,
+                LocaleISO_639_1::Default,
+                "string_middle_em"
+                )
+        });
+    }
+
+};
+
 class UIModel : public IUIModel
 {
 public:
@@ -85,17 +100,26 @@ public:
                                 },
                             true,
                             "UIDataButton",
-                            std::vector<std::shared_ptr<UIData>>({
-                                std::make_shared<UIDataString>(
-                                    "exit",
-                                    LocaleISO_639_1::Default,
-                                    "string_middle_em"
-                                    )
-                            })
+                            BuildButtonData("exit")
                         ),
-                        std::make_shared<UIDataButton>(),
-                        std::make_shared<UIDataButton>(),
-                        std::make_shared<UIDataButton>()
+                        std::make_shared<UIDataButton>(
+                            nullptr, 
+                            false,
+                            "UIDataButton",
+                            BuildButtonData("options")
+                        ),
+                        std::make_shared<UIDataButton>(
+                            nullptr, 
+                            false,
+                            "UIDataButton",
+                            BuildButtonData("continue offline")
+                        ),
+                        std::make_shared<UIDataButton>(
+                            nullptr, 
+                            false,
+                            "UIDataButton",
+                            BuildButtonData("new game offline")
+                        )
                     })
                     )
                 })
