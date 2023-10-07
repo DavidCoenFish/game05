@@ -10,14 +10,12 @@
 #include "common/ui/ui_manager.h"
 
 UIContentTexture::UIContentTexture(
-    const bool in_clear_background,
-    const VectorFloat4& in_clear_colour,
+    const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
     const std::shared_ptr<HeapWrapperItem>& in_shader_resource_view_handle
     )
     : _content_default(
-        in_clear_background,
-        in_clear_colour,
+        in_base_colour,
         in_layout
         )
     , _shader_resource_view_handle()

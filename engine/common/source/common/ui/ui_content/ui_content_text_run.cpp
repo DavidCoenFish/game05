@@ -9,14 +9,12 @@
 
 
 UIContentTextRun::UIContentTextRun(
-    const bool in_clear_background,
-    const VectorFloat4& in_clear_colour,
+    const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
     std::unique_ptr<TextRun>& in_text_run
     )
     : _content_default(
-        in_clear_background,
-        in_clear_colour,
+        in_base_colour,
         in_layout
         )
     , _text_run(std::move(in_text_run))
@@ -31,15 +29,13 @@ UIContentTextRun::~UIContentTextRun()
 }
 
 const bool UIContentTextRun::SetBase(
-    const bool in_clear_background,
-    const VectorFloat4& in_clear_colour,
+    const UIBaseColour& in_base_colour,
     const UILayout& in_layout
     )
 {
     bool dirty = false;
     if (true == _content_default.SetBase(
-        in_clear_background,
-        in_clear_colour,
+        in_base_colour,
         in_layout
         ))
     {

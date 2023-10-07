@@ -8,15 +8,13 @@ class UIContentButton : public IUIContent, public IUIInput
 {
 public:
     UIContentButton(
-        const bool in_clear_background,
-        const VectorFloat4& in_clear_colour,
+        const UIBaseColour& in_base_colour,
         const UILayout& in_layout
         );
     virtual ~UIContentButton();
 
     const bool SetBase(
-        const bool in_clear_background,
-        const VectorFloat4& in_clear_colour,
+        const UIBaseColour& in_base_colour,
         const UILayout& in_layout
         );
     const bool Set(

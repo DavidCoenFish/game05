@@ -22,11 +22,13 @@
 UIContentFactoryParam::UIContentFactoryParam(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list,
-    TextManager* const in_text_manager
+    TextManager* const in_text_manager,
+    const int in_create_index
     )
     : _draw_system(in_draw_system)
     , _command_list(in_command_list)
     , _text_manager(in_text_manager)
+    , _create_index(in_create_index)
 {
     // Nop
 }

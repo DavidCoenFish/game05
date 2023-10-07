@@ -7,15 +7,13 @@ class UIContentCanvas : public IUIContent
 {
 public:
     UIContentCanvas(
-        const bool in_clear_background,
-        const VectorFloat4& in_clear_colour,
+        const UIBaseColour& in_base_colour,
         const UILayout& in_layout
         );
     virtual ~UIContentCanvas();
 
     const bool SetBase(
-        const bool in_clear_background,
-        const VectorFloat4& in_clear_colour,
+        const UIBaseColour& in_base_colour,
         const UILayout& in_layout
         );
 

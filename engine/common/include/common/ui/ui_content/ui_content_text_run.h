@@ -12,16 +12,14 @@ class UIContentTextRun : public IUIContent
 {
 public:
     UIContentTextRun(
-        const bool in_clear_background,
-        const VectorFloat4& in_clear_colour,
+        const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
         std::unique_ptr<TextRun>& in_text_run
         );
     ~UIContentTextRun();
 
     const bool SetBase(
-        const bool in_clear_background,
-        const VectorFloat4& in_clear_colour,
+        const UIBaseColour& in_base_colour,
         const UILayout& in_layout
         );
 

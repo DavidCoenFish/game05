@@ -17,6 +17,7 @@
 #include "common/ui/ui_content/ui_content_string.h"
 #include "common/ui/ui_content/ui_content_text_run.h"
 #include "common/ui/ui_hierarchy_node.h"
+#include "common/ui/ui_base_colour.h"
 #include "common/ui/ui_layout.h"
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_data/ui_data_string.h"
@@ -44,9 +45,10 @@ namespace
     constexpr int s_new_line_gap_small = 3; // DscMath::ScaleInt(s_default_font_size, s_default_newling_ratio);
     constexpr float s_default_margin = s_default_font_size * 0.5f; // in pixels, or in em?
     constexpr float s_default_gap = s_default_font_size * 0.5f; // in pixels, or in em?
+    constexpr float s_slow_fade = 1.0f;
+    constexpr float s_quick_fade = 0.1f;
 
     typedef const std::filesystem::path& (*TGetPathRef)();
-
     const std::filesystem::path& GetFontPathDefault()
     {
         static std::filesystem::path s_data = std::filesystem::path("data") / "code2000.ttf";
@@ -55,7 +57,6 @@ namespace
 
     // Return copy or reference, want to avoid 
     typedef const UILayout& (*TGetUILayoutRef)();
-
     const UILayout& GetUILayout()
     {
         static UILayout s_layout = UILayout::FactoryFull();
@@ -156,7 +157,6 @@ namespace
     }
 
     typedef const UICoord& (*TGetUICoordRef)();
-
     const UICoord& GetUICoordDefaultMargin()
     {
         static UICoord s_coord(UICoord::ParentSource::None, 0.0f, s_default_margin);
@@ -166,6 +166,38 @@ namespace
     {
         static UICoord s_coord(UICoord::ParentSource::None, 0.0f, s_default_gap);
         return s_coord;
+    }
+
+    typedef const UIBaseColour (*TGetUIBaseColour)();
+    const UIBaseColour GetUIBaseColourDefault()
+    {
+        return UIBaseColour();
+    }
+    const UIBaseColour GetUIBaseColourStaggerClearTransparent()
+    {
+        return UIBaseColour(
+            VectorFloat4(0.0f, 0.0f, 0.0f, 0.0f),
+            true,
+            VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f),
+            s_quick_fade,
+            s_quick_fade
+            );
+    }
+    const UIBaseColour GetUIBaseColourBlackSlowFade()
+    {
+        return UIBaseColour(
+            VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+            true,
+            VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+            s_slow_fade
+            );
+    }
+    const UIBaseColour GetUIBaseColourRed()
+    {
+        return UIBaseColour(
+            VectorFloat4(1.0f, 0.0f, 0.0f, 1.0f),
+            true
+            );
     }
 
     typedef const VectorFloat4& (*TGetColour)();
@@ -207,8 +239,7 @@ namespace
 
     template<
         TGetUILayoutRef in_get_layout_ref = GetUILayout,
-        bool in_clear_background = true,
-        TGetColour in_get_clear_colour_ref = GetColourTransparent
+        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault
         >
     const bool FactoryCanvas(
         std::unique_ptr<IUIContent>& in_out_content,
@@ -219,16 +250,14 @@ namespace
         if (nullptr == canvas)
         {
             in_out_content = std::make_unique<UIContentCanvas>(
-                in_clear_background,
-                in_get_clear_colour_ref(),
+                in_get_base_colour(),
                 in_get_layout_ref());
             return true;
         }
         else
         {
             if (true == canvas->SetBase(
-                in_clear_background,
-                in_get_clear_colour_ref(),
+                in_get_base_colour(),
                 in_get_layout_ref()))
             {
                 return true;
@@ -240,8 +269,7 @@ namespace
 
     template<
         TGetUILayoutRef in_get_layout_ref = GetUILayout,
-        bool in_clear_background = true,
-        TGetColour in_get_clear_colour_ref = GetColourTransparent
+        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault
         >
     const bool FactoryButton(
         std::unique_ptr<IUIContent>& in_out_content,
@@ -252,16 +280,14 @@ namespace
         if (nullptr == content)
         {
             in_out_content = std::make_unique<UIContentButton>(
-                in_clear_background,
-                in_get_clear_colour_ref(),
+                in_get_base_colour(),
                 in_get_layout_ref());
             return true;
         }
         else
         {
             if (true == content->SetBase(
-                in_clear_background,
-                in_get_clear_colour_ref(),
+                in_get_base_colour(),
                 in_get_layout_ref()))
             {
                 return true;
@@ -273,13 +299,12 @@ namespace
 
     template<
         TGetUILayoutRef in_get_layout_ref = GetUILayout,
+        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
         TGetPathRef in_get_path_ref = GetFontPathDefault,
         int in_font_size = s_default_font_size,
         int in_new_line_gap = s_new_line_gap,
         TextEnum::HorizontalLineAlignment in_horizontal = TextEnum::HorizontalLineAlignment::Left,
         TextEnum::VerticalBlockAlignment in_vertical = TextEnum::VerticalBlockAlignment::Top,
-        bool in_clear_background = true,
-        TGetColour in_get_clear_colour_ref = GetColourTransparent,
         bool in_width_limit = false,
         TGetColour in_get_text_colour_ref = GetColourBlack
         >
@@ -310,8 +335,7 @@ namespace
                 in_get_text_colour_ref()
                 );
             in_out_content = std::move(std::make_unique<UIContentString>(
-                in_clear_background,
-                in_get_clear_colour_ref(),
+                in_get_base_colour(),
                 in_get_layout_ref(), 
                 text_block
                 ));
@@ -320,8 +344,7 @@ namespace
         else
         {
             if (true == content->SetBase(
-                    in_clear_background,
-                    in_get_clear_colour_ref(),
+                    in_get_base_colour(),
                     in_get_layout_ref()))
             {
                 dirty = true;
@@ -346,11 +369,10 @@ namespace
 
     template<
         TGetUILayoutRef in_get_layout_ref = GetUILayout,
+        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
         int in_em_size = s_default_font_size,
         TextEnum::HorizontalLineAlignment in_horizontal = TextEnum::HorizontalLineAlignment::Left,
         TextEnum::VerticalBlockAlignment in_vertical = TextEnum::VerticalBlockAlignment::Top,
-        bool in_clear_background = true,
-        TGetColour in_get_clear_colour_ref = GetColourTransparent,
         bool in_width_limit_enabled = false
         >
     const bool FactoryTextRun(
@@ -373,8 +395,7 @@ namespace
                 in_em_size
                 );
             in_out_content = std::move(std::make_unique<UIContentTextRun>(
-                in_clear_background,
-                in_get_clear_colour_ref(),
+                in_get_base_colour(),
                 in_get_layout_ref(), 
                 text_run
                 ));
@@ -383,8 +404,7 @@ namespace
         else
         {
             if (true == content->SetBase(
-                    in_clear_background,
-                    in_get_clear_colour_ref(),
+                    in_get_base_colour(),
                     in_get_layout_ref()))
             {
                 dirty = true;
@@ -406,10 +426,9 @@ namespace
 
     template<
         TGetUILayoutRef in_get_layout_ref = GetUILayout,
+        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
         StackOrientation in_orientation = StackOrientation::TVertical,
-        TGetUICoordRef in_get_gap_ref = GetUICoordDefaultGap,
-        bool in_clear_background = true,
-        TGetColour in_get_clear_colour_ref = GetColourTransparent
+        TGetUICoordRef in_get_gap_ref = GetUICoordDefaultGap
         >
     const bool FactoryStack(
         std::unique_ptr<IUIContent>& in_out_content,
@@ -422,8 +441,7 @@ namespace
         {
             dirty = true;
             auto new_content = std::make_unique<UIContentStack>(
-                in_clear_background,
-                in_get_clear_colour_ref(),
+                in_get_base_colour(),
                 in_get_layout_ref(),
                 in_orientation,
                 in_get_gap_ref()
@@ -433,8 +451,7 @@ namespace
         else
         {
             if (true == content->Set(
-                in_clear_background,
-                in_get_clear_colour_ref(),
+                in_get_base_colour(),
                 in_get_layout_ref(),
                 in_orientation,
                 in_get_gap_ref()
@@ -453,8 +470,10 @@ void DefaultUIComponentFactory::Populate(
     )
 {
     in_ui_manager.AddContentFactory("UIDataString", FactoryString<>);
+    // Button text
     in_ui_manager.AddContentFactory("string_middle_em", FactoryString<
         GetUILayout,
+        GetUIBaseColourDefault,
         GetFontPathDefault,
         s_default_font_size,
         s_new_line_gap,
@@ -463,6 +482,7 @@ void DefaultUIComponentFactory::Populate(
         >);
     in_ui_manager.AddContentFactory("string_small_right", FactoryString<
         GetUILayoutBottomRightShrink,
+        GetUIBaseColourDefault,
         GetFontPathDefault,
         s_default_font_size_small,
         s_new_line_gap_small,
@@ -473,6 +493,7 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("UIDataTextRun", FactoryTextRun<>);
     in_ui_manager.AddContentFactory("text_run_small_right", FactoryTextRun<
         GetUILayoutBottomRightShrink,
+        GetUIBaseColourDefault,
         s_default_font_size_small,
         TextEnum::HorizontalLineAlignment::Left,
         TextEnum::VerticalBlockAlignment::Top
@@ -480,42 +501,42 @@ void DefaultUIComponentFactory::Populate(
 
     in_ui_manager.AddContentFactory("UIDataTextRunWrap", FactoryTextRun<
         GetUILayoutQuadrant0,
+        GetUIBaseColourDefault,
         s_default_font_size,
         TextEnum::HorizontalLineAlignment::Left,
         TextEnum::VerticalBlockAlignment::Top,
-        true,
-        GetColourTransparent,
         true
         >);
 
-    in_ui_manager.AddContentFactory("UIDataButton", FactoryButton<GetUILayoutRow, true, GetColourRed>);
+    in_ui_manager.AddContentFactory("UIDataButton", FactoryButton<
+        GetUILayoutRow, 
+        GetUIBaseColourRed
+        >);
 
     in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<>);
-    in_ui_manager.AddContentFactory("canvas_debug_quad0", FactoryCanvas<GetUILayoutQuadrant0, true, GetColourRed>);
+    in_ui_manager.AddContentFactory("canvas_debug_quad0", FactoryCanvas<
+        GetUILayoutQuadrant0, 
+        GetUIBaseColourRed
+        >);
     in_ui_manager.AddContentFactory("canvas_banner_left", FactoryCanvas<
         GetUILayoutBannerLeft, 
-        true, 
-        GetColourTransparentDark
+        GetUIBaseColourStaggerClearTransparent
         >);
 
     in_ui_manager.AddContentFactory("stack_vertical_bottom_right", FactoryStack<
         GetUILayoutMarginBottomRightShrink,
+        GetUIBaseColourStaggerClearTransparent,
         StackOrientation::TVertical,
-        GetUICoordDefaultGap,
-        true,
-        GetColourTransparent
+        GetUICoordDefaultGap
         >);
 
     in_ui_manager.AddContentFactory("stack_vertical_middle", FactoryStack<
         GetUILayoutMarginMiddleShrinkVertical,
+        GetUIBaseColourStaggerClearTransparent,
         StackOrientation::TVertical,
-        GetUICoordDefaultGap,
-        true,
-        GetColourTransparent
+        GetUICoordDefaultGap
         >);
-
-        
-
+    return;
 }
 
 const UIDataTextRunStyle* const DefaultUIComponentFactory::GetDefaultTextStyle()

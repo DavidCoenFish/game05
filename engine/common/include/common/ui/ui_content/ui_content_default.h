@@ -34,8 +34,7 @@ class UIContentDefault
 {
 public:
     UIContentDefault(
-        const bool in_clear_background,
-        const VectorFloat4& in_clear_colour,
+        const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
         void* in_source_token = nullptr
         );
@@ -57,8 +56,7 @@ public:
         );
 
     const bool SetBase(
-        const bool in_clear_background,
-        const VectorFloat4& in_clear_colour,
+        const UIBaseColour& in_base_colour,
         const UILayout& in_layout
         );
 
@@ -98,17 +96,22 @@ public:
         UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         );
 
+    // const bool UpdateShaderConstantBuffer
+    // ShaderConstantBuffer* GetShaderConstantBuffer
+
 private:
-    //VectorFloat4 _clear_colour;
-    //bool _clear_background;
     UIBaseColour _base_colour;
+    UILayout _layout;
     //std::shader_ptr<ShaderConstantBuffer> _shader_constant_buffer;
+
+    std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;
+    VectorFloat4 _tint_colour;
     float _time_accumulate_seconds;
 
     // uv = abs(_uv_scroll), and use range [-1...1] wrapped when advancing _uv_scroll, to allow saw tooth animation
-    // Scale update speed by desired size ratio to target size?
     VectorFloat2 _uv_scroll;
-    UILayout _layout;
+
     void* _source_token;
+
 
 };

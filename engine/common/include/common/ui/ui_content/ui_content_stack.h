@@ -19,8 +19,7 @@ class UIContentStack : public IUIContent
 {
 public:
     UIContentStack(
-        const bool in_clear_background,
-        const VectorFloat4& in_clear_colour,
+        const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
         const StackOrientation in_orientation,
         const UICoord& in_gap
@@ -28,8 +27,7 @@ public:
     virtual ~UIContentStack();
 
     const bool Set(
-        const bool in_clear_background,
-        const VectorFloat4& in_clear_colour,
+        const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
         const StackOrientation in_orientation,
         const UICoord& in_gap

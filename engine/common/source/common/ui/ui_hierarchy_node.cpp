@@ -270,7 +270,8 @@ const bool UIHierarchyNode::UpdateHierarchy(
                 UIContentFactoryParam factory_param(
                     in_param._draw_system,
                     in_param._command_list,
-                    in_param._text_manager
+                    in_param._text_manager,
+                    index
                     );
                 if (true == factory->second(
                     child->_content,

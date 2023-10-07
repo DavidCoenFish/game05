@@ -27,11 +27,13 @@ struct UIContentFactoryParam
     explicit UIContentFactoryParam(
         DrawSystem* const in_draw_system = nullptr,
         ID3D12GraphicsCommandList* const in_command_list = nullptr,
-        TextManager* const in_text_manager = nullptr
+        TextManager* const in_text_manager = nullptr,
+        const int in_create_index = 0
         );
     DrawSystem* const _draw_system;
     ID3D12GraphicsCommandList* const _command_list;
     TextManager* _text_manager;
+    int _create_index;
 };
 
 struct UIManagerUpdateParam

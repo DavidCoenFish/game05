@@ -12,14 +12,12 @@
 
 
 UIContentString::UIContentString(
-    const bool in_clear_background,
-    const VectorFloat4& in_clear_colour,
+    const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
     std::unique_ptr<TextBlock>& in_text_block
     )
     : _content_default(
-        in_clear_background,
-        in_clear_colour,
+        in_base_colour,
         in_layout
         )
     , _text_block(std::move(in_text_block))
@@ -33,14 +31,12 @@ UIContentString::~UIContentString()
 }
 
 const bool UIContentString::SetBase(
-    const bool in_clear_background,
-    const VectorFloat4& in_clear_colour,
+    const UIBaseColour& in_base_colour,
     const UILayout& in_layout
     )
 {
     if (true == _content_default.SetBase(
-        in_clear_background,
-        in_clear_colour,
+        in_base_colour,
         in_layout
         ))
     {

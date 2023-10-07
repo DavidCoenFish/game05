@@ -59,7 +59,7 @@ struct UIHierarchyNodeChildData
     std::unique_ptr<UIScreenSpace> _screen_space;
     //std::unique_ptr<UILayout>(); //layout data here or in content?
 
-    std::shader_ptr<ShaderConstantBuffer> _shader_constant_buffer;
+    //std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;
 
 };
 

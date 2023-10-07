@@ -11,16 +11,14 @@ class UIContentString : public IUIContent
 {
 public:
     UIContentString(
-        const bool in_clear_background,
-        const VectorFloat4& in_clear_colour,
+        const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
         std::unique_ptr<TextBlock>& in_text_block
         );
     ~UIContentString();
 
     const bool SetBase(
-        const bool in_clear_background,
-        const VectorFloat4& in_clear_colour,
+        const UIBaseColour& in_base_colour,
         const UILayout& in_layout
         );
 

@@ -31,15 +31,14 @@ namespace
 }
 
 UIContentDefault::UIContentDefault(
-    const bool in_clear_background,
-    const VectorFloat4& in_clear_colour,
+    const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
     void* in_source_token
     )
-    : _clear_background(in_clear_background)
-    , _clear_colour(in_clear_colour)
+    : _base_colour(in_base_colour)
     , _layout(in_layout)
     , _source_token(in_source_token)
+    , _time_accumulate_seconds(0.0f)
 {
     // Nop
 }
@@ -115,26 +114,16 @@ void UIContentDefault::CalculateGeometry(
 }
 
 const bool UIContentDefault::SetBase(
-    const bool in_clear_background,
-    const VectorFloat4& in_clear_colour,
+    const UIBaseColour& in_base_colour,
     const UILayout& in_layout
     )
 {
     bool dirty = false;
 
-    if (_clear_background != in_clear_background)
+    if (_base_colour != in_base_colour)
     {
         dirty = true;
-        _clear_background = in_clear_background;
-    }
-    if (_clear_colour != in_clear_colour)
-    {
-        //change of background colour when background is not active doesn't dirty content
-        if (true == _clear_background)
-        {
-            dirty = true;
-        }
-        _clear_colour = in_clear_colour;
+        _base_colour = in_base_colour;
     }
 
     if (_layout != in_layout)
@@ -187,8 +176,8 @@ const bool UIContentDefault::UpdateHierarchy(
                 &in_array_data,
                 true,
                 false,
-                _clear_background,
-                _clear_colour
+                _base_colour.GetClearBackground(),
+                _base_colour.GetClearColourRef()
                 );
         }))
         {
@@ -202,8 +191,8 @@ const bool UIContentDefault::UpdateHierarchy(
             nullptr,
             true,
             false,
-            _clear_background,
-            _clear_colour
+            _base_colour.GetClearBackground(),
+            _base_colour.GetClearColourRef()
             ))
         {
             dirty = true;

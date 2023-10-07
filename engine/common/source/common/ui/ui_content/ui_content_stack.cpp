@@ -10,15 +10,13 @@
 #include "common/ui/ui_geometry.h"
 
 UIContentStack::UIContentStack(
-    const bool in_clear_background,
-    const VectorFloat4& in_clear_colour,
+    const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
     const StackOrientation in_orientation,
     const UICoord& in_gap
     )
     : _content_default(
-        in_clear_background, 
-        in_clear_colour,
+        in_base_colour,
         in_layout
         )
     , _orientation(in_orientation)
@@ -33,8 +31,7 @@ UIContentStack::~UIContentStack()
 }
 
 const bool UIContentStack::Set(
-    const bool in_clear_background,
-    const VectorFloat4& in_clear_colour,
+    const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
     const StackOrientation in_orientation,
     const UICoord& in_gap
@@ -43,8 +40,7 @@ const bool UIContentStack::Set(
     bool dirty = false;
 
     if (true == _content_default.SetBase(
-        in_clear_background, 
-        in_clear_colour,
+        in_base_colour,
         in_layout
         ))
     {

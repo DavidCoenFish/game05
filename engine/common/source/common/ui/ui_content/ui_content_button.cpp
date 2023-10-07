@@ -5,13 +5,11 @@
 #include "common/ui/ui_geometry.h"
 
 UIContentButton::UIContentButton(
-    const bool in_clear_background,
-    const VectorFloat4& in_clear_colour,
+    const UIBaseColour& in_base_colour,
     const UILayout& in_layout
     )
     : _content_default(
-        in_clear_background,
-        in_clear_colour,
+        in_base_colour,
         in_layout
         )
 {
@@ -24,14 +22,12 @@ UIContentButton::~UIContentButton()
 }
 
 const bool UIContentButton::SetBase(
-    const bool in_clear_background,
-    const VectorFloat4& in_clear_colour,
+    const UIBaseColour& in_base_colour,
     const UILayout& in_layout
     )
 {
     return _content_default.SetBase(
-        in_clear_background,
-        in_clear_colour,
+        in_base_colour,
         in_layout
         );
 }
