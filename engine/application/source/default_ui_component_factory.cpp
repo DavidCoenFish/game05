@@ -193,6 +193,16 @@ namespace
             s_slow_fade
             );
     }
+    const UIBaseColour GetUIBaseColourStaggerClearDark(const int in_create_index)
+    {
+        return UIBaseColour(
+            VectorFloat4(0.0f, 0.0f, 0.0f, 0.5f),
+            true,
+            VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f),
+            s_quick_fade * in_create_index,
+            s_quick_fade
+            );
+    }
     const UIBaseColour GetUIBaseColourRed(const int)
     {
         return UIBaseColour(
@@ -514,14 +524,14 @@ void DefaultUIComponentFactory::Populate(
         GetUIBaseColourRed
         >);
 
-    in_ui_manager.AddContentFactory("UIDataContainer", FactoryCanvas<>);
+    in_ui_manager.AddContentFactory("UIData", FactoryCanvas<>);
     in_ui_manager.AddContentFactory("canvas_debug_quad0", FactoryCanvas<
         GetUILayoutQuadrant0, 
         GetUIBaseColourRed
         >);
     in_ui_manager.AddContentFactory("canvas_banner_left", FactoryCanvas<
         GetUILayoutBannerLeft, 
-        GetUIBaseColourStaggerClearTransparent
+        GetUIBaseColourStaggerClearDark
         >);
 
     in_ui_manager.AddContentFactory("stack_vertical_bottom_right", FactoryStack<

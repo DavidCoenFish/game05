@@ -75,21 +75,10 @@ public:
             );
         _data_map["fps"] = _data_map_build_fps;
 
-        _data_array_map[""] = std::vector<std::shared_ptr<UIData>>({
-
-#if 0
-            // Build info
-            std::make_shared<UIDataContainer>(
-                std::vector<std::shared_ptr<UIData>>({}),
-                "canvas_debug_quad0"
-                ),
-#endif
-
-#if 1
-            // Left banner
-            std::make_shared<UIData>(
-                "canvas_banner_left",
-                std::vector<std::shared_ptr<UIData>>({
+        // Left banner
+        auto data_main_launch = std::make_shared<UIData>(
+            "canvas_banner_left",
+            std::vector<std::shared_ptr<UIData>>({
                 std::make_shared<UIData>(
                     "stack_vertical_middle",
                     std::vector<std::shared_ptr<UIData>>({
@@ -103,8 +92,10 @@ public:
                             BuildButtonData("exit")
                         ),
                         std::make_shared<UIDataButton>(
-                            nullptr, 
-                            false,
+                            [this](const VectorFloat2&){
+                                _data_map["main"]->ModifyData().clear();
+                                },
+                            true,
                             "UIDataButton",
                             BuildButtonData("options")
                         ),
@@ -123,9 +114,26 @@ public:
                     })
                     )
                 })
+            );
+        _data_map["main_launch"] = data_main_launch;
+
+        auto _data_main = std::make_shared<UIData>(
+            "UIData",
+            std::vector<std::shared_ptr<UIData>>({
+                data_main_launch
+                })
+            );
+        _data_map["main"] = _data_main;
+
+        _data_array_map[""] = std::vector<std::shared_ptr<UIData>>({
+#if 0
+            // Build info
+            std::make_shared<UIDataContainer>(
+                std::vector<std::shared_ptr<UIData>>({}),
+                "canvas_debug_quad0"
                 ),
 #endif
-
+            _data_main,
 #if 1
             // Build info
             std::make_shared<UIData>(
@@ -178,6 +186,12 @@ private:
 private:
     std::map<std::string, std::vector<std::shared_ptr<UIData>>> _data_array_map;
     std::map<std::string, std::shared_ptr<UIData>> _data_map;
+
+    // Could be in _data_map? or just have as first class
+    //std::shared_ptr<UIData> _data_layer_main;
+    //std::shared_ptr<UIData> _data_layer_modal;
+    //std::shared_ptr<UIData> _data_layer_popup;
+    //std::shared_ptr<UIData> _data_layer_tooltip;
 
 };
 
