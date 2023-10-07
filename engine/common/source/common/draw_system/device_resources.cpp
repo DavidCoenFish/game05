@@ -4,6 +4,7 @@
 #include "common/direct_xtk12/d3dx12.h"
 #include "common/draw_system/device_resources.h"
 #include "common/draw_system/screen_size_resources.h"
+#include "common/draw_system/i_resource.h"
 #include "common/log/log.h"
 #include "common/math/vector_int2.h"
 #include "common/util/utf8.h"
@@ -578,3 +579,13 @@ IRenderTarget* DeviceResources::GetRenderTargetBackBuffer()
     return nullptr;
 }
 
+void DeviceResources::ForceRestore(
+    ID3D12GraphicsCommandList* const in_command_list,
+    IResource* const in_resource
+    )
+{
+    in_resource->OnDeviceRestored(
+        in_command_list,
+        _device.Get()
+        );
+}

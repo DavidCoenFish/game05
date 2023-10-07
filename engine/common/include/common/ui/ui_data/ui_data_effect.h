@@ -11,6 +11,7 @@ enum class UIDataEffectType
     TDropShadow,
     TRoundCorners,
     TDesaturate,
+    TDesaturateIfDisabled,
     TBlendRGBAndAlpha // Use child 0 as rgb, and child 1 as alpha ~ take average of rgb to use as alpha
     // TBlend is not needed, the default shader will do a premultiplied alpha blend of the children
     // TChromeFill move fill to a different element
@@ -37,7 +38,6 @@ private:
     UICoord _coord_b;
     UICoord _coord_c;
     UICoord _coord_d;
-    // VectorFloat4 _tint; or use base tint
 
     // Shader will also take the target texture width, height, 1.0f/width, 1.0f/height
     // Shader will take a texture input from each child

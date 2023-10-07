@@ -297,6 +297,20 @@ void DrawSystem::AddFrameResource(
     }
 }
 
+void DrawSystem::ForceRestore(
+    ID3D12GraphicsCommandList* const in_command_list,
+    IResource* const in_resource
+    )
+{
+    if (nullptr != _device_resources)
+    {
+        _device_resources->ForceRestore(
+            in_command_list,
+            in_resource
+            );
+    }
+}
+
 std::shared_ptr<CustomCommandList> DrawSystem::CreateCustomCommandList(
     ID3D12PipelineState* const in_pipeline_state_object_or_null
     )

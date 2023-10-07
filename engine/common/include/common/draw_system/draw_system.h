@@ -133,6 +133,10 @@ public:
     void AddFrameResource(
         const std::shared_ptr<IResource>& in_resource
         );
+    void ForceRestore(
+        ID3D12GraphicsCommandList* const in_command_list,
+        IResource* const in_resource
+        );
 
     std::shared_ptr<CustomCommandList> CreateCustomCommandList(
         ID3D12PipelineState* const in_pipeline_state_object_or_null = nullptr

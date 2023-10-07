@@ -62,6 +62,11 @@ public:
         const std::shared_ptr<IResource>& in_resource
         );
 
+    void ForceRestore(
+        ID3D12GraphicsCommandList* const in_command_list,
+        IResource* const in_resource
+        );
+
 private:
     void GetAdapter(
         IDXGIAdapter1** in_pp_adapter,

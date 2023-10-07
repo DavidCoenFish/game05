@@ -168,31 +168,32 @@ namespace
         return s_coord;
     }
 
-    typedef const UIBaseColour (*TGetUIBaseColour)();
-    const UIBaseColour GetUIBaseColourDefault()
+    typedef const UIBaseColour (*TGetUIBaseColour)(const int in_create_index);
+    const UIBaseColour GetUIBaseColourDefault(const int)
     {
         return UIBaseColour();
     }
-    const UIBaseColour GetUIBaseColourStaggerClearTransparent()
+    const UIBaseColour GetUIBaseColourStaggerClearTransparent(const int in_create_index)
     {
         return UIBaseColour(
             VectorFloat4(0.0f, 0.0f, 0.0f, 0.0f),
             true,
             VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f),
-            s_quick_fade,
+            s_quick_fade * in_create_index,
             s_quick_fade
             );
     }
-    const UIBaseColour GetUIBaseColourBlackSlowFade()
+    const UIBaseColour GetUIBaseColourBlackSlowFade(const int)
     {
         return UIBaseColour(
             VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
             true,
             VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+            0.0f,
             s_slow_fade
             );
     }
-    const UIBaseColour GetUIBaseColourRed()
+    const UIBaseColour GetUIBaseColourRed(const int)
     {
         return UIBaseColour(
             VectorFloat4(1.0f, 0.0f, 0.0f, 1.0f),
@@ -243,21 +244,21 @@ namespace
         >
     const bool FactoryCanvas(
         std::unique_ptr<IUIContent>& in_out_content,
-        const UIContentFactoryParam&
+        const UIContentFactoryParam& in_factory_param
         )
     {
         UIContentCanvas* canvas = dynamic_cast<UIContentCanvas*>(in_out_content.get());
         if (nullptr == canvas)
         {
             in_out_content = std::make_unique<UIContentCanvas>(
-                in_get_base_colour(),
+                in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref());
             return true;
         }
         else
         {
             if (true == canvas->SetBase(
-                in_get_base_colour(),
+                in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref()))
             {
                 return true;
@@ -273,21 +274,21 @@ namespace
         >
     const bool FactoryButton(
         std::unique_ptr<IUIContent>& in_out_content,
-        const UIContentFactoryParam&
+        const UIContentFactoryParam& in_factory_param
         )
     {
         UIContentButton* content = dynamic_cast<UIContentButton*>(in_out_content.get());
         if (nullptr == content)
         {
             in_out_content = std::make_unique<UIContentButton>(
-                in_get_base_colour(),
+                in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref());
             return true;
         }
         else
         {
             if (true == content->SetBase(
-                in_get_base_colour(),
+                in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref()))
             {
                 return true;
@@ -310,10 +311,10 @@ namespace
         >
     const bool FactoryString(
         std::unique_ptr<IUIContent>& in_out_content,
-        const UIContentFactoryParam& in_param
+        const UIContentFactoryParam& in_factory_param
         )
     {
-        auto font = in_param._text_manager->GetTextFont(in_get_path_ref());
+        auto font = in_factory_param._text_manager->GetTextFont(in_get_path_ref());
         const float new_line_gap_ratio = static_cast<float>(in_new_line_gap) / static_cast<float>(in_font_size);
 
         UIContentString* content = dynamic_cast<UIContentString*>(in_out_content.get());
@@ -335,7 +336,7 @@ namespace
                 in_get_text_colour_ref()
                 );
             in_out_content = std::move(std::make_unique<UIContentString>(
-                in_get_base_colour(),
+                in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(), 
                 text_block
                 ));
@@ -344,7 +345,7 @@ namespace
         else
         {
             if (true == content->SetBase(
-                    in_get_base_colour(),
+                    in_get_base_colour(in_factory_param._create_index),
                     in_get_layout_ref()))
             {
                 dirty = true;
@@ -377,7 +378,7 @@ namespace
         >
     const bool FactoryTextRun(
         std::unique_ptr<IUIContent>& in_out_content,
-        const UIContentFactoryParam&
+        const UIContentFactoryParam& in_factory_param
         )
     {
         UIContentTextRun* content = dynamic_cast<UIContentTextRun*>(in_out_content.get());
@@ -395,7 +396,7 @@ namespace
                 in_em_size
                 );
             in_out_content = std::move(std::make_unique<UIContentTextRun>(
-                in_get_base_colour(),
+                in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(), 
                 text_run
                 ));
@@ -404,7 +405,7 @@ namespace
         else
         {
             if (true == content->SetBase(
-                    in_get_base_colour(),
+                    in_get_base_colour(in_factory_param._create_index),
                     in_get_layout_ref()))
             {
                 dirty = true;
@@ -432,7 +433,7 @@ namespace
         >
     const bool FactoryStack(
         std::unique_ptr<IUIContent>& in_out_content,
-        const UIContentFactoryParam& //in_param
+        const UIContentFactoryParam& in_factory_param
         )
     {
         UIContentStack* content = dynamic_cast<UIContentStack*>(in_out_content.get());
@@ -441,7 +442,7 @@ namespace
         {
             dirty = true;
             auto new_content = std::make_unique<UIContentStack>(
-                in_get_base_colour(),
+                in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
                 in_orientation,
                 in_get_gap_ref()
@@ -451,7 +452,7 @@ namespace
         else
         {
             if (true == content->Set(
-                in_get_base_colour(),
+                in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
                 in_orientation,
                 in_get_gap_ref()

@@ -495,6 +495,11 @@ std::shared_ptr<ShaderConstantBuffer> Shader::MakeShaderConstantBuffer(
         array_constant_buffer
         );
 
+    in_draw_system->ForceRestore(
+        nullptr,
+        shader_constant_buffer.get()
+        );
+
     return shader_constant_buffer;
 }
 
