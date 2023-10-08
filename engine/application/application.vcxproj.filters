@@ -376,5 +376,8 @@
     <FxCompile Include="task\test_text_run\background_pixel.hlsl">
       <Filter>task\test_text_run</Filter>
     </FxCompile>
+    <FxCompile Include="shader\ui_effect_dropshadow_pixel.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

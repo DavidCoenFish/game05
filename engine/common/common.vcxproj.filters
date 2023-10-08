@@ -313,6 +313,9 @@
     <ClCompile Include="source\common\ui\ui_base_colour.cpp">
       <Filter>souce\common\ui</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\ui\ui_content\ui_content_effect.cpp">
+      <Filter>souce\common\ui\ui_content</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -646,6 +649,12 @@
       <Filter>include\common\draw_system\shader</Filter>
     </ClInclude>
     <ClInclude Include="include\common\ui\ui_base_colour.h">
+      <Filter>include\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_content\ui_content_effect.h">
+      <Filter>include\common\ui\ui_content</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_effect_enum.h">
       <Filter>include\common\ui</Filter>
     </ClInclude>
   </ItemGroup>

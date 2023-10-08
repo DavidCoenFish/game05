@@ -97,6 +97,7 @@
     <ClCompile Include="source\common\ui\ui_content\ui_content_button.cpp" />
     <ClCompile Include="source\common\ui\ui_content\ui_content_canvas.cpp" />
     <ClCompile Include="source\common\ui\ui_content\ui_content_default.cpp" />
+    <ClCompile Include="source\common\ui\ui_content\ui_content_effect.cpp" />
     <ClCompile Include="source\common\ui\ui_content\ui_content_stack.cpp" />
     <ClCompile Include="source\common\ui\ui_content\ui_content_string.cpp" />
     <ClCompile Include="source\common\ui\ui_content\ui_content_texture.cpp" />
@@ -184,6 +185,7 @@
     <ClInclude Include="include\common\ui\ui_content\ui_content_button.h" />
     <ClInclude Include="include\common\ui\ui_content\ui_content_canvas.h" />
     <ClInclude Include="include\common\ui\ui_content\ui_content_default.h" />
+    <ClInclude Include="include\common\ui\ui_content\ui_content_effect.h" />
     <ClInclude Include="include\common\ui\ui_content\ui_content_stack.h" />
     <ClInclude Include="include\common\ui\ui_content\ui_content_string.h" />
     <ClInclude Include="include\common\ui\ui_content\ui_content_texture.h" />
@@ -194,6 +196,7 @@
     <ClInclude Include="include\common\ui\ui_data\ui_data_string.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_text_run.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_effect.h" />
+    <ClInclude Include="include\common\ui\ui_effect_enum.h" />
     <ClInclude Include="include\common\ui\ui_hierarchy_node.h" />
     <ClInclude Include="include\common\ui\ui_layout.h" />
     <ClInclude Include="include\common\ui\ui_manager.h" />

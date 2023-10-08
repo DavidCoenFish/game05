@@ -4,36 +4,26 @@
 #include "common/ui/ui_coord.h"
 
 class Shader;
-
-enum class UIDataEffectType
-{
-    TNone,
-    TDropShadow,
-    TRoundCorners,
-    TDesaturate,
-    TDesaturateIfDisabled,
-    TBlendRGBAndAlpha // Use child 0 as rgb, and child 1 as alpha ~ take average of rgb to use as alpha
-    // TBlend is not needed, the default shader will do a premultiplied alpha blend of the children
-    // TChromeFill move fill to a different element
-};
+enum class UIEffectEnum;
 
 class UIDataEffect : public UIData
 {
 public:
     UIDataEffect(
-        const UIDataEffectType in_type,
-        //const std::shared_ptr<Shader>& in_shader,
+        const UIEffectEnum in_type,
+        const UICoord& in_coord_a = UICoord(),
+        const UICoord& in_coord_b = UICoord(),
+        const UICoord& in_coord_c = UICoord(),
+        const UICoord& in_coord_d = UICoord(),
         const std::string& in_template_name = std::string("UIDataEffect"),
         const std::vector<std::shared_ptr<UIData>>& in_array_child_data = std::vector<std::shared_ptr<UIData>>()
         );
     virtual ~UIDataEffect();
 
-    //const std::shared_ptr<Shader>& GetShaderRef() const { return _shader; }
-    const UIDataEffectType GetEffectType() const { return _type; }
+    const UIEffectEnum GetEffectEnum() const { return _type; }
 
 private:
-    //std::shared_ptr<Shader> _shader;
-    UIDataEffectType _type;
+    UIEffectEnum _type;
     UICoord _coord_a;
     UICoord _coord_b;
     UICoord _coord_c;
