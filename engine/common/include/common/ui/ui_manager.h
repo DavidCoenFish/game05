@@ -1,4 +1,5 @@
 #pragma once
+///
 
 #include "common/math/vector_int2.h"
 #include "common/math/vector_float4.h"
@@ -22,6 +23,7 @@ class UIManagerImplementation;
 
 struct UIDataTextRunStyle;
 
+/// \related UIManager
 struct UIContentFactoryParam
 {
     explicit UIContentFactoryParam(
@@ -36,6 +38,7 @@ struct UIContentFactoryParam
     int _create_index;
 };
 
+/// \related UIManager
 struct UIManagerUpdateParam
 {
     explicit UIManagerUpdateParam(
@@ -70,7 +73,8 @@ struct UIManagerUpdateParam
 
 };
 
-// Does UIRootInputState hold this data?
+/// \related UIManager
+/// Does UIRootInputState hold this data?
 struct UIManagerDealInputParam
 {
     static UIManagerDealInputParam Factory();
@@ -104,6 +108,7 @@ struct UIManagerDealInputParam
 
 };
 
+/// \related UIManager
 struct UIManagerDrawParam
 {
     explicit UIManagerDrawParam(
@@ -120,6 +125,8 @@ struct UIManagerDrawParam
     //const bool in_force_total_redraw = false
 };
 
+/// \class UIManager
+/// \brief A minimal redraw ui system, heirarchy based
 class UIManager
 {
 public:
