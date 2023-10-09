@@ -19,7 +19,7 @@ const float Timer::GetDeltaSeconds(float* const out_nice_fps_or_nullptr)
     _nice_fps_time_accumulate -= delta;
     if (_nice_fps_time_accumulate < 0.0f)
     {
-        _nice_fps_time_accumulate += 0.1f;
+        _nice_fps_time_accumulate += 0.1f; // Limit how often the nice fps is changed
         _nice_fps = _delta_seconds_average ? 1.0f / _delta_seconds_average : 0.0f;
     }
 

@@ -184,15 +184,25 @@ public:
         )
     {
         bool dirty = false;
-        if ((_width_limit_enabled != in_width_limit_enabled) ||
-            (_width_limit != in_width_limit))
+        if (_width_limit_enabled != in_width_limit_enabled)
         {
             dirty = true;
             _width_limit_enabled = in_width_limit_enabled;
-            _width_limit = in_width_limit;
             _calculate_dirty = true;
             _geometry_dirty = true;
         }
+
+        if (_width_limit != in_width_limit)
+        {
+            _width_limit = in_width_limit;
+            if (true == _width_limit_enabled)
+            {
+                dirty = true;
+                _calculate_dirty = true;
+                _geometry_dirty = true;
+            }
+        }
+
         return dirty;
     }
 

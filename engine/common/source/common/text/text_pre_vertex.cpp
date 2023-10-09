@@ -119,6 +119,17 @@ void TextPreVertex::AddPreVertex(
     return;
 }
 
+void TextPreVertex::AddCursor(
+    const int in_pos_x,
+    const int //in_pos_y
+    )
+{
+    // This was added to get fixed width more stable. 
+    // possibly some error with GetBounds not correctly using min _horizontal_bounds, thus adding a min(0)
+    _horizontal_bounds[_line_index][0] = std::min(_horizontal_bounds[_line_index][0], 0);
+    _horizontal_bounds[_line_index][1] = std::max(_horizontal_bounds[_line_index][1], in_pos_x);
+}
+
 void TextPreVertex::StartNewLine(
     VectorInt2& in_out_cursor
     )

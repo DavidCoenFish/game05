@@ -292,6 +292,11 @@ private:
 
             in_out_cursor[0] += x_advance;
             in_out_cursor[1] += y_advance;
+
+            in_out_text_pre_vertex.AddCursor(
+                in_out_cursor[0],
+                in_out_cursor[1]
+                );
         }
 
         return;

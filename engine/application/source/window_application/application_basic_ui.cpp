@@ -71,7 +71,7 @@ public:
         auto _data_map_build_fps = std::make_shared<UIDataString>(
             "0.0",
             LocaleISO_639_1::Default,
-            "string_small_right"
+            "string_small_right_fixed"
             );
         _data_map["fps"] = _data_map_build_fps;
 
@@ -133,15 +133,20 @@ public:
                 "canvas_debug_quad0"
                 ),
 #endif
+
+#if 1
+            // Main page data
             _data_main,
+#endif
+
 #if 1
             // Build info
             std::make_shared<UIData>(
                 "stack_vertical_bottom_right",
                 std::vector<std::shared_ptr<UIData>>({
-                    _data_map_build_info,
-                    _data_map_build_version,
-                    _data_map_build_fps
+                    _data_map_build_info
+                    ,_data_map_build_version
+                    ,_data_map_build_fps
                     })
                 )
 #endif

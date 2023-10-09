@@ -62,6 +62,11 @@ public:
         const VectorFloat4& in_colour
         );
 
+    void AddCursor(
+        const int in_pos_x,
+        const int in_pos_y
+        );
+
     void StartNewLine(
         VectorInt2& in_out_cursor
         );

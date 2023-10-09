@@ -278,6 +278,9 @@
     <CopyFileToFolders Include="task\test_text_run\application.json">
       <Filter>task\test_text_run</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="data\mono_spatial.ttf">
+      <Filter>data</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="task\test_triangle\pixel_shader.hlsl">

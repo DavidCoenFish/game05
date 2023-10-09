@@ -54,6 +54,11 @@ namespace
         static std::filesystem::path s_data = std::filesystem::path("data") / "code2000.ttf";
         return s_data;
     }
+    const std::filesystem::path& GetFontPathFixedWidth()
+    {
+        static std::filesystem::path s_data = std::filesystem::path("data") / "mono_spatial.ttf";
+        return s_data;
+    }
 
     // Return copy or reference, want to avoid 
     typedef const UILayout& (*TGetUILayoutRef)();
@@ -172,6 +177,10 @@ namespace
     const UIBaseColour GetUIBaseColourDefault(const int)
     {
         return UIBaseColour();
+    }
+    const UIBaseColour GetUIBaseColourDebugRed(const int)
+    {
+        return UIBaseColour(VectorFloat4(1.0f, 0.0f, 0.0f, 1.0f));
     }
     const UIBaseColour GetUIBaseColourStaggerClearTransparent(const int in_create_index)
     {
@@ -493,8 +502,17 @@ void DefaultUIComponentFactory::Populate(
         >);
     in_ui_manager.AddContentFactory("string_small_right", FactoryString<
         GetUILayoutBottomRightShrink,
-        GetUIBaseColourDefault,
+        GetUIBaseColourDefault, //GetUIBaseColourDebugRed, //
         GetFontPathDefault,
+        s_default_font_size_small,
+        s_new_line_gap_small,
+        TextEnum::HorizontalLineAlignment::Left,
+        TextEnum::VerticalBlockAlignment::Top
+        >);
+    in_ui_manager.AddContentFactory("string_small_right_fixed", FactoryString<
+        GetUILayoutBottomRightShrink,
+        GetUIBaseColourDefault, //GetUIBaseColourDebugRed, //
+        GetFontPathFixedWidth,
         s_default_font_size_small,
         s_new_line_gap_small,
         TextEnum::HorizontalLineAlignment::Left,
