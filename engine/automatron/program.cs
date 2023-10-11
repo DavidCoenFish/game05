@@ -1,5 +1,6 @@
 ﻿namespace Automatron
 {
+   /// Application class
    class Program
    {
       private static bool DealTask(ITask in_task, System.Collections.Generic.Dictionary<string, ITask> in_task_map)
@@ -82,9 +83,7 @@
          return 0;
       }
 
-      //args = ["G:\dcoen\game02", "G:\dcoen\game02\Automatron03\Tasks", "test commit"]
-      //C:\development\game04
-      //C:\development\game04\support\s01_d3dx12_engine\Automatron03\TasksTest
+      /// args = ["G:\dcoen\game02", "G:\dcoen\game02\Automatron03\Tasks", "test commit"]
       static int Main(string[] args)
       {
          System.Console.WriteLine("Automatron Start:" + System.DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"));

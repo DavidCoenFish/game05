@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace Automatron
 {
+   /// Run the file of the first dependency as an exe
    class TaskRunExeAction : ITask
    {
+      /// Plain old class object for json reflection
+      /// extra data for a task
       public class TaskRunExeActionPOCO
       {
          public int Priority { get; set; }
@@ -17,28 +20,15 @@ namespace Automatron
          public ActionPOCO[] Actions { get; set; }
       }
 
+      /// Plain old class object for json reflection
+      /// define an action
       public class ActionPOCO
       {
-         // "Wait", "Close", "SysKeyDown", "SysKeyDownAlt"
          public string Factory { get; set; }
          public string StringParam0 { get; set; }
          public int IntParam0 { get; set; }
 
       }
-
-      //public class ActionWaitPOCO
-      //{
-      //   public int Millisecond { get; set; }
-      //}
-
-      //public class ActionSysKeyDownPOCO
-      //{
-      //   public int Key { get; set; }
-      //}
-
-      //ActionFactoryWait(1000),
-      //ActionFactoryPostMessage(WM_SYSKEYDOWN, new System.IntPtr(VK_RETURN), new System.IntPtr(KEY_STATE_DOWN)),
-      //ActionFactoryPostMessage(WM_CLOSE, System.IntPtr.Zero, System.IntPtr.Zero)
 
       private static int GetVkKey(string key)
       {
@@ -54,7 +44,7 @@ namespace Automatron
          return result;
       }
 
-
+      /// Generate a task object with given name and actions from the given json string
       public static ITask Factory(string name, string jsonString, string[] args)
       {
          var data = System.Text.Json.JsonSerializer.Deserialize<TaskRunExeActionPOCO>(jsonString);

@@ -1,5 +1,6 @@
 ﻿namespace Automatron
 {
+   /// Collect the tasks types and factories
    class Task
    {
       private static bool _initialized = false;
@@ -22,11 +23,14 @@
          }
       }
 
+      /// Plain old class object for json reflection
       public class TaskPOCO
       {
+         /// Name of the factory to use to construct the task
          public string Factory { get; set; }
       }
 
+      /// Generate a task from a file
       public static ITask DealFile(string fileName, string[] args)
       {
          ITask result = null;
@@ -44,7 +48,7 @@
          }
          else
          {
-            System.Console.Error.WriteLine(string.Format("Request for unknown taks:{0}", data.Factory));
+            System.Console.Error.WriteLine(string.Format("Request for unknown task:{0}", data.Factory));
          }
 
          return result;

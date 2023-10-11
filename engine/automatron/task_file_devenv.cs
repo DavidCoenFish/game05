@@ -1,8 +1,10 @@
 ﻿
 namespace Automatron
 {
+   /// Task to run a visual studio build
    class TaskFileDevenv : ITaskFile
    {
+      /// Plain old class object for json reflection
       public class TaskFileDevenvPOCO
       {
          public int Priority { get; set; }
@@ -17,6 +19,7 @@ namespace Automatron
          public string Platform { get; set; }
       }
 
+      /// Factory method to build a Devenv task
       public static TaskFileDevenv Factory(string name, string jsonString, string[] args)
       {
          var rootPath = args[0];

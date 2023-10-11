@@ -13,7 +13,7 @@
 #include "common/direct_xtk12/d3dx12.h"
 #include "common/log/log.h"
 
-// Set this to 1 to enable some additional debug validation
+/// Set this to 1 to enable some additional debug validation
 #define VALIDATE_LISTS 0
 #if VALIDATE_LISTS
 #   include < unordered_set > 

@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Automatron
 {
+   /// Task to run a visual studio unit test
    class TaskRunTest : ITask
    {
+      /// Plain old class object for json reflection
       public class TaskRunTestPOCO
       {
          public int Priority { get; set; }

@@ -2,7 +2,6 @@
 
 #include "window_application/application_test_line.h"
 
-#include "common/direct_xtk12/keyboard.h"
 #include "common/draw_system/custom_command_list.h"
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/draw_system_frame.h"

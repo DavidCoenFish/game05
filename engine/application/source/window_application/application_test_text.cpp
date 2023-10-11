@@ -3,7 +3,6 @@
 #include "window_application/application_test_text.h"
 #include "scene_component/scene_component_screen_quad.h"
 
-#include "common/direct_xtk12/keyboard.h"
 #include "common/draw_system/custom_command_list.h"
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/draw_system_frame.h"

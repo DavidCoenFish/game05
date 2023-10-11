@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Automatron
 {
+   /// Task to commit repo to git
    class TaskGitCommit : ITask
    {
+      /// Plain old class object for json reflection
       public class TaskGitCommitPOCO
       {
          public int Priority { get; set; }

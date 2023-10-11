@@ -113,9 +113,9 @@ namespace DirectX
     class LinearAllocator
     {
     public:
-        // These values will be rounded up to the nearest 64k.
-        // You can specify zero for incrementalSizeBytes to increment
-        // By 1 page (64k).
+        /// These values will be rounded up to the nearest 64k.
+        /// You can specify zero for incrementalSizeBytes to increment
+        /// By 1 page (64k).
         LinearAllocator(
             _In_ ID3D12Device* in_device,
             _In_ size_t in_page_size,
@@ -130,14 +130,14 @@ namespace DirectX
             _In_ size_t in_requested_size,
             _In_ size_t in_alignment
             );
-        // Call this at least once a frame to check if pages have become available.
+        /// Call this at least once a frame to check if pages have become available.
         void RetirePendingPages() noexcept;
-        // Call this after you submit your work to the driver.
-        // (e.g. immediately before Present.)
+        /// Call this after you submit your work to the driver.
+        /// (e.g. immediately before Present.)
         void FenceCommittedPages(_In_ ID3D12CommandQueue* in_command_queue);
-        // Throws away all currently unused pages
+        /// Throws away all currently unused pages
         void Shrink() noexcept;
-        // Statistics
+        /// Statistics
         size_t CommittedPageCount() const noexcept
         {
             return _num_pending;
@@ -190,11 +190,11 @@ namespace DirectX
 
     private:
         LinearAllocatorPage* _pending_pages;
-        // Pages in use by the GPU
+        /// Pages in use by the GPU
         LinearAllocatorPage* _used_pages;
-        // Pages to be submitted to the GPU
+        /// Pages to be submitted to the GPU
         LinearAllocatorPage* _unused_pages;
-        // Pages not being used right now
+        /// Pages not being used right now
         size_t _increment;
         size_t _num_pending;
         size_t _total_pages;
