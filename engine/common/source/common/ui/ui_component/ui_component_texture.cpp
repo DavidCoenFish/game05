@@ -1,5 +1,5 @@
 #include "common/common_pch.h"
-#include "common/ui/ui_content/ui_content_texture.h"
+#include "common/ui/ui_component/ui_component_texture.h"
 
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/draw_system_frame.h"
@@ -9,7 +9,7 @@
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_manager.h"
 
-UIContentTexture::UIContentTexture(
+UIComponentTexture::UIComponentTexture(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
     const std::shared_ptr<HeapWrapperItem>& in_shader_resource_view_handle
@@ -25,15 +25,15 @@ UIContentTexture::UIContentTexture(
     _geometry = std::make_shared<UIGeometry>();
 }
 
-UIContentTexture::~UIContentTexture()
+UIComponentTexture::~UIComponentTexture()
 {
     // Nop
 }
 /*
-void UIContentTexture::Draw(
+void UIComponentTexture::Draw(
     const UIManagerDrawParam& in_param,
     UITexture* const in_texture,
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&,// in_child_data_array, // Todo, a ui_content which draws the texture of each child?
+    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&,// in_child_data_array, // Todo, a ui_component which draws the texture of each child?
     Shader* const in_shader
     )
 {
@@ -63,7 +63,7 @@ void UIContentTexture::Draw(
 }
 */
 
-void UIContentTexture::SetTexture(
+void UIComponentTexture::SetTexture(
     const std::shared_ptr<HeapWrapperItem>& in_shader_resource_view_handle
     )
 {

@@ -1,40 +1,23 @@
 #pragma once
 
-#include "common/ui/ui_content/i_ui_content.h"
-#include "common/ui/ui_content/ui_content_default.h"
+#include "common/ui/ui_component/i_ui_component.h"
+#include "common/ui/ui_component/ui_component_default.h"
 
-enum class UIEffectEnum;
-
-class UIContentEffect : public IUIContent
+class UIComponentCanvas : public IUIComponent
 {
 public:
-    UIContentEffect(
+    UIComponentCanvas(
         const UIBaseColour& in_base_colour,
-        const UILayout& in_layout,
-        const UIEffectEnum in_type,
-        const UICoord& in_coord_a,
-        const UICoord& in_coord_b,
-        const UICoord& in_coord_c,
-        const UICoord& in_coord_d
+        const UILayout& in_layout
         );
-    ~UIContentEffect();
+    virtual ~UIComponentCanvas();
 
     const bool SetBase(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout
         );
 
-    // return true if modified, else false
-    const bool Set(
-        const UIEffectEnum in_type,
-        const UICoord& in_coord_a,
-        const UICoord& in_coord_b,
-        const UICoord& in_coord_c,
-        const UICoord& in_coord_d
-        );
-
 private:
-    // Make sorting children easier
     virtual void SetSourceToken(void* in_source_ui_data_token) override;
     virtual void* GetSourceToken() const override;
 
@@ -67,21 +50,8 @@ private:
         UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         ) override;
 
-    //virtual const bool GetNeedsPreDraw() const override;
-    virtual void PreDraw(
-        const UIManagerDrawParam& in_param
-        ) override;
 
 private:
-    UIContentDefault _content_default;
-
-    UIEffectEnum _type;
-    UICoord _coord_a;
-    UICoord _coord_b;
-    UICoord _coord_c;
-    UICoord _coord_d;
-
-    std::shared_ptr<Shader> _shader;
-    std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;
+    UIComponentDefault _content_default;
 
 };

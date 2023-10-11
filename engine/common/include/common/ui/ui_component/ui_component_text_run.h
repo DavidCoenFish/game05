@@ -1,43 +1,36 @@
 #pragma once
 
-#include "common/ui/ui_content/i_ui_content.h"
-#include "common/ui/ui_content/ui_content_default.h"
+#include "common/ui/ui_component/i_ui_component.h"
+#include "common/ui/ui_component/ui_component_default.h"
+#include "common/text/text_enum.h"
 
-class VectorInt4;
+class ITextRunData;
+class TextRun;
+class TextFont;
 
-enum class StackOrientation
-{
-    TVertical, // BottomTop
-    THorizontal, // LeftRight
-    //TGridLeftRightTopBottom?
-    //TGridTopBottomLeftRight?
-    //TFlowLeftRightTopBottom
-    //TFlowTopBottomLeftRight
-};
-
-class UIContentStack : public IUIContent
+class UIComponentTextRun : public IUIComponent
 {
 public:
-    UIContentStack(
+    UIComponentTextRun(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
-        const StackOrientation in_orientation,
-        const UICoord& in_gap
+        std::unique_ptr<TextRun>& in_text_run
         );
-    virtual ~UIContentStack();
+    ~UIComponentTextRun();
+
+    const bool SetBase(
+        const UIBaseColour& in_base_colour,
+        const UILayout& in_layout
+        );
 
     const bool Set(
-        const UIBaseColour& in_base_colour,
-        const UILayout& in_layout,
-        const StackOrientation in_orientation,
-        const UICoord& in_gap
+        const bool in_width_limit_enabled,
+        const TextEnum::HorizontalLineAlignment in_horizontal,
+        const TextEnum::VerticalBlockAlignment in_vertical,
+        const int in_em_size
         );
 
 private:
-    //virtual const bool GetClearBackground(
-    //    VectorFloat4& out_clear_colour
-    //    ) const override;
-
     // Make sorting children easier
     virtual void SetSourceToken(void* in_source_ui_data_token) override;
     virtual void* GetSourceToken() const override;
@@ -72,17 +65,15 @@ private:
         UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         ) override;
 
-    void GetStackDesiredSize(
-        VectorInt2& out_layout_size, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
-        VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
-        const VectorInt2& in_parent_window,
-        const float in_ui_scale,
-        UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-        std::vector<VectorInt4>& out_child_window_offset
-        );
+    //virtual const bool GetNeedsPreDraw() const override;
+    virtual void PreDraw(
+        const UIManagerDrawParam& in_param
+        ) override;
+
 private:
-    UIContentDefault _content_default;
-    StackOrientation _orientation;
-    UICoord _gap;
+    UIComponentDefault _content_default;
+
+    int _change_id;
+    std::unique_ptr<TextRun> _text_run;
 
 };

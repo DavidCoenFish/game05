@@ -15,8 +15,8 @@
 #include "common/log/log.h"
 #include "common/math/vector_int2.h"
 #include "common/math/vector_int4.h"
-#include "common/ui/ui_content/ui_content_canvas.h"
-#include "common/ui/ui_content/ui_content_texture.h"
+#include "common/ui/ui_component/ui_component_canvas.h"
+#include "common/ui/ui_component/ui_component_texture.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_texture.h"
@@ -281,7 +281,7 @@ ApplicationTestCoord::ApplicationTestCoord(
             );
 
         {
-            _draw_resource->_ui_texture[0] = std::dynamic_pointer_cast<UIContentTexture>(UIHierarchyNode::MakeContentTexture(
+            _draw_resource->_ui_texture[0] = std::dynamic_pointer_cast<UIComponentTexture>(UIHierarchyNode::MakeContentTexture(
                 _draw_system.get(),
                 command_list->GetCommandList(),
                 _draw_resource->_render_target->GetShaderResourceHeapWrapperItem()
@@ -310,7 +310,7 @@ ApplicationTestCoord::ApplicationTestCoord(
         }
 
         {
-            _draw_resource->_ui_texture[1] = std::dynamic_pointer_cast<UIContentTexture>(UIHierarchyNode::MakeContentTexture(
+            _draw_resource->_ui_texture[1] = std::dynamic_pointer_cast<UIComponentTexture>(UIHierarchyNode::MakeContentTexture(
                 _draw_system.get(),
                 command_list->GetCommandList(),
                 _draw_resource->_texture->GetHeapWrapperItem()

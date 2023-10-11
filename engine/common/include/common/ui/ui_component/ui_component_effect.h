@@ -1,21 +1,23 @@
 #pragma once
 
-#include "common/ui/ui_content/i_ui_content.h"
-#include "common/ui/ui_content/ui_content_default.h"
-#include "common/text/text_enum.h"
+#include "common/ui/ui_component/i_ui_component.h"
+#include "common/ui/ui_component/ui_component_default.h"
 
-class TextBlock;
-class TextFont;
+enum class UIEffectEnum;
 
-class UIContentString : public IUIContent
+class UIComponentEffect : public IUIComponent
 {
 public:
-    UIContentString(
+    UIComponentEffect(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
-        std::unique_ptr<TextBlock>& in_text_block
+        const UIEffectEnum in_type,
+        const UICoord& in_coord_a,
+        const UICoord& in_coord_b,
+        const UICoord& in_coord_c,
+        const UICoord& in_coord_d
         );
-    ~UIContentString();
+    ~UIComponentEffect();
 
     const bool SetBase(
         const UIBaseColour& in_base_colour,
@@ -24,13 +26,11 @@ public:
 
     // return true if modified, else false
     const bool Set(
-        TextFont& in_font, 
-        const int in_font_size,
-        const float in_new_line_gap_ratio,
-        const bool in_width_limit_enabled,
-        const TextEnum::HorizontalLineAlignment in_horizontal, 
-        const TextEnum::VerticalBlockAlignment in_vertical,
-        const VectorFloat4& in_text_colour
+        const UIEffectEnum in_type,
+        const UICoord& in_coord_a,
+        const UICoord& in_coord_b,
+        const UICoord& in_coord_c,
+        const UICoord& in_coord_d
         );
 
 private:
@@ -41,7 +41,6 @@ private:
     virtual const bool SetLayout(const UILayout& in_layout) override;
 
     virtual const bool UpdateHierarchy(
-        //std::vector<std::shared_ptr<UIData>>*& out_array_data_or_null,
         UIData* const in_data,
         UIHierarchyNodeChildData& in_out_child_data,
         const UIHierarchyNodeUpdateHierarchyParam& in_param
@@ -74,9 +73,15 @@ private:
         ) override;
 
 private:
-    UIContentDefault _content_default;
+    UIComponentDefault _content_default;
 
-    //bool _use_parent_size_for_width_limit;
-    std::unique_ptr<TextBlock> _text_block;
+    UIEffectEnum _type;
+    UICoord _coord_a;
+    UICoord _coord_b;
+    UICoord _coord_c;
+    UICoord _coord_d;
+
+    std::shared_ptr<Shader> _shader;
+    std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;
 
 };

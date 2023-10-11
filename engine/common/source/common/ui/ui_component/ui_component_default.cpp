@@ -1,5 +1,5 @@
 #include "common/common_pch.h"
-#include "common/ui/ui_content/ui_content_default.h"
+#include "common/ui/ui_component/ui_component_default.h"
 
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/draw_system_frame.h"
@@ -13,8 +13,8 @@
 #include "common/ui/ui_data/ui_data.h"
 
 #include "common/common_pch.h"
-#include "common/ui/ui_content/ui_content_stack.h"
-#include "common/ui/ui_content/ui_content_default.h"
+#include "common/ui/ui_component/ui_component_stack.h"
+#include "common/ui/ui_component/ui_component_default.h"
 #include "common/ui/ui_layout.h"
 #include "common/ui/ui_coord.h"
 #include "common/ui/ui_screen_space.h"
@@ -30,7 +30,7 @@ namespace
     constexpr float s_scroll_speed = 25.0f;
 }
 
-UIContentDefault::UIContentDefault(
+UIComponentDefault::UIComponentDefault(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
     void* in_source_token
@@ -43,12 +43,12 @@ UIContentDefault::UIContentDefault(
     // Nop
 }
 
-UIContentDefault::~UIContentDefault()
+UIComponentDefault::~UIComponentDefault()
 {
     // Nop
 }
 
-void UIContentDefault::CalculateGeometry(
+void UIComponentDefault::CalculateGeometry(
     VectorFloat4& out_geometry_pos,
     VectorFloat4& out_geometry_uv,
     VectorInt2& out_texture_size,
@@ -113,7 +113,7 @@ void UIContentDefault::CalculateGeometry(
     return;
 }
 
-const bool UIContentDefault::SetBase(
+const bool UIComponentDefault::SetBase(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout
     )
@@ -137,17 +137,17 @@ const bool UIContentDefault::SetBase(
 }
 
 // Make sorting children easier
-void UIContentDefault::SetSourceToken(void* in_source_ui_data_token)
+void UIComponentDefault::SetSourceToken(void* in_source_ui_data_token)
 {
     _source_token = in_source_ui_data_token;
 }
 
-void* UIContentDefault::GetSourceToken() const
+void* UIComponentDefault::GetSourceToken() const
 {
     return _source_token;
 }
 
-const bool UIContentDefault::SetLayout(const UILayout& in_layout)
+const bool UIComponentDefault::SetLayout(const UILayout& in_layout)
 {
     bool dirty = false;
     if (_layout != in_layout)
@@ -157,7 +157,7 @@ const bool UIContentDefault::SetLayout(const UILayout& in_layout)
     return dirty;
 }
 
-const bool UIContentDefault::UpdateHierarchy(
+const bool UIComponentDefault::UpdateHierarchy(
     UIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
     const UIHierarchyNodeUpdateHierarchyParam& in_param
@@ -202,9 +202,9 @@ const bool UIContentDefault::UpdateHierarchy(
     return dirty;
 }
 
-void UIContentDefault::UpdateSize(
+void UIComponentDefault::UpdateSize(
     DrawSystem* const in_draw_system,
-    IUIContent& in_out_ui_content,
+    IUIComponent& in_out_ui_component,
     const VectorInt2& in_parent_size,
     const VectorInt2& in_parent_offset,
     const VectorInt2& in_parent_window,
@@ -218,7 +218,7 @@ void UIContentDefault::UpdateSize(
 {
     VectorInt2 layout_size;
     VectorInt2 desired_size;
-    in_out_ui_content.GetDesiredSize(
+    in_out_ui_component.GetDesiredSize(
         layout_size,
         desired_size,
         in_parent_window,
@@ -276,7 +276,7 @@ void UIContentDefault::UpdateSize(
     return;
 }
 
-void UIContentDefault::GetDesiredSize(
+void UIComponentDefault::GetDesiredSize(
     VectorInt2& out_layout_size,
     VectorInt2& out_desired_size,
     const VectorInt2& in_parent_window,
@@ -292,13 +292,13 @@ void UIContentDefault::GetDesiredSize(
     for (auto iter: in_out_node.GetChildData())
     {
         UIHierarchyNodeChildData& child_data = *iter;
-        if (nullptr == child_data._content)
+        if (nullptr == child_data._component)
         {
             continue;
         }
         VectorInt2 child_layout_size;
         VectorInt2 child_desired_size;
-        child_data._content->GetDesiredSize(
+        child_data._component->GetDesiredSize(
             child_layout_size,
             child_desired_size,
             out_layout_size, 

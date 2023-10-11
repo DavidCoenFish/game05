@@ -1,10 +1,9 @@
 #include "common/common_pch.h"
-#include "common/ui/ui_content/ui_content_button.h"
-#include "common/ui/ui_data/ui_data_button.h"
+#include "common/ui/ui_component/ui_component_canvas.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_geometry.h"
 
-UIContentButton::UIContentButton(
+UIComponentCanvas::UIComponentCanvas(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout
     )
@@ -16,12 +15,12 @@ UIContentButton::UIContentButton(
     // Nop
 }
 
-UIContentButton::~UIContentButton()
+UIComponentCanvas::~UIComponentCanvas()
 {
     // Nop
 }
 
-const bool UIContentButton::SetBase(
+const bool UIComponentCanvas::SetBase(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout
     )
@@ -32,77 +31,39 @@ const bool UIContentButton::SetBase(
         );
 }
 
-const bool UIContentButton::Set(
-    const bool in_enabled,
-    const std::function<void(const VectorFloat2&)>& in_on_click
-    )
-{
-    bool dirty = false;
-    if (_enabled != in_enabled)
-    {
-        dirty = true;
-        _enabled = in_enabled;
-    }
-
-    _on_click = in_on_click;
-
-    //if (_on_click != in_on_click)
-    //{
-    //    _on_click = in_on_click;
-    //}
-
-    return dirty;
-}
-
-void UIContentButton::SetSourceToken(void* in_source_ui_data_token)
+void UIComponentCanvas::SetSourceToken(void* in_source_ui_data_token)
 {
     _content_default.SetSourceToken(in_source_ui_data_token);
     return;
 }
 
-void* UIContentButton::GetSourceToken() const
+void* UIComponentCanvas::GetSourceToken() const
 {
     return _content_default.GetSourceToken();
 }
 
-const bool UIContentButton::SetLayout(const UILayout& in_layout)
+const bool UIComponentCanvas::SetLayout(const UILayout& in_layout)
 {
     return _content_default.SetLayout(in_layout);
 }
 
-const bool UIContentButton::UpdateHierarchy(
+const bool UIComponentCanvas::UpdateHierarchy(
     //std::vector<std::shared_ptr<UIData>>*& out_array_data_or_null,
     UIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
     const UIHierarchyNodeUpdateHierarchyParam& in_param
     )
 {
-    bool dirty = false;
-    const UIDataButton* const data = dynamic_cast<const UIDataButton*>(in_data);
-    if (nullptr != data)
-    {
-        if (true == Set(
-            data->GetEnabled(),
-            data->GetOnClick()
-            ))
-        {
-            dirty = true;
-        }
-    }
+    // currently UIDataContainer is handled by _content_default.UpdateHierarchy
 
-    if (true == _content_default.UpdateHierarchy(
+    return _content_default.UpdateHierarchy(
         in_data,
         in_out_child_data, 
         in_param
-        ))
-    {
-        dirty = true;
-    }
-
-    return dirty;
+        );
 }
 
-void UIContentButton::UpdateSize(
+void UIComponentCanvas::UpdateSize(
     DrawSystem* const in_draw_system,
     const VectorInt2& in_parent_size,
     const VectorInt2& in_parent_offset,
@@ -130,7 +91,7 @@ void UIContentButton::UpdateSize(
         );
 }
 
-void UIContentButton::GetDesiredSize(
+void UIComponentCanvas::GetDesiredSize(
     VectorInt2& out_layout_size, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
     VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
     const VectorInt2& in_parent_window,
@@ -145,16 +106,4 @@ void UIContentButton::GetDesiredSize(
         in_ui_scale,
         in_out_node
         );
-}
-
-void UIContentButton::OnInputMouseClick(
-    const VectorFloat4&, // in_screen_pos,
-    const VectorFloat2& in_mouse_pos
-    )
-{
-    if (nullptr != _on_click)
-    {
-        _on_click(in_mouse_pos);
-    }
-    return;
 }

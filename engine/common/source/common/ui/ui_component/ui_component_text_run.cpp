@@ -1,86 +1,70 @@
 #include "common/common_pch.h"
-#include "common/ui/ui_content/ui_content_string.h"
+#include "common/ui/ui_component/ui_component_text_run.h"
 
-//#include "common/draw_system/draw_system_frame.h"
-//#include "common/draw_system/draw_system.h"
-#include "common/math/dsc_math.h"
-#include "common/text/text_block.h"
+#include "common/text/text_run.h"
 #include "common/text/text_manager.h"
-#include "common/ui/ui_data/ui_data_string.h"
+#include "common/ui/ui_data/ui_data_text_run.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_manager.h"
 
 
-UIContentString::UIContentString(
+UIComponentTextRun::UIComponentTextRun(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
-    std::unique_ptr<TextBlock>& in_text_block
+    std::unique_ptr<TextRun>& in_text_run
     )
     : _content_default(
         in_base_colour,
         in_layout
         )
-    , _text_block(std::move(in_text_block))
+    , _text_run(std::move(in_text_run))
+    , _change_id(0)
 {
     return;
 }
 
-UIContentString::~UIContentString()
+UIComponentTextRun::~UIComponentTextRun()
 {
     return;
 }
 
-const bool UIContentString::SetBase(
+const bool UIComponentTextRun::SetBase(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout
     )
 {
+    bool dirty = false;
     if (true == _content_default.SetBase(
         in_base_colour,
         in_layout
         ))
     {
-        return true;
+        dirty = true;
     }
-    return false;
+    return dirty;
 }
 
-const bool UIContentString::Set(
-    TextFont& in_font, 
-    const int in_font_size,
-    const float in_new_line_gap_ratio,
+const bool UIComponentTextRun::Set(
     const bool in_width_limit_enabled,
-    const TextEnum::HorizontalLineAlignment in_horizontal, 
+    const TextEnum::HorizontalLineAlignment in_horizontal,
     const TextEnum::VerticalBlockAlignment in_vertical,
-    const VectorFloat4& in_text_colour
+    const int in_em_size
     )
 {
     bool dirty = false;
-    if (true == _text_block->SetFont(in_font))
+    if (true == _text_run->SetEMSize(in_em_size))
     {
         dirty = true;
     }
-    if (true == _text_block->SetFontSize(in_font_size))
+    if (true == _text_run->SetWidthLimitEnabled(in_width_limit_enabled))
     {
         dirty = true;
     }
-    if (true == _text_block->SetNewLineGapRatio(in_new_line_gap_ratio))
+    if (true == _text_run->SetHorizontalLineAlignment(in_horizontal))
     {
         dirty = true;
     }
-    if (true == _text_block->SetWidthLimitEnabled(in_width_limit_enabled))
-    {
-        dirty = true;
-    }
-    if (true == _text_block->SetHorizontalLineAlignment(in_horizontal))
-    {
-        dirty = true;
-    }
-    if (true == _text_block->SetVerticalBlockAlignment(in_vertical))
-    {
-        dirty = true;
-    }
-    if (true == _text_block->SetColour(in_text_colour))
+    if (true == _text_run->SetVerticalBlockAlignment(in_vertical))
     {
         dirty = true;
     }
@@ -88,38 +72,47 @@ const bool UIContentString::Set(
     return dirty;
 }
 
+
 // Make sorting children easier
-void UIContentString::SetSourceToken(void* in_source_ui_data_token)
+void UIComponentTextRun::SetSourceToken(void* in_source_ui_data_token)
 {
     _content_default.SetSourceToken(in_source_ui_data_token);
     return;
 }
 
-void* UIContentString::GetSourceToken() const
+void* UIComponentTextRun::GetSourceToken() const
 {
     return _content_default.GetSourceToken();
 }
 
-const bool UIContentString::SetLayout(const UILayout& in_layout)
+const bool UIComponentTextRun::SetLayout(const UILayout& in_layout)
 {
     return _content_default.SetLayout(in_layout);
 }
 
-const bool UIContentString::UpdateHierarchy(
-    //std::vector<std::shared_ptr<UIData>>*& out_array_data_or_null,
+const bool UIComponentTextRun::UpdateHierarchy(
     UIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
     const UIHierarchyNodeUpdateHierarchyParam& in_param
     )
 {
     bool dirty = false;
-    const UIDataString* const data_string = dynamic_cast<const UIDataString*>(in_data);
-    if (nullptr != data_string)
+    UIDataTextRun* const data_text_run = dynamic_cast<UIDataTextRun*>(in_data);
+    if (nullptr != data_text_run)
     {
-        if (true == _text_block->SetText(
-            data_string->GetStringRef(),
-            in_param._text_manager->GetLocaleToken(data_string->GetLocale())
-            ))
+        if (true == data_text_run->VisitData(
+            *(in_param._text_manager),
+            *(in_param._locale_system),
+            *(in_param._default_text_style),
+            [this](const int in_change_id, const std::vector<std::shared_ptr<ITextRunData>>& in_data_array)->bool{
+                if (_change_id != in_change_id)
+                {
+                    _change_id = in_change_id;
+                    _text_run->SetTextRunArray(in_data_array);
+                    return true;
+                }
+                return false;
+            }))
         {
             dirty = true;
         }
@@ -137,7 +130,7 @@ const bool UIContentString::UpdateHierarchy(
     return dirty;
 }
 
-void UIContentString::UpdateSize(
+void UIComponentTextRun::UpdateSize(
     DrawSystem* const in_draw_system,
     const VectorInt2& in_parent_size,
     const VectorInt2& in_parent_offset,
@@ -164,15 +157,12 @@ void UIContentString::UpdateSize(
         out_screen_space
         );
 
-    // Return true if needed? no, if the size of the texture changes, then texture is marked as needs to draw
-    _text_block->SetTextContainerSize(
+    _text_run->SetTextContainerSize(
         in_out_node.GetTextureSize(in_draw_system)
         );
-
-    return;
 }
 
-void UIContentString::GetDesiredSize(
+void UIComponentTextRun::GetDesiredSize(
     VectorInt2& out_layout_size, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
     VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
     const VectorInt2& in_parent_window,
@@ -182,13 +172,10 @@ void UIContentString::GetDesiredSize(
 {
     out_layout_size = _content_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
 
-    _text_block->SetWidthLimit(
-        _text_block->GetWidthLimitEnabled(),
-        out_layout_size[0]
-        );
-    _text_block->SetUIScale(in_ui_scale);
+    _text_run->SetWidthLimitWidth(out_layout_size[0]);
+    _text_run->SetUIScale(in_ui_scale);
 
-    out_desired_size = _text_block->GetTextBounds();
+    out_desired_size = _text_run->GetTextBounds();
 
     out_layout_size = _content_default.GetLayout().CalculateShrinkSize(out_layout_size, out_desired_size);
     //out_desired_size = VectorInt2::Max(out_layout_size, out_desired_size);
@@ -196,17 +183,21 @@ void UIContentString::GetDesiredSize(
     return;
 }
 
-void UIContentString::PreDraw(
+//const bool UIComponentTextRun::GetNeedsPreDraw() const
+//{
+//    return _pre_draw_dirty;
+//}
+
+void UIComponentTextRun::PreDraw(
     const UIManagerDrawParam& in_param
     )
 {
 #if 1
-    in_param._text_manager->DrawText(
+    in_param._text_manager->DrawTextRun(
         in_param._draw_system,
         in_param._frame,
-        _text_block.get()
+        _text_run.get()
         );
 #endif
-    //_pre_draw_dirty = false;
     return;
 }

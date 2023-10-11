@@ -9,7 +9,7 @@ class DrawSystem;
 class DrawSystemFrame;
 class HeapWrapperItem;
 class UIData;
-class IUIContent;
+class IUIComponent;
 class IUIModel;
 class LocaleSystem;
 class Shader;
@@ -22,7 +22,7 @@ class UITexture;
 class UILayout;
 class UIScreenSpace;
 
-struct UIContentFactoryParam;
+struct UIComponentFactoryParam;
 struct UIDataTextRunStyle;
 struct UIManagerDrawParam;
 struct UIManagerUpdateLayoutParam;
@@ -34,7 +34,7 @@ UIHierarchyNode // N0
     _child_node_array // A0
         _geometry // G1 geometry to draw the texture T1 onto T0
         _shader_constant_buffer // S1 the shader constants
-        _content // C1 controls size of T1 and G1. model returns an array of ui data for root
+        _component // C1 controls size of T1 and G1. model returns an array of ui data for root
         //_layoutData // L0 layout data here or in content
         UIHierarchyNode // N1 child node
             _texture // T1 texture or backbuffer A1 draws to
@@ -45,7 +45,7 @@ struct UIHierarchyNodeChildData
 {
     UIHierarchyNodeChildData(
         std::unique_ptr<UIGeometry>& in_geometry,
-        std::unique_ptr<IUIContent>& in_content,
+        std::unique_ptr<IUIComponent>& in_component,
         std::unique_ptr<UIHierarchyNode>& in_node,
         std::unique_ptr<UIScreenSpace>& in_screen_space
         );
@@ -53,8 +53,8 @@ struct UIHierarchyNodeChildData
 
     // Need to track if state changed, so not using GeometryGeneric
     std::unique_ptr<UIGeometry> _geometry;
-    // _content is out here rather than in _node to avoid top level node needing a root or do nothing content for layout
-    std::unique_ptr<IUIContent> _content; 
+    // _component is out here rather than in _node to avoid top level node needing a root or do nothing content for layout
+    std::unique_ptr<IUIComponent> _component; 
     std::unique_ptr<UIHierarchyNode> _node;
     std::unique_ptr<UIScreenSpace> _screen_space;
     //std::unique_ptr<UILayout>(); //layout data here or in content?
@@ -66,8 +66,8 @@ struct UIHierarchyNodeChildData
 struct UIHierarchyNodeUpdateHierarchyParam
 {
     typedef std::function< const bool(
-        std::unique_ptr<IUIContent>& in_out_content,
-        const UIContentFactoryParam& in_param
+        std::unique_ptr<IUIComponent>& in_out_content,
+        const UIComponentFactoryParam& in_param
         )> TContentFactory;
 
     explicit UIHierarchyNodeUpdateHierarchyParam(
@@ -117,11 +117,11 @@ public:
     std::shared_ptr<HeapWrapperItem> GetShaderResourceHeapWrapperItem() const;
 
     void AddChild(
-        std::unique_ptr<IUIContent>& in_content
+        std::unique_ptr<IUIComponent>& in_content
         );
     const bool ClearChildren();
 
-    // Expose child data array to allow ui_content to specialise how hieararchy builds
+    // Expose child data array to allow ui_component to specialise how hieararchy builds
     std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& GetChildData() { return _child_data_array; }
 
     // create/ destroy nodes to match model, make content match type from factory, update content?
@@ -165,7 +165,7 @@ public:
     const bool Draw(
         const UIManagerDrawParam& in_draw_param,
         Shader* const in_shader,
-        IUIContent* const in_content_or_null = nullptr
+        IUIComponent* const in_content_or_null = nullptr
         );
 
 private:

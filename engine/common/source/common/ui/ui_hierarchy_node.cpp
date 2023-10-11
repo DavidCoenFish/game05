@@ -6,11 +6,11 @@
 #include "common/draw_system/shader/shader.h"
 #include "common/ui/i_ui_input.h"
 #include "common/ui/i_ui_model.h"
-#include "common/ui/ui_content/ui_content_canvas.h"
-#include "common/ui/ui_content/ui_content_default.h"
-#include "common/ui/ui_content/ui_content_stack.h"
-#include "common/ui/ui_content/ui_content_string.h"
-#include "common/ui/ui_content/ui_content_texture.h"
+#include "common/ui/ui_component/ui_component_canvas.h"
+#include "common/ui/ui_component/ui_component_default.h"
+#include "common/ui/ui_component/ui_component_stack.h"
+#include "common/ui/ui_component/ui_component_string.h"
+#include "common/ui/ui_component/ui_component_texture.h"
 #include "common/ui/ui_coord.h"
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_manager.h"
@@ -23,12 +23,12 @@
 
 UIHierarchyNodeChildData::UIHierarchyNodeChildData(
     std::unique_ptr<UIGeometry>& in_geometry,
-    std::unique_ptr<IUIContent>& in_content,
+    std::unique_ptr<IUIComponent>& in_component,
     std::unique_ptr<UIHierarchyNode>& in_node,
     std::unique_ptr<UIScreenSpace>& in_screen_space
     )
     : _geometry(std::move(in_geometry))
-    , _content(std::move(in_content))
+    , _component(std::move(in_component))
     , _node(std::move(in_node))
     , _screen_space(std::move(in_screen_space))
 {
@@ -124,7 +124,7 @@ std::shared_ptr<HeapWrapperItem> UIHierarchyNode::GetShaderResourceHeapWrapperIt
 }
 
 void UIHierarchyNode::AddChild(
-    std::unique_ptr<IUIContent>& in_content
+    std::unique_ptr<IUIComponent>& in_content
     )
 {
     auto geometry = std::make_unique<UIGeometry>();
@@ -203,7 +203,7 @@ const bool UIHierarchyNode::UpdateHierarchy(
         for (int index = target_length; index < (int)_child_data_array.size(); ++index)
         {
             auto child = _child_data_array[index];
-            map_temp_ownership[child->_content->GetSourceToken()] = child;
+            map_temp_ownership[child->_component->GetSourceToken()] = child;
             dirty = true;
         }
         _child_data_array.resize(target_length);
@@ -215,7 +215,7 @@ const bool UIHierarchyNode::UpdateHierarchy(
             const auto& child = _child_data_array[index];
             if (nullptr != child)
             {
-                void* source_child_token = child->_content ? child->_content->GetSourceToken() : nullptr;
+                void* source_child_token = child->_component ? child->_component->GetSourceToken() : nullptr;
                 void* data_token = (void*)&data;
                 if (data_token != source_child_token)
                 {
@@ -245,7 +245,7 @@ const bool UIHierarchyNode::UpdateHierarchy(
             else
             {
                 auto geometry = std::make_unique<UIGeometry>();
-                std::unique_ptr<IUIContent> content;
+                std::unique_ptr<IUIComponent> content;
                 auto node = std::make_unique<UIHierarchyNode>();
                 auto screen_space = std::make_unique<UIScreenSpace>();
                 _child_data_array[index] = std::make_shared<UIHierarchyNodeChildData>(
@@ -267,35 +267,35 @@ const bool UIHierarchyNode::UpdateHierarchy(
             auto factory = in_param._map_content_factory.find(data.GetTemplateName());
             if (factory != in_param._map_content_factory.end())
             {
-                UIContentFactoryParam factory_param(
+                UIComponentFactoryParam factory_param(
                     in_param._draw_system,
                     in_param._command_list,
                     in_param._text_manager,
                     index
                     );
                 if (true == factory->second(
-                    child->_content,
+                    child->_component,
                     factory_param
                     ))
                 {
                     dirty = true;
                     void* source_token = (void*)&data; //static_cast<void*>(&data); //reinterpret_cast<void*>(&data);
-                    child->_content->SetSourceToken(source_token);
+                    child->_component->SetSourceToken(source_token);
                     child->_node->MarkTextureDirty();
                 }
             }
             else
             {
-                if (nullptr != child->_content)
+                if (nullptr != child->_component)
                 {
-                    child->_content.reset();
+                    child->_component.reset();
                     dirty = true;
                 }
             }
 
-            if (nullptr != child->_content)
+            if (nullptr != child->_component)
             {
-                if (true == child->_content->UpdateHierarchy(
+                if (true == child->_component->UpdateHierarchy(
                     &data,
                     *(child.get()),
                     in_param
@@ -355,12 +355,12 @@ void UIHierarchyNode::UpdateSize(
     {
         UIHierarchyNodeChildData& child_data = *child_data_ptr;
 
-        if (nullptr == child_data._content)
+        if (nullptr == child_data._component)
         {
             continue;
         }
 
-        child_data._content->UpdateSize(
+        child_data._component->UpdateSize(
             in_draw_system,
             in_parent_size,
             in_parent_offset,
@@ -390,7 +390,7 @@ void UIHierarchyNode::DealInput(
             (false == in_input_state.GetMouseLeftDown()) &&
             (true == in_input_state.GetMouseLeftDownChange()))
         {
-            IUIInput* const input = dynamic_cast<IUIInput*>(child_data._content.get());
+            IUIInput* const input = dynamic_cast<IUIInput*>(child_data._component.get());
             if (nullptr != input)
             {
                 input->OnInputMouseClick(
@@ -412,7 +412,7 @@ void UIHierarchyNode::DealInput(
 const bool UIHierarchyNode::Draw(
     const UIManagerDrawParam& in_draw_param,
     Shader* const in_shader,
-    IUIContent* const in_content_or_null
+    IUIComponent* const in_content_or_null
     )
 {
     bool dirty = false;
@@ -423,7 +423,7 @@ const bool UIHierarchyNode::Draw(
         if (true == iter->_node->Draw(
             in_draw_param,
             in_shader,
-            iter->_content.get()
+            iter->_component.get()
             ))
         {
             dirty = true;

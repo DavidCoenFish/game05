@@ -73,12 +73,14 @@
 
 namespace DX
 {
-    // Helper class for COM exceptions
+    /// Helper class for COM exceptions
     class com_exception : public std::exception
     {
     public:
+        /// Constructor
         com_exception(HRESULT hr) noexcept : result(hr) {}
 
+        /// Get the descript of the exception
         const char* what() const override
         {
             static char s_str[64] = {};
@@ -90,7 +92,7 @@ namespace DX
         HRESULT result;
     };
 
-    // Helper utility converts D3D API failures into exceptions.
+    /// Helper utility converts D3D API failures into exceptions.
     inline void ThrowIfFailed(HRESULT hr)
     {
         if (FAILED(hr))

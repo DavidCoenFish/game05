@@ -7,7 +7,7 @@
 class DrawSystem;
 class DrawSystemFrame;
 class HeapWrapperItem;
-class IUIContent;
+class IUIComponent;
 class UIData;
 class Shader;
 class ShaderConstantBuffer;
@@ -30,15 +30,15 @@ struct UIHierarchyNodeUpdateHierarchyParam;
     don't inherit functionality, but we can share methods/ components
     default implementation
 */
-class UIContentDefault
+class UIComponentDefault
 {
 public:
-    UIContentDefault(
+    UIComponentDefault(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
         void* in_source_token = nullptr
         );
-    ~UIContentDefault();
+    ~UIComponentDefault();
 
     static void CalculateGeometry(
         VectorFloat4& out_geometry_pos,
@@ -76,7 +76,7 @@ public:
 
     void UpdateSize(
         DrawSystem* const in_draw_system,
-        IUIContent& in_out_ui_content,
+        IUIComponent& in_out_ui_component,
         const VectorInt2& in_parent_size,
         const VectorInt2& in_parent_offset,
         const VectorInt2& in_parent_window,

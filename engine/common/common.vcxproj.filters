@@ -247,29 +247,11 @@
     <ClCompile Include="source\common\text\text_pre_vertex.cpp">
       <Filter>souce\common\text</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\ui\ui_content\ui_content_canvas.cpp">
-      <Filter>souce\common\ui\ui_content</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_content\ui_content_stack.cpp">
-      <Filter>souce\common\ui\ui_content</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_content\ui_content_string.cpp">
-      <Filter>souce\common\ui\ui_content</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_content\ui_content_texture.cpp">
-      <Filter>souce\common\ui\ui_content</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_content\i_ui_content.cpp">
-      <Filter>souce\common\ui\ui_content</Filter>
-    </ClCompile>
     <ClCompile Include="source\common\text\text_run.cpp">
       <Filter>souce\common\text</Filter>
     </ClCompile>
     <ClCompile Include="source\common\ui\ui_layout.cpp">
       <Filter>souce\common\ui</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_content\ui_content_default.cpp">
-      <Filter>souce\common\ui\ui_content</Filter>
     </ClCompile>
     <ClCompile Include="source\common\locale\locale_enum.cpp">
       <Filter>souce\common\locale</Filter>
@@ -289,17 +271,11 @@
     <ClCompile Include="source\common\text\text_run_data_icon.cpp">
       <Filter>souce\common\text</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\ui\ui_content\ui_content_text_run.cpp">
-      <Filter>souce\common\ui\ui_content</Filter>
-    </ClCompile>
     <ClCompile Include="source\common\math\dsc_math.cpp">
       <Filter>souce\common\math</Filter>
     </ClCompile>
     <ClCompile Include="source\common\util\hash.cpp">
       <Filter>souce\common\util</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_content\ui_content_button.cpp">
-      <Filter>souce\common\ui\ui_content</Filter>
     </ClCompile>
     <ClCompile Include="source\common\ui\ui_screen_space.cpp">
       <Filter>souce\common\ui</Filter>
@@ -313,8 +289,32 @@
     <ClCompile Include="source\common\ui\ui_base_colour.cpp">
       <Filter>souce\common\ui</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\ui\ui_content\ui_content_effect.cpp">
-      <Filter>souce\common\ui\ui_content</Filter>
+    <ClCompile Include="source\common\ui\ui_component\i_ui_component.cpp">
+      <Filter>souce\common\ui\ui_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_component\ui_component_button.cpp">
+      <Filter>souce\common\ui\ui_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_component\ui_component_canvas.cpp">
+      <Filter>souce\common\ui\ui_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_component\ui_component_default.cpp">
+      <Filter>souce\common\ui\ui_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_component\ui_component_effect.cpp">
+      <Filter>souce\common\ui\ui_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_component\ui_component_stack.cpp">
+      <Filter>souce\common\ui\ui_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_component\ui_component_string.cpp">
+      <Filter>souce\common\ui\ui_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_component\ui_component_text_run.cpp">
+      <Filter>souce\common\ui\ui_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_component\ui_component_texture.cpp">
+      <Filter>souce\common\ui\ui_component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -579,29 +579,11 @@
     <ClInclude Include="include\common\text\text_pre_vertex.h">
       <Filter>include\common\text</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\ui\ui_content\ui_content_canvas.h">
-      <Filter>include\common\ui\ui_content</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_content\ui_content_stack.h">
-      <Filter>include\common\ui\ui_content</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_content\ui_content_string.h">
-      <Filter>include\common\ui\ui_content</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_content\ui_content_texture.h">
-      <Filter>include\common\ui\ui_content</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_content\i_ui_content.h">
-      <Filter>include\common\ui\ui_content</Filter>
-    </ClInclude>
     <ClInclude Include="include\common\text\text_run.h">
       <Filter>include\common\text</Filter>
     </ClInclude>
     <ClInclude Include="include\common\ui\ui_layout.h">
       <Filter>include\common\ui</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_content\ui_content_default.h">
-      <Filter>include\common\ui\ui_content</Filter>
     </ClInclude>
     <ClInclude Include="include\common\locale\locale_system.h">
       <Filter>include\common\locale</Filter>
@@ -624,17 +606,11 @@
     <ClInclude Include="source\common\text\text_run_data_string.h">
       <Filter>souce\common\text</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\ui\ui_content\ui_content_text_run.h">
-      <Filter>include\common\ui\ui_content</Filter>
-    </ClInclude>
     <ClInclude Include="include\common\math\dsc_math.h">
       <Filter>include\common\math</Filter>
     </ClInclude>
     <ClInclude Include="include\common\util\hash.h">
       <Filter>include\common\util</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_content\ui_content_button.h">
-      <Filter>include\common\ui\ui_content</Filter>
     </ClInclude>
     <ClInclude Include="source\common\ui\ui_screen_space.h">
       <Filter>souce\common\ui</Filter>
@@ -651,11 +627,35 @@
     <ClInclude Include="include\common\ui\ui_base_colour.h">
       <Filter>include\common\ui</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\ui\ui_content\ui_content_effect.h">
-      <Filter>include\common\ui\ui_content</Filter>
-    </ClInclude>
     <ClInclude Include="include\common\ui\ui_effect_enum.h">
       <Filter>include\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_component\ui_component_default.h">
+      <Filter>include\common\ui\ui_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_component\ui_component_effect.h">
+      <Filter>include\common\ui\ui_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_component\ui_component_stack.h">
+      <Filter>include\common\ui\ui_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_component\ui_component_string.h">
+      <Filter>include\common\ui\ui_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_component\ui_component_text_run.h">
+      <Filter>include\common\ui\ui_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_component\ui_component_texture.h">
+      <Filter>include\common\ui\ui_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_component\i_ui_component.h">
+      <Filter>include\common\ui\ui_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_component\ui_component_button.h">
+      <Filter>include\common\ui\ui_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_component\ui_component_canvas.h">
+      <Filter>include\common\ui\ui_component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -773,17 +773,17 @@
     <Filter Include="souce\common\ui\ui_data">
       <UniqueIdentifier>{2e915536-bbd6-44d6-80e5-07e6d5f840f5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\common\ui\ui_content">
-      <UniqueIdentifier>{9da10cb7-8caf-4629-a953-a7be43ecd01b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="souce\common\ui\ui_content">
-      <UniqueIdentifier>{cd80b2d5-46fe-46b6-bda1-eb0783177f17}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\common\locale">
       <UniqueIdentifier>{f73a6e4f-db56-4c97-be07-134c548bd96a}</UniqueIdentifier>
     </Filter>
     <Filter Include="souce\common\locale">
       <UniqueIdentifier>{f7e9ac86-6a6f-48d6-b797-8ea6d2d472e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\ui\ui_component">
+      <UniqueIdentifier>{9da10cb7-8caf-4629-a953-a7be43ecd01b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\ui\ui_component">
+      <UniqueIdentifier>{cd80b2d5-46fe-46b6-bda1-eb0783177f17}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

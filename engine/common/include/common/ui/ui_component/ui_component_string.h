@@ -1,28 +1,40 @@
 #pragma once
 
-#include "common/ui/ui_content/i_ui_content.h"
-#include "common/ui/ui_content/ui_content_default.h"
-#include "common/ui/i_ui_input.h"
+#include "common/ui/ui_component/i_ui_component.h"
+#include "common/ui/ui_component/ui_component_default.h"
+#include "common/text/text_enum.h"
 
-class UIContentButton : public IUIContent, public IUIInput
+class TextBlock;
+class TextFont;
+
+class UIComponentString : public IUIComponent
 {
 public:
-    UIContentButton(
+    UIComponentString(
         const UIBaseColour& in_base_colour,
-        const UILayout& in_layout
+        const UILayout& in_layout,
+        std::unique_ptr<TextBlock>& in_text_block
         );
-    virtual ~UIContentButton();
+    ~UIComponentString();
 
     const bool SetBase(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout
         );
+
+    // return true if modified, else false
     const bool Set(
-        const bool in_enabled,
-        const std::function<void(const VectorFloat2&)>& in_on_click
+        TextFont& in_font, 
+        const int in_font_size,
+        const float in_new_line_gap_ratio,
+        const bool in_width_limit_enabled,
+        const TextEnum::HorizontalLineAlignment in_horizontal, 
+        const TextEnum::VerticalBlockAlignment in_vertical,
+        const VectorFloat4& in_text_colour
         );
 
 private:
+    // Make sorting children easier
     virtual void SetSourceToken(void* in_source_ui_data_token) override;
     virtual void* GetSourceToken() const override;
 
@@ -56,14 +68,15 @@ private:
         UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         ) override;
 
-    virtual void OnInputMouseClick(
-        const VectorFloat4& in_screen_pos,
-        const VectorFloat2& in_mouse_pos
+    //virtual const bool GetNeedsPreDraw() const override;
+    virtual void PreDraw(
+        const UIManagerDrawParam& in_param
         ) override;
 
 private:
-    UIContentDefault _content_default;
-    bool _enabled;
-    std::function<void(const VectorFloat2&)> _on_click;
+    UIComponentDefault _content_default;
+
+    //bool _use_parent_size_for_width_limit;
+    std::unique_ptr<TextBlock> _text_block;
 
 };

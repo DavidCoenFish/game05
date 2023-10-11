@@ -57,7 +57,7 @@ UiHierarchyNode
 for text, it outputs to a UiTexture, and gets input from UiHierarchyNode size
 
 
-i_ui_content
+i_ui_component
     UiContentImage
     UiContentText
     UiContentCanvas
@@ -83,7 +83,7 @@ ui coord have a ratio and a pixel size
 canvas child position specified by 
 
 
-i_ui_content
+i_ui_component
     void UpdateChildGeometry(out render target size4, out geometry pos4, out geometry uv4, in child)
     int2 CalculateNeededSize(max size2)
 
@@ -148,7 +148,7 @@ UIHierarchyNode // N0
     _child_data_array A0
         _node // N1 child node
         _geometry // G1 geometry to draw the child nodes texture onto the parents texture
-    _content C0 // controls hierarchy, layout, texture size T0/ geometry size G0
+    _component C0 // controls hierarchy, layout, texture size T0/ geometry size G0
     //_layout_data
 
 Manager Draw
@@ -161,8 +161,8 @@ Manager Draw
 
 Manager Update(in_size)
     Node(N0)::UpdateHierarchy
-        _content(C0) rebuild to match model
-        _content(C0)::BuildChildArray(A0)
+        _component(C0) rebuild to match model
+        _component(C0)::BuildChildArray(A0)
 
     // texture/ desired size may be bigger than max size allowed by input/ parent. deal with that by reducing range of uv on geometry to match
     // but how to deal with that at the tope level, it doesn't have geometry (there is no G0), so do we start at N0 and work on A0
@@ -177,7 +177,7 @@ Manager Update(in_size)
                         //Node(N2)::SetSize(S1_2)
                         // stack may have an optional max size for child? or just let child grow... flags
                         // flag for shrinking size to min, auto or manual scroll
-                // presume using _content(C1, A1) and does magic to shrink/ strech self to accomidate dealing with size(S0)
+                // presume using _component(C1, A1) and does magic to shrink/ strech self to accomidate dealing with size(S0)
                 sets texture size(T1) with size from Content(C1)
                 sets geometry size(G1) with pos_uv from Content(C1)
 
@@ -185,7 +185,7 @@ Manager Update(in_size)
     // Rule: top level component can not require scrolling? or default content for top level?
 
     // Sanity check 1: if stack is top level, margin for auto scroll, again, there is no G0
-    // have a default content? and/or a UIContentRoot? UIDataRoot?
+    // have a default content? and/or a UIComponentRoot? UIDataRoot?
 
     // Sanity check 2: so the root nod has a default/ root type. but now i want a child stack with margin and text.
 N(0) root
@@ -231,7 +231,7 @@ UIRootNode // R0
         UIHierarchyNode // N1 
             _texture // T1 texture or backbuffer this node draws to, or the render target for this node
             _geometry // G1 geometry to draw the texture T0 onto the external/parent texture?
-            _content // C1 controls hierarchy, layout, texture size T0/ geometry size G0
+            _component // C1 controls hierarchy, layout, texture size T0/ geometry size G0
             _child_node_array // A1
                 _node // N2 child node
 
@@ -240,7 +240,7 @@ UIHierarchyNode // N0
     //_input_state // I0 top level input state, which node is focused, node click started on, hover node
     _child_node_array // A0
         _geometry // G1 geometry to draw the texture T1 onto T0
-        _content // C1 controls size of T1 and G1. model returns an array of ui data for root
+        _component // C1 controls size of T1 and G1. model returns an array of ui data for root
         UIHierarchyNode // N1 child node
             _texture // T1 texture or backbuffer A1 draws to
             _child_node_array // A1
@@ -269,7 +269,7 @@ UIHierarchyNode // N0
     _texture // T0 texture or backbuffer A0 draws to
     _child_node_array // A0
         _geometry // G1 geometry to draw the texture T1 onto T0
-        _content // C1 controls size of T1 and G1. model returns an array of ui data for root
+        _component // C1 controls size of T1 and G1. model returns an array of ui data for root
         UIHierarchyNode // N1 child node
             _texture // T1 texture or backbuffer A1 draws to
             _child_node_array // A1

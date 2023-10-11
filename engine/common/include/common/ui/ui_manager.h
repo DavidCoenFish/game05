@@ -10,7 +10,7 @@
 
 class DrawSystem;
 class DrawSystemFrame;
-class IUIContent;
+class IUIComponent;
 class UIData;
 class IUIModel;
 class LocaleSystem;
@@ -24,9 +24,9 @@ class UIManagerImplementation;
 struct UIDataTextRunStyle;
 
 /// \related UIManager
-struct UIContentFactoryParam
+struct UIComponentFactoryParam
 {
-    explicit UIContentFactoryParam(
+    explicit UIComponentFactoryParam(
         DrawSystem* const in_draw_system = nullptr,
         ID3D12GraphicsCommandList* const in_command_list = nullptr,
         TextManager* const in_text_manager = nullptr,
@@ -148,10 +148,10 @@ public:
 
     // Add content factories, layout templates can be expressed through the content class
     typedef std::function< const bool(
-        std::unique_ptr<IUIContent>& in_out_content,
-        const UIContentFactoryParam& in_param
+        std::unique_ptr<IUIComponent>& in_out_content,
+        const UIComponentFactoryParam& in_param
         )> TContentFactory;
-    // Clear flag and background colour moved to IUIContent
+    // Clear flag and background colour moved to IUIComponent
     void AddContentFactory(
         const std::string& in_content_name,
         const TContentFactory& in_factory

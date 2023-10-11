@@ -9,7 +9,7 @@ class RenderTargetTexture;
 class GeometryGeneric;
 class UIManager;
 class UIHierarchyNode;
-class UIContentTexture;
+class UIComponentTexture;
 
 class ApplicationTestCoord : public IWindowApplication
 {
@@ -49,7 +49,7 @@ private:
         std::shared_ptr<GeometryGeneric> _panel_geometry[2];
 
         std::shared_ptr<UIHierarchyNode> _ui_hierarchy_node;
-        std::shared_ptr<UIContentTexture> _ui_texture[2];
+        std::shared_ptr<UIComponentTexture> _ui_texture[2];
         
     };
     std::unique_ptr<DrawResource> _draw_resource;

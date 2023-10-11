@@ -10,12 +10,12 @@
 #include "common/text/text_font.h"
 #include "common/text/text_manager.h"
 #include "common/text/text_run.h"
-#include "common/ui/ui_content/i_ui_content.h"
-#include "common/ui/ui_content/ui_content_button.h"
-#include "common/ui/ui_content/ui_content_canvas.h"
-#include "common/ui/ui_content/ui_content_stack.h"
-#include "common/ui/ui_content/ui_content_string.h"
-#include "common/ui/ui_content/ui_content_text_run.h"
+#include "common/ui/ui_component/i_ui_component.h"
+#include "common/ui/ui_component/ui_component_button.h"
+#include "common/ui/ui_component/ui_component_canvas.h"
+#include "common/ui/ui_component/ui_component_stack.h"
+#include "common/ui/ui_component/ui_component_string.h"
+#include "common/ui/ui_component/ui_component_text_run.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_base_colour.h"
 #include "common/ui/ui_layout.h"
@@ -262,14 +262,14 @@ namespace
         TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault
         >
     const bool FactoryCanvas(
-        std::unique_ptr<IUIContent>& in_out_content,
-        const UIContentFactoryParam& in_factory_param
+        std::unique_ptr<IUIComponent>& in_out_content,
+        const UIComponentFactoryParam& in_factory_param
         )
     {
-        UIContentCanvas* canvas = dynamic_cast<UIContentCanvas*>(in_out_content.get());
+        UIComponentCanvas* canvas = dynamic_cast<UIComponentCanvas*>(in_out_content.get());
         if (nullptr == canvas)
         {
-            in_out_content = std::make_unique<UIContentCanvas>(
+            in_out_content = std::make_unique<UIComponentCanvas>(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref());
             return true;
@@ -292,14 +292,14 @@ namespace
         TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault
         >
     const bool FactoryButton(
-        std::unique_ptr<IUIContent>& in_out_content,
-        const UIContentFactoryParam& in_factory_param
+        std::unique_ptr<IUIComponent>& in_out_content,
+        const UIComponentFactoryParam& in_factory_param
         )
     {
-        UIContentButton* content = dynamic_cast<UIContentButton*>(in_out_content.get());
+        UIComponentButton* content = dynamic_cast<UIComponentButton*>(in_out_content.get());
         if (nullptr == content)
         {
-            in_out_content = std::make_unique<UIContentButton>(
+            in_out_content = std::make_unique<UIComponentButton>(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref());
             return true;
@@ -329,14 +329,14 @@ namespace
         TGetColour in_get_text_colour_ref = GetColourBlack
         >
     const bool FactoryString(
-        std::unique_ptr<IUIContent>& in_out_content,
-        const UIContentFactoryParam& in_factory_param
+        std::unique_ptr<IUIComponent>& in_out_content,
+        const UIComponentFactoryParam& in_factory_param
         )
     {
         auto font = in_factory_param._text_manager->GetTextFont(in_get_path_ref());
         const float new_line_gap_ratio = static_cast<float>(in_new_line_gap) / static_cast<float>(in_font_size);
 
-        UIContentString* content = dynamic_cast<UIContentString*>(in_out_content.get());
+        UIComponentString* content = dynamic_cast<UIComponentString*>(in_out_content.get());
         bool dirty = false;
         if (nullptr == content)
         {
@@ -354,7 +354,7 @@ namespace
                 in_vertical,
                 in_get_text_colour_ref()
                 );
-            in_out_content = std::move(std::make_unique<UIContentString>(
+            in_out_content = std::move(std::make_unique<UIComponentString>(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(), 
                 text_block
@@ -396,11 +396,11 @@ namespace
         bool in_width_limit_enabled = false
         >
     const bool FactoryTextRun(
-        std::unique_ptr<IUIContent>& in_out_content,
-        const UIContentFactoryParam& in_factory_param
+        std::unique_ptr<IUIComponent>& in_out_content,
+        const UIComponentFactoryParam& in_factory_param
         )
     {
-        UIContentTextRun* content = dynamic_cast<UIContentTextRun*>(in_out_content.get());
+        UIComponentTextRun* content = dynamic_cast<UIComponentTextRun*>(in_out_content.get());
         bool dirty = false;
         if (nullptr == content)
         {
@@ -414,7 +414,7 @@ namespace
                 in_vertical,
                 in_em_size
                 );
-            in_out_content = std::move(std::make_unique<UIContentTextRun>(
+            in_out_content = std::move(std::make_unique<UIComponentTextRun>(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(), 
                 text_run
@@ -451,16 +451,16 @@ namespace
         TGetUICoordRef in_get_gap_ref = GetUICoordDefaultGap
         >
     const bool FactoryStack(
-        std::unique_ptr<IUIContent>& in_out_content,
-        const UIContentFactoryParam& in_factory_param
+        std::unique_ptr<IUIComponent>& in_out_content,
+        const UIComponentFactoryParam& in_factory_param
         )
     {
-        UIContentStack* content = dynamic_cast<UIContentStack*>(in_out_content.get());
+        UIComponentStack* content = dynamic_cast<UIComponentStack*>(in_out_content.get());
         bool dirty = false;
         if (nullptr == content)
         {
             dirty = true;
-            auto new_content = std::make_unique<UIContentStack>(
+            auto new_content = std::make_unique<UIComponentStack>(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
                 in_orientation,

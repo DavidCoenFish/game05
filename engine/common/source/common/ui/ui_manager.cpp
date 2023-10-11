@@ -14,12 +14,12 @@
 #include "common/ui/i_ui_model.h"
 #include "common/ui/ui_root_input_state.h"
 #include "common/ui/ui_screen_space.h"
-#include "common/ui/ui_content/ui_content_stack.h"
+#include "common/ui/ui_component/ui_component_stack.h"
 #include "common/ui/ui_data/ui_data.h"
 #include "common/text/text_manager.h"
 #include "common/util/vector_helper.h"
 
-UIContentFactoryParam::UIContentFactoryParam(
+UIComponentFactoryParam::UIComponentFactoryParam(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list,
     TextManager* const in_text_manager,

@@ -1,20 +1,25 @@
 #pragma once
 
-#include "common/ui/ui_content/i_ui_content.h"
-#include "common/ui/ui_content/ui_content_default.h"
+#include "common/ui/ui_component/i_ui_component.h"
+#include "common/ui/ui_component/ui_component_default.h"
+#include "common/ui/i_ui_input.h"
 
-class UIContentCanvas : public IUIContent
+class UIComponentButton : public IUIComponent, public IUIInput
 {
 public:
-    UIContentCanvas(
+    UIComponentButton(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout
         );
-    virtual ~UIContentCanvas();
+    virtual ~UIComponentButton();
 
     const bool SetBase(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout
+        );
+    const bool Set(
+        const bool in_enabled,
+        const std::function<void(const VectorFloat2&)>& in_on_click
         );
 
 private:
@@ -24,6 +29,7 @@ private:
     virtual const bool SetLayout(const UILayout& in_layout) override;
 
     virtual const bool UpdateHierarchy(
+        //std::vector<std::shared_ptr<UIData>>*& out_array_data_or_null,
         UIData* const in_data,
         UIHierarchyNodeChildData& in_out_child_data,
         const UIHierarchyNodeUpdateHierarchyParam& in_param
@@ -50,8 +56,14 @@ private:
         UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         ) override;
 
+    virtual void OnInputMouseClick(
+        const VectorFloat4& in_screen_pos,
+        const VectorFloat2& in_mouse_pos
+        ) override;
 
 private:
-    UIContentDefault _content_default;
+    UIComponentDefault _content_default;
+    bool _enabled;
+    std::function<void(const VectorFloat2&)> _on_click;
 
 };

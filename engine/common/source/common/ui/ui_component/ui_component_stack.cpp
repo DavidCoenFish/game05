@@ -1,15 +1,15 @@
 #include "common/common_pch.h"
-#include "common/ui/ui_content/ui_content_stack.h"
+#include "common/ui/ui_component/ui_component_stack.h"
 
 #include "common/math/vector_int4.h"
-#include "common/ui/ui_content/ui_content_default.h"
+#include "common/ui/ui_component/ui_component_default.h"
 #include "common/ui/ui_layout.h"
 #include "common/ui/ui_coord.h"
 #include "common/ui/ui_screen_space.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_geometry.h"
 
-UIContentStack::UIContentStack(
+UIComponentStack::UIComponentStack(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
     const StackOrientation in_orientation,
@@ -25,12 +25,12 @@ UIContentStack::UIContentStack(
     // Nop
 }
 
-UIContentStack::~UIContentStack()
+UIComponentStack::~UIComponentStack()
 {
     // Nop
 }
 
-const bool UIContentStack::Set(
+const bool UIComponentStack::Set(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
     const StackOrientation in_orientation,
@@ -63,22 +63,22 @@ const bool UIContentStack::Set(
 }
 
 // Make sorting children easier
-void UIContentStack::SetSourceToken(void* in_source_ui_data_token)
+void UIComponentStack::SetSourceToken(void* in_source_ui_data_token)
 {
     _content_default.SetSourceToken(in_source_ui_data_token);
 }
 
-void* UIContentStack::GetSourceToken() const
+void* UIComponentStack::GetSourceToken() const
 {
     return _content_default.GetSourceToken();
 }
 
-const bool UIContentStack::SetLayout(const UILayout& in_layout)
+const bool UIComponentStack::SetLayout(const UILayout& in_layout)
 {
     return _content_default.SetLayout(in_layout);
 }
 
-const bool UIContentStack::UpdateHierarchy(
+const bool UIComponentStack::UpdateHierarchy(
     UIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
     const UIHierarchyNodeUpdateHierarchyParam& in_param
@@ -100,7 +100,7 @@ const bool UIContentStack::UpdateHierarchy(
     return dirty;
 }
 
-void UIContentStack::UpdateSize(
+void UIComponentStack::UpdateSize(
     DrawSystem* const in_draw_system,
     const VectorInt2& in_parent_size,
     const VectorInt2& in_parent_offset,
@@ -132,7 +132,7 @@ void UIContentStack::UpdateSize(
     VectorFloat4 geometry_uv;
     VectorInt2 texture_size;
 
-    UIContentDefault::CalculateGeometry(
+    UIComponentDefault::CalculateGeometry(
         geometry_pos,
         geometry_uv,
         texture_size,
@@ -169,7 +169,7 @@ void UIContentStack::UpdateSize(
     {
         UIHierarchyNodeChildData& child_data = *child_data_ptr;
 
-        if (nullptr == child_data._content)
+        if (nullptr == child_data._component)
         {
             continue;
         }
@@ -179,7 +179,7 @@ void UIContentStack::UpdateSize(
         VectorInt2 window(child_window_offset.GetX(), child_window_offset.GetY());
         const VectorInt2 offset(child_window_offset.GetZ(), child_window_offset.GetW());
 
-        child_data._content->UpdateSize(
+        child_data._component->UpdateSize(
             in_draw_system,
             texture_size,
             offset,
@@ -196,7 +196,7 @@ void UIContentStack::UpdateSize(
     return;
 }
 
-void UIContentStack::GetDesiredSize(
+void UIComponentStack::GetDesiredSize(
     VectorInt2&, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
     VectorInt2&, // if bigger than layout size, we need to scroll
     const VectorInt2&,
@@ -207,7 +207,7 @@ void UIContentStack::GetDesiredSize(
     return;
 }
 
-void UIContentStack::GetStackDesiredSize(
+void UIComponentStack::GetStackDesiredSize(
     VectorInt2& out_layout_size, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
     VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
     const VectorInt2& in_parent_window,
@@ -224,14 +224,14 @@ void UIContentStack::GetStackDesiredSize(
     {
         UIHierarchyNodeChildData& child_data = *child_data_ptr;
 
-        if (nullptr == child_data._content)
+        if (nullptr == child_data._component)
         {
             continue;
         }
 
         VectorInt2 child_layout;
         VectorInt2 child_desired;
-        child_data._content->GetDesiredSize(
+        child_data._component->GetDesiredSize(
             child_layout,
             child_desired,
             out_layout_size, 

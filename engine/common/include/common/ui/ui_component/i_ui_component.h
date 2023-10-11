@@ -21,11 +21,11 @@ struct UIHierarchyNodeChildData;
 struct UIHierarchyNodeLayoutData;
 struct UIHierarchyNodeUpdateHierarchyParam;
 
-class IUIContent
+class IUIComponent
 {
 public:
-    IUIContent();
-    virtual ~IUIContent();
+    IUIComponent();
+    virtual ~IUIComponent();
 
     //virtual const bool GetClearBackground(
     //    VectorFloat4& out_clear_colour

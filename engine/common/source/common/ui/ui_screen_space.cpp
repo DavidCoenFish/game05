@@ -25,7 +25,7 @@ namespace
 
         const VectorFloat2 zero_one_geometry_pivot(
             zero_one_geometry_pos[0] - (zero_one_geometry_pos[0] * in_geometry_uv[0]),
-            zero_one_geometry_pos[1] - (zero_one_geometry_pos[1] * (1.0 - in_geometry_uv[1]))
+            zero_one_geometry_pos[1] - (zero_one_geometry_pos[1] * (1.0f - in_geometry_uv[1]))
             );
 
         const VectorFloat2 zero_one_new_pivot(

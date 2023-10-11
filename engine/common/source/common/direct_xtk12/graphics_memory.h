@@ -22,8 +22,8 @@ namespace DirectX
 {
     class LinearAllocatorPage;
 
-    // Works a little like a smart pointer. The memory will only be fenced by the GPU once the pointer
-    // Has been invalidated or the user explicitly marks it for fencing.
+    /// Works a little like a smart pointer. The memory will only be fenced by the GPU once the pointer
+    /// Has been invalidated or the user explicitly marks it for fencing.
     class GraphicsResource
     {
     public:
@@ -71,7 +71,7 @@ namespace DirectX
             return _resource != nullptr;
         }
 
-        // Clear the pointer. Using operator -> will produce bad results.
+        /// Clear the pointer. Using operator -> will produce bad results.
         void __cdecl Reset() noexcept;
         void __cdecl Reset(GraphicsResource &&) noexcept;
 
@@ -136,7 +136,7 @@ namespace DirectX
             return _shared_resource.get() != in_other._shared_resource.get();
         }
 
-        // Clear the pointer. Using operator -> will produce bad results.
+        /// Clear the pointer. Using operator -> will produce bad results.
         void __cdecl Reset() noexcept;
         void __cdecl Reset(GraphicsResource &&);
         void __cdecl Reset(SharedGraphicsResource &&) noexcept;
@@ -170,19 +170,19 @@ namespace DirectX
         GraphicsMemory& operator=(GraphicsMemory && in_move_from) noexcept;
         GraphicsMemory(GraphicsMemory const&) = delete;
         GraphicsMemory& operator=(GraphicsMemory const&) = delete;
-        // Singleton
-        // Should only use nullptr for single GPU scenarios; mGPU requires a specific device
+        /// Singleton
+        /// Should only use nullptr for single GPU scenarios; mGPU requires a specific device
         static GraphicsMemory& __cdecl Get(_In_opt_ ID3D12Device* in_device = nullptr);
 
         virtual ~GraphicsMemory();
-        // Make sure to keep the GraphicsResource handle alive as long as you need to access
-        // The memory on the CPU. For example, do not simply cache GpuAddress() and discard
-        // The GraphicsResource object, or your memory may be overwritten later.
+        /// Make sure to keep the GraphicsResource handle alive as long as you need to access
+        /// The memory on the CPU. For example, do not simply cache GpuAddress() and discard
+        /// The GraphicsResource object, or your memory may be overwritten later.
         GraphicsResource __cdecl Allocate(
             size_t in_size,
             size_t in_alignment = 16
             );
-        // Special overload of Allocate that aligns to D3D12 constant buffer alignment requirements
+        /// Special overload of Allocate that aligns to D3D12 constant buffer alignment requirements
         template < typename T > GraphicsResource AllocateConstant()
         {
             const size_t in_alignment = D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT;
@@ -204,20 +204,20 @@ namespace DirectX
             return alloc;
         }
 
-        // Submits all the pending one-shot memory to the GPU.
-        // The memory will be recycled once the GPU is done with it.
+        /// Submits all the pending one-shot memory to the GPU.
+        /// The memory will be recycled once the GPU is done with it.
         void __cdecl Commit(_In_ ID3D12CommandQueue* in_command_queue);
-        // This frees up any unused memory.
-        // If you want to make sure all memory is reclaimed, idle the GPU before calling this.
-        // It is not recommended that you call this unless absolutely necessary (e.g. your
-        // Memory budget changes at run-time, or perhaps you're changing levels in your game.)
+        /// This frees up any unused memory.
+        /// If you want to make sure all memory is reclaimed, idle the GPU before calling this.
+        /// It is not recommended that you call this unless absolutely necessary (e.g. your
+        /// Memory budget changes at run-time, or perhaps you're changing levels in your game.)
         void __cdecl GarbageCollect();
-        // Memory statistics
+        /// Memory statistics
         GraphicsMemoryStatistics __cdecl GetStatistics();
         void __cdecl ResetStatistics();
 
     private:
-        // Private implementation.
+        /// Private implementation.
         class Impl;
 
     private:
