@@ -1,14 +1,15 @@
 #include "common/common_pch.h"
 #include "common/ui/ui_component/ui_component_string.h"
 
-//#include "common/draw_system/draw_system_frame.h"
-//#include "common/draw_system/draw_system.h"
+#include "common/draw_system/draw_system_frame.h"
+#include "common/draw_system/draw_system.h"
 #include "common/math/dsc_math.h"
 #include "common/text/text_block.h"
 #include "common/text/text_manager.h"
 #include "common/ui/ui_data/ui_data_string.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_manager.h"
+#include "common/ui/ui_texture.h"
 
 
 UIComponentString::UIComponentString(
@@ -196,17 +197,47 @@ void UIComponentString::GetDesiredSize(
     return;
 }
 
-void UIComponentString::PreDraw(
-    const UIManagerDrawParam& in_param
-    )
+const bool UIComponentString::Draw(
+    const UIManagerDrawParam& in_draw_param,
+    Shader* const,
+    UIHierarchyNode& in_node
+    ) 
 {
-#if 1
-    in_param._text_manager->DrawText(
-        in_param._draw_system,
-        in_param._frame,
-        _text_block.get()
-        );
-#endif
-    //_pre_draw_dirty = false;
-    return;
+    bool dirty = false;
+    auto& texture = in_node.GetUITexture();
+
+    if ((false == texture.GetHasDrawn()) ||
+        (true == texture.GetAlwaysDirty())
+        )
+    {
+        dirty = true;
+        std::shared_ptr<IResource> frame_resource;
+        auto* const render_target = texture.GetRenderTarget(
+            in_draw_param._draw_system,
+            frame_resource,
+            in_draw_param._frame->GetCommandList()
+            );
+
+        if (nullptr == render_target)
+        {
+            return dirty;
+        }
+
+        dirty = true;
+        in_draw_param._frame->SetRenderTarget(
+            render_target, 
+            frame_resource,
+            texture.GetAllowClear()
+            );
+
+        in_draw_param._text_manager->DrawText(
+            in_draw_param._draw_system,
+            in_draw_param._frame,
+            _text_block.get()
+            );
+
+        texture.SetHasDrawn(true);
+    }
+
+    return dirty;
 }

@@ -65,9 +65,10 @@ private:
         UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         ) override;
 
-    //virtual const bool GetNeedsPreDraw() const override;
-    virtual void PreDraw(
-        const UIManagerDrawParam& in_param
+    virtual const bool Draw(
+        const UIManagerDrawParam& in_draw_param,
+        Shader* const in_shader,
+        UIHierarchyNode& in_node
         ) override;
 
 private:

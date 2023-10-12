@@ -86,29 +86,6 @@ UIHierarchyNode::~UIHierarchyNode()
     // Nop
 }
 
-//return true if all bits of flga are set
-//const bool UIHierarchyNode::GetFlag(const TFlag in_flag)
-//{
-//    if (((int)_flag & (int)in_flag) == (int)in_flag)
-//    {
-//        return true;
-//    }
-//    return false;
-//}
-//
-//void UIHierarchyNode::SetFlag(const TFlag in_flag, const bool in_value)
-//{
-//    if (true == in_value)
-//    {
-//        _flag = (TFlag)((int)_flag | (int)in_flag);
-//    }
-//    else
-//    {
-//        _flag = (TFlag)((int)_flag & ~(int)in_flag);
-//    }
-//    return;
-//}
-
 UIRootInputState& UIHierarchyNode::GetOrMakeRootInputState()
 {
     if (nullptr == _root_input_state)
@@ -411,9 +388,69 @@ void UIHierarchyNode::DealInput(
 // Return True if we needed to draw, ie, the texture may have changed
 const bool UIHierarchyNode::Draw(
     const UIManagerDrawParam& in_draw_param,
-    Shader* const in_shader,
-    IUIComponent* const in_content_or_null
+    Shader* const in_shader//,
+    //IUIComponent* const in_content_or_null
     )
+#if 1
+{
+    bool dirty = false;
+
+    // Ensure that children textures are ready
+    for (auto& iter : _child_data_array)
+    {
+        if (true == iter->_component->Draw(
+            in_draw_param,
+            in_shader,
+            *(iter->_node.get())
+            ))
+        {
+            dirty = true;
+        }
+    }
+
+   if ((true == dirty) ||
+        (false == _texture->GetHasDrawn()) ||
+        (true == _texture->GetAlwaysDirty())
+        )
+    {
+        std::shared_ptr<IResource> frame_resource;
+        auto* const render_target = _texture->GetRenderTarget(
+            in_draw_param._draw_system,
+            frame_resource,
+            in_draw_param._frame->GetCommandList()
+            );
+        if (nullptr == render_target)
+        {
+            return dirty;
+        }
+
+        dirty = true;
+        in_draw_param._frame->SetRenderTarget(
+            render_target, 
+            frame_resource,
+            _texture->GetAllowClear()
+            );
+
+        for (auto& iter : _child_data_array)
+        {
+            UIHierarchyNodeChildData& child_data = *iter;
+
+            in_shader->SetShaderResourceViewHandle(0, child_data._node->GetShaderResourceHeapWrapperItem());
+            auto geometry = child_data._geometry->GetGeometry(
+                in_draw_param._draw_system,
+                in_draw_param._frame->GetCommandList()
+                );
+
+            in_draw_param._frame->SetShader(in_shader);
+            in_draw_param._frame->Draw(geometry);
+        }
+
+        _texture->SetHasDrawn(true);
+    }
+
+    return dirty;
+}
+#else
 {
     bool dirty = false;
 
@@ -480,3 +517,4 @@ const bool UIHierarchyNode::Draw(
 
     return dirty;
 }
+#endif

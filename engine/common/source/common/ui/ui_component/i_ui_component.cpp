@@ -11,15 +11,3 @@ IUIComponent::~IUIComponent()
     // Nop
 }
 
-//const bool IUIComponent::GetNeedsPreDraw() const
-//{
-//    return false;
-//}
-
-void IUIComponent::PreDraw(
-    const UIManagerDrawParam&
-    )
-{
-}
-
-

@@ -68,8 +68,14 @@ private:
         ) override;
 
     //virtual const bool GetNeedsPreDraw() const override;
-    virtual void PreDraw(
-        const UIManagerDrawParam& in_param
+    //virtual void PreDraw(
+    //    const UIManagerDrawParam& in_param
+    //    ) override;
+
+    virtual const bool Draw(
+        const UIManagerDrawParam& in_draw_param,
+        Shader* const in_shader,
+        UIHierarchyNode& in_node
         ) override;
 
 private:

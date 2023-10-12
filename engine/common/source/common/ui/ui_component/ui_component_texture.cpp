@@ -71,3 +71,15 @@ void UIComponentTexture::SetTexture(
     _shader_resource_view_handle = in_shader_resource_view_handle;
 }
 
+const bool UIComponentTexture::Draw(
+    const UIManagerDrawParam& in_draw_param,
+    Shader* const in_shader,
+    UIHierarchyNode& in_node
+    ) 
+{
+    return _content_default.Draw(
+        in_draw_param,
+        in_shader,
+        in_node
+        );
+}

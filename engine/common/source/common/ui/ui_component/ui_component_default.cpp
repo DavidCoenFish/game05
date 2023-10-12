@@ -313,3 +313,39 @@ void UIComponentDefault::GetDesiredSize(
 
     return;
 }
+
+const bool UIComponentDefault::Draw(
+    const UIManagerDrawParam& in_draw_param,
+    Shader* const in_shader,
+    UIHierarchyNode& in_node
+    )
+{
+    bool dirty = false;
+
+#if 0
+    // Ensure that children textures are ready
+    auto& child_data_array = in_node.GetChildData();
+    for (auto& iter : child_data_array)
+    {
+        if (true == iter->_node->Draw(
+            in_draw_param,
+            in_shader
+            ))
+        {
+            dirty = true;
+        }
+    }
+#else
+    if (true == in_node.Draw(
+        in_draw_param,
+        in_shader
+        ))
+    {
+        dirty = true;
+    }
+
+#endif
+
+    return dirty;
+}
+

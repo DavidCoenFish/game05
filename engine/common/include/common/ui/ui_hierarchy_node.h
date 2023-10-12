@@ -30,15 +30,18 @@ struct UIManagerUpdateLayoutParam;
 /*
 UIHierarchyNode // N0 
     _texture // T0 texture or backbuffer A0 draws to
-    [_input_state] // I0 top level input state, which node is focused, node click started on, hover node
+    [_input_state] // I0 optional top level input state, which node is focused, node click started on, hover node
     _child_node_array // A0
         _geometry // G1 geometry to draw the texture T1 onto T0
-        _shader_constant_buffer // S1 the shader constants
-        _component // C1 controls size of T1 and G1. model returns an array of ui data for root
-        //_layoutData // L0 layout data here or in content
+        _shader_constant_buffer // S1 the shader constants -> moved to component default? or needs to be with? in? geometry G1
+        _component // C1 controls size of T1 and G1. model returns an array of ui data for child array A1
         UIHierarchyNode // N1 child node
             _texture // T1 texture or backbuffer A1 draws to
             _child_node_array // A1
+
+the component C1 may have special rules (ie, a virtual method) to control how child array A1 is drawn to T1
+put tint colour into geometry, how about the shader constants?
+
 */
 
 struct UIHierarchyNodeChildData
@@ -113,7 +116,7 @@ public:
 
     UIRootInputState& GetOrMakeRootInputState();
 
-    // nullptr if _bUseBackBuffer is true
+    /// nullptr if _bUseBackBuffer is true
     std::shared_ptr<HeapWrapperItem> GetShaderResourceHeapWrapperItem() const;
 
     void AddChild(
@@ -121,10 +124,10 @@ public:
         );
     const bool ClearChildren();
 
-    // Expose child data array to allow ui_component to specialise how hieararchy builds
+    /// Expose child data array to allow ui_component to specialise how hieararchy builds
     std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& GetChildData() { return _child_data_array; }
 
-    // create/ destroy nodes to match model, make content match type from factory, update content?
+    /// create/ destroy nodes to match model, make content match type from factory, update content?
     const bool UpdateHierarchy(
         const UIHierarchyNodeUpdateHierarchyParam& in_param,
         const std::vector<std::shared_ptr<UIData>>* const in_array_data_or_null,
@@ -161,19 +164,23 @@ public:
         const bool in_mouse_inside = true // => flag
         );
 
-    // return True if we needed to draw, ie, we have modified _texture
+    /// return True if we needed to draw, ie, we have modified _texture
     const bool Draw(
         const UIManagerDrawParam& in_draw_param,
-        Shader* const in_shader,
-        IUIComponent* const in_content_or_null = nullptr
+        Shader* const in_shader//,
+        //IUIComponent* const in_content_or_null = nullptr
         );
 
+    UITexture& GetUITexture() const { return *_texture; }
+
 private:
-    std::unique_ptr<UITexture> _texture;
+    /// recursion data structure, holds a UIHierarchyNode, component, geometry...
     std::vector<std::shared_ptr<UIHierarchyNodeChildData>> _child_data_array;
 
-    // Allow top level node to hold some state for input like the focused node, or click active node, hover node?
-    // Lazy create
+    /// Hold the render target or wrap the backbuffer as a texture
+    std::unique_ptr<UITexture> _texture;
+
+    /// Allow top level node to hold some state for input like the focused node, or click active node, hover node?
     std::unique_ptr<UIRootInputState> _root_input_state;
 
 };

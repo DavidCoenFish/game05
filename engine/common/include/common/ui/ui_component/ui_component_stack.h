@@ -80,6 +80,14 @@ private:
         UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         std::vector<VectorInt4>& out_child_window_offset
         );
+
+    virtual const bool Draw(
+        const UIManagerDrawParam& in_draw_param,
+        Shader* const in_shader,
+        UIHierarchyNode& in_node
+        ) override;
+
+
 private:
     UIComponentDefault _content_default;
     StackOrientation _orientation;

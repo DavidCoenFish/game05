@@ -25,12 +25,11 @@ public:
         );
 
 private:
-    //virtual void Draw(
-    //    const UIManagerDrawParam& in_param,
-    //    UITexture* const in_texture,
-    //    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_child_data_array,
-    //    Shader* const in_shader
-    //    ) override;
+    virtual const bool Draw(
+        const UIManagerDrawParam& in_draw_param,
+        Shader* const in_shader,
+        UIHierarchyNode& in_node
+        ) override;
 
 private:
     UIComponentDefault _content_default;

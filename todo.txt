@@ -1,6 +1,3 @@
-make shader param instancable, is Shader::MakeParamInstance, Shader::SetParam
-
-- shader param instance
 - UIDataEffect // drop shadow
 - ui fade in/ tint / background colour
 - ui fade/blur out effect for destroyed uitextures

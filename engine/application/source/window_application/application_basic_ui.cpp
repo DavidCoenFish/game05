@@ -127,12 +127,18 @@ public:
 
         _data_array_map[""] = std::vector<std::shared_ptr<UIData>>({
 #if 0
-            // Build info
-            std::make_shared<UIDataContainer>(
-                std::vector<std::shared_ptr<UIData>>({}),
-                "canvas_debug_quad0"
+            // debug quad
+            std::make_shared<UIData>(
+                "canvas_debug_quad0",
+                std::vector<std::shared_ptr<UIData>>({})
                 ),
 #endif
+
+#if 0
+            // debug string
+            _data_map_build_version,
+#endif
+
 
 #if 1
             // Main page data

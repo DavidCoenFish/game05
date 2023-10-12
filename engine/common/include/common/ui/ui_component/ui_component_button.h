@@ -61,6 +61,12 @@ private:
         const VectorFloat2& in_mouse_pos
         ) override;
 
+    virtual const bool Draw(
+        const UIManagerDrawParam& in_draw_param,
+        Shader* const in_shader,
+        UIHierarchyNode& in_node
+        ) override;
+
 private:
     UIComponentDefault _content_default;
     bool _enabled;
