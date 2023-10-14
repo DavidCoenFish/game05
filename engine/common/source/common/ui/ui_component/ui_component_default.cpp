@@ -322,29 +322,21 @@ const bool UIComponentDefault::Draw(
 {
     bool dirty = false;
 
-#if 0
-    // Ensure that children textures are ready
-    auto& child_data_array = in_node.GetChildData();
-    for (auto& iter : child_data_array)
-    {
-        if (true == iter->_node->Draw(
-            in_draw_param,
-            in_shader
-            ))
-        {
-            dirty = true;
-        }
-    }
-#else
-    if (true == in_node.Draw(
+    if (true == in_node.PreDraw(
         in_draw_param,
         in_shader
         ))
     {
         dirty = true;
     }
-
-#endif
+    if (true == in_node.Draw(
+        in_draw_param,
+        in_shader,
+        dirty
+        ))
+    {
+        dirty = true;
+    }
 
     return dirty;
 }

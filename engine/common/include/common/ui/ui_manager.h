@@ -4,9 +4,6 @@
 #include "common/math/vector_int2.h"
 #include "common/math/vector_float4.h"
 
-/*
-    locale should be an aspect of the UIData, not the ui update param
-*/
 
 class DrawSystem;
 class DrawSystemFrame;
@@ -38,6 +35,9 @@ struct UIComponentFactoryParam
     int _create_index;
 };
 
+///  locale should be an aspect of the UIData, not the ui update param
+///  however, Harfbuz want to know the locale to help pos the text.
+///  so Locale in is used to resolve the locale system keys to text, but we still pass locale key
 /// \related UIManager
 struct UIManagerUpdateParam
 {

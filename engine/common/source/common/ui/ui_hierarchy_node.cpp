@@ -386,10 +386,9 @@ void UIHierarchyNode::DealInput(
 }
 
 // Return True if we needed to draw, ie, the texture may have changed
-const bool UIHierarchyNode::Draw(
+const bool UIHierarchyNode::PreDraw(
     const UIManagerDrawParam& in_draw_param,
-    Shader* const in_shader//,
-    //IUIComponent* const in_content_or_null
+    Shader* const in_shader
     )
 #if 1
 {
@@ -408,7 +407,17 @@ const bool UIHierarchyNode::Draw(
         }
     }
 
-   if ((true == dirty) ||
+    return dirty;
+}
+
+const bool UIHierarchyNode::Draw(
+    const UIManagerDrawParam& in_draw_param,
+    Shader* const in_shader,
+    const bool in_dirty
+    )
+{
+    bool dirty = false;
+    if ((true == in_dirty) ||
         (false == _texture->GetHasDrawn()) ||
         (true == _texture->GetAlwaysDirty())
         )
@@ -450,6 +459,7 @@ const bool UIHierarchyNode::Draw(
 
     return dirty;
 }
+
 #else
 {
     bool dirty = false;

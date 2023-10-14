@@ -238,9 +238,15 @@ public:
         const UIManagerDrawParam& in_param
         )
     {
-        in_root.Draw(
+
+        const bool dirty = in_root.PreDraw(
             in_param,
             _shader.get()
+            );
+        in_root.Draw(
+            in_param,
+            _shader.get(),
+            dirty
             );
     }
 
