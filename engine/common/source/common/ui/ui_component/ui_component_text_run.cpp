@@ -188,7 +188,6 @@ void UIComponentTextRun::GetDesiredSize(
 
 const bool UIComponentTextRun::Draw(
     const UIManagerDrawParam& in_draw_param,
-    Shader* const,
     UIHierarchyNode& in_node
     ) 
 {

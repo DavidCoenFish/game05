@@ -377,7 +377,8 @@ void ApplicationBasicUI::Update()
                 UIManagerDrawParam(
                     _draw_system.get(),
                     frame.get(),
-                    _draw_resource->_text_manager.get()
+                    _draw_resource->_text_manager.get(),
+                    _draw_resource->_ui_manager.get()
                     )
                 );
         }

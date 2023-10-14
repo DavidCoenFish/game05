@@ -11,12 +11,14 @@ class IUIComponent;
 class UIData;
 class IUIModel;
 class LocaleSystem;
+class Shader;
 class TextManager;
 class UIHierarchyNode;
 class UIManager;
 class UIManagerImplementation;
 
 //enum class LocaleISO_639_1;
+enum class UIEffectEnum;
 
 struct UIDataTextRunStyle;
 
@@ -114,12 +116,14 @@ struct UIManagerDrawParam
     explicit UIManagerDrawParam(
         DrawSystem* const in_draw_system = nullptr,
         DrawSystemFrame* const in_frame = nullptr,
-        TextManager* const in_text_manager = nullptr
+        TextManager* const in_text_manager = nullptr,
+        UIManager* const in_ui_manager = nullptr
         );
 
     DrawSystem* const _draw_system;
     DrawSystemFrame* const _frame;
     TextManager* const _text_manager;
+    UIManager* const _ui_manager;
 
     // Need some way of detecticting if device was reset
     //const bool in_force_total_redraw = false
@@ -157,25 +161,28 @@ public:
         const TContentFactory& in_factory
         );
 
-    // Update [heirearchy, desired size, layout], in_out_target can start out as null to kick things off
-    // Don't recurse through this method, intended for kicking off the root node
+    /// Update [heirearchy, desired size, layout], in_out_target can start out as null to kick things off
+    /// Don't recurse through this method, intended for kicking off the root node
     void Update(
         std::shared_ptr<UIHierarchyNode>& in_out_target_or_null,
         const UIManagerUpdateParam& in_param,
         const std::string& in_model_key = ""
         );
 
-    // Deal input
+    /// root node owns the input state
     void DealInput(
         UIHierarchyNode& in_root,
         const UIManagerDealInputParam& in_param
         );
 
-    // Draw
+    /// root node references the top level texture or backbuffer
     void Draw(
         UIHierarchyNode& in_root,
         const UIManagerDrawParam& in_param
         );
+
+    Shader* const GetDefaultShader() const;
+    Shader* const GetEffectShader(const UIEffectEnum in_type) const;
 
 private:
     std::unique_ptr<UIManagerImplementation> _implementation;

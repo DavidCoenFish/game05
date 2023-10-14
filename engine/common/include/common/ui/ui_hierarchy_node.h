@@ -168,13 +168,11 @@ public:
     /// split PreDraw and Draw to allow UIComponentEffect to prep the childrent but implement it own texture draw
     /// return True if we needed to draw, ie, we have modified children. Ask children to update there textures
     const bool PreDraw(
-        const UIManagerDrawParam& in_draw_param,
-        Shader* const in_shader
+        const UIManagerDrawParam& in_draw_param
         );
     /// return True if we needed to draw, ie, we have modified _texture. Draw children textures to our own texture
     const bool Draw(
         const UIManagerDrawParam& in_draw_param,
-        Shader* const in_shader,
         const bool in_dirty
         );
 

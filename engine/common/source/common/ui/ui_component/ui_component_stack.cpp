@@ -291,13 +291,11 @@ void UIComponentStack::GetStackDesiredSize(
 
 const bool UIComponentStack::Draw(
     const UIManagerDrawParam& in_draw_param,
-    Shader* const in_shader,
     UIHierarchyNode& in_node
     ) 
 {
     return _content_default.Draw(
         in_draw_param,
-        in_shader,
         in_node
         );
 }

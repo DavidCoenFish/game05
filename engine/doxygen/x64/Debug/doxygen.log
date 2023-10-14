@@ -689,12 +689,12 @@
   C:/development/game05/engine/common/source/common/dag_threaded/dag_threaded_value.h:7: warning: Compound DagThreadedValue is not documented.
   C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.cpp:95: warning: Compound DeviceAllocator is not documented.
   C:/development/game05/engine/common/source/common/draw_system/device_resources.h:19: warning: Compound DeviceResources is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:165: warning: Compound DirectX::GraphicsMemory is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:166: warning: Compound DirectX::GraphicsMemory is not documented.
   C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.cpp:232: warning: Compound DirectX::GraphicsMemory::Impl is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:149: warning: Compound DirectX::GraphicsMemoryStatistics is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:150: warning: Compound DirectX::GraphicsMemoryStatistics is not documented.
   C:/development/game05/engine/common/source/common/direct_xtk12/linear_allocator.h:113: warning: Compound DirectX::LinearAllocator is not documented.
   C:/development/game05/engine/common/source/common/direct_xtk12/linear_allocator.h:47: warning: Compound DirectX::LinearAllocatorPage is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:86: warning: Compound DirectX::SharedGraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:87: warning: Compound DirectX::SharedGraphicsResource is not documented.
   C:/development/game05/engine/common/include/common/draw_system/draw_system.h:31: warning: Compound DrawSystem is not documented.
   C:/development/game05/engine/common/include/common/draw_system/draw_system_frame.h:9: warning: Compound DrawSystemFrame is not documented.
   C:/development/game05/engine/common/include/common/util/enum_soft_bind.h:4: warning: Compound EnumSoftBind is not documented.
@@ -781,7 +781,8 @@
   C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_canvas.h:6: warning: Compound UIComponentCanvas is not documented.
   C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_default.h:33: warning: Compound UIComponentDefault is not documented.
   C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_effect.h:8: warning: Compound UIComponentEffect is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:27: warning: Compound UIComponentFactoryParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_effect.h:11: warning: Compound UIComponentEffect::TShaderConstantBuffer is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:25: warning: Compound UIComponentFactoryParam is not documented.
   C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_stack.h:18: warning: Compound UIComponentStack is not documented.
   C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_string.h:10: warning: Compound UIComponentString is not documented.
   C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_text_run.h:11: warning: Compound UIComponentTextRun is not documented.
@@ -800,9 +801,8 @@
   C:/development/game05/engine/common/include/common/ui/ui_hierarchy_node.h:69: warning: Compound UIHierarchyNodeUpdateHierarchyParam is not documented.
   C:/development/game05/engine/common/include/common/ui/ui_hierarchy_node.h:106: warning: Compound UIHierarchyNodeUpdateSize is not documented.
   C:/development/game05/engine/common/include/common/ui/ui_layout.h:8: warning: Compound UILayout is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:112: warning: Compound UIManagerDrawParam is not documented.
-  C:/development/game05/engine/common/source/common/ui/ui_manager.cpp:107: warning: Compound UIManagerImplementation is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:42: warning: Compound UIManagerUpdateParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:113: warning: Compound UIManagerDrawParam is not documented.
+  C:/development/game05/engine/common/source/common/ui/ui_manager.cpp:124: warning: Compound UIManagerImplementation is not documented.
   C:/development/game05/engine/application/source/window_application/application_basic_ui.cpp:48: warning: Compound UIModel is not documented.
   C:/development/game05/engine/common/source/common/ui/ui_root_input_state.h:8: warning: Compound UIRootInputState is not documented.
   C:/development/game05/engine/common/source/common/ui/ui_screen_space.h:5: warning: Compound UIScreenSpace is not documented.
@@ -1500,7 +1500,7 @@
   C:/development/game05/engine/common/include/common/ui/ui_component/i_ui_component.h:40: warning: Member UpdateHierarchy(UIData *const in_data, UIHierarchyNodeChildData &in_out_child_data, const UIHierarchyNodeUpdateHierarchyParam &in_param)=0 (function) of class IUIComponent is not documented.
   C:/development/game05/engine/common/include/common/ui/ui_component/i_ui_component.h:46: warning: Member UpdateSize(DrawSystem *const in_draw_system, const VectorInt2 &in_parent_size, const VectorInt2 &in_parent_offset, const VectorInt2 &in_parent_window, const float in_ui_scale, const float in_time_delta, UIGeometry &in_out_geometry, UIHierarchyNode &in_out_node, const UIScreenSpace &in_parent_screen_space, UIScreenSpace &out_screen_space)=0 (function) of class IUIComponent is not documented.
   C:/development/game05/engine/common/include/common/ui/ui_component/i_ui_component.h:59: warning: Member GetDesiredSize(VectorInt2 &out_layout_size, VectorInt2 &out_desired_size, const VectorInt2 &in_parent_window, const float in_ui_scale, UIHierarchyNode &in_out_node)=0 (function) of class IUIComponent is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_component/i_ui_component.h:67: warning: Member Draw(const UIManagerDrawParam &in_draw_param, Shader *const in_shader, UIHierarchyNode &in_node)=0 (function) of class IUIComponent is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_component/i_ui_component.h:67: warning: Member Draw(const UIManagerDrawParam &in_draw_param, UIHierarchyNode &in_node)=0 (function) of class IUIComponent is not documented.
   C:/development/game05/engine/common/include/common/ui/i_ui_input.h:27: warning: Member OnInputMouseLeftDown(const VectorFloat4 &in_screen_pos, const VectorFloat2 &in_mouse_pos) (function) of class IUIInput is not documented.
   C:/development/game05/engine/common/include/common/ui/i_ui_input.h:31: warning: Member OnInputMouseClick(const VectorFloat4 &in_screen_pos, const VectorFloat2 &in_mouse_pos) (function) of class IUIInput is not documented.
   C:/development/game05/engine/common/include/common/ui/i_ui_model.h:10: warning: Member VisitDataArray(const std::string &in_key, const std::function< void(const std::vector< std::shared_ptr< UIData > > &)> &in_visitor) const =0 (function) of class IUIModel is not documented.
@@ -1746,16 +1746,6 @@
   C:/development/game05/engine/common/include/common/text/text_block.h:46: warning: Member SetFontSize(const int in_font_size) (function) of class TextBlock is not documented.
   C:/development/game05/engine/common/include/common/text/text_block.h:49: warning: Member SetNewLineGapRatio(const float in_new_line_gap_ratio) (function) of class TextBlock is not documented.
   C:/development/game05/engine/common/include/common/text/text_block.h:52: warning: Member SetText(const std::string &in_string_utf8, const TextLocale *const in_locale_token) (function) of class TextBlock is not documented.
-  C:/development/game05/engine/common/include/common/text/text_block.h:56: warning: Member SetTextContainerSize(const VectorInt2 &in_size) (function) of class TextBlock is not documented.
-  C:/development/game05/engine/common/include/common/text/text_block.h:59: warning: Member GetWidthLimitEnabled() const (function) of class TextBlock is not documented.
-  C:/development/game05/engine/common/include/common/text/text_block.h:60: warning: Member SetWidthLimitEnabled(const bool in_width_limit_enabled) (function) of class TextBlock is not documented.
-  C:/development/game05/engine/common/include/common/text/text_block.h:63: warning: Member SetWidthLimit(const bool in_width_limit_enabled, const int in_width_limit) (function) of class TextBlock is not documented.
-  C:/development/game05/engine/common/include/common/text/text_block.h:67: warning: Member SetHorizontalLineAlignment(const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment) (function) of class TextBlock is not documented.
-  C:/development/game05/engine/common/include/common/text/text_block.h:70: warning: Member SetVerticalBlockAlignment(const TextEnum::VerticalBlockAlignment in_vertical_block_alignment) (function) of class TextBlock is not documented.
-  C:/development/game05/engine/common/include/common/text/text_block.h:73: warning: Member SetColour(const VectorFloat4 &in_colour) (function) of class TextBlock is not documented.
-  C:/development/game05/engine/common/include/common/text/text_block.h:76: warning: Member SetUIScale(const float in_ui_scale) (function) of class TextBlock is not documented.
-  C:/development/game05/engine/common/include/common/text/text_block.h:80: warning: Member Set(TextFont &in_text_font, const int in_font_size, const float in_new_line_gap_ratio, const std::string &in_string_utf8, const TextLocale *const in_locale_token, const VectorInt2 &in_size, const bool in_width_limit_enabled, const int in_width_limit, const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment, const TextEnum::VerticalBlockAlignment in_vertical_block_alignment, const VectorFloat4 &in_colour, const float in_ui_scale) (function) of class TextBlock is not documented.
-  C:/development/game05/engine/common/include/common/text/text_block.h:96: warning: Member GetGeometry(bool &out_geometry_dirty, DrawSystem *const in_draw_system, ID3D12GraphicsCommandList *const in_command_list) (function) of class TextBlock is not documented.
   Generating docs for compound CommandLine...
   Generating docs for compound ConstantBuffer...
   Generating docs for compound ConstantBufferB0...
@@ -1838,6 +1828,16 @@
   Generating docs for compound ShaderResourceInfo...
   Generating docs for compound TaskWindow...
   Generating docs for compound TextBlock...
+  C:/development/game05/engine/common/include/common/text/text_block.h:56: warning: Member SetTextContainerSize(const VectorInt2 &in_size) (function) of class TextBlock is not documented.
+  C:/development/game05/engine/common/include/common/text/text_block.h:59: warning: Member GetWidthLimitEnabled() const (function) of class TextBlock is not documented.
+  C:/development/game05/engine/common/include/common/text/text_block.h:60: warning: Member SetWidthLimitEnabled(const bool in_width_limit_enabled) (function) of class TextBlock is not documented.
+  C:/development/game05/engine/common/include/common/text/text_block.h:63: warning: Member SetWidthLimit(const bool in_width_limit_enabled, const int in_width_limit) (function) of class TextBlock is not documented.
+  C:/development/game05/engine/common/include/common/text/text_block.h:67: warning: Member SetHorizontalLineAlignment(const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment) (function) of class TextBlock is not documented.
+  C:/development/game05/engine/common/include/common/text/text_block.h:70: warning: Member SetVerticalBlockAlignment(const TextEnum::VerticalBlockAlignment in_vertical_block_alignment) (function) of class TextBlock is not documented.
+  C:/development/game05/engine/common/include/common/text/text_block.h:73: warning: Member SetColour(const VectorFloat4 &in_colour) (function) of class TextBlock is not documented.
+  C:/development/game05/engine/common/include/common/text/text_block.h:76: warning: Member SetUIScale(const float in_ui_scale) (function) of class TextBlock is not documented.
+  C:/development/game05/engine/common/include/common/text/text_block.h:80: warning: Member Set(TextFont &in_text_font, const int in_font_size, const float in_new_line_gap_ratio, const std::string &in_string_utf8, const TextLocale *const in_locale_token, const VectorInt2 &in_size, const bool in_width_limit_enabled, const int in_width_limit, const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment, const TextEnum::VerticalBlockAlignment in_vertical_block_alignment, const VectorFloat4 &in_colour, const float in_ui_scale) (function) of class TextBlock is not documented.
+  C:/development/game05/engine/common/include/common/text/text_block.h:96: warning: Member GetGeometry(bool &out_geometry_dirty, DrawSystem *const in_draw_system, ID3D12GraphicsCommandList *const in_command_list) (function) of class TextBlock is not documented.
   C:/development/game05/engine/common/source/common/text/text_block.cpp:20: warning: Member TextBlockImplementation(TextFont &in_text_font, const int in_font_size, const float in_new_line_gap_ratio, const std::string &in_string_utf8, const TextLocale *const in_locale_token, const VectorInt2 &in_containter_size, const bool in_width_limit_enabled, const int in_width_limit, const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment, const TextEnum::VerticalBlockAlignment in_vertical_block_alignment, const VectorFloat4 &in_colour, const float in_ui_scale) (function) of class TextBlockImplementation is not documented.
   C:/development/game05/engine/common/source/common/text/text_block.cpp:54: warning: Member GetTextBounds() (function) of class TextBlockImplementation is not documented.
   C:/development/game05/engine/common/source/common/text/text_block.cpp:78: warning: Member GetFont() const (function) of class TextBlockImplementation is not documented.
@@ -1968,16 +1968,21 @@
   C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_default.h:71: warning: Member UpdateHierarchy(UIData *const in_data, UIHierarchyNodeChildData &in_out_child_data, const UIHierarchyNodeUpdateHierarchyParam &in_param) (function) of class UIComponentDefault is not documented.
   C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_default.h:77: warning: Member UpdateSize(DrawSystem *const in_draw_system, IUIComponent &in_out_ui_component, const VectorInt2 &in_parent_size, const VectorInt2 &in_parent_offset, const VectorInt2 &in_parent_window, const float in_ui_scale, const float in_time_delta, UIGeometry &in_out_geometry, UIHierarchyNode &in_out_node, const UIScreenSpace &in_parent_screen_space, UIScreenSpace &out_screen_space) (function) of class UIComponentDefault is not documented.
   C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_default.h:91: warning: Member GetDesiredSize(VectorInt2 &out_layout_size, VectorInt2 &out_desired_size, const VectorInt2 &in_parent_window, const float in_ui_scale, UIHierarchyNode &in_out_node) (function) of class UIComponentDefault is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_default.h:99: warning: Member Draw(const UIManagerDrawParam &in_draw_param, Shader *const in_shader, UIHierarchyNode &in_node) (function) of class UIComponentDefault is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_default.h:99: warning: Member Draw(const UIManagerDrawParam &in_draw_param, UIHierarchyNode &in_node) (function) of class UIComponentDefault is not documented.
   C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_default.h:43: warning: Member CalculateGeometry(VectorFloat4 &out_geometry_pos, VectorFloat4 &out_geometry_uv, VectorInt2 &out_texture_size, VectorFloat2 &in_out_scroll, const VectorInt2 &in_parent_size, const VectorInt2 &in_parent_offset, const VectorInt2 &in_parent_window, const float in_ui_scale, const float in_time_delta, const VectorInt2 &in_layout_size, const VectorInt2 &in_desired_size, const UILayout &in_layout) (function) of class UIComponentDefault is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_effect.h:11: warning: Member UIComponentEffect(const UIBaseColour &in_base_colour, const UILayout &in_layout, const UIEffectEnum in_type, const UICoord &in_coord_a, const UICoord &in_coord_b, const UICoord &in_coord_c, const UICoord &in_coord_d) (function) of class UIComponentEffect is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_effect.h:22: warning: Member SetBase(const UIBaseColour &in_base_colour, const UILayout &in_layout) (function) of class UIComponentEffect is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_effect.h:28: warning: Member Set(const UIEffectEnum in_type, const UICoord &in_coord_a, const UICoord &in_coord_b, const UICoord &in_coord_c, const UICoord &in_coord_d) (function) of class UIComponentEffect is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:29: warning: Member UIComponentFactoryParam(DrawSystem *const in_draw_system=nullptr, ID3D12GraphicsCommandList *const in_command_list=nullptr, TextManager *const in_text_manager=nullptr, const int in_create_index=0) (function) of struct UIComponentFactoryParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:35: warning: Member _draw_system (variable) of struct UIComponentFactoryParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:36: warning: Member _command_list (variable) of struct UIComponentFactoryParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:37: warning: Member _text_manager (variable) of struct UIComponentFactoryParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:38: warning: Member _create_index (variable) of struct UIComponentFactoryParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_effect.h:22: warning: Member UIComponentEffect(const UIBaseColour &in_base_colour, const UILayout &in_layout, const UIEffectEnum in_type, const UICoord &in_coord_a, const UICoord &in_coord_b, const UICoord &in_coord_c, const UICoord &in_coord_d) (function) of class UIComponentEffect is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_effect.h:33: warning: Member SetBase(const UIBaseColour &in_base_colour, const UILayout &in_layout) (function) of class UIComponentEffect is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_effect.h:39: warning: Member Set(const UIEffectEnum in_type, const UICoord &in_coord_a, const UICoord &in_coord_b, const UICoord &in_coord_c, const UICoord &in_coord_d) (function) of class UIComponentEffect is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_effect.h:13: warning: Member _data[4] (variable) of struct UIComponentEffect::TShaderConstantBuffer is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_effect.h:15: warning: Member _render_target_width (variable) of struct UIComponentEffect::TShaderConstantBuffer is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_effect.h:16: warning: Member _render_target_height (variable) of struct UIComponentEffect::TShaderConstantBuffer is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_effect.h:17: warning: Member _i_render_target_width (variable) of struct UIComponentEffect::TShaderConstantBuffer is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_effect.h:18: warning: Member _i_render_target_height (variable) of struct UIComponentEffect::TShaderConstantBuffer is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:27: warning: Member UIComponentFactoryParam(DrawSystem *const in_draw_system=nullptr, ID3D12GraphicsCommandList *const in_command_list=nullptr, TextManager *const in_text_manager=nullptr, const int in_create_index=0) (function) of struct UIComponentFactoryParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:33: warning: Member _draw_system (variable) of struct UIComponentFactoryParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:34: warning: Member _command_list (variable) of struct UIComponentFactoryParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:35: warning: Member _text_manager (variable) of struct UIComponentFactoryParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:36: warning: Member _create_index (variable) of struct UIComponentFactoryParam is not documented.
   C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_stack.h:21: warning: Member UIComponentStack(const UIBaseColour &in_base_colour, const UILayout &in_layout, const StackOrientation in_orientation, const UICoord &in_gap) (function) of class UIComponentStack is not documented.
   C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_stack.h:29: warning: Member Set(const UIBaseColour &in_base_colour, const UILayout &in_layout, const StackOrientation in_orientation, const UICoord &in_gap) (function) of class UIComponentStack is not documented.
   C:/development/game05/engine/common/include/common/ui/ui_component/ui_component_string.h:13: warning: Member UIComponentString(const UIBaseColour &in_base_colour, const UILayout &in_layout, std::unique_ptr< TextBlock > &in_text_block) (function) of class UIComponentString is not documented.
@@ -2054,7 +2059,7 @@
   C:/development/game05/engine/common/include/common/ui/ui_hierarchy_node.h:146: warning: Member UpdateTextureSize(const VectorInt2 &in_parent_size, const bool in_mark_dirty) (function) of class UIHierarchyNode is not documented.
   C:/development/game05/engine/common/include/common/ui/ui_hierarchy_node.h:151: warning: Member UpdateSize(DrawSystem *const in_draw_system, const VectorInt2 &in_parent_size, const VectorInt2 &in_parent_offset, const VectorInt2 &in_parent_window, const float in_ui_scale, const float in_time_delta, const bool in_mark_dirty, const UIScreenSpace &in_parent_screen_space) (function) of class UIHierarchyNode is not documented.
   C:/development/game05/engine/common/include/common/ui/ui_hierarchy_node.h:162: warning: Member DealInput(UIRootInputState &in_input_state, const bool in_mouse_inside=true) (function) of class UIHierarchyNode is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_hierarchy_node.h:174: warning: Member GetUITexture() const (function) of class UIHierarchyNode is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_hierarchy_node.h:179: warning: Member GetUITexture() const (function) of class UIHierarchyNode is not documented.
   C:/development/game05/engine/common/include/common/ui/ui_hierarchy_node.h:49: warning: Member UIHierarchyNodeChildData(std::unique_ptr< UIGeometry > &in_geometry, std::unique_ptr< IUIComponent > &in_component, std::unique_ptr< UIHierarchyNode > &in_node, std::unique_ptr< UIScreenSpace > &in_screen_space) (function) of struct UIHierarchyNodeChildData is not documented.
   C:/development/game05/engine/common/include/common/ui/ui_hierarchy_node.h:58: warning: Member _geometry (variable) of struct UIHierarchyNodeChildData is not documented.
   C:/development/game05/engine/common/include/common/ui/ui_hierarchy_node.h:60: warning: Member _component (variable) of struct UIHierarchyNodeChildData is not documented.
@@ -2080,46 +2085,47 @@
   C:/development/game05/engine/common/include/common/ui/ui_layout.h:29: warning: Member operator==(const UILayout &in_rhs) const (function) of class UILayout is not documented.
   C:/development/game05/engine/common/include/common/ui/ui_layout.h:30: warning: Member operator!=(const UILayout &in_rhs) const (function) of class UILayout is not documented.
   C:/development/game05/engine/common/include/common/ui/ui_layout.h:11: warning: Member FactoryFull() (function) of class UILayout is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:153: warning: Member TContentFactory (typedef) of class UIManager is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:133: warning: Member UIManager(DrawSystem *const in_draw_system, ID3D12GraphicsCommandList *const in_command_list, const std::filesystem::path &in_root_path) (function) of class UIManager is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:155: warning: Member AddContentFactory(const std::string &in_content_name, const TContentFactory &in_factory) (function) of class UIManager is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:162: warning: Member Update(std::shared_ptr< UIHierarchyNode > &in_out_target_or_null, const UIManagerUpdateParam &in_param, const std::string &in_model_key="") (function) of class UIManager is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:169: warning: Member DealInput(UIHierarchyNode &in_root, const UIManagerDealInputParam &in_param) (function) of class UIManager is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:175: warning: Member Draw(UIHierarchyNode &in_root, const UIManagerDrawParam &in_param) (function) of class UIManager is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:141: warning: Member GetInputElementDescArray() (function) of class UIManager is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:142: warning: Member BuildGeometryData(std::vector< uint8_t > &out_vertex_data, const VectorFloat4 &in_pos=VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f), const VectorFloat4 &in_uv=VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f)) (function) of class UIManager is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:82: warning: Member UIManagerDealInputParam(DrawSystem *const in_draw_system=nullptr, const bool in_mouse_valid=false, const bool in_mouse_left_down=false, const bool in_mouse_right_down=false, const int in_mouse_x=0, const int in_mouse_y=0, const int in_mouse_scroll=0) (function) of struct UIManagerDealInputParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:80: warning: Member Factory() (function) of struct UIManagerDealInputParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:99: warning: Member _draw_system (variable) of struct UIManagerDealInputParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:100: warning: Member _mouse_valid (variable) of struct UIManagerDealInputParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:101: warning: Member _mouse_left_down (variable) of struct UIManagerDealInputParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:102: warning: Member _mouse_right_down (variable) of struct UIManagerDealInputParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:103: warning: Member _mouse_x (variable) of struct UIManagerDealInputParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:105: warning: Member _mouse_y (variable) of struct UIManagerDealInputParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:107: warning: Member _mouse_scroll (variable) of struct UIManagerDealInputParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:114: warning: Member UIManagerDrawParam(DrawSystem *const in_draw_system=nullptr, DrawSystemFrame *const in_frame=nullptr, TextManager *const in_text_manager=nullptr) (function) of struct UIManagerDrawParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:120: warning: Member _draw_system (variable) of struct UIManagerDrawParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:121: warning: Member _frame (variable) of struct UIManagerDrawParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:122: warning: Member _text_manager (variable) of struct UIManagerDrawParam is not documented.
-  C:/development/game05/engine/common/source/common/ui/ui_manager.cpp:110: warning: Member UIManagerImplementation(DrawSystem *const in_draw_system, ID3D12GraphicsCommandList *const in_command_list, const std::filesystem::path &in_root_path) (function) of class UIManagerImplementation is not documented.
-  C:/development/game05/engine/common/source/common/ui/ui_manager.cpp:151: warning: Member AddContentFactory(const std::string &in_content_name, const UIManager::TContentFactory &in_factory) (function) of class UIManagerImplementation is not documented.
-  C:/development/game05/engine/common/source/common/ui/ui_manager.cpp:161: warning: Member Update(std::shared_ptr< UIHierarchyNode > &in_out_target_or_null, const UIManagerUpdateParam &in_param, const std::string &in_model_key) (function) of class UIManagerImplementation is not documented.
-  C:/development/game05/engine/common/source/common/ui/ui_manager.cpp:219: warning: Member DealInput(UIHierarchyNode &in_root, const UIManagerDealInputParam &in_param) (function) of class UIManagerImplementation is not documented.
-  C:/development/game05/engine/common/source/common/ui/ui_manager.cpp:236: warning: Member Draw(UIHierarchyNode &in_root, const UIManagerDrawParam &in_param) (function) of class UIManagerImplementation is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:44: warning: Member UIManagerUpdateParam(DrawSystem *const in_draw_system=nullptr, ID3D12GraphicsCommandList *const in_command_list=nullptr, const IUIModel *const in_ui_model=nullptr, const UIDataTextRunStyle *const in_default_text_style=nullptr, LocaleSystem *const in_locale_system=nullptr, TextManager *const in_text_manager=nullptr, const float in_ui_scale=1.0f, const float in_time_delta=0.0f, const bool in_draw_every_frame=false, const bool in_draw_to_texture=false, const VectorInt2 &in_texture_size=VectorInt2(0, 0), const bool in_allow_clear=false, const VectorFloat4 &in_clear_colour=VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f)) (function) of struct UIManagerUpdateParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:60: warning: Member _draw_system (variable) of struct UIManagerUpdateParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:61: warning: Member _command_list (variable) of struct UIManagerUpdateParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:62: warning: Member _ui_model (variable) of struct UIManagerUpdateParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:63: warning: Member _default_text_style (variable) of struct UIManagerUpdateParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:64: warning: Member _locale_system (variable) of struct UIManagerUpdateParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:65: warning: Member _text_manager (variable) of struct UIManagerUpdateParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:66: warning: Member _ui_scale (variable) of struct UIManagerUpdateParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:67: warning: Member _time_delta (variable) of struct UIManagerUpdateParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:68: warning: Member _draw_to_texture (variable) of struct UIManagerUpdateParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:69: warning: Member _draw_every_frame (variable) of struct UIManagerUpdateParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:70: warning: Member _texture_size (variable) of struct UIManagerUpdateParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:71: warning: Member _allow_clear (variable) of struct UIManagerUpdateParam is not documented.
-  C:/development/game05/engine/common/include/common/ui/ui_manager.h:72: warning: Member _clear_colour (variable) of struct UIManagerUpdateParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:156: warning: Member TContentFactory (typedef) of class UIManager is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:136: warning: Member UIManager(DrawSystem *const in_draw_system, ID3D12GraphicsCommandList *const in_command_list, const std::filesystem::path &in_root_path) (function) of class UIManager is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:158: warning: Member AddContentFactory(const std::string &in_content_name, const TContentFactory &in_factory) (function) of class UIManager is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:183: warning: Member GetDefaultShader() const (function) of class UIManager is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:184: warning: Member GetEffectShader(const UIEffectEnum in_type) const (function) of class UIManager is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:144: warning: Member GetInputElementDescArray() (function) of class UIManager is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:145: warning: Member BuildGeometryData(std::vector< uint8_t > &out_vertex_data, const VectorFloat4 &in_pos=VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f), const VectorFloat4 &in_uv=VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f)) (function) of class UIManager is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:83: warning: Member UIManagerDealInputParam(DrawSystem *const in_draw_system=nullptr, const bool in_mouse_valid=false, const bool in_mouse_left_down=false, const bool in_mouse_right_down=false, const int in_mouse_x=0, const int in_mouse_y=0, const int in_mouse_scroll=0) (function) of struct UIManagerDealInputParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:81: warning: Member Factory() (function) of struct UIManagerDealInputParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:100: warning: Member _draw_system (variable) of struct UIManagerDealInputParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:101: warning: Member _mouse_valid (variable) of struct UIManagerDealInputParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:102: warning: Member _mouse_left_down (variable) of struct UIManagerDealInputParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:103: warning: Member _mouse_right_down (variable) of struct UIManagerDealInputParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:104: warning: Member _mouse_x (variable) of struct UIManagerDealInputParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:106: warning: Member _mouse_y (variable) of struct UIManagerDealInputParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:108: warning: Member _mouse_scroll (variable) of struct UIManagerDealInputParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:115: warning: Member UIManagerDrawParam(DrawSystem *const in_draw_system=nullptr, DrawSystemFrame *const in_frame=nullptr, TextManager *const in_text_manager=nullptr, UIManager *const in_ui_manager=nullptr) (function) of struct UIManagerDrawParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:122: warning: Member _draw_system (variable) of struct UIManagerDrawParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:123: warning: Member _frame (variable) of struct UIManagerDrawParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:124: warning: Member _text_manager (variable) of struct UIManagerDrawParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:125: warning: Member _ui_manager (variable) of struct UIManagerDrawParam is not documented.
+  C:/development/game05/engine/common/source/common/ui/ui_manager.cpp:127: warning: Member UIManagerImplementation(DrawSystem *const in_draw_system, ID3D12GraphicsCommandList *const in_command_list, const std::filesystem::path &in_root_path) (function) of class UIManagerImplementation is not documented.
+  C:/development/game05/engine/common/source/common/ui/ui_manager.cpp:192: warning: Member AddContentFactory(const std::string &in_content_name, const UIManager::TContentFactory &in_factory) (function) of class UIManagerImplementation is not documented.
+  C:/development/game05/engine/common/source/common/ui/ui_manager.cpp:202: warning: Member Update(std::shared_ptr< UIHierarchyNode > &in_out_target_or_null, const UIManagerUpdateParam &in_param, const std::string &in_model_key) (function) of class UIManagerImplementation is not documented.
+  C:/development/game05/engine/common/source/common/ui/ui_manager.cpp:260: warning: Member DealInput(UIHierarchyNode &in_root, const UIManagerDealInputParam &in_param) (function) of class UIManagerImplementation is not documented.
+  C:/development/game05/engine/common/source/common/ui/ui_manager.cpp:277: warning: Member Draw(UIHierarchyNode &in_root, const UIManagerDrawParam &in_param) (function) of class UIManagerImplementation is not documented.
+  C:/development/game05/engine/common/source/common/ui/ui_manager.cpp:291: warning: Member GetEffectShader(const UIEffectEnum in_type) const (function) of class UIManagerImplementation is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:45: warning: Member UIManagerUpdateParam(DrawSystem *const in_draw_system=nullptr, ID3D12GraphicsCommandList *const in_command_list=nullptr, const IUIModel *const in_ui_model=nullptr, const UIDataTextRunStyle *const in_default_text_style=nullptr, LocaleSystem *const in_locale_system=nullptr, TextManager *const in_text_manager=nullptr, const float in_ui_scale=1.0f, const float in_time_delta=0.0f, const bool in_draw_every_frame=false, const bool in_draw_to_texture=false, const VectorInt2 &in_texture_size=VectorInt2(0, 0), const bool in_allow_clear=false, const VectorFloat4 &in_clear_colour=VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f)) (function) of struct UIManagerUpdateParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:61: warning: Member _draw_system (variable) of struct UIManagerUpdateParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:62: warning: Member _command_list (variable) of struct UIManagerUpdateParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:63: warning: Member _ui_model (variable) of struct UIManagerUpdateParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:64: warning: Member _default_text_style (variable) of struct UIManagerUpdateParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:65: warning: Member _locale_system (variable) of struct UIManagerUpdateParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:66: warning: Member _text_manager (variable) of struct UIManagerUpdateParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:67: warning: Member _ui_scale (variable) of struct UIManagerUpdateParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:68: warning: Member _time_delta (variable) of struct UIManagerUpdateParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:69: warning: Member _draw_to_texture (variable) of struct UIManagerUpdateParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:70: warning: Member _draw_every_frame (variable) of struct UIManagerUpdateParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:71: warning: Member _texture_size (variable) of struct UIManagerUpdateParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:72: warning: Member _allow_clear (variable) of struct UIManagerUpdateParam is not documented.
+  C:/development/game05/engine/common/include/common/ui/ui_manager.h:73: warning: Member _clear_colour (variable) of struct UIManagerUpdateParam is not documented.
   C:/development/game05/engine/application/source/window_application/application_basic_ui.cpp:51: warning: Member UIModel(IWindowApplication &in_application) (function) of class UIModel is not documented.
   C:/development/game05/engine/common/include/common/ui/i_ui_model.h:20: warning: Member GetDataType(const std::string &in_key) (function) of class IUIModel is not documented.
   C:/development/game05/engine/common/source/common/ui/ui_root_input_state.h:13: warning: Member Update(const UIManagerDealInputParam &in_param, const VectorInt2 &in_root_size) (function) of class UIRootInputState is not documented.
@@ -2250,11 +2256,11 @@
   C:/development/game05/engine/automatron/task_run_test.cs:15: warning: Member Priority (property) of class Automatron.TaskRunTest.TaskRunTestPOCO is not documented.
   C:/development/game05/engine/automatron/task_run_test.cs:16: warning: Member Dependency (property) of class Automatron.TaskRunTest.TaskRunTestPOCO is not documented.
   C:/development/game05/engine/automatron/task_run_test.cs:17: warning: Member Skip (property) of class Automatron.TaskRunTest.TaskRunTestPOCO is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:168: warning: Member GraphicsMemory(_In_ ID3D12Device *in_device) (function) of class DirectX::GraphicsMemory is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:169: warning: Member GraphicsMemory(GraphicsMemory &&in_move_from) noexcept (function) of class DirectX::GraphicsMemory is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:170: warning: Member operator=(GraphicsMemory &&in_move_from) noexcept (function) of class DirectX::GraphicsMemory is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:196: warning: Member AllocateConstant(const T &in_set_data) (function) of class DirectX::GraphicsMemory is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:217: warning: Member ResetStatistics() (function) of class DirectX::GraphicsMemory is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:169: warning: Member GraphicsMemory(_In_ ID3D12Device *in_device) (function) of class DirectX::GraphicsMemory is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:170: warning: Member GraphicsMemory(GraphicsMemory &&in_move_from) noexcept (function) of class DirectX::GraphicsMemory is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:171: warning: Member operator=(GraphicsMemory &&in_move_from) noexcept (function) of class DirectX::GraphicsMemory is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:197: warning: Member AllocateConstant(const T &in_set_data) (function) of class DirectX::GraphicsMemory is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:218: warning: Member ResetStatistics() (function) of class DirectX::GraphicsMemory is not documented.
   C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.cpp:235: warning: Member Impl(GraphicsMemory *in_owner) noexcept(false) (function) of class DirectX::GraphicsMemory::Impl is not documented.
   C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.cpp:251: warning: Member Impl(Impl &&)=default (function) of class DirectX::GraphicsMemory::Impl is not documented.
   C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.cpp:252: warning: Member operator=(Impl &&)=default (function) of class DirectX::GraphicsMemory::Impl is not documented.
@@ -2265,22 +2271,6 @@
   C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.cpp:286: warning: Member GetStatistics(GraphicsMemoryStatistics &in_stats) (function) of class DirectX::GraphicsMemory::Impl is not documented.
   C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.cpp:306: warning: Member ResetStatistics() (function) of class DirectX::GraphicsMemory::Impl is not documented.
   C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.cpp:315: warning: Member _owner (variable) of class DirectX::GraphicsMemory::Impl is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:152: warning: Member _committed_memory (variable) of struct DirectX::GraphicsMemoryStatistics is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:154: warning: Member _total_memory (variable) of struct DirectX::GraphicsMemoryStatistics is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:156: warning: Member _total_pages (variable) of struct DirectX::GraphicsMemoryStatistics is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:158: warning: Member _peak_commited_memory (variable) of struct DirectX::GraphicsMemoryStatistics is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:160: warning: Member _peak_total_memory (variable) of struct DirectX::GraphicsMemoryStatistics is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:162: warning: Member _peak_total_pages (variable) of struct DirectX::GraphicsMemoryStatistics is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:31: warning: Member GraphicsResource(_In_ LinearAllocatorPage *in_page, _In_ D3D12_GPU_VIRTUAL_ADDRESS in_gpu_address, _In_ ID3D12Resource *in_resource, _In_ void *in_memory, _In_ size_t in_offset, _In_ size_t in_size) noexcept (function) of class DirectX::GraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:39: warning: Member GraphicsResource(GraphicsResource &&in_other) noexcept (function) of class DirectX::GraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:40: warning: Member operator=(GraphicsResource &&) noexcept (function) of class DirectX::GraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:44: warning: Member GpuAddress() const noexcept (function) of class DirectX::GraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:49: warning: Member Resource() const noexcept (function) of class DirectX::GraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:54: warning: Member Memory() const noexcept (function) of class DirectX::GraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:59: warning: Member ResourceOffset() const noexcept (function) of class DirectX::GraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:64: warning: Member Size() const noexcept (function) of class DirectX::GraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:69: warning: Member operator bool() const noexcept (function) of class DirectX::GraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:76: warning: Member Reset(GraphicsResource &&) noexcept (function) of class DirectX::GraphicsResource is not documented.
   Generating docs for compound TextBlockImplementation...
   Generating docs for compound TextCell...
   Generating docs for compound TextFont...
@@ -2302,6 +2292,7 @@
   Generating docs for compound UIComponentCanvas...
   Generating docs for compound UIComponentDefault...
   Generating docs for compound UIComponentEffect...
+  Generating docs for nested compound UIComponentEffect::TShaderConstantBuffer...
   Generating docs for compound UIComponentFactoryParam...
   Generating docs for compound UIComponentStack...
   Generating docs for compound UIComponentString...
@@ -2359,8 +2350,21 @@
   Generating docs for nested compound Automatron::TaskRunTest::TaskRunTestPOCO...
   Generating docs for compound DirectX::GraphicsMemory...
   Generating docs for nested compound DirectX::GraphicsMemory::Impl...
-  Generating docs for compound DirectX::GraphicsMemoryStatistics...
-  Generating docs for compound DirectX::GraphicsResource...
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:153: warning: Member _committed_memory (variable) of struct DirectX::GraphicsMemoryStatistics is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:155: warning: Member _total_memory (variable) of struct DirectX::GraphicsMemoryStatistics is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:157: warning: Member _total_pages (variable) of struct DirectX::GraphicsMemoryStatistics is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:159: warning: Member _peak_commited_memory (variable) of struct DirectX::GraphicsMemoryStatistics is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:161: warning: Member _peak_total_memory (variable) of struct DirectX::GraphicsMemoryStatistics is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:163: warning: Member _peak_total_pages (variable) of struct DirectX::GraphicsMemoryStatistics is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:31: warning: Member GraphicsResource(_In_ LinearAllocatorPage *in_page, _In_ D3D12_GPU_VIRTUAL_ADDRESS in_gpu_address, _In_ ID3D12Resource *in_resource, _In_ void *in_memory, _In_ size_t in_offset, _In_ size_t in_size) noexcept (function) of class DirectX::GraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:39: warning: Member GraphicsResource(GraphicsResource &&in_other) noexcept (function) of class DirectX::GraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:40: warning: Member operator=(GraphicsResource &&) noexcept (function) of class DirectX::GraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:44: warning: Member GpuAddress() const noexcept (function) of class DirectX::GraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:49: warning: Member Resource() const noexcept (function) of class DirectX::GraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:54: warning: Member Memory() const noexcept (function) of class DirectX::GraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:59: warning: Member ResourceOffset() const noexcept (function) of class DirectX::GraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:64: warning: Member Size() const noexcept (function) of class DirectX::GraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:69: warning: Member operator bool() const noexcept (function) of class DirectX::GraphicsResource is not documented.
   C:/development/game05/engine/common/source/common/direct_xtk12/linear_allocator.h:124: warning: Member LinearAllocator(LinearAllocator &&)=default (function) of class DirectX::LinearAllocator is not documented.
   C:/development/game05/engine/common/source/common/direct_xtk12/linear_allocator.h:125: warning: Member operator=(LinearAllocator &&)=default (function) of class DirectX::LinearAllocator is not documented.
   C:/development/game05/engine/common/source/common/direct_xtk12/linear_allocator.h:129: warning: Member FindPageForAlloc(_In_ size_t in_requested_size, _In_ size_t in_alignment) (function) of class DirectX::LinearAllocator is not documented.
@@ -2385,23 +2389,25 @@
   C:/development/game05/engine/common/source/common/direct_xtk12/linear_allocator.h:106: warning: Member _offset (variable) of class DirectX::LinearAllocatorPage is not documented.
   C:/development/game05/engine/common/source/common/direct_xtk12/linear_allocator.h:107: warning: Member _size (variable) of class DirectX::LinearAllocatorPage is not documented.
   C:/development/game05/engine/common/source/common/direct_xtk12/linear_allocator.h:108: warning: Member _upload_resource (variable) of class DirectX::LinearAllocatorPage is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:90: warning: Member SharedGraphicsResource(SharedGraphicsResource &&) noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:91: warning: Member operator=(SharedGraphicsResource &&) noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:92: warning: Member SharedGraphicsResource(GraphicsResource &&) (function) of class DirectX::SharedGraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:93: warning: Member operator=(GraphicsResource &&) (function) of class DirectX::SharedGraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:94: warning: Member SharedGraphicsResource(const SharedGraphicsResource &) noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:95: warning: Member operator=(const SharedGraphicsResource &) noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:99: warning: Member GpuAddress() const noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:104: warning: Member Resource() const noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:109: warning: Member Memory() const noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:114: warning: Member ResourceOffset() const noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:119: warning: Member Size() const noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:124: warning: Member operator bool() const noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:129: warning: Member operator==(const SharedGraphicsResource &in_other) const noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:134: warning: Member operator!=(const SharedGraphicsResource &in_other) const noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:141: warning: Member Reset(GraphicsResource &&) (function) of class DirectX::SharedGraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:142: warning: Member Reset(SharedGraphicsResource &&) noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
-  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:143: warning: Member Reset(const SharedGraphicsResource &in_resource) noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:91: warning: Member SharedGraphicsResource(SharedGraphicsResource &&) noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:92: warning: Member operator=(SharedGraphicsResource &&) noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:93: warning: Member SharedGraphicsResource(GraphicsResource &&) (function) of class DirectX::SharedGraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:94: warning: Member operator=(GraphicsResource &&) (function) of class DirectX::SharedGraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:95: warning: Member SharedGraphicsResource(const SharedGraphicsResource &) noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:96: warning: Member operator=(const SharedGraphicsResource &) noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:100: warning: Member GpuAddress() const noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:105: warning: Member Resource() const noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:110: warning: Member Memory() const noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:115: warning: Member ResourceOffset() const noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:120: warning: Member Size() const noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:125: warning: Member operator bool() const noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:130: warning: Member operator==(const SharedGraphicsResource &in_other) const noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:135: warning: Member operator!=(const SharedGraphicsResource &in_other) const noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:142: warning: Member Reset(GraphicsResource &&) (function) of class DirectX::SharedGraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:143: warning: Member Reset(SharedGraphicsResource &&) noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
+  C:/development/game05/engine/common/source/common/direct_xtk12/graphics_memory.h:144: warning: Member Reset(const SharedGraphicsResource &in_resource) noexcept (function) of class DirectX::SharedGraphicsResource is not documented.
+  Generating docs for compound DirectX::GraphicsMemoryStatistics...
+  Generating docs for compound DirectX::GraphicsResource...
   Generating docs for compound DirectX::LinearAllocator...
   Generating docs for compound DirectX::LinearAllocatorPage...
   Generating docs for compound DirectX::SharedGraphicsResource...
@@ -2429,6 +2435,6 @@
   finalizing index lists...
   writing tag file...
   Running plantuml with JAVA...
-  type lookup cache used 5797/65536 hits=19216 misses=6205
-  symbol lookup cache used 6327/65536 hits=21261 misses=6327
+  type lookup cache used 5792/65536 hits=19240 misses=6201
+  symbol lookup cache used 6334/65536 hits=21324 misses=6334
   finished...

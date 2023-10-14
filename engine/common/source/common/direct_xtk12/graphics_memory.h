@@ -73,6 +73,7 @@ namespace DirectX
 
         /// Clear the pointer. Using operator -> will produce bad results.
         void __cdecl Reset() noexcept;
+        /// Take ownership of input Graphics resource on reset.
         void __cdecl Reset(GraphicsResource &&) noexcept;
 
     private:

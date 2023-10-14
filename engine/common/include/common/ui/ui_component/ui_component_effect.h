@@ -8,6 +8,17 @@ enum class UIEffectEnum;
 class UIComponentEffect : public IUIComponent
 {
 public:
+    struct TShaderConstantBuffer
+    {
+        float _data[4];
+
+        int _render_target_width;
+        int _render_target_height;
+        float _i_render_target_width;
+        float _i_render_target_height;
+    };
+
+
     UIComponentEffect(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
@@ -67,14 +78,8 @@ private:
         UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         ) override;
 
-    //virtual const bool GetNeedsPreDraw() const override;
-    //virtual void PreDraw(
-    //    const UIManagerDrawParam& in_param
-    //    ) override;
-
     virtual const bool Draw(
         const UIManagerDrawParam& in_draw_param,
-        Shader* const in_shader,
         UIHierarchyNode& in_node
         ) override;
 
@@ -87,7 +92,6 @@ private:
     UICoord _coord_c;
     UICoord _coord_d;
 
-    std::shared_ptr<Shader> _shader;
     std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;
 
 };

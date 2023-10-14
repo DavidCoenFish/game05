@@ -316,22 +316,19 @@ void UIComponentDefault::GetDesiredSize(
 
 const bool UIComponentDefault::Draw(
     const UIManagerDrawParam& in_draw_param,
-    Shader* const in_shader,
     UIHierarchyNode& in_node
     )
 {
     bool dirty = false;
 
     if (true == in_node.PreDraw(
-        in_draw_param,
-        in_shader
+        in_draw_param
         ))
     {
         dirty = true;
     }
     if (true == in_node.Draw(
         in_draw_param,
-        in_shader,
         dirty
         ))
     {

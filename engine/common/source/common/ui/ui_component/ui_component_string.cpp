@@ -199,7 +199,6 @@ void UIComponentString::GetDesiredSize(
 
 const bool UIComponentString::Draw(
     const UIManagerDrawParam& in_draw_param,
-    Shader* const,
     UIHierarchyNode& in_node
     ) 
 {

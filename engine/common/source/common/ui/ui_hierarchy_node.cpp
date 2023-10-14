@@ -387,8 +387,7 @@ void UIHierarchyNode::DealInput(
 
 // Return True if we needed to draw, ie, the texture may have changed
 const bool UIHierarchyNode::PreDraw(
-    const UIManagerDrawParam& in_draw_param,
-    Shader* const in_shader
+    const UIManagerDrawParam& in_draw_param
     )
 #if 1
 {
@@ -399,7 +398,6 @@ const bool UIHierarchyNode::PreDraw(
     {
         if (true == iter->_component->Draw(
             in_draw_param,
-            in_shader,
             *(iter->_node.get())
             ))
         {
@@ -412,7 +410,6 @@ const bool UIHierarchyNode::PreDraw(
 
 const bool UIHierarchyNode::Draw(
     const UIManagerDrawParam& in_draw_param,
-    Shader* const in_shader,
     const bool in_dirty
     )
 {
@@ -444,13 +441,15 @@ const bool UIHierarchyNode::Draw(
         {
             UIHierarchyNodeChildData& child_data = *iter;
 
-            in_shader->SetShaderResourceViewHandle(0, child_data._node->GetShaderResourceHeapWrapperItem());
+            Shader* const shader = in_draw_param._ui_manager->GetDefaultShader();
+
+            shader->SetShaderResourceViewHandle(0, child_data._node->GetShaderResourceHeapWrapperItem());
             auto geometry = child_data._geometry->GetGeometry(
                 in_draw_param._draw_system,
                 in_draw_param._frame->GetCommandList()
                 );
 
-            in_draw_param._frame->SetShader(in_shader);
+            in_draw_param._frame->SetShader(shader);
             in_draw_param._frame->Draw(geometry);
         }
 

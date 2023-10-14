@@ -67,7 +67,6 @@ private:
 
     virtual const bool Draw(
         const UIManagerDrawParam& in_draw_param,
-        Shader* const in_shader,
         UIHierarchyNode& in_node
         ) override;
 

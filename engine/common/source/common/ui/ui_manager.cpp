@@ -9,11 +9,13 @@
 #include "common/draw_system/shader/shader_resource_info.h"
 #include "common/file_system/file_system.h"
 #include "common/log/log.h"
+#include "common/ui/ui_effect_enum.h"
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/i_ui_model.h"
 #include "common/ui/ui_root_input_state.h"
 #include "common/ui/ui_screen_space.h"
+#include "common/ui/ui_component/ui_component_effect.h"
 #include "common/ui/ui_component/ui_component_stack.h"
 #include "common/ui/ui_data/ui_data.h"
 #include "common/text/text_manager.h"
@@ -68,11 +70,13 @@ UIManagerUpdateParam::UIManagerUpdateParam(
 UIManagerDrawParam::UIManagerDrawParam(
     DrawSystem* const in_draw_system,
     DrawSystemFrame* const in_frame,
-    TextManager* const in_text_manager
+    TextManager* const in_text_manager,
+    UIManager* const in_ui_manager
     )
     : _draw_system(in_draw_system)
     , _frame(in_frame)
     , _text_manager(in_text_manager)
+    , _ui_manager(in_ui_manager)
 {
     // Nop
 }
@@ -104,6 +108,19 @@ UIManagerDealInputParam::UIManagerDealInputParam(
 }
 
 
+namespace
+{
+    static const char* const s_array_shader_path[] = {
+        "ui_block_pixel.cso",
+        "ui_effect_dropshadow_pixel.hlsl"
+        };
+    struct TShaderConstantBuffer
+    {
+        //VectorFloat4 _tint_colour;
+        float _tint_colour[4];
+    };
+}
+
 class UIManagerImplementation
 {
 public:
@@ -113,8 +130,6 @@ public:
         const std::filesystem::path& in_root_path
         )
     {
-        auto vertex_shader_data = FileSystem::SyncReadFile(in_root_path / "shader" / "ui_block_vertex.cso");
-        auto pixel_shader_data = FileSystem::SyncReadFile(in_root_path / "shader" / "ui_block_pixel.cso");
         std::vector < DXGI_FORMAT > render_target_format;
         render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
         ShaderPipelineStateData shader_pipeline_state_data(
@@ -128,22 +143,48 @@ public:
             CD3DX12_DEPTH_STENCIL_DESC()// CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT)
             );
 
+        auto vertex_shader_data = FileSystem::SyncReadFile(in_root_path / "shader" / "ui_block_vertex.cso");
+
         std::vector<std::shared_ptr<ShaderResourceInfo>> array_shader_resource_info;
         array_shader_resource_info.push_back(
             ShaderResourceInfo::FactorySampler(nullptr, D3D12_SHADER_VISIBILITY_PIXEL)
             );
-
-        _shader = in_draw_system->MakeShader(
-            in_command_list,
-            shader_pipeline_state_data,
-            vertex_shader_data,
-            nullptr,
-            pixel_shader_data,
-            array_shader_resource_info
+        std::vector<std::shared_ptr<ConstantBufferInfo>> array_shader_constants_info_default;
+        array_shader_constants_info_default.push_back(
+            ConstantBufferInfo::Factory(
+                TShaderConstantBuffer(),
+                D3D12_SHADER_VISIBILITY_PIXEL
+                )
+            );
+        std::vector<std::shared_ptr<ConstantBufferInfo>> array_shader_constants_info_effect;
+        array_shader_constants_info_effect.push_back(
+            ConstantBufferInfo::Factory(
+                TShaderConstantBuffer(),
+                D3D12_SHADER_VISIBILITY_PIXEL
+                )
+            );
+        array_shader_constants_info_effect.push_back(
+            ConstantBufferInfo::Factory(
+                UIComponentEffect::TShaderConstantBuffer(),
+                D3D12_SHADER_VISIBILITY_PIXEL
+                )
             );
 
-        // Add a default content ?
-        //AddContentFactory("", FactoryDefault);
+        for (int index = static_cast<int>(UIEffectEnum::TNone); index < static_cast<int>(UIEffectEnum::TCount); ++index)
+        {
+            const std::filesystem::path path = in_root_path / "shader" / std::string(s_array_shader_path[index]);
+            auto pixel_shader_data = FileSystem::SyncReadFile( path );
+
+            _shader_array[index] = in_draw_system->MakeShader(
+                in_command_list,
+                shader_pipeline_state_data,
+                vertex_shader_data,
+                nullptr,
+                pixel_shader_data,
+                array_shader_resource_info,
+                index ? array_shader_constants_info_effect : array_shader_constants_info_default
+                );
+        }
 
         return;
     }
@@ -238,21 +279,25 @@ public:
         const UIManagerDrawParam& in_param
         )
     {
-
         const bool dirty = in_root.PreDraw(
-            in_param,
-            _shader.get()
+            in_param
             );
         in_root.Draw(
             in_param,
-            _shader.get(),
             dirty
             );
+    }
+
+    Shader* const GetEffectShader(const UIEffectEnum in_type) const
+    {
+        return _shader_array[static_cast<size_t>(in_type)].get();
     }
 
 private:
     std::shared_ptr<Shader> _shader;
     std::map<std::string, UIManager::TContentFactory> _map_content_factory;
+
+    std::array<std::shared_ptr<Shader>, static_cast<size_t>(UIEffectEnum::TCount)> _shader_array;
 
 };
 
@@ -346,4 +391,14 @@ void UIManager::Draw(
         in_param
         );
     return;
+}
+
+Shader* const UIManager::GetDefaultShader() const
+{
+    return _implementation->GetEffectShader(UIEffectEnum::TNone);
+}
+
+Shader* const UIManager::GetEffectShader(const UIEffectEnum in_type) const
+{
+    return _implementation->GetEffectShader(in_type);
 }
