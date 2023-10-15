@@ -127,12 +127,12 @@ namespace DirectX
             return _shared_resource != nullptr;
         }
 
-        bool operator == (const SharedGraphicsResource&in_other) const noexcept
+        bool operator == (const SharedGraphicsResource& in_other) const noexcept
         {
             return _shared_resource.get() == in_other._shared_resource.get();
         }
 
-        bool operator != (const SharedGraphicsResource&in_other) const noexcept
+        bool operator != (const SharedGraphicsResource& in_other) const noexcept
         {
             return _shared_resource.get() != in_other._shared_resource.get();
         }
@@ -141,7 +141,7 @@ namespace DirectX
         void __cdecl Reset() noexcept;
         void __cdecl Reset(GraphicsResource &&);
         void __cdecl Reset(SharedGraphicsResource &&) noexcept;
-        void __cdecl Reset(const SharedGraphicsResource&in_resource) noexcept;
+        void __cdecl Reset(const SharedGraphicsResource& in_resource) noexcept;
 
     private:
         std::shared_ptr < GraphicsResource > _shared_resource;

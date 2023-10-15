@@ -2,6 +2,7 @@
 
 #include "common/ui/ui_component/i_ui_component.h"
 #include "common/ui/ui_component/ui_component_default.h"
+#include "common/math/vector_float4.h"
 
 enum class UIEffectEnum;
 
@@ -10,14 +11,13 @@ class UIComponentEffect : public IUIComponent
 public:
     struct TShaderConstantBuffer
     {
-        float _data[4];
-
-        int _render_target_width;
-        int _render_target_height;
-        float _i_render_target_width;
-        float _i_render_target_height;
+        VectorFloat4 _data;
+        VectorFloat4 _width_height_iwidth_iheight;
+        //int _render_target_width;
+        //int _render_target_height;
+        //float _i_render_target_width;
+        //float _i_render_target_height;
     };
-
 
     UIComponentEffect(
         const UIBaseColour& in_base_colour,

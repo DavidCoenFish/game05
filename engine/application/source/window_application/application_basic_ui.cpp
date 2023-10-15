@@ -79,39 +79,51 @@ public:
         auto data_main_launch = std::make_shared<UIData>(
             "canvas_banner_left",
             std::vector<std::shared_ptr<UIData>>({
-                std::make_shared<UIData>(
-                    "stack_vertical_middle",
+                std::make_shared<UIDataEffect>(
+                "effect_drop_shadow",
                     std::vector<std::shared_ptr<UIData>>({
-                        std::make_shared<UIDataButton>(
-                            [&in_application](const VectorFloat2&){
-                                in_application.Destroy(0);
-                                return;
-                                },
-                            true,
-                            "UIDataButton",
-                            BuildButtonData("exit")
-                        ),
-                        std::make_shared<UIDataButton>(
-                            [this](const VectorFloat2&){
-                                _data_map["main"]->ModifyData().clear();
-                                },
-                            true,
-                            "UIDataButton",
-                            BuildButtonData("options")
-                        ),
-                        std::make_shared<UIDataButton>(
-                            nullptr, 
-                            false,
-                            "UIDataButton",
-                            BuildButtonData("continue offline")
-                        ),
-                        std::make_shared<UIDataButton>(
-                            nullptr, 
-                            false,
-                            "UIDataButton",
-                            BuildButtonData("new game offline")
-                        )
-                    })
+
+                        std::make_shared<UIData>(
+                            "UIData",
+                            std::vector<std::shared_ptr<UIData>>({
+                                std::make_shared<UIData>(
+                                    "stack_vertical_middle",
+                                    std::vector<std::shared_ptr<UIData>>({
+                                        std::make_shared<UIDataButton>(
+                                            [&in_application](const VectorFloat2&){
+                                                in_application.Destroy(0);
+                                                return;
+                                                },
+                                            true,
+                                            "UIDataButton",
+                                            BuildButtonData("exit")
+                                        ),
+                                        std::make_shared<UIDataButton>(
+                                            [this](const VectorFloat2&){
+                                                _data_map["main"]->ModifyData().clear();
+                                                },
+                                            true,
+                                            "UIDataButton",
+                                            BuildButtonData("options")
+                                        ),
+                                        std::make_shared<UIDataButton>(
+                                            nullptr, 
+                                            false,
+                                            "UIDataButton",
+                                            BuildButtonData("continue offline")
+                                        ),
+                                        std::make_shared<UIDataButton>(
+                                            nullptr, 
+                                            false,
+                                            "UIDataButton",
+                                            BuildButtonData("new game offline")
+                                        )
+                                    })
+                                    )
+                                })
+                            )
+                        })
+
                     )
                 })
             );

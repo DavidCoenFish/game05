@@ -4,6 +4,7 @@
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/draw_system_frame.h"
 #include "common/draw_system/shader/shader.h"
+#include "common/draw_system/shader/shader_constant_buffer.h"
 #include "common/ui/i_ui_input.h"
 #include "common/ui/i_ui_model.h"
 #include "common/ui/ui_component/ui_component_canvas.h"
@@ -45,6 +46,7 @@ UIHierarchyNodeUpdateHierarchyParam::UIHierarchyNodeUpdateHierarchyParam(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list,
     const IUIModel* const in_ui_model,
+    UIManager* const in_ui_manager,
     LocaleSystem* const in_locale_system,
     TextManager* const in_text_manager,
     const UIDataTextRunStyle* const in_default_text_style 
@@ -53,6 +55,7 @@ UIHierarchyNodeUpdateHierarchyParam::UIHierarchyNodeUpdateHierarchyParam(
     , _draw_system(in_draw_system)
     , _command_list(in_command_list)
     , _ui_model(in_ui_model)
+    , _ui_manager(in_ui_manager)
     , _locale_system(in_locale_system)
     , _text_manager(in_text_manager)
     , _default_text_style(in_default_text_style)
@@ -389,7 +392,6 @@ void UIHierarchyNode::DealInput(
 const bool UIHierarchyNode::PreDraw(
     const UIManagerDrawParam& in_draw_param
     )
-#if 1
 {
     bool dirty = false;
 
@@ -448,8 +450,21 @@ const bool UIHierarchyNode::Draw(
                 in_draw_param._draw_system,
                 in_draw_param._frame->GetCommandList()
                 );
+            if (nullptr == child_data._shader_constant_buffer)
+            {
+                child_data._shader_constant_buffer = shader->MakeShaderConstantBuffer(
+                    in_draw_param._draw_system
+                    );
+            }
+            ShaderConstantBuffer* const shader_constant_buffer = child_data._shader_constant_buffer.get();
+            if (nullptr != shader_constant_buffer)
+            {
+                UIManager::TShaderConstantBuffer& buffer = shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
+                // todo: get the tint colour, from geometry?
+                buffer._tint_colour = VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f);
+            }
 
-            in_draw_param._frame->SetShader(shader);
+            in_draw_param._frame->SetShader(shader, shader_constant_buffer);
             in_draw_param._frame->Draw(geometry);
         }
 
@@ -458,72 +473,3 @@ const bool UIHierarchyNode::Draw(
 
     return dirty;
 }
-
-#else
-{
-    bool dirty = false;
-
-    // Ensure that children textures are ready
-    for (auto& iter : _child_data_array)
-    {
-        if (true == iter->_node->Draw(
-            in_draw_param,
-            in_shader,
-            iter->_component.get()
-            ))
-        {
-            dirty = true;
-        }
-    }
-
-    if ((true == dirty) ||
-        (false == _texture->GetHasDrawn()) ||
-        (true == _texture->GetAlwaysDirty())
-        )
-    {
-        std::shared_ptr<IResource> frame_resource;
-        auto* const render_target = _texture->GetRenderTarget(
-            in_draw_param._draw_system,
-            frame_resource,
-            in_draw_param._frame->GetCommandList()
-            );
-        if (nullptr == render_target)
-        {
-            return dirty;
-        }
-
-        dirty = true;
-        in_draw_param._frame->SetRenderTarget(
-            render_target, 
-            frame_resource,
-            _texture->GetAllowClear()
-            );
-
-        if (nullptr != in_content_or_null)
-        {
-            in_content_or_null->PreDraw(
-                in_draw_param
-                //, _child_data_array
-                );
-        }
-
-        for (auto& iter : _child_data_array)
-        {
-            UIHierarchyNodeChildData& child_data = *iter;
-
-            in_shader->SetShaderResourceViewHandle(0, child_data._node->GetShaderResourceHeapWrapperItem());
-            auto geometry = child_data._geometry->GetGeometry(
-                in_draw_param._draw_system,
-                in_draw_param._frame->GetCommandList()
-                );
-
-            in_draw_param._frame->SetShader(in_shader);
-            in_draw_param._frame->Draw(geometry);
-        }
-
-        _texture->SetHasDrawn(true);
-    }
-
-    return dirty;
-}
-#endif

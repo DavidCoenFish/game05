@@ -4,7 +4,6 @@
 #include "common/math/vector_int2.h"
 #include "common/math/vector_float4.h"
 
-
 class DrawSystem;
 class DrawSystemFrame;
 class IUIComponent;
@@ -134,6 +133,12 @@ struct UIManagerDrawParam
 class UIManager
 {
 public:
+    struct TShaderConstantBuffer
+    {
+        VectorFloat4 _tint_colour;
+        //float _tint_colour[4];
+    };
+
     UIManager(
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list,

@@ -13,15 +13,18 @@
 #include "common/ui/ui_component/i_ui_component.h"
 #include "common/ui/ui_component/ui_component_button.h"
 #include "common/ui/ui_component/ui_component_canvas.h"
+#include "common/ui/ui_component/ui_component_effect.h"
 #include "common/ui/ui_component/ui_component_stack.h"
 #include "common/ui/ui_component/ui_component_string.h"
 #include "common/ui/ui_component/ui_component_text_run.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_base_colour.h"
+#include "common/ui/ui_effect_enum.h"
 #include "common/ui/ui_layout.h"
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_data/ui_data_string.h"
 #include "common/ui/ui_data/ui_data_text_run.h"
+#include "common/ui/ui_data/ui_data_effect.h"
 
 namespace
 {
@@ -162,6 +165,11 @@ namespace
     }
 
     typedef const UICoord& (*TGetUICoordRef)();
+    const UICoord& GetUICoordNone()
+    {
+        static UICoord s_coord;
+        return s_coord;
+    }
     const UICoord& GetUICoordDefaultMargin()
     {
         static UICoord s_coord(UICoord::ParentSource::None, 0.0f, s_default_margin);
@@ -170,6 +178,16 @@ namespace
     const UICoord& GetUICoordDefaultGap()
     {
         static UICoord s_coord(UICoord::ParentSource::None, 0.0f, s_default_gap);
+        return s_coord;
+    }
+    const UICoord& GetUICoordDefaultGapHalf()
+    {
+        static UICoord s_coord(UICoord::ParentSource::None, 0.0f, s_default_gap * 0.5f);
+        return s_coord;
+    }
+    const UICoord& GetUICoordDefaultGapQuater()
+    {
+        static UICoord s_coord(UICoord::ParentSource::None, 0.0f, s_default_gap * 0.25f);
         return s_coord;
     }
 
@@ -217,6 +235,14 @@ namespace
         return UIBaseColour(
             VectorFloat4(1.0f, 0.0f, 0.0f, 1.0f),
             true
+            );
+    }
+    const UIBaseColour GetUIBaseColourClearDark(const int)
+    {
+        return UIBaseColour(
+            VectorFloat4(0.0f, 0.0f, 0.0f, 0.0f),
+            true,
+            VectorFloat4(0.0f, 0.0f, 0.0f, 0.5f)
             );
     }
 
@@ -315,6 +341,58 @@ namespace
         }
 
         return false;
+    }
+
+    template<
+        UIEffectEnum in_effect_type = UIEffectEnum::TNone,
+        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
+        TGetUICoordRef in_get_ui_coord_a = GetUICoordNone,
+        TGetUICoordRef in_get_ui_coord_b = GetUICoordNone,
+        TGetUICoordRef in_get_ui_coord_c = GetUICoordNone,
+        TGetUICoordRef in_get_ui_coord_d = GetUICoordNone
+        >
+    const bool FactoryEffect(
+        std::unique_ptr<IUIComponent>& in_out_content,
+        const UIComponentFactoryParam& in_factory_param
+        )
+    {
+        bool dirty = false;
+        UIComponentEffect* content = dynamic_cast<UIComponentEffect*>(in_out_content.get());
+        if (nullptr == content)
+        {
+            in_out_content = std::make_unique<UIComponentEffect>(
+                in_get_base_colour(0),
+                GetUILayout(),
+                in_effect_type,
+                in_get_ui_coord_a(),
+                in_get_ui_coord_b(),
+                in_get_ui_coord_c(),
+                in_get_ui_coord_d()
+                );
+            dirty = true;
+        }
+        else
+        {
+            if (true == content->SetBase(
+                in_get_base_colour(in_factory_param._create_index),
+                GetUILayout()))
+            {
+                dirty = true;
+            }
+
+            if (true == content->Set(
+                in_effect_type,
+                in_get_ui_coord_a(),
+                in_get_ui_coord_b(),
+                in_get_ui_coord_c(),
+                in_get_ui_coord_d()
+                ))
+            {
+                dirty = true;
+            }
+        }
+
+        return dirty;
     }
 
     template<
@@ -540,6 +618,14 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("UIDataButton", FactoryButton<
         GetUILayoutRow, 
         GetUIBaseColourRed
+        >);
+
+    in_ui_manager.AddContentFactory("effect_drop_shadow", FactoryEffect<
+        UIEffectEnum::TDropShadow,
+        GetUIBaseColourClearDark,
+        GetUICoordDefaultGapQuater,
+        GetUICoordDefaultGapHalf,
+        GetUICoordDefaultGap
         >);
 
     in_ui_manager.AddContentFactory("UIData", FactoryCanvas<>);

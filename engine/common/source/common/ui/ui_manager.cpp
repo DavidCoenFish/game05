@@ -112,13 +112,8 @@ namespace
 {
     static const char* const s_array_shader_path[] = {
         "ui_block_pixel.cso",
-        "ui_effect_dropshadow_pixel.hlsl"
+        "ui_effect_dropshadow_pixel.cso"
         };
-    struct TShaderConstantBuffer
-    {
-        //VectorFloat4 _tint_colour;
-        float _tint_colour[4];
-    };
 }
 
 class UIManagerImplementation
@@ -152,14 +147,14 @@ public:
         std::vector<std::shared_ptr<ConstantBufferInfo>> array_shader_constants_info_default;
         array_shader_constants_info_default.push_back(
             ConstantBufferInfo::Factory(
-                TShaderConstantBuffer(),
+                UIManager::TShaderConstantBuffer(),
                 D3D12_SHADER_VISIBILITY_PIXEL
                 )
             );
         std::vector<std::shared_ptr<ConstantBufferInfo>> array_shader_constants_info_effect;
         array_shader_constants_info_effect.push_back(
             ConstantBufferInfo::Factory(
-                TShaderConstantBuffer(),
+                UIManager::TShaderConstantBuffer(),
                 D3D12_SHADER_VISIBILITY_PIXEL
                 )
             );
@@ -202,7 +197,8 @@ public:
     void Update(
         std::shared_ptr<UIHierarchyNode>& in_out_target_or_null,
         const UIManagerUpdateParam& in_param,
-        const std::string& in_model_key
+        const std::string& in_model_key,
+        UIManager* const in_ui_manager
         )
     {
         const UIScreenSpace parent_screen_space;
@@ -211,6 +207,7 @@ public:
             in_param._draw_system,
             in_param._command_list,
             in_param._ui_model,
+            in_ui_manager,
             in_param._locale_system,
             in_param._text_manager,
             in_param._default_text_style
@@ -362,7 +359,8 @@ void UIManager::Update(
     _implementation->Update(
         in_out_target_or_null, 
         in_param,
-        in_model_key
+        in_model_key,
+        this
         );
     return;
 }

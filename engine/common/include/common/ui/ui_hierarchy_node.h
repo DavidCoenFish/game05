@@ -9,6 +9,7 @@ class DrawSystem;
 class DrawSystemFrame;
 class HeapWrapperItem;
 class UIData;
+class UIManager;
 class IUIComponent;
 class IUIModel;
 class LocaleSystem;
@@ -62,7 +63,7 @@ struct UIHierarchyNodeChildData
     std::unique_ptr<UIScreenSpace> _screen_space;
     //std::unique_ptr<UILayout>(); //layout data here or in content?
 
-    //std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;
+    std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;
 
 };
 
@@ -78,6 +79,7 @@ struct UIHierarchyNodeUpdateHierarchyParam
         DrawSystem* const in_draw_system = nullptr,
         ID3D12GraphicsCommandList* const in_command_list = nullptr,
         const IUIModel* const in_ui_model = nullptr,
+        UIManager* const in_ui_manager = nullptr,
         LocaleSystem* const in_locale_system = nullptr,
         TextManager* const in_text_manager = nullptr,
         const UIDataTextRunStyle* const in_default_text_style = nullptr
@@ -86,6 +88,7 @@ struct UIHierarchyNodeUpdateHierarchyParam
     DrawSystem* const _draw_system;
     ID3D12GraphicsCommandList* const _command_list;
     const IUIModel* const _ui_model;
+    UIManager* const _ui_manager;
     LocaleSystem* const _locale_system;
     TextManager* const _text_manager;
     const UIDataTextRunStyle* const _default_text_style;
