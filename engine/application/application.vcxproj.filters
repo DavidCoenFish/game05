@@ -382,5 +382,8 @@
     <FxCompile Include="shader\ui_effect_dropshadow_pixel.hlsl">
       <Filter>shader</Filter>
     </FxCompile>
+    <FxCompile Include="shader\ui_effect_corner_pixel.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

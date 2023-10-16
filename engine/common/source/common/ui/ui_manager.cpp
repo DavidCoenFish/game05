@@ -112,7 +112,8 @@ namespace
 {
     static const char* const s_array_shader_path[] = {
         "ui_block_pixel.cso",
-        "ui_effect_dropshadow_pixel.cso"
+        "ui_effect_dropshadow_pixel.cso",
+        "ui_effect_corner_pixel.cso"
         };
 }
 

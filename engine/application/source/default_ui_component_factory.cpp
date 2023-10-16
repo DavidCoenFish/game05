@@ -617,14 +617,23 @@ void DefaultUIComponentFactory::Populate(
 
     in_ui_manager.AddContentFactory("UIDataButton", FactoryButton<
         GetUILayoutRow, 
-        GetUIBaseColourRed
+        GetUIBaseColourDefault //GetUIBaseColourRed
         >);
 
     in_ui_manager.AddContentFactory("effect_drop_shadow", FactoryEffect<
-        UIEffectEnum::TDropShadow,
+        UIEffectEnum::TDropShadow, //UIEffectEnum::TDropShadow,
         GetUIBaseColourClearDark,
         GetUICoordDefaultGapQuater,
         GetUICoordDefaultGapHalf,
+        GetUICoordDefaultGap
+        >);
+
+    in_ui_manager.AddContentFactory("effect_corner", FactoryEffect<
+        UIEffectEnum::TRoundCorners,
+        GetUIBaseColourDefault,
+        GetUICoordDefaultGap,
+        GetUICoordDefaultGap,
+        GetUICoordDefaultGap,
         GetUICoordDefaultGap
         >);
 
@@ -636,6 +645,10 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("canvas_banner_left", FactoryCanvas<
         GetUILayoutBannerLeft, 
         GetUIBaseColourStaggerClearDark
+        >);
+    in_ui_manager.AddContentFactory("canvas_red", FactoryCanvas<
+        GetUILayout, 
+        GetUIBaseColourDebugRed
         >);
 
     in_ui_manager.AddContentFactory("stack_vertical_bottom_right", FactoryStack<

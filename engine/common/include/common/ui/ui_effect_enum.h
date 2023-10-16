@@ -2,11 +2,11 @@
 
 enum class UIEffectEnum
 {
-    TNone = 0,
+    TNone = 0, // this seemed like a good idea to have None be the default block shader, but constant buffer is different
     TDropShadow,
+    TRoundCorners,
     // TInnerShadow, // Invert of drop shadow, draw over solid, not transparent
     // TEdgeShadow, // draw shadow against edge of texture
-    // TRoundCorners,
     // TDesaturate,
     // TDesaturateIfDisabled,
     // TTextureMixRGBAndAlpha, // Use child 0 as rgb, and child 1 as alpha ~ take average of rgb to use as alpha

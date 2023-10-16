@@ -2,6 +2,7 @@
 
 #include "common/draw_system/shader/shader_pipeline_state_data.h"
 
+//result = foreground + (1 - foreground.alpha) * background
 const D3D12_BLEND_DESC ShaderPipelineStateData::FactoryBlendDescAlphaPremultiplied()
 {
     D3D12_BLEND_DESC blend_desc;
@@ -12,12 +13,12 @@ const D3D12_BLEND_DESC ShaderPipelineStateData::FactoryBlendDescAlphaPremultipli
         TRUE, //BlendEnable
         FALSE, //LogicOpEnable
         // dest.rgb = src.rgb * src.a + dest.rgb * (1 - src.a)
-        D3D12_BLEND_SRC_ALPHA, //SrcBlend 
+        D3D12_BLEND_ONE, //SrcBlend 
         D3D12_BLEND_INV_SRC_ALPHA, //DestBlend
         D3D12_BLEND_OP_ADD, //BlendOp
         // dest.a = 1 - (1 - src.a) * (1 - dest.a) [the math works out]
-        D3D12_BLEND_INV_DEST_ALPHA, //SrcBlendAlpha
-        D3D12_BLEND_ONE, //DestBlendAlpha
+        D3D12_BLEND_ONE, //D3D12_BLEND_INV_DEST_ALPHA, //SrcBlendAlpha
+        D3D12_BLEND_INV_SRC_ALPHA, //D3D12_BLEND_ONE, //DestBlendAlpha
         D3D12_BLEND_OP_ADD, //BlendOpAlpha
         D3D12_LOGIC_OP_NOOP, //LogicOp
         D3D12_COLOR_WRITE_ENABLE_ALL, //RenderTargetWriteMask

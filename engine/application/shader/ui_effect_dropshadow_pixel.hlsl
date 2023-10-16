@@ -96,22 +96,12 @@ Pixel main(Interpolant in_input)
         float2(_width_height_iwidth_iheight.z, _width_height_iwidth_iheight.w)
         );
 
-    //shadow_alpha *= _tint.a;
-    //shadow_alpha *= 1.0 - texel.a;
-
     Pixel result;
-    //result._colour = float4(
-    //    ((texel.rgb / texel.a) + ((_tint.rgb / _tint.a) * shadow_alpha)) * (shadow_alpha + texel.a),
-    //    (shadow_alpha + texel.a)
-    //    );
-
-    //result._colour = texel;
-    //result._colour = float4(shadow_alpha,shadow_alpha,shadow_alpha,1.0);
-    //result._colour = float4(saturate(_offset_x_y_radius.z/10.0),saturate(_offset_x_y_radius.z/10.0),saturate(_offset_x_y_radius.z/10.0),1.0);
 
     // Premultipiled alpha
     //result = foreground + (1 - foreground.alpha) * background
     result._colour = texel + (1.0 - texel.a) * (_tint * shadow_alpha);
+    //result._colour = texel;
 
     return result;
 }
