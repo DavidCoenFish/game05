@@ -36,6 +36,8 @@ private:
         const int in_key_state,
         const int in_z_delta
         ) override;
+    virtual void OnActivated();
+    virtual void OnDeactivated();
 
 private:
     typedef IWindowApplication BaseType;
@@ -53,5 +55,6 @@ private:
     std::unique_ptr<DrawResource> _draw_resource;
     int _scroll_key_state;
     int _scroll_z;
+    bool _active;
 
 };

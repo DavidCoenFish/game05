@@ -254,6 +254,7 @@ ApplicationBasicUI::ApplicationBasicUI(
         )
     , _scroll_key_state(0)
     , _scroll_z(0)
+    , _active(false)
 {
     LOG_MESSAGE(
         "ApplicationBasicUI  ctor %p",
@@ -368,7 +369,7 @@ void ApplicationBasicUI::Update()
         }
 
         // Deal input
-        if (nullptr != _draw_resource->_ui_hierarchy_node)
+        if ((nullptr != _draw_resource->_ui_hierarchy_node) && (true == _active))
         {
             int mouse_x = 0;
             int mouse_y = 0;
@@ -437,6 +438,18 @@ void ApplicationBasicUI::OnScroll(
 {
     _scroll_key_state |= in_key_state;
     _scroll_z += in_z_delta;
+    return;
+}
+
+void ApplicationBasicUI::OnActivated()
+{
+    _active = true;
+    return;
+}
+
+void ApplicationBasicUI::OnDeactivated()
+{
+    _active = false;
     return;
 }
 
