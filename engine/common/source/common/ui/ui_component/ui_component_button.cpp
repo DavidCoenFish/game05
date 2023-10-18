@@ -65,10 +65,10 @@ void* UIComponentButton::GetSourceToken() const
     return _content_default.GetSourceToken();
 }
 
-const bool UIComponentButton::SetLayout(const UILayout& in_layout)
-{
-    return _content_default.SetLayout(in_layout);
-}
+//const bool UIComponentButton::SetLayout(const UILayout& in_layout)
+//{
+//    return _content_default.SetLayout(in_layout);
+//}
 
 const bool UIComponentButton::UpdateHierarchy(
     //std::vector<std::shared_ptr<UIData>>*& out_array_data_or_null,

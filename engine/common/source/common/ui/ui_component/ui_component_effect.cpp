@@ -9,6 +9,7 @@
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_texture.h"
+#include "common/ui/ui_effect_enum.h"
 
 UIComponentEffect::UIComponentEffect(
     const UIBaseColour& in_base_colour,
@@ -105,10 +106,10 @@ void* UIComponentEffect::GetSourceToken() const
     return _content_default.GetSourceToken();
 }
 
-const bool UIComponentEffect::SetLayout(const UILayout& in_layout)
-{
-    return _content_default.SetLayout(in_layout);
-}
+//const bool UIComponentEffect::SetLayout(const UILayout& in_layout)
+//{
+//    return _content_default.SetLayout(in_layout);
+//}
 
 const bool UIComponentEffect::UpdateHierarchy(
     UIData* const in_data,
@@ -174,28 +175,31 @@ void UIComponentEffect::UpdateSize(
         TShaderConstantBuffer& constant_1 = _shader_constant_buffer->GetConstant<TShaderConstantBuffer>(1);
         constant_0._tint_colour = VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f);
 
-        VectorFloat2 texture_size_float(static_cast<float>(texture_size.GetX()), static_cast<float>(texture_size.GetY()));
-        constant_1._data = VectorFloat4(
-            _coord_a.Calculate(texture_size_float, in_ui_scale),
-            _coord_b.Calculate(texture_size_float, in_ui_scale),
-            _coord_c.Calculate(texture_size_float, in_ui_scale),
-            _coord_d.Calculate(texture_size_float, in_ui_scale)
-            );
-        constant_1._width_height_iwidth_iheight = VectorFloat4(
-            static_cast<float>(texture_size.GetX()),
-            static_cast<float>(texture_size.GetY()),
-            1.0f / static_cast<float>(texture_size.GetX()),
-            1.0f / static_cast<float>(texture_size.GetY())
-            );
-
-        auto& child_data_array = in_out_node.GetChildData();
-        if (0 != child_data_array.size())
+        if (UIEffectEnum::TNone != _type)
         {
-            UIHierarchyNodeChildData& child_data = *(child_data_array[0]);
-            child_data._geometry->Get(
-                constant_1._geometry_pos,
-                constant_1._geometry_uv
+            VectorFloat2 texture_size_float(static_cast<float>(texture_size.GetX()), static_cast<float>(texture_size.GetY()));
+            constant_1._data = VectorFloat4(
+                _coord_a.Calculate(texture_size_float, in_ui_scale),
+                _coord_b.Calculate(texture_size_float, in_ui_scale),
+                _coord_c.Calculate(texture_size_float, in_ui_scale),
+                _coord_d.Calculate(texture_size_float, in_ui_scale)
                 );
+            constant_1._width_height_iwidth_iheight = VectorFloat4(
+                static_cast<float>(texture_size.GetX()),
+                static_cast<float>(texture_size.GetY()),
+                1.0f / static_cast<float>(texture_size.GetX()),
+                1.0f / static_cast<float>(texture_size.GetY())
+                );
+
+            auto& child_data_array = in_out_node.GetChildData();
+            if (0 != child_data_array.size())
+            {
+                UIHierarchyNodeChildData& child_data = *(child_data_array[0]);
+                child_data._geometry->Get(
+                    constant_1._geometry_pos,
+                    constant_1._geometry_uv
+                    );
+            }
         }
     }
 

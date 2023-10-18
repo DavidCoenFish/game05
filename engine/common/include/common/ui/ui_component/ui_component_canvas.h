@@ -21,7 +21,7 @@ private:
     virtual void SetSourceToken(void* in_source_ui_data_token) override;
     virtual void* GetSourceToken() const override;
 
-    virtual const bool SetLayout(const UILayout& in_layout) override;
+    //virtual const bool SetLayout(const UILayout& in_layout) override;
 
     virtual const bool UpdateHierarchy(
         UIData* const in_data,

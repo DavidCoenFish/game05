@@ -88,10 +88,10 @@ void* UIComponentTextRun::GetSourceToken() const
     return _content_default.GetSourceToken();
 }
 
-const bool UIComponentTextRun::SetLayout(const UILayout& in_layout)
-{
-    return _content_default.SetLayout(in_layout);
-}
+//const bool UIComponentTextRun::SetLayout(const UILayout& in_layout)
+//{
+//    return _content_default.SetLayout(in_layout);
+//}
 
 const bool UIComponentTextRun::UpdateHierarchy(
     UIData* const in_data,

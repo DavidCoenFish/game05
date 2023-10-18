@@ -73,10 +73,10 @@ void* UIComponentStack::GetSourceToken() const
     return _content_default.GetSourceToken();
 }
 
-const bool UIComponentStack::SetLayout(const UILayout& in_layout)
-{
-    return _content_default.SetLayout(in_layout);
-}
+//const bool UIComponentStack::SetLayout(const UILayout& in_layout)
+//{
+//    return _content_default.SetLayout(in_layout);
+//}
 
 const bool UIComponentStack::UpdateHierarchy(
     UIData* const in_data,

@@ -26,10 +26,8 @@ struct UIHierarchyNodeChildData;
 struct UIHierarchyNodeLayoutData;
 struct UIHierarchyNodeUpdateHierarchyParam;
 
-/*
-    don't inherit functionality, but we can share methods/ components
-    default implementation
-*/
+/// don't inherit functionality, but we can share methods/ components
+/// default implementation
 class UIComponentDefault
 {
 public:
@@ -101,21 +99,20 @@ public:
         UIHierarchyNode& in_node
         );
 
-    // const bool UpdateShaderConstantBuffer
-    // ShaderConstantBuffer* GetShaderConstantBuffer
-
 private:
+    /// colour data, like the clear colour, tint colour, fade profile
     UIBaseColour _base_colour;
+
+    /// layout data of the component
     UILayout _layout;
-    //std::shader_ptr<ShaderConstantBuffer> _shader_constant_buffer;
 
-    std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;
-    VectorFloat4 _tint_colour;
-    float _time_accumulate_seconds;
-
-    // uv = abs(_uv_scroll), and use range [-1...1] wrapped when advancing _uv_scroll, to allow saw tooth animation
+    /// uv = abs(_uv_scroll), and use range [-1...1] wrapped when advancing _uv_scroll, to allow saw tooth animation
     VectorFloat2 _uv_scroll;
 
+    /// keep track of lifespan/ duration of the component
+    float _time_accumulate_seconds;
+
+    /// maps to UIData, but we don't hold onto reference other than treating it as an ID/ token
     void* _source_token;
 
 

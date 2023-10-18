@@ -6,9 +6,12 @@
 
 enum class UIEffectEnum;
 
+/// initially thought effect would what multiple shader inputs, but is one enought?
+/// if we want more than one shader input, switch count based on UIEffectEnum
 class UIComponentEffect : public IUIComponent
 {
 public:
+    /// the generic data for the effect shaders
     struct TShaderConstantBuffer
     {
         VectorFloat4 _data;
@@ -17,6 +20,7 @@ public:
         VectorFloat4 _geometry_uv;
     };
 
+    /// weak contract to construct via factory UIManager::TContentFactory
     UIComponentEffect(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
@@ -26,14 +30,16 @@ public:
         const UICoord& in_coord_c,
         const UICoord& in_coord_d
         );
-    ~UIComponentEffect();
+    /// destructed by base type IUIComponent which has virtual dtor, so virtual here may be redundant but does provide info
+    virtual ~UIComponentEffect();
 
+    /// return true if modified, else false
     const bool SetBase(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout
         );
 
-    // return true if modified, else false
+    /// return true if modified, else false
     const bool Set(
         const UIEffectEnum in_type,
         const UICoord& in_coord_a,
@@ -43,18 +49,22 @@ public:
         );
 
 private:
-    // Make sorting children easier
+    /// Make sorting children easier
     virtual void SetSourceToken(void* in_source_ui_data_token) override;
+    /// Make sorting children easier
     virtual void* GetSourceToken() const override;
 
-    virtual const bool SetLayout(const UILayout& in_layout) override;
+    /// 
+    //virtual const bool SetLayout(const UILayout& in_layout) override;
 
+    /// ensure that the data structure matches the model (UIData)
     virtual const bool UpdateHierarchy(
         UIData* const in_data,
         UIHierarchyNodeChildData& in_out_child_data,
         const UIHierarchyNodeUpdateHierarchyParam& in_param
         ) override;
 
+    /// convert the layout data and parent size to the texture size, geometry size and uv
     virtual void UpdateSize(
         DrawSystem* const in_draw_system,
         const VectorInt2& in_parent_size,
@@ -68,6 +78,7 @@ private:
         UIScreenSpace& out_screen_space
         ) override;
 
+    /// certain layout data allows shrink
     virtual void GetDesiredSize(
         VectorInt2& out_layout_size, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
         VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
@@ -76,20 +87,29 @@ private:
         UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         ) override;
 
+    /// deal with the component being drawn to the node texture
     virtual const bool Draw(
         const UIManagerDrawParam& in_draw_param,
         UIHierarchyNode& in_node
         ) override;
 
 private:
+    /// composition rather than inheratence
     UIComponentDefault _content_default;
 
+    /// either we don't use type none, or need to be carefull with type to use with _shader_constant_buffer
     UIEffectEnum _type;
+
+    /// used to build the shader constants
     UICoord _coord_a;
+    /// used to build the shader constants
     UICoord _coord_b;
+    /// used to build the shader constants
     UICoord _coord_c;
+    /// used to build the shader constants
     UICoord _coord_d;
 
+    /// the shader constants for this effect
     std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;
 
     /// full size to the render target draw surface
