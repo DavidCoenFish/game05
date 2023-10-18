@@ -1,4 +1,5 @@
 #include "ui_block_interpolant.hlsli"
+#include "ui_effect_common.hlsli"
 
 struct Pixel
 {
@@ -17,6 +18,8 @@ cbuffer ConstantBufferEffect : register(b1)
 {
     float4 _offset_x_y_radius;
     float4 _width_height_iwidth_iheight;
+    float4 _geometry_pos;
+    float4 _geometry_uv;
 };
 
 float2 SampleAtOffset(
@@ -27,7 +30,15 @@ float2 SampleAtOffset(
     float in_high
     )
 {
-    float4 texel = g_texture.Sample(g_sampler_state, in_uv);
+    //float4 texel = g_texture.Sample(g_sampler_state, in_uv);
+    float4 texel = GetBlockTexel(
+        g_texture,
+        g_sampler_state,
+        _geometry_pos,
+        _geometry_uv,
+        in_uv
+        );
+
     float ratio = saturate((in_radius - in_low) / (in_high - in_low));
     float coverage = 4.0 * ratio;
     // [sum value, sum coverage]
@@ -86,7 +97,14 @@ float CalculateShadowAlpha(
 
 Pixel main(Interpolant in_input)
 {
-    float4 texel = g_texture.Sample(g_sampler_state, in_input._uv);
+    //float4 texel = g_texture.Sample(g_sampler_state, in_input._uv);
+    float4 texel = GetBlockTexel(
+        g_texture,
+        g_sampler_state,
+        _geometry_pos,
+        _geometry_uv,
+        in_input._uv
+        );
 
     float shadow_alpha = CalculateShadowAlpha(
         in_input._uv,

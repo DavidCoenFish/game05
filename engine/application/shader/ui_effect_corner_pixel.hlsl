@@ -1,4 +1,5 @@
 #include "ui_block_interpolant.hlsli"
+#include "ui_effect_common.hlsli"
 
 struct Pixel
 {
@@ -17,6 +18,8 @@ cbuffer ConstantBufferEffect : register(b1)
 {
     float4 _top_right_top_left_bottom_left_bottom_right; //radius
     float4 _width_height_iwidth_iheight;
+    float4 _geometry_pos;
+    float4 _geometry_uv;
 };
 
 float CalculateAlpha(float in_x, float in_y, float in_radius)
@@ -69,7 +72,14 @@ float CalculateCornerAlpha(
 
 Pixel main(Interpolant in_input)
 {
-    float4 texel = g_texture.Sample(g_sampler_state, in_input._uv);
+    //float4 texel = g_texture.Sample(g_sampler_state, in_input._uv);
+    float4 texel = GetBlockTexel(
+        g_texture,
+        g_sampler_state,
+        _geometry_pos,
+        _geometry_uv,
+        in_input._uv
+        );
 
     float corner_alpha = CalculateCornerAlpha(
         in_input._uv,

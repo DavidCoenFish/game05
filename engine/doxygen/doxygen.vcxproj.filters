@@ -4,10 +4,16 @@
     <Filter Include="script">
       <UniqueIdentifier>{0a2da8ac-4e6b-436d-be1b-04868661000b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="props">
+      <UniqueIdentifier>{7b5869d5-62ed-417b-a645-040d8bc739f4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="script\build.cmd">
       <Filter>script</Filter>
+    </None>
+    <None Include="props\doxygen.props">
+      <Filter>props</Filter>
     </None>
   </ItemGroup>
 </Project>

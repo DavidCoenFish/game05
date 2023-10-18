@@ -29,7 +29,7 @@ UIComponentEffect::UIComponentEffect(
     , _coord_c(in_coord_c)
     , _coord_d(in_coord_d)
 {
-    // Nop
+    _geometry = std::make_unique<UIGeometry>();
 }
 
 UIComponentEffect::~UIComponentEffect()
@@ -187,6 +187,16 @@ void UIComponentEffect::UpdateSize(
             1.0f / static_cast<float>(texture_size.GetX()),
             1.0f / static_cast<float>(texture_size.GetY())
             );
+
+        auto& child_data_array = in_out_node.GetChildData();
+        if (0 != child_data_array.size())
+        {
+            UIHierarchyNodeChildData& child_data = *(child_data_array[0]);
+            child_data._geometry->Get(
+                constant_1._geometry_pos,
+                constant_1._geometry_uv
+                );
+        }
     }
 
     return;
@@ -256,7 +266,7 @@ const bool UIComponentEffect::Draw(
             shader->SetShaderResourceViewHandle(0, child_data._node->GetShaderResourceHeapWrapperItem());
             in_draw_param._frame->SetShader(shader, _shader_constant_buffer.get());
 
-            GeometryGeneric* const geometry = child_data._geometry->GetGeometry(
+            GeometryGeneric* const geometry = _geometry->GetGeometry(
                 in_draw_param._draw_system,
                 in_draw_param._frame->GetCommandList()
                 );

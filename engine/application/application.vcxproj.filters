@@ -124,6 +124,9 @@
     <None Include="task\test_coord\present_interpolant.hlsli">
       <Filter>task\test_coord</Filter>
     </None>
+    <None Include="shader\ui_effect_common.hlsli">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Build.cpp">
@@ -383,6 +386,9 @@
       <Filter>shader</Filter>
     </FxCompile>
     <FxCompile Include="shader\ui_effect_corner_pixel.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\ui_effect_debug.hlsl">
       <Filter>shader</Filter>
     </FxCompile>
   </ItemGroup>

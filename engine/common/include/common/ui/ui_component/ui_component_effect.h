@@ -13,10 +13,8 @@ public:
     {
         VectorFloat4 _data;
         VectorFloat4 _width_height_iwidth_iheight;
-        //int _render_target_width;
-        //int _render_target_height;
-        //float _i_render_target_width;
-        //float _i_render_target_height;
+        VectorFloat4 _geometry_pos;
+        VectorFloat4 _geometry_uv;
     };
 
     UIComponentEffect(
@@ -93,5 +91,9 @@ private:
     UICoord _coord_d;
 
     std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;
+
+    /// full size to the render target draw surface
+    /// we don't use the child component geometry as we may want to draw outside it, ie, dropshadow
+    std::unique_ptr<UIGeometry> _geometry;
 
 };

@@ -620,8 +620,12 @@ void DefaultUIComponentFactory::Populate(
         GetUIBaseColourDefault //GetUIBaseColourRed
         >);
 
+    in_ui_manager.AddContentFactory("effect_debug", FactoryEffect<
+        UIEffectEnum::TDebug
+        >);
+
     in_ui_manager.AddContentFactory("effect_drop_shadow", FactoryEffect<
-        UIEffectEnum::TDropShadow, //UIEffectEnum::TDropShadow,
+        UIEffectEnum::TDropShadow,
         GetUIBaseColourClearDark,
         GetUICoordDefaultGapQuater,
         GetUICoordDefaultGapHalf,

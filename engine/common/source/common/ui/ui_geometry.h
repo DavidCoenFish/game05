@@ -32,6 +32,11 @@ public:
         const VectorFloat4& in_uv
         );
 
+    void Get(
+        VectorFloat4& out_pos,
+        VectorFloat4& out_uv
+        ) const;
+
     GeometryGeneric* GetGeometry(
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list

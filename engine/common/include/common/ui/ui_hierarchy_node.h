@@ -55,14 +55,15 @@ struct UIHierarchyNodeChildData
         );
     ~UIHierarchyNodeChildData();
 
-    // Need to track if state changed, so not using GeometryGeneric
+    /// Need to track if state changed, so not using GeometryGeneric
     std::unique_ptr<UIGeometry> _geometry;
-    // _component is out here rather than in _node to avoid top level node needing a root or do nothing content for layout
+    /// _component is out here rather than in _node to avoid top level node needing a root or do nothing content for layout
     std::unique_ptr<IUIComponent> _component; 
+    /// recusion point
     std::unique_ptr<UIHierarchyNode> _node;
+    /// size relative to screen for input
     std::unique_ptr<UIScreenSpace> _screen_space;
-    //std::unique_ptr<UILayout>(); //layout data here or in content?
-
+    /// shader constants to allow for tint
     std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;
 
 };

@@ -154,9 +154,9 @@ LRESULT CALLBACK WndProc(HWND in_hwnd, UINT in_message, WPARAM in_wparam, LPARAM
         }
         break;
 
-        // equivalent to WM_ACTIVATE
+    // equivalent to WM_ACTIVATE
     case WM_ACTIVATEAPP:
-        LOG_MESSAGE_DEBUG("WndProc WM_ACTIVATEAPP:%d", in_wparam);
+        //LOG_MESSAGE_DEBUG("WndProc WM_ACTIVATEAPP:%d", in_wparam);
         if (nullptr != application)
         {
             if (in_wparam)

@@ -13,12 +13,14 @@ class TextLocale;
 class VectorInt2;
 class TextFont;
 
+/// intended as a simple block of text with a given colour.
 class TextBlock
 {
 public:
-    // Object is to be ready for use after contruction? so we create geometry with DrawSystem? allow for update however
-    // one main use case is ui, which may not have the container size ready? or change ui to not creat a text block till ready
-    // Move to lazy init of geometry as ui use case will not know the container size at construction
+    /// Object is to be ready for use after contruction? so we create geometry with DrawSystem? allow for update however
+    /// one main use case is ui, which may not have the container size ready? or change ui to not creat a text block till ready
+    /// Move to lazy init of geometry as ui use case will not know the container size at construction
+    /// locale provided for glyph positioning
     TextBlock(
         TextFont& in_text_font,
         const int in_font_size,
@@ -36,7 +38,7 @@ public:
 
     ~TextBlock();
 
-    // Get the natural size required by the text using current width limit if enabled
+    /// Get the natural size required by the text, if width limit is enabled, when uses width limit
     VectorInt2 GetTextBounds();
 
     TextFont* const GetFont() const;
@@ -92,7 +94,7 @@ public:
         const float in_ui_scale
         );
 
-    // Rather than a seperate Update function, that could be forgoten, have the update in the getter, results in out_geometry_dirty
+    /// Rather than a seperate Update function, that could be forgoten, have the update in the getter, results in out_geometry_dirty
     GeometryGeneric* const GetGeometry(
         bool& out_geometry_dirty,
         DrawSystem* const in_draw_system,

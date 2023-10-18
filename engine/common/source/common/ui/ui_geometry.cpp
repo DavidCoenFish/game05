@@ -90,6 +90,15 @@ UIGeometry::~UIGeometry()
     // Nop
 }
 
+void UIGeometry::Get(
+    VectorFloat4& out_pos,
+    VectorFloat4& out_uv
+    ) const
+{
+    out_pos = _pos;
+    out_uv = _uv;
+}
+
 const bool UIGeometry::Set(
     const VectorFloat4& in_pos,
     const VectorFloat4& in_uv
