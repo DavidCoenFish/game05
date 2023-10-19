@@ -30,7 +30,9 @@ UIComponentEffect::UIComponentEffect(
     , _coord_c(in_coord_c)
     , _coord_d(in_coord_d)
 {
+#if defined(GEOMETRY_SIZE_INTO_SHADER)
     _geometry = std::make_unique<UIGeometry>();
+#endif
 }
 
 UIComponentEffect::~UIComponentEffect()
@@ -191,6 +193,7 @@ void UIComponentEffect::UpdateSize(
                 1.0f / static_cast<float>(texture_size.GetY())
                 );
 
+#if defined(GEOMETRY_SIZE_INTO_SHADER)
             auto& child_data_array = in_out_node.GetChildData();
             if (0 != child_data_array.size())
             {
@@ -200,6 +203,7 @@ void UIComponentEffect::UpdateSize(
                     constant_1._geometry_uv
                     );
             }
+#endif
         }
     }
 
@@ -270,10 +274,26 @@ const bool UIComponentEffect::Draw(
             shader->SetShaderResourceViewHandle(0, child_data._node->GetShaderResourceHeapWrapperItem());
             in_draw_param._frame->SetShader(shader, _shader_constant_buffer.get());
 
+#if defined(GEOMETRY_SIZE_INTO_SHADER)
             GeometryGeneric* const geometry = _geometry->GetGeometry(
                 in_draw_param._draw_system,
                 in_draw_param._frame->GetCommandList()
                 );
+#else
+            GeometryGeneric* const geometry = child_data._geometry->GetGeometry(
+                in_draw_param._draw_system,
+                in_draw_param._frame->GetCommandList()
+                );
+            VectorFloat4 geometry_pos;
+            VectorFloat4 geometry_uv;
+            child_data._geometry->Get(
+                geometry_pos,
+                geometry_uv
+                );
+            DSC_ASSERT(geometry_pos == VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f), "Expect child geometry to be full screen");
+            // atention Y inverted
+            DSC_ASSERT(geometry_uv == VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f), "Expect child geometry to be full screen uv"); 
+#endif
 
             in_draw_param._frame->Draw(geometry);
         }

@@ -97,9 +97,9 @@ public:
                 //"effect_debug",
                     std::vector<std::shared_ptr<UIData>>({
 
-                        //std::make_shared<UIData>(
-                        //    "UIData",
-                        //    std::vector<std::shared_ptr<UIData>>({
+                        std::make_shared<UIData>(
+                            "UIData",
+                            std::vector<std::shared_ptr<UIData>>({
                                 std::make_shared<UIData>(
                                     "stack_vertical_middle",
                                     std::vector<std::shared_ptr<UIData>>({
@@ -138,9 +138,9 @@ public:
                                     )
                                 })
                             )
-                    //    })
+                        })
 
-                    //)
+                    )
                 })
             );
         _data_map["main_launch"] = data_main_launch;

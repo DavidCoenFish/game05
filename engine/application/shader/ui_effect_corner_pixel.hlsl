@@ -18,8 +18,10 @@ cbuffer ConstantBufferEffect : register(b1)
 {
     float4 _top_right_top_left_bottom_left_bottom_right; //radius
     float4 _width_height_iwidth_iheight;
+#if defined(GEOMETRY_SIZE_INTO_SHADER)
     float4 _geometry_pos;
     float4 _geometry_uv;
+#endif
 };
 
 float CalculateAlpha(float in_x, float in_y, float in_radius)
@@ -72,7 +74,7 @@ float CalculateCornerAlpha(
 
 Pixel main(Interpolant in_input)
 {
-    //float4 texel = g_texture.Sample(g_sampler_state, in_input._uv);
+#if defined(GEOMETRY_SIZE_INTO_SHADER)
     float4 texel = GetBlockTexel(
         g_texture,
         g_sampler_state,
@@ -80,6 +82,9 @@ Pixel main(Interpolant in_input)
         _geometry_uv,
         in_input._uv
         );
+#else
+    float4 texel = g_texture.Sample(g_sampler_state, in_input._uv);
+#endif
 
     float corner_alpha = CalculateCornerAlpha(
         in_input._uv,

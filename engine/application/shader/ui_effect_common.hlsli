@@ -1,3 +1,5 @@
+#if defined(GEOMETRY_SIZE_INTO_SHADER)
+
 float4 GetBlockTexel(
     Texture2D in_texture,
     SamplerState in_sampler_state,
@@ -44,3 +46,4 @@ float4 GetBlockDebug(
     return result;
 }
 
+#endif

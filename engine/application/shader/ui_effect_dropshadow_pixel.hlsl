@@ -18,8 +18,10 @@ cbuffer ConstantBufferEffect : register(b1)
 {
     float4 _offset_x_y_radius;
     float4 _width_height_iwidth_iheight;
+#if defined(GEOMETRY_SIZE_INTO_SHADER)
     float4 _geometry_pos;
     float4 _geometry_uv;
+#endif
 };
 
 float2 SampleAtOffset(
@@ -30,7 +32,7 @@ float2 SampleAtOffset(
     float in_high
     )
 {
-    //float4 texel = g_texture.Sample(g_sampler_state, in_uv);
+#if defined(GEOMETRY_SIZE_INTO_SHADER)
     float4 texel = GetBlockTexel(
         g_texture,
         g_sampler_state,
@@ -38,6 +40,9 @@ float2 SampleAtOffset(
         _geometry_uv,
         in_uv
         );
+#else
+    float4 texel = g_texture.Sample(g_sampler_state, in_uv);
+#endif
 
     float ratio = saturate((in_radius - in_low) / (in_high - in_low));
     float coverage = 4.0 * ratio;
@@ -59,9 +64,10 @@ float CalculateShadowAlpha(
     // the extra +[0.5,0.5] inside the round is to avoid a horible (accuracy?) step
     float2 pivot = (round((in_uv * in_width_height) - in_offset + float2(0.5, 0.5))) + float2(0.5, 0.5);
 
-    float4 texel = g_texture.Sample(g_sampler_state, pivot * in_iwidth_iheight);
+    //float4 texel = g_texture.Sample(g_sampler_state, pivot * in_iwidth_iheight);
     // [sum value, sum coverage]
-    float2 coverage_shadow = float2(texel.a, 1.0);
+    //float2 coverage_shadow = float2(texel.a, 1.0);
+    float2 coverage_shadow = float2(0.0, 0.0);
 
     coverage_shadow = SampleAtOffset(coverage_shadow, (pivot + float2(0.5, 1.5)) * in_iwidth_iheight, in_radius, 0.5, 2.9154);
     coverage_shadow = SampleAtOffset(coverage_shadow, (pivot + float2(0.5, 3.5)) * in_iwidth_iheight, in_radius, 2.5, 5.1478);
@@ -97,7 +103,7 @@ float CalculateShadowAlpha(
 
 Pixel main(Interpolant in_input)
 {
-    //float4 texel = g_texture.Sample(g_sampler_state, in_input._uv);
+#if defined(GEOMETRY_SIZE_INTO_SHADER)
     float4 texel = GetBlockTexel(
         g_texture,
         g_sampler_state,
@@ -105,6 +111,9 @@ Pixel main(Interpolant in_input)
         _geometry_uv,
         in_input._uv
         );
+#else
+    float4 texel = g_texture.Sample(g_sampler_state, in_input._uv);
+#endif
 
     float shadow_alpha = CalculateShadowAlpha(
         in_input._uv,
@@ -118,8 +127,7 @@ Pixel main(Interpolant in_input)
 
     // Premultipiled alpha
     //result = foreground + (1 - foreground.alpha) * background
-    result._colour = texel + (1.0 - texel.a) * (_tint * shadow_alpha);
-    //result._colour = texel;
+    result._colour = texel + ((1.0 - texel.a) * (_tint * shadow_alpha));
 
     return result;
 }

@@ -6,6 +6,9 @@
 
 enum class UIEffectEnum;
 
+// passing geometry into the shader worked, but is rather expensive on the shader, drop shadow had more than 512 instructions
+// #define GEOMETRY_SIZE_INTO_SHADER
+
 /// initially thought effect would what multiple shader inputs, but is one enought?
 /// if we want more than one shader input, switch count based on UIEffectEnum
 class UIComponentEffect : public IUIComponent
@@ -16,8 +19,10 @@ public:
     {
         VectorFloat4 _data;
         VectorFloat4 _width_height_iwidth_iheight;
+#if defined(GEOMETRY_SIZE_INTO_SHADER)
         VectorFloat4 _geometry_pos;
         VectorFloat4 _geometry_uv;
+#endif
     };
 
     /// weak contract to construct via factory UIManager::TContentFactory
@@ -112,8 +117,10 @@ private:
     /// the shader constants for this effect
     std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;
 
+#if defined(GEOMETRY_SIZE_INTO_SHADER)
     /// full size to the render target draw surface
     /// we don't use the child component geometry as we may want to draw outside it, ie, dropshadow
     std::unique_ptr<UIGeometry> _geometry;
+#endif
 
 };
