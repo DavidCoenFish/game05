@@ -366,7 +366,13 @@ void UIHierarchyNode::DealInput(
     {
         UIHierarchyNodeChildData& child_data = *child_data_ptr;
         const bool inside = in_mouse_inside && child_data._screen_space->GetClipRef().Inside(in_input_state.GetMousePosRef());
-        if ((true == inside) &&        
+
+        child_data_ptr->_node->DealInput(
+            in_input_state,
+            inside
+            );
+
+        if ((true == inside) &&
             (false == in_input_state.GetMouseLeftDown()) &&
             (true == in_input_state.GetMouseLeftDownChange()))
         {
@@ -377,13 +383,10 @@ void UIHierarchyNode::DealInput(
                     child_data._screen_space->GetPosRef(),
                     in_input_state.GetMousePosRef()
                     );
+                // consume mouse input
+                in_input_state.SetMouseLeftDownChange(false);
             }
         }
-
-        child_data_ptr->_node->DealInput(
-            in_input_state,
-            inside
-            );
     }
     return;
 }

@@ -163,6 +163,18 @@ namespace
             );
         return s_layout;
     }
+    const UILayout& GetUILayoutModal()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.75f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f)
+            );
+        return s_layout;
+    }
 
     typedef const UICoord& (*TGetUICoordRef)();
     const UICoord& GetUICoordNone()
@@ -243,6 +255,20 @@ namespace
             VectorFloat4(0.0f, 0.0f, 0.0f, 0.0f),
             true,
             VectorFloat4(0.0f, 0.0f, 0.0f, 0.5f)
+            );
+    }
+    const UIBaseColour GetUIBaseColourDark(const int)
+    {
+        return UIBaseColour(
+            VectorFloat4(0.0f, 0.0f, 0.0f, 0.5f),
+            true
+            );
+    }
+    const UIBaseColour GetUIBaseColourGrey(const int)
+    {
+        return UIBaseColour(
+            VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f),
+            true
             );
     }
 
@@ -618,6 +644,16 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("UIDataButton", FactoryButton<
         GetUILayoutRow, 
         GetUIBaseColourDefault //GetUIBaseColourRed
+        >);
+
+    in_ui_manager.AddContentFactory("button_background", FactoryButton<
+        GetUILayout, 
+        GetUIBaseColourDark
+        >);
+
+    in_ui_manager.AddContentFactory("button_modal_body", FactoryButton<
+        GetUILayoutModal, 
+        GetUIBaseColourGrey
         >);
 
     in_ui_manager.AddContentFactory("effect_debug", FactoryEffect<

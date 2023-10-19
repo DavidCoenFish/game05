@@ -17,6 +17,7 @@ public:
 
     const VectorFloat2& GetMousePosRef() const { return _mouse_pos; }
     const bool GetMouseLeftDown() const { return _mouse_prev_left_down; }
+    void SetMouseLeftDownChange(const bool in_value) { _mouse_left_down_change = in_value; return; }
     const bool GetMouseLeftDownChange() const { return _mouse_left_down_change; }
 
 private:

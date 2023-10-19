@@ -117,6 +117,9 @@ public:
                                         std::make_shared<UIDataButton>(
                                             [this](const VectorFloat2&){
                                                 _data_map["main"]->ModifyData().clear();
+                                                _data_map["modal"]->ModifyData().push_back(
+                                                    _data_map["modal_options"]
+                                                    );
                                                 },
                                             true,
                                             "UIDataButton",
@@ -153,6 +156,34 @@ public:
             );
         _data_map["main"] = _data_main;
 
+        auto data_modal_options = 
+            std::make_shared<UIDataButton>(
+                [this](const VectorFloat2&){
+                    _data_map["modal"]->ModifyData().clear();
+                    _data_map["main"]->ModifyData().push_back(
+                        _data_map["main_launch"]
+                        );
+                    },
+                true,
+                "button_background",
+                std::vector<std::shared_ptr<UIData>>({
+                    std::make_shared<UIDataButton>(
+                        [this](const VectorFloat2&){},
+                        true,
+                        "button_modal_body"
+                    )
+                })
+            );
+
+        _data_map["modal_options"] = data_modal_options;
+
+        auto _data_modal = std::make_shared<UIData>(
+            "UIData",
+            std::vector<std::shared_ptr<UIData>>({})
+            );
+        _data_map["modal"] = _data_modal;
+
+
         _data_array_map[""] = std::vector<std::shared_ptr<UIData>>({
 #if 0
             // debug quad
@@ -174,6 +205,11 @@ public:
 #endif
 
 #if 1
+            // Modal page data
+            _data_modal,
+#endif
+
+#if 1
             // Build info
             std::make_shared<UIData>(
                 "stack_vertical_bottom_right",
@@ -184,7 +220,6 @@ public:
                     })
                 )
 #endif
-
 
             });
     }
