@@ -232,9 +232,6 @@
     <ClCompile Include="source\common\ui\ui_data\ui_data.cpp">
       <Filter>souce\common\ui\ui_data</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\ui\ui_data\ui_data_effect.cpp">
-      <Filter>souce\common\ui\ui_data</Filter>
-    </ClCompile>
     <ClCompile Include="source\common\ui\i_ui_model.cpp">
       <Filter>souce\common\ui</Filter>
     </ClCompile>
@@ -314,6 +311,9 @@
       <Filter>souce\common\ui\ui_component</Filter>
     </ClCompile>
     <ClCompile Include="source\common\ui\ui_component\ui_component_texture.cpp">
+      <Filter>souce\common\ui\ui_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_component\ui_component_grid.cpp">
       <Filter>souce\common\ui\ui_component</Filter>
     </ClCompile>
   </ItemGroup>
@@ -561,9 +561,6 @@
     <ClInclude Include="include\common\ui\ui_data\ui_data.h">
       <Filter>include\common\ui\ui_data</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\ui\ui_data\ui_data_effect.h">
-      <Filter>include\common\ui\ui_data</Filter>
-    </ClInclude>
     <ClInclude Include="include\common\ui\ui_data\ui_data_text_run.h">
       <Filter>include\common\ui\ui_data</Filter>
     </ClInclude>
@@ -655,6 +652,9 @@
       <Filter>include\common\ui\ui_component</Filter>
     </ClInclude>
     <ClInclude Include="include\common\ui\ui_component\ui_component_canvas.h">
+      <Filter>include\common\ui\ui_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_component\ui_component_grid.h">
       <Filter>include\common\ui\ui_component</Filter>
     </ClInclude>
   </ItemGroup>

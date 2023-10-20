@@ -1,7 +1,15 @@
-- UIDataEffect // drop shadow
+- Option dialog
+- UiComponentGrid
+- DisableEffect // add a mask passed down during input, input mask? [hover, click down, active, disabled]?
+    active is for buttons with toggle state, like checkbox?
+    IUIComponent::SetInputState(hover, touch_down)?
+    UIDataToggle // bool true/ false
+    UIDataScroll // float with min, max, knot size (% of total)
+
+- InnerShadowEffect
+- UiComponentInputMaskDisplay
 - ui fade in/ tint / background colour
 - ui fade/blur out effect for destroyed uitextures
-- Option dialog
 - expander
 - checkbox
 - slider (ui scale)

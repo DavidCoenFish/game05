@@ -42,20 +42,12 @@ void* UIComponentCanvas::GetSourceToken() const
     return _content_default.GetSourceToken();
 }
 
-//const bool UIComponentCanvas::SetLayout(const UILayout& in_layout)
-//{
-//    return _content_default.SetLayout(in_layout);
-//}
-
 const bool UIComponentCanvas::UpdateHierarchy(
-    //std::vector<std::shared_ptr<UIData>>*& out_array_data_or_null,
     UIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
     const UIHierarchyNodeUpdateHierarchyParam& in_param
     )
 {
-    // currently UIDataContainer is handled by _content_default.UpdateHierarchy
-
     return _content_default.UpdateHierarchy(
         in_data,
         in_out_child_data, 

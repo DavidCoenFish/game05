@@ -6,7 +6,7 @@
 
 enum class UIEffectEnum;
 
-// passing geometry into the shader worked, but is rather expensive on the shader, drop shadow had more than 512 instructions
+// passing geometry info into the shader worked, but is rather expensive on the shader, drop shadow had more than 512 instructions
 // #define GEOMETRY_SIZE_INTO_SHADER
 
 /// initially thought effect would what multiple shader inputs, but is one enought?
@@ -58,9 +58,6 @@ private:
     virtual void SetSourceToken(void* in_source_ui_data_token) override;
     /// Make sorting children easier
     virtual void* GetSourceToken() const override;
-
-    /// 
-    //virtual const bool SetLayout(const UILayout& in_layout) override;
 
     /// ensure that the data structure matches the model (UIData)
     virtual const bool UpdateHierarchy(

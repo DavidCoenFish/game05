@@ -24,7 +24,6 @@
 #include "common/ui/ui_data/ui_data.h"
 #include "common/ui/ui_data/ui_data_button.h"
 #include "common/ui/ui_data/ui_data_string.h"
-#include "common/ui/ui_data/ui_data_effect.h"
 #include "common/ui/ui_data/ui_data_text_run.h"
 #include "common/util/timer.h"
 #include "common/util/vector_helper.h"
@@ -36,7 +35,7 @@ namespace
     {
         return std::vector<std::shared_ptr<UIData>>({
 
-            std::make_shared<UIDataEffect>(
+            std::make_shared<UIData>(
                 "effect_corner",
                 std::vector<std::shared_ptr<UIData>>({
 
@@ -92,7 +91,7 @@ public:
         auto data_main_launch = std::make_shared<UIData>(
             "canvas_banner_left",
             std::vector<std::shared_ptr<UIData>>({
-                std::make_shared<UIDataEffect>(
+                std::make_shared<UIData>(
                 "effect_drop_shadow",
                 //"effect_debug",
                     std::vector<std::shared_ptr<UIData>>({

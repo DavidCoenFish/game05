@@ -34,18 +34,11 @@ public:
         );
 
 private:
-    //virtual const bool GetClearBackground(
-    //    VectorFloat4& out_clear_colour
-    //    ) const override;
-
     // Make sorting children easier
     virtual void SetSourceToken(void* in_source_ui_data_token) override;
     virtual void* GetSourceToken() const override;
 
-    //virtual const bool SetLayout(const UILayout& in_layout) override;
-
     virtual const bool UpdateHierarchy(
-        //std::vector<std::shared_ptr<UIData>>*& out_array_data_or_null,
         UIData* const in_data,
         UIHierarchyNodeChildData& in_out_child_data,
         const UIHierarchyNodeUpdateHierarchyParam& in_param
@@ -72,6 +65,8 @@ private:
         UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         ) override;
 
+    /// Stack is a little special in that we want the children to expand as needed along one axis
+    /// skip over null child components
     void GetStackDesiredSize(
         VectorInt2& out_layout_size, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
         VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
@@ -85,7 +80,6 @@ private:
         const UIManagerDrawParam& in_draw_param,
         UIHierarchyNode& in_node
         ) override;
-
 
 private:
     UIComponentDefault _content_default;

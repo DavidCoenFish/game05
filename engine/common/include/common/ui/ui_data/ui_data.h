@@ -1,5 +1,9 @@
 #pragma once
 
+/// base ui data class ends up representing minimal data for ui hoerarchy
+/// moving towards only run time modified deat (like a string) to be in a derrived ui data class
+/// the rest of the data, like effect type or size param, are moved into construction factories
+/// UIManager::AddContentFactory(
 class UIData
 {
 public:

@@ -73,31 +73,17 @@ void* UIComponentStack::GetSourceToken() const
     return _content_default.GetSourceToken();
 }
 
-//const bool UIComponentStack::SetLayout(const UILayout& in_layout)
-//{
-//    return _content_default.SetLayout(in_layout);
-//}
-
 const bool UIComponentStack::UpdateHierarchy(
     UIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
     const UIHierarchyNodeUpdateHierarchyParam& in_param
     )
 {
-    bool dirty = false;
-
-    // currently UIDataContainer is handled by _content_default.UpdateHierarchy
-
-    if (true == _content_default.UpdateHierarchy(
+    return _content_default.UpdateHierarchy(
         in_data,
         in_out_child_data,
         in_param
-        ))
-    {
-        dirty = true;
-    }
-
-    return dirty;
+        );
 }
 
 void UIComponentStack::UpdateSize(
@@ -176,7 +162,7 @@ void UIComponentStack::UpdateSize(
 
         VectorInt4& child_window_offset = child_window_offset_array[trace];
         trace += 1;
-        VectorInt2 window(child_window_offset.GetX(), child_window_offset.GetY());
+        const VectorInt2 window(child_window_offset.GetX(), child_window_offset.GetY());
         const VectorInt2 offset(child_window_offset.GetZ(), child_window_offset.GetW());
 
         child_data._component->UpdateSize(
@@ -197,14 +183,20 @@ void UIComponentStack::UpdateSize(
 }
 
 void UIComponentStack::GetDesiredSize(
-    VectorInt2&, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
-    VectorInt2&, // if bigger than layout size, we need to scroll
-    const VectorInt2&,
-    const float,
-    UIHierarchyNode& // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+    VectorInt2& out_layout_size, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
+    VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
+    const VectorInt2& in_parent_window,
+    const float in_ui_scale,
+    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
-    return;
+    return _content_default.GetDesiredSize(
+        out_layout_size,
+        out_desired_size,
+        in_parent_window,
+        in_ui_scale,
+        in_out_node
+        );
 }
 
 void UIComponentStack::GetStackDesiredSize(

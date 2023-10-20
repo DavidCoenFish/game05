@@ -98,6 +98,7 @@
     <ClCompile Include="source\common\ui\ui_component\ui_component_canvas.cpp" />
     <ClCompile Include="source\common\ui\ui_component\ui_component_default.cpp" />
     <ClCompile Include="source\common\ui\ui_component\ui_component_effect.cpp" />
+    <ClCompile Include="source\common\ui\ui_component\ui_component_grid.cpp" />
     <ClCompile Include="source\common\ui\ui_component\ui_component_stack.cpp" />
     <ClCompile Include="source\common\ui\ui_component\ui_component_string.cpp" />
     <ClCompile Include="source\common\ui\ui_component\ui_component_texture.cpp" />
@@ -107,7 +108,6 @@
     <ClCompile Include="source\common\ui\ui_data\ui_data_button.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_string.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_text_run.cpp" />
-    <ClCompile Include="source\common\ui\ui_data\ui_data_effect.cpp" />
     <ClCompile Include="source\common\ui\ui_geometry.cpp" />
     <ClCompile Include="source\common\ui\ui_hierarchy_node.cpp" />
     <ClCompile Include="source\common\ui\ui_layout.cpp" />
@@ -186,6 +186,7 @@
     <ClInclude Include="include\common\ui\ui_component\ui_component_canvas.h" />
     <ClInclude Include="include\common\ui\ui_component\ui_component_default.h" />
     <ClInclude Include="include\common\ui\ui_component\ui_component_effect.h" />
+    <ClInclude Include="include\common\ui\ui_component\ui_component_grid.h" />
     <ClInclude Include="include\common\ui\ui_component\ui_component_stack.h" />
     <ClInclude Include="include\common\ui\ui_component\ui_component_string.h" />
     <ClInclude Include="include\common\ui\ui_component\ui_component_texture.h" />
@@ -195,7 +196,6 @@
     <ClInclude Include="include\common\ui\ui_data\ui_data_button.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_string.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_text_run.h" />
-    <ClInclude Include="include\common\ui\ui_data\ui_data_effect.h" />
     <ClInclude Include="include\common\ui\ui_effect_enum.h" />
     <ClInclude Include="include\common\ui\ui_hierarchy_node.h" />
     <ClInclude Include="include\common\ui\ui_layout.h" />

@@ -24,7 +24,6 @@
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_data/ui_data_string.h"
 #include "common/ui/ui_data/ui_data_text_run.h"
-#include "common/ui/ui_data/ui_data_effect.h"
 
 namespace
 {
