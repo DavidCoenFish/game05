@@ -241,9 +241,16 @@ const bool UIHierarchyNode::UpdateHierarchy(
         // ensure each content is created/ passed through factory
         for (int index = 0; index < target_length; ++index)
         {
-            auto& data = *(in_array_data_or_null->operator[](index));
+            auto pdata = (in_array_data_or_null->operator[](index));
             auto& child = _child_data_array[index];
 
+            if (nullptr == pdata)
+            {
+                child->_component.reset();
+                continue;
+            }
+
+            auto& data = *pdata;
             auto factory = in_param._map_content_factory.find(data.GetTemplateName());
             if (factory != in_param._map_content_factory.end())
             {
@@ -401,6 +408,11 @@ const bool UIHierarchyNode::PreDraw(
     // Ensure that children textures are ready
     for (auto& iter : _child_data_array)
     {
+        if (nullptr == iter->_component)
+        {
+            continue;
+        }
+
         if (true == iter->_component->Draw(
             in_draw_param,
             *(iter->_node.get())
@@ -445,6 +457,10 @@ const bool UIHierarchyNode::Draw(
         for (auto& iter : _child_data_array)
         {
             UIHierarchyNodeChildData& child_data = *iter;
+            if (nullptr == child_data._component)
+            {
+                continue;
+            }
 
             Shader* const shader = in_draw_param._ui_manager->GetDefaultShader();
 

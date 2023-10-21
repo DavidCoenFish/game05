@@ -237,7 +237,7 @@ void UIComponentGrid::GetGridDesiredSize(
     VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
     const VectorInt2& in_parent_window,
     const float in_ui_scale,
-    UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+    UIHierarchyNode&,// in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     std::vector<VectorInt4>& out_child_window_offset // left to right, top to bottom
     )
 {
@@ -254,6 +254,8 @@ void UIComponentGrid::GetGridDesiredSize(
             total_reserved += size;
             bias_sum += item.GetRemainderBias();
         }
+
+        out_desired_size[0] = std::max(out_layout_size.GetX(), total_reserved);
 
         const int horizontal_remainder = out_layout_size.GetX() - total_reserved;
         if (0 < horizontal_remainder)
@@ -284,6 +286,8 @@ void UIComponentGrid::GetGridDesiredSize(
             bias_sum += item.GetRemainderBias();
         }
 
+        out_desired_size[1] = std::max(out_layout_size.GetY(), total_reserved);
+
         const int vertical_remainder = height - total_reserved;
         if (0 < vertical_remainder)
         {
@@ -312,12 +316,14 @@ void UIComponentGrid::GetGridDesiredSize(
             out_child_window_offset.push_back(VectorInt4(
                 size_x,
                 size_y,
-                height - sum_y,
-                sum_x
+                sum_x,
+                height - sum_y
                 ));
             sum_x += size_x;
         }
     }
+
+    out_layout_size = _content_default.GetLayout().CalculateShrinkSize(out_layout_size, out_desired_size);
 
     return;
 }

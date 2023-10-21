@@ -87,7 +87,7 @@ public:
             );
         _data_map["fps"] = _data_map_build_fps;
 
-        // Left banner
+        // Launch Left banner
         auto data_main_launch = std::make_shared<UIData>(
             "canvas_banner_left",
             std::vector<std::shared_ptr<UIData>>({
@@ -155,6 +155,7 @@ public:
             );
         _data_map["main"] = _data_main;
 
+        // Options dialog
         auto data_modal_options = 
             std::make_shared<UIDataButton>(
                 [this](const VectorFloat2&){
@@ -169,7 +170,50 @@ public:
                     std::make_shared<UIDataButton>(
                         [this](const VectorFloat2&){},
                         true,
-                        "button_modal_body"
+                        "button_modal_body",
+                        std::vector<std::shared_ptr<UIData>>({
+                            std::make_shared<UIData>(
+                                "grid_dialog_header_body_footer",
+                                std::vector<std::shared_ptr<UIData>>({
+                                    std::make_shared<UIDataString>(
+                                        "Options",
+                                        LocaleISO_639_1::Default,
+                                        "string_middle_em"
+                                        ),
+                                    std::make_shared<UIData>("canvas_red")
+
+#if 1
+                                    , std::make_shared<UIData>(
+                                        "grid_three_buttons",
+                                        std::vector<std::shared_ptr<UIData>>({
+                                            
+                                            std::make_shared<UIDataButton>(
+                                                [&in_application](const VectorFloat2&){},
+                                                true,
+                                                "UIDataButton",
+                                                BuildButtonData("Undo")
+                                            ),
+                                            nullptr,
+                                            std::make_shared<UIDataButton>(
+                                                [&in_application](const VectorFloat2&){},
+                                                true,
+                                                "UIDataButton",
+                                                BuildButtonData("Redo")
+                                            ),
+                                            nullptr,
+                                            std::make_shared<UIDataButton>(
+                                                [&in_application](const VectorFloat2&){},
+                                                true,
+                                                "UIDataButton",
+                                                BuildButtonData("Reset")
+                                            )
+
+                                        })
+                                    )
+#endif
+                                })
+                            )
+                        })
                     )
                 })
             );

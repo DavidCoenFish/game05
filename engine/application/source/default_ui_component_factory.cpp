@@ -14,6 +14,7 @@
 #include "common/ui/ui_component/ui_component_button.h"
 #include "common/ui/ui_component/ui_component_canvas.h"
 #include "common/ui/ui_component/ui_component_effect.h"
+#include "common/ui/ui_component/ui_component_grid.h"
 #include "common/ui/ui_component/ui_component_stack.h"
 #include "common/ui/ui_component/ui_component_string.h"
 #include "common/ui/ui_component/ui_component_text_run.h"
@@ -47,6 +48,7 @@ namespace
     constexpr int s_new_line_gap_small = 3; // DscMath::ScaleInt(s_default_font_size, s_default_newling_ratio);
     constexpr float s_default_margin = s_default_font_size * 0.5f; // in pixels, or in em?
     constexpr float s_default_gap = s_default_font_size * 0.5f; // in pixels, or in em?
+    constexpr float s_default_button_width = 144.0f; // https://uxmovement.com/mobile/optimal-size-and-spacing-for-mobile-buttons/
     constexpr float s_slow_fade = 1.0f;
     constexpr float s_quick_fade = 0.1f;
 
@@ -200,6 +202,42 @@ namespace
     {
         static UICoord s_coord(UICoord::ParentSource::None, 0.0f, s_default_gap * 0.25f);
         return s_coord;
+    }
+
+    typedef const std::vector<UIComponentGridSizeData>& (*TGetUIGridSizeData)();
+    const std::vector<UIComponentGridSizeData>& GetUIGridSizeDataDefaultHorizontal()
+    {
+        static std::vector<UIComponentGridSizeData> s_data({
+            UIComponentGridSizeData(UICoord(UICoord::ParentSource::X, 1.0f))
+        });
+        return s_data;
+    }
+    const std::vector<UIComponentGridSizeData>& GetUIGridSizeDataDefaultVertical()
+    {
+        static std::vector<UIComponentGridSizeData> s_data({
+            UIComponentGridSizeData(UICoord(UICoord::ParentSource::Y, 1.0f))
+        });
+        return s_data;
+    }
+    const std::vector<UIComponentGridSizeData>& GetUIGridSizeDataHeaderBodyFooter()
+    {
+        static std::vector<UIComponentGridSizeData> s_data({
+            UIComponentGridSizeData(UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size * 2.0f), 0.0f),
+            UIComponentGridSizeData(UICoord(), 1.0f),
+            UIComponentGridSizeData(UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size * 2.0f), 0.0f)
+        });
+        return s_data;
+    }
+    const std::vector<UIComponentGridSizeData>& GetUIGridSizeDataThreeButtonsHorizontal()
+    {
+        static std::vector<UIComponentGridSizeData> s_data({
+            UIComponentGridSizeData(UICoord(UICoord::ParentSource::X, 0.0f, s_default_button_width), 0.0f),
+            UIComponentGridSizeData(UICoord(), 1.0f),
+            UIComponentGridSizeData(UICoord(UICoord::ParentSource::X, 0.0f, s_default_button_width), 0.0f),
+            UIComponentGridSizeData(UICoord(), 1.0f),
+            UIComponentGridSizeData(UICoord(UICoord::ParentSource::X, 0.0f, s_default_button_width), 0.0f)
+        });
+        return s_data;
     }
 
     typedef const UIBaseColour (*TGetUIBaseColour)(const int in_create_index);
@@ -586,12 +624,115 @@ namespace
 
         return dirty;
     }
+
+    template<
+        TGetUILayoutRef in_get_layout_ref = GetUILayout,
+        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
+        TGetUIGridSizeData in_get_grid_size_horizontal = GetUIGridSizeDataDefaultHorizontal,
+        TGetUIGridSizeData in_get_grid_size_vertical = GetUIGridSizeDataDefaultVertical
+        >
+    const bool FactoryGrid(
+        std::unique_ptr<IUIComponent>& in_out_content,
+        const UIComponentFactoryParam& in_factory_param
+        )
+    {
+        UIComponentGrid* content = dynamic_cast<UIComponentGrid*>(in_out_content.get());
+        bool dirty = false;
+        if (nullptr == content)
+        {
+            dirty = true;
+            auto new_content = std::make_unique<UIComponentGrid>(
+                in_get_base_colour(in_factory_param._create_index),
+                in_get_layout_ref(),
+                in_get_grid_size_horizontal(),
+                in_get_grid_size_vertical()
+                );
+            in_out_content = std::move(new_content);
+        }
+        else
+        {
+            if (true == content->Set(
+                in_get_base_colour(in_factory_param._create_index),
+                in_get_layout_ref(),
+                in_get_grid_size_horizontal(),
+                in_get_grid_size_vertical()
+                ))
+            {
+                dirty = true;
+            }
+        }
+        return dirty;
+    }
 }
 
 void DefaultUIComponentFactory::Populate(
     UIManager& in_ui_manager
     )
 {
+    // UIData canvas
+    in_ui_manager.AddContentFactory("UIData", FactoryCanvas<>);
+    in_ui_manager.AddContentFactory("canvas_debug_quad0", FactoryCanvas<
+        GetUILayoutQuadrant0, 
+        GetUIBaseColourRed
+        >);
+    in_ui_manager.AddContentFactory("canvas_banner_left", FactoryCanvas<
+        GetUILayoutBannerLeft, 
+        GetUIBaseColourStaggerClearDark
+        >);
+    in_ui_manager.AddContentFactory("canvas_red", FactoryCanvas<
+        GetUILayout, 
+        GetUIBaseColourDebugRed
+        >);
+
+    // UIData stack
+    in_ui_manager.AddContentFactory("stack_vertical_bottom_right", FactoryStack<
+        GetUILayoutMarginBottomRightShrink,
+        GetUIBaseColourStaggerClearTransparent,
+        StackOrientation::TVertical,
+        GetUICoordDefaultGap
+        >);
+    in_ui_manager.AddContentFactory("stack_vertical_middle", FactoryStack<
+        GetUILayoutMarginMiddleShrinkVertical,
+        GetUIBaseColourStaggerClearTransparent,
+        StackOrientation::TVertical,
+        GetUICoordDefaultGap
+        >);
+
+    // UIData grid
+    in_ui_manager.AddContentFactory("grid_dialog_header_body_footer", FactoryGrid<
+        GetUILayoutMargin,
+        GetUIBaseColourDefault,
+        GetUIGridSizeDataDefaultHorizontal,
+        GetUIGridSizeDataHeaderBodyFooter
+        >);
+    in_ui_manager.AddContentFactory("grid_three_buttons", FactoryGrid<
+        GetUILayout,
+        GetUIBaseColourDefault,
+        GetUIGridSizeDataThreeButtonsHorizontal,
+        GetUIGridSizeDataDefaultVertical
+        >);
+
+    // UIData effect
+    in_ui_manager.AddContentFactory("effect_debug", FactoryEffect<
+        UIEffectEnum::TDebug
+        >);
+    in_ui_manager.AddContentFactory("effect_drop_shadow", FactoryEffect<
+        UIEffectEnum::TDropShadow,
+        GetUIBaseColourClearDark,
+        GetUICoordDefaultGapQuater,
+        GetUICoordDefaultGapHalf,
+        GetUICoordDefaultGap
+        >);
+    in_ui_manager.AddContentFactory("effect_corner", FactoryEffect<
+        UIEffectEnum::TRoundCorners,
+        GetUIBaseColourDefault,
+        GetUICoordDefaultGap,
+        GetUICoordDefaultGap,
+        GetUICoordDefaultGap,
+        GetUICoordDefaultGap
+        >);
+
+    // UIDataString
     in_ui_manager.AddContentFactory("UIDataString", FactoryString<>);
     // Button text
     in_ui_manager.AddContentFactory("string_middle_em", FactoryString<
@@ -630,7 +771,6 @@ void DefaultUIComponentFactory::Populate(
         TextEnum::HorizontalLineAlignment::Left,
         TextEnum::VerticalBlockAlignment::Top
         >);
-
     in_ui_manager.AddContentFactory("UIDataTextRunWrap", FactoryTextRun<
         GetUILayoutQuadrant0,
         GetUIBaseColourDefault,
@@ -644,65 +784,15 @@ void DefaultUIComponentFactory::Populate(
         GetUILayoutRow, 
         GetUIBaseColourDefault //GetUIBaseColourRed
         >);
-
     in_ui_manager.AddContentFactory("button_background", FactoryButton<
         GetUILayout, 
         GetUIBaseColourDark
         >);
-
     in_ui_manager.AddContentFactory("button_modal_body", FactoryButton<
         GetUILayoutModal, 
         GetUIBaseColourGrey
         >);
 
-    in_ui_manager.AddContentFactory("effect_debug", FactoryEffect<
-        UIEffectEnum::TDebug
-        >);
-
-    in_ui_manager.AddContentFactory("effect_drop_shadow", FactoryEffect<
-        UIEffectEnum::TDropShadow,
-        GetUIBaseColourClearDark,
-        GetUICoordDefaultGapQuater,
-        GetUICoordDefaultGapHalf,
-        GetUICoordDefaultGap
-        >);
-
-    in_ui_manager.AddContentFactory("effect_corner", FactoryEffect<
-        UIEffectEnum::TRoundCorners,
-        GetUIBaseColourDefault,
-        GetUICoordDefaultGap,
-        GetUICoordDefaultGap,
-        GetUICoordDefaultGap,
-        GetUICoordDefaultGap
-        >);
-
-    in_ui_manager.AddContentFactory("UIData", FactoryCanvas<>);
-    in_ui_manager.AddContentFactory("canvas_debug_quad0", FactoryCanvas<
-        GetUILayoutQuadrant0, 
-        GetUIBaseColourRed
-        >);
-    in_ui_manager.AddContentFactory("canvas_banner_left", FactoryCanvas<
-        GetUILayoutBannerLeft, 
-        GetUIBaseColourStaggerClearDark
-        >);
-    in_ui_manager.AddContentFactory("canvas_red", FactoryCanvas<
-        GetUILayout, 
-        GetUIBaseColourDebugRed
-        >);
-
-    in_ui_manager.AddContentFactory("stack_vertical_bottom_right", FactoryStack<
-        GetUILayoutMarginBottomRightShrink,
-        GetUIBaseColourStaggerClearTransparent,
-        StackOrientation::TVertical,
-        GetUICoordDefaultGap
-        >);
-
-    in_ui_manager.AddContentFactory("stack_vertical_middle", FactoryStack<
-        GetUILayoutMarginMiddleShrinkVertical,
-        GetUIBaseColourStaggerClearTransparent,
-        StackOrientation::TVertical,
-        GetUICoordDefaultGap
-        >);
     return;
 }
 
