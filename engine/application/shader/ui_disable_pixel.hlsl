@@ -1,6 +1,15 @@
 #include "ui_interpolant.hlsli"
 #include "ui_common_pixel.hlsli"
-#include "ui_effect_common_pixel.hlsli"
+
+cbuffer ConstantBufferEffect : register(b1)
+{
+    float4 _offset_x_y_radius;
+    float4 _width_height_iwidth_iheight;
+#if defined(GEOMETRY_SIZE_INTO_SHADER)
+    float4 _geometry_pos;
+    float4 _geometry_uv;
+#endif
+};
 
 float2 SampleAtOffset(
     float2 in_coverage_shadow,
@@ -95,8 +104,8 @@ Pixel main(Interpolant in_input)
 
     float shadow_alpha = CalculateShadowAlpha(
         in_input._uv,
-        float2(_constant_buffer_1_data0.x, _constant_buffer_1_data0.y),
-        _constant_buffer_1_data0.z,
+        float2(_offset_x_y_radius.x, _offset_x_y_radius.y),
+        _offset_x_y_radius.z,
         float2(_width_height_iwidth_iheight.x, _width_height_iwidth_iheight.y),
         float2(_width_height_iwidth_iheight.z, _width_height_iwidth_iheight.w)
         );

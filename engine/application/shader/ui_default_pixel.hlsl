@@ -1,17 +1,5 @@
-#include "ui_block_interpolant.hlsli"
-
-struct Pixel
-{
-    float4 _colour : SV_TARGET0;
-};
-
-Texture2D g_texture : register(t0);
-SamplerState g_sampler_state : register(s0);
-
-cbuffer ConstantBufferBlock : register(b0)
-{
-    float4 _tint;
-};
+#include "ui_interpolant.hlsli"
+#include "ui_common_pixel.hlsli"
 
 Pixel main(Interpolant in_input)
 {

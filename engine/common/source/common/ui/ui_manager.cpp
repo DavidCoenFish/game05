@@ -21,6 +21,16 @@
 #include "common/text/text_manager.h"
 #include "common/util/vector_helper.h"
 
+namespace
+{
+    static const char* const s_array_shader_path[] = {
+        "ui_default_pixel.cso",
+        "ui_effect_debug_pixel.cso",
+        "ui_effect_dropshadow_pixel.cso",
+        "ui_effect_corner_pixel.cso"
+        };
+}
+
 UIComponentFactoryParam::UIComponentFactoryParam(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list,
@@ -107,17 +117,6 @@ UIManagerDealInputParam::UIManagerDealInputParam(
     // Nop
 }
 
-
-namespace
-{
-    static const char* const s_array_shader_path[] = {
-        "ui_block_pixel.cso",
-        "ui_effect_debug.cso",
-        "ui_effect_dropshadow_pixel.cso",
-        "ui_effect_corner_pixel.cso"
-        };
-}
-
 class UIManagerImplementation
 {
 public:
@@ -140,7 +139,7 @@ public:
             CD3DX12_DEPTH_STENCIL_DESC()// CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT)
             );
 
-        auto vertex_shader_data = FileSystem::SyncReadFile(in_root_path / "shader" / "ui_block_vertex.cso");
+        auto vertex_shader_data = FileSystem::SyncReadFile(in_root_path / "shader" / "ui_vertex.cso");
 
         std::vector<std::shared_ptr<ShaderResourceInfo>> array_shader_resource_info;
         array_shader_resource_info.push_back(

@@ -115,16 +115,19 @@
     <None Include="shader\text_interpolant.hlsli">
       <Filter>shader</Filter>
     </None>
-    <None Include="shader\ui_block_interpolant.hlsli">
-      <Filter>shader</Filter>
-    </None>
     <None Include="task\test_coord\triangle_interpolant.hlsli">
       <Filter>task\test_coord</Filter>
     </None>
     <None Include="task\test_coord\present_interpolant.hlsli">
       <Filter>task\test_coord</Filter>
     </None>
-    <None Include="shader\ui_effect_common.hlsli">
+    <None Include="shader\ui_common_pixel.hlsli">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\ui_effect_common_pixel.hlsli">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\ui_interpolant.hlsli">
       <Filter>shader</Filter>
     </None>
   </ItemGroup>
@@ -361,12 +364,6 @@
     <FxCompile Include="shader\text_vertex.hlsl">
       <Filter>shader</Filter>
     </FxCompile>
-    <FxCompile Include="shader\ui_block_pixel.hlsl">
-      <Filter>shader</Filter>
-    </FxCompile>
-    <FxCompile Include="shader\ui_block_vertex.hlsl">
-      <Filter>shader</Filter>
-    </FxCompile>
     <FxCompile Include="task\test_coord\triangle_pixel.hlsl">
       <Filter>task\test_coord</Filter>
     </FxCompile>
@@ -382,13 +379,25 @@
     <FxCompile Include="task\test_text_run\background_pixel.hlsl">
       <Filter>task\test_text_run</Filter>
     </FxCompile>
-    <FxCompile Include="shader\ui_effect_dropshadow_pixel.hlsl">
+    <FxCompile Include="shader\ui_disable_pixel.hlsl">
       <Filter>shader</Filter>
     </FxCompile>
     <FxCompile Include="shader\ui_effect_corner_pixel.hlsl">
       <Filter>shader</Filter>
     </FxCompile>
-    <FxCompile Include="shader\ui_effect_debug.hlsl">
+    <FxCompile Include="shader\ui_effect_debug_pixel.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\ui_effect_dropshadow_pixel.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\ui_effect_gloss_pixel.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\ui_vertex.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\ui_default_pixel.hlsl">
       <Filter>shader</Filter>
     </FxCompile>
   </ItemGroup>
