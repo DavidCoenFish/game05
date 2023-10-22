@@ -1,10 +1,7 @@
 #pragma once
 class HeapWrapperItem;
 
-/*
-    shader constant is reflection of a stuct with visiblity in the shader
-*/
-// Either derrive off iResource, or be told by parent that DeviceLost/DeviceRestored
+/// Shader constant is reflection of a stuct with visiblity in the shader
 struct ConstantBuffer
 {
 public:

@@ -119,8 +119,8 @@ void ApplicationTestTriangle::Update()
     {
         auto frame = _draw_system->CreateNewFrame();
         frame->SetRenderTarget(_draw_system->GetRenderTargetBackBuffer());
-        frame->SetShader(_shader.get());
-        frame->Draw(_geometry.get());
+        frame->SetShader(_shader);
+        frame->Draw(_geometry);
     }
 }
 

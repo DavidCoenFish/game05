@@ -33,7 +33,7 @@ public:
     void Draw(
         DrawSystem* const in_draw_system,
         DrawSystemFrame* const in_draw_system_frame,
-        GeometryGeneric* const in_screen_quad,
+        const std::shared_ptr<GeometryGeneric>& in_screen_quad,
         const CameraConstantBufferB0& in_camera_constant_buffer
         );
 

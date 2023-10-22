@@ -4,10 +4,12 @@
 #include "common/math/vector_float4.h"
 
 class DrawSystem;
+class DrawSystemFrame;
 class HeapWrapperItem;
 class IResource;
 class IRenderTarget;
 class RenderTargetTexture;
+class Shader;
 class VectorInt2;
 /*
     Own a render target texture, 
@@ -24,11 +26,16 @@ public:
         );
     ~UITexture();
 
-    IRenderTarget* GetRenderTarget(
+    void UpdateRenderTarget(
         DrawSystem* const in_draw_system,
-        std::shared_ptr<IResource>& out_frame_resource,
         ID3D12GraphicsCommandList* const in_command_list
         );
+
+    const bool SetRenderTarget(
+        DrawSystem* const in_draw_system,
+        DrawSystemFrame* const in_frame
+        );
+
     const VectorInt2 GetSize(
         DrawSystem* const in_draw_system
         ) const;
@@ -42,8 +49,6 @@ public:
         );
 
     void SetSize(
-        //DrawSystem* const in_draw_system,
-        //ID3D12GraphicsCommandList* const in_command_list,
         const VectorInt2& in_size
         );
 
@@ -52,8 +57,11 @@ public:
         _has_drawn = false;
     }
 
-    // nullptr if _bUseBackBuffer is true
-    std::shared_ptr<HeapWrapperItem> GetShaderResourceHeapWrapperItem() const;
+    void SetShaderResource(
+        Shader& in_shader,
+        const int in_index,
+        DrawSystemFrame* const in_draw_system_frame
+        );
 
     const bool GetHasDrawn() const { return _has_drawn; }
     void SetHasDrawn(const bool in_has_drawn) { _has_drawn = in_has_drawn; return; }

@@ -37,9 +37,13 @@ public:
         VectorFloat4& out_uv
         ) const;
 
-    GeometryGeneric* GetGeometry(
+    void UpdateGeometry(
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list
+        );
+    void Draw(
+        DrawSystem* const in_draw_system,
+        DrawSystemFrame* const in_frame
         );
 
 private:

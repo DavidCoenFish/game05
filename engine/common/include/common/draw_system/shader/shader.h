@@ -47,7 +47,7 @@ public:
 
     std::shared_ptr<ShaderConstantBuffer> MakeShaderConstantBuffer(
             DrawSystem* const in_draw_system
-            );
+            ) const;
 
 private:
     virtual void OnDeviceLost() override;

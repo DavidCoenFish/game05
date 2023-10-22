@@ -790,11 +790,9 @@ void ApplicationMultiLine::Update()
 
         // Draw background
 #if 1
-        auto shader_background = _draw_resources->_background_shader.get();
-        auto shader_background_constant_buffer = _draw_resources->_background_shader_constant_buffer.get();
-        if ((nullptr != shader_background) && (nullptr != shader_background_constant_buffer))
+        if ((nullptr != _draw_resources->_background_shader) && (nullptr != _draw_resources->_background_shader_constant_buffer))
         {
-            auto& buffer0 = shader_background_constant_buffer->GetConstant<ConstantBufferB0>(0);
+            auto& buffer0 = _draw_resources->_background_shader_constant_buffer->GetConstant<ConstantBufferB0>(0);
             buffer0._camera_at = _camera_at;
             buffer0._camera_up = _camera_up;
             buffer0._camera_pos = _camera_pos;
@@ -803,7 +801,7 @@ void ApplicationMultiLine::Update()
             buffer0._camera_fov_vertical = _fov_vertical;
             buffer0._camera_unit_pixel_size = _unit_pixel_size;
 
-            auto& buffer_background1 = shader_background_constant_buffer->GetConstant<ConstantBufferBackgroundB1>(1);
+            auto& buffer_background1 = _draw_resources->_background_shader_constant_buffer->GetConstant<ConstantBufferBackgroundB1>(1);
 
             buffer_background1._sun_azimuth_altitude = VectorFloat2(Angle::DegToRadian(45.0f), Angle::DegToRadian(45.0f));
             buffer_background1._sun_range = VectorFloat2(0.05f, 0.2f);//1.0f, 5.0f);
@@ -814,18 +812,16 @@ void ApplicationMultiLine::Update()
             buffer_background1._ground_tint = VectorFloat3(32.0f / 255.0f, 16.0f / 255.0f, 2.0f / 255.0f);
             buffer_background1._fog_tint = VectorFloat3(200.0f / 255.0f, 200.0f / 255.0f, 200.0f / 255.0f);
 
-            frame->SetShader(shader_background, shader_background_constant_buffer);
-            frame->Draw(_draw_resources->_background_geometry.get());
+            frame->SetShader(_draw_resources->_background_shader, _draw_resources->_background_shader_constant_buffer);
+            frame->Draw(_draw_resources->_background_geometry);
         }
 #endif
 
         // Draw Grid
 #if 1
-        auto shader_grid = _draw_resources->_background_shader_grid.get();
-        auto shader_grid_constant_buffer = _draw_resources->_background_shader_grid_constant_buffer.get();
-        if ((nullptr != shader_grid) && (nullptr != shader_grid_constant_buffer))
+        if ((nullptr != _draw_resources->_background_shader_grid) && (nullptr != _draw_resources->_background_shader_grid_constant_buffer))
         {
-            auto& buffer0 = shader_grid_constant_buffer->GetConstant<ConstantBufferB0>(0);
+            auto& buffer0 = _draw_resources->_background_shader_grid_constant_buffer->GetConstant<ConstantBufferB0>(0);
             buffer0._camera_at = _camera_at;
             buffer0._camera_up = _camera_up;
             buffer0._camera_pos = _camera_pos;
@@ -834,22 +830,20 @@ void ApplicationMultiLine::Update()
             buffer0._camera_fov_vertical = _fov_vertical;
             buffer0._camera_unit_pixel_size = _unit_pixel_size;
 
-            frame->SetShader(shader_grid, shader_grid_constant_buffer);
-            frame->Draw(_draw_resources->_background_geometry.get());
+            frame->SetShader(_draw_resources->_background_shader_grid, _draw_resources->_background_shader_grid_constant_buffer);
+            frame->Draw(_draw_resources->_background_geometry);
         }
 #endif
 
         // Draw Multi Line
 #if 1
-        auto multi_line_shader = _draw_resources->_multi_line_shader.get();
-        auto multi_line_shader_constant_buffer = _draw_resources->_multi_line_shader_constant_buffer.get();
-        if ((nullptr != multi_line_shader) && (nullptr != multi_line_shader_constant_buffer))
+        if ((nullptr != _draw_resources->_multi_line_shader) && (nullptr != _draw_resources->_multi_line_shader_constant_buffer))
         {
             frame->ResourceBarrier(_draw_resources->_multi_line_data_pos_thick.get(), D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
             frame->ResourceBarrier(_draw_resources->_multi_line_data_dir_length.get(), D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
             frame->ResourceBarrier(_draw_resources->_multi_line_data_colour.get(), D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
 
-            auto& buffer0 = multi_line_shader_constant_buffer->GetConstant<ConstantBufferB0>(0);
+            auto& buffer0 = _draw_resources->_multi_line_shader_constant_buffer->GetConstant<ConstantBufferB0>(0);
             buffer0._camera_at = _camera_at;
             buffer0._camera_up = _camera_up;
             buffer0._camera_pos = _camera_pos;
@@ -859,8 +853,8 @@ void ApplicationMultiLine::Update()
             buffer0._camera_unit_pixel_size = _unit_pixel_size;
             buffer0._camera_radian_per_pixel = _radian_per_pixel;
 
-            frame->SetShader(multi_line_shader, multi_line_shader_constant_buffer);
-            frame->Draw(_draw_resources->_multi_line_geometry.get());
+            frame->SetShader(_draw_resources->_multi_line_shader, _draw_resources->_multi_line_shader_constant_buffer);
+            frame->Draw(_draw_resources->_multi_line_geometry);
         }
 #endif
 

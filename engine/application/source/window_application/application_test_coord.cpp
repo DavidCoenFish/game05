@@ -363,27 +363,28 @@ void ApplicationTestCoord::Update()
         auto frame = _draw_system->CreateNewFrame();
         
         // Draw triangle to render texture
-        frame->SetRenderTarget(_draw_resource->_render_target.get());
-        frame->SetShader(_draw_resource->_triangle_shader.get());
-        frame->Draw(_draw_resource->_triangle_geometry.get());
+        frame->SetRenderTargetTexture(_draw_resource->_render_target);
+        frame->SetShader(_draw_resource->_triangle_shader);
+        frame->Draw(_draw_resource->_triangle_geometry);
         frame->ResourceBarrier(_draw_resource->_render_target.get(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
         // Set back buffer as render target
         frame->SetRenderTarget(_draw_system->GetRenderTargetBackBuffer());
 
         // Draw triangle
-        frame->SetShader(_draw_resource->_triangle_shader.get());
-        frame->Draw(_draw_resource->_triangle_geometry.get());
+        frame->SetShader(_draw_resource->_triangle_shader);
+        frame->Draw(_draw_resource->_triangle_geometry);
 
         // Draw Panel 0 with render texture of triangle
         _draw_resource->_present_shader->SetShaderResourceViewHandle(0, _draw_resource->_render_target->GetShaderResourceHeapWrapperItem());
-        frame->SetShader(_draw_resource->_present_shader.get());
-        frame->Draw(_draw_resource->_panel_geometry[0].get());
+        frame->SetShader(_draw_resource->_present_shader);
+        frame->Draw(_draw_resource->_panel_geometry[0]);
 
         // Draw Panel 1 with texture
+        frame->AddFrameResource(_draw_resource->_texture);
         _draw_resource->_present_shader->SetShaderResourceViewHandle(0, _draw_resource->_texture->GetHeapWrapperItem());
-        frame->SetShader(_draw_resource->_present_shader.get());
-        frame->Draw(_draw_resource->_panel_geometry[1].get());
+        frame->SetShader(_draw_resource->_present_shader);
+        frame->Draw(_draw_resource->_panel_geometry[1]);
 
         #if 0
         // Draw ui hierarchy

@@ -162,7 +162,7 @@ SceneComponentBackground::~SceneComponentBackground()
 void SceneComponentBackground::Draw(
     DrawSystem* const in_draw_system,
     DrawSystemFrame* const in_draw_system_frame,
-    GeometryGeneric* const in_screen_quad,
+    const std::shared_ptr<GeometryGeneric>& in_screen_quad,
     const CameraConstantBufferB0& in_camera_constant_buffer
     )
 {
@@ -172,11 +172,9 @@ void SceneComponentBackground::Draw(
 
     // Draw background
 #if 1
-    auto shader_background = _shader_background.get();
-    auto shader_background_constant_buffer = _shader_background_constant_buffer.get();
-    if ((nullptr != shader_background) && (nullptr != shader_background_constant_buffer))
+    if ((nullptr != _shader_background) && (nullptr != _shader_background_constant_buffer))
     {
-        auto& buffer_background_sky = shader_background_constant_buffer->GetConstant<ConstantBufferSky>(0);
+        auto& buffer_background_sky = _shader_background_constant_buffer->GetConstant<ConstantBufferSky>(0);
 
         buffer_background_sky._sun_azimuth_altitude = VectorFloat2(Angle::DegToRadian(45.0f), Angle::DegToRadian(45.0f));
         buffer_background_sky._sun_range = VectorFloat2(0.05f, 0.2f);//1.0f, 5.0f);
@@ -187,20 +185,18 @@ void SceneComponentBackground::Draw(
         buffer_background_sky._ground_tint = VectorFloat3(32.0f / 255.0f, 16.0f / 255.0f, 2.0f / 255.0f);
         buffer_background_sky._fog_tint = VectorFloat3(200.0f / 255.0f, 200.0f / 255.0f, 200.0f / 255.0f);
 
-        in_draw_system_frame->SetShader(shader_background, shader_background_constant_buffer);
+        in_draw_system_frame->SetShader(_shader_background, _shader_background_constant_buffer);
         in_draw_system_frame->Draw(in_screen_quad);
     }
 #endif
 
     // Draw Grid
 #if 1
-    auto shader_grid = _shader_grid.get();
-    auto shader_grid_constant_buffer = _shader_grid_constant_buffer.get();
-    if ((nullptr != shader_grid) && (nullptr != shader_grid_constant_buffer))
+    if ((nullptr != _shader_grid) && (nullptr != _shader_grid_constant_buffer))
     {
-        shader_grid_constant_buffer->GetConstant<CameraConstantBufferB0>(0) = in_camera_constant_buffer;
+        _shader_grid_constant_buffer->GetConstant<CameraConstantBufferB0>(0) = in_camera_constant_buffer;
 
-        in_draw_system_frame->SetShader(shader_grid, shader_grid_constant_buffer);
+        in_draw_system_frame->SetShader(_shader_grid, _shader_grid_constant_buffer);
         in_draw_system_frame->Draw(in_screen_quad);
     }
 #endif

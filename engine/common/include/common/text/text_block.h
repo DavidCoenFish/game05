@@ -12,6 +12,7 @@ class TextBlockImplementation;
 class TextLocale;
 class VectorInt2;
 class TextFont;
+class TextTexture;
 
 /// intended as a simple block of text with a given colour.
 class TextBlock
@@ -94,11 +95,21 @@ public:
         const float in_ui_scale
         );
 
+    // GeometryGeneric* const GetGeometry(
+
     /// Rather than a seperate Update function, that could be forgoten, have the update in the getter, results in out_geometry_dirty
-    GeometryGeneric* const GetGeometry(
-        bool& out_geometry_dirty,
+    /// Rath than return ref to smart ptr, take the DrawFrame and Shader and do the draw internally?
+    //std::shared_ptr<GeometryGeneric>& GetGeometryRef(
+    //    bool& out_geometry_dirty,
+    //    DrawSystem* const in_draw_system,
+    //    ID3D12GraphicsCommandList* const in_command_list
+    //    );
+
+    void Draw(
         DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list
+        DrawSystemFrame* const in_draw_system_frame,
+        std::shared_ptr<Shader>& in_shader,
+        TextTexture& in_text_texture
         );
 
 private:

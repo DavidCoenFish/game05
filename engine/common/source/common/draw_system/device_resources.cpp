@@ -455,17 +455,6 @@ const bool DeviceResources::CreateWindowSizeDependentResources(
     return true;
 }
 
-void DeviceResources::AddFrameResource(
-    const std::shared_ptr<IResource>& in_resource
-    )
-{
-    if (_screen_size_resources)
-    {
-        _screen_size_resources->AddFrameResource(in_resource);
-    }
-    return;
-}
-
 void DeviceResources::MoveToNextFrame()
 {
     if (_screen_size_resources)

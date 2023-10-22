@@ -18,7 +18,7 @@ public:
         );
     ~SceneComponentScreenQuad();
 
-    GeometryGeneric* const GetGeometry() const;
+    const std::shared_ptr<GeometryGeneric>& GetGeometryRef() const;
     static const std::vector<D3D12_INPUT_ELEMENT_DESC>& GetInputElementDescArray();
 
 private:

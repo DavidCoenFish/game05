@@ -287,9 +287,9 @@ public:
             );
     }
 
-    Shader* const GetEffectShader(const UIEffectEnum in_type) const
+    const std::shared_ptr<Shader>& GetShaderRef(const UIShaderEnum in_type)
     {
-        return _shader_array[static_cast<size_t>(in_type)].get();
+        return _shader_array[static_cast<size_t>(in_type)];
     }
 
 private:
@@ -393,12 +393,7 @@ void UIManager::Draw(
     return;
 }
 
-Shader* const UIManager::GetDefaultShader() const
+const std::shared_ptr<Shader>& UIManager::GetShaderRef(const UIShaderEnum in_type) const
 {
-    return _implementation->GetEffectShader(UIEffectEnum::TNone);
-}
-
-Shader* const UIManager::GetEffectShader(const UIEffectEnum in_type) const
-{
-    return _implementation->GetEffectShader(in_type);
+    return _implementation->GetShaderRef(in_type);
 }

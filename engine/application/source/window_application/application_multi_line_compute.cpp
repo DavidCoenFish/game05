@@ -351,7 +351,7 @@ void ApplicationMultiLineCompute::Update()
     if (_draw_system && _draw_resources)
     {
         auto frame = _draw_system->CreateNewFrame();
-        auto screen_quad = _draw_resources->_screen_quad ? _draw_resources->_screen_quad->GetGeometry() : nullptr;
+        const auto& screen_quad = _draw_resources->_screen_quad ? _draw_resources->_screen_quad->GetGeometryRef() : nullptr;
 
         if (_draw_resources->_camera_ray && screen_quad)
         {
@@ -375,8 +375,8 @@ void ApplicationMultiLineCompute::Update()
 
         // Draw Multi Line Compute
 #if 1
-        auto multi_line_compute = _draw_resources->_multi_line_compute.get();
-        auto multi_line_compute_constant_buffer = _draw_resources->_multi_line_compute_constant_buffer.get();
+        auto multi_line_compute = _draw_resources->_multi_line_compute;
+        auto multi_line_compute_constant_buffer = _draw_resources->_multi_line_compute_constant_buffer;
         if ((nullptr != multi_line_compute) && (nullptr != multi_line_compute_constant_buffer))
         {
             frame->ResourceBarrier(_draw_resources->_multi_line_data_uv_low_uv_high.get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
@@ -396,8 +396,8 @@ void ApplicationMultiLineCompute::Update()
 
         // Draw Multi Line
 #if 1
-        auto multi_line_shader = _draw_resources->_multi_line_shader.get();
-        auto multi_line_shader_constant_buffer = _draw_resources->_multi_line_shader_constant_buffer.get();
+        auto multi_line_shader = _draw_resources->_multi_line_shader;
+        auto multi_line_shader_constant_buffer = _draw_resources->_multi_line_shader_constant_buffer;
         if ((nullptr != multi_line_shader) && (nullptr != multi_line_shader_constant_buffer))
         {
             frame->ResourceBarrier(_draw_resources->_multi_line_data_uv_low_uv_high.get(), D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
@@ -408,7 +408,7 @@ void ApplicationMultiLineCompute::Update()
             multi_line_shader_constant_buffer->GetConstant<CameraConstantBufferB0>(0) = _draw_resources->_camera_ray->GetConstantBufferB0();
 
             frame->SetShader(multi_line_shader, multi_line_shader_constant_buffer);
-            frame->Draw(_draw_resources->_multi_line_geometry.get());
+            frame->Draw(_draw_resources->_multi_line_geometry);
         }
 #endif
 

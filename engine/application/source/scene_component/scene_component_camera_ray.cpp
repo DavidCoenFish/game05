@@ -126,7 +126,7 @@ SceneComponentCameraRay::~SceneComponentCameraRay()
 void SceneComponentCameraRay::Update(
     const float in_time_delta_seconds,
     DrawSystemFrame* const in_draw_system_frame,
-    GeometryGeneric* const in_screen_quad
+    const std::shared_ptr<GeometryGeneric>& in_screen_quad
     )
 {
     // camera pos update
@@ -225,14 +225,11 @@ void SceneComponentCameraRay::Update(
             _render_target_texture.get()
             );
 
-        auto shader_camera_ray = _shader_camera_ray.get();
-        auto shader_camera_ray_constant_buffer = _shader_camera_ray_constant_buffer.get();
-
-        if ((nullptr != shader_camera_ray) && (nullptr != shader_camera_ray_constant_buffer))
+        if ((nullptr != _shader_camera_ray) && (nullptr != _shader_camera_ray_constant_buffer))
         {
-            shader_camera_ray_constant_buffer->GetConstant<CameraConstantBufferB0>(0) = _constant_buffer;
+            _shader_camera_ray_constant_buffer->GetConstant<CameraConstantBufferB0>(0) = _constant_buffer;
 
-            in_draw_system_frame->SetShader(shader_camera_ray, shader_camera_ray_constant_buffer);
+            in_draw_system_frame->SetShader(_shader_camera_ray, _shader_camera_ray_constant_buffer);
             in_draw_system_frame->Draw(in_screen_quad);
         }
 

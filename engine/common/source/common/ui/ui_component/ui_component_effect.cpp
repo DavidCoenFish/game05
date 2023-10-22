@@ -10,6 +10,33 @@
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_texture.h"
 #include "common/ui/ui_effect_enum.h"
+#include "common/ui/ui_shader_enum.h"
+
+namespace
+{
+    const UIShaderEnum GetShaderType(const UIEffectEnum in_type)
+    {
+        UIShaderEnum result = UIShaderEnum::TCount;
+        switch(in_type)
+        {
+        default:
+            DSC_ASSERT_ALWAYS("missing switch case effect shader");
+            break;
+        case UIEffectEnum::TDebug:
+            result = UIShaderEnum::TEffectDebug;
+            break;
+        case UIEffectEnum::TDropShadow:
+            result = UIShaderEnum::TEffectDropShadow;
+            break;
+        case UIEffectEnum::TRoundCorners:
+            result = UIShaderEnum::TEffectRoundCorners;
+            break;
+        }
+
+        return result;
+    }
+
+}
 
 UIComponentEffect::UIComponentEffect(
     const UIBaseColour& in_base_colour,
@@ -131,7 +158,8 @@ const bool UIComponentEffect::UpdateHierarchy(
 
     if (nullptr == _shader_constant_buffer)
     {
-        Shader* const shader = in_param._ui_manager->GetEffectShader(_type);
+        const auto shader_type = GetShaderType(_type);
+        const Shader* const shader = in_param._ui_manager->GetShaderRef(shader_type).get();
         if (nullptr != shader)
         {
             _shader_constant_buffer = shader->MakeShaderConstantBuffer(
@@ -247,43 +275,37 @@ const bool UIComponentEffect::Draw(
         (true == texture.GetAlwaysDirty())
         )
     {
-        std::shared_ptr<IResource> frame_resource;
-        auto* const render_target = texture.GetRenderTarget(
+        if (false == texture.SetRenderTarget(
             in_draw_param._draw_system,
-            frame_resource,
-            in_draw_param._frame->GetCommandList()
-            );
-        if (nullptr == render_target)
+            in_draw_param._frame
+            ))
         {
             return dirty;
         }
 
         dirty = true;
-        in_draw_param._frame->SetRenderTarget(
-            render_target, 
-            frame_resource,
-            texture.GetAllowClear()
-            );
 
         auto& child_data_array = in_node.GetChildData();
         if (0 != child_data_array.size())
         {
             UIHierarchyNodeChildData& child_data = *(child_data_array[0]);
-            Shader* const shader = in_draw_param._ui_manager->GetEffectShader(_type);
+            const auto shader_type = GetShaderType(_type);
+            const auto& shader = in_draw_param._ui_manager->GetShaderRef(shader_type);
 
-            shader->SetShaderResourceViewHandle(0, child_data._node->GetShaderResourceHeapWrapperItem());
-            in_draw_param._frame->SetShader(shader, _shader_constant_buffer.get());
+            child_data._node->GetUITexture().SetShaderResource(
+                *shader,
+                0,
+                in_draw_param._frame
+                );
+
+            in_draw_param._frame->SetShader(shader, _shader_constant_buffer);
 
 #if defined(GEOMETRY_SIZE_INTO_SHADER)
-            GeometryGeneric* const geometry = _geometry->GetGeometry(
+            _geometry->Draw(
                 in_draw_param._draw_system,
-                in_draw_param._frame->GetCommandList()
+                in_draw_param._frame
                 );
 #else
-            GeometryGeneric* const geometry = child_data._geometry->GetGeometry(
-                in_draw_param._draw_system,
-                in_draw_param._frame->GetCommandList()
-                );
             VectorFloat4 geometry_pos;
             VectorFloat4 geometry_uv;
             child_data._geometry->Get(
@@ -293,9 +315,12 @@ const bool UIComponentEffect::Draw(
             DSC_ASSERT(geometry_pos == VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f), "Expect child geometry to be full screen");
             // atention Y inverted
             DSC_ASSERT(geometry_uv == VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f), "Expect child geometry to be full screen uv"); 
-#endif
 
-            in_draw_param._frame->Draw(geometry);
+            child_data._geometry->Draw(
+                in_draw_param._draw_system,
+                in_draw_param._frame
+                );
+#endif
         }
 
         texture.SetHasDrawn(true);

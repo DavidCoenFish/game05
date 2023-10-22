@@ -19,6 +19,7 @@
 #include "common/ui/ui_texture.h"
 #include "common/ui/ui_data/ui_data.h"
 #include "common/ui/ui_root_input_state.h"
+#include "common/ui/ui_shader_enum.h"
 #include "common/math/vector_int2.h"
 #include "common/math/vector_float4.h"
 
@@ -98,10 +99,10 @@ UIRootInputState& UIHierarchyNode::GetOrMakeRootInputState()
     return *_root_input_state;
 }
 
-std::shared_ptr<HeapWrapperItem> UIHierarchyNode::GetShaderResourceHeapWrapperItem() const
-{
-    return _texture->GetShaderResourceHeapWrapperItem();
-}
+//std::shared_ptr<HeapWrapperItem> UIHierarchyNode::GetShaderResourceHeapWrapperItem() const
+//{
+//    return _texture->GetShaderResourceHeapWrapperItem();
+//}
 
 void UIHierarchyNode::AddChild(
     std::unique_ptr<IUIComponent>& in_content
@@ -436,23 +437,15 @@ const bool UIHierarchyNode::Draw(
         (true == _texture->GetAlwaysDirty())
         )
     {
-        std::shared_ptr<IResource> frame_resource;
-        auto* const render_target = _texture->GetRenderTarget(
+        if (false == _texture->SetRenderTarget(
             in_draw_param._draw_system,
-            frame_resource,
-            in_draw_param._frame->GetCommandList()
-            );
-        if (nullptr == render_target)
+            in_draw_param._frame
+            ))
         {
             return dirty;
         }
 
         dirty = true;
-        in_draw_param._frame->SetRenderTarget(
-            render_target, 
-            frame_resource,
-            _texture->GetAllowClear()
-            );
 
         for (auto& iter : _child_data_array)
         {
@@ -462,29 +455,33 @@ const bool UIHierarchyNode::Draw(
                 continue;
             }
 
-            Shader* const shader = in_draw_param._ui_manager->GetDefaultShader();
+            const auto& shader = in_draw_param._ui_manager->GetShaderRef(UIShaderEnum::TDefault);
 
-            shader->SetShaderResourceViewHandle(0, child_data._node->GetShaderResourceHeapWrapperItem());
-            auto geometry = child_data._geometry->GetGeometry(
-                in_draw_param._draw_system,
-                in_draw_param._frame->GetCommandList()
+            child_data._node->GetUITexture().SetShaderResource(
+                *shader,
+                0,
+                in_draw_param._frame
                 );
+
             if (nullptr == child_data._shader_constant_buffer)
             {
                 child_data._shader_constant_buffer = shader->MakeShaderConstantBuffer(
                     in_draw_param._draw_system
                     );
             }
-            ShaderConstantBuffer* const shader_constant_buffer = child_data._shader_constant_buffer.get();
-            if (nullptr != shader_constant_buffer)
+            if (nullptr != child_data._shader_constant_buffer)
             {
-                UIManager::TShaderConstantBuffer& buffer = shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
+                UIManager::TShaderConstantBuffer& buffer = child_data._shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
                 // todo: get the tint colour, from geometry?
                 buffer._tint_colour = VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f);
             }
 
-            in_draw_param._frame->SetShader(shader, shader_constant_buffer);
-            in_draw_param._frame->Draw(geometry);
+            in_draw_param._frame->SetShader(shader, child_data._shader_constant_buffer);
+
+            child_data._geometry->Draw(
+                in_draw_param._draw_system,
+                in_draw_param._frame
+                );
         }
 
         _texture->SetHasDrawn(true);

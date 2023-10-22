@@ -474,7 +474,7 @@ void Shader::OnDeviceRestored(
 
 std::shared_ptr<ShaderConstantBuffer> Shader::MakeShaderConstantBuffer(
     DrawSystem* const in_draw_system
-    )
+    ) const
 {
     std::vector<std::shared_ptr<ConstantBuffer>> array_constant_buffer;
 

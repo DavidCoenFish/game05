@@ -212,7 +212,7 @@ void ApplicationTestCompute::Update()
 
         // Dispatch compute shader
 #if 1
-        auto compute_shader = _draw_resources->_compute_shader.get();
+        auto compute_shader = _draw_resources->_compute_shader;
         if (nullptr != compute_shader)
         {
             frame->SetShader(compute_shader);
@@ -228,7 +228,7 @@ void ApplicationTestCompute::Update()
 #if 1
         frame->SetRenderTarget(_draw_system->GetRenderTargetBackBuffer());
 
-        auto present_shader = _draw_resources->_present_shader.get();
+        auto present_shader = _draw_resources->_present_shader;
         if (nullptr != present_shader)
         {
             frame->ResourceBarrier(
@@ -237,7 +237,7 @@ void ApplicationTestCompute::Update()
                 );
 
             frame->SetShader(present_shader);
-            frame->Draw(_draw_resources->_present_geometry.get());
+            frame->Draw(_draw_resources->_present_geometry);
         }
 #endif
     }

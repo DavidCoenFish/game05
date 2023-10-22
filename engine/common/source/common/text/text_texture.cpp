@@ -298,6 +298,11 @@ std::shared_ptr<HeapWrapperItem> TextTexture::GetShaderViewHeapWrapperItem() con
     return _texture->GetHeapWrapperItem();
 }
 
+std::shared_ptr<IResource> TextTexture::GetResource() const
+{
+    return _texture;
+}
+
 void TextTexture::RestUsage()
 {
     _array_glyph_row.clear();

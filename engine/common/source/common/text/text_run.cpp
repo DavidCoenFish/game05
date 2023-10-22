@@ -5,6 +5,7 @@
 #include "common/draw_system/draw_system_frame.h"
 #include "common/draw_system/geometry/geometry_generic.h"
 #include "common/draw_system/render_target/render_target_texture.h"
+#include "common/draw_system/shader/shader.h"
 #include "common/math/vector_int2.h"
 #include "common/math/vector_int4.h"
 #include "common/math/vector_float2.h"
@@ -16,6 +17,7 @@
 #include "common/text/text_pre_vertex.h"
 #include "common/text/text_run_data_icon.h"
 #include "common/text/text_run_data_string.h"
+#include "common/text/text_texture.h"
 
 class TextRunImplementation
 {
@@ -283,10 +285,11 @@ public:
         return dirty;
     }
 
-    GeometryGeneric* const GetGeometry(
-        bool& out_geometry_dirty,
+    void Draw(
         DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list
+        DrawSystemFrame* const in_draw_system_frame,
+        std::shared_ptr<Shader>& in_shader,
+        TextTexture& in_text_texture
         )
     {
         GetTextBounds();
@@ -294,7 +297,6 @@ public:
         if (true == _geometry_dirty)
         {
             _geometry_dirty = false;
-            out_geometry_dirty = true;
 
             std::vector<uint8_t> vertex_raw_data;
             _pre_vertex_data->BuildVertexData(
@@ -308,7 +310,7 @@ public:
             if (nullptr == _geometry)
             {
                 _geometry = in_draw_system->MakeGeometryGeneric(
-                    in_command_list,
+                    in_draw_system_frame->GetCommandList(),
                     D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
                     TextManager::GetInputElementDesc(),
                     vertex_raw_data,
@@ -318,14 +320,20 @@ public:
             else
             {
                 in_draw_system->UpdateGeometryGeneric(
-                    in_command_list,
+                    in_draw_system_frame->GetCommandList(),
                     _geometry.get(),
                     vertex_raw_data
                     );
             }
         }
 
-        return _geometry.get();
+        in_text_texture.Update(in_draw_system, in_draw_system_frame);
+        in_draw_system_frame->AddFrameResource(in_text_texture.GetResource());
+        in_shader->SetShaderResourceViewHandle(0, in_text_texture.GetShaderViewHeapWrapperItem());
+        in_draw_system_frame->SetShader(in_shader);
+        in_draw_system_frame->Draw(_geometry);
+
+        return;
     }
 
 private:
@@ -526,15 +534,18 @@ const bool TextRun::Set(
         );
 }
 
-GeometryGeneric* const TextRun::GetGeometry(
-    bool& out_geometry_dirty,
+void TextRun::Draw(
     DrawSystem* const in_draw_system,
-    ID3D12GraphicsCommandList* const in_command_list
+    DrawSystemFrame* const in_draw_system_frame,
+    std::shared_ptr<Shader>& in_shader,
+    TextTexture& in_text_texture
     )
 {
-    return _implementation->GetGeometry(
-        out_geometry_dirty,
+    _implementation->Draw(
         in_draw_system,
-        in_command_list
+        in_draw_system_frame,
+        in_shader,
+        in_text_texture
         );
+    return;
 }

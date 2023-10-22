@@ -7,13 +7,14 @@ class DrawSystem;
 class DrawSystemFrame;
 class GeometryGeneric;
 class HeapWrapperItem;
+class IconFont;
 class ITextRunData;
 class Shader;
-class TextRunImplementation;
-class TextLocale;
-class VectorInt2;
 class TextFont;
-class IconFont;
+class TextLocale;
+class TextRunImplementation;
+class TextTexture;
+class VectorInt2;
 
 class TextRun
 {
@@ -91,10 +92,18 @@ public:
         );
 
     // Rather than a seperate Update function, that could be forgoten, have the update in the getter, results in out_geometry_dirty
-    GeometryGeneric* const GetGeometry(
-        bool& out_geometry_dirty,
+
+    //GeometryGeneric* const GetGeometryRef(
+    //std::shared_ptr<GeometryGeneric>& GetGeometryRef(
+    //    bool& out_geometry_dirty,
+    //    DrawSystem* const in_draw_system,
+    //    ID3D12GraphicsCommandList* const in_command_list
+    //    );
+    void Draw(
         DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list
+        DrawSystemFrame* const in_draw_system_frame,
+        std::shared_ptr<Shader>& in_shader,
+        TextTexture& in_text_texture
         );
 
 private:

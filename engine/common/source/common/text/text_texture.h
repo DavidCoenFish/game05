@@ -3,6 +3,7 @@
 class DrawSystem;
 class DrawSystemFrame;
 class HeapWrapperItem;
+class IResource;
 class ShaderResource;
 class TextCell;
 class TextGlyphRow;
@@ -37,6 +38,7 @@ public:
         );
 
     std::shared_ptr<HeapWrapperItem> GetShaderViewHeapWrapperItem() const;
+    std::shared_ptr<IResource> GetResource() const;
     void RestUsage();
 
 private:

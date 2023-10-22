@@ -1,25 +1,36 @@
 #include "common/common_pch.h"
+#include "common/draw_system/draw_system_frame.h"
 
 #include "common/direct_xtk12/d3dx12.h"
 #include "common/draw_system/draw_system.h"
-#include "common/draw_system/draw_system_frame.h"
+#include "common/draw_system/draw_system_resource_list.h"
 #include "common/draw_system/geometry/geometry_generic.h"
 #include "common/draw_system/render_target/i_render_target.h"
+#include "common/draw_system/render_target/render_target_texture.h"
 #include "common/draw_system/shader/shader.h"
+#include "common/draw_system/shader/shader_constant_buffer.h"
+#include "common/log/log.h"
 
 DrawSystemFrame::DrawSystemFrame(DrawSystem&in_draw_system) 
     : _draw_system(in_draw_system)
     , _command_list(nullptr)
     , _render_target(nullptr)
 {
+    //LOG_MESSAGE_RENDER("DrawSystemFrame start");
+
     _draw_system.Prepare(_command_list);
+    _resource_list = _draw_system.MakeResourceList();
+    DSC_ASSERT(nullptr != _resource_list, "Make resource list failed");
     return;
 }
 
 DrawSystemFrame::~DrawSystemFrame()
 {
     SetRenderTarget(nullptr);
+    _draw_system.FinishResourceList(_resource_list);
     _draw_system.Present();
+    //LOG_MESSAGE_RENDER("DrawSystemFrame end");
+
     return;
 }
 
@@ -34,8 +45,7 @@ const int DrawSystemFrame::GetBackBufferIndex()
 }
 
 void DrawSystemFrame::SetRenderTarget(
-    IRenderTarget* const in_render_target, 
-    const std::shared_ptr<IResource>& in_resource,
+    IRenderTarget* const in_render_target,
     const bool in_allow_clear
     )
 {
@@ -52,31 +62,56 @@ void DrawSystemFrame::SetRenderTarget(
     _render_target = in_render_target;
     if (_render_target)
     {
-        if (nullptr != in_resource)
-        {
-            _draw_system.AddFrameResource(in_resource);
-        }
+        // backbuffer render resource is not a IResource, but RenderTargetTexture is, deal upstream
+        //_resource_list->AddResource(_render_target);
         _render_target->StartRender(_command_list, in_allow_clear);
     }
+
+    return;
+}
+
+void DrawSystemFrame::SetRenderTargetTexture(
+    const std::shared_ptr<RenderTargetTexture>& in_render_target,
+    const bool in_allow_clear
+    )
+{
+    AddFrameResource(in_render_target);
+    SetRenderTarget(in_render_target.get(), in_allow_clear);
+    return;
+}
+
+
+void DrawSystemFrame::AddFrameResource(
+    const std::shared_ptr<IResource>& in_resource
+    )
+{
+    _resource_list->AddResource(in_resource);
     return;
 }
 
 void DrawSystemFrame::SetShader(
-    Shader* const in_shader,
-    ShaderConstantBuffer* const in_shader_constant_buffer
+    const std::shared_ptr<Shader>& in_shader,
+    const std::shared_ptr<ShaderConstantBuffer>& in_shader_constant_buffer
     )
 {
     in_shader->SetActive(
         _command_list,
-        in_shader_constant_buffer,
+        in_shader_constant_buffer.get(),
         _draw_system.GetBackBufferIndex()
         );
+    _resource_list->AddResource(in_shader);
+    _resource_list->AddResource(in_shader_constant_buffer);
+
     return;
 }
 
-void DrawSystemFrame::Draw(GeometryGeneric* const in_geometry)
+void DrawSystemFrame::Draw(
+    const std::shared_ptr<GeometryGeneric>& in_geometry
+    )
 {
     in_geometry->Draw(_command_list);
+    _resource_list->AddResource(in_geometry);
+
     return;
 }
 
@@ -104,15 +139,16 @@ void DrawSystemFrame::ResourceBarrier(
 }
 
 void DrawSystemFrame::UpdateGeometryGeneric(
-    GeometryGeneric* const in_geometry,
+    const std::shared_ptr<GeometryGeneric>& in_geometry,
     const std::vector<uint8_t>& in_vertex_data_raw
     )
 {
     _draw_system.UpdateGeometryGeneric(
         _command_list,
-        in_geometry,
+        in_geometry.get(),
         in_vertex_data_raw
         );
+    _resource_list->AddResource(in_geometry);
     return;
 }
 

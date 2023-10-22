@@ -121,7 +121,7 @@ public:
     UIRootInputState& GetOrMakeRootInputState();
 
     /// nullptr if _bUseBackBuffer is true
-    std::shared_ptr<HeapWrapperItem> GetShaderResourceHeapWrapperItem() const;
+    //std::shared_ptr<HeapWrapperItem> GetShaderResourceHeapWrapperItem() const;
 
     void AddChild(
         std::unique_ptr<IUIComponent>& in_content

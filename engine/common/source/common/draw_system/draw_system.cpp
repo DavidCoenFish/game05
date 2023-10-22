@@ -5,6 +5,7 @@
 #include "common/draw_system/device_resources.h"
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/draw_system_frame.h"
+#include "common/draw_system/draw_system_resource_list.h"
 #include "common/draw_system/geometry/geometry_generic.h"
 #include "common/draw_system/heap_wrapper/heap_wrapper.h"
 #include "common/draw_system/heap_wrapper/heap_wrapper_item.h"
@@ -271,29 +272,19 @@ std::shared_ptr<RenderTargetTexture> DrawSystem::MakeRenderTargetTexture(
     return result;
 }
 
-//void DrawSystem::ResizeRenderTargetTexture(
-//    ID3D12GraphicsCommandList* const in_command_list,
-//    RenderTargetTexture* const in_render_target_texture,
-//    const VectorInt2& in_size
-//    )
-//{
-//    if ((nullptr != in_render_target_texture) && (nullptr != _device_resources))
-//    {
-//        in_render_target_texture->Resize(
-//            in_command_list,
-//            _device_resources->GetD3dDevice(),
-//            in_size
-//            );
-//    }
-//}
-
-void DrawSystem::AddFrameResource(
-    const std::shared_ptr<IResource>& in_resource
+void DrawSystem::ResizeRenderTargetTexture(
+    ID3D12GraphicsCommandList* const in_command_list,
+    RenderTargetTexture* const in_render_target_texture,
+    const VectorInt2& in_size
     )
 {
-    if (nullptr != _device_resources)
+    if ((nullptr != in_render_target_texture) && (nullptr != _device_resources))
     {
-        _device_resources->AddFrameResource(in_resource);
+        in_render_target_texture->Resize(
+            in_command_list,
+            _device_resources->GetD3dDevice(),
+            in_size
+            );
     }
 }
 
@@ -338,6 +329,28 @@ void DrawSystem::CustomCommandListFinish(ID3D12GraphicsCommandList* in_command_l
 std::unique_ptr<DrawSystemFrame> DrawSystem::CreateNewFrame()
 {
     return std::make_unique<DrawSystemFrame>(*this);
+}
+
+std::shared_ptr<DrawSystemResourceList> DrawSystem::MakeResourceList()
+{
+    auto device = _device_resources ? _device_resources->GetD3dDevice() : nullptr;
+    if (nullptr != device)
+    {
+        return DrawSystemResourceList::Factory(*device);
+    }
+    return nullptr;
+}
+
+void DrawSystem::FinishResourceList(
+    std::shared_ptr<DrawSystemResourceList>& in_resource_list
+    )
+{
+    ID3D12CommandQueue* const command_queue = _device_resources ? _device_resources->GetCommandQueue() : nullptr;
+    if ((nullptr != command_queue) && (nullptr != in_resource_list))
+    {
+        _resource_list.push_back(in_resource_list);
+        in_resource_list->MarkFinished(command_queue);
+    }
 }
 
 void DrawSystem::Prepare(ID3D12GraphicsCommandList*& in_command_list)
@@ -499,3 +512,15 @@ void DrawSystem::CreateDeviceResources()
     }
 }
 
+void DrawSystem::RemoveCompletedResourceList()
+{
+    // Release completed frame assets
+    _resource_list.erase(
+        std::remove_if(
+            _resource_list.begin(), 
+            _resource_list.end(),
+            [](const std::shared_ptr<DrawSystemResourceList>& item) { 
+                return item->GetFinished();
+            }), 
+        _resource_list.end());
+}

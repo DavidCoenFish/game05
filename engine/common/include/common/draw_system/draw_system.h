@@ -4,6 +4,7 @@
 
 class DeviceResources;
 class DrawSystemFrame;
+class DrawSystemResourceList;
 class IResource;
 class IRenderTarget;
 class HeapWrapper;
@@ -124,15 +125,13 @@ public:
         const VectorInt2& in_size,
         const bool in_resize_with_screen = false
         );
-    //void ResizeRenderTargetTexture(
-    //    ID3D12GraphicsCommandList* const in_command_list,
-    //    RenderTargetTexture* const in_render_target_texture,
-    //    const VectorInt2& in_size
-    //    );
 
-    void AddFrameResource(
-        const std::shared_ptr<IResource>& in_resource
+    void ResizeRenderTargetTexture(
+        ID3D12GraphicsCommandList* const in_command_list,
+        RenderTargetTexture* const in_render_target_texture,
+        const VectorInt2& in_size
         );
+
     void ForceRestore(
         ID3D12GraphicsCommandList* const in_command_list,
         IResource* const in_resource
@@ -145,6 +144,11 @@ public:
 
     // Ctor == Prepare, dtor == Present
     std::unique_ptr<DrawSystemFrame> CreateNewFrame();
+    std::shared_ptr<DrawSystemResourceList> MakeResourceList();
+    /// Mark the resource list as finished and wait for fence before destroying it, transfer ownership
+    void FinishResourceList(
+        std::shared_ptr<DrawSystemResourceList>& in_resource_list
+        );
 
     void Prepare(ID3D12GraphicsCommandList*& in_command_list);
     void Present();
@@ -158,8 +162,10 @@ public:
 
 private:
     void CreateDeviceResources();
+    void RemoveCompletedResourceList();
 
 private:
+    /// window handle which hosts the d3dx12 draw surface
     HWND _hwnd;
     unsigned int _back_buffer_count;
     D3D_FEATURE_LEVEL _d3d_feature_level;
@@ -167,12 +173,17 @@ private:
     RenderTargetFormatData _target_format_data;
     RenderTargetDepthData _target_depth_data;
 
+    /// resource internal to the draw system
     std::unique_ptr<DeviceResources> _device_resources;
+    /// list of all created resources, to be told if device is reset
     std::list<IResource*> _list_resource;
 
     std::shared_ptr<HeapWrapper> _heap_wrapper_cbv_srv_uav;
     std::shared_ptr<HeapWrapper> _heap_wrapper_sampler;
     std::shared_ptr<HeapWrapper> _heap_wrapper_render_target_view;
     std::shared_ptr<HeapWrapper> _heap_wrapper_depth_stencil_view;
+
+    /// list of resource waiting for gpu usage to finish
+    std::vector<std::shared_ptr<DrawSystemResourceList>> _resource_list;
 
 };

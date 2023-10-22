@@ -45,6 +45,7 @@ public:
 
     IRenderTarget* GetRenderTargetBackBuffer();
     ID3D12Device2* const GetD3dDevice();
+    ID3D12CommandQueue* const GetCommandQueue() const { return _command_queue.Get(); }
 
     ID3D12GraphicsCommandList* GetCustomCommandList(
         ID3D12PipelineState* const in_pipeline_state_object_or_null
@@ -56,10 +57,6 @@ public:
         DrawSystem* const in_draw_system,
         const HWND in_hwnd,
         VectorInt2* out_size = nullptr
-        );
-
-    void AddFrameResource(
-        const std::shared_ptr<IResource>& in_resource
         );
 
     void ForceRestore(

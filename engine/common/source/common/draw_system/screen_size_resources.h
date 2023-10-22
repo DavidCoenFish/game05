@@ -36,10 +36,6 @@ public:
         const Microsoft::WRL::ComPtr < ID3D12CommandQueue >&in_command_queue
         );
 
-    void AddFrameResource(
-        const std::shared_ptr<IResource>& in_resource
-        );
-
     IRenderTarget* GetRenderTargetBackBuffer();
     void UpdateBackBufferIndex();
     const int GetBackBufferIndex() const
@@ -56,8 +52,6 @@ public:
     void MoveToNextFrame(const Microsoft::WRL::ComPtr < ID3D12CommandQueue >&in_command_queue);
 
 private:
-    // CD3DX12_CPU_DESCRIPTOR_HANDLE GetRenderTargetView() const;
-    // CD3DX12_CPU_DESCRIPTOR_HANDLE GetDepthStencilView() const;
     static const size_t MAX_BACK_BUFFER_COUNT = 3;
     VectorInt2 _size;
     bool _allow_tearing;
@@ -70,15 +64,5 @@ private:
     Microsoft::WRL::Wrappers::Event _fence_event;
     Microsoft::WRL::ComPtr<IDXGISwapChain3> _swap_chain;
     std::unique_ptr<RenderTargetBackBuffer> _render_target_back_buffer[MAX_BACK_BUFFER_COUNT];
-
-    struct FrameResources
-    {
-        explicit FrameResources(const UINT64 in_fence_value) : _fence_value(in_fence_value) {}
-        UINT64 _fence_value;
-        std::vector<std::shared_ptr<IResource>> _resource_array;
-    };
-    std::vector<std::shared_ptr<FrameResources>> _frame_resource_array;
-    UINT64 _frame_fence_value;
-    Microsoft::WRL::ComPtr<ID3D12Fence> _frame_fence;
 
 };

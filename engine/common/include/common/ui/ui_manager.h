@@ -18,6 +18,7 @@ class UIManagerImplementation;
 
 //enum class LocaleISO_639_1;
 enum class UIEffectEnum;
+enum class UIShaderEnum;
 
 struct UIDataTextRunStyle;
 
@@ -186,8 +187,7 @@ public:
         const UIManagerDrawParam& in_param
         );
 
-    Shader* const GetDefaultShader() const;
-    Shader* const GetEffectShader(const UIEffectEnum in_type) const;
+    const std::shared_ptr<Shader>& GetShaderRef(const UIShaderEnum in_type) const;
 
 private:
     std::unique_ptr<UIManagerImplementation> _implementation;

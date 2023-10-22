@@ -65,9 +65,9 @@ SceneComponentScreenQuad::~SceneComponentScreenQuad()
     // Nop
 }
 
-GeometryGeneric* const SceneComponentScreenQuad::GetGeometry() const
+const std::shared_ptr<GeometryGeneric>& SceneComponentScreenQuad::GetGeometryRef() const
 {
-    return _geometry.get();
+    return _geometry;
 }
 
 const std::vector<D3D12_INPUT_ELEMENT_DESC>& SceneComponentScreenQuad::GetInputElementDescArray()

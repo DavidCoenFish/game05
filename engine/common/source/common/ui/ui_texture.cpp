@@ -3,6 +3,7 @@
 
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/draw_system_frame.h"
+#include "common/draw_system/shader/shader.h"
 #include "common/draw_system/render_target/render_target_texture.h"
 
 UITexture::UITexture(
@@ -25,9 +26,8 @@ UITexture::~UITexture()
     // Nop
 }
 
-IRenderTarget* UITexture::GetRenderTarget(
+void UITexture::UpdateRenderTarget(
     DrawSystem* const in_draw_system,
-    std::shared_ptr<IResource>& out_frame_resource,
     ID3D12GraphicsCommandList* const in_command_list
     )
 {
@@ -54,12 +54,39 @@ IRenderTarget* UITexture::GetRenderTarget(
                 _size
                 );
         }
-
-        out_frame_resource = _render_target_texture;
-
-        return _render_target_texture.get();
     }
-    return in_draw_system->GetRenderTargetBackBuffer();
+    return;
+}
+
+const bool UITexture::SetRenderTarget(
+    DrawSystem* const in_draw_system,
+    DrawSystemFrame* const in_frame
+    )
+{
+    UpdateRenderTarget(in_draw_system, in_frame->GetCommandList());
+
+    if (true == _draw_to_texture)
+    {
+        if (nullptr == _render_target_texture)
+        {
+            return false;
+        }
+
+        in_frame->SetRenderTarget(
+            _render_target_texture.get(),
+            _allow_clear
+            );
+        in_frame->AddFrameResource(_render_target_texture);
+    }
+    else
+    {
+        in_frame->SetRenderTarget(
+            in_draw_system->GetRenderTargetBackBuffer(),
+            _allow_clear
+            );
+    }
+
+    return true;
 }
 
 const VectorInt2 UITexture::GetSize(
@@ -119,11 +146,28 @@ void UITexture::SetSize(
 }
 
 // nullptr if _bUseBackBuffer is true
-std::shared_ptr<HeapWrapperItem> UITexture::GetShaderResourceHeapWrapperItem() const
+//std::shared_ptr<HeapWrapperItem> UITexture::GetShaderResourceHeapWrapperItem() const
+//{
+//    if ((true == _draw_to_texture) && (nullptr != _render_target_texture))
+//    {
+//        return _render_target_texture->GetShaderResourceHeapWrapperItem();
+//    }
+//    return nullptr;
+//}
+void UITexture::SetShaderResource(
+    Shader& in_shader,
+    const int in_index,
+    DrawSystemFrame* const in_draw_system_frame
+    )
 {
     if ((true == _draw_to_texture) && (nullptr != _render_target_texture))
     {
-        return _render_target_texture->GetShaderResourceHeapWrapperItem();
+        in_shader.SetShaderResourceViewHandle(
+            in_index,
+            _render_target_texture->GetShaderResourceHeapWrapperItem()
+            );
+        in_draw_system_frame->AddFrameResource(_render_target_texture);
     }
-    return nullptr;
+
+    return;
 }

@@ -316,6 +316,9 @@
     <ClCompile Include="source\common\ui\ui_component\ui_component_grid.cpp">
       <Filter>souce\common\ui\ui_component</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\draw_system\draw_system_resource_list.cpp">
+      <Filter>souce\common\draw_system</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -656,6 +659,12 @@
     </ClInclude>
     <ClInclude Include="include\common\ui\ui_component\ui_component_grid.h">
       <Filter>include\common\ui\ui_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\draw_system_resource_list.h">
+      <Filter>include\common\draw_system</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\ui\ui_shader_enum.h">
+      <Filter>souce\common\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

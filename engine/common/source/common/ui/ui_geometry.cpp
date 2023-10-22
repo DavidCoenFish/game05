@@ -3,6 +3,7 @@
 
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/draw_system_frame.h"
+#include "common/draw_system/geometry/geometry_generic.h"
 #include "common/ui/ui_manager.h"
 #include "common/util/vector_helper.h"
 
@@ -116,7 +117,7 @@ const bool UIGeometry::Set(
     return true;
 }
 
-GeometryGeneric* UIGeometry::GetGeometry(
+void UIGeometry::UpdateGeometry(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list
     )
@@ -154,6 +155,24 @@ GeometryGeneric* UIGeometry::GetGeometry(
             );
     }
 
-    return _geometry.get();
+    return;
+}
+
+void UIGeometry::Draw(
+    DrawSystem* const in_draw_system,
+    DrawSystemFrame* const in_frame
+    )
+{
+    UpdateGeometry(in_draw_system, in_frame->GetCommandList());
+    if (nullptr == _geometry)
+    {
+        return;
+    }
+
+    in_frame->Draw(
+        _geometry
+        );
+
+    return;
 }
 

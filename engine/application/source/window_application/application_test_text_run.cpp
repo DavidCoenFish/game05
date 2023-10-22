@@ -276,8 +276,8 @@ void ApplicationTestTextRun::Update()
         auto frame = _draw_system->CreateNewFrame();
         frame->SetRenderTarget(_draw_system->GetRenderTargetBackBuffer());
 
-        auto background_shader = _draw_resources->_background_shader.get();
-        auto background_shader_constant_buffer = _draw_resources->_background_shader_constant_buffer.get();
+        auto background_shader = _draw_resources->_background_shader;
+        auto background_shader_constant_buffer = _draw_resources->_background_shader_constant_buffer;
         if ((nullptr != background_shader) && (nullptr != background_shader_constant_buffer))
         {
             auto& buffer0 = background_shader_constant_buffer->GetConstant<BackgroundConstantBufferB0>(0);
@@ -285,7 +285,7 @@ void ApplicationTestTextRun::Update()
             buffer0._screen_height = _screen_height;
 
             frame->SetShader(background_shader, background_shader_constant_buffer);
-            frame->Draw(_draw_resources->_screen_quad->GetGeometry());
+            frame->Draw(_draw_resources->_screen_quad->GetGeometryRef());
         }
         _draw_resources->_text_run->SetTextContainerSize(
             VectorInt2(_screen_width, _screen_height)

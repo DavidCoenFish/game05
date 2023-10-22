@@ -51,7 +51,7 @@ public:
     void Update(
         const float in_time_delta_seconds,
         DrawSystemFrame* const in_draw_system_frame,
-        GeometryGeneric* const in_screen_quad
+        const std::shared_ptr<GeometryGeneric>& in_screen_quad
         );
 
     void OnWindowSizeChanged(

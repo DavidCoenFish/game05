@@ -209,25 +209,15 @@ const bool UIComponentString::Draw(
         (true == texture.GetAlwaysDirty())
         )
     {
-        dirty = true;
-        std::shared_ptr<IResource> frame_resource;
-        auto* const render_target = texture.GetRenderTarget(
+        if (false == texture.SetRenderTarget(
             in_draw_param._draw_system,
-            frame_resource,
-            in_draw_param._frame->GetCommandList()
-            );
-
-        if (nullptr == render_target)
+            in_draw_param._frame
+            ))
         {
             return dirty;
         }
 
         dirty = true;
-        in_draw_param._frame->SetRenderTarget(
-            render_target, 
-            frame_resource,
-            texture.GetAllowClear()
-            );
 
         in_draw_param._text_manager->DrawText(
             in_draw_param._draw_system,
