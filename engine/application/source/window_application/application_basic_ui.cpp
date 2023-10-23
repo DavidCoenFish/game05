@@ -95,8 +95,7 @@ public:
             "canvas_banner_left",
             std::vector<std::shared_ptr<UIData>>({
                 std::make_shared<UIData>(
-                "effect_drop_shadow",
-                //"effect_debug",
+                    "effect_drop_shadow",
                     std::vector<std::shared_ptr<UIData>>({
 
                         std::make_shared<UIData>(
@@ -170,54 +169,86 @@ public:
                 true,
                 "button_background",
                 std::vector<std::shared_ptr<UIData>>({
-                    std::make_shared<UIDataButton>(
-                        [this](const VectorFloat2&){},
-                        true,
-                        "button_modal_body",
-                        std::vector<std::shared_ptr<UIData>>({
-                            std::make_shared<UIData>(
-                                "grid_dialog_header_body_footer",
-                                std::vector<std::shared_ptr<UIData>>({
-                                    std::make_shared<UIDataString>(
-                                        "Options",
-                                        LocaleISO_639_1::Default,
-                                        "string_middle_em"
-                                        ),
-                                    std::make_shared<UIData>("canvas_red")
 
-#if 1
-                                    , std::make_shared<UIData>(
-                                        "grid_three_buttons",
+                    std::make_shared<UIData>(
+                        "effect_drop_shadow",
+                        std::vector<std::shared_ptr<UIData>>({
+
+                    std::make_shared<UIData>(
+                        "UIData",
+                        std::vector<std::shared_ptr<UIData>>({
+
+                            std::make_shared<UIDataButton>(
+                                [this](const VectorFloat2&){},
+                                true,
+                                "button_modal_body",
+                                std::vector<std::shared_ptr<UIData>>({
+                                    std::make_shared<UIData>(
+                                        "grid_dialog_header_body_footer",
                                         std::vector<std::shared_ptr<UIData>>({
+                                            std::make_shared<UIDataString>(
+                                                "Options",
+                                                LocaleISO_639_1::Default,
+                                                "string_middle_em"
+                                                ),
+                                            nullptr//std::make_shared<UIData>("canvas_red")
+
+        #if 1
+                                            , std::make_shared<UIData>(
+                                                "effect_drop_shadow",
+                                                std::vector<std::shared_ptr<UIData>>({
+
+                                            std::make_shared<UIData>(
+                                                "UIData",
+                                                std::vector<std::shared_ptr<UIData>>({
+
+                                            std::make_shared<UIData>(
+                                                "canvas_margin",
+                                                std::vector<std::shared_ptr<UIData>>({
+
+
+                                            std::make_shared<UIData>(
+                                                "grid_three_buttons",
+                                                std::vector<std::shared_ptr<UIData>>({
                                             
-                                            std::make_shared<UIDataButton>(
-                                                [&in_application](const VectorFloat2&){},
-                                                true,
-                                                "UIDataButton",
-                                                BuildButtonData("Undo")
-                                            ),
-                                            nullptr,
-                                            std::make_shared<UIDataButton>(
-                                                [&in_application](const VectorFloat2&){},
-                                                true,
-                                                "UIDataButton",
-                                                BuildButtonData("Redo")
-                                            ),
-                                            nullptr,
-                                            std::make_shared<UIDataButton>(
-                                                [&in_application](const VectorFloat2&){},
-                                                true,
-                                                "UIDataButton",
-                                                BuildButtonData("Reset")
+                                                    std::make_shared<UIDataButton>(
+                                                        [&in_application](const VectorFloat2&){},
+                                                        true,
+                                                        "UIDataButton",
+                                                        BuildButtonData("Undo")
+                                                    ),
+                                                    nullptr,
+                                                    std::make_shared<UIDataButton>(
+                                                        [&in_application](const VectorFloat2&){},
+                                                        true,
+                                                        "UIDataButton",
+                                                        BuildButtonData("Redo")
+                                                    ),
+                                                    nullptr,
+                                                    std::make_shared<UIDataButton>(
+                                                        [&in_application](const VectorFloat2&){},
+                                                        true,
+                                                        "UIDataButton",
+                                                        BuildButtonData("Reset")
+                                                    )
+
+                                                })
                                             )
 
+                                            }))
+                                            }))}))
+        #endif
                                         })
                                     )
-#endif
                                 })
                             )
+
                         })
                     )
+
+                        })
+                    )
+
                 })
             );
 

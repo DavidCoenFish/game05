@@ -224,7 +224,7 @@ namespace
         static std::vector<UIComponentGridSizeData> s_data({
             UIComponentGridSizeData(UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size * 2.0f), 0.0f),
             UIComponentGridSizeData(UICoord(), 1.0f),
-            UIComponentGridSizeData(UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size * 2.0f), 0.0f)
+            UIComponentGridSizeData(UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size * 3.0f), 0.0f)
         });
         return s_data;
     }
@@ -692,6 +692,9 @@ void DefaultUIComponentFactory::Populate(
         GetUIBaseColourDebugRed
         //GetUIBaseColourWhite
         >);
+    in_ui_manager.AddContentFactory("canvas_margin", FactoryCanvas<
+        GetUILayoutMargin
+        >);
 
     // UIData stack
     in_ui_manager.AddContentFactory("stack_vertical_bottom_right", FactoryStack<
@@ -709,7 +712,7 @@ void DefaultUIComponentFactory::Populate(
 
     // UIData grid
     in_ui_manager.AddContentFactory("grid_dialog_header_body_footer", FactoryGrid<
-        GetUILayoutMargin,
+        GetUILayout,
         GetUIBaseColourDefault,
         GetUIGridSizeDataDefaultHorizontal,
         GetUIGridSizeDataHeaderBodyFooter

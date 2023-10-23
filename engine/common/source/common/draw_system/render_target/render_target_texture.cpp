@@ -88,7 +88,7 @@ RenderTargetTexture::RenderTargetTexture(
 
 RenderTargetTexture::~RenderTargetTexture()
 {
-    LOG_MESSAGE_RENDER("RenderTargetTexture dtor %d", _id);
+    //LOG_MESSAGE_RENDER("RenderTargetTexture dtor %d", _id);
 
     return;
 }
@@ -189,7 +189,7 @@ void RenderTargetTexture::OnDeviceRestored(
             &iter->_clear_value,
             IID_PPV_ARGS(iter->_render_target.ReleaseAndGetAddressOf())
             ));
-        LOG_MESSAGE_RENDER("RenderTargetResource_%d [%dx%d]", _id, _size[0], _size[1]);
+        //LOG_MESSAGE_RENDER("RenderTargetResource_%d [%dx%d]", _id, _size[0], _size[1]);
         iter->_render_target->SetName((std::wstring(L"RenderTargetResource_") + std::to_wstring(_id)).c_str());
 
         auto render_target_view_descriptor = iter->_render_target_view_descriptor->GetCPUHandle();
