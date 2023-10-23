@@ -23,11 +23,11 @@ float2 SampleAtOffset(
 #endif
 
     float ratio = saturate((in_radius - in_low) / (in_high - in_low));
-    float coverage = 4.0 * ratio;
+    //float coverage = 4.0 * ratio;
     // [sum value, sum coverage]
     return float2(
-        in_coverage_shadow.x + (texel.a * coverage),
-        in_coverage_shadow.y + coverage
+        in_coverage_shadow.x + (texel.a * ratio),
+        in_coverage_shadow.y + ratio
         );
 }
 

@@ -12,6 +12,7 @@
 #include "common/ui/ui_effect_enum.h"
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_hierarchy_node.h"
+#include "common/ui/ui_shader_enum.h"
 #include "common/ui/i_ui_model.h"
 #include "common/ui/ui_root_input_state.h"
 #include "common/ui/ui_screen_space.h"
@@ -27,7 +28,8 @@ namespace
         "ui_default_pixel.cso",
         "ui_effect_debug_pixel.cso",
         "ui_effect_dropshadow_pixel.cso",
-        "ui_effect_corner_pixel.cso"
+        "ui_effect_corner_pixel.cso",
+        "ui_effect_gloss_pixel.cso"
         };
 }
 
@@ -166,7 +168,7 @@ public:
                 )
             );
 
-        for (int index = static_cast<int>(UIEffectEnum::TNone); index < static_cast<int>(UIEffectEnum::TCount); ++index)
+        for (int index = 0; index < static_cast<int>(UIShaderEnum::TCount); ++index)
         {
             const std::filesystem::path path = in_root_path / "shader" / std::string(s_array_shader_path[index]);
             auto pixel_shader_data = FileSystem::SyncReadFile( path );

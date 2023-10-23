@@ -31,6 +31,9 @@ namespace
         case UIEffectEnum::TRoundCorners:
             result = UIShaderEnum::TEffectRoundCorners;
             break;
+        case UIEffectEnum::TGloss:
+            result = UIShaderEnum::TEffectGloss;
+            break;
         }
 
         return result;

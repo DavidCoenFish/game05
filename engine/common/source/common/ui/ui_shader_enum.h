@@ -6,8 +6,10 @@ enum class UIShaderEnum
     TEffectDebug,
     TEffectDropShadow,
     TEffectRoundCorners,
+    TEffectGloss,
 
     //TDisable 
 
-    TCount
+    TCount,
+    TEffectStart = TEffectDebug
 };

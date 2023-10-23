@@ -6,6 +6,7 @@ enum class UIEffectEnum
     TDebug,
     TDropShadow,
     TRoundCorners,
+    TGloss,
     // TInnerShadow, // Invert of drop shadow, draw over solid, not transparent
     // TEdgeShadow, // draw shadow against edge of texture
     // TDesaturate,

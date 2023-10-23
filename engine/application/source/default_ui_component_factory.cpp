@@ -309,6 +309,14 @@ namespace
             );
     }
 
+    const UIBaseColour GetUIBaseColourWhite(const int)
+    {
+        return UIBaseColour(
+            VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f),
+            true
+            );
+    }
+
     typedef const VectorFloat4& (*TGetColour)();
     const VectorFloat4& GetColourTransparent()
     {
@@ -682,6 +690,7 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("canvas_red", FactoryCanvas<
         GetUILayout, 
         GetUIBaseColourDebugRed
+        //GetUIBaseColourWhite
         >);
 
     // UIData stack
@@ -730,6 +739,12 @@ void DefaultUIComponentFactory::Populate(
         GetUICoordDefaultGap,
         GetUICoordDefaultGap,
         GetUICoordDefaultGap
+        >);
+    in_ui_manager.AddContentFactory("effect_gloss", FactoryEffect<
+        UIEffectEnum::TGloss,
+        GetUIBaseColourClearDark,
+        GetUICoordDefaultGap,
+        GetUICoordDefaultGapHalf
         >);
 
     // UIDataString

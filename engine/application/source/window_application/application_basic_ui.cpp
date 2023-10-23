@@ -36,22 +36,25 @@ namespace
         return std::vector<std::shared_ptr<UIData>>({
 
             std::make_shared<UIData>(
-                "effect_corner",
+                "effect_gloss",
                 std::vector<std::shared_ptr<UIData>>({
 
                     std::make_shared<UIData>(
-                        "canvas_red",
+                        "effect_corner",
                         std::vector<std::shared_ptr<UIData>>({
-
-                            std::make_shared<UIDataString>(
-                                in_body,
-                                LocaleISO_639_1::Default,
-                                "string_middle_em"
+                            std::make_shared<UIData>(
+                                "canvas_red"
                             )
                         })
                     )
                 })
+            ),
+            std::make_shared<UIDataString>(
+                in_body,
+                LocaleISO_639_1::Default,
+                "string_middle_em"
             )
+
         });
     }
 

@@ -30,11 +30,12 @@ const FileSystem::TFileData FileSystem::SyncReadFile(const std::filesystem::path
     LOG_MESSAGE_FILESYSTEM("FileSystem::SyncReadFile:%s", absolutePath.string().c_str());
 
 	std::ifstream inFile(absolutePath, std::ios::in | std::ios::binary | std::ios::ate);
-	auto pBlob = std::make_shared< std::vector< uint8_t > >();
+	auto blob = std::make_shared< std::vector< uint8_t > >();
    
     if (!inFile || inFile.fail() || false == inFile.is_open())
     {
         LOG_MESSAGE_FILESYSTEM("  file:%d fail():%d is_open():%d", inFile ? 1 : 0, inFile.fail() ? 1 : 0, inFile.is_open() ? 1 : 0);
+        return blob;
     }
     DSC_CONDITION_THROW(!inFile || inFile.fail() || false == inFile.is_open(), "Failed to open file");
 
@@ -42,19 +43,19 @@ const FileSystem::TFileData FileSystem::SyncReadFile(const std::filesystem::path
 
     DSC_CONDITION_THROW(len < 0 || !inFile || inFile.fail(), "Failed to open file");
 
-	pBlob->resize(size_t(len));
+	blob->resize(size_t(len));
 
 	inFile.seekg(0, std::ios::beg);
 
     DSC_CONDITION_THROW(!inFile || inFile.fail(), "Failed to open file");
 
-	inFile.read(reinterpret_cast<char*>(pBlob->data()), len);
+	inFile.read(reinterpret_cast<char*>(blob->data()), len);
 
     DSC_CONDITION_THROW(!inFile || inFile.fail(), "Failed to open file");
 
 	inFile.close();
 
-	return pBlob;
+	return blob;
 }
 
 const bool FileSystem::SyncWriteFile(const std::filesystem::path& absolutePath, const TFileData& pData)
