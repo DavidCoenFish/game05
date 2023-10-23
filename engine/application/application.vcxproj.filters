@@ -379,7 +379,7 @@
     <FxCompile Include="task\test_text_run\background_pixel.hlsl">
       <Filter>task\test_text_run</Filter>
     </FxCompile>
-    <FxCompile Include="shader\ui_disable_pixel.hlsl">
+    <FxCompile Include="shader\ui_effect_desaturate_pixel.hlsl">
       <Filter>shader</Filter>
     </FxCompile>
     <FxCompile Include="shader\ui_effect_corner_pixel.hlsl">
@@ -398,6 +398,9 @@
       <Filter>shader</Filter>
     </FxCompile>
     <FxCompile Include="shader\ui_default_pixel.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\ui_effect_fill_pixel.hlsl">
       <Filter>shader</Filter>
     </FxCompile>
   </ItemGroup>

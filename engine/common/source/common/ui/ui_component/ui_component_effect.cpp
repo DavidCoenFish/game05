@@ -34,6 +34,9 @@ namespace
         case UIEffectEnum::TGloss:
             result = UIShaderEnum::TEffectGloss;
             break;
+        case UIEffectEnum::TFill:
+            result = UIShaderEnum::TEffectFill;
+            break;
         }
 
         return result;
@@ -206,7 +209,8 @@ void UIComponentEffect::UpdateSize(
         const VectorInt2 texture_size = in_out_node.GetTextureSize(in_draw_system);
         UIManager::TShaderConstantBuffer& constant_0 = _shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
         TShaderConstantBuffer& constant_1 = _shader_constant_buffer->GetConstant<TShaderConstantBuffer>(1);
-        constant_0._tint_colour = VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f);
+        constant_0._tint_colour = _content_default.GetTintColour();
+        //VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f);
 
         if (UIEffectEnum::TNone != _type)
         {

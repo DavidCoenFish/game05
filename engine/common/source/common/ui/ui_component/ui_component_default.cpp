@@ -341,3 +341,8 @@ const bool UIComponentDefault::Draw(
     return dirty;
 }
 
+const VectorFloat4 UIComponentDefault::GetTintColour() const
+{
+    return _base_colour.GetTintColour(_time_accumulate_seconds);
+}
+

@@ -75,6 +75,7 @@ DrawSystem::~DrawSystem()
         iter->OnDeviceLost();
     }
     _list_resource.clear();
+    _resource_list.clear();
     _device_resources.reset();
 }
 

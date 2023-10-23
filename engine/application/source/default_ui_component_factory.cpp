@@ -286,12 +286,29 @@ namespace
             true
             );
     }
+    const UIBaseColour GetUIBaseColourClearBlue(const int)
+    {
+        return UIBaseColour(
+            VectorFloat4(0.0f, 0.0f, 0.0f, 0.0f),
+            true,
+            VectorFloat4(0.0f, 0.0f, 1.0f, 1.0f)
+            );
+    }
+
     const UIBaseColour GetUIBaseColourClearDark(const int)
     {
         return UIBaseColour(
             VectorFloat4(0.0f, 0.0f, 0.0f, 0.0f),
             true,
             VectorFloat4(0.0f, 0.0f, 0.0f, 0.5f)
+            );
+    }
+    const UIBaseColour GetUIBaseColourClearLight(const int)
+    {
+        return UIBaseColour(
+            VectorFloat4(0.0f, 0.0f, 0.0f, 0.0f),
+            true,
+            VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f)
             );
     }
     const UIBaseColour GetUIBaseColourDark(const int)
@@ -735,6 +752,14 @@ void DefaultUIComponentFactory::Populate(
         GetUICoordDefaultGapHalf,
         GetUICoordDefaultGap
         >);
+    in_ui_manager.AddContentFactory("effect_drop_glow", FactoryEffect<
+        UIEffectEnum::TDropShadow,
+        GetUIBaseColourClearLight,
+        GetUICoordNone,
+        GetUICoordNone,
+        GetUICoordDefaultGap
+        >);
+
     in_ui_manager.AddContentFactory("effect_corner", FactoryEffect<
         UIEffectEnum::TRoundCorners,
         GetUIBaseColourDefault,
@@ -745,8 +770,11 @@ void DefaultUIComponentFactory::Populate(
         >);
     in_ui_manager.AddContentFactory("effect_gloss", FactoryEffect<
         UIEffectEnum::TGloss,
-        GetUIBaseColourClearDark,
-        GetUICoordDefaultGap,
+        GetUIBaseColourDefault
+        >);
+    in_ui_manager.AddContentFactory("effect_fill", FactoryEffect<
+        UIEffectEnum::TFill,
+        GetUIBaseColourClearBlue,
         GetUICoordDefaultGapHalf
         >);
 

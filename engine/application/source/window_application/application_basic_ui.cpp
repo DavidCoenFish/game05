@@ -40,21 +40,34 @@ namespace
                 std::vector<std::shared_ptr<UIData>>({
 
                     std::make_shared<UIData>(
-                        "effect_corner",
+                        "effect_fill",
                         std::vector<std::shared_ptr<UIData>>({
+
                             std::make_shared<UIData>(
-                                "canvas_red"
+                                "effect_corner",
+                                std::vector<std::shared_ptr<UIData>>({
+                                    std::make_shared<UIData>(
+                                        "canvas_red"
+                                    )
+                                })
                             )
                         })
                     )
                 })
             ),
-            std::make_shared<UIDataString>(
-                in_body,
-                LocaleISO_639_1::Default,
-                "string_middle_em"
-            )
 
+            std::make_shared<UIData>(
+                "effect_drop_glow",
+                std::vector<std::shared_ptr<UIData>>({
+                std::make_shared<UIData>(
+                    "UIData",
+                    std::vector<std::shared_ptr<UIData>>({
+                        std::make_shared<UIDataString>(
+                            in_body,
+                            LocaleISO_639_1::Default,
+                            "string_middle_em"
+                        )
+            }))}))
         });
     }
 

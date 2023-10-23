@@ -99,6 +99,8 @@ public:
         UIHierarchyNode& in_node
         );
 
+    const VectorFloat4 GetTintColour() const;
+
 private:
     /// colour data, like the clear colour, tint colour, fade profile
     UIBaseColour _base_colour;

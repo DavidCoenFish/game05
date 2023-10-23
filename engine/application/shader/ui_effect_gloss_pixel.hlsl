@@ -30,13 +30,12 @@ float4 SumQuadrant(float4 in_quadrant_sum, float2 in_pivot, float in_a, float in
 // return gloss amount and darken amount
 float2 CalculateGlossDark(
     float2 in_uv, 
-    float2 in_radius, // gloss radius, darken radius
     float2 in_width_height,
     float2 in_iwidth_iheight
     )
 {
-    // ensure the uv is at pixel center, the extra +[0.5,0.5] inside the round is to avoid a horible (accuracy?) step
-    float2 pivot = (round((in_uv * in_width_height) + float2(0.05, 0.05))) - float2(0.5, 0.5);
+    // ensure the uv is at pixel center, the extra +[0.05,0.05] inside the round is to avoid a horible (accuracy?) step
+    float2 pivot = (floor((in_uv * in_width_height) + float2(0.05, 0.05))) + float2(0.5, 0.5);
     //float2 pivot = in_uv * in_width_height;
 
     float4 quadrant_sum = float4(0.0, 0.0, 0.0, 0.0);
@@ -54,32 +53,27 @@ float2 CalculateGlossDark(
     float2 result = float2(
         (quadrant_sum.x + quadrant_sum.y + quadrant_sum.z + quadrant_sum.w) / 32.0,
         saturate((quadrant_sum.x - ((quadrant_sum.y + quadrant_sum.z + quadrant_sum.w) / 6.0)) / 8.0)
-        //quadrant_sum.x / 6.0
         );
 
     return result;
 }
 
-
 float4 CalculateColour(
     float2 in_uv,
-    float2 in_radius,
     float2 in_width_height,
     float2 in_iwidth_iheight
     )
 {
     float4 texel = g_texture.Sample(g_sampler_state, in_uv);
-    //float2 pivot = (round((in_uv * in_width_height) + float2(0.5, 0.5))) + float2(0.5, 0.5);
-    //float2 pivot = round(in_uv * in_width_height) + float2(0.5, 0.5);
-    //float2 pivot = in_uv * in_width_height;
-    //float4 texel = g_texture.Sample(g_sampler_state, pivot * in_iwidth_iheight);
 
     float2 gloss_darken = CalculateGlossDark(
         in_uv,
-        in_radius,
         in_width_height,
         in_iwidth_iheight
         );
+
+    // Premultipiled alpha
+    //result = foreground + (1 - foreground.alpha) * background
 
     float darken = 1.0 - (gloss_darken.x * 1.25 * texel.a);
     float gloss = gloss_darken.y * gloss_darken.y * texel.a * 0.4;
@@ -99,16 +93,10 @@ Pixel main(Interpolant in_input)
 
     float4 colour = CalculateColour(
         in_input._uv, 
-        float2(_constant_buffer_1_data0.x, _constant_buffer_1_data0.y),
         float2(_width_height_iwidth_iheight.x, _width_height_iwidth_iheight.y),
         float2(_width_height_iwidth_iheight.z, _width_height_iwidth_iheight.w)
         );
 
-    // Premultipiled alpha
-    //result = foreground + (1 - foreground.alpha) * background
-    //result._colour = float4(1.0, 0.0, 0.0, 1.0);
-    //result._colour = texel + ((1.0 - texel.a) * colour);
-    //result._colour = colour + ((1.0 - colour.a) * texel);
     result._colour = colour;
 
     return result;
