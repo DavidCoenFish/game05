@@ -300,7 +300,7 @@ namespace
         return UIBaseColour(
             VectorFloat4(0.0f, 0.0f, 0.0f, 0.0f),
             true,
-            VectorFloat4(0.0f, 0.0f, 0.0f, 0.5f)
+            VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f)
             );
     }
     const UIBaseColour GetUIBaseColourClearLight(const int)
@@ -308,7 +308,7 @@ namespace
         return UIBaseColour(
             VectorFloat4(0.0f, 0.0f, 0.0f, 0.0f),
             true,
-            VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f)
+            VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f) //0.5f, 0.5f, 0.5f, 0.5f)
             );
     }
     const UIBaseColour GetUIBaseColourDark(const int)

@@ -16,6 +16,7 @@
 #include "common/ui/i_ui_model.h"
 #include "common/ui/ui_root_input_state.h"
 #include "common/ui/ui_screen_space.h"
+#include "common/ui/ui_shader_enum.h"
 #include "common/ui/ui_component/ui_component_effect.h"
 #include "common/ui/ui_component/ui_component_stack.h"
 #include "common/ui/ui_data/ui_data.h"
@@ -24,13 +25,14 @@
 
 namespace
 {
-    static const char* const s_array_shader_path[] = {
+    static const char* const s_array_shader_path[static_cast<int>(UIShaderEnum::TCount)] = {
         "ui_default_pixel.cso",
         "ui_effect_debug_pixel.cso",
         "ui_effect_dropshadow_pixel.cso",
         "ui_effect_corner_pixel.cso",
         "ui_effect_gloss_pixel.cso",
         "ui_effect_fill_pixel.cso",
+        "ui_effect_desaturate_pixel.cso"
         };
 }
 
@@ -146,7 +148,7 @@ public:
 
         std::vector<std::shared_ptr<ShaderResourceInfo>> array_shader_resource_info;
         array_shader_resource_info.push_back(
-            ShaderResourceInfo::FactorySampler(nullptr, D3D12_SHADER_VISIBILITY_PIXEL)
+            ShaderResourceInfo::FactoryClampSampler(nullptr, D3D12_SHADER_VISIBILITY_PIXEL)
             );
         std::vector<std::shared_ptr<ConstantBufferInfo>> array_shader_constants_info_default;
         array_shader_constants_info_default.push_back(

@@ -12,6 +12,13 @@ public:
         // D3D12_SHADER_VISIBILITY_PIXEL
         const bool in_mip_map = false
         );
+    static std::shared_ptr<ShaderResourceInfo> FactoryClampSampler(
+        const std::shared_ptr < HeapWrapperItem >&in_shader_resource_view_handle,
+        const D3D12_SHADER_VISIBILITY in_visiblity,
+        // D3D12_SHADER_VISIBILITY_PIXEL
+        const bool in_mip_map = false
+        );
+
     static std::shared_ptr<ShaderResourceInfo> FactoryDataSampler(
         const std::shared_ptr < HeapWrapperItem >&in_shader_resource_view_handle,
         const D3D12_SHADER_VISIBILITY in_visiblity

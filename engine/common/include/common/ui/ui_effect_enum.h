@@ -8,10 +8,10 @@ enum class UIEffectEnum
     TRoundCorners,
     TGloss,
     TFill,
+    TDesaturate,
+
     // TInnerShadow, // Invert of drop shadow, draw over solid, not transparent
     // TEdgeShadow,
-    // TDesaturate,
-    // TDesaturateIfDisabled,
     // TTextureMixRGBAndAlpha, // Use child 0 as rgb, and child 1 as alpha ~ take average of rgb to use as alpha
     // TBlend is not needed, the default shader will do a premultiplied alpha blend of the children
     // TChromeFill move fill to a different element?
