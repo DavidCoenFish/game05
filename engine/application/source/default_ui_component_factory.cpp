@@ -13,6 +13,7 @@
 #include "common/ui/ui_component/i_ui_component.h"
 #include "common/ui/ui_component/ui_component_button.h"
 #include "common/ui/ui_component/ui_component_canvas.h"
+#include "common/ui/ui_component/ui_component_disable.h"
 #include "common/ui/ui_component/ui_component_effect.h"
 #include "common/ui/ui_component/ui_component_grid.h"
 #include "common/ui/ui_component/ui_component_stack.h"
@@ -23,6 +24,7 @@
 #include "common/ui/ui_effect_enum.h"
 #include "common/ui/ui_layout.h"
 #include "common/ui/ui_manager.h"
+#include "common/ui/ui_data/ui_data_disable.h"
 #include "common/ui/ui_data/ui_data_string.h"
 #include "common/ui/ui_data/ui_data_text_run.h"
 
@@ -176,6 +178,21 @@ namespace
             );
         return s_layout;
     }
+    const UILayout& GetUILayoutShrink()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 1.0f),
+            UICoord(UICoord::ParentSource::Y, 1.0f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            true,
+            true
+            );
+        return s_layout;
+    }
+
 
     typedef const UICoord& (*TGetUICoordRef)();
     const UICoord& GetUICoordNone()
@@ -484,6 +501,37 @@ namespace
     }
 
     template<
+        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault
+        >
+    const bool FactoryDisable(
+        std::unique_ptr<IUIComponent>& in_out_content,
+        const UIComponentFactoryParam& in_factory_param
+        )
+    {
+        bool dirty = false;
+        UIComponentDisable* content = dynamic_cast<UIComponentDisable*>(in_out_content.get());
+        if (nullptr == content)
+        {
+            in_out_content = std::make_unique<UIComponentDisable>(
+                in_get_base_colour(in_factory_param._create_index),
+                GetUILayoutShrink() //GetUILayout()
+                );
+            dirty = true;
+        }
+        else
+        {
+            if (true == content->SetBase(
+                in_get_base_colour(in_factory_param._create_index),
+                GetUILayoutShrink())) //GetUILayout()))
+            {
+                dirty = true;
+            }
+        }
+
+        return dirty;
+    }
+
+    template<
         TGetUILayoutRef in_get_layout_ref = GetUILayout,
         TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
         TGetPathRef in_get_path_ref = GetFontPathDefault,
@@ -776,6 +824,10 @@ void DefaultUIComponentFactory::Populate(
         UIEffectEnum::TFill,
         GetUIBaseColourClearBlue,
         GetUICoordDefaultGapHalf
+        >);
+
+    in_ui_manager.AddContentFactory("UIDataDisable", FactoryDisable<
+        GetUIBaseColourDefault
         >);
 
     // UIDataString

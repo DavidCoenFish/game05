@@ -23,6 +23,7 @@
 #include "common/ui/ui_texture.h"
 #include "common/ui/ui_data/ui_data.h"
 #include "common/ui/ui_data/ui_data_button.h"
+#include "common/ui/ui_data/ui_data_disable.h"
 #include "common/ui/ui_data/ui_data_string.h"
 #include "common/ui/ui_data/ui_data_text_run.h"
 #include "common/util/timer.h"
@@ -123,7 +124,6 @@ public:
                                                 in_application.Destroy(0);
                                                 return;
                                                 },
-                                            true,
                                             "UIDataButton",
                                             BuildButtonData("exit")
                                         ),
@@ -135,21 +135,32 @@ public:
                                                     _data_map["modal_options"]
                                                     );
                                                 },
-                                            true,
                                             "UIDataButton",
                                             BuildButtonData("options")
                                         ),
-                                        std::make_shared<UIDataButton>(
-                                            nullptr, 
-                                            false,
-                                            "UIDataButton",
-                                            BuildButtonData("continue")
+                                        std::make_shared<UIDataDisable>(
+                                            true,
+                                            "UIDataDisable",
+                                                    std::vector<std::shared_ptr<UIData>>({
+
+                                                        std::make_shared<UIDataButton>(
+                                                            nullptr, 
+                                                            "UIDataButton",
+                                                            BuildButtonData("continue")
+                                                        )
+                                                    })
                                         ),
-                                        std::make_shared<UIDataButton>(
-                                            nullptr, 
-                                            false,
-                                            "UIDataButton",
-                                            BuildButtonData("new game")
+                                        std::make_shared<UIDataDisable>(
+                                            true,
+                                            "UIDataDisable",
+                                                    std::vector<std::shared_ptr<UIData>>({
+
+                                                        std::make_shared<UIDataButton>(
+                                                            nullptr, 
+                                                            "UIDataButton",
+                                                            BuildButtonData("new game")
+                                                        )
+                                                    })
                                         )
                                     })
                                     )
@@ -179,7 +190,6 @@ public:
                         _data_map["main_launch"]
                         );
                     },
-                true,
                 "button_background",
                 std::vector<std::shared_ptr<UIData>>({
 
@@ -193,7 +203,6 @@ public:
 
                             std::make_shared<UIDataButton>(
                                 [this](const VectorFloat2&){},
-                                true,
                                 "button_modal_body",
                                 std::vector<std::shared_ptr<UIData>>({
                                     std::make_shared<UIData>(
@@ -226,21 +235,18 @@ public:
                                             
                                                     std::make_shared<UIDataButton>(
                                                         [&in_application](const VectorFloat2&){},
-                                                        true,
                                                         "UIDataButton",
                                                         BuildButtonData("Undo")
                                                     ),
                                                     nullptr,
                                                     std::make_shared<UIDataButton>(
                                                         [&in_application](const VectorFloat2&){},
-                                                        true,
                                                         "UIDataButton",
                                                         BuildButtonData("Redo")
                                                     ),
                                                     nullptr,
                                                     std::make_shared<UIDataButton>(
                                                         [&in_application](const VectorFloat2&){},
-                                                        true,
                                                         "UIDataButton",
                                                         BuildButtonData("Reset")
                                                     )
@@ -438,7 +444,7 @@ ApplicationBasicUI::~ApplicationBasicUI()
     _draw_resource.reset();
     _draw_system.reset();
     LOG_MESSAGE(
-        "ApplicationBasicUI  dtor %p",
+        "ApplicationBasicUI dtor %p",
         this
         );
 }

@@ -33,16 +33,10 @@ const bool UIComponentButton::SetBase(
 }
 
 const bool UIComponentButton::Set(
-    const bool in_enabled,
     const std::function<void(const VectorFloat2&)>& in_on_click
     )
 {
     bool dirty = false;
-    if (_enabled != in_enabled)
-    {
-        dirty = true;
-        _enabled = in_enabled;
-    }
 
     _on_click = in_on_click;
 
@@ -82,7 +76,6 @@ const bool UIComponentButton::UpdateHierarchy(
     if (nullptr != data)
     {
         if (true == Set(
-            data->GetEnabled(),
             data->GetOnClick()
             ))
         {

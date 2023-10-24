@@ -319,6 +319,12 @@
     <ClCompile Include="source\common\draw_system\draw_system_resource_list.cpp">
       <Filter>souce\common\draw_system</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\ui\ui_data\ui_data_disable.cpp">
+      <Filter>souce\common\ui\ui_data</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_component\ui_component_disable.cpp">
+      <Filter>souce\common\ui\ui_component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -665,6 +671,12 @@
     </ClInclude>
     <ClInclude Include="source\common\ui\ui_shader_enum.h">
       <Filter>souce\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_data\ui_data_disable.h">
+      <Filter>include\common\ui\ui_data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_component\ui_component_disable.h">
+      <Filter>include\common\ui\ui_component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

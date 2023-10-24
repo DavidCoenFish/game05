@@ -1,8 +1,8 @@
 #include "common/common_pch.h"
-#include "common/ui/ui_data/ui_data_button.h"
+#include "common/ui/ui_data/ui_data_disable.h"
 
-UIDataButton::UIDataButton(
-    const std::function<void(const VectorFloat2&)>& in_on_click,
+UIDataDisable::UIDataDisable(
+    const bool in_disabled,
     const std::string& in_template_name,
     const std::vector<std::shared_ptr<UIData>>& in_array_child_data
     )
@@ -10,12 +10,12 @@ UIDataButton::UIDataButton(
         in_template_name,
         in_array_child_data
         )
-    , _on_click(in_on_click)
+    , _disabled(in_disabled)
 {
     // Nop
 }
 
-UIDataButton::~UIDataButton()
+UIDataDisable::~UIDataDisable()
 {
     // Nop
 }
