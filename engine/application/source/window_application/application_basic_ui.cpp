@@ -125,7 +125,7 @@ public:
                                                 return;
                                                 },
                                             "UIDataButton",
-                                            BuildButtonData("exit")
+                                            BuildButtonData("Exit")
                                         ),
 
                                         std::make_shared<UIDataButton>(
@@ -136,7 +136,7 @@ public:
                                                     );
                                                 },
                                             "UIDataButton",
-                                            BuildButtonData("options")
+                                            BuildButtonData("Options")
                                         ),
                                         std::make_shared<UIDataDisable>(
                                             true,
@@ -146,7 +146,7 @@ public:
                                                         std::make_shared<UIDataButton>(
                                                             nullptr, 
                                                             "UIDataButton",
-                                                            BuildButtonData("continue")
+                                                            BuildButtonData("Continue")
                                                         )
                                                     })
                                         ),
@@ -158,7 +158,7 @@ public:
                                                         std::make_shared<UIDataButton>(
                                                             nullptr, 
                                                             "UIDataButton",
-                                                            BuildButtonData("new game")
+                                                            BuildButtonData("New game")
                                                         )
                                                     })
                                         )
@@ -197,8 +197,14 @@ public:
                         "effect_drop_shadow",
                         std::vector<std::shared_ptr<UIData>>({
 
+                        //
+
                     std::make_shared<UIData>(
                         "UIData",
+                        std::vector<std::shared_ptr<UIData>>({
+
+                    std::make_shared<UIData>(
+                        "effect_corner_modal",
                         std::vector<std::shared_ptr<UIData>>({
 
                             std::make_shared<UIDataButton>(
@@ -233,23 +239,43 @@ public:
                                                 "grid_three_buttons",
                                                 std::vector<std::shared_ptr<UIData>>({
                                             
+                                        std::make_shared<UIDataDisable>(
+                                            true,
+                                            "UIDataDisable",
+                                                    std::vector<std::shared_ptr<UIData>>({
+
                                                     std::make_shared<UIDataButton>(
                                                         [&in_application](const VectorFloat2&){},
                                                         "UIDataButton",
                                                         BuildButtonData("Undo")
                                                     ),
+                                                    })),
                                                     nullptr,
+
+                                        std::make_shared<UIDataDisable>(
+                                            true,
+                                            "UIDataDisable",
+                                                    std::vector<std::shared_ptr<UIData>>({
+
                                                     std::make_shared<UIDataButton>(
                                                         [&in_application](const VectorFloat2&){},
                                                         "UIDataButton",
                                                         BuildButtonData("Redo")
                                                     ),
+                                                    })),
                                                     nullptr,
+
+                                        std::make_shared<UIDataDisable>(
+                                            true,
+                                            "UIDataDisable",
+                                                    std::vector<std::shared_ptr<UIData>>({
+
                                                     std::make_shared<UIDataButton>(
                                                         [&in_application](const VectorFloat2&){},
                                                         "UIDataButton",
                                                         BuildButtonData("Reset")
                                                     )
+                                                    }))
 
                                                 })
                                             )
@@ -264,6 +290,8 @@ public:
 
                         })
                     )
+
+                    }))
 
                         })
                     )

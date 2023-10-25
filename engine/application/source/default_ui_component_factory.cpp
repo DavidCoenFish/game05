@@ -262,10 +262,6 @@ namespace
     {
         return UIBaseColour();
     }
-    const UIBaseColour GetUIBaseColourDebugRed(const int)
-    {
-        return UIBaseColour(VectorFloat4(1.0f, 0.0f, 0.0f, 1.0f));
-    }
     const UIBaseColour GetUIBaseColourStaggerClearTransparent(const int in_create_index)
     {
         return UIBaseColour(
@@ -296,36 +292,12 @@ namespace
             s_quick_fade
             );
     }
+
     const UIBaseColour GetUIBaseColourRed(const int)
     {
         return UIBaseColour(
             VectorFloat4(1.0f, 0.0f, 0.0f, 1.0f),
             true
-            );
-    }
-    const UIBaseColour GetUIBaseColourClearBlue(const int)
-    {
-        return UIBaseColour(
-            VectorFloat4(0.0f, 0.0f, 0.0f, 0.0f),
-            true,
-            VectorFloat4(0.0f, 0.0f, 1.0f, 1.0f)
-            );
-    }
-
-    const UIBaseColour GetUIBaseColourClearDark(const int)
-    {
-        return UIBaseColour(
-            VectorFloat4(0.0f, 0.0f, 0.0f, 0.0f),
-            true,
-            VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f)
-            );
-    }
-    const UIBaseColour GetUIBaseColourClearLight(const int)
-    {
-        return UIBaseColour(
-            VectorFloat4(0.0f, 0.0f, 0.0f, 0.0f),
-            true,
-            VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f) //0.5f, 0.5f, 0.5f, 0.5f)
             );
     }
     const UIBaseColour GetUIBaseColourDark(const int)
@@ -342,12 +314,44 @@ namespace
             true
             );
     }
-
     const UIBaseColour GetUIBaseColourWhite(const int)
     {
         return UIBaseColour(
             VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f),
             true
+            );
+    }
+
+    const UIBaseColour GetUIBaseColourClearBlue(const int)
+    {
+        return UIBaseColour(
+            VectorFloat4(0.0f, 0.0f, 0.0f, 0.0f),
+            true,
+            VectorFloat4(0.0f, 0.0f, 1.0f, 1.0f)
+            );
+    }
+    const UIBaseColour GetUIBaseColourClearDark(const int)
+    {
+        return UIBaseColour(
+            VectorFloat4(0.0f, 0.0f, 0.0f, 0.0f),
+            true,
+            VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f)
+            );
+    }
+    const UIBaseColour GetUIBaseColourClearLight(const int)
+    {
+        return UIBaseColour(
+            VectorFloat4(0.0f, 0.0f, 0.0f, 0.0f),
+            true,
+            VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f) //0.5f, 0.5f, 0.5f, 0.5f)
+            );
+    }
+    const UIBaseColour GetUIBaseColourClearGrey(const int)
+    {
+        return UIBaseColour(
+            VectorFloat4(0.0f, 0.0f, 0.0f, 0.0f),
+            true,
+            VectorFloat4(0.75f, 0.75f, 0.75f, 1.0f) //0.5f, 0.5f, 0.5f, 0.5f)
             );
     }
 
@@ -449,6 +453,7 @@ namespace
     }
 
     template<
+        TGetUILayoutRef in_get_layout_ref = GetUILayout,
         UIEffectEnum in_effect_type = UIEffectEnum::TNone,
         TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
         TGetUICoordRef in_get_ui_coord_a = GetUICoordNone,
@@ -467,7 +472,7 @@ namespace
         {
             in_out_content = std::make_unique<UIComponentEffect>(
                 in_get_base_colour(0),
-                GetUILayout(),
+                in_get_layout_ref(),
                 in_effect_type,
                 in_get_ui_coord_a(),
                 in_get_ui_coord_b(),
@@ -480,7 +485,7 @@ namespace
         {
             if (true == content->SetBase(
                 in_get_base_colour(in_factory_param._create_index),
-                GetUILayout()))
+                in_get_layout_ref()))
             {
                 dirty = true;
             }
@@ -754,7 +759,7 @@ void DefaultUIComponentFactory::Populate(
         >);
     in_ui_manager.AddContentFactory("canvas_red", FactoryCanvas<
         GetUILayout, 
-        GetUIBaseColourDebugRed
+        GetUIBaseColourRed
         //GetUIBaseColourWhite
         >);
     in_ui_manager.AddContentFactory("canvas_margin", FactoryCanvas<
@@ -791,9 +796,11 @@ void DefaultUIComponentFactory::Populate(
 
     // UIData effect
     in_ui_manager.AddContentFactory("effect_debug", FactoryEffect<
+        GetUILayout,
         UIEffectEnum::TDebug
         >);
     in_ui_manager.AddContentFactory("effect_drop_shadow", FactoryEffect<
+        GetUILayout,
         UIEffectEnum::TDropShadow,
         GetUIBaseColourClearDark,
         GetUICoordDefaultGapQuater,
@@ -801,6 +808,7 @@ void DefaultUIComponentFactory::Populate(
         GetUICoordDefaultGap
         >);
     in_ui_manager.AddContentFactory("effect_drop_glow", FactoryEffect<
+        GetUILayout,
         UIEffectEnum::TDropShadow,
         GetUIBaseColourClearLight,
         GetUICoordNone,
@@ -809,6 +817,16 @@ void DefaultUIComponentFactory::Populate(
         >);
 
     in_ui_manager.AddContentFactory("effect_corner", FactoryEffect<
+        GetUILayout,
+        UIEffectEnum::TRoundCorners,
+        GetUIBaseColourDefault,
+        GetUICoordDefaultGap,
+        GetUICoordDefaultGap,
+        GetUICoordDefaultGap,
+        GetUICoordDefaultGap
+        >);
+    in_ui_manager.AddContentFactory("effect_corner_modal", FactoryEffect<
+        GetUILayoutModal,
         UIEffectEnum::TRoundCorners,
         GetUIBaseColourDefault,
         GetUICoordDefaultGap,
@@ -817,17 +835,19 @@ void DefaultUIComponentFactory::Populate(
         GetUICoordDefaultGap
         >);
     in_ui_manager.AddContentFactory("effect_gloss", FactoryEffect<
+        GetUILayout,
         UIEffectEnum::TGloss,
         GetUIBaseColourDefault
         >);
     in_ui_manager.AddContentFactory("effect_fill", FactoryEffect<
+        GetUILayout,
         UIEffectEnum::TFill,
         GetUIBaseColourClearBlue,
         GetUICoordDefaultGapHalf
         >);
 
     in_ui_manager.AddContentFactory("UIDataDisable", FactoryDisable<
-        GetUIBaseColourDefault
+        GetUIBaseColourClearGrey
         >);
 
     // UIDataString
@@ -887,7 +907,7 @@ void DefaultUIComponentFactory::Populate(
         GetUIBaseColourDark
         >);
     in_ui_manager.AddContentFactory("button_modal_body", FactoryButton<
-        GetUILayoutModal, 
+        GetUILayout, //GetUILayoutModal, 
         GetUIBaseColourGrey
         >);
 
