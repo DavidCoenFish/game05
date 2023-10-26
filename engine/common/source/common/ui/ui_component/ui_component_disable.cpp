@@ -167,6 +167,36 @@ void UIComponentDisable::GetDesiredSize(
     UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
+#if 1
+    VectorInt2 max_desired_size;
+
+    out_layout_size = _content_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
+
+    // Default is to go through children and see if anyone needs a bigger size than what we calculate
+    for (auto iter: in_out_node.GetChildData())
+    {
+        UIHierarchyNodeChildData& child_data = *iter;
+        if (nullptr == child_data._component)
+        {
+            continue;
+        }
+        VectorInt2 child_layout_size;
+        VectorInt2 child_desired_size;
+        child_data._component->GetDesiredSize(
+            child_layout_size,
+            child_desired_size,
+            out_layout_size, 
+            in_ui_scale, 
+            *child_data._node
+            );
+        max_desired_size = VectorInt2::Max(max_desired_size, child_desired_size);
+    }
+
+    out_layout_size = _content_default.GetLayout().CalculateShrinkSize(out_layout_size, max_desired_size);
+    out_desired_size = VectorInt2::Max(out_layout_size, max_desired_size);
+
+    return;
+#else
     return _content_default.GetDesiredSize(
         out_layout_size,
         out_desired_size,
@@ -174,6 +204,7 @@ void UIComponentDisable::GetDesiredSize(
         in_ui_scale,
         in_out_node
         );
+#endif
 }
 
 const bool UIComponentDisable::Draw(

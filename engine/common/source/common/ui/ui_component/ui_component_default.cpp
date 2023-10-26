@@ -284,6 +284,11 @@ void UIComponentDefault::GetDesiredSize(
     UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
+#if 1
+    out_layout_size = _layout.GetSize(in_parent_window, in_ui_scale);
+    out_desired_size = out_layout_size;
+    return;
+#else
     VectorInt2 max_desired_size;
 
     out_layout_size = _layout.GetSize(in_parent_window, in_ui_scale);
@@ -312,6 +317,7 @@ void UIComponentDefault::GetDesiredSize(
     out_desired_size = VectorInt2::Max(out_layout_size, max_desired_size);
 
     return;
+#endif
 }
 
 const bool UIComponentDefault::Draw(

@@ -131,7 +131,6 @@ public:
                                                         )
                                                 })
                                             ),
-
                                         std::make_shared<UIDataDisable>(
                                             true,
                                             "UIDataDisable",
@@ -227,6 +226,7 @@ public:
                                             std::make_shared<UIData>(
                                                 "stack_top_down",
                                                 std::vector<std::shared_ptr<UIData>>({
+
                                                     std::make_shared<UIData>(
                                                         "grid_small_big_pair",
                                                         std::vector<std::shared_ptr<UIData>>({
@@ -258,7 +258,6 @@ public:
                                                             std::make_shared<UIData>("canvas_blue"),
                                                         })
                                                     )
-
 
                                                 })
                                             )
