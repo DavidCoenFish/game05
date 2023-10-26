@@ -119,25 +119,19 @@ public:
                                     "stack_vertical_middle",
                                     std::vector<std::shared_ptr<UIData>>({
 
-                                        std::make_shared<UIDataButton>(
-                                            [&in_application](const VectorFloat2&){
-                                                in_application.Destroy(0);
-                                                return;
-                                                },
-                                            "UIDataButton",
-                                            BuildButtonData("Exit")
-                                        ),
+                                        std::make_shared<UIDataDisable>(
+                                            true,
+                                            "UIDataDisable",
+                                                    std::vector<std::shared_ptr<UIData>>({
 
-                                        std::make_shared<UIDataButton>(
-                                            [this](const VectorFloat2&){
-                                                _data_map["main"]->ModifyData().clear();
-                                                _data_map["modal"]->ModifyData().push_back(
-                                                    _data_map["modal_options"]
-                                                    );
-                                                },
-                                            "UIDataButton",
-                                            BuildButtonData("Options")
-                                        ),
+                                                        std::make_shared<UIDataButton>(
+                                                            nullptr, 
+                                                            "UIDataButton",
+                                                            BuildButtonData("New game")
+                                                        )
+                                                })
+                                            ),
+
                                         std::make_shared<UIDataDisable>(
                                             true,
                                             "UIDataDisable",
@@ -150,19 +144,29 @@ public:
                                                         )
                                                     })
                                         ),
-                                        std::make_shared<UIDataDisable>(
-                                            true,
-                                            "UIDataDisable",
-                                                    std::vector<std::shared_ptr<UIData>>({
 
-                                                        std::make_shared<UIDataButton>(
-                                                            nullptr, 
-                                                            "UIDataButton",
-                                                            BuildButtonData("New game")
-                                                        )
-                                                    })
-                                        )
-                                    })
+                                        std::make_shared<UIDataButton>(
+                                            [this](const VectorFloat2&){
+                                                _data_map["main"]->ModifyData().clear();
+                                                _data_map["modal"]->ModifyData().push_back(
+                                                    _data_map["modal_options"]
+                                                    );
+                                                },
+                                            "UIDataButton",
+                                            BuildButtonData("Options")
+                                        ),
+
+                                        std::make_shared<UIDataButton>(
+                                            [&in_application](const VectorFloat2&){
+                                                in_application.Destroy(0);
+                                                return;
+                                                },
+                                            "UIDataButton",
+                                            BuildButtonData("Exit")
+                                        ),
+
+
+                                        })
                                     )
                                 })
                             )
@@ -376,9 +380,9 @@ public:
             std::make_shared<UIData>(
                 "stack_vertical_bottom_right",
                 std::vector<std::shared_ptr<UIData>>({
-                    _data_map_build_info
+                    _data_map_build_fps
                     ,_data_map_build_version
-                    ,_data_map_build_fps
+                    ,_data_map_build_info
                     })
                 )
 #endif

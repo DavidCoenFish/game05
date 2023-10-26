@@ -162,8 +162,10 @@ void UIComponentStack::UpdateSize(
 
         VectorInt4& child_window_offset = child_window_offset_array[trace];
         trace += 1;
+        // invert y, 0,0 is bottom left
+        const int height = texture_size.GetY() - (child_window_offset.GetW() + child_window_offset.GetY());
         const VectorInt2 window(child_window_offset.GetX(), child_window_offset.GetY());
-        const VectorInt2 offset(child_window_offset.GetZ(), child_window_offset.GetW());
+        const VectorInt2 offset(child_window_offset.GetZ(), height);
 
         child_data._component->UpdateSize(
             in_draw_system,
