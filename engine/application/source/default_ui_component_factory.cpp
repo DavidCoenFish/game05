@@ -115,6 +115,22 @@ namespace
             );
         return s_layout;
     }
+    const UILayout& GetUILayoutMarginTop()
+    {
+        // Todo: is y up the screen for ui, y==0 is bottom, y==1 is top screen
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 1.0f, s_default_margin * (-2.0f)),
+            UICoord(UICoord::ParentSource::Y, 1.0f, s_default_margin * (-2.0f)),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 1.0f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 1.0f),
+            false,
+            true
+            );
+        return s_layout;
+    }
+
     const UILayout& GetUILayoutQuadrant0()
     {
         // Todo: is y up or down the screen for ui
@@ -192,7 +208,20 @@ namespace
             );
         return s_layout;
     }
-
+    const UILayout& GetUILayoutShrinkVertical()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 1.0f),
+            UICoord(UICoord::ParentSource::Y, 1.0f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            false,
+            true
+            );
+        return s_layout;
+    }
 
     typedef const UICoord& (*TGetUICoordRef)();
     const UICoord& GetUICoordNone()
@@ -236,6 +265,14 @@ namespace
         });
         return s_data;
     }
+    const std::vector<UIComponentGridSizeData>& GetUIGridSizeDataBigRowVertical()
+    {
+        static std::vector<UIComponentGridSizeData> s_data({
+            UIComponentGridSizeData(UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size * 4.0f))
+        });
+        return s_data;
+    }
+
     const std::vector<UIComponentGridSizeData>& GetUIGridSizeDataHeaderBodyFooter()
     {
         static std::vector<UIComponentGridSizeData> s_data({
@@ -253,6 +290,14 @@ namespace
             UIComponentGridSizeData(UICoord(UICoord::ParentSource::X, 0.0f, s_default_button_width), 0.0f),
             UIComponentGridSizeData(UICoord(), 1.0f),
             UIComponentGridSizeData(UICoord(UICoord::ParentSource::X, 0.0f, s_default_button_width), 0.0f)
+        });
+        return s_data;
+    }
+    const std::vector<UIComponentGridSizeData>& GetUIGridSizeDataSmallBigHorizontal()
+    {
+        static std::vector<UIComponentGridSizeData> s_data({
+            UIComponentGridSizeData(UICoord(), 1.0f),
+            UIComponentGridSizeData(UICoord(), 2.0f),
         });
         return s_data;
     }
@@ -296,8 +341,13 @@ namespace
     const UIBaseColour GetUIBaseColourRed(const int)
     {
         return UIBaseColour(
-            VectorFloat4(1.0f, 0.0f, 0.0f, 1.0f),
-            true
+            VectorFloat4(1.0f, 0.0f, 0.0f, 1.0f)
+            );
+    }
+    const UIBaseColour GetUIBaseColourBlue(const int)
+    {
+        return UIBaseColour(
+            VectorFloat4(0.0f, 0.0f, 1.0f, 1.0f)
             );
     }
     const UIBaseColour GetUIBaseColourDark(const int)
@@ -760,13 +810,22 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("canvas_red", FactoryCanvas<
         GetUILayout, 
         GetUIBaseColourRed
-        //GetUIBaseColourWhite
+        >);
+    in_ui_manager.AddContentFactory("canvas_blue", FactoryCanvas<
+        GetUILayout, 
+        GetUIBaseColourBlue
         >);
     in_ui_manager.AddContentFactory("canvas_margin", FactoryCanvas<
         GetUILayoutMargin
         >);
 
     // UIData stack
+    in_ui_manager.AddContentFactory("stack", FactoryStack<>);
+
+    in_ui_manager.AddContentFactory("stack_top_down", FactoryStack<
+        GetUILayoutMarginTop
+        >);
+
     in_ui_manager.AddContentFactory("stack_vertical_bottom_right", FactoryStack<
         GetUILayoutMarginBottomRightShrink,
         GetUIBaseColourStaggerClearTransparent,
@@ -792,6 +851,13 @@ void DefaultUIComponentFactory::Populate(
         GetUIBaseColourDefault,
         GetUIGridSizeDataThreeButtonsHorizontal,
         GetUIGridSizeDataDefaultVertical
+        >);
+
+    in_ui_manager.AddContentFactory("grid_small_big_pair", FactoryGrid<
+        GetUILayoutShrinkVertical,
+        GetUIBaseColourDefault,
+        GetUIGridSizeDataSmallBigHorizontal,
+        GetUIGridSizeDataBigRowVertical
         >);
 
     // UIData effect

@@ -27,7 +27,7 @@ namespace
         return ((static_cast<float>(in_pos) / static_cast<float>(in_size)) * 2.0f) - 1.0f;
     }
 
-    constexpr float s_scroll_speed = 25.0f;
+    constexpr float s_scroll_speed = 5.0f;
 }
 
 UIComponentDefault::UIComponentDefault(
@@ -88,8 +88,7 @@ void UIComponentDefault::CalculateGeometry(
         new_value = fmodf(new_value + 1.0f, 2.0f) - 1.0f; // want range [-1.0 ... 1.0]
         in_out_scroll[0] = new_value;
 
-        const float length = (static_cast<float>(in_parent_window[0]) / static_cast<float>(in_desired_size[0]));//
-        //const float length = (static_cast<float>(in_desired_size[0]) / static_cast<float>(in_parent_window[0]));//
+        const float length = (static_cast<float>(in_layout_size[0]) / static_cast<float>(in_desired_size[0]));//
         const float offset = (1.0f - length) * abs(new_value);
         out_geometry_uv[0] = offset;
         out_geometry_uv[2] = offset + length;
@@ -102,10 +101,8 @@ void UIComponentDefault::CalculateGeometry(
         new_value = fmodf(new_value + 1.0f, 2.0f) - 1.0f; // want range [-1.0 ... 1.0]
         in_out_scroll[1] = new_value;
 
-        const float length = (static_cast<float>(in_desired_size[1]) / static_cast<float>(in_parent_window[1]));//
+        const float length = (static_cast<float>(in_layout_size[1]) / static_cast<float>(in_desired_size[1]));//
         const float offset = (1.0f - length) * abs(new_value);
-        //out_geometry_uv[1] = 1.0f - offset;
-        //out_geometry_uv[3] = 1.0f - (offset + length);
         out_geometry_uv[1] = offset + length;
         out_geometry_uv[3] = offset;
     }

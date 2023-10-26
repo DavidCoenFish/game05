@@ -219,7 +219,45 @@ public:
                                                 LocaleISO_639_1::Default,
                                                 "string_middle_em"
                                                 ),
-                                            nullptr//std::make_shared<UIData>("canvas_red")
+
+                                            std::make_shared<UIData>(
+                                                "stack_top_down",
+                                                std::vector<std::shared_ptr<UIData>>({
+                                                    std::make_shared<UIData>(
+                                                        "grid_small_big_pair",
+                                                        std::vector<std::shared_ptr<UIData>>({
+                                                            std::make_shared<UIData>("canvas_red"),
+                                                            std::make_shared<UIData>("canvas_blue"),
+                                                        })
+                                                    ),
+
+                                                    std::make_shared<UIData>(
+                                                        "grid_small_big_pair",
+                                                        std::vector<std::shared_ptr<UIData>>({
+                                                            std::make_shared<UIData>("canvas_red"),
+                                                            std::make_shared<UIData>("canvas_blue"),
+                                                        })
+                                                    ),
+
+                                                    std::make_shared<UIData>(
+                                                        "grid_small_big_pair",
+                                                        std::vector<std::shared_ptr<UIData>>({
+                                                            std::make_shared<UIData>("canvas_red"),
+                                                            std::make_shared<UIData>("canvas_blue"),
+                                                        })
+                                                    ),
+
+                                                    std::make_shared<UIData>(
+                                                        "grid_small_big_pair",
+                                                        std::vector<std::shared_ptr<UIData>>({
+                                                            std::make_shared<UIData>("canvas_red"),
+                                                            std::make_shared<UIData>("canvas_blue"),
+                                                        })
+                                                    )
+
+
+                                                })
+                                            )
 
         #if 1
                                             , std::make_shared<UIData>(

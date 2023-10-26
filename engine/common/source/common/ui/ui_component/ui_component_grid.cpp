@@ -212,6 +212,7 @@ void UIComponentGrid::GetDesiredSize(
     UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
+#if 0
     return _content_default.GetDesiredSize(
         out_layout_size,
         out_desired_size,
@@ -219,6 +220,19 @@ void UIComponentGrid::GetDesiredSize(
         in_ui_scale,
         in_out_node
         );
+#else
+    std::vector<VectorInt4> child_window_offset; // left to right, top to bottom
+
+    GetGridDesiredSize(
+        out_layout_size,
+        out_desired_size,
+        in_parent_window,
+        in_ui_scale,
+        in_out_node,
+        child_window_offset
+        );
+    return;
+#endif
 }
 
 const bool UIComponentGrid::Draw(
@@ -255,21 +269,28 @@ void UIComponentGrid::GetGridDesiredSize(
             bias_sum += item.GetRemainderBias();
         }
 
-        out_desired_size[0] = std::max(out_layout_size.GetX(), total_reserved);
-
-        const int horizontal_remainder = out_layout_size.GetX() - total_reserved;
-        if (0 < horizontal_remainder)
+        if ((0 == bias_sum) || (_content_default.GetLayout().GetShrinkWidth()))
         {
-            int running_total = 0;
-            const float bias_mul = bias_sum ? 1.0f / bias_sum : 0.0f;
-            for (int index = 0; index < static_cast<int>(_horizontal_size_array.size()); ++index)
+            out_desired_size[0] = total_reserved;
+        }
+        else
+        {
+            out_desired_size[0] = std::max(out_layout_size.GetX(), total_reserved);
+
+            const int horizontal_remainder = out_layout_size.GetX() - total_reserved;
+            if (0 < horizontal_remainder)
             {
-                const float bias = _horizontal_size_array[index].GetRemainderBias() * bias_mul;
-                const int add = static_cast<int>(horizontal_remainder * bias);
-                horizontal_sizes[index] += add;
-                running_total += horizontal_sizes[index];
+                int running_total = 0;
+                const float bias_mul = bias_sum ? 1.0f / bias_sum : 0.0f;
+                for (int index = 0; index < static_cast<int>(_horizontal_size_array.size()); ++index)
+                {
+                    const float bias = _horizontal_size_array[index].GetRemainderBias() * bias_mul;
+                    const int add = static_cast<int>(horizontal_remainder * bias);
+                    horizontal_sizes[index] += add;
+                    running_total += horizontal_sizes[index];
+                }
+                horizontal_sizes.back() += (out_layout_size.GetX() - running_total);
             }
-            horizontal_sizes.back() += (out_layout_size.GetX() - running_total);
         }
     }
 
@@ -286,21 +307,28 @@ void UIComponentGrid::GetGridDesiredSize(
             bias_sum += item.GetRemainderBias();
         }
 
-        out_desired_size[1] = std::max(out_layout_size.GetY(), total_reserved);
-
-        const int vertical_remainder = height - total_reserved;
-        if (0 < vertical_remainder)
+        if ((0 == bias_sum) || (_content_default.GetLayout().GetShrinkHeight()))
         {
-            int running_total = 0;
-            const float bias_mul = bias_sum ? 1.0f / bias_sum : 0.0f;
-            for (int index = 0; index < static_cast<int>(_vertical_size_array.size()); ++index)
+            out_desired_size[1] = total_reserved;
+        }
+        else
+        {
+            out_desired_size[1] = std::max(out_layout_size.GetY(), total_reserved);
+
+            const int vertical_remainder = height - total_reserved;
+            if (0 < vertical_remainder)
             {
-                const float bias = _vertical_size_array[index].GetRemainderBias() * bias_mul;
-                const int add = static_cast<int>(vertical_remainder * bias);
-                vertical_sizes[index] += add;
-                running_total += vertical_sizes[index];
+                int running_total = 0;
+                const float bias_mul = bias_sum ? 1.0f / bias_sum : 0.0f;
+                for (int index = 0; index < static_cast<int>(_vertical_size_array.size()); ++index)
+                {
+                    const float bias = _vertical_size_array[index].GetRemainderBias() * bias_mul;
+                    const int add = static_cast<int>(vertical_remainder * bias);
+                    vertical_sizes[index] += add;
+                    running_total += vertical_sizes[index];
+                }
+                vertical_sizes.back() += (height - running_total);
             }
-            vertical_sizes.back() += (height - running_total);
         }
     }
 

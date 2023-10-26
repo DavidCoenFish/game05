@@ -26,6 +26,9 @@ public:
     const VectorInt2 GetAttach(const VectorInt2& in_size, const float in_ui_scale) const;
     const VectorInt2 GetPivot(const VectorInt2& in_parent_size, const float in_ui_scale) const;
 
+    const bool GetShrinkWidth() const { return _shrink_width; }
+    const bool GetShrinkHeight() const { return _shrink_height; }
+
     const bool operator==(const UILayout& in_rhs) const;
     const bool operator!=(const UILayout& in_rhs) const;
 
