@@ -26,6 +26,7 @@
 #include "common/ui/ui_data/ui_data_disable.h"
 #include "common/ui/ui_data/ui_data_string.h"
 #include "common/ui/ui_data/ui_data_text_run.h"
+#include "common/ui/ui_data/ui_data_toggle.h"
 #include "common/util/timer.h"
 #include "common/util/vector_helper.h"
 #include "common/window/window_application_param.h"
@@ -184,6 +185,27 @@ public:
             );
         _data_map["main"] = _data_main;
 
+        auto data_toggle_fps = std::make_shared<UIDataToggle>(
+            true,
+            [this](const VectorFloat2&)
+            {
+                auto data = std::dynamic_pointer_cast<UIDataToggle>(_data_map["data_toggle_fps"]);
+                if (nullptr != data)
+                {
+                    data->ToggleValue();
+                }
+            },
+            "UIDataToggle",
+            // unicode 2713
+            std::vector<std::shared_ptr<UIData>>({
+                std::make_shared<UIDataString>("Y")
+            }),
+            std::vector<std::shared_ptr<UIData>>({
+                std::make_shared<UIDataString>("N")
+            })
+            );
+        _data_map["data_toggle_fps"] = data_toggle_fps;
+
         // Options dialog
         auto data_modal_options = 
             std::make_shared<UIDataButton>(
@@ -231,7 +253,12 @@ public:
                                                         "grid_small_big_pair",
                                                         std::vector<std::shared_ptr<UIData>>({
                                                             std::make_shared<UIData>("canvas_red"),
-                                                            std::make_shared<UIData>("canvas_blue"),
+                                                            std::make_shared<UIData>(
+                                                                "canvas_blue",
+                                                                std::vector<std::shared_ptr<UIData>>({
+                                                                    data_toggle_fps
+                                                                })
+                                                            )
                                                         })
                                                     ),
 

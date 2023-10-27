@@ -1,6 +1,7 @@
 #include "common/common_pch.h"
 #include "common/ui/ui_component/ui_component_button.h"
 #include "common/ui/ui_data/ui_data_button.h"
+#include "common/ui/ui_data/ui_data_toggle.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_geometry.h"
 
@@ -77,6 +78,17 @@ const bool UIComponentButton::UpdateHierarchy(
     {
         if (true == Set(
             data->GetOnClick()
+            ))
+        {
+            dirty = true;
+        }
+    }
+
+    const UIDataToggle* const data_toggle = dynamic_cast<const UIDataToggle*>(in_data);
+    if (nullptr != data_toggle)
+    {
+        if (true == Set(
+            data_toggle->GetOnClick()
             ))
         {
             dirty = true;

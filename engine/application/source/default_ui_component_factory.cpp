@@ -131,9 +131,8 @@ namespace
         return s_layout;
     }
 
-    const UILayout& GetUILayoutQuadrant0()
+    const UILayout& GetUILayoutQuadrant0() //lover left
     {
-        // Todo: is y up or down the screen for ui
         static UILayout s_layout(
             UICoord(UICoord::ParentSource::X, 0.5f),
             UICoord(UICoord::ParentSource::Y, 0.5f),
@@ -144,6 +143,19 @@ namespace
             );
         return s_layout;
     }
+    const UILayout& GetUILayoutQuadrant1() //upper left
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 0.0f),
+            UICoord(UICoord::ParentSource::Y, 1.0f),
+            UICoord(UICoord::ParentSource::X, 0.0f),
+            UICoord(UICoord::ParentSource::Y, 1.0f)
+            );
+        return s_layout;
+    }
+
     const UILayout& GetUILayoutBannerLeft()
     {
         static UILayout s_layout(
@@ -219,6 +231,19 @@ namespace
             UICoord(UICoord::ParentSource::Y, 0.5f),
             false,
             true
+            );
+        return s_layout;
+    }
+
+    const UILayout& GetUILayoutCheckboxLeft()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 0.0f, s_default_font_size),
+            UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size),
+            UICoord(UICoord::ParentSource::X, 0.0f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 0.0f, s_default_gap),
+            UICoord(UICoord::ParentSource::Y, 0.5f)
             );
         return s_layout;
     }
@@ -974,6 +999,11 @@ void DefaultUIComponentFactory::Populate(
         >);
     in_ui_manager.AddContentFactory("button_modal_body", FactoryButton<
         GetUILayout, //GetUILayoutModal, 
+        GetUIBaseColourGrey
+        >);
+
+    in_ui_manager.AddContentFactory("UIDataToggle", FactoryButton<
+        GetUILayoutCheckboxLeft, 
         GetUIBaseColourGrey
         >);
 
