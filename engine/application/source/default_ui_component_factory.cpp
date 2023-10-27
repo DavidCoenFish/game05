@@ -85,6 +85,20 @@ namespace
             );
         return s_layout;
     }
+    const UILayout& GetUILayoutMarginTiny()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 1.0f, -2.0f),
+            UICoord(UICoord::ParentSource::Y, 1.0f, -2.0f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f)
+            );
+        return s_layout;
+    }
+
+
     const UILayout& GetUILayoutMarginBottomRightShrink()
     {
         // Todo: is y up the screen for ui, y==0 is bottom, y==1 is top screen
@@ -238,11 +252,11 @@ namespace
     const UILayout& GetUILayoutCheckboxLeft()
     {
         static UILayout s_layout(
-            UICoord(UICoord::ParentSource::X, 0.0f, s_default_font_size),
-            UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size),
+            UICoord(UICoord::ParentSource::X, 0.0f, s_default_font_size * 1.25f), // 1.1f),
+            UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size * 1.25f), // 1.1f),
             UICoord(UICoord::ParentSource::X, 0.0f),
             UICoord(UICoord::ParentSource::Y, 0.5f),
-            UICoord(UICoord::ParentSource::X, 0.0f, s_default_gap),
+            UICoord(UICoord::ParentSource::X, 0.0f),
             UICoord(UICoord::ParentSource::Y, 0.5f)
             );
         return s_layout;
@@ -293,7 +307,7 @@ namespace
     const std::vector<UIComponentGridSizeData>& GetUIGridSizeDataBigRowVertical()
     {
         static std::vector<UIComponentGridSizeData> s_data({
-            UIComponentGridSizeData(UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size * 4.0f))
+            UIComponentGridSizeData(UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size * 1.5f))
         });
         return s_data;
     }
@@ -322,6 +336,7 @@ namespace
     {
         static std::vector<UIComponentGridSizeData> s_data({
             UIComponentGridSizeData(UICoord(), 1.0f),
+            UIComponentGridSizeData(UICoord(UICoord::ParentSource::X, 0.0f, s_default_gap), 0.0f),
             UIComponentGridSizeData(UICoord(), 2.0f),
         });
         return s_data;
@@ -418,7 +433,7 @@ namespace
         return UIBaseColour(
             VectorFloat4(0.0f, 0.0f, 0.0f, 0.0f),
             true,
-            VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f) //0.5f, 0.5f, 0.5f, 0.5f)
+            VectorFloat4(1.5f, 1.5f, 1.5f, 1.0f) //0.5f, 0.5f, 0.5f, 0.5f)
             );
     }
     const UIBaseColour GetUIBaseColourClearGrey(const int)
@@ -836,6 +851,10 @@ void DefaultUIComponentFactory::Populate(
         GetUILayout, 
         GetUIBaseColourRed
         >);
+    in_ui_manager.AddContentFactory("canvas_grey", FactoryCanvas<
+        GetUILayout, 
+        GetUIBaseColourGrey
+        >);
     in_ui_manager.AddContentFactory("canvas_blue", FactoryCanvas<
         GetUILayout, 
         GetUIBaseColourBlue
@@ -843,6 +862,11 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("canvas_margin", FactoryCanvas<
         GetUILayoutMargin
         >);
+    in_ui_manager.AddContentFactory("canvas_margin_tiny", FactoryCanvas<
+        GetUILayoutMarginTiny
+        >);
+
+        
 
     // UIData stack
     in_ui_manager.AddContentFactory("stack", FactoryStack<>);
@@ -898,6 +922,11 @@ void DefaultUIComponentFactory::Populate(
         GetUICoordDefaultGapHalf,
         GetUICoordDefaultGap
         >);
+    in_ui_manager.AddContentFactory("effect_inner_shadow", FactoryEffect<
+        GetUILayout,
+        UIEffectEnum::TInnerShadow,
+        GetUIBaseColourClearDark
+        >);
     in_ui_manager.AddContentFactory("effect_drop_glow", FactoryEffect<
         GetUILayout,
         UIEffectEnum::TDropShadow,
@@ -925,6 +954,17 @@ void DefaultUIComponentFactory::Populate(
         GetUICoordDefaultGap,
         GetUICoordDefaultGap
         >);
+    in_ui_manager.AddContentFactory("effect_corner_tiny", FactoryEffect<
+        GetUILayout,
+        UIEffectEnum::TRoundCorners,
+        GetUIBaseColourDefault,
+        GetUICoordDefaultGapQuater,
+        GetUICoordDefaultGapQuater,
+        GetUICoordDefaultGapQuater,
+        GetUICoordDefaultGapQuater
+        >);
+
+
     in_ui_manager.AddContentFactory("effect_gloss", FactoryEffect<
         GetUILayout,
         UIEffectEnum::TGloss,
@@ -953,14 +993,42 @@ void DefaultUIComponentFactory::Populate(
         TextEnum::HorizontalLineAlignment::Middle,
         TextEnum::VerticalBlockAlignment::MiddleEM
         >);
-    in_ui_manager.AddContentFactory("string_small_right", FactoryString<
-        GetUILayoutBottomRightShrink,
+    in_ui_manager.AddContentFactory("string_middle", FactoryString<
+        GetUILayout,
+        GetUIBaseColourDefault,
+        GetFontPathDefault,
+        s_default_font_size,
+        s_new_line_gap,
+        TextEnum::HorizontalLineAlignment::Middle,
+        TextEnum::VerticalBlockAlignment::Middle
+        >);
+    in_ui_manager.AddContentFactory("string_right", FactoryString<
+        GetUILayout,
+        GetUIBaseColourDefault,
+        GetFontPathDefault,
+        s_default_font_size,
+        s_new_line_gap,
+        TextEnum::HorizontalLineAlignment::Right,
+        TextEnum::VerticalBlockAlignment::Middle
+        >);
+
+    in_ui_manager.AddContentFactory("string_right_em", FactoryString<
+        GetUILayout,
+        GetUIBaseColourDefault, //GetUIBaseColourDebugRed, //
+        GetFontPathDefault,
+        s_default_font_size,
+        s_new_line_gap_small,
+        TextEnum::HorizontalLineAlignment::Right,
+        TextEnum::VerticalBlockAlignment::MiddleEM
+        >);
+    in_ui_manager.AddContentFactory("string_small_right_em", FactoryString<
+        GetUILayout,
         GetUIBaseColourDefault, //GetUIBaseColourDebugRed, //
         GetFontPathDefault,
         s_default_font_size_small,
         s_new_line_gap_small,
-        TextEnum::HorizontalLineAlignment::Left,
-        TextEnum::VerticalBlockAlignment::Top
+        TextEnum::HorizontalLineAlignment::Right,
+        TextEnum::VerticalBlockAlignment::MiddleEM
         >);
     in_ui_manager.AddContentFactory("string_small_right_fixed", FactoryString<
         GetUILayoutBottomRightShrink,

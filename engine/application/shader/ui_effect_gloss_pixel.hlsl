@@ -76,7 +76,7 @@ float4 CalculateColour(
     //result = foreground + (1 - foreground.alpha) * background
 
     float darken = 1.0 - (gloss_darken.x * 1.25 * texel.a);
-    float gloss = gloss_darken.y * gloss_darken.y * texel.a * 0.4;
+    float gloss = gloss_darken.y * gloss_darken.y * texel.a * 0.55;
 
     float4 result = float4(
         (texel.x * darken) + gloss,

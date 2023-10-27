@@ -28,6 +28,9 @@ namespace
         case UIEffectEnum::TDropShadow:
             result = UIShaderEnum::TEffectDropShadow;
             break;
+        case UIEffectEnum::TInnerShadow:
+            result = UIShaderEnum::TEffectInnerShadow;
+            break;
         case UIEffectEnum::TRoundCorners:
             result = UIShaderEnum::TEffectRoundCorners;
             break;

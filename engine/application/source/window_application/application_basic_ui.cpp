@@ -49,7 +49,7 @@ namespace
                                 "effect_corner",
                                 std::vector<std::shared_ptr<UIData>>({
                                     std::make_shared<UIData>(
-                                        "canvas_red"
+                                        "canvas_grey"
                                     )
                                 })
                             )
@@ -73,6 +73,92 @@ namespace
         });
     }
 
+    std::vector<std::shared_ptr<UIData>> BuildCheckboxTrue()
+    {
+        return std::vector<std::shared_ptr<UIData>>({
+
+            std::make_shared<UIData>(
+                "effect_inner_shadow",
+                std::vector<std::shared_ptr<UIData>>({
+                    std::make_shared<UIData>(
+                        "canvas_grey"
+                    )
+                })
+            ),
+
+            std::make_shared<UIData>(
+                "effect_drop_shadow",
+                std::vector<std::shared_ptr<UIData>>({
+
+            std::make_shared<UIData>(
+                "effect_gloss",
+                std::vector<std::shared_ptr<UIData>>({
+
+                    std::make_shared<UIData>(
+                        "effect_fill",
+                        std::vector<std::shared_ptr<UIData>>({
+
+                            std::make_shared<UIData>(
+                                "UIData",
+                                std::vector<std::shared_ptr<UIData>>({
+
+                            std::make_shared<UIData>(
+                                "canvas_margin_tiny",
+                                std::vector<std::shared_ptr<UIData>>({
+
+                            std::make_shared<UIData>(
+                                "effect_corner",
+                                std::vector<std::shared_ptr<UIData>>({
+                                    std::make_shared<UIData>(
+                                        "canvas_grey"
+                                    )
+                                })
+                            )
+                                })
+                            )
+                                })
+                            )
+                        })
+                    )
+                        })
+                    )
+                })
+            ),
+
+            std::make_shared<UIData>(
+                "effect_drop_glow",
+                std::vector<std::shared_ptr<UIData>>({
+                std::make_shared<UIData>(
+                    "UIData",
+                    std::vector<std::shared_ptr<UIData>>({
+                        std::make_shared<UIDataString>(
+                            "\xe2""\x9c""\x93",
+                            LocaleISO_639_1::Default,
+                            "string_middle"
+                            )
+                        })
+                    )
+                })
+            )
+        });
+    }
+
+
+    std::vector<std::shared_ptr<UIData>> BuildCheckboxFalse()
+    {
+        return std::vector<std::shared_ptr<UIData>>({
+
+            std::make_shared<UIData>(
+                "effect_inner_shadow",
+                std::vector<std::shared_ptr<UIData>>({
+                    std::make_shared<UIData>(
+                        "canvas_grey"
+                    )
+                })
+            )
+        });
+    }
+
 };
 
 class UIModel : public IUIModel
@@ -83,7 +169,7 @@ public:
         auto _data_map_build_version = std::make_shared<UIDataString>(
             std::string(Build::GetBuildTime()) + " " + Build::GetBuildVersion(),
             LocaleISO_639_1::Default,
-            "string_small_right"
+            "string_small_right_em"
             );
 
         const std::string build_info_string = std::string(
@@ -196,15 +282,26 @@ public:
                 }
             },
             "UIDataToggle",
-            // unicode 2713
-            std::vector<std::shared_ptr<UIData>>({
-                std::make_shared<UIDataString>("Y")
-            }),
-            std::vector<std::shared_ptr<UIData>>({
-                std::make_shared<UIDataString>("N")
-            })
+            BuildCheckboxTrue(),
+            BuildCheckboxFalse()
             );
         _data_map["data_toggle_fps"] = data_toggle_fps;
+
+        auto data_toggle_tooltip = std::make_shared<UIDataToggle>(
+            false,
+            [this](const VectorFloat2&)
+            {
+                auto data = std::dynamic_pointer_cast<UIDataToggle>(_data_map["data_toggle_tooltip"]);
+                if (nullptr != data)
+                {
+                    data->ToggleValue();
+                }
+            },
+            "UIDataToggle",
+            BuildCheckboxTrue(),
+            BuildCheckboxFalse()
+            );
+        _data_map["data_toggle_tooltip"] = data_toggle_tooltip;
 
         // Options dialog
         auto data_modal_options = 
@@ -252,20 +349,38 @@ public:
                                                     std::make_shared<UIData>(
                                                         "grid_small_big_pair",
                                                         std::vector<std::shared_ptr<UIData>>({
-                                                            std::make_shared<UIData>("canvas_red"),
-                                                            std::make_shared<UIData>(
-                                                                "canvas_blue",
-                                                                std::vector<std::shared_ptr<UIData>>({
-                                                                    data_toggle_fps
-                                                                })
-                                                            )
+                                                            std::make_shared<UIDataString>(
+                                                                "Show FPS",
+                                                                LocaleISO_639_1::Default,
+                                                                "string_right_em"
+                                                                ),
+                                                            nullptr,
+                                                            data_toggle_fps
                                                         })
                                                     ),
 
                                                     std::make_shared<UIData>(
                                                         "grid_small_big_pair",
                                                         std::vector<std::shared_ptr<UIData>>({
-                                                            std::make_shared<UIData>("canvas_red"),
+                                                            std::make_shared<UIDataString>(
+                                                                "Show Tooltips",
+                                                                LocaleISO_639_1::Default,
+                                                                "string_right_em"
+                                                                ),
+                                                            nullptr,
+                                                            data_toggle_tooltip
+                                                        })
+                                                    ),
+
+                                                    std::make_shared<UIData>(
+                                                        "grid_small_big_pair",
+                                                        std::vector<std::shared_ptr<UIData>>({
+                                                            std::make_shared<UIDataString>(
+                                                                "UI Scale",
+                                                                LocaleISO_639_1::Default,
+                                                                "string_right_em"
+                                                                ),
+                                                            nullptr,
                                                             std::make_shared<UIData>("canvas_blue"),
                                                         })
                                                     ),
@@ -273,15 +388,12 @@ public:
                                                     std::make_shared<UIData>(
                                                         "grid_small_big_pair",
                                                         std::vector<std::shared_ptr<UIData>>({
-                                                            std::make_shared<UIData>("canvas_red"),
-                                                            std::make_shared<UIData>("canvas_blue"),
-                                                        })
-                                                    ),
-
-                                                    std::make_shared<UIData>(
-                                                        "grid_small_big_pair",
-                                                        std::vector<std::shared_ptr<UIData>>({
-                                                            std::make_shared<UIData>("canvas_red"),
+                                                            std::make_shared<UIDataString>(
+                                                                "Locale",
+                                                                LocaleISO_639_1::Default,
+                                                                "string_right_em"
+                                                                ),
+                                                            nullptr,
                                                             std::make_shared<UIData>("canvas_blue"),
                                                         })
                                                     )

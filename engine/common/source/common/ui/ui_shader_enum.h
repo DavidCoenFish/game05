@@ -6,6 +6,7 @@ enum class UIShaderEnum
 
     TEffectDebug,
     TEffectDropShadow,
+    TEffectInnerShadow,
     TEffectRoundCorners,
     TEffectGloss,
     TEffectFill,

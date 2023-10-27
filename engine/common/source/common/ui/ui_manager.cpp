@@ -29,6 +29,7 @@ namespace
         "ui_default_pixel.cso",
         "ui_effect_debug_pixel.cso",
         "ui_effect_dropshadow_pixel.cso",
+        "ui_effect_innershadow_pixel.cso",
         "ui_effect_corner_pixel.cso",
         "ui_effect_gloss_pixel.cso",
         "ui_effect_fill_pixel.cso",

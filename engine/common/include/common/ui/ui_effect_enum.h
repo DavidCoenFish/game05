@@ -5,6 +5,7 @@ enum class UIEffectEnum
     TNone = 0, // this seemed like a good idea to have None be the default block shader, but constant buffer is different
     TDebug,
     TDropShadow,
+    TInnerShadow,
     TRoundCorners,
     TGloss,
     TFill,
