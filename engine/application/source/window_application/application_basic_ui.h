@@ -3,6 +3,7 @@
 #include "common/window/i_window_application.h"
 
 class DrawSystem;
+class IUIModel;
 class LocaleSystem;
 class TextManager;
 class Timer;
@@ -48,7 +49,7 @@ private:
         std::unique_ptr<TextManager> _text_manager;
         std::unique_ptr<LocaleSystem> _locale_system;
         std::unique_ptr<UIManager> _ui_manager;
-        std::unique_ptr<UIModel> _ui_model;
+        std::unique_ptr<IUIModel> _ui_model;
         std::unique_ptr<Timer> _timer;
         std::shared_ptr<UIHierarchyNode> _ui_hierarchy_node;
     };

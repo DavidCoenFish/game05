@@ -24,12 +24,15 @@
 #include "common/ui/ui_data/ui_data.h"
 #include "common/ui/ui_data/ui_data_button.h"
 #include "common/ui/ui_data/ui_data_disable.h"
+#include "common/ui/ui_data/ui_data_float.h"
 #include "common/ui/ui_data/ui_data_string.h"
 #include "common/ui/ui_data/ui_data_text_run.h"
 #include "common/ui/ui_data/ui_data_toggle.h"
 #include "common/util/timer.h"
 #include "common/util/vector_helper.h"
 #include "common/window/window_application_param.h"
+
+class UIModel;
 
 namespace
 {
@@ -143,7 +146,6 @@ namespace
         });
     }
 
-
     std::vector<std::shared_ptr<UIData>> BuildCheckboxFalse()
     {
         return std::vector<std::shared_ptr<UIData>>({
@@ -159,6 +161,62 @@ namespace
         });
     }
 
+    std::shared_ptr<UIData> BuildSliderButton(
+        const std::shared_ptr<UIDataFloat>& in_data_float, 
+        const float in_step_mul,
+        const std::string& in_text
+        )
+    {
+        return std::make_shared<UIDataButton>(
+                [in_data_float, in_step_mul](const VectorFloat2&){
+                    if (nullptr != in_data_float)
+                    {
+                        const float step = in_data_float->GetStep() * in_step_mul;
+                        const float value = in_data_float->GetValue() + step;
+                        in_data_float->SetValue(value);
+                    }
+                }, 
+                "UIDataButton",
+                std::vector<std::shared_ptr<UIData>>({
+
+                    std::make_shared<UIData>(
+                        "effect_gloss",
+                        std::vector<std::shared_ptr<UIData>>({
+
+                            std::make_shared<UIData>(
+                                "effect_fill",
+                                std::vector<std::shared_ptr<UIData>>({
+
+                                    std::make_shared<UIData>(
+                                        "effect_corner",
+                                        std::vector<std::shared_ptr<UIData>>({
+                                            std::make_shared<UIData>(
+                                                "canvas_grey"
+                                            )
+                                        })
+                                    )
+                                })
+                            )
+                        })
+                    ),
+                    std::make_shared<UIData>(
+                        "effect_drop_glow",
+                        std::vector<std::shared_ptr<UIData>>({
+                        std::make_shared<UIData>(
+                            "UIData",
+                            std::vector<std::shared_ptr<UIData>>({
+                                std::make_shared<UIDataString>(
+                                    in_text,
+                                    LocaleISO_639_1::Default,
+                                    "string_middle"
+                                    )
+                                })
+                            )
+                        })
+                    )
+                })
+            );
+    }
 };
 
 class UIModel : public IUIModel
@@ -166,7 +224,7 @@ class UIModel : public IUIModel
 public:
     UIModel(IWindowApplication& in_application)
     {
-        auto _data_map_build_version = std::make_shared<UIDataString>(
+        auto data_map_build_version = std::make_shared<UIDataString>(
             std::string(Build::GetBuildTime()) + " " + Build::GetBuildVersion(),
             LocaleISO_639_1::Default,
             "string_small_right_em"
@@ -178,18 +236,55 @@ public:
             " <Locale " + Build::GetBuildConfiguration() + ">" + 
             " <Locale " + Build::GetBuildPlatform() + ">";
 
-        auto _data_map_build_info = std::make_shared<UIDataTextRun>(
+        auto data_map_build_info = std::make_shared<UIDataTextRun>(
             build_info_string,
             LocaleISO_639_1::Default,
             "text_run_small_right"
             );
 
-        auto _data_map_build_fps = std::make_shared<UIDataString>(
+        auto data_map_build_fps = std::make_shared<UIDataString>(
             "0.0",
             LocaleISO_639_1::Default,
             "string_small_right_fixed"
             );
-        _data_map["fps"] = _data_map_build_fps;
+        _data_map["fps"] = data_map_build_fps;
+
+        auto data_map_ui_scale = std::make_shared<UIDataFloat>(
+            1.0f,
+            0.05f,
+            VectorFloat2(0.25f, 4.0f),
+            [this](const float in_new_value){
+                auto data = std::dynamic_pointer_cast<UIDataFloat>(_data_map["ui_scale"]);
+                if (nullptr != data)
+                {
+                    data->SetValue(in_new_value);
+                }
+            },
+            std::make_shared<UIData>(
+                "canvas_widget"
+            ),
+            "slider_horizontal",
+            std::vector<std::shared_ptr<UIData>>({
+                std::make_shared<UIData>(
+                    "effect_inner_shadow",
+                    std::vector<std::shared_ptr<UIData>>({
+                        std::make_shared<UIData>(
+                            "canvas_grey"
+                            )
+                        })
+                    )
+               })
+            );
+        _data_map["ui_scale"] = data_map_ui_scale;
+
+        auto data_map_ui_scale_slider = std::make_shared<UIData>(
+            "grid_slider_horizontal",
+            std::vector<std::shared_ptr<UIData>>({
+                BuildSliderButton(data_map_ui_scale, -1.0f, "\xe2""\x8f""\xb4"),
+                data_map_ui_scale,
+                BuildSliderButton(data_map_ui_scale, 1.0f, "\xe2""\x8f""\xb5")
+                })
+            );
 
         // Launch Left banner
         auto data_main_launch = std::make_shared<UIData>(
@@ -319,8 +414,6 @@ public:
                         "effect_drop_shadow",
                         std::vector<std::shared_ptr<UIData>>({
 
-                        //
-
                     std::make_shared<UIData>(
                         "UIData",
                         std::vector<std::shared_ptr<UIData>>({
@@ -381,7 +474,7 @@ public:
                                                                 "string_right_em"
                                                                 ),
                                                             nullptr,
-                                                            std::make_shared<UIData>("canvas_blue"),
+                                                            data_map_ui_scale_slider
                                                         })
                                                     ),
 
@@ -499,7 +592,7 @@ public:
 
 #if 0
             // debug string
-            _data_map_build_version,
+            data_map_build_version,
 #endif
 
 
@@ -518,9 +611,9 @@ public:
             std::make_shared<UIData>(
                 "stack_vertical_bottom_right",
                 std::vector<std::shared_ptr<UIData>>({
-                    _data_map_build_fps
-                    ,_data_map_build_version
-                    ,_data_map_build_info
+                    data_map_build_fps
+                    ,data_map_build_version
+                    ,data_map_build_info
                     })
                 )
 #endif
@@ -683,8 +776,17 @@ void ApplicationBasicUI::Update()
         }
         #endif
 
-        auto frame = _draw_system->CreateNewFrame();
+        float ui_scale = 1.0f;
+        if ((nullptr != _draw_resource) && (nullptr != _draw_resource->_ui_model))
+        {
+            auto data = dynamic_cast<UIDataFloat*>(_draw_resource->_ui_model->GetData("ui_scale"));
+            if (nullptr != data)
+            {
+                ui_scale = data->GetValue();
+            }
+        }
 
+        auto frame = _draw_system->CreateNewFrame();
         frame->SetRenderTarget(_draw_system->GetRenderTargetBackBuffer());
 
         // Update ui layout
@@ -696,7 +798,7 @@ void ApplicationBasicUI::Update()
                 DefaultUIComponentFactory::GetDefaultTextStyle(),
                 _draw_resource->_locale_system.get(),
                 _draw_resource->_text_manager.get(),
-                1.0f, //in_ui_scale = 1.0f,
+                ui_scale, //in_ui_scale = 1.0f,
                 delta_seconds, //in_time_delta = 0.0f,
                 true, //false, //in_always_dirty = false,
                 false, //in_draw_to_texture = false, // Draw to texture or backbuffer?

@@ -101,6 +101,8 @@
     <ClCompile Include="source\common\ui\ui_component\ui_component_disable.cpp" />
     <ClCompile Include="source\common\ui\ui_component\ui_component_effect.cpp" />
     <ClCompile Include="source\common\ui\ui_component\ui_component_grid.cpp" />
+    <ClCompile Include="source\common\ui\ui_component\ui_component_scroll.cpp" />
+    <ClCompile Include="source\common\ui\ui_component\ui_component_slider.cpp" />
     <ClCompile Include="source\common\ui\ui_component\ui_component_stack.cpp" />
     <ClCompile Include="source\common\ui\ui_component\ui_component_string.cpp" />
     <ClCompile Include="source\common\ui\ui_component\ui_component_texture.cpp" />
@@ -194,6 +196,8 @@
     <ClInclude Include="include\common\ui\ui_component\ui_component_disable.h" />
     <ClInclude Include="include\common\ui\ui_component\ui_component_effect.h" />
     <ClInclude Include="include\common\ui\ui_component\ui_component_grid.h" />
+    <ClInclude Include="include\common\ui\ui_component\ui_component_scroll.h" />
+    <ClInclude Include="include\common\ui\ui_component\ui_component_slider.h" />
     <ClInclude Include="include\common\ui\ui_component\ui_component_stack.h" />
     <ClInclude Include="include\common\ui\ui_component\ui_component_string.h" />
     <ClInclude Include="include\common\ui\ui_component\ui_component_texture.h" />
@@ -207,6 +211,7 @@
     <ClInclude Include="include\common\ui\ui_data\ui_data_text_run.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_toggle.h" />
     <ClInclude Include="include\common\ui\ui_effect_enum.h" />
+    <ClInclude Include="include\common\ui\ui_enum.h" />
     <ClInclude Include="include\common\ui\ui_hierarchy_node.h" />
     <ClInclude Include="include\common\ui\ui_layout.h" />
     <ClInclude Include="include\common\ui\ui_manager.h" />

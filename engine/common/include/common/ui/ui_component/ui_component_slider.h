@@ -2,30 +2,33 @@
 
 #include "common/ui/ui_component/i_ui_component.h"
 #include "common/ui/ui_component/ui_component_default.h"
+#include "common/ui/i_ui_input.h"
 
-class VectorInt4;
 enum class UIOrientation;
 
-class UIComponentStack : public IUIComponent
+// child is the slider knot?
+class UIComponentSlider : public IUIComponent, public IUIInput
 {
 public:
-    UIComponentStack(
+    UIComponentSlider(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
-        const UIOrientation in_orientation,
-        const UICoord& in_gap
+        const UIOrientation in_orientation
         );
-    virtual ~UIComponentStack();
+    virtual ~UIComponentSlider();
 
-    const bool Set(
+    const bool SetBase(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
-        const UIOrientation in_orientation,
-        const UICoord& in_gap
+        const UIOrientation in_orientation
+        );
+    const bool Set(
+        const std::function<void(const float)>& in_value_change,
+        const float in_value,
+        const VectorFloat2& in_range_low_high
         );
 
 private:
-    // Make sorting children easier
     virtual void SetSourceToken(void* in_source_ui_data_token) override;
     virtual void* GetSourceToken() const override;
 
@@ -56,16 +59,10 @@ private:
         UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         ) override;
 
-    /// Stack is a little special in that we want the children to expand as needed along one axis
-    /// skip over null child components
-    void GetStackDesiredSize(
-        VectorInt2& out_layout_size, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
-        VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
-        const VectorInt2& in_parent_window,
-        const float in_ui_scale,
-        UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-        std::vector<VectorInt4>& out_child_window_offset
-        );
+    virtual void OnInputMouseClick(
+        const VectorFloat4& in_screen_pos,
+        const VectorFloat2& in_mouse_pos
+        ) override;
 
     virtual const bool Draw(
         const UIManagerDrawParam& in_draw_param,
@@ -74,7 +71,13 @@ private:
 
 private:
     UIComponentDefault _content_default;
+
     UIOrientation _orientation;
-    UICoord _gap;
+
+    // Is it simpler to just have the last child node be the knot? but then we have to control how it's layout is updated
+    std::shared_ptr<UIHierarchyNodeChildData> _child_data_knot;
+    std::function<void(const float)> _value_change;
+    float _value;
+    VectorFloat2 _range_low_high;
 
 };

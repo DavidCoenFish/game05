@@ -22,6 +22,7 @@
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_base_colour.h"
 #include "common/ui/ui_effect_enum.h"
+#include "common/ui/ui_enum.h"
 #include "common/ui/ui_layout.h"
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_data/ui_data_disable.h"
@@ -49,7 +50,6 @@ namespace
     constexpr int s_new_line_gap = 4; // DscMath::ScaleInt(s_default_font_size, s_default_newling_ratio);
     constexpr int s_new_line_gap_small = 3; // DscMath::ScaleInt(s_default_font_size, s_default_newling_ratio);
     constexpr float s_default_margin = s_default_font_size * 0.5f; // in pixels, or in em?
-    constexpr float s_default_gap = s_default_font_size * 0.5f; // in pixels, or in em?
     constexpr float s_default_button_width = 144.0f; // https://uxmovement.com/mobile/optimal-size-and-spacing-for-mobile-buttons/
     constexpr float s_slow_fade = 1.0f;
     constexpr float s_quick_fade = 0.1f;
@@ -88,8 +88,8 @@ namespace
     const UILayout& GetUILayoutMarginTiny()
     {
         static UILayout s_layout(
-            UICoord(UICoord::ParentSource::X, 1.0f, -2.0f),
-            UICoord(UICoord::ParentSource::Y, 1.0f, -2.0f),
+            UICoord(UICoord::ParentSource::X, 1.0f, s_default_margin * (-0.25f)),
+            UICoord(UICoord::ParentSource::Y, 1.0f, s_default_margin * (-0.25f)),
             UICoord(UICoord::ParentSource::X, 0.5f),
             UICoord(UICoord::ParentSource::Y, 0.5f),
             UICoord(UICoord::ParentSource::X, 0.5f),
@@ -262,6 +262,32 @@ namespace
         return s_layout;
     }
 
+    const UILayout& GetUILayoutWidget()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 0.0f, s_default_font_size * 1.25f), // 1.1f),
+            UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size * 1.25f), // 1.1f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f)
+            );
+        return s_layout;
+    }
+
+    const UILayout& GetUILayoutSliderHorizontal()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 1.0f),
+            UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size * 1.25f), // 1.1f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f)
+            );
+        return s_layout;
+    }
+
     typedef const UICoord& (*TGetUICoordRef)();
     const UICoord& GetUICoordNone()
     {
@@ -275,17 +301,17 @@ namespace
     }
     const UICoord& GetUICoordDefaultGap()
     {
-        static UICoord s_coord(UICoord::ParentSource::None, 0.0f, s_default_gap);
+        static UICoord s_coord(UICoord::ParentSource::None, 0.0f, s_default_margin);
         return s_coord;
     }
     const UICoord& GetUICoordDefaultGapHalf()
     {
-        static UICoord s_coord(UICoord::ParentSource::None, 0.0f, s_default_gap * 0.5f);
+        static UICoord s_coord(UICoord::ParentSource::None, 0.0f, s_default_margin * 0.5f);
         return s_coord;
     }
     const UICoord& GetUICoordDefaultGapQuater()
     {
-        static UICoord s_coord(UICoord::ParentSource::None, 0.0f, s_default_gap * 0.25f);
+        static UICoord s_coord(UICoord::ParentSource::None, 0.0f, s_default_margin * 0.25f);
         return s_coord;
     }
 
@@ -308,6 +334,24 @@ namespace
     {
         static std::vector<UIComponentGridSizeData> s_data({
             UIComponentGridSizeData(UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size * 1.5f))
+        });
+        return s_data;
+    }
+
+    const std::vector<UIComponentGridSizeData>& GetUIGridSliderHorizontalWidth()
+    {
+        static std::vector<UIComponentGridSizeData> s_data({
+            UIComponentGridSizeData(UICoord(UICoord::ParentSource::X, 0.0f, s_default_font_size)),
+            UIComponentGridSizeData(UICoord(), 1.0f),
+            UIComponentGridSizeData(UICoord(UICoord::ParentSource::X, 0.0f, s_default_font_size))
+        });
+        return s_data;
+    }
+
+    const std::vector<UIComponentGridSizeData>& GetUIGridSliderHorizontalHeight()
+    {
+        static std::vector<UIComponentGridSizeData> s_data({
+            UIComponentGridSizeData(UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size))
         });
         return s_data;
     }
@@ -336,7 +380,7 @@ namespace
     {
         static std::vector<UIComponentGridSizeData> s_data({
             UIComponentGridSizeData(UICoord(), 1.0f),
-            UIComponentGridSizeData(UICoord(UICoord::ParentSource::X, 0.0f, s_default_gap), 0.0f),
+            UIComponentGridSizeData(UICoord(UICoord::ParentSource::X, 0.0f, s_default_margin), 0.0f),
             UIComponentGridSizeData(UICoord(), 2.0f),
         });
         return s_data;
@@ -756,7 +800,7 @@ namespace
     template<
         TGetUILayoutRef in_get_layout_ref = GetUILayout,
         TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
-        StackOrientation in_orientation = StackOrientation::TVertical,
+        UIOrientation in_orientation = UIOrientation::TVertical,
         TGetUICoordRef in_get_gap_ref = GetUICoordDefaultGap
         >
     const bool FactoryStack(
@@ -865,8 +909,10 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("canvas_margin_tiny", FactoryCanvas<
         GetUILayoutMarginTiny
         >);
-
-        
+    in_ui_manager.AddContentFactory("canvas_widget", FactoryCanvas<
+        GetUILayoutWidget, 
+        GetUIBaseColourBlue
+        >);
 
     // UIData stack
     in_ui_manager.AddContentFactory("stack", FactoryStack<>);
@@ -878,13 +924,13 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("stack_vertical_bottom_right", FactoryStack<
         GetUILayoutMarginBottomRightShrink,
         GetUIBaseColourStaggerClearTransparent,
-        StackOrientation::TVertical,
+        UIOrientation::TVertical,
         GetUICoordDefaultGap
         >);
     in_ui_manager.AddContentFactory("stack_vertical_middle", FactoryStack<
         GetUILayoutMarginMiddleShrinkVertical,
         GetUIBaseColourStaggerClearTransparent,
-        StackOrientation::TVertical,
+        UIOrientation::TVertical,
         GetUICoordDefaultGap
         >);
 
@@ -908,6 +954,15 @@ void DefaultUIComponentFactory::Populate(
         GetUIGridSizeDataSmallBigHorizontal,
         GetUIGridSizeDataBigRowVertical
         >);
+
+    in_ui_manager.AddContentFactory("grid_slider_horizontal", FactoryGrid<
+        GetUILayoutSliderHorizontal,
+        GetUIBaseColourDefault,
+        GetUIGridSliderHorizontalWidth,
+        GetUIGridSliderHorizontalHeight
+        >);
+
+
 
     // UIData effect
     in_ui_manager.AddContentFactory("effect_debug", FactoryEffect<
@@ -1074,6 +1129,13 @@ void DefaultUIComponentFactory::Populate(
         GetUILayoutCheckboxLeft, 
         GetUIBaseColourGrey
         >);
+
+    // button of a slider
+    in_ui_manager.AddContentFactory("button_widget", FactoryButton<
+        GetUILayoutWidget, 
+        GetUIBaseColourGrey
+        >);
+
 
     return;
 }

@@ -8,11 +8,12 @@
 #include "common/ui/ui_screen_space.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_geometry.h"
+#include "common/ui/ui_enum.h"
 
 UIComponentStack::UIComponentStack(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
-    const StackOrientation in_orientation,
+    const UIOrientation in_orientation,
     const UICoord& in_gap
     )
     : _content_default(
@@ -33,7 +34,7 @@ UIComponentStack::~UIComponentStack()
 const bool UIComponentStack::Set(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
-    const StackOrientation in_orientation,
+    const UIOrientation in_orientation,
     const UICoord& in_gap
     )
 {
@@ -237,7 +238,7 @@ void UIComponentStack::GetStackDesiredSize(
         {
         default:
             break;
-        case StackOrientation::TVertical:
+        case UIOrientation::TVertical:
             if (0 != max_desired_size[1])
             {
                 max_desired_size[1] += gap;
@@ -247,7 +248,7 @@ void UIComponentStack::GetStackDesiredSize(
             max_desired_size[1] += child_desired[1];
 
             break;
-        case StackOrientation::THorizontal:
+        case UIOrientation::THorizontal:
             if (0 != max_desired_size[0])
             {
                 max_desired_size[0] += gap;
@@ -271,10 +272,10 @@ void UIComponentStack::GetStackDesiredSize(
         {
         default:
             break;
-        case StackOrientation::TVertical:
+        case UIOrientation::TVertical:
             iter[0] = out_layout_size[0];
             break;
-        case StackOrientation::THorizontal:
+        case UIOrientation::THorizontal:
             iter[1] = out_layout_size[1];
             break;
         }
