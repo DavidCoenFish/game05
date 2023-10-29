@@ -23,7 +23,7 @@ UITexture::UITexture(
 
 UITexture::~UITexture()
 {
-    // Nop
+    _render_target_texture.reset();
 }
 
 void UITexture::UpdateRenderTarget(

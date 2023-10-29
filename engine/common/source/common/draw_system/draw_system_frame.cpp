@@ -27,8 +27,8 @@ DrawSystemFrame::DrawSystemFrame(DrawSystem&in_draw_system)
 DrawSystemFrame::~DrawSystemFrame()
 {
     SetRenderTarget(nullptr);
-    _draw_system.FinishResourceList(_resource_list);
     _draw_system.Present();
+    _draw_system.FinishResourceList(_resource_list);
     //LOG_MESSAGE_RENDER("DrawSystemFrame end");
 
     return;

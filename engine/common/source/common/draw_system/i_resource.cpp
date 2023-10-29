@@ -3,6 +3,10 @@
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/i_resource.h"
 
+#if defined(DRAW_SYSTEM_RESOURCE_ALIVE_COUNT)
+int s_draw_system_resource_alive_count = 0;
+#endif
+
 IResource::IResource(DrawSystem* const in_draw_system) 
     : _draw_system(in_draw_system)
 {
@@ -10,6 +14,11 @@ IResource::IResource(DrawSystem* const in_draw_system)
     {
         _draw_system->AddResource(this);
     }
+
+#if defined(DRAW_SYSTEM_RESOURCE_ALIVE_COUNT)
+    s_draw_system_resource_alive_count += 1;
+#endif
+
     return;
 }
 
@@ -19,6 +28,11 @@ IResource::~IResource()
     {
         _draw_system->RemoveResource(this);
     }
+
+#if defined(DRAW_SYSTEM_RESOURCE_ALIVE_COUNT)
+    s_draw_system_resource_alive_count -= 1;
+#endif
+
 }
 
 void IResource::OnResize(

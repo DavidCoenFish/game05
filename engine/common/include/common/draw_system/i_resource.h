@@ -3,6 +3,8 @@ class DrawSystem;
 class CustomCommandList;
 class VectorInt2;
 
+//#define DRAW_SYSTEM_RESOURCE_ALIVE_COUNT
+
 class IResource
 {
 public:

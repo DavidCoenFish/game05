@@ -1,6 +1,12 @@
 #include "common/common_pch.h"
 
 #include "common/draw_system/draw_system_resource_list.h"
+#include "common/log/log.h"
+
+#if defined(DRAW_SYSTEM_RESOURCE_LIST_DEBUG)
+int s_id = 0;
+#endif
+
 
 std::shared_ptr<DrawSystemResourceList> DrawSystemResourceList::Factory(
     ID3D12Device& in_device
@@ -25,12 +31,23 @@ DrawSystemResourceList::DrawSystemResourceList(
     )
     : _fence(in_fence)
     , _command_list_marked_finished(false)
+#if defined(DRAW_SYSTEM_RESOURCE_LIST_DEBUG)
+    , _id(s_id++)
+#endif
 {
+#if defined(DRAW_SYSTEM_RESOURCE_LIST_DEBUG)
+    LOG_MESSAGE_RENDER("DrawSystemResourceList_[%d] ctor", _id);
+#endif
+
     // Nop
 }
 
 DrawSystemResourceList::~DrawSystemResourceList()
 {
+#if defined(DRAW_SYSTEM_RESOURCE_LIST_DEBUG)
+    LOG_MESSAGE_RENDER("DrawSystemResourceList_[%d] dtor", _id);
+#endif
+
     // Nop
 }
 
@@ -54,12 +71,20 @@ void DrawSystemResourceList::MarkFinished(
         _fence.Get(),
         1
         );
+
     _command_list_marked_finished = true;
+
     return;
 }
 
 const bool DrawSystemResourceList::GetFinished() const
 {
-    return (0 < _fence->GetCompletedValue());
+    auto completed_value = _fence->GetCompletedValue();
+
+#if defined(DRAW_SYSTEM_RESOURCE_LIST_DEBUG)
+    LOG_MESSAGE_RENDER("DrawSystemResourceList_[%d] completed_value %d, size %d", _id, completed_value, _resource_array.size() );
+#endif
+
+    return (0 < completed_value);
 }
 

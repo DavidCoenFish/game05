@@ -7,7 +7,7 @@
 enum class UIOrientation;
 
 // child is the slider knot?
-class UIComponentSlider : public IUIComponent, public IUIInput
+class UIComponentSlider : public IUIComponent//, public IUIInput
 {
 public:
     UIComponentSlider(
@@ -59,10 +59,10 @@ private:
         UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         ) override;
 
-    virtual void OnInputMouseClick(
-        const VectorFloat4& in_screen_pos,
-        const VectorFloat2& in_mouse_pos
-        ) override;
+    //virtual void OnInputMouseClick(
+    //    const VectorFloat4& in_screen_pos,
+    //    const VectorFloat2& in_mouse_pos
+    //    ) override;
 
     virtual const bool Draw(
         const UIManagerDrawParam& in_draw_param,

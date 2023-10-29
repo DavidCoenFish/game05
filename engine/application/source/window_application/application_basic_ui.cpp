@@ -8,6 +8,7 @@
 #include "common/draw_system/custom_command_list.h"
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/draw_system_frame.h"
+#include "common/draw_system/i_resource.h"
 #include "common/file_system/file_system.h"
 #include "common/locale/locale_system.h"
 #include "common/log/log.h"
@@ -31,6 +32,10 @@
 #include "common/util/timer.h"
 #include "common/util/vector_helper.h"
 #include "common/window/window_application_param.h"
+
+#if defined(DRAW_SYSTEM_RESOURCE_ALIVE_COUNT)
+extern int s_draw_system_resource_alive_count;
+#endif
 
 class UIModel;
 
@@ -780,6 +785,11 @@ ApplicationBasicUI::~ApplicationBasicUI()
 void ApplicationBasicUI::Update()
 {
     BaseType::Update();
+
+#if defined(DRAW_SYSTEM_RESOURCE_ALIVE_COUNT)
+    LOG_CONSOLE("resource alive count [%d]", s_draw_system_resource_alive_count);
+#endif
+
     if (_draw_system)
     {
         float nice_fps = 0.0f;

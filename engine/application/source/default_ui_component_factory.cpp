@@ -18,6 +18,7 @@
 #include "common/ui/ui_component/ui_component_grid.h"
 #include "common/ui/ui_component/ui_component_stack.h"
 #include "common/ui/ui_component/ui_component_string.h"
+#include "common/ui/ui_component/ui_component_slider.h"
 #include "common/ui/ui_component/ui_component_text_run.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_base_colour.h"
@@ -27,6 +28,7 @@
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_data/ui_data_disable.h"
 #include "common/ui/ui_data/ui_data_string.h"
+#include "common/ui/ui_data/ui_data_float.h"
 #include "common/ui/ui_data/ui_data_text_run.h"
 
 namespace
@@ -875,6 +877,42 @@ namespace
         }
         return dirty;
     }
+
+    template<
+        TGetUILayoutRef in_get_layout_ref = GetUILayout,
+        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
+        UIOrientation in_orientation = UIOrientation::THorizontal
+        >
+    const bool FactorySlider(
+        std::unique_ptr<IUIComponent>& in_out_content,
+        const UIComponentFactoryParam& in_factory_param
+        )
+    {
+        UIComponentSlider* content = dynamic_cast<UIComponentSlider*>(in_out_content.get());
+        bool dirty = false;
+        if (nullptr == content)
+        {
+            dirty = true;
+            auto new_content = std::make_unique<UIComponentSlider>(
+                in_get_base_colour(in_factory_param._create_index),
+                in_get_layout_ref(),
+                in_orientation
+                );
+            in_out_content = std::move(new_content);
+        }
+        else
+        {
+            if (true == content->SetBase(
+                in_get_base_colour(in_factory_param._create_index),
+                in_get_layout_ref(),
+                in_orientation
+                ))
+            {
+                dirty = true;
+            }
+        }
+        return dirty;
+    }
 }
 
 void DefaultUIComponentFactory::Populate(
@@ -1134,6 +1172,11 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("button_widget", FactoryButton<
         GetUILayoutWidget, 
         GetUIBaseColourGrey
+        >);
+
+    in_ui_manager.AddContentFactory("UIDataFloat", FactorySlider<>);
+    in_ui_manager.AddContentFactory("slider_horizontal", FactorySlider<
+        GetUILayoutSliderHorizontal
         >);
 
 

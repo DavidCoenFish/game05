@@ -1,6 +1,8 @@
 #pragma once
 class IResource;
 
+//#define DRAW_SYSTEM_RESOURCE_LIST_DEBUG
+
 /// Have been having issues with [render targets, geometry, constant buffer] being destoyed before command list finishes
 class DrawSystemResourceList
 {
@@ -34,4 +36,7 @@ private:
     Microsoft::WRL::ComPtr<ID3D12Fence> _fence;
     bool _command_list_marked_finished;
 
+#if defined(DRAW_SYSTEM_RESOURCE_LIST_DEBUG)
+    int _id;
+#endif
 };

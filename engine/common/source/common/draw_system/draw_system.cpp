@@ -356,6 +356,8 @@ void DrawSystem::FinishResourceList(
 
 void DrawSystem::Prepare(ID3D12GraphicsCommandList*& in_command_list)
 {
+    RemoveCompletedResourceList();
+
     if (nullptr != _device_resources)
     {
         _device_resources->Prepare(in_command_list);
