@@ -224,7 +224,7 @@ class UIModel : public IUIModel
 public:
     UIModel(IWindowApplication& in_application)
     {
-        auto data_map_build_version = std::make_shared<UIDataString>(
+        _data_build_version = std::make_shared<UIDataString>(
             std::string(Build::GetBuildTime()) + " " + Build::GetBuildVersion(),
             LocaleISO_639_1::Default,
             "string_small_right_em"
@@ -236,18 +236,21 @@ public:
             " <Locale " + Build::GetBuildConfiguration() + ">" + 
             " <Locale " + Build::GetBuildPlatform() + ">";
 
-        auto data_map_build_info = std::make_shared<UIDataTextRun>(
+        _data_build_info = std::make_shared<UIDataTextRun>(
             build_info_string,
             LocaleISO_639_1::Default,
             "text_run_small_right"
             );
 
-        auto data_map_build_fps = std::make_shared<UIDataString>(
+        _data_build_fps = std::make_shared<UIDataString>(
             "0.0",
             LocaleISO_639_1::Default,
             "string_small_right_fixed"
             );
-        _data_map["fps"] = data_map_build_fps;
+
+        _data_build = std::make_shared<UIData>(
+                "stack_vertical_bottom_right"
+                );
 
         auto data_map_ui_scale = std::make_shared<UIDataFloat>(
             1.0f,
@@ -580,7 +583,6 @@ public:
             );
         _data_map["modal"] = _data_modal;
 
-
         _data_array_map[""] = std::vector<std::shared_ptr<UIData>>({
 #if 0
             // debug quad
@@ -592,7 +594,7 @@ public:
 
 #if 0
             // debug string
-            data_map_build_version,
+            _data_build_info,
 #endif
 
 
@@ -608,14 +610,7 @@ public:
 
 #if 1
             // Build info
-            std::make_shared<UIData>(
-                "stack_vertical_bottom_right",
-                std::vector<std::shared_ptr<UIData>>({
-                    data_map_build_fps
-                    ,data_map_build_version
-                    ,data_map_build_info
-                    })
-                )
+            _data_build
 #endif
 
             });
@@ -624,6 +619,39 @@ public:
     virtual ~UIModel()
     {
         // Nop
+    }
+
+    void RefreshBuildInfo(const float in_nice_fps)
+    {
+        auto data_show = dynamic_cast<UIDataToggle*>(GetData("data_toggle_fps"));
+
+        bool show_fps = false;
+        if (nullptr != data_show)
+        {
+            show_fps = data_show->GetValue();
+        }
+
+        if ((nullptr != _data_build_fps) && (true == show_fps))
+        {
+            std::stringstream stream;
+            stream << std::fixed;
+            stream << std::setprecision(1);
+            stream << in_nice_fps;
+            std::string stream_string = stream.str();
+
+            _data_build_fps->SetString(stream_string);
+        }
+
+        auto& data_array = _data_build->ModifyData();
+        data_array.clear();
+
+        if (true == show_fps)
+        {
+            data_array.push_back(_data_build_fps);
+        }
+
+        data_array.push_back(_data_build_version);
+        data_array.push_back(_data_build_info);
     }
 
 private:
@@ -658,12 +686,11 @@ private:
     std::map<std::string, std::vector<std::shared_ptr<UIData>>> _data_array_map;
     std::map<std::string, std::shared_ptr<UIData>> _data_map;
 
-    // Could be in _data_map? or just have as first class
-    //std::shared_ptr<UIData> _data_layer_main;
-    //std::shared_ptr<UIData> _data_layer_modal;
-    //std::shared_ptr<UIData> _data_layer_popup;
-    //std::shared_ptr<UIData> _data_layer_tooltip;
-
+    std::shared_ptr<UIData> _data_build;
+    std::shared_ptr<UIData> _data_build_info;
+    std::shared_ptr<UIData> _data_build_version;
+    std::shared_ptr<UIDataString> _data_build_fps;
+    
 };
 
 IWindowApplication* const ApplicationBasicUI::Factory(
@@ -758,23 +785,15 @@ void ApplicationBasicUI::Update()
         float nice_fps = 0.0f;
         const float delta_seconds = _draw_resource->_timer->GetDeltaSeconds(&nice_fps);
 
-        #if 1
         // update fps
+        if ((nullptr != _draw_resource) && (nullptr != _draw_resource->_ui_model))
         {
-            UIDataString* const data_string = _draw_resource->_ui_model->GetDataType<UIDataString>("fps");
-            if (nullptr != data_string)
+            UIModel* const model = dynamic_cast<UIModel*>(_draw_resource->_ui_model.get());
+            if (nullptr != model)
             {
-                std::stringstream stream;
-                stream << std::fixed;
-                stream << std::setprecision(1);
-                //stream << "fps: ";
-                stream << nice_fps;
-                std::string stream_string = stream.str();
-
-                data_string->SetString(stream_string);
+                model->RefreshBuildInfo(nice_fps);
             }
         }
-        #endif
 
         float ui_scale = 1.0f;
         if ((nullptr != _draw_resource) && (nullptr != _draw_resource->_ui_model))
