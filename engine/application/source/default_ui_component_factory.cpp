@@ -949,7 +949,7 @@ void DefaultUIComponentFactory::Populate(
         >);
     in_ui_manager.AddContentFactory("canvas_widget", FactoryCanvas<
         GetUILayoutWidget, 
-        GetUIBaseColourBlue
+        GetUIBaseColourDefault //GetUIBaseColourBlue
         >);
 
     // UIData stack

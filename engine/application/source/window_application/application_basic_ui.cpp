@@ -222,6 +222,55 @@ namespace
                 })
             );
     }
+
+    std::shared_ptr<UIData> BuildSliderKnot()
+    {
+        return std::make_shared<UIData>(
+            "canvas_widget",
+            std::vector<std::shared_ptr<UIData>>({
+                //std::make_shared<UIData>(
+                //    "effect_drop_shadow",
+                //    std::vector<std::shared_ptr<UIData>>({
+
+                        std::make_shared<UIData>(
+                            "effect_gloss",
+                            std::vector<std::shared_ptr<UIData>>({
+
+                                std::make_shared<UIData>(
+                                    "effect_fill",
+                                    std::vector<std::shared_ptr<UIData>>({
+
+                                        std::make_shared<UIData>(
+                                            "UIData",
+                                            std::vector<std::shared_ptr<UIData>>({
+
+                                        std::make_shared<UIData>(
+                                            "canvas_margin_tiny",
+                                            std::vector<std::shared_ptr<UIData>>({
+
+                                        std::make_shared<UIData>(
+                                            "effect_corner",
+                                            std::vector<std::shared_ptr<UIData>>({
+                                                std::make_shared<UIData>(
+                                                    "canvas_grey"
+                                                )
+                                            })
+                                        )
+                                    })
+                                )
+                            })
+                        )
+                    })
+                                )
+                            })
+
+                        )
+                //    })
+                //)
+            })
+        );
+    }
+
 };
 
 class UIModel : public IUIModel
@@ -268,9 +317,7 @@ public:
                     data->SetValue(in_new_value);
                 }
             },
-            std::make_shared<UIData>(
-                "canvas_widget"
-            ),
+            BuildSliderKnot(),
             "slider_horizontal",
             std::vector<std::shared_ptr<UIData>>({
                 std::make_shared<UIData>(

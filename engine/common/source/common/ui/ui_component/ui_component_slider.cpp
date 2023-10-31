@@ -1,8 +1,16 @@
 #include "common/common_pch.h"
 #include "common/ui/ui_component/ui_component_slider.h"
+
+#include "common/draw_system/shader/shader.h"
+#include "common/draw_system/shader/shader_constant_buffer.h"
+#include "common/draw_system/draw_system_frame.h"
 #include "common/ui/ui_data/ui_data_float.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_geometry.h"
+#include "common/ui/ui_manager.h"
+#include "common/ui/ui_shader_enum.h"
+#include "common/ui/ui_texture.h"
+#include "common/ui/ui_screen_space.h"
 
 UIComponentSlider::UIComponentSlider(
     const UIBaseColour& in_base_colour,
@@ -19,7 +27,16 @@ UIComponentSlider::UIComponentSlider(
     , _value(0.0f)
     , _range_low_high()
 {
-    // Nop
+    auto geometry = std::make_unique<UIGeometry>();
+    std::unique_ptr<IUIComponent> component;
+    auto node = std::make_unique<UIHierarchyNode>();
+    auto screen_space = std::make_unique<UIScreenSpace>();
+    _child_data_knot = std::make_shared<UIHierarchyNodeChildData>(
+        geometry,
+        component,
+        node,
+        screen_space
+        );
 }
 
 UIComponentSlider::~UIComponentSlider()
@@ -92,9 +109,51 @@ const bool UIComponentSlider::UpdateHierarchy(
     )
 {
     bool dirty = false;
-    const UIDataFloat* const data = dynamic_cast<const UIDataFloat*>(in_data);
-    if (nullptr != data)
+    UIDataFloat* const data = dynamic_cast<UIDataFloat*>(in_data);
+    UIData* const knot_data = data ? data->GetKnotChildData() : nullptr;
+    if (nullptr != knot_data)
     {
+        auto factory = in_param._map_content_factory.find(knot_data->GetTemplateName());
+        if (factory != in_param._map_content_factory.end())
+        {
+            UIComponentFactoryParam factory_param(
+                in_param._draw_system,
+                in_param._command_list,
+                in_param._text_manager,
+                0
+                );
+            if (true == factory->second(
+                _child_data_knot->_component,
+                factory_param
+                ))
+            {
+                dirty = true;
+                void* source_token = (void*)knot_data; //static_cast<void*>(&data); //reinterpret_cast<void*>(&data);
+                _child_data_knot->_component->SetSourceToken(source_token);
+                _child_data_knot->_node->MarkTextureDirty();
+            }
+        }
+        else
+        {
+            if (nullptr != _child_data_knot->_component)
+            {
+                _child_data_knot->_component.reset();
+                dirty = true;
+            }
+        }
+
+        if (nullptr != _child_data_knot->_component)
+        {
+            if (true == _child_data_knot->_component->UpdateHierarchy(
+                knot_data,
+                *(_child_data_knot.get()),
+                in_param
+                ))
+            {
+                dirty = true;
+                _child_data_knot->_node->MarkTextureDirty();
+            }
+        }
     }
 
     if (true == _content_default.UpdateHierarchy(
@@ -135,6 +194,24 @@ void UIComponentSlider::UpdateSize(
         in_parent_screen_space,
         out_screen_space
         );
+
+    if (nullptr != _child_data_knot->_component)
+    {
+        _child_data_knot->_component->UpdateSize(
+            in_draw_system,
+            in_parent_size,
+            in_parent_offset,
+            in_parent_window,
+            in_ui_scale,
+            in_time_delta, 
+            *_child_data_knot->_geometry, 
+            *_child_data_knot->_node,
+            in_parent_screen_space,
+            *_child_data_knot->_screen_space
+            );
+    }
+
+    return;
 }
 
 void UIComponentSlider::GetDesiredSize(
@@ -167,39 +244,67 @@ const bool UIComponentSlider::Draw(
     UIHierarchyNode& in_node
     ) 
 {
-    return _content_default.Draw(
+    bool dirty = false;
+
+    if ((nullptr != _child_data_knot) && (nullptr != _child_data_knot->_component))
+    {
+        if (true == _child_data_knot->_component->Draw(
+            in_draw_param,
+            *(_child_data_knot->_node.get())
+            ))
+        {
+            dirty = true;
+        }
+    }
+
+    if (true == in_node.PreDraw(
+        in_draw_param
+        ))
+    {
+        dirty = true;
+    }
+    if (true == in_node.Draw(
         in_draw_param,
-        in_node
-        );
+        dirty
+        ))
+    {
+        if (nullptr != _child_data_knot)
+        {
+            UIHierarchyNodeChildData& child_data = *_child_data_knot;
+            const auto& shader = in_draw_param._ui_manager->GetShaderRef(UIShaderEnum::TDefault);
 
-    //bool dirty = false;
+            child_data._node->GetUITexture().SetShaderResource(
+                *shader,
+                0,
+                in_draw_param._frame
+                );
 
-    //if ((nullptr != _child_data_knot) && (nullptr != _child_data_knot->_component))
-    //{
-    //    if (true == _child_data_knot->_component->Draw(
-    //        in_draw_param,
-    //        *(_child_data_knot->_node.get())
-    //        ))
-    //    {
-    //        dirty = true;
-    //    }
-    //}
+            if (nullptr == child_data._shader_constant_buffer)
+            {
+                child_data._shader_constant_buffer = shader->MakeShaderConstantBuffer(
+                    in_draw_param._draw_system
+                    );
+            }
 
-    //if (true == in_node.PreDraw(
-    //    in_draw_param
-    //    ))
-    //{
-    //    dirty = true;
-    //}
-    //if (true == in_node.Draw(
-    //    in_draw_param,
-    //    dirty
-    //    ))
-    //{
-    //    dirty = true;
-    //}
+            if (nullptr != child_data._shader_constant_buffer)
+            {
+                UIManager::TShaderConstantBuffer& buffer = child_data._shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
+                // todo: get the tint colour, from geometry?
+                buffer._tint_colour = VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f);
+            }
 
-    //return dirty;
+            in_draw_param._frame->SetShader(shader, child_data._shader_constant_buffer);
+
+            child_data._geometry->Draw(
+                in_draw_param._draw_system,
+                in_draw_param._frame
+                );
+        }
+
+        dirty = true;
+    }
+
+    return dirty;
 
 }
 

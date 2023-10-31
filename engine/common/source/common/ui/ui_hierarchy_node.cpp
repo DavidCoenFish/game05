@@ -226,12 +226,12 @@ const bool UIHierarchyNode::UpdateHierarchy(
             else
             {
                 auto geometry = std::make_unique<UIGeometry>();
-                std::unique_ptr<IUIComponent> content;
+                std::unique_ptr<IUIComponent> component;
                 auto node = std::make_unique<UIHierarchyNode>();
                 auto screen_space = std::make_unique<UIScreenSpace>();
                 _child_data_array[index] = std::make_shared<UIHierarchyNodeChildData>(
                     geometry,
-                    content, 
+                    component, 
                     node,
                     screen_space
                     );
