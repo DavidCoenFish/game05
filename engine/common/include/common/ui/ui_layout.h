@@ -29,6 +29,9 @@ public:
     const bool GetShrinkWidth() const { return _shrink_width; }
     const bool GetShrinkHeight() const { return _shrink_height; }
 
+    void SetSliderHorisontal(const float in_value);
+    void SetSliderVertical(const float in_value);
+
     const bool operator==(const UILayout& in_rhs) const;
     const bool operator!=(const UILayout& in_rhs) const;
 

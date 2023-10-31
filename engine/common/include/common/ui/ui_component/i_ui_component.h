@@ -31,6 +31,11 @@ public:
     /// virtual dtor as this class is used to store derrived types
     virtual ~IUIComponent();
 
+    /// Allow slider to modify a component layout
+    virtual const bool SetLayout(const UILayout& in_layout);
+    /// Allow slider to modify a component layout
+    virtual const UILayout& GetLayout() const; 
+
     /// Make sorting children easier
     virtual void SetSourceToken(void* in_source_ui_data_token) = 0;
     /// Make sorting children easier

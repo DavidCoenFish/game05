@@ -11,6 +11,36 @@
 #include "common/ui/ui_shader_enum.h"
 #include "common/ui/ui_texture.h"
 #include "common/ui/ui_screen_space.h"
+#include "common/ui/ui_enum.h"
+
+namespace
+{
+    const bool TweakLayout(
+        IUIComponent* const in_component,
+        const float in_value,
+        const UIOrientation in_orientation
+        )
+    {
+        if (nullptr == in_component)
+        {
+            return false;
+        }
+        UILayout layout = in_component->GetLayout();
+        switch(in_orientation)
+        {
+        default:
+            break;
+        case UIOrientation::THorizontal:
+            layout.SetSliderHorisontal(in_value);
+            break;
+        case UIOrientation::TVertical:
+            layout.SetSliderVertical(in_value);
+            break;
+        }
+        const bool dirty = in_component->SetLayout(layout);
+        return dirty;
+    }
+}
 
 UIComponentSlider::UIComponentSlider(
     const UIBaseColour& in_base_colour,
@@ -110,6 +140,18 @@ const bool UIComponentSlider::UpdateHierarchy(
 {
     bool dirty = false;
     UIDataFloat* const data = dynamic_cast<UIDataFloat*>(in_data);
+    if (nullptr != data)
+    {
+        if (true == Set(
+            data->GetOnValueChange(),
+            data->GetValue(),
+            data->GetRangeLowHigh()
+            ))
+        {
+            dirty = true;
+        }
+    }
+
     UIData* const knot_data = data ? data->GetKnotChildData() : nullptr;
     if (nullptr != knot_data)
     {
@@ -153,6 +195,19 @@ const bool UIComponentSlider::UpdateHierarchy(
                 dirty = true;
                 _child_data_knot->_node->MarkTextureDirty();
             }
+        }
+    }
+
+    {
+        const float domain = _range_low_high[1] - _range_low_high[0];
+        const float value = domain != 0.0f ? (_value - _range_low_high[0]) / domain : 0.0f;
+        if (true == TweakLayout(
+            _child_data_knot->_component.get(), 
+            value,
+            _orientation
+            ))
+        {
+            dirty = true;
         }
     }
 

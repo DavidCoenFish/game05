@@ -31,6 +31,16 @@ const bool UIComponentCanvas::SetBase(
         );
 }
 
+const bool UIComponentCanvas::SetLayout(const UILayout& in_layout)
+{
+    return _content_default.SetLayout(in_layout);
+}
+
+const UILayout& UIComponentCanvas::GetLayout() const
+{
+    return _content_default.GetLayout();
+}
+
 void UIComponentCanvas::SetSourceToken(void* in_source_ui_data_token)
 {
     _content_default.SetSourceToken(in_source_ui_data_token);

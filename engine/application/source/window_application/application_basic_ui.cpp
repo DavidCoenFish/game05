@@ -309,7 +309,7 @@ public:
         auto data_map_ui_scale = std::make_shared<UIDataFloat>(
             1.0f,
             0.05f,
-            VectorFloat2(0.25f, 4.0f),
+            VectorFloat2(0.25f, 3.0f),
             [this](const float in_new_value){
                 auto data = std::dynamic_pointer_cast<UIDataFloat>(_data_map["ui_scale"]);
                 if (nullptr != data)
