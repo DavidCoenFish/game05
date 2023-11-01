@@ -337,6 +337,9 @@
     <ClCompile Include="source\common\ui\ui_component\ui_component_slider.cpp">
       <Filter>souce\common\ui\ui_component</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\ui\ui_data\ui_data_scroll.cpp">
+      <Filter>souce\common\ui\ui_data</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -645,9 +648,6 @@
     <ClInclude Include="include\common\ui\ui_base_colour.h">
       <Filter>include\common\ui</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\ui\ui_effect_enum.h">
-      <Filter>include\common\ui</Filter>
-    </ClInclude>
     <ClInclude Include="include\common\ui\ui_component\ui_component_default.h">
       <Filter>include\common\ui\ui_component</Filter>
     </ClInclude>
@@ -704,6 +704,9 @@
     </ClInclude>
     <ClInclude Include="include\common\ui\ui_enum.h">
       <Filter>include\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_data\ui_data_scroll.h">
+      <Filter>include\common\ui\ui_data</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

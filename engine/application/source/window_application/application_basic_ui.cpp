@@ -181,7 +181,7 @@ namespace
                         in_data_float->SetValue(value);
                     }
                 }, 
-                "UIDataButton",
+                "button_default",
                 std::vector<std::shared_ptr<UIData>>({
 
                     std::make_shared<UIData>(
@@ -225,6 +225,12 @@ namespace
 
     std::shared_ptr<UIData> BuildSliderKnot()
     {
+#if 0
+        return std::make_shared<UIData>(
+            "canvas_widget"
+            );
+
+#else
         return std::make_shared<UIData>(
             "canvas_widget",
             std::vector<std::shared_ptr<UIData>>({
@@ -269,6 +275,7 @@ namespace
                 //)
             })
         );
+#endif
     }
 
 };
@@ -303,8 +310,8 @@ public:
             );
 
         _data_build = std::make_shared<UIData>(
-                "stack_vertical_bottom_right"
-                );
+            "stack_vertical_bottom_right"
+            );
 
         auto data_map_ui_scale = std::make_shared<UIDataFloat>(
             1.0f,
@@ -853,6 +860,7 @@ void ApplicationBasicUI::Update()
         }
 
         float ui_scale = 1.0f;
+        #if 1
         if ((nullptr != _draw_resource) && (nullptr != _draw_resource->_ui_model))
         {
             auto data = dynamic_cast<UIDataFloat*>(_draw_resource->_ui_model->GetData("ui_scale"));
@@ -861,6 +869,7 @@ void ApplicationBasicUI::Update()
                 ui_scale = data->GetValue();
             }
         }
+        #endif
 
         auto frame = _draw_system->CreateNewFrame();
         frame->SetRenderTarget(_draw_system->GetRenderTargetBackBuffer());

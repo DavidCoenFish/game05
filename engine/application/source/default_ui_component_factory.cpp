@@ -22,7 +22,7 @@
 #include "common/ui/ui_component/ui_component_text_run.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_base_colour.h"
-#include "common/ui/ui_effect_enum.h"
+#include "common/ui/ui_enum.h"
 #include "common/ui/ui_enum.h"
 #include "common/ui/ui_layout.h"
 #include "common/ui/ui_manager.h"
@@ -343,9 +343,9 @@ namespace
     const std::vector<UIComponentGridSizeData>& GetUIGridSliderHorizontalWidth()
     {
         static std::vector<UIComponentGridSizeData> s_data({
-            UIComponentGridSizeData(UICoord(UICoord::ParentSource::X, 0.0f, s_default_font_size)),
+            UIComponentGridSizeData(UICoord(UICoord::ParentSource::X, 0.0f, s_default_font_size * 1.25f)),
             UIComponentGridSizeData(UICoord(), 1.0f),
-            UIComponentGridSizeData(UICoord(UICoord::ParentSource::X, 0.0f, s_default_font_size))
+            UIComponentGridSizeData(UICoord(UICoord::ParentSource::X, 0.0f, s_default_font_size * 1.25f))
         });
         return s_data;
     }
@@ -353,7 +353,7 @@ namespace
     const std::vector<UIComponentGridSizeData>& GetUIGridSliderHorizontalHeight()
     {
         static std::vector<UIComponentGridSizeData> s_data({
-            UIComponentGridSizeData(UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size))
+            UIComponentGridSizeData(UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size * 1.25f))
         });
         return s_data;
     }
@@ -1152,6 +1152,10 @@ void DefaultUIComponentFactory::Populate(
 
     in_ui_manager.AddContentFactory("UIDataButton", FactoryButton<
         GetUILayoutRow, 
+        GetUIBaseColourDefault //GetUIBaseColourRed
+        >);
+    in_ui_manager.AddContentFactory("button_default", FactoryButton<
+        GetUILayout, 
         GetUIBaseColourDefault //GetUIBaseColourRed
         >);
     in_ui_manager.AddContentFactory("button_background", FactoryButton<

@@ -112,6 +112,7 @@
     <ClCompile Include="source\common\ui\ui_data\ui_data_button.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_disable.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_float.cpp" />
+    <ClCompile Include="source\common\ui\ui_data\ui_data_scroll.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_string.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_text_run.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_toggle.cpp" />
@@ -207,10 +208,10 @@
     <ClInclude Include="include\common\ui\ui_data\ui_data_button.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_disable.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_float.h" />
+    <ClInclude Include="include\common\ui\ui_data\ui_data_scroll.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_string.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_text_run.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_toggle.h" />
-    <ClInclude Include="include\common\ui\ui_effect_enum.h" />
     <ClInclude Include="include\common\ui\ui_enum.h" />
     <ClInclude Include="include\common\ui\ui_hierarchy_node.h" />
     <ClInclude Include="include\common\ui\ui_layout.h" />

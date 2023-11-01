@@ -120,7 +120,8 @@ void UIComponentGrid::UpdateSize(
     UIGeometry& in_out_geometry, 
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text,
     const UIScreenSpace& in_parent_screen_space,
-    UIScreenSpace& out_screen_space
+    UIScreenSpace& out_screen_space,
+    UILayout* const in_layout_override
     )
 {
     std::vector<VectorInt4> child_window_offset_array;
@@ -133,7 +134,8 @@ void UIComponentGrid::UpdateSize(
         in_parent_window,
         in_ui_scale,
         in_out_node,
-        child_window_offset_array
+        child_window_offset_array,
+        in_layout_override
         );
 
     VectorFloat4 geometry_pos;
@@ -209,7 +211,8 @@ void UIComponentGrid::GetDesiredSize(
     VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
     const VectorInt2& in_parent_window,
     const float in_ui_scale,
-    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+    UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+    UILayout* const in_layout_override
     )
 {
 #if 0
@@ -229,7 +232,8 @@ void UIComponentGrid::GetDesiredSize(
         in_parent_window,
         in_ui_scale,
         in_out_node,
-        child_window_offset
+        child_window_offset,
+        in_layout_override
         );
     return;
 #endif
@@ -252,10 +256,12 @@ void UIComponentGrid::GetGridDesiredSize(
     const VectorInt2& in_parent_window,
     const float in_ui_scale,
     UIHierarchyNode&,// in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    std::vector<VectorInt4>& out_child_window_offset // left to right, top to bottom
+    std::vector<VectorInt4>& out_child_window_offset, // left to right, top to bottom
+    UILayout* const in_layout_override
     )
 {
-    out_layout_size = _content_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
+    out_layout_size = in_layout_override ? in_layout_override->GetSize(in_parent_window, in_ui_scale)
+        : _content_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
 
     std::vector<int> horizontal_sizes;
     {
@@ -351,7 +357,8 @@ void UIComponentGrid::GetGridDesiredSize(
         }
     }
 
-    out_layout_size = _content_default.GetLayout().CalculateShrinkSize(out_layout_size, out_desired_size);
+    out_layout_size = in_layout_override ? in_layout_override->CalculateShrinkSize(out_layout_size, out_desired_size)
+        : _content_default.GetLayout().CalculateShrinkSize(out_layout_size, out_desired_size);
 
     return;
 }

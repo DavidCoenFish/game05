@@ -67,18 +67,28 @@ const VectorInt2 UILayout::GetPivot(const VectorInt2& in_parent_size, const floa
         );
 }
 
-void UILayout::SetSliderHorisontal(const float in_value)
+void UILayout::SetSliderHorizontal(const float in_value)
 {
     _data_pivot[0] = UICoord(UICoord::ParentSource::X, in_value);
-    _data_attach[0] = UICoord(UICoord::ParentSource::X, 1.0f - in_value);
+    //_data_attach[0] = UICoord(UICoord::ParentSource::X, 1.0f - in_value);
+    _data_attach[0] = UICoord(UICoord::ParentSource::X, in_value);
     return;
 }
 
 void UILayout::SetSliderVertical(const float in_value)
 {
     _data_pivot[1] = UICoord(UICoord::ParentSource::Y, in_value);
-    _data_attach[1] = UICoord(UICoord::ParentSource::Y, 1.0f - in_value);
+    //_data_attach[1] = UICoord(UICoord::ParentSource::Y, 1.0f - in_value);
+    _data_attach[1] = UICoord(UICoord::ParentSource::Y, in_value);
     return;
+}
+
+void UILayout::SetScrollHorizontal(const VectorFloat2& in_value)
+{
+}
+
+void UILayout::SetScrollVertical(const VectorFloat2& in_value)
+{
 }
 
 const bool UILayout::operator==(const UILayout& in_rhs) const

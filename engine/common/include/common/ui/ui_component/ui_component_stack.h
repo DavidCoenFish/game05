@@ -45,7 +45,8 @@ private:
         UIGeometry& in_out_geometry, 
         UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         const UIScreenSpace& in_parent_screen_space,
-        UIScreenSpace& out_screen_space
+        UIScreenSpace& out_screen_space,
+        UILayout* const in_layout_override = nullptr
         ) override;
 
     virtual void GetDesiredSize(
@@ -53,7 +54,8 @@ private:
         VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
         const VectorInt2& in_parent_window,
         const float in_ui_scale,
-        UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+        UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+        UILayout* const in_layout_override = nullptr
         ) override;
 
     /// Stack is a little special in that we want the children to expand as needed along one axis
@@ -64,7 +66,8 @@ private:
         const VectorInt2& in_parent_window,
         const float in_ui_scale,
         UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-        std::vector<VectorInt4>& out_child_window_offset
+        std::vector<VectorInt4>& out_child_window_offset,
+        UILayout* const in_layout_override
         );
 
     virtual const bool Draw(

@@ -5,27 +5,25 @@
 #include "common/ui/i_ui_input.h"
 
 enum class UIOrientation;
-/*
-class UIComponentScroll : public IUIComponent, public IUIInput
+
+class UIComponentScroll : public IUIComponent//, public IUIInput
 {
 public:
     UIComponentScroll(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
-        const UICoord& in_minimum_knot_thickness,
-        const UIOrientation _orientation
+        const UIOrientation in_orientation
         );
     virtual ~UIComponentScroll();
 
     const bool SetBase(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
-        const UICoord& in_minimum_knot_thickness,
-        const UIOrientation _orientation
+        const UIOrientation in_orientation
         );
     const bool Set(
-        const std::function<void(const float)>& in_value_change,
-        const VectorFloat2& in_value_low_high,
+        const std::function<void(const VectorFloat2&)>& in_value_change,
+        const VectorFloat2& in_value,
         const VectorFloat2& in_range_low_high
         );
 
@@ -49,7 +47,8 @@ private:
         UIGeometry& in_out_geometry, 
         UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         const UIScreenSpace& in_parent_screen_space,
-        UIScreenSpace& out_screen_space
+        UIScreenSpace& out_screen_space,
+        UILayout* const in_layout_override = nullptr
         ) override;
 
     virtual void GetDesiredSize(
@@ -57,13 +56,14 @@ private:
         VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
         const VectorInt2& in_parent_window,
         const float in_ui_scale,
-        UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+        UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+        UILayout* const in_layout_override = nullptr
         ) override;
 
-    virtual void OnInputMouseClick(
-        const VectorFloat4& in_screen_pos,
-        const VectorFloat2& in_mouse_pos
-        ) override;
+    //virtual void OnInputMouseClick(
+    //    const VectorFloat4& in_screen_pos,
+    //    const VectorFloat2& in_mouse_pos
+    //    ) override;
 
     virtual const bool Draw(
         const UIManagerDrawParam& in_draw_param,
@@ -72,9 +72,12 @@ private:
 
 private:
     UIComponentDefault _content_default;
-    std::function<void(const VectorFloat2&)> _on_click;
-    VectorFloat2 _value_low_high;
+
+    UIOrientation _orientation;
+
+    std::shared_ptr<UIHierarchyNodeChildData> _child_data_knot;
+    std::function<void(const VectorFloat2&)> _value_change;
+    VectorFloat2 _value;
     VectorFloat2 _range_low_high;
 
 };
-*/

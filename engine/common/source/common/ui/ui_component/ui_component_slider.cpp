@@ -15,30 +15,24 @@
 
 namespace
 {
-    const bool TweakLayout(
-        IUIComponent* const in_component,
+    void TweakLayout(
+        UILayout& in_out_layout,
         const float in_value,
         const UIOrientation in_orientation
         )
     {
-        if (nullptr == in_component)
-        {
-            return false;
-        }
-        UILayout layout = in_component->GetLayout();
         switch(in_orientation)
         {
         default:
             break;
         case UIOrientation::THorizontal:
-            layout.SetSliderHorisontal(in_value);
+            in_out_layout.SetSliderHorizontal(in_value);
             break;
         case UIOrientation::TVertical:
-            layout.SetSliderVertical(in_value);
+            in_out_layout.SetSliderVertical(in_value);
             break;
         }
-        const bool dirty = in_component->SetLayout(layout);
-        return dirty;
+        return;
     }
 }
 
@@ -198,19 +192,6 @@ const bool UIComponentSlider::UpdateHierarchy(
         }
     }
 
-    {
-        const float domain = _range_low_high[1] - _range_low_high[0];
-        const float value = domain != 0.0f ? (_value - _range_low_high[0]) / domain : 0.0f;
-        if (true == TweakLayout(
-            _child_data_knot->_component.get(), 
-            value,
-            _orientation
-            ))
-        {
-            dirty = true;
-        }
-    }
-
     if (true == _content_default.UpdateHierarchy(
         in_data,
         in_out_child_data, 
@@ -233,7 +214,8 @@ void UIComponentSlider::UpdateSize(
     UIGeometry& in_out_geometry, 
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     const UIScreenSpace& in_parent_screen_space,
-    UIScreenSpace& out_screen_space
+    UIScreenSpace& out_screen_space,
+    UILayout* const in_layout_override
     )
 {
     _content_default.UpdateSize(
@@ -247,22 +229,33 @@ void UIComponentSlider::UpdateSize(
         in_out_geometry, 
         in_out_node,
         in_parent_screen_space,
-        out_screen_space
+        out_screen_space,
+        in_layout_override
         );
 
     if (nullptr != _child_data_knot->_component)
     {
+        const float domain = _range_low_high[1] - _range_low_high[0];
+        const float value = domain != 0.0f ? (_value - _range_low_high[0]) / domain : 0.0f;
+        UILayout layout = _child_data_knot->_component->GetLayout();
+        TweakLayout(
+            layout, 
+            value,
+            _orientation
+            );
+
         _child_data_knot->_component->UpdateSize(
             in_draw_system,
-            in_parent_size,
-            in_parent_offset,
+            in_parent_window,//in_parent_size,
+            VectorInt2(),//in_parent_offset,
             in_parent_window,
             in_ui_scale,
             in_time_delta, 
             *_child_data_knot->_geometry, 
             *_child_data_knot->_node,
             in_parent_screen_space,
-            *_child_data_knot->_screen_space
+            *_child_data_knot->_screen_space,
+            &layout
             );
     }
 
@@ -274,7 +267,8 @@ void UIComponentSlider::GetDesiredSize(
     VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
     const VectorInt2& in_parent_window,
     const float in_ui_scale,
-    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+    UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+    UILayout* const in_layout_override
     )
 {
     return _content_default.GetDesiredSize(
@@ -282,7 +276,8 @@ void UIComponentSlider::GetDesiredSize(
         out_desired_size,
         in_parent_window,
         in_ui_scale,
-        in_out_node
+        in_out_node,
+        in_layout_override
         );
 }
 

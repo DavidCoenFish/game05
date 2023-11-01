@@ -75,7 +75,8 @@ void UIComponentCanvas::UpdateSize(
     UIGeometry& in_out_geometry, 
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     const UIScreenSpace& in_parent_screen_space,
-    UIScreenSpace& out_screen_space
+    UIScreenSpace& out_screen_space,
+    UILayout* const in_layout_override
     )
 {
     _content_default.UpdateSize(
@@ -89,7 +90,8 @@ void UIComponentCanvas::UpdateSize(
         in_out_geometry, 
         in_out_node,
         in_parent_screen_space,
-        out_screen_space
+        out_screen_space,
+        in_layout_override
         );
 }
 
@@ -98,7 +100,8 @@ void UIComponentCanvas::GetDesiredSize(
     VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
     const VectorInt2& in_parent_window,
     const float in_ui_scale,
-    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+    UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+    UILayout* const in_layout_override
     )
 {
     return _content_default.GetDesiredSize(
@@ -106,7 +109,8 @@ void UIComponentCanvas::GetDesiredSize(
         out_desired_size,
         in_parent_window,
         in_ui_scale,
-        in_out_node
+        in_out_node,
+        in_layout_override
         );
 }
 

@@ -97,7 +97,8 @@ void UIComponentStack::UpdateSize(
     UIGeometry& in_out_geometry, 
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     const UIScreenSpace& in_parent_screen_space,
-    UIScreenSpace& out_screen_space
+    UIScreenSpace& out_screen_space,
+    UILayout* const in_layout_override
     )
 {
     // the default UpdateSize recurses, we do want to do that, but with an offset to where to put things
@@ -112,7 +113,8 @@ void UIComponentStack::UpdateSize(
         in_parent_window,
         in_ui_scale,
         in_out_node,
-        child_window_offset_array
+        child_window_offset_array,
+        in_layout_override
         );
 
     VectorFloat4 geometry_pos;
@@ -131,7 +133,7 @@ void UIComponentStack::UpdateSize(
         in_time_delta, 
         layout_size,
         desired_size,
-        _content_default.GetLayout()
+        in_layout_override ? *in_layout_override : _content_default.GetLayout()
         );
 
     // Update geometry
@@ -190,7 +192,8 @@ void UIComponentStack::GetDesiredSize(
     VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
     const VectorInt2& in_parent_window,
     const float in_ui_scale,
-    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+    UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+    UILayout* const in_layout_override
     )
 {
     return _content_default.GetDesiredSize(
@@ -198,7 +201,8 @@ void UIComponentStack::GetDesiredSize(
         out_desired_size,
         in_parent_window,
         in_ui_scale,
-        in_out_node
+        in_out_node,
+        in_layout_override
         );
 }
 
@@ -208,10 +212,12 @@ void UIComponentStack::GetStackDesiredSize(
     const VectorInt2& in_parent_window,
     const float in_ui_scale,
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    std::vector<VectorInt4>& out_child_window_offset
+    std::vector<VectorInt4>& out_child_window_offset,
+    UILayout* const in_layout_override
     )
 {
-    out_layout_size = _content_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
+    out_layout_size = in_layout_override ? in_layout_override->GetSize(in_parent_window, in_ui_scale)
+        : _content_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
     const int gap = _gap.Calculate(in_parent_window, in_ui_scale);
 
     VectorInt2 max_desired_size;
@@ -263,7 +269,8 @@ void UIComponentStack::GetStackDesiredSize(
         out_child_window_offset.push_back(window_offset);
     }
 
-    out_layout_size = _content_default.GetLayout().CalculateShrinkSize(out_layout_size, max_desired_size);
+    out_layout_size = in_layout_override ? in_layout_override->CalculateShrinkSize(out_layout_size, max_desired_size)
+        : _content_default.GetLayout().CalculateShrinkSize(out_layout_size, max_desired_size);
     out_desired_size = max_desired_size;
 
     for (auto& iter : out_child_window_offset)

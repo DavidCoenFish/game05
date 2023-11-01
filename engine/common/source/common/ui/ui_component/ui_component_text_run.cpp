@@ -143,7 +143,8 @@ void UIComponentTextRun::UpdateSize(
     UIGeometry& in_out_geometry, 
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     const UIScreenSpace& in_parent_screen_space,
-    UIScreenSpace& out_screen_space
+    UIScreenSpace& out_screen_space,
+    UILayout* const in_layout_override
     )
 {
     _content_default.UpdateSize(
@@ -157,7 +158,8 @@ void UIComponentTextRun::UpdateSize(
         in_out_geometry, 
         in_out_node,
         in_parent_screen_space,
-        out_screen_space
+        out_screen_space,
+        in_layout_override
         );
 
     _text_run->SetTextContainerSize(
@@ -170,17 +172,20 @@ void UIComponentTextRun::GetDesiredSize(
     VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
     const VectorInt2& in_parent_window,
     const float in_ui_scale,
-    UIHierarchyNode& // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+    UIHierarchyNode&, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+    UILayout* const in_layout_override
     )
 {
-    out_layout_size = _content_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
+    out_layout_size = in_layout_override ? in_layout_override->GetSize(in_parent_window, in_ui_scale)
+        : _content_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
 
     _text_run->SetWidthLimitWidth(out_layout_size[0]);
     _text_run->SetUIScale(in_ui_scale);
 
     out_desired_size = _text_run->GetTextBounds();
 
-    out_layout_size = _content_default.GetLayout().CalculateShrinkSize(out_layout_size, out_desired_size);
+    out_layout_size = in_layout_override ? in_layout_override->CalculateShrinkSize(out_layout_size, out_desired_size)
+        : _content_default.GetLayout().CalculateShrinkSize(out_layout_size, out_desired_size);
     //out_desired_size = VectorInt2::Max(out_layout_size, out_desired_size);
 
     return;

@@ -9,7 +9,7 @@
 #include "common/draw_system/shader/shader_resource_info.h"
 #include "common/file_system/file_system.h"
 #include "common/log/log.h"
-#include "common/ui/ui_effect_enum.h"
+#include "common/ui/ui_enum.h"
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_shader_enum.h"

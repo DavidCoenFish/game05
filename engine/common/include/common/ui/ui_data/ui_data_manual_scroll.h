@@ -26,10 +26,10 @@ public:
 
     const float GetStep() const { return _step; } 
     UIData* const GetKnotChildData() const { return _knot_child_data.get(); } 
-    //std::shared_ptr<UIData>& GetKnotChildDataShared() { return _knot_child_data; } 
+    std::shared_ptr<UIData>& GetKnotChildDataShared() { return _knot_child_data; } 
 
 private:
-    std::function<void(const float)> _on_value_change;
+    std::function<void(const bool)> _on_value_change;
     std::shared_ptr<UIData> _knot_child_data;
     VectorFloat2 _range_low_high;
     float _value;

@@ -9,7 +9,7 @@
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_texture.h"
-#include "common/ui/ui_effect_enum.h"
+#include "common/ui/ui_enum.h"
 #include "common/ui/ui_shader_enum.h"
 #include "common/ui/ui_component/ui_component_effect.h"
 #include "common/ui/ui_data/ui_data_disable.h"
@@ -120,7 +120,8 @@ void UIComponentDisable::UpdateSize(
     UIGeometry& in_out_geometry, 
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     const UIScreenSpace& in_parent_screen_space,
-    UIScreenSpace& out_screen_space
+    UIScreenSpace& out_screen_space,
+    UILayout* const in_layout_override
     )
 {
     _content_default.UpdateSize(
@@ -134,7 +135,8 @@ void UIComponentDisable::UpdateSize(
         in_out_geometry, 
         in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         in_parent_screen_space,
-        out_screen_space
+        out_screen_space,
+        in_layout_override
         );
 
     if (nullptr != _shader_constant_buffer)
@@ -164,13 +166,15 @@ void UIComponentDisable::GetDesiredSize(
     VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
     const VectorInt2& in_parent_window,
     const float in_ui_scale,
-    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+    UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+    UILayout* const in_layout_override
     )
 {
 #if 1
     VectorInt2 max_desired_size;
 
-    out_layout_size = _content_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
+    out_layout_size = in_layout_override ? in_layout_override->GetSize(in_parent_window, in_ui_scale) 
+        : _content_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
 
     // Default is to go through children and see if anyone needs a bigger size than what we calculate
     for (auto iter: in_out_node.GetChildData())
