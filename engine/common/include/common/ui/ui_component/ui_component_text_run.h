@@ -31,14 +31,16 @@ public:
         );
 
 private:
+    virtual const bool SetStateFlag(const UIStateFlag in_state_flag) override;
+    virtual const UIStateFlag GetStateFlag() const override;
+
+    virtual const UILayout& GetLayout() const override; 
+
     // Make sorting children easier
     virtual void SetSourceToken(void* in_source_ui_data_token) override;
     virtual void* GetSourceToken() const override;
 
-    //virtual const bool SetLayout(const UILayout& in_layout) override;
-
     virtual const bool UpdateHierarchy(
-        //std::vector<std::shared_ptr<UIData>>*& out_array_data_or_null,
         UIData* const in_data,
         UIHierarchyNodeChildData& in_out_child_data,
         const UIHierarchyNodeUpdateHierarchyParam& in_param

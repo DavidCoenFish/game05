@@ -87,6 +87,21 @@ const bool UIComponentGrid::Set(
     return dirty;
 }
 
+const bool UIComponentGrid::SetStateFlag(const UIStateFlag in_state_flag)
+{
+    return _content_default.SetStateFlag(in_state_flag);
+}
+
+const UIStateFlag UIComponentGrid::GetStateFlag() const
+{
+    return _content_default.GetStateFlag();
+}
+
+const UILayout& UIComponentGrid::GetLayout() const
+{
+    return _content_default.GetLayout();
+}
+
 void UIComponentGrid::SetSourceToken(void* in_source_ui_data_token)
 {
     _content_default.SetSourceToken(in_source_ui_data_token);

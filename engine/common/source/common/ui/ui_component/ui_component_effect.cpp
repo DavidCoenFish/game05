@@ -54,7 +54,8 @@ UIComponentEffect::UIComponentEffect(
     const UICoord& in_coord_a,
     const UICoord& in_coord_b,
     const UICoord& in_coord_c,
-    const UICoord& in_coord_d
+    const UICoord& in_coord_d,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_array_or_null
     )
     : _content_default(
         in_base_colour,
@@ -65,10 +66,15 @@ UIComponentEffect::UIComponentEffect(
     , _coord_b(in_coord_b)
     , _coord_c(in_coord_c)
     , _coord_d(in_coord_d)
+    , _state_flag_tint_array(in_state_flag_array_or_null)
 {
 #if defined(GEOMETRY_SIZE_INTO_SHADER)
     _geometry = std::make_unique<UIGeometry>();
 #endif
+    if (nullptr != _state_flag_tint_array)
+    {
+        _content_default.SetStateFlagDirty(UIStateFlag::TTintMask);
+    }
 }
 
 UIComponentEffect::~UIComponentEffect()
@@ -76,27 +82,27 @@ UIComponentEffect::~UIComponentEffect()
     // Nop
 }
 
-const bool UIComponentEffect::SetBase(
-    const UIBaseColour& in_base_colour,
-    const UILayout& in_layout
-    )
-{
-    return _content_default.SetBase(
-        in_base_colour,
-        in_layout
-        );
-}
-
 // return true if modified, else false
 const bool UIComponentEffect::Set(
+    const UIBaseColour& in_base_colour,
+    const UILayout& in_layout,
     const UIEffectEnum in_type,
     const UICoord& in_coord_a,
     const UICoord& in_coord_b,
     const UICoord& in_coord_c,
-    const UICoord& in_coord_d
+    const UICoord& in_coord_d,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_array_or_null
     )
 {
     bool dirty = false;
+
+    if (true == _content_default.SetBase(
+        in_base_colour,
+        in_layout
+        ))
+    {
+        dirty = true;
+    }
 
     if (_type != in_type)
     {
@@ -129,7 +135,28 @@ const bool UIComponentEffect::Set(
         _coord_d = in_coord_d;
     }
 
+    if (_state_flag_tint_array != in_state_flag_array_or_null)
+    {
+        dirty = true;
+        _state_flag_tint_array = in_state_flag_array_or_null;
+    }
+
     return dirty;
+}
+
+const bool UIComponentEffect::SetStateFlag(const UIStateFlag in_state_flag)
+{
+    return _content_default.SetStateFlag(in_state_flag);
+}
+
+const UIStateFlag UIComponentEffect::GetStateFlag() const
+{
+    return _content_default.GetStateFlag();
+}
+
+const UILayout& UIComponentEffect::GetLayout() const
+{
+    return _content_default.GetLayout();
 }
 
 // Make sorting children easier
@@ -143,11 +170,6 @@ void* UIComponentEffect::GetSourceToken() const
 {
     return _content_default.GetSourceToken();
 }
-
-//const bool UIComponentEffect::SetLayout(const UILayout& in_layout)
-//{
-//    return _content_default.SetLayout(in_layout);
-//}
 
 const bool UIComponentEffect::UpdateHierarchy(
     UIData* const in_data,
@@ -214,8 +236,13 @@ void UIComponentEffect::UpdateSize(
         const VectorInt2 texture_size = in_out_node.GetTextureSize(in_draw_system);
         UIManager::TShaderConstantBuffer& constant_0 = _shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
         TShaderConstantBuffer& constant_1 = _shader_constant_buffer->GetConstant<TShaderConstantBuffer>(1);
-        constant_0._tint_colour = _content_default.GetTintColour();
-        //VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f);
+        const VectorFloat4* tint_override = nullptr;
+        const auto tint_array = _state_flag_tint_array.get();
+        if (nullptr != tint_array)
+        {
+            tint_override = &(*tint_array)[static_cast<int>(_content_default.GetStateFlag()) & static_cast<int>(UIStateFlag::TTintMask)];
+        }
+        constant_0._tint_colour = _content_default.GetTintColour(tint_override);
 
         if (UIEffectEnum::TNone != _type)
         {

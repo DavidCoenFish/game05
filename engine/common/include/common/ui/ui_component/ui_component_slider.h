@@ -29,6 +29,11 @@ public:
         );
 
 private:
+    virtual const bool SetStateFlag(const UIStateFlag in_state_flag) override;
+    virtual const UIStateFlag GetStateFlag() const override;
+
+    virtual const UILayout& GetLayout() const override; 
+
     virtual void SetSourceToken(void* in_source_ui_data_token) override;
     virtual void* GetSourceToken() const override;
 

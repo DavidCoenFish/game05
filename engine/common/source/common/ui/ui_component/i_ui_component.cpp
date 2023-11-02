@@ -11,15 +11,3 @@ IUIComponent::~IUIComponent()
 {
     // Nop
 }
-
-const bool IUIComponent::SetLayout(const UILayout&)
-{
-    return false;
-}
-
-const UILayout& IUIComponent::GetLayout() const
-{
-    static const UILayout s_dummy;
-    return s_dummy;
-}
-

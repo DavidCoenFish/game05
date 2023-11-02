@@ -115,6 +115,21 @@ const bool UIComponentSlider::Set(
     return dirty;
 }
 
+const bool UIComponentSlider::SetStateFlag(const UIStateFlag in_state_flag)
+{
+    return _content_default.SetStateFlag(in_state_flag);
+}
+
+const UIStateFlag UIComponentSlider::GetStateFlag() const
+{
+    return _content_default.GetStateFlag();
+}
+
+const UILayout& UIComponentSlider::GetLayout() const
+{
+    return _content_default.GetLayout();
+}
+
 void UIComponentSlider::SetSourceToken(void* in_source_ui_data_token)
 {
     _content_default.SetSourceToken(in_source_ui_data_token);
@@ -244,11 +259,12 @@ void UIComponentSlider::UpdateSize(
             _orientation
             );
 
+        const auto texture_size = in_out_node.GetTextureSize(in_draw_system);
         _child_data_knot->_component->UpdateSize(
             in_draw_system,
-            in_parent_window,//in_parent_size,
+            texture_size, //in_parent_window,//in_parent_size,
             VectorInt2(),//in_parent_offset,
-            in_parent_window,
+            texture_size, //in_parent_window,
             in_ui_scale,
             in_time_delta, 
             *_child_data_knot->_geometry, 

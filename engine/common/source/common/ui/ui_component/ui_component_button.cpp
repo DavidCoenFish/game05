@@ -7,12 +7,14 @@
 
 UIComponentButton::UIComponentButton(
     const UIBaseColour& in_base_colour,
-    const UILayout& in_layout
+    const UILayout& in_layout,
+    const std::function<void(const VectorFloat2&)>& in_on_click
     )
     : _content_default(
         in_base_colour,
         in_layout
         )
+    , _on_click(in_on_click)
 {
     // Nop
 }
@@ -37,16 +39,23 @@ const bool UIComponentButton::Set(
     const std::function<void(const VectorFloat2&)>& in_on_click
     )
 {
-    bool dirty = false;
-
     _on_click = in_on_click;
+    return false;
+}
 
-    //if (_on_click != in_on_click)
-    //{
-    //    _on_click = in_on_click;
-    //}
+const bool UIComponentButton::SetStateFlag(const UIStateFlag in_state_flag)
+{
+    return _content_default.SetStateFlag(in_state_flag);
+}
 
-    return dirty;
+const UIStateFlag UIComponentButton::GetStateFlag() const
+{
+    return _content_default.GetStateFlag();
+}
+
+const UILayout& UIComponentButton::GetLayout() const
+{
+    return _content_default.GetLayout();
 }
 
 void UIComponentButton::SetSourceToken(void* in_source_ui_data_token)
@@ -60,13 +69,7 @@ void* UIComponentButton::GetSourceToken() const
     return _content_default.GetSourceToken();
 }
 
-//const bool UIComponentButton::SetLayout(const UILayout& in_layout)
-//{
-//    return _content_default.SetLayout(in_layout);
-//}
-
 const bool UIComponentButton::UpdateHierarchy(
-    //std::vector<std::shared_ptr<UIData>>*& out_array_data_or_null,
     UIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
     const UIHierarchyNodeUpdateHierarchyParam& in_param

@@ -2,6 +2,7 @@
 
 #include "common/ui/ui_layout.h"
 #include "common/ui/ui_base_colour.h"
+#include "common/ui/ui_enum.h"
 #include "common/math/vector_float4.h"
 
 class DrawSystem;
@@ -12,6 +13,7 @@ class UIData;
 class Shader;
 class ShaderConstantBuffer;
 class UIGeometry;
+class UIScreenSpace;
 class UITexture;
 class UIHierarchyNode;
 class UIScreenSpace;
@@ -34,7 +36,8 @@ public:
     UIComponentDefault(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
-        void* in_source_token = nullptr
+        void* in_source_token = nullptr,
+        const UIStateFlag in_state_flag = UIStateFlag::TNone
         );
     ~UIComponentDefault();
 
@@ -61,10 +64,15 @@ public:
     void SetSourceToken(void* in_source_ui_data_token);
     void* GetSourceToken() const;
 
-    const bool SetLayout(const UILayout& in_layout);
+   // const bool SetLayout(const UILayout& in_layout);
     const UILayout& GetLayout() const { return _layout; }
 
     VectorFloat2& GetUVScroll() { return _uv_scroll; }
+
+    /// Return true if bits under _state_flag_dirty_mask change
+    const bool SetStateFlag(const UIStateFlag in_state_flag);
+    const UIStateFlag GetStateFlag() const { return _state_flag; }
+    void SetStateFlagDirty(const UIStateFlag in_state_flag_dirty_mask) { _state_flag_dirty_mask = in_state_flag_dirty_mask; return; }
 
     const bool UpdateHierarchy(
         UIData* const in_data,
@@ -86,14 +94,7 @@ public:
         UIScreenSpace& out_screen_space,
         UILayout* const in_layout_override
         );
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="out_layout_size"></param>
-    /// <param name="out_desired_size"></param>
-    /// <param name="in_parent_window"></param>
-    /// <param name="in_ui_scale"></param>
-    /// <param name="in_out_node"></param>
+
     void GetDesiredSize(
         VectorInt2& out_layout_size, // if layout has shrink enabled, and desired size was smaller than layout, the layout size can shrink
         VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
@@ -108,7 +109,7 @@ public:
         UIHierarchyNode& in_node
         );
 
-    const VectorFloat4 GetTintColour() const;
+    const VectorFloat4 GetTintColour(const VectorFloat4* const in_override_tint = nullptr) const;
 
 private:
     /// colour data, like the clear colour, tint colour, fade profile
@@ -126,5 +127,7 @@ private:
     /// maps to UIData, but we don't hold onto reference other than treating it as an ID/ token
     void* _source_token;
 
+    UIStateFlag _state_flag;
+    UIStateFlag _state_flag_dirty_mask;
 
 };

@@ -16,8 +16,8 @@ public:
         );
 
     const VectorFloat4 GetTintColour(
-        //const int in_create_index, 
-        const float in_time_accumulate_seconds
+        const float in_time_accumulate_seconds,
+        const VectorFloat4* const in_override_tint
         ) const;
 
     const VectorFloat4& GetClearColourRef() const { return _clear_colour; }

@@ -29,3 +29,24 @@ enum class UIEffectEnum
 
     TCount
 };
+
+enum class UIStateFlag
+{
+    TNone = 0,
+    /// Mouse cursor over item
+    THover = 1 << 0, 
+    /// Mouse click down / screen touch
+    TTouch = 1 << 1, 
+    /// List box selection/ navigation focus?
+    TSelected = 1 << 2, 
+
+    /// Disabled is expressed
+
+    /// Mask for input pass to filter state flag, ie, the values set by the ui manager input pass
+    TMaskInput = THover | TTouch, 
+
+    /// Count of how many tint permutations
+    TTintPermutationCount = 1 << 3,
+    TTintMask = THover | TTouch | TSelected
+
+};

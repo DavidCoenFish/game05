@@ -12,15 +12,15 @@ public:
         );
     virtual ~UIComponentCanvas();
 
-    const bool SetBase(
+    const bool Set(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout
         );
 
 private:
-    /// Allow slider to modify a component layout
-    virtual const bool SetLayout(const UILayout& in_layout) override;
-    /// Allow slider to modify a component layout
+    virtual const bool SetStateFlag(const UIStateFlag in_state_flag) override;
+    virtual const UIStateFlag GetStateFlag() const override;
+
     virtual const UILayout& GetLayout() const override; 
 
     virtual void SetSourceToken(void* in_source_ui_data_token) override;

@@ -22,8 +22,8 @@ UIBaseColour::UIBaseColour(
 }
 
 const VectorFloat4 UIBaseColour::GetTintColour(
-    //const int in_create_index, 
-    const float in_time_accumulate_seconds
+    const float in_time_accumulate_seconds,
+    const VectorFloat4* const in_override_tint
     ) const
 {
     //const float fade_start_time_seconds = in_create_index * _delay_per_create_index_seconds;
@@ -31,6 +31,10 @@ const VectorFloat4 UIBaseColour::GetTintColour(
 
     if (_fade_end_seconds <= in_time_accumulate_seconds)
     {
+        if (nullptr != in_override_tint)
+        {
+            return *in_override_tint;
+        }
         return _tint_colour;
     }
 
@@ -38,6 +42,16 @@ const VectorFloat4 UIBaseColour::GetTintColour(
     if ((_fade_start_seconds <= in_time_accumulate_seconds) && (_fade_end_seconds != _fade_start_seconds))
     {
         alpha = (in_time_accumulate_seconds - _fade_start_seconds) / (_fade_end_seconds - _fade_start_seconds);
+    }
+
+    if (nullptr != in_override_tint)
+    {
+        return VectorFloat4(
+            in_override_tint->GetX() * alpha,
+            in_override_tint->GetY() * alpha,
+            in_override_tint->GetZ() * alpha,
+            in_override_tint->GetW() * alpha
+            );
     }
 
     // premultiplied alpha

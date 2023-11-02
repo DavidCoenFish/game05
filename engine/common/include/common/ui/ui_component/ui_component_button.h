@@ -9,19 +9,27 @@ class UIComponentButton : public IUIComponent, public IUIInput
 public:
     UIComponentButton(
         const UIBaseColour& in_base_colour,
-        const UILayout& in_layout
+        const UILayout& in_layout,
+        const std::function<void(const VectorFloat2&)>& in_on_click = nullptr
         );
     virtual ~UIComponentButton();
 
+    /// Called from factory
     const bool SetBase(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout
         );
+
     const bool Set(
         const std::function<void(const VectorFloat2&)>& in_on_click
         );
 
 private:
+    virtual const bool SetStateFlag(const UIStateFlag in_state_flag) override;
+    virtual const UIStateFlag GetStateFlag() const override;
+
+    virtual const UILayout& GetLayout() const override; 
+
     virtual void SetSourceToken(void* in_source_ui_data_token) override;
     virtual void* GetSourceToken() const override;
 

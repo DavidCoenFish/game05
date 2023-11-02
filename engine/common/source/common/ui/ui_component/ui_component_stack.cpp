@@ -63,6 +63,21 @@ const bool UIComponentStack::Set(
     return dirty;
 }
 
+const bool UIComponentStack::SetStateFlag(const UIStateFlag in_state_flag)
+{
+    return _content_default.SetStateFlag(in_state_flag);
+}
+
+const UIStateFlag UIComponentStack::GetStateFlag() const
+{
+    return _content_default.GetStateFlag();
+}
+
+const UILayout& UIComponentStack::GetLayout() const
+{
+    return _content_default.GetLayout();
+}
+
 // Make sorting children easier
 void UIComponentStack::SetSourceToken(void* in_source_ui_data_token)
 {

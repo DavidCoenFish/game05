@@ -15,30 +15,25 @@
 
 namespace
 {
-    const bool TweakLayout(
-        IUIComponent* const in_component,
+    void TweakLayout(
+        UILayout& in_out_layout,
         const VectorFloat2& in_value,
         const UIOrientation in_orientation
         )
     {
-        if (nullptr == in_component)
-        {
-            return false;
-        }
-        UILayout layout = in_component->GetLayout();
         switch(in_orientation)
         {
         default:
             break;
         case UIOrientation::THorizontal:
-            layout.SetScrollHorizontal(in_value);
+            in_out_layout.SetScrollHorizontal(in_value);
             break;
         case UIOrientation::TVertical:
-            layout.SetScrollVertical(in_value);
+            in_out_layout.SetScrollVertical(in_value);
             break;
         }
-        const bool dirty = in_component->SetLayout(layout);
-        return dirty;
+
+        return;
     }
 }
 
@@ -121,6 +116,21 @@ const bool UIComponentScroll::Set(
     return dirty;
 }
 
+const bool UIComponentScroll::SetStateFlag(const UIStateFlag in_state_flag)
+{
+    return _content_default.SetStateFlag(in_state_flag);
+}
+
+const UIStateFlag UIComponentScroll::GetStateFlag() const
+{
+    return _content_default.GetStateFlag();
+}
+
+const UILayout& UIComponentScroll::GetLayout() const
+{
+    return _content_default.GetLayout();
+}
+
 void UIComponentScroll::SetSourceToken(void* in_source_ui_data_token)
 {
     _content_default.SetSourceToken(in_source_ui_data_token);
@@ -198,17 +208,6 @@ const bool UIComponentScroll::UpdateHierarchy(
         }
     }
 
-    {
-        if (true == TweakLayout(
-            _child_data_knot->_component.get(), 
-            _value,
-            _orientation
-            ))
-        {
-            dirty = true;
-        }
-    }
-
     if (true == _content_default.UpdateHierarchy(
         in_data,
         in_out_child_data, 
@@ -252,17 +251,26 @@ void UIComponentScroll::UpdateSize(
 
     if (nullptr != _child_data_knot->_component)
     {
+        UILayout layout = _child_data_knot->_component->GetLayout();
+        TweakLayout(
+            layout, 
+            _value,
+            _orientation
+            );
+
+        const auto texture_size = in_out_node.GetTextureSize(in_draw_system);
         _child_data_knot->_component->UpdateSize(
             in_draw_system,
-            in_parent_size,
-            in_parent_offset,
-            in_parent_window,
+            texture_size, //in_parent_size,
+            VectorInt2(), //in_parent_offset,
+            texture_size, //in_parent_window,
             in_ui_scale,
             in_time_delta, 
             *_child_data_knot->_geometry, 
             *_child_data_knot->_node,
             in_parent_screen_space,
-            *_child_data_knot->_screen_space
+            *_child_data_knot->_screen_space,
+            &layout
             );
     }
 

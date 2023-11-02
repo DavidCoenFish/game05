@@ -317,6 +317,28 @@ namespace
         return s_coord;
     }
 
+    typedef const std::shared_ptr<const UIComponentEffect::TStateFlagTintArray>& (*TGetUIStateFlagTintArray)();
+    const std::shared_ptr<const UIComponentEffect::TStateFlagTintArray>& GetUIStateFlagTintArray()
+    {
+        static const std::shared_ptr<const UIComponentEffect::TStateFlagTintArray> s_data;
+        return s_data;
+    }
+    const std::shared_ptr<const UIComponentEffect::TStateFlagTintArray>& GetUIStateFlagTintArrayDefault()
+    {
+        static const UIComponentEffect::TStateFlagTintArray s_data_array({
+            VectorFloat4(0.0f, 0.0f, 1.0f, 1.0f), // TNone
+            VectorFloat4(0.2f, 0.2f, 1.0f, 1.0f), // THover
+            VectorFloat4(0.0f, 0.25f, 0.75f, 1.0f), // TTouch
+            VectorFloat4(0.2f, 0.45f, 0.75f, 1.0f), // TTouch THover
+            VectorFloat4(0.25f, 0.0f, 1.0f, 1.0f), // TSelected
+            VectorFloat4(0.45f, 0.2f, 1.0f, 1.0f), // TSelected THover
+            VectorFloat4(0.25f, 0.25f, 0.75f, 1.0f), // TSelected TTouch
+            VectorFloat4(0.45f, 0.45f, 0.75f, 1.0f)  // TSelected TTouch THover
+            });
+        static const std::shared_ptr<const UIComponentEffect::TStateFlagTintArray> s_data = std::make_shared<const UIComponentEffect::TStateFlagTintArray>(s_data_array);
+        return s_data;
+    }
+
     typedef const std::vector<UIComponentGridSizeData>& (*TGetUIGridSizeData)();
     const std::vector<UIComponentGridSizeData>& GetUIGridSizeDataDefaultHorizontal()
     {
@@ -547,7 +569,7 @@ namespace
         }
         else
         {
-            if (true == canvas->SetBase(
+            if (true == canvas->Set(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref()))
             {
@@ -595,7 +617,8 @@ namespace
         TGetUICoordRef in_get_ui_coord_a = GetUICoordNone,
         TGetUICoordRef in_get_ui_coord_b = GetUICoordNone,
         TGetUICoordRef in_get_ui_coord_c = GetUICoordNone,
-        TGetUICoordRef in_get_ui_coord_d = GetUICoordNone
+        TGetUICoordRef in_get_ui_coord_d = GetUICoordNone,
+        TGetUIStateFlagTintArray in_get_ui_state_flag_tint_array = GetUIStateFlagTintArray
         >
     const bool FactoryEffect(
         std::unique_ptr<IUIComponent>& in_out_content,
@@ -607,31 +630,28 @@ namespace
         if (nullptr == content)
         {
             in_out_content = std::make_unique<UIComponentEffect>(
-                in_get_base_colour(0),
+                in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
                 in_effect_type,
                 in_get_ui_coord_a(),
                 in_get_ui_coord_b(),
                 in_get_ui_coord_c(),
-                in_get_ui_coord_d()
+                in_get_ui_coord_d(),
+                in_get_ui_state_flag_tint_array()
                 );
             dirty = true;
         }
         else
         {
-            if (true == content->SetBase(
-                in_get_base_colour(in_factory_param._create_index),
-                in_get_layout_ref()))
-            {
-                dirty = true;
-            }
-
             if (true == content->Set(
+                in_get_base_colour(in_factory_param._create_index),
+                in_get_layout_ref(),
                 in_effect_type,
                 in_get_ui_coord_a(),
                 in_get_ui_coord_b(),
                 in_get_ui_coord_c(),
-                in_get_ui_coord_d()
+                in_get_ui_coord_d(),
+                in_get_ui_state_flag_tint_array()
                 ))
             {
                 dirty = true;
@@ -1067,7 +1087,11 @@ void DefaultUIComponentFactory::Populate(
         GetUILayout,
         UIEffectEnum::TFill,
         GetUIBaseColourClearBlue,
-        GetUICoordDefaultGapHalf
+        GetUICoordDefaultGapHalf,
+        GetUICoordNone,
+        GetUICoordNone,
+        GetUICoordNone,
+        GetUIStateFlagTintArrayDefault
         >);
 
     in_ui_manager.AddContentFactory("UIDataDisable", FactoryDisable<

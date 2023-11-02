@@ -21,6 +21,7 @@ struct UIHierarchyNodeChildData;
 struct UIHierarchyNodeLayoutData;
 struct UIHierarchyNodeUpdateHierarchyParam;
 
+enum class UIStateFlag;
 
 /// interface base class for the ui components, do not store members here, see UIComponentDefault
 class IUIComponent
@@ -32,9 +33,10 @@ public:
     virtual ~IUIComponent();
 
     /// Allow slider to modify a component layout
-    virtual const bool SetLayout(const UILayout& in_layout);
-    /// Allow slider to modify a component layout
-    virtual const UILayout& GetLayout() const; 
+    virtual const UILayout& GetLayout() const = 0; 
+
+    virtual const bool SetStateFlag(const UIStateFlag in_state_flag) = 0;
+    virtual const UIStateFlag GetStateFlag() const = 0;
 
     /// Make sorting children easier
     virtual void SetSourceToken(void* in_source_ui_data_token) = 0;

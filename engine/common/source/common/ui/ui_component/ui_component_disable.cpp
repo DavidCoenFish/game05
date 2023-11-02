@@ -58,6 +58,21 @@ const bool UIComponentDisable::Set(
     return dirty;
 }
 
+const bool UIComponentDisable::SetStateFlag(const UIStateFlag in_state_flag)
+{
+    return _content_default.SetStateFlag(in_state_flag);
+}
+
+const UIStateFlag UIComponentDisable::GetStateFlag() const
+{
+    return _content_default.GetStateFlag();
+}
+
+const UILayout& UIComponentDisable::GetLayout() const
+{
+    return _content_default.GetLayout();
+}
+
 // Make sorting children easier
 void UIComponentDisable::SetSourceToken(void* in_source_ui_data_token)
 {

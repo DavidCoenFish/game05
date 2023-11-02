@@ -271,7 +271,8 @@ public:
         input_state.Update(in_param, texture_size);
 
         in_root.DealInput(
-            input_state
+            input_state,
+            static_cast<int>(UIStateFlag::THover)
             );
 
         //LOG_MESSAGE_DEBUG("%d %d %d %d", in_param._mouse_x, in_param._mouse_y, in_param._mouse_left_down, in_param._mouse_right_down, in_param._mouse_scroll);

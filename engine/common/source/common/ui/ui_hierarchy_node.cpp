@@ -367,17 +367,46 @@ void UIHierarchyNode::UpdateSize(
 
 void UIHierarchyNode::DealInput(
     UIRootInputState& in_input_state,
-    const bool in_mouse_inside
+    const int in_state_flag
     )
 {
     for(auto& child_data_ptr : _child_data_array)
     {
         UIHierarchyNodeChildData& child_data = *child_data_ptr;
-        const bool inside = in_mouse_inside && child_data._screen_space->GetClipRef().Inside(in_input_state.GetMousePosRef());
+        const bool inside = (0 != (in_state_flag & static_cast<int>(UIStateFlag::THover))) && 
+            child_data._screen_space->GetClipRef().Inside(in_input_state.GetMousePosRef());
+
+        //const bool SetStateFlag(const UIStateFlag in_state_flag);
+        //const UIStateFlag GetStateFlag() const;
+
+        int local_flag = 0; //in_state_flag;
+        if (nullptr != child_data._component)
+        {
+             local_flag = static_cast<int>(child_data._component->GetStateFlag()) & ~static_cast<int>(UIStateFlag::TMaskInput);
+        }
+
+        if (true == inside)
+        {
+            local_flag |= static_cast<int>(UIStateFlag::THover);
+
+            if (true == in_input_state.GetMouseLeftDown())
+            {
+                local_flag |= static_cast<int>(UIStateFlag::TTouch);
+            }
+        }
+
+        if (nullptr != child_data._component)
+        {
+             if (true == child_data._component->SetStateFlag(static_cast<UIStateFlag>(local_flag)))
+             {
+                child_data._node->MarkTextureDirty();
+                //_texture->MarkDirty();
+             }
+        }
 
         child_data_ptr->_node->DealInput(
             in_input_state,
-            inside
+            local_flag
             );
 
         if ((true == inside) &&

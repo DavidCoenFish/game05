@@ -89,6 +89,21 @@ const bool UIComponentString::Set(
     return dirty;
 }
 
+const bool UIComponentString::SetStateFlag(const UIStateFlag in_state_flag)
+{
+    return _content_default.SetStateFlag(in_state_flag);
+}
+
+const UIStateFlag UIComponentString::GetStateFlag() const
+{
+    return _content_default.GetStateFlag();
+}
+
+const UILayout& UIComponentString::GetLayout() const
+{
+    return _content_default.GetLayout();
+}
+
 // Make sorting children easier
 void UIComponentString::SetSourceToken(void* in_source_ui_data_token)
 {

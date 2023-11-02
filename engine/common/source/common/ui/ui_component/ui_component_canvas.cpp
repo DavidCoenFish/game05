@@ -20,7 +20,7 @@ UIComponentCanvas::~UIComponentCanvas()
     // Nop
 }
 
-const bool UIComponentCanvas::SetBase(
+const bool UIComponentCanvas::Set(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout
     )
@@ -31,9 +31,14 @@ const bool UIComponentCanvas::SetBase(
         );
 }
 
-const bool UIComponentCanvas::SetLayout(const UILayout& in_layout)
+const bool UIComponentCanvas::SetStateFlag(const UIStateFlag in_state_flag)
 {
-    return _content_default.SetLayout(in_layout);
+    return _content_default.SetStateFlag(in_state_flag);
+}
+
+const UIStateFlag UIComponentCanvas::GetStateFlag() const
+{
+    return _content_default.GetStateFlag();
 }
 
 const UILayout& UIComponentCanvas::GetLayout() const

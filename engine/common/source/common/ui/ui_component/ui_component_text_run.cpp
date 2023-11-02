@@ -75,6 +75,20 @@ const bool UIComponentTextRun::Set(
     return dirty;
 }
 
+const bool UIComponentTextRun::SetStateFlag(const UIStateFlag in_state_flag)
+{
+    return _content_default.SetStateFlag(in_state_flag);
+}
+
+const UIStateFlag UIComponentTextRun::GetStateFlag() const
+{
+    return _content_default.GetStateFlag();
+}
+
+const UILayout& UIComponentTextRun::GetLayout() const
+{
+    return _content_default.GetLayout();
+}
 
 // Make sorting children easier
 void UIComponentTextRun::SetSourceToken(void* in_source_ui_data_token)
@@ -87,11 +101,6 @@ void* UIComponentTextRun::GetSourceToken() const
 {
     return _content_default.GetSourceToken();
 }
-
-//const bool UIComponentTextRun::SetLayout(const UILayout& in_layout)
-//{
-//    return _content_default.SetLayout(in_layout);
-//}
 
 const bool UIComponentTextRun::UpdateHierarchy(
     UIData* const in_data,

@@ -2,6 +2,7 @@
 
 #include "common/ui/ui_component/i_ui_component.h"
 #include "common/ui/ui_component/ui_component_default.h"
+#include "common/ui/ui_enum.h"
 #include "common/math/vector_float4.h"
 
 enum class UIEffectEnum;
@@ -25,6 +26,8 @@ public:
 #endif
     };
 
+    typedef std::array<VectorFloat4, static_cast<int>(UIStateFlag::TTintPermutationCount)> TStateFlagTintArray;
+
     /// weak contract to construct via factory UIManager::TContentFactory
     UIComponentEffect(
         const UIBaseColour& in_base_colour,
@@ -33,27 +36,30 @@ public:
         const UICoord& in_coord_a,
         const UICoord& in_coord_b,
         const UICoord& in_coord_c,
-        const UICoord& in_coord_d
+        const UICoord& in_coord_d,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_array_or_null = nullptr
         );
     /// destructed by base type IUIComponent which has virtual dtor, so virtual here may be redundant but does provide info
     virtual ~UIComponentEffect();
 
     /// return true if modified, else false
-    const bool SetBase(
-        const UIBaseColour& in_base_colour,
-        const UILayout& in_layout
-        );
-
-    /// return true if modified, else false
     const bool Set(
+        const UIBaseColour& in_base_colour,
+        const UILayout& in_layout,
         const UIEffectEnum in_type,
         const UICoord& in_coord_a,
         const UICoord& in_coord_b,
         const UICoord& in_coord_c,
-        const UICoord& in_coord_d
+        const UICoord& in_coord_d,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_array_or_null = nullptr
         );
 
 private:
+    virtual const bool SetStateFlag(const UIStateFlag in_state_flag) override;
+    virtual const UIStateFlag GetStateFlag() const override;
+
+    virtual const UILayout& GetLayout() const override; 
+
     /// Make sorting children easier
     virtual void SetSourceToken(void* in_source_ui_data_token) override;
     /// Make sorting children easier
@@ -113,8 +119,13 @@ private:
     /// used to build the shader constants
     UICoord _coord_d;
 
-    /// the shader constants for this effect
+    /// The shader constants for this effect
     std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;
+
+    /// Do we have valid tint data, treat as const resource, ie, not allowed to modify tint data other than componet factory setting it to null or another set of data
+    std::shared_ptr<const TStateFlagTintArray> _state_flag_tint_array;
+    //bool _use_state_flag_tint_array;
+    //TStateFlagTintArray _state_flag_tint_array;
 
 #if defined(GEOMETRY_SIZE_INTO_SHADER)
     /// full size to the render target draw surface

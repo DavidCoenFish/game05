@@ -33,12 +33,15 @@ namespace
 UIComponentDefault::UIComponentDefault(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
-    void* in_source_token
+    void* in_source_token,
+    const UIStateFlag in_state_flag
     )
     : _base_colour(in_base_colour)
     , _layout(in_layout)
     , _source_token(in_source_token)
     , _time_accumulate_seconds(0.0f)
+    , _state_flag(in_state_flag)
+    , _state_flag_dirty_mask(UIStateFlag::TNone)
 {
     // Nop
 }
@@ -147,13 +150,22 @@ void* UIComponentDefault::GetSourceToken() const
     return _source_token;
 }
 
-const bool UIComponentDefault::SetLayout(const UILayout& in_layout)
+//const bool UIComponentDefault::SetLayout(const UILayout& in_layout)
+//{
+//    bool dirty = false;
+//    if (_layout != in_layout)
+//    {
+//        _layout = in_layout;
+//    }
+//    return dirty;
+//}
+
+/// return true if any bits under the dirty flag are modified
+const bool UIComponentDefault::SetStateFlag(const UIStateFlag in_state_flag)
 {
-    bool dirty = false;
-    if (_layout != in_layout)
-    {
-        _layout = in_layout;
-    }
+    const bool dirty = (static_cast<int>(_state_flag) & static_cast<int>(_state_flag_dirty_mask)) 
+        != (static_cast<int>(in_state_flag) & static_cast<int>(_state_flag_dirty_mask));
+    _state_flag = in_state_flag;
     return dirty;
 }
 
@@ -348,8 +360,8 @@ const bool UIComponentDefault::Draw(
     return dirty;
 }
 
-const VectorFloat4 UIComponentDefault::GetTintColour() const
+const VectorFloat4 UIComponentDefault::GetTintColour(const VectorFloat4* const in_override_tint) const
 {
-    return _base_colour.GetTintColour(_time_accumulate_seconds);
+    return _base_colour.GetTintColour(_time_accumulate_seconds, in_override_tint);
 }
 

@@ -165,7 +165,7 @@ public:
 
     void DealInput(
         UIRootInputState& in_input_state,
-        const bool in_mouse_inside = true // => flag
+        const int in_state_flag = 0
         );
 
 
