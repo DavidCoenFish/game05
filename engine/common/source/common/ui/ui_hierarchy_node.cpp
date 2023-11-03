@@ -399,8 +399,8 @@ void UIHierarchyNode::DealInput(
         {
              if (true == child_data._component->SetStateFlag(static_cast<UIStateFlag>(local_flag)))
              {
+                // do we 
                 child_data._node->MarkTextureDirty();
-                //_texture->MarkDirty();
              }
         }
 

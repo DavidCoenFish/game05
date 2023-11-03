@@ -87,12 +87,14 @@ UIManagerDrawParam::UIManagerDrawParam(
     DrawSystem* const in_draw_system,
     DrawSystemFrame* const in_frame,
     TextManager* const in_text_manager,
-    UIManager* const in_ui_manager
+    UIManager* const in_ui_manager//,
+    //const float in_ui_scale
     )
     : _draw_system(in_draw_system)
     , _frame(in_frame)
     , _text_manager(in_text_manager)
     , _ui_manager(in_ui_manager)
+   // , _ui_scale(in_ui_scale)
 {
     // Nop
 }

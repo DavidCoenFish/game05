@@ -20,6 +20,10 @@
 #include "common/ui/ui_screen_space.h"
 #include "common/ui/ui_hierarchy_node.h"
 
+#include "common/log/log.h"
+
+//        LOG_CONSOLE("SetStateFlag %d => %d", _state_flag, in_state_flag);
+
 namespace
 {
     const float CalculatePos(const int in_pos, const int in_size)
@@ -165,6 +169,10 @@ const bool UIComponentDefault::SetStateFlag(const UIStateFlag in_state_flag)
 {
     const bool dirty = (static_cast<int>(_state_flag) & static_cast<int>(_state_flag_dirty_mask)) 
         != (static_cast<int>(in_state_flag) & static_cast<int>(_state_flag_dirty_mask));
+    //if (true == dirty)
+    //{
+    //    LOG_CONSOLE("SetStateFlag %d => %d", _state_flag, in_state_flag);
+    //}
     _state_flag = in_state_flag;
     return dirty;
 }

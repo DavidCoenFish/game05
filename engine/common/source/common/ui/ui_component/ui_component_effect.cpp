@@ -12,6 +12,10 @@
 #include "common/ui/ui_enum.h"
 #include "common/ui/ui_shader_enum.h"
 
+#include "common/log/log.h"
+
+//        LOG_CONSOLE("SetStateFlag %d => %d", _state_flag, in_state_flag);
+
 namespace
 {
     const UIShaderEnum GetShaderType(const UIEffectEnum in_type)
@@ -231,47 +235,60 @@ void UIComponentEffect::UpdateSize(
         in_layout_override
         );
 
+    bool dirty = false;
     if (nullptr != _shader_constant_buffer)
     {
-        const VectorInt2 texture_size = in_out_node.GetTextureSize(in_draw_system);
         UIManager::TShaderConstantBuffer& constant_0 = _shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
-        TShaderConstantBuffer& constant_1 = _shader_constant_buffer->GetConstant<TShaderConstantBuffer>(1);
         const VectorFloat4* tint_override = nullptr;
-        const auto tint_array = _state_flag_tint_array.get();
+        const auto tint_array = _state_flag_tint_array.get();        
         if (nullptr != tint_array)
         {
-            tint_override = &(*tint_array)[static_cast<int>(_content_default.GetStateFlag()) & static_cast<int>(UIStateFlag::TTintMask)];
+            const int tint_index = static_cast<int>(_content_default.GetStateFlag()) & static_cast<int>(UIStateFlag::TTintMask);
+            tint_override = &(*tint_array)[tint_index];
         }
-        constant_0._tint_colour = _content_default.GetTintColour(tint_override);
+        const auto new_tint = _content_default.GetTintColour(tint_override);
+        if (constant_0._tint_colour != new_tint)
+        {
+            dirty = true;
+            constant_0._tint_colour = new_tint;
+            //LOG_CONSOLE("tint_index %d", tint_index);
+        }
 
+        const VectorInt2 texture_size = in_out_node.GetTextureSize(in_draw_system);
+        TShaderConstantBuffer& constant_1 = _shader_constant_buffer->GetConstant<TShaderConstantBuffer>(1);
         if (UIEffectEnum::TNone != _type)
         {
             VectorFloat2 texture_size_float(static_cast<float>(texture_size.GetX()), static_cast<float>(texture_size.GetY()));
-            constant_1._data = VectorFloat4(
+
+            const VectorFloat4 data(
                 _coord_a.Calculate(texture_size_float, in_ui_scale),
                 _coord_b.Calculate(texture_size_float, in_ui_scale),
                 _coord_c.Calculate(texture_size_float, in_ui_scale),
                 _coord_d.Calculate(texture_size_float, in_ui_scale)
                 );
-            constant_1._width_height_iwidth_iheight = VectorFloat4(
+            if (constant_1._data != data)
+            {
+                dirty = true;
+                constant_1._data = data;
+            }
+
+            const VectorFloat4 width_height_iwidth_iheight(
                 static_cast<float>(texture_size.GetX()),
                 static_cast<float>(texture_size.GetY()),
                 1.0f / static_cast<float>(texture_size.GetX()),
                 1.0f / static_cast<float>(texture_size.GetY())
                 );
-
-#if defined(GEOMETRY_SIZE_INTO_SHADER)
-            auto& child_data_array = in_out_node.GetChildData();
-            if (0 != child_data_array.size())
+            if (constant_1._width_height_iwidth_iheight != width_height_iwidth_iheight)
             {
-                UIHierarchyNodeChildData& child_data = *(child_data_array[0]);
-                child_data._geometry->Get(
-                    constant_1._geometry_pos,
-                    constant_1._geometry_uv
-                    );
+                dirty = true;
+                constant_1._width_height_iwidth_iheight = width_height_iwidth_iheight;
             }
-#endif
         }
+    }
+
+    if (true == dirty)
+    {
+        in_out_node.MarkTextureDirty();
     }
 
     return;
@@ -338,6 +355,22 @@ const bool UIComponentEffect::Draw(
                 0,
                 in_draw_param._frame
                 );
+
+            // the tint array index may be changed by input after update size and before draw
+            const auto tint_array = _state_flag_tint_array.get();
+            if ((nullptr != _shader_constant_buffer) && (nullptr != tint_array))
+            {
+                UIManager::TShaderConstantBuffer& constant_0 = _shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
+                const VectorFloat4* tint_override = nullptr;
+                const int tint_index = static_cast<int>(_content_default.GetStateFlag()) & static_cast<int>(UIStateFlag::TTintMask);
+                tint_override = &(*tint_array)[tint_index];
+
+                const auto new_tint = _content_default.GetTintColour(tint_override);
+                if (constant_0._tint_colour != new_tint)
+                {
+                    constant_0._tint_colour = new_tint;
+                }
+            }
 
             in_draw_param._frame->SetShader(shader, _shader_constant_buffer);
 
