@@ -77,3 +77,32 @@ unit - garrison, ablity a, b, transform to building, transform to attachment [a,
 
 get the audio where your cursor is? buildings sing? (do[c] do[d] do[c]-di[e]-do[d]-do[c])  addons just angry hummm, units make quick (nomnomnomnom) while eating
 cliff jump say "boing"?
+
+big units build a bigger building?
+(max 7 addons)
+ ***
+*****
+*****
+*****
+ ***
+
+(max 8 addons)
+  ****
+  ****
+********
+********
+********
+********
+  ****
+  ****
+
+is random to get skill of input units on building, but 100% if all four input units have the same skill
+
+
+trapped in starter tutorial till killing tutorial host... if you ignore the tutorial instructions the host start to take things seriously and tries to win
+tutorial host otherwise is just a flying building with neural "yeap, i am a flying building in an rts, bet you have never seen that before"
+
+
+
+
+

@@ -1,11 +1,12 @@
-- disable flag into ui state flag
-- clean up input code, mouse -> one of n touches
 - slider visuals
 - slider click and drag, jump to click, click hold buttons
+- toggle visuals, hollow rounded corner effect
+- clean up input code, mouse -> one of n touches
 - scroll
 - manual scroll
 - list box
 - combo box
+- change locale
 - transition out effect
 - fade in effect
 - fade exit
