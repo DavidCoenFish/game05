@@ -112,7 +112,7 @@ private:
 
 private:
     /// Default properties of a component
-    UIComponentDefault _content_default;
+    UIComponentDefault _component_default;
     /// Left to right
     std::vector<UIComponentGridSizeData> _horizontal_size_array;
     /// Top to bottom

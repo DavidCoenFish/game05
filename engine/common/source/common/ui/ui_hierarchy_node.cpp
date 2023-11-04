@@ -373,17 +373,21 @@ void UIHierarchyNode::DealInput(
     for(auto& child_data_ptr : _child_data_array)
     {
         UIHierarchyNodeChildData& child_data = *child_data_ptr;
-        const bool inside = (0 != (in_state_flag & static_cast<int>(UIStateFlag::THover))) && 
-            child_data._screen_space->GetClipRef().Inside(in_input_state.GetMousePosRef());
-
-        //const bool SetStateFlag(const UIStateFlag in_state_flag);
-        //const UIStateFlag GetStateFlag() const;
 
         int local_flag = 0; //in_state_flag;
         if (nullptr != child_data._component)
         {
-             local_flag = static_cast<int>(child_data._component->GetStateFlag()) & ~static_cast<int>(UIStateFlag::TMaskInput);
+             local_flag = static_cast<int>(child_data._component->GetStateFlag());//
+             //& ~static_cast<int>(UIStateFlag::TMaskInput);
         }
+
+        const bool inside = (0 != (in_state_flag & static_cast<int>(UIStateFlag::THover))) && 
+            child_data._screen_space->GetClipRef().Inside(in_input_state.GetMousePosRef()) &&
+            (0 == (local_flag & static_cast<int>(UIStateFlag::TDisable)));
+
+        //const bool SetStateFlag(const UIStateFlag in_state_flag);
+        //const UIStateFlag GetStateFlag() const;
+        local_flag = local_flag & ~static_cast<int>(UIStateFlag::TMaskInput);
 
         if (true == inside)
         {
@@ -399,7 +403,6 @@ void UIHierarchyNode::DealInput(
         {
              if (true == child_data._component->SetStateFlag(static_cast<UIStateFlag>(local_flag)))
              {
-                // do we 
                 child_data._node->MarkTextureDirty();
              }
         }

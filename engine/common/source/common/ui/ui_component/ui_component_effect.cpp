@@ -61,7 +61,7 @@ UIComponentEffect::UIComponentEffect(
     const UICoord& in_coord_d,
     const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_array_or_null
     )
-    : _content_default(
+    : _component_default(
         in_base_colour,
         in_layout
         )
@@ -77,7 +77,7 @@ UIComponentEffect::UIComponentEffect(
 #endif
     if (nullptr != _state_flag_tint_array)
     {
-        _content_default.SetStateFlagDirty(UIStateFlag::TTintMask);
+        _component_default.SetStateFlagDirty(UIStateFlag::TTintMask);
     }
 }
 
@@ -100,7 +100,7 @@ const bool UIComponentEffect::Set(
 {
     bool dirty = false;
 
-    if (true == _content_default.SetBase(
+    if (true == _component_default.SetBase(
         in_base_colour,
         in_layout
         ))
@@ -150,29 +150,29 @@ const bool UIComponentEffect::Set(
 
 const bool UIComponentEffect::SetStateFlag(const UIStateFlag in_state_flag)
 {
-    return _content_default.SetStateFlag(in_state_flag);
+    return _component_default.SetStateFlag(in_state_flag);
 }
 
 const UIStateFlag UIComponentEffect::GetStateFlag() const
 {
-    return _content_default.GetStateFlag();
+    return _component_default.GetStateFlag();
 }
 
 const UILayout& UIComponentEffect::GetLayout() const
 {
-    return _content_default.GetLayout();
+    return _component_default.GetLayout();
 }
 
 // Make sorting children easier
 void UIComponentEffect::SetSourceToken(void* in_source_ui_data_token)
 {
-    _content_default.SetSourceToken(in_source_ui_data_token);
+    _component_default.SetSourceToken(in_source_ui_data_token);
     return;
 }
 
 void* UIComponentEffect::GetSourceToken() const
 {
-    return _content_default.GetSourceToken();
+    return _component_default.GetSourceToken();
 }
 
 const bool UIComponentEffect::UpdateHierarchy(
@@ -182,7 +182,7 @@ const bool UIComponentEffect::UpdateHierarchy(
     )
 {
     bool dirty = false;
-    if (true == _content_default.UpdateHierarchy(
+    if (true == _component_default.UpdateHierarchy(
         in_data,
         in_out_child_data,
         in_param
@@ -220,7 +220,7 @@ void UIComponentEffect::UpdateSize(
     UILayout* const in_layout_override
     )
 {
-    _content_default.UpdateSize(
+    _component_default.UpdateSize(
         in_draw_system,
         *this,
         in_parent_size,
@@ -243,10 +243,10 @@ void UIComponentEffect::UpdateSize(
         const auto tint_array = _state_flag_tint_array.get();        
         if (nullptr != tint_array)
         {
-            const int tint_index = static_cast<int>(_content_default.GetStateFlag()) & static_cast<int>(UIStateFlag::TTintMask);
+            const int tint_index = static_cast<int>(_component_default.GetStateFlag()) & static_cast<int>(UIStateFlag::TTintMask);
             tint_override = &(*tint_array)[tint_index];
         }
-        const auto new_tint = _content_default.GetTintColour(tint_override);
+        const auto new_tint = _component_default.GetTintColour(tint_override);
         if (constant_0._tint_colour != new_tint)
         {
             dirty = true;
@@ -303,7 +303,7 @@ void UIComponentEffect::GetDesiredSize(
     UILayout* const in_layout_override
     )
 {
-    return _content_default.GetDesiredSize(
+    return _component_default.GetDesiredSize(
         out_layout_size,
         out_desired_size,
         in_parent_window,
@@ -362,10 +362,10 @@ const bool UIComponentEffect::Draw(
             {
                 UIManager::TShaderConstantBuffer& constant_0 = _shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
                 const VectorFloat4* tint_override = nullptr;
-                const int tint_index = static_cast<int>(_content_default.GetStateFlag()) & static_cast<int>(UIStateFlag::TTintMask);
+                const int tint_index = static_cast<int>(_component_default.GetStateFlag()) & static_cast<int>(UIStateFlag::TTintMask);
                 tint_override = &(*tint_array)[tint_index];
 
-                const auto new_tint = _content_default.GetTintColour(tint_override);
+                const auto new_tint = _component_default.GetTintColour(tint_override);
                 if (constant_0._tint_colour != new_tint)
                 {
                     constant_0._tint_colour = new_tint;

@@ -51,6 +51,21 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "doxygen", "doxygen\doxygen.
 		{B4064DBC-E1BA-42ED-8E9B-FC82ED339576} = {B4064DBC-E1BA-42ED-8E9B-FC82ED339576}
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "design", "design", "{2C0B0486-D021-4003-A738-299429143C78}"
+	ProjectSection(SolutionItems) = preProject
+		..\design\rpg_legendary_quest_00.txt = ..\design\rpg_legendary_quest_00.txt
+		..\design\rts_mold_00.txt = ..\design\rts_mold_00.txt
+		..\design\sandbox_jank_00.txt = ..\design\sandbox_jank_00.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "script", "script", "{F733BE00-72EC-45C3-9948-8D6E112ED327}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "hunts_goblins", "hunts_goblins", "{B4CBFE22-FB5E-4E18-A875-A9104C527B57}"
+	ProjectSection(SolutionItems) = preProject
+		..\script\hunts_goblins\draft00.txt = ..\script\hunts_goblins\draft00.txt
+		..\script\hunts_goblins\draft01.txt = ..\script\hunts_goblins\draft01.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -143,6 +158,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2C0B0486-D021-4003-A738-299429143C78} = {3E632E09-36A9-4D11-ABDD-6C628C632CE6}
+		{F733BE00-72EC-45C3-9948-8D6E112ED327} = {3E632E09-36A9-4D11-ABDD-6C628C632CE6}
+		{B4CBFE22-FB5E-4E18-A875-A9104C527B57} = {F733BE00-72EC-45C3-9948-8D6E112ED327}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {01849243-7DF1-40D0-80A9-36CDCC951EE5}

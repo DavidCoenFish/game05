@@ -105,7 +105,7 @@ private:
 
 private:
     /// composition rather than inheratence
-    UIComponentDefault _content_default;
+    UIComponentDefault _component_default;
 
     /// either we don't use type none, or need to be carefull with type to use with _shader_constant_buffer
     UIEffectEnum _type;

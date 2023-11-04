@@ -69,9 +69,12 @@ public:
 
     VectorFloat2& GetUVScroll() { return _uv_scroll; }
 
-    /// Return true if bits under _state_flag_dirty_mask change
+    /// Return true if bits under _state_flag_dirty_mask change. 
+    /// Is a direct setter too raw, move to enable/disable bit rather than entire flag.
     const bool SetStateFlag(const UIStateFlag in_state_flag);
+    const bool SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable);
     const UIStateFlag GetStateFlag() const { return _state_flag; }
+
     void SetStateFlagDirty(const UIStateFlag in_state_flag_dirty_mask) { _state_flag_dirty_mask = in_state_flag_dirty_mask; return; }
 
     const bool UpdateHierarchy(
@@ -127,7 +130,9 @@ private:
     /// maps to UIData, but we don't hold onto reference other than treating it as an ID/ token
     void* _source_token;
 
+    /// input hover, touch, selected, disabled....
     UIStateFlag _state_flag;
+    /// there are bit when if changed, return dirty
     UIStateFlag _state_flag_dirty_mask;
 
 };

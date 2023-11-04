@@ -43,7 +43,7 @@ UIComponentGrid::UIComponentGrid(
     const std::vector<UIComponentGridSizeData>& in_horizontal_size_array,
     const std::vector<UIComponentGridSizeData>& in_vertical_size_array
     )
-    : _content_default(in_base_colour, in_layout)
+    : _component_default(in_base_colour, in_layout)
     , _horizontal_size_array(in_horizontal_size_array)
     , _vertical_size_array(in_vertical_size_array)
 {
@@ -64,7 +64,7 @@ const bool UIComponentGrid::Set(
 {
     bool dirty = false;
 
-    if (true == _content_default.SetBase(
+    if (true == _component_default.SetBase(
         in_base_colour,
         in_layout
         ))
@@ -89,27 +89,27 @@ const bool UIComponentGrid::Set(
 
 const bool UIComponentGrid::SetStateFlag(const UIStateFlag in_state_flag)
 {
-    return _content_default.SetStateFlag(in_state_flag);
+    return _component_default.SetStateFlag(in_state_flag);
 }
 
 const UIStateFlag UIComponentGrid::GetStateFlag() const
 {
-    return _content_default.GetStateFlag();
+    return _component_default.GetStateFlag();
 }
 
 const UILayout& UIComponentGrid::GetLayout() const
 {
-    return _content_default.GetLayout();
+    return _component_default.GetLayout();
 }
 
 void UIComponentGrid::SetSourceToken(void* in_source_ui_data_token)
 {
-    _content_default.SetSourceToken(in_source_ui_data_token);
+    _component_default.SetSourceToken(in_source_ui_data_token);
 }
 
 void* UIComponentGrid::GetSourceToken() const
 {
-    return _content_default.GetSourceToken();
+    return _component_default.GetSourceToken();
 }
 
 const bool UIComponentGrid::UpdateHierarchy(
@@ -118,7 +118,7 @@ const bool UIComponentGrid::UpdateHierarchy(
     const UIHierarchyNodeUpdateHierarchyParam& in_param
     )
 {
-    return _content_default.UpdateHierarchy(
+    return _component_default.UpdateHierarchy(
         in_data,
         in_out_child_data,
         in_param
@@ -161,7 +161,7 @@ void UIComponentGrid::UpdateSize(
         geometry_pos,
         geometry_uv,
         texture_size,
-        _content_default.GetUVScroll(),
+        _component_default.GetUVScroll(),
         in_parent_size,
         in_parent_offset,
         in_parent_window,
@@ -169,7 +169,7 @@ void UIComponentGrid::UpdateSize(
         in_time_delta, 
         layout_size,
         desired_size,
-        _content_default.GetLayout()
+        _component_default.GetLayout()
         );
 
     // Update geometry
@@ -231,7 +231,7 @@ void UIComponentGrid::GetDesiredSize(
     )
 {
 #if 0
-    return _content_default.GetDesiredSize(
+    return _component_default.GetDesiredSize(
         out_layout_size,
         out_desired_size,
         in_parent_window,
@@ -259,7 +259,7 @@ const bool UIComponentGrid::Draw(
     UIHierarchyNode& in_node
     )
 {
-    return _content_default.Draw(
+    return _component_default.Draw(
         in_draw_param,
         in_node
         );
@@ -276,7 +276,7 @@ void UIComponentGrid::GetGridDesiredSize(
     )
 {
     out_layout_size = in_layout_override ? in_layout_override->GetSize(in_parent_window, in_ui_scale)
-        : _content_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
+        : _component_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
 
     std::vector<int> horizontal_sizes;
     {
@@ -290,7 +290,7 @@ void UIComponentGrid::GetGridDesiredSize(
             bias_sum += item.GetRemainderBias();
         }
 
-        if ((0 == bias_sum) || (_content_default.GetLayout().GetShrinkWidth()))
+        if ((0 == bias_sum) || (_component_default.GetLayout().GetShrinkWidth()))
         {
             out_desired_size[0] = total_reserved;
         }
@@ -328,7 +328,7 @@ void UIComponentGrid::GetGridDesiredSize(
             bias_sum += item.GetRemainderBias();
         }
 
-        if ((0 == bias_sum) || (_content_default.GetLayout().GetShrinkHeight()))
+        if ((0 == bias_sum) || (_component_default.GetLayout().GetShrinkHeight()))
         {
             out_desired_size[1] = total_reserved;
         }
@@ -373,7 +373,7 @@ void UIComponentGrid::GetGridDesiredSize(
     }
 
     out_layout_size = in_layout_override ? in_layout_override->CalculateShrinkSize(out_layout_size, out_desired_size)
-        : _content_default.GetLayout().CalculateShrinkSize(out_layout_size, out_desired_size);
+        : _component_default.GetLayout().CalculateShrinkSize(out_layout_size, out_desired_size);
 
     return;
 }

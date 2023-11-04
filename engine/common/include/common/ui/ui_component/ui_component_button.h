@@ -73,7 +73,7 @@ private:
         ) override;
 
 private:
-    UIComponentDefault _content_default;
+    UIComponentDefault _component_default;
     std::function<void(const VectorFloat2&)> _on_click;
 
 };

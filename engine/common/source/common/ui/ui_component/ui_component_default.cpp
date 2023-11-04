@@ -177,6 +177,20 @@ const bool UIComponentDefault::SetStateFlag(const UIStateFlag in_state_flag)
     return dirty;
 }
 
+const bool UIComponentDefault::SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable)
+{
+    int state_flag = static_cast<int>(_state_flag);
+    if (true == in_enable)
+    {
+        state_flag |= static_cast<int>(in_state_flag_bit);
+    }
+    else
+    {
+        state_flag &= ~static_cast<int>(in_state_flag_bit);
+    }
+    return SetStateFlag(static_cast<UIStateFlag>(state_flag));
+}
+
 const bool UIComponentDefault::UpdateHierarchy(
     UIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,

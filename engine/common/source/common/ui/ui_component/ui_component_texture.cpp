@@ -19,7 +19,7 @@ UIComponentTexture::UIComponentTexture(
     const std::shared_ptr<HeapWrapperItem>& in_shader_resource_view_handle,
     const std::shared_ptr<IResource>& in_shader_resource
     )
-    : _content_default(
+    : _component_default(
         in_base_colour,
         in_layout
         )
@@ -47,28 +47,28 @@ void UIComponentTexture::SetTexture(
 
 const bool UIComponentTexture::SetStateFlag(const UIStateFlag in_state_flag)
 {
-    return _content_default.SetStateFlag(in_state_flag);
+    return _component_default.SetStateFlag(in_state_flag);
 }
 
 const UIStateFlag UIComponentTexture::GetStateFlag() const
 {
-    return _content_default.GetStateFlag();
+    return _component_default.GetStateFlag();
 }
 
 const UILayout& UIComponentTexture::GetLayout() const
 {
-    return _content_default.GetLayout();
+    return _component_default.GetLayout();
 }
 
 void UIComponentTexture::SetSourceToken(void* in_source_ui_data_token)
 {
-    _content_default.SetSourceToken(in_source_ui_data_token);
+    _component_default.SetSourceToken(in_source_ui_data_token);
     return;
 }
 
 void* UIComponentTexture::GetSourceToken() const
 {
-    return _content_default.GetSourceToken();
+    return _component_default.GetSourceToken();
 }
 
 const bool UIComponentTexture::UpdateHierarchy(
@@ -78,7 +78,7 @@ const bool UIComponentTexture::UpdateHierarchy(
     )
 {
     bool dirty = false;
-    dirty = _content_default.UpdateHierarchy(
+    dirty = _component_default.UpdateHierarchy(
         in_data,
         in_out_child_data, 
         in_param
@@ -105,7 +105,7 @@ void UIComponentTexture::UpdateSize(
     UILayout* const in_layout_override
     )
 {
-    _content_default.UpdateSize(
+    _component_default.UpdateSize(
         in_draw_system,
         *this,
         in_parent_size,
@@ -130,7 +130,7 @@ void UIComponentTexture::GetDesiredSize(
     UILayout* const in_layout_override
     )
 {
-    return _content_default.GetDesiredSize(
+    return _component_default.GetDesiredSize(
         out_layout_size,
         out_desired_size,
         in_parent_window,
@@ -146,7 +146,7 @@ const bool UIComponentTexture::Draw(
     ) 
 {
 #if 0
-    return _content_default.Draw(
+    return _component_default.Draw(
         in_draw_param,
         in_node
         );
@@ -184,7 +184,7 @@ const bool UIComponentTexture::Draw(
         if (nullptr != _shader_constant_buffer)
         {
             UIManager::TShaderConstantBuffer& buffer = _shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
-            buffer._tint_colour = _content_default.GetTintColour();
+            buffer._tint_colour = _component_default.GetTintColour();
         }
 
         in_draw_param._frame->SetShader(shader, _shader_constant_buffer);

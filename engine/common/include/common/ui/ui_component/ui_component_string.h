@@ -86,7 +86,7 @@ private:
         ) override;
 
 private:
-    UIComponentDefault _content_default;
+    UIComponentDefault _component_default;
 
     //bool _use_parent_size_for_width_limit;
     std::unique_ptr<TextBlock> _text_block;

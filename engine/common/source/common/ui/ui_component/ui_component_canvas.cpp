@@ -7,7 +7,7 @@ UIComponentCanvas::UIComponentCanvas(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout
     )
-    : _content_default(
+    : _component_default(
         in_base_colour,
         in_layout
         )
@@ -25,7 +25,7 @@ const bool UIComponentCanvas::Set(
     const UILayout& in_layout
     )
 {
-    return _content_default.SetBase(
+    return _component_default.SetBase(
         in_base_colour,
         in_layout
         );
@@ -33,28 +33,28 @@ const bool UIComponentCanvas::Set(
 
 const bool UIComponentCanvas::SetStateFlag(const UIStateFlag in_state_flag)
 {
-    return _content_default.SetStateFlag(in_state_flag);
+    return _component_default.SetStateFlag(in_state_flag);
 }
 
 const UIStateFlag UIComponentCanvas::GetStateFlag() const
 {
-    return _content_default.GetStateFlag();
+    return _component_default.GetStateFlag();
 }
 
 const UILayout& UIComponentCanvas::GetLayout() const
 {
-    return _content_default.GetLayout();
+    return _component_default.GetLayout();
 }
 
 void UIComponentCanvas::SetSourceToken(void* in_source_ui_data_token)
 {
-    _content_default.SetSourceToken(in_source_ui_data_token);
+    _component_default.SetSourceToken(in_source_ui_data_token);
     return;
 }
 
 void* UIComponentCanvas::GetSourceToken() const
 {
-    return _content_default.GetSourceToken();
+    return _component_default.GetSourceToken();
 }
 
 const bool UIComponentCanvas::UpdateHierarchy(
@@ -63,7 +63,7 @@ const bool UIComponentCanvas::UpdateHierarchy(
     const UIHierarchyNodeUpdateHierarchyParam& in_param
     )
 {
-    return _content_default.UpdateHierarchy(
+    return _component_default.UpdateHierarchy(
         in_data,
         in_out_child_data, 
         in_param
@@ -84,7 +84,7 @@ void UIComponentCanvas::UpdateSize(
     UILayout* const in_layout_override
     )
 {
-    _content_default.UpdateSize(
+    _component_default.UpdateSize(
         in_draw_system,
         *this,
         in_parent_size,
@@ -109,7 +109,7 @@ void UIComponentCanvas::GetDesiredSize(
     UILayout* const in_layout_override
     )
 {
-    return _content_default.GetDesiredSize(
+    return _component_default.GetDesiredSize(
         out_layout_size,
         out_desired_size,
         in_parent_window,
@@ -124,7 +124,7 @@ const bool UIComponentCanvas::Draw(
     UIHierarchyNode& in_node
     ) 
 {
-    return _content_default.Draw(
+    return _component_default.Draw(
         in_draw_param,
         in_node
         );

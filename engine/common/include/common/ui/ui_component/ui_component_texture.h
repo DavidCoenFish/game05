@@ -88,7 +88,7 @@ private:
         ) override;
 
 private:
-    UIComponentDefault _content_default;
+    UIComponentDefault _component_default;
 
     bool _dirty;
     std::shared_ptr<HeapWrapperItem> _shader_resource_view_handle;

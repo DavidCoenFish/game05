@@ -19,13 +19,14 @@ UIComponentDisable::UIComponentDisable(
     const UILayout& in_layout,
     const bool in_disable
     )
-    : _content_default(
+    : _component_default(
         in_base_colour,
         in_layout
         )
-    , _disable(in_disable)
+    //, _disable(false)
 {
-    // Nop
+     _component_default.SetStateFlagDirty(UIStateFlag::TDisable);
+     Set(in_disable);
 }
 
 UIComponentDisable::~UIComponentDisable()
@@ -38,7 +39,7 @@ const bool UIComponentDisable::SetBase(
     const UILayout& in_layout
     )
 {
-    return _content_default.SetBase(
+    return _component_default.SetBase(
         in_base_colour,
         in_layout
         );
@@ -49,10 +50,14 @@ const bool UIComponentDisable::Set(
     )
 {
     bool dirty = false;
-    if (_disable != in_disable)
+    //if (_disable != in_disable)
+    //{
+    //    dirty = true;
+    //    _disable = in_disable;
+    //}
+    if (true == _component_default.SetStateFlagBit(UIStateFlag::TDisable, in_disable))
     {
         dirty = true;
-        _disable = in_disable;
     }
 
     return dirty;
@@ -60,29 +65,29 @@ const bool UIComponentDisable::Set(
 
 const bool UIComponentDisable::SetStateFlag(const UIStateFlag in_state_flag)
 {
-    return _content_default.SetStateFlag(in_state_flag);
+    return _component_default.SetStateFlag(in_state_flag);
 }
 
 const UIStateFlag UIComponentDisable::GetStateFlag() const
 {
-    return _content_default.GetStateFlag();
+    return _component_default.GetStateFlag();
 }
 
 const UILayout& UIComponentDisable::GetLayout() const
 {
-    return _content_default.GetLayout();
+    return _component_default.GetLayout();
 }
 
 // Make sorting children easier
 void UIComponentDisable::SetSourceToken(void* in_source_ui_data_token)
 {
-    _content_default.SetSourceToken(in_source_ui_data_token);
+    _component_default.SetSourceToken(in_source_ui_data_token);
     return;
 }
 
 void* UIComponentDisable::GetSourceToken() const
 {
-    return _content_default.GetSourceToken();
+    return _component_default.GetSourceToken();
 }
 
 const bool UIComponentDisable::UpdateHierarchy(
@@ -102,7 +107,7 @@ const bool UIComponentDisable::UpdateHierarchy(
         }
     }
 
-    if (true == _content_default.UpdateHierarchy(
+    if (true == _component_default.UpdateHierarchy(
         in_data,
         in_out_child_data,
         in_param
@@ -139,7 +144,7 @@ void UIComponentDisable::UpdateSize(
     UILayout* const in_layout_override
     )
 {
-    _content_default.UpdateSize(
+    _component_default.UpdateSize(
         in_draw_system,
         *this,
         in_parent_size,
@@ -159,11 +164,13 @@ void UIComponentDisable::UpdateSize(
         const VectorInt2 texture_size = in_out_node.GetTextureSize(in_draw_system);
         UIManager::TShaderConstantBuffer& constant_0 = _shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
         UIComponentEffect::TShaderConstantBuffer& constant_1 = _shader_constant_buffer->GetConstant<UIComponentEffect::TShaderConstantBuffer>(1);
-        constant_0._tint_colour = _content_default.GetTintColour();
+        constant_0._tint_colour = _component_default.GetTintColour();
+
+        const bool disable = (0 != (static_cast<int>(_component_default.GetStateFlag()) & static_cast<int>(UIStateFlag::TDisable)));
 
         VectorFloat2 texture_size_float(static_cast<float>(texture_size.GetX()), static_cast<float>(texture_size.GetY()));
         constant_1._data = VectorFloat4(
-            _disable ? 1.0f : 0.0f
+            disable ? 1.0f : 0.0f
             );
         constant_1._width_height_iwidth_iheight = VectorFloat4(
             static_cast<float>(texture_size.GetX()),
@@ -189,7 +196,7 @@ void UIComponentDisable::GetDesiredSize(
     VectorInt2 max_desired_size;
 
     out_layout_size = in_layout_override ? in_layout_override->GetSize(in_parent_window, in_ui_scale) 
-        : _content_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
+        : _component_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
 
     // Default is to go through children and see if anyone needs a bigger size than what we calculate
     for (auto iter: in_out_node.GetChildData())
@@ -211,12 +218,12 @@ void UIComponentDisable::GetDesiredSize(
         max_desired_size = VectorInt2::Max(max_desired_size, child_desired_size);
     }
 
-    out_layout_size = _content_default.GetLayout().CalculateShrinkSize(out_layout_size, max_desired_size);
+    out_layout_size = _component_default.GetLayout().CalculateShrinkSize(out_layout_size, max_desired_size);
     out_desired_size = VectorInt2::Max(out_layout_size, max_desired_size);
 
     return;
 #else
-    return _content_default.GetDesiredSize(
+    return _component_default.GetDesiredSize(
         out_layout_size,
         out_desired_size,
         in_parent_window,

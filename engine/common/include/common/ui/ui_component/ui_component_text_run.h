@@ -75,7 +75,7 @@ private:
         ) override;
 
 private:
-    UIComponentDefault _content_default;
+    UIComponentDefault _component_default;
 
     int _change_id;
     std::unique_ptr<TextRun> _text_run;

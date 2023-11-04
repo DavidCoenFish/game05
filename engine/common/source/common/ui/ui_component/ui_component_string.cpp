@@ -17,7 +17,7 @@ UIComponentString::UIComponentString(
     const UILayout& in_layout,
     std::unique_ptr<TextBlock>& in_text_block
     )
-    : _content_default(
+    : _component_default(
         in_base_colour,
         in_layout
         )
@@ -36,7 +36,7 @@ const bool UIComponentString::SetBase(
     const UILayout& in_layout
     )
 {
-    if (true == _content_default.SetBase(
+    if (true == _component_default.SetBase(
         in_base_colour,
         in_layout
         ))
@@ -91,29 +91,29 @@ const bool UIComponentString::Set(
 
 const bool UIComponentString::SetStateFlag(const UIStateFlag in_state_flag)
 {
-    return _content_default.SetStateFlag(in_state_flag);
+    return _component_default.SetStateFlag(in_state_flag);
 }
 
 const UIStateFlag UIComponentString::GetStateFlag() const
 {
-    return _content_default.GetStateFlag();
+    return _component_default.GetStateFlag();
 }
 
 const UILayout& UIComponentString::GetLayout() const
 {
-    return _content_default.GetLayout();
+    return _component_default.GetLayout();
 }
 
 // Make sorting children easier
 void UIComponentString::SetSourceToken(void* in_source_ui_data_token)
 {
-    _content_default.SetSourceToken(in_source_ui_data_token);
+    _component_default.SetSourceToken(in_source_ui_data_token);
     return;
 }
 
 void* UIComponentString::GetSourceToken() const
 {
-    return _content_default.GetSourceToken();
+    return _component_default.GetSourceToken();
 }
 
 const bool UIComponentString::UpdateHierarchy(
@@ -136,7 +136,7 @@ const bool UIComponentString::UpdateHierarchy(
         }
     }
 
-    if (true == _content_default.UpdateHierarchy(
+    if (true == _component_default.UpdateHierarchy(
         in_data,
         in_out_child_data,
         in_param
@@ -162,7 +162,7 @@ void UIComponentString::UpdateSize(
     UILayout* const in_layout_override
     )
 {
-    _content_default.UpdateSize(
+    _component_default.UpdateSize(
         in_draw_system,
         *this,
         in_parent_size,
@@ -195,7 +195,7 @@ void UIComponentString::GetDesiredSize(
     )
 {
     out_layout_size = in_layout_override ? in_layout_override->GetSize(in_parent_window, in_ui_scale) 
-        : _content_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
+        : _component_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
 
     _text_block->SetWidthLimit(
         _text_block->GetWidthLimitEnabled(),
@@ -206,7 +206,7 @@ void UIComponentString::GetDesiredSize(
     out_desired_size = _text_block->GetTextBounds();
 
     out_layout_size = in_layout_override ? in_layout_override->CalculateShrinkSize(out_layout_size, out_desired_size)
-        : _content_default.GetLayout().CalculateShrinkSize(out_layout_size, out_desired_size);
+        : _component_default.GetLayout().CalculateShrinkSize(out_layout_size, out_desired_size);
     //out_desired_size = VectorInt2::Max(out_layout_size, out_desired_size);
 
     return;

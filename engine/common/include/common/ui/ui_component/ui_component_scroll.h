@@ -76,7 +76,7 @@ private:
         ) override;
 
 private:
-    UIComponentDefault _content_default;
+    UIComponentDefault _component_default;
 
     UIOrientation _orientation;
 

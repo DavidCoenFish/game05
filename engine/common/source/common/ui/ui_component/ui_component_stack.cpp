@@ -16,7 +16,7 @@ UIComponentStack::UIComponentStack(
     const UIOrientation in_orientation,
     const UICoord& in_gap
     )
-    : _content_default(
+    : _component_default(
         in_base_colour,
         in_layout
         )
@@ -40,7 +40,7 @@ const bool UIComponentStack::Set(
 {
     bool dirty = false;
 
-    if (true == _content_default.SetBase(
+    if (true == _component_default.SetBase(
         in_base_colour,
         in_layout
         ))
@@ -65,28 +65,28 @@ const bool UIComponentStack::Set(
 
 const bool UIComponentStack::SetStateFlag(const UIStateFlag in_state_flag)
 {
-    return _content_default.SetStateFlag(in_state_flag);
+    return _component_default.SetStateFlag(in_state_flag);
 }
 
 const UIStateFlag UIComponentStack::GetStateFlag() const
 {
-    return _content_default.GetStateFlag();
+    return _component_default.GetStateFlag();
 }
 
 const UILayout& UIComponentStack::GetLayout() const
 {
-    return _content_default.GetLayout();
+    return _component_default.GetLayout();
 }
 
 // Make sorting children easier
 void UIComponentStack::SetSourceToken(void* in_source_ui_data_token)
 {
-    _content_default.SetSourceToken(in_source_ui_data_token);
+    _component_default.SetSourceToken(in_source_ui_data_token);
 }
 
 void* UIComponentStack::GetSourceToken() const
 {
-    return _content_default.GetSourceToken();
+    return _component_default.GetSourceToken();
 }
 
 const bool UIComponentStack::UpdateHierarchy(
@@ -95,7 +95,7 @@ const bool UIComponentStack::UpdateHierarchy(
     const UIHierarchyNodeUpdateHierarchyParam& in_param
     )
 {
-    return _content_default.UpdateHierarchy(
+    return _component_default.UpdateHierarchy(
         in_data,
         in_out_child_data,
         in_param
@@ -140,7 +140,7 @@ void UIComponentStack::UpdateSize(
         geometry_pos,
         geometry_uv,
         texture_size,
-        _content_default.GetUVScroll(),
+        _component_default.GetUVScroll(),
         in_parent_size,
         in_parent_offset,
         in_parent_window,
@@ -148,7 +148,7 @@ void UIComponentStack::UpdateSize(
         in_time_delta, 
         layout_size,
         desired_size,
-        in_layout_override ? *in_layout_override : _content_default.GetLayout()
+        in_layout_override ? *in_layout_override : _component_default.GetLayout()
         );
 
     // Update geometry
@@ -211,7 +211,7 @@ void UIComponentStack::GetDesiredSize(
     UILayout* const in_layout_override
     )
 {
-    return _content_default.GetDesiredSize(
+    return _component_default.GetDesiredSize(
         out_layout_size,
         out_desired_size,
         in_parent_window,
@@ -232,7 +232,7 @@ void UIComponentStack::GetStackDesiredSize(
     )
 {
     out_layout_size = in_layout_override ? in_layout_override->GetSize(in_parent_window, in_ui_scale)
-        : _content_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
+        : _component_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
     const int gap = _gap.Calculate(in_parent_window, in_ui_scale);
 
     VectorInt2 max_desired_size;
@@ -285,7 +285,7 @@ void UIComponentStack::GetStackDesiredSize(
     }
 
     out_layout_size = in_layout_override ? in_layout_override->CalculateShrinkSize(out_layout_size, max_desired_size)
-        : _content_default.GetLayout().CalculateShrinkSize(out_layout_size, max_desired_size);
+        : _component_default.GetLayout().CalculateShrinkSize(out_layout_size, max_desired_size);
     out_desired_size = max_desired_size;
 
     for (auto& iter : out_child_window_offset)
@@ -311,7 +311,7 @@ const bool UIComponentStack::Draw(
     UIHierarchyNode& in_node
     ) 
 {
-    return _content_default.Draw(
+    return _component_default.Draw(
         in_draw_param,
         in_node
         );

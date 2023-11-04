@@ -1,0 +1,2 @@
+just another mine craft clone, but with procedural character creation that needs mined world resources to customise character, and automation via social connections
+

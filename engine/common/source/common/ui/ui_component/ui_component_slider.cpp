@@ -41,7 +41,7 @@ UIComponentSlider::UIComponentSlider(
     const UILayout& in_layout,
     const UIOrientation in_orientation
     )
-    : _content_default(
+    : _component_default(
         in_base_colour,
         in_layout
         )
@@ -75,7 +75,7 @@ const bool UIComponentSlider::SetBase(
     )
 {
     bool dirty = false;
-    if (true == _content_default.SetBase(
+    if (true == _component_default.SetBase(
         in_base_colour,
         in_layout
         ))
@@ -117,28 +117,28 @@ const bool UIComponentSlider::Set(
 
 const bool UIComponentSlider::SetStateFlag(const UIStateFlag in_state_flag)
 {
-    return _content_default.SetStateFlag(in_state_flag);
+    return _component_default.SetStateFlag(in_state_flag);
 }
 
 const UIStateFlag UIComponentSlider::GetStateFlag() const
 {
-    return _content_default.GetStateFlag();
+    return _component_default.GetStateFlag();
 }
 
 const UILayout& UIComponentSlider::GetLayout() const
 {
-    return _content_default.GetLayout();
+    return _component_default.GetLayout();
 }
 
 void UIComponentSlider::SetSourceToken(void* in_source_ui_data_token)
 {
-    _content_default.SetSourceToken(in_source_ui_data_token);
+    _component_default.SetSourceToken(in_source_ui_data_token);
     return;
 }
 
 void* UIComponentSlider::GetSourceToken() const
 {
-    return _content_default.GetSourceToken();
+    return _component_default.GetSourceToken();
 }
 
 const bool UIComponentSlider::UpdateHierarchy(
@@ -207,7 +207,7 @@ const bool UIComponentSlider::UpdateHierarchy(
         }
     }
 
-    if (true == _content_default.UpdateHierarchy(
+    if (true == _component_default.UpdateHierarchy(
         in_data,
         in_out_child_data, 
         in_param
@@ -233,7 +233,7 @@ void UIComponentSlider::UpdateSize(
     UILayout* const in_layout_override
     )
 {
-    _content_default.UpdateSize(
+    _component_default.UpdateSize(
         in_draw_system,
         *this,
         in_parent_size,
@@ -287,7 +287,7 @@ void UIComponentSlider::GetDesiredSize(
     UILayout* const in_layout_override
     )
 {
-    return _content_default.GetDesiredSize(
+    return _component_default.GetDesiredSize(
         out_layout_size,
         out_desired_size,
         in_parent_window,

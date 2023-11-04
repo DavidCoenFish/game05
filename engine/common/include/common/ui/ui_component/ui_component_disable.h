@@ -81,12 +81,12 @@ private:
 
 private:
     /// composition rather than inheratence
-    UIComponentDefault _content_default;
+    UIComponentDefault _component_default;
 
     /// the shader constants for this effect
     std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;
 
-    /// when true, set the shader constant data0.x to 1
-    bool _disable;
+    /// should this state only be expressed by the _component_default state flag?
+    //bool _disable;
 
 };

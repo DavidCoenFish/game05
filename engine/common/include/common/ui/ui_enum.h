@@ -40,13 +40,15 @@ enum class UIStateFlag
     /// List box selection/ navigation focus?
     TSelected = 1 << 2, 
 
-    /// Disabled is expressed
-
     /// Mask for input pass to filter state flag, ie, the values set by the ui manager input pass
     TMaskInput = THover | TTouch, 
-
     /// Count of how many tint permutations
     TTintPermutationCount = 1 << 3,
-    TTintMask = THover | TTouch | TSelected
+    /// Mask for tint types
+    TTintMask = THover | TTouch | TSelected,
+
+    /// Disabled is expressed by UICompnentDisable, but need a way to comunicate with input that node is disabled?
+    TDisable = 1 << 3 
+
 
 };

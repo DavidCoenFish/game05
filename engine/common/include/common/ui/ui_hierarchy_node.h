@@ -41,8 +41,6 @@ UIHierarchyNode // N0
             _child_node_array // A1
 
 the component C1 may have special rules (ie, a virtual method) to control how child array A1 is drawn to T1
-put tint colour into geometry, how about the shader constants?
-
 */
 
 struct UIHierarchyNodeChildData

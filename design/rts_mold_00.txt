@@ -15,22 +15,30 @@ building has six slots for add ons, adjacent addons of the same type can be comb
 2 adjacent "extra health" gives passive healing, 3 gives castable heal
 2 adjacent "melle attack" gives splash?
 2 adjacent "armor" gives shields that recover over time
-2 adjacent "range" gives splash, 3  gives gerenade
-2 adjacent "projectile", 3 gives snipe
+2 adjacent "range" gives splash, 3  gives gerenade? or tentical reach?
+2 adjacent "projectile", 3 gives snipe? 
+damage over time/ posion
 2 adjacent "flight" speed, 3 for ablity to land and take off?
-cliff jump -> teleport
+cliff jump -> blink
 abilty to transport others?
 root to ground -> burrow
 visiblity range -> see burrowed/ cloaked
-move speed -> blink
-consume food ablity? 
+move speed -> boost?
+consume food ablity? vampire? faster gather?
 stun -> neural
+some abblity that ends up allowing garrioned units to leave at other building? or is that default? cliff jump->tepeport
+or would telleporting buildings be more fun. you may get quite the cool down
 
-is there a way to get to neural parrisite? viper grappling shot?
+using both ablities (cliff jump, boost) allows teleport?
 
-all units have default "gather food" slow mellee attach, 
 
-flying uints can use mellee attacks on other flyers
+is there a way to get to neural parrisite? viper grappling shot? damage over time anti air?
+
+all units have default "gather food" slow mellee attach
+
+flying uints can use mellee attacks on other flyers, includeding gather "food"/eat
+
+
 
 aim for 20 addons? reserve on key for making builing, and some/two keys for ablitites? 
 max of two ablities if it takes 3 addons joinded to make an ablity?
@@ -48,7 +56,24 @@ addon get dimished version of skill, but is still attached to building
 
 can buildings use ablitites? if all 4 input units had some ablity. do ablities mix into new ablitites, so a builds still gets the 'w','e' ablitites....
 
+units food gather/ damage to things not dead is half speed of gather food otherwise
+cancling building losses health that was converted to building. damaged units build/ transform slower
+
 
 building can eat your own units for food? slow? a flying building could eat a neural controlled flying building, but may not finish before neural, so eating is a form of damage
 
+building is 4x4 with corners knocked off
+ **
+****
+****
+ **
+add on is 2x2
+**
+**
+unit mostly fills up one square, but as they get more addons (other than cheaper) they gain size. cheaper addon make things smaller/ cheapers/ weaker?
 
+building - make unit, start to eat garrisoned, spit out garrisoned, ablity a, ablity b (if most of units that built building had compatable ablities)
+unit - garrison, ablity a, b, transform to building, transform to attachment [a,b,c,d,.....]
+
+get the audio where your cursor is? buildings sing? (do[c] do[d] do[c]-di[e]-do[d]-do[c])  addons just angry hummm, units make quick (nomnomnomnom) while eating
+cliff jump say "boing"?
