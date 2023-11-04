@@ -267,7 +267,7 @@ namespace
     const UILayout& GetUILayoutWidget()
     {
         static UILayout s_layout(
-            UICoord(UICoord::ParentSource::X, 0.0f, s_default_font_size * 0.5f), // 1.1f),
+            UICoord(UICoord::ParentSource::X, 0.0f, s_default_font_size), // 1.1f),
             UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size * 1.25f), // 1.1f),
             UICoord(UICoord::ParentSource::X, 0.5f),
             UICoord(UICoord::ParentSource::Y, 0.5f),

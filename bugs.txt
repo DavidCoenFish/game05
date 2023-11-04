@@ -1,0 +1,6 @@
+ui elements/ text being trimmed top few rows of pixels at certain ui scale
+fps text randomly having last digit truncated
+draw system may not need to have texture resource handles be per frame buffer
+clean up uv coords, if geometry is -1,-1 in lover left, then have uv 0,0 in lower left, not upper left
+clean up ui hierarchy resize to do less work
+text word wrap may be incorrect

@@ -1,22 +1,17 @@
-- Option dialog
-- UiComponentGrid
-- DisableEffect // add a mask passed down during input, input mask? [hover, click down, active, disabled]?
-    active is for buttons with toggle state, like checkbox?
-    IUIComponent::SetInputState(hover, touch_down)?
-    UIDataToggle // bool true/ false
-    UIDataScroll // float with min, max, knot size (% of total)
-
-- InnerShadowEffect
-- UiComponentInputMaskDisplay
-- ui fade in/ tint / background colour
-- ui fade/blur out effect for destroyed uitextures
-- expander
-- checkbox
-- slider (ui scale)
-- combobox dropdown (choose locale)
-- cleanup input mouse -> touch, flag. 
-- greyscale effect on false disabled
-- character selection screen
+- disable flag into ui state flag
+- clean up input code, mouse -> one of n touches
+- slider visuals
+- slider click and drag, jump to click, click hold buttons
+- scroll
+- manual scroll
+- list box
+- combo box
+- transition out effect
+- fade in effect
+- fade exit
+- character selection screen stub
 - blob renderer
 - personality decal
 - shadow blob (folds upward to look around, laughs, eyes track mouse pointer...)
+- anatomy study shaders
+- rts demo

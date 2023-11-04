@@ -7,6 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root_items", "root_items", 
 	ProjectSection(SolutionItems) = preProject
 		..\.gitignore = ..\.gitignore
 		..\backup_copy_e_drive.cmd = ..\backup_copy_e_drive.cmd
+		..\bugs.txt = ..\bugs.txt
 		..\cmd_here.cmd = ..\cmd_here.cmd
 		..\commit.cmd = ..\commit.cmd
 		..\notes.txt = ..\notes.txt

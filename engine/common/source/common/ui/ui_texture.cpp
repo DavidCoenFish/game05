@@ -16,6 +16,7 @@ UITexture::UITexture(
     , _allow_clear(in_allow_clear)
     , _always_dirty(in_always_dirty)
     , _has_drawn(false)
+    //, _needs_resize(false)
     , _clear_colour(in_clear_colour)
 {
     // Nop
@@ -31,13 +32,12 @@ void UITexture::UpdateRenderTarget(
     ID3D12GraphicsCommandList* const in_command_list
     )
 {
-    if (true == _draw_to_texture)
+    if ((true == _draw_to_texture) && (0 < _size.GetX()) && (0 < _size.GetY()))
     {
-        if ((nullptr == _render_target_texture) &&
-            (0 < _size.GetX()) &&
-            (0 < _size.GetY()))
+        if (nullptr == _render_target_texture)
         {
             _has_drawn = false;
+            //_needs_resize = false;
 
             const std::vector<RenderTargetFormatData> target_format_data_array({
                 RenderTargetFormatData(
@@ -54,6 +54,19 @@ void UITexture::UpdateRenderTarget(
                 _size
                 );
         }
+#if 0
+        else if (true == _needs_resize)
+        {
+            _has_drawn = false;
+            _needs_resize = false;
+
+            in_draw_system->ResizeRenderTargetTexture(
+                in_command_list,
+                _render_target_texture.get(),
+                _size
+                );
+        }
+#endif
     }
     return;
 }
@@ -140,20 +153,23 @@ void UITexture::SetSize(
 
     _size = in_size;
     _has_drawn = false;
+
+#if 1
     _render_target_texture.reset();
+#else
+    // resizing the render target seems to be triggering a object deleted while still in use error
+    _needs_resize = true;
+
+    if ((_size.GetX() <= 0) ||
+       (_size.GetY() <= 0))
+    {
+        _render_target_texture.reset();
+    }
+#endif
 
     return;
 }
 
-// nullptr if _bUseBackBuffer is true
-//std::shared_ptr<HeapWrapperItem> UITexture::GetShaderResourceHeapWrapperItem() const
-//{
-//    if ((true == _draw_to_texture) && (nullptr != _render_target_texture))
-//    {
-//        return _render_target_texture->GetShaderResourceHeapWrapperItem();
-//    }
-//    return nullptr;
-//}
 void UITexture::SetShaderResource(
     Shader& in_shader,
     const int in_index,

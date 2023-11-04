@@ -11,10 +11,8 @@ class IRenderTarget;
 class RenderTargetTexture;
 class Shader;
 class VectorInt2;
-/*
-    Own a render target texture, 
-    or reference the back buffer or other external texture render target
-*/
+
+/// Own a render target texture, or use the draw system back buffer
 class UITexture
 {
 public:
@@ -25,11 +23,6 @@ public:
         const VectorFloat4& in_clear_colour = VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f)
         );
     ~UITexture();
-
-    void UpdateRenderTarget(
-        DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list
-        );
 
     const bool SetRenderTarget(
         DrawSystem* const in_draw_system,
@@ -70,10 +63,23 @@ public:
     const bool GetAlwaysDirty() const { return _always_dirty; }
 
 private:
-    bool _draw_to_texture; // true == use _render_target_texture else use the application backbuffer via draw system
-    bool _allow_clear; // When render target is set active, do we clear
-    bool _always_dirty; // If we share a render target, like the backbuffer, we may need to always draw
-    bool _has_drawn; // Internal flag to help know if data drawn to texture
+    void UpdateRenderTarget(
+        DrawSystem* const in_draw_system,
+        ID3D12GraphicsCommandList* const in_command_list
+        );
+
+private:
+    /// true == use _render_target_texture else use the application backbuffer via draw system
+    bool _draw_to_texture; 
+    /// When render target is set active, do we clear
+    bool _allow_clear; 
+    /// If we share a render target, like the backbuffer, we may need to always draw
+    bool _always_dirty; 
+    /// Internal flag to help know if data drawn to texture
+    bool _has_drawn; 
+
+    // resizing the render target seems to be triggering a object deleted while still in use error
+    //bool _needs_resize;
     VectorInt2 _size;
     VectorFloat4 _clear_colour;
 

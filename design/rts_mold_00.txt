@@ -1,0 +1,54 @@
+slime mold rts
+
+start with one building and 10 units, 100 food, near some food. units can collect the food and take it to any building. 
+each unit gathers about 5 food every 10 seconds.
+1000 food at each base location.
+four units selected allows you to build another build, consuming the four units
+one unit allows you to build an add on that must be attached to a building, consuming the unit
+by default, building can create a worker every 10 seconds, costing 50 food. initial health is 25
+building has 100 health, addons have 25 health
+addon attached to a building modify the units built from that building going forward, not including unfinished units. 
+you get a limited number of add ons of each type say 10, not replenished over 3 rounds? but have a lot of differnt addons.
+add on may do things like add mellee attack, reduce cost/time, add attack range, add flight, add move speed, add armour, 
+root into ground (x2 armor, x2 range?), visiblity range, cliff jump, swim, 
+building has six slots for add ons, adjacent addons of the same type can be combined to form ablitites, 2 for passive, 3 for active, with more addons reducing cooldown time
+2 adjacent "extra health" gives passive healing, 3 gives castable heal
+2 adjacent "melle attack" gives splash?
+2 adjacent "armor" gives shields that recover over time
+2 adjacent "range" gives splash, 3  gives gerenade
+2 adjacent "projectile", 3 gives snipe
+2 adjacent "flight" speed, 3 for ablity to land and take off?
+cliff jump -> teleport
+abilty to transport others?
+root to ground -> burrow
+visiblity range -> see burrowed/ cloaked
+move speed -> blink
+consume food ablity? 
+stun -> neural
+
+is there a way to get to neural parrisite? viper grappling shot?
+
+all units have default "gather food" slow mellee attach, 
+
+flying uints can use mellee attacks on other flyers
+
+aim for 20 addons? reserve on key for making builing, and some/two keys for ablitites? 
+max of two ablities if it takes 3 addons joinded to make an ablity?
+
+to build a unit, the food cost and time to build increase with nb of addons.
+
+can gather food from dead units? can also gather food from alive units, amount of food is production cost minus health
+pathfinding blocked? by dead big units?
+increase trave cost over tiles related to population in the tile, either gound, underground or in sky
+
+all units can gather food?
+all units can be converted to buildings
+building get dimished version of skills of input units. does this allow flying buildings. yes. not very fast and only flying units could drop off food.
+addon get dimished version of skill, but is still attached to building
+
+can buildings use ablitites? if all 4 input units had some ablity. do ablities mix into new ablitites, so a builds still gets the 'w','e' ablitites....
+
+
+building can eat your own units for food? slow? a flying building could eat a neural controlled flying building, but may not finish before neural, so eating is a form of damage
+
+
