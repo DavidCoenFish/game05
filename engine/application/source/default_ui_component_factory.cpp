@@ -330,10 +330,11 @@ namespace
             VectorFloat4(0.2f, 0.2f, 1.0f, 1.0f), // THover
             VectorFloat4(0.0f, 0.8f, 0.7f, 1.0f), // TTouch
             VectorFloat4(0.0f, 0.4f, 0.9f, 1.0f), // TTouch THover
-            VectorFloat4(0.25f, 0.0f, 1.0f, 1.0f), // TSelected
-            VectorFloat4(0.45f, 0.2f, 1.0f, 1.0f), // TSelected THover
-            VectorFloat4(0.25f, 0.25f, 0.75f, 1.0f), // TSelected TTouch
-            VectorFloat4(0.45f, 0.45f, 0.75f, 1.0f)  // TSelected TTouch THover
+            VectorFloat4(1.0f, 0.0f, 0.0f, 1.0f), // TSelected
+            VectorFloat4(1.0f, 0.2f, 0.2f, 1.0f), // TSelected THover
+            VectorFloat4(0.7f, 0.8f, 0.0f, 1.0f), // TSelected TTouch
+            VectorFloat4(0.9f, 0.4f, 0.0f, 1.0f), // TSelected TTouch THover
+
             });
         static const std::shared_ptr<const UIComponentEffect::TStateFlagTintArray> s_data = std::make_shared<const UIComponentEffect::TStateFlagTintArray>(s_data_array);
         return s_data;
