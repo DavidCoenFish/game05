@@ -412,19 +412,34 @@ void UIHierarchyNode::DealInput(
             local_flag
             );
 
+        const bool left_down = in_input_state.GetMouseLeftDown();
+        const bool left_change = in_input_state.GetMouseLeftDownChange();
+
         if ((true == inside) &&
-            (false == in_input_state.GetMouseLeftDown()) &&
-            (true == in_input_state.GetMouseLeftDownChange()))
+            ((true == left_down) || ((false == left_down) && (true == left_change))))
         {
             IUIInput* const input = dynamic_cast<IUIInput*>(child_data._component.get());
             if (nullptr != input)
             {
-                input->OnInputMouseClick(
-                    child_data._screen_space->GetPosRef(),
-                    in_input_state.GetMousePosRef()
-                    );
-                // consume mouse input
-                in_input_state.SetMouseLeftDownChange(false);
+                if ((false == left_down) && (true == left_change))
+                {
+                    input->OnInputClick(
+                        child_data._screen_space->GetPosRef(),
+                        in_input_state.GetMousePosRef()
+                        );
+                    // consume mouse input
+                    in_input_state.SetMouseLeftDownChange(false);
+                }
+                else if (true == left_down)
+                {
+                    input->OnInputTouch(
+                        child_data._screen_space->GetPosRef(),
+                        in_input_state.GetMousePosRef()
+                        );
+                    // consume mouse input
+                    in_input_state.SetMouseLeftDownChange(false);
+
+                }
             }
         }
     }

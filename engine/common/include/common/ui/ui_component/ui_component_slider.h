@@ -7,7 +7,7 @@
 enum class UIOrientation;
 
 // child is the slider knot?
-class UIComponentSlider : public IUIComponent//, public IUIInput
+class UIComponentSlider : public IUIComponent, public IUIInput
 {
 public:
     UIComponentSlider(
@@ -66,10 +66,14 @@ private:
         UILayout* const in_layout_override = nullptr
         ) override;
 
-    //virtual void OnInputMouseClick(
-    //    const VectorFloat4& in_screen_pos,
-    //    const VectorFloat2& in_mouse_pos
-    //    ) override;
+    virtual void OnInputTouch(
+        const VectorFloat4& in_screen_pos,
+        const VectorFloat2& in_mouse_pos
+        );
+    virtual void OnInputClick(
+        const VectorFloat4& in_screen_pos,
+        const VectorFloat2& in_mouse_pos
+        ) override;
 
     virtual const bool Draw(
         const UIManagerDrawParam& in_draw_param,

@@ -159,7 +159,7 @@ void UIComponentButton::GetDesiredSize(
         );
 }
 
-void UIComponentButton::OnInputMouseClick(
+void UIComponentButton::OnInputClick(
     const VectorFloat4&, // in_screen_pos,
     const VectorFloat2& in_mouse_pos
     )

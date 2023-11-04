@@ -62,7 +62,7 @@ private:
         UILayout* const in_layout_override = nullptr
         ) override;
 
-    virtual void OnInputMouseClick(
+    virtual void OnInputClick(
         const VectorFloat4& in_screen_pos,
         const VectorFloat2& in_mouse_pos
         ) override;

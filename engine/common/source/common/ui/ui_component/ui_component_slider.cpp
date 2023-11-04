@@ -34,6 +34,35 @@ namespace
         }
         return;
     }
+
+    const float CalculateTouchValue(
+        const VectorFloat4& in_screen_pos, 
+        const VectorFloat2& in_mouse_pos, 
+        const UIOrientation in_orientation, 
+        const VectorFloat2& in_range_low_high
+        )
+    {
+        float value = 0.0f;
+        switch(in_orientation)
+        {
+        default:
+            break;
+        case UIOrientation::THorizontal:
+            {
+                const float width = in_screen_pos[2] - in_screen_pos[0];
+                value = width != 0.0f ? (in_mouse_pos.GetX() - in_screen_pos[0]) / width : 0.0f;
+            }
+            break;
+        case UIOrientation::TVertical:
+            {
+                const float height = in_screen_pos[3] - in_screen_pos[1];
+                value = height != 0.0f ? (in_mouse_pos.GetY() - in_screen_pos[1]) / height : 0.0f;
+            }
+            break;
+        }
+        value = (in_range_low_high[0] + (value * (in_range_low_high[1] - in_range_low_high[0])));
+        return value;
+    }
 }
 
 UIComponentSlider::UIComponentSlider(
@@ -297,13 +326,39 @@ void UIComponentSlider::GetDesiredSize(
         );
 }
 
-//void UIComponentSlider::OnInputMouseClick(
-//    const VectorFloat4&, // in_screen_pos,
-//    const VectorFloat2& // in_mouse_pos
-//    )
-//{
-//    return;
-//}
+void UIComponentSlider::OnInputTouch(
+    const VectorFloat4& in_screen_pos,
+    const VectorFloat2& in_mouse_pos
+    )
+{
+    if(nullptr == _value_change)
+    {
+        return;
+    }
+
+    const float value = CalculateTouchValue(in_screen_pos, in_mouse_pos, _orientation, _range_low_high);
+
+    _value_change(value);
+
+    return;
+}
+
+void UIComponentSlider::OnInputClick(
+    const VectorFloat4& in_screen_pos,
+    const VectorFloat2& in_mouse_pos
+    )
+{
+    if(nullptr == _value_change)
+    {
+        return;
+    }
+
+    const float value = CalculateTouchValue(in_screen_pos, in_mouse_pos, _orientation, _range_low_high);
+
+    _value_change(value);
+
+    return;
+}
 
 const bool UIComponentSlider::Draw(
     const UIManagerDrawParam& in_draw_param,

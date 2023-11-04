@@ -24,11 +24,11 @@ public:
     //    const VectorFloat2& in_screen_pos_or_delta //
     //    ) = 0;
 
-    virtual void OnInputMouseLeftDown(
+    virtual void OnInputTouch(
         const VectorFloat4& in_screen_pos,
         const VectorFloat2& in_mouse_pos
         );
-    virtual void OnInputMouseClick(
+    virtual void OnInputClick(
         const VectorFloat4& in_screen_pos,
         const VectorFloat2& in_mouse_pos
         );

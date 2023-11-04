@@ -6,7 +6,7 @@ IUIInput::~IUIInput()
     // Nop
 }
 
-void IUIInput::OnInputMouseLeftDown(
+void IUIInput::OnInputTouch(
     const VectorFloat4&,
     const VectorFloat2&
     )
@@ -14,7 +14,7 @@ void IUIInput::OnInputMouseLeftDown(
     // Nop
 }
 
-void IUIInput::OnInputMouseClick(
+void IUIInput::OnInputClick(
     const VectorFloat4&,
     const VectorFloat2&
     )
