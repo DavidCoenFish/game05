@@ -99,8 +99,6 @@ namespace
             );
         return s_layout;
     }
-
-
     const UILayout& GetUILayoutMarginBottomRightShrink()
     {
         // Todo: is y up the screen for ui, y==0 is bottom, y==1 is top screen
@@ -146,7 +144,6 @@ namespace
             );
         return s_layout;
     }
-
     const UILayout& GetUILayoutQuadrant0() //lover left
     {
         static UILayout s_layout(
@@ -171,7 +168,6 @@ namespace
             );
         return s_layout;
     }
-
     const UILayout& GetUILayoutBannerLeft()
     {
         static UILayout s_layout(
@@ -250,7 +246,6 @@ namespace
             );
         return s_layout;
     }
-
     const UILayout& GetUILayoutCheckboxLeft()
     {
         static UILayout s_layout(
@@ -263,7 +258,6 @@ namespace
             );
         return s_layout;
     }
-
     const UILayout& GetUILayoutWidget()
     {
         static UILayout s_layout(
@@ -289,6 +283,32 @@ namespace
             );
         return s_layout;
     }
+    const UILayout& GetUILayoutGridSliderHorizontal()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 1.0f, -(s_default_font_size * 0.375f)),
+            UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size * 1.25f), // 1.1f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f)
+            );
+        return s_layout;
+    }
+
+    const UILayout& GetUILayoutHorizontalRule()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 1.0f),
+            UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size * 0.125f), // 1.1f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f)
+            );
+        return s_layout;
+    }
+    
 
     typedef const UICoord& (*TGetUICoordRef)();
     const UICoord& GetUICoordNone()
@@ -314,6 +334,11 @@ namespace
     const UICoord& GetUICoordDefaultGapQuater()
     {
         static UICoord s_coord(UICoord::ParentSource::None, 0.0f, s_default_margin * 0.25f);
+        return s_coord;
+    }
+    const UICoord& GetUICoordDefaultGapEigth()
+    {
+        static UICoord s_coord(UICoord::ParentSource::None, 0.0f, s_default_margin * 0.125f);
         return s_coord;
     }
 
@@ -358,7 +383,7 @@ namespace
     const std::vector<UIComponentGridSizeData>& GetUIGridSizeDataBigRowVertical()
     {
         static std::vector<UIComponentGridSizeData> s_data({
-            UIComponentGridSizeData(UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size * 1.5f))
+            UIComponentGridSizeData(UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size * 2.0f))
         });
         return s_data;
     }
@@ -958,6 +983,10 @@ void DefaultUIComponentFactory::Populate(
         GetUILayout, 
         GetUIBaseColourGrey
         >);
+    in_ui_manager.AddContentFactory("horizontal_rule", FactoryCanvas<
+        GetUILayoutHorizontalRule, 
+        GetUIBaseColourGrey
+        >);
     in_ui_manager.AddContentFactory("canvas_blue", FactoryCanvas<
         GetUILayout, 
         GetUIBaseColourBlue
@@ -977,7 +1006,10 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("stack", FactoryStack<>);
 
     in_ui_manager.AddContentFactory("stack_top_down", FactoryStack<
-        GetUILayoutMarginTop
+        GetUILayoutMarginTop,
+        GetUIBaseColourDefault,
+        UIOrientation::TVertical,
+        GetUICoordNone // No gap
         >);
 
     in_ui_manager.AddContentFactory("stack_vertical_bottom_right", FactoryStack<
@@ -1015,7 +1047,7 @@ void DefaultUIComponentFactory::Populate(
         >);
 
     in_ui_manager.AddContentFactory("grid_slider_horizontal", FactoryGrid<
-        GetUILayoutSliderHorizontal,
+        GetUILayoutGridSliderHorizontal,
         GetUIBaseColourDefault,
         GetUIGridSliderHorizontalWidth,
         GetUIGridSliderHorizontalHeight
@@ -1035,6 +1067,14 @@ void DefaultUIComponentFactory::Populate(
         GetUICoordDefaultGapQuater,
         GetUICoordDefaultGapHalf,
         GetUICoordDefaultGap
+        >);
+    in_ui_manager.AddContentFactory("effect_drop_shadow_small", FactoryEffect<
+        GetUILayout,
+        UIEffectEnum::TDropShadow,
+        GetUIBaseColourClearDark,
+        GetUICoordDefaultGapEigth,
+        GetUICoordDefaultGapEigth,
+        GetUICoordDefaultGapQuater
         >);
     in_ui_manager.AddContentFactory("effect_inner_shadow", FactoryEffect<
         GetUILayout,

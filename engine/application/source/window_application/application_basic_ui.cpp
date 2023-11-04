@@ -328,23 +328,67 @@ public:
             "slider_horizontal",
             std::vector<std::shared_ptr<UIData>>({
                 std::make_shared<UIData>(
-                    "effect_inner_shadow",
-                    std::vector<std::shared_ptr<UIData>>({
-                        std::make_shared<UIData>(
-                            "canvas_grey"
-                            )
-                        })
+                    "horizontal_rule"
                     )
-               })
+                })
             );
         _data_map["ui_scale"] = data_map_ui_scale;
 
         auto data_map_ui_scale_slider = std::make_shared<UIData>(
-            "grid_slider_horizontal",
+            "effect_drop_shadow_small",
             std::vector<std::shared_ptr<UIData>>({
-                BuildSliderButton(data_map_ui_scale, -1.0f, "\xe2""\x8f""\xb4"),
-                data_map_ui_scale,
-                BuildSliderButton(data_map_ui_scale, 1.0f, "\xe2""\x8f""\xb5")
+                std::make_shared<UIData>(
+                    "UIData",
+                    std::vector<std::shared_ptr<UIData>>({
+                        std::make_shared<UIData>(
+                            "grid_slider_horizontal",
+                            std::vector<std::shared_ptr<UIData>>({
+                                BuildSliderButton(data_map_ui_scale, -1.0f, "\xe2""\x8f""\xb4"),
+                                data_map_ui_scale,
+                                BuildSliderButton(data_map_ui_scale, 1.0f, "\xe2""\x8f""\xb5")
+                                })
+                            )
+                        })
+                    )
+                })
+            );
+
+        auto debug_slider_contents = std::make_shared<UIDataFloat>(
+            0.5f,
+            0.05f,
+            VectorFloat2(0.0f, 1.0f),
+            [this](const float in_new_value){
+                auto data = std::dynamic_pointer_cast<UIDataFloat>(_data_map["debug_slider"]);
+                if (nullptr != data)
+                {
+                    data->SetValue(in_new_value);
+                }
+            },
+            BuildSliderKnot(),
+            "slider_horizontal",
+            std::vector<std::shared_ptr<UIData>>({
+                std::make_shared<UIData>(
+                    "horizontal_rule"
+                    )
+                })
+            );
+        _data_map["debug_slider"] = debug_slider_contents;
+        auto debug_slider = std::make_shared<UIData>(
+            "effect_drop_shadow_small",
+            std::vector<std::shared_ptr<UIData>>({
+                std::make_shared<UIData>(
+                    "UIData",
+                    std::vector<std::shared_ptr<UIData>>({
+                        std::make_shared<UIData>(
+                            "grid_slider_horizontal",
+                            std::vector<std::shared_ptr<UIData>>({
+                                BuildSliderButton(debug_slider_contents, -1.0f, "\xe2""\x8f""\xb4"),
+                                debug_slider_contents,
+                                BuildSliderButton(debug_slider_contents, 1.0f, "\xe2""\x8f""\xb5")
+                                })
+                            )
+                        })
+                    )
                 })
             );
 
@@ -536,6 +580,19 @@ public:
                                                                 ),
                                                             nullptr,
                                                             data_map_ui_scale_slider
+                                                        })
+                                                    ),
+
+                                                    std::make_shared<UIData>(
+                                                        "grid_small_big_pair",
+                                                        std::vector<std::shared_ptr<UIData>>({
+                                                            std::make_shared<UIDataString>(
+                                                                "debug slider",
+                                                                LocaleISO_639_1::Default,
+                                                                "string_right_em"
+                                                                ),
+                                                            nullptr,
+                                                            debug_slider
                                                         })
                                                     ),
 

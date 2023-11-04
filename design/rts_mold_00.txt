@@ -98,11 +98,20 @@ big units build a bigger building?
 
 is random to get skill of input units on building, but 100% if all four input units have the same skill
 
+can't garrison while making units? and cant make units while garrion? can ungarrison from any building?
+or can't garrison if all buildings are building. can queue up into negative, but need the food to be submitted before you can build. can remove units from build queue
 
 trapped in starter tutorial till killing tutorial host... if you ignore the tutorial instructions the host start to take things seriously and tries to win
 tutorial host otherwise is just a flying building with neural "yeap, i am a flying building in an rts, bet you have never seen that before"
 
+dead bodies can accumulate to block map, can be gather for food or damaged to remove
 
-
-
-
+implementation
+    photoshop style cached tiles of traversal distance maps, invalidate tile on change, and paths using tile
+    density map of population/ slowdown of each cell
+    visiblity map, what each player can currently see, has seen of the map
+    render list units/ buildings and what they are doing.
+    frame state database (unit build, unit move, build building, gather resources, special abblities, camera)
+        state database can rewind (single player's undo/ and multiplay network message stitch in)
+        save to current time, save full database
+        - how to order input from multiple players on same frame? mod order for player index?
