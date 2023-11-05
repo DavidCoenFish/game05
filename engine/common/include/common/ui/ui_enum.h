@@ -50,5 +50,24 @@ enum class UIStateFlag
     /// Disabled is expressed by UICompnentDisable, but need a way to comunicate with input that node is disabled?
     TDisable = 1 << 3 
 
+};
 
+/// will these need to be flags, allow shift control right click? start with simple
+enum class UITouchFlavour
+{
+    TNone,
+    TMouseLeft,
+    TMouseRight,
+};
+
+/// should this just be changed to directly using windows virtual key id? or vaugely allow remapping
+/// This was intended for ui navigation control, but what if we want general key presses to be comunicated with some component
+enum class UINavigationType
+{
+    TNone,
+    TLeft,
+    TRight,
+    TUp,
+    TDown,
+    TScroll //mouse scroll has an ammount? or just add an amount to everything, allow dpad?
 };

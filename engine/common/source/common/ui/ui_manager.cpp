@@ -83,44 +83,60 @@ UIManagerUpdateParam::UIManagerUpdateParam(
     // Nop
 }
 
+UIManagerDealInputTouch::UIManagerDealInputTouch(
+    const VectorInt2& in_root_relative_pos,
+    const bool in_active,
+    //const bool in_start, 
+    //const bool in_end,
+    const int in_id,
+    const UITouchFlavour in_flavour
+    )
+    : _root_relative_pos(in_root_relative_pos)
+    , _active(in_active)
+    //, _start(in_start)
+    //, _end(in_end)
+    , _id(in_id)
+    , _flavour(in_flavour)
+{
+    // Nop
+}
+
+UIManagerDealInputNavigation::UIManagerDealInputNavigation(
+    const UINavigationType in_type,
+    const float in_amount,
+    const bool in_end
+    )
+    : _type(in_type)
+    , _amount(in_amount)
+    , _end(in_end)
+{
+    // Nop
+}
+
+UIManagerDealInputParam::UIManagerDealInputParam(
+    const std::vector<UIManagerDealInputTouch>& in_touch_array,
+    const std::vector<UIManagerDealInputNavigation>& in_navigation_array,
+    DrawSystem* const in_draw_system,
+    const float in_time_delta
+    )
+    : _touch_array(in_touch_array)
+    , _navigation_array(in_navigation_array)
+    , _draw_system(in_draw_system)
+    , _time_delta(in_time_delta)
+{
+    // Nop
+}
+
 UIManagerDrawParam::UIManagerDrawParam(
     DrawSystem* const in_draw_system,
     DrawSystemFrame* const in_frame,
     TextManager* const in_text_manager,
-    UIManager* const in_ui_manager//,
-    //const float in_ui_scale
+    UIManager* const in_ui_manager
     )
     : _draw_system(in_draw_system)
     , _frame(in_frame)
     , _text_manager(in_text_manager)
     , _ui_manager(in_ui_manager)
-   // , _ui_scale(in_ui_scale)
-{
-    // Nop
-}
-
-
-UIManagerDealInputParam UIManagerDealInputParam::Factory()
-{
-    return UIManagerDealInputParam();
-}
-
-UIManagerDealInputParam::UIManagerDealInputParam(
-    DrawSystem* const in_draw_system,
-    const bool in_mouse_valid,
-    const bool in_mouse_left_down,
-    const bool in_mouse_right_down,
-    const int in_mouse_x,
-    const int in_mouse_y,
-    const int in_mouse_scroll
-    )
-    : _draw_system(in_draw_system)
-    , _mouse_valid(in_mouse_valid)
-    , _mouse_left_down(in_mouse_left_down)
-    , _mouse_right_down(in_mouse_right_down)
-    , _mouse_x(in_mouse_x)
-    , _mouse_y(in_mouse_y)
-    , _mouse_scroll(in_mouse_scroll)
 {
     // Nop
 }
@@ -274,7 +290,7 @@ public:
 
         in_root.DealInput(
             input_state,
-            static_cast<int>(UIStateFlag::THover)
+            true 
             );
 
         //LOG_MESSAGE_DEBUG("%d %d %d %d", in_param._mouse_x, in_param._mouse_y, in_param._mouse_left_down, in_param._mouse_right_down, in_param._mouse_scroll);
@@ -326,7 +342,7 @@ UIManager::~UIManager()
     // Nop
 }
 
-// Get the InputElementDescArray to match the ui manager shader
+// Get the InputElementDescArray to match the ui manager shader, not UIGeometry.h is not public
 const std::vector<D3D12_INPUT_ELEMENT_DESC>& UIManager::GetInputElementDescArray()
 {
     return UIGeometry::GetInputElementDescArray();

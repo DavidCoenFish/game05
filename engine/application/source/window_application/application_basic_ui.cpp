@@ -967,13 +967,17 @@ void ApplicationBasicUI::Update()
              _draw_resource->_ui_manager->DealInput(
                 *_draw_resource->_ui_hierarchy_node,
                 UIManagerDealInputParam(
+                    std::vector<UIManagerDealInputTouch>({
+                        UIManagerDealInputTouch(
+                            VectorInt2(mouse_x, mouse_y),
+                            mouse_left_button,
+                            0,
+                            UITouchFlavour::TMouseLeft
+                            )
+                        }),
+                    std::vector<UIManagerDealInputNavigation>(),
                     _draw_system.get(),
-                    mouse_valid,
-                    mouse_left_button,
-                    mouse_right_button,
-                    mouse_x,
-                    mouse_y,
-                    _scroll_z
+                    delta_seconds
                     )
                 );
             _scroll_key_state = 0;

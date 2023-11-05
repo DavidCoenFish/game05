@@ -3,6 +3,7 @@
 
 #include "common/math/vector_int2.h"
 #include "common/math/vector_float4.h"
+#include "common/ui/ui_enum.h"
 
 class DrawSystem;
 class DrawSystemFrame;
@@ -19,6 +20,8 @@ class UIManagerImplementation;
 //enum class LocaleISO_639_1;
 enum class UIEffectEnum;
 enum class UIShaderEnum;
+enum class UITouchFlavour;
+enum class UINavigationType;
 
 struct UIDataTextRunStyle;
 
@@ -76,37 +79,71 @@ struct UIManagerUpdateParam
 };
 
 /// \related UIManager
+/// Treat mouse right as a seperate touch?
+/// Touches can have flavours, shift,control,alt key down? left or right mouse?
+struct UIManagerDealInputTouch
+{
+    explicit UIManagerDealInputTouch(
+        const VectorInt2& in_root_relative_pos = VectorInt2(),
+        const bool in_active = false,
+        //const bool in_start = false, 
+        //const bool in_end = false,
+        //const float in_duration = 0.0f,
+        const int in_id = 0,
+        const UITouchFlavour in_flavour = UITouchFlavour::TNone
+        );
+
+    /// Pixel coords relative to application window
+    VectorInt2 _root_relative_pos;
+    /// Mouse left button down, finger touching screen
+    bool _active; 
+    /// First frame with touch active
+    //bool _start; 
+    /// Active changed from true to false this frame
+    //bool _end;
+    /// How long this touch has been active, how long mouse button left down
+    /// Only valid if _active or _end is true
+    //float _duration; //duration gets calculated internally?
+    /// Each continous touch gets an id
+    int _id;
+    /// Hint on touch type
+    UITouchFlavour _flavour;
+};
+
+/// \related UIManager
+struct UIManagerDealInputNavigation
+{
+    explicit UIManagerDealInputNavigation(
+        const UINavigationType in_type = UINavigationType::TNone,
+        const float in_amount = 1.0f,
+        const bool in_end = false
+        );
+
+    /// Key type
+    UINavigationType _type;
+    /// Duration of key down
+    //float _duration; //duration gets calculated internally?
+    /// joystick or scroll amount, else 1.0 for keypress?
+    float _amount; 
+    /// True if the key down ended this frame
+    bool _end;
+};
+
+/// \related UIManager
 /// Does UIRootInputState hold this data?
 struct UIManagerDealInputParam
 {
-    static UIManagerDealInputParam Factory();
-
     explicit UIManagerDealInputParam(
+        const std::vector<UIManagerDealInputTouch>& in_touch_array = std::vector<UIManagerDealInputTouch>(),
+        const std::vector<UIManagerDealInputNavigation>& in_navigation_array = std::vector<UIManagerDealInputNavigation>(),
         DrawSystem* const in_draw_system = nullptr,
-        const bool in_mouse_valid = false,
-        const bool in_mouse_left_down = false,
-        const bool in_mouse_right_down = false,
-        const int in_mouse_x = 0,
-        const int in_mouse_y = 0,
-        const int in_mouse_scroll = 0
+        const float in_time_delta = 0.0f
         );
 
-    //int _navigation_left_repeat;
-    //int _navigation_right_repeat;
-    //int _navigation_up_repeat;
-    //int _navigation_down_repeat;
-    //bool _action_currently_down;
-    //bool _action_transition_up; //action key released this update
-
+    std::vector<UIManagerDealInputTouch> _touch_array;
+    std::vector<UIManagerDealInputNavigation> _navigation_array;
     DrawSystem* _draw_system;
-    bool _mouse_valid;
-    bool _mouse_left_down;
-    bool _mouse_right_down;
-    int _mouse_x;
-    //int _mouse_x_delta;
-    int _mouse_y;
-    //int _mouse_y_delta;
-    int _mouse_scroll;
+    float _time_delta;
 
 };
 

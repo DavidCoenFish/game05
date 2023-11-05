@@ -365,85 +365,132 @@ void UIHierarchyNode::UpdateSize(
     return;
 }
 
-void UIHierarchyNode::DealInput(
+const bool UIHierarchyNode::DealInput(
     UIRootInputState& in_input_state,
-    const int in_state_flag
+    const bool in_parent_inside,
+    const bool in_action
     )
 {
+    bool dirty = false;
     for(auto& child_data_ptr : _child_data_array)
     {
         UIHierarchyNodeChildData& child_data = *child_data_ptr;
 
         int local_flag = 0; //in_state_flag;
-        if (nullptr != child_data._component)
+        void* source_token = nullptr;
+        IUIComponent* const component = child_data._component.get();
+        if (nullptr != component)
         {
-             local_flag = static_cast<int>(child_data._component->GetStateFlag());//
-             //& ~static_cast<int>(UIStateFlag::TMaskInput);
+             local_flag = static_cast<int>(component->GetStateFlag()) & ~static_cast<int>(UIStateFlag::TMaskInput);
+             source_token = component->GetSourceToken();
         }
 
-        const bool inside = (0 != (in_state_flag & static_cast<int>(UIStateFlag::THover))) && 
-            child_data._screen_space->GetClipRef().Inside(in_input_state.GetMousePosRef()) &&
-            (0 == (local_flag & static_cast<int>(UIStateFlag::TDisable)));
+        // nope out of disabled components, don't even recurse
+        if (0 != (local_flag & static_cast<int>(UIStateFlag::TDisable)))
+        {
+            continue;
+        }
 
-        //const bool SetStateFlag(const UIStateFlag in_state_flag);
-        //const UIStateFlag GetStateFlag() const;
-        local_flag = local_flag & ~static_cast<int>(UIStateFlag::TMaskInput);
+        IUIInput* const input = dynamic_cast<IUIInput*>(component);
+
+        bool inside = false;
+        bool action = nullptr == input ? in_action : false;
+
+        // update state flag for all touches
+        for (auto& touch : in_input_state.GetTouchArray())
+        {
+            const bool local_inside = child_data._screen_space->GetClipRef().Inside(touch._touch_pos_current);
+
+            if ((true == in_parent_inside) && 
+                (true == local_inside))
+            {
+                inside = true;
+            }
+
+            // OnDrag, drag slider, can be outside, but protected by matching source token
+            if ((true == touch._active) &&
+                (nullptr != touch._active_source_token) &&
+                (nullptr != input) &&
+                (touch._active_source_token == source_token) &&
+                (false == touch._end))
+            {
+                input->OnInputTouch(child_data._screen_space->GetPosRef(), touch._touch_pos_current);
+            }
+
+            if ((true == local_inside) &&
+                (nullptr != touch._active_source_token) &&
+                (touch._active_source_token == source_token))
+            {
+                action = true;
+            }
+
+            // OnClick, needs to be over the same element as touch started on
+            if ((true == touch._end) &&
+                (true == in_parent_inside) &&
+                (true == local_inside) &&
+                (nullptr != touch._active_source_token) &&
+                (nullptr != input) &&
+                (touch._active_source_token == source_token))
+            {
+                input->OnInputClick(
+                    child_data._screen_space->GetPosRef(),
+                    touch._touch_pos_current
+                    );
+                //touch._end = false; // consume input, is done by matching source_token
+            }
+
+        }
+
+        // recurse
+        if (true == child_data_ptr->_node->DealInput(
+            in_input_state,
+            inside,
+            action
+            ))
+        {
+            _texture->MarkDirty();
+        }
+
+        // deal click, set active if not consumed during eralier recursion 
+        // choose first hit deepest element for first active
+        for (auto& touch : in_input_state.GetTouchArray())
+        {
+            const bool local_inside = child_data._screen_space->GetClipRef().Inside(touch._touch_pos_current);
+
+            // this is the first active source token for this touch
+            if ((nullptr != input) &&
+                (true == touch._active) &&
+                (nullptr == touch._active_source_token) &&
+                (true == in_parent_inside) && 
+                (true == local_inside))
+            {
+                touch._active_source_token = source_token;
+                //touch._touch_pos_active_start = touch._touch_pos_current;
+            }
+
+        }
 
         if (true == inside)
         {
             local_flag |= static_cast<int>(UIStateFlag::THover);
-
-            if (true == in_input_state.GetMouseLeftDown())
-            {
-                local_flag |= static_cast<int>(UIStateFlag::TTouch);
-            }
         }
 
-        if (nullptr != child_data._component)
+        if (true == action)
         {
-             if (true == child_data._component->SetStateFlag(static_cast<UIStateFlag>(local_flag)))
+            local_flag |= static_cast<int>(UIStateFlag::TTouch);
+        }
+
+        if (nullptr != component)
+        {
+             if (true == component->SetStateFlag(static_cast<UIStateFlag>(local_flag)))
              {
                 child_data._node->MarkTextureDirty();
+                dirty = true;
              }
         }
-
-        child_data_ptr->_node->DealInput(
-            in_input_state,
-            local_flag
-            );
-
-        const bool left_down = in_input_state.GetMouseLeftDown();
-        const bool left_change = in_input_state.GetMouseLeftDownChange();
-
-        if ((true == inside) &&
-            ((true == left_down) || ((false == left_down) && (true == left_change))))
-        {
-            IUIInput* const input = dynamic_cast<IUIInput*>(child_data._component.get());
-            if (nullptr != input)
-            {
-                if ((false == left_down) && (true == left_change))
-                {
-                    input->OnInputClick(
-                        child_data._screen_space->GetPosRef(),
-                        in_input_state.GetMousePosRef()
-                        );
-                    // consume mouse input
-                    in_input_state.SetMouseLeftDownChange(false);
-                }
-                else if (true == left_down)
-                {
-                    input->OnInputTouch(
-                        child_data._screen_space->GetPosRef(),
-                        in_input_state.GetMousePosRef()
-                        );
-                    // consume mouse input
-                    in_input_state.SetMouseLeftDownChange(false);
-
-                }
-            }
-        }
     }
-    return;
+
+    return dirty;
 }
 
 // Return True if we needed to draw, ie, the texture may have changed

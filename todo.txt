@@ -1,3 +1,5 @@
+- clean up input code, mouse -> one of n touches
+    click hold buttons, track which UIData is under the start of the touch
 - redo inner shadow
 - toggle visuals, hollow rounded corner effect
 - scroll
@@ -5,8 +7,6 @@
 - list box
 - combo box
 - change locale
-- clean up input code, mouse -> one of n touches
-    click hold buttons, track which UIData is under the start of the touch
 - transition out effect
 - fade in effect
 - fade exit

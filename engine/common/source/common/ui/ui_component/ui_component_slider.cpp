@@ -63,6 +63,42 @@ namespace
         value = (in_range_low_high[0] + (value * (in_range_low_high[1] - in_range_low_high[0])));
         return value;
     }
+
+    const bool RecurseSetStateFlag(UIHierarchyNodeChildData* const in_node_child_data, const UIStateFlag in_state_flag)
+    {
+        bool dirty = false;
+        if (nullptr == in_node_child_data)
+        {
+            return dirty;
+        }
+
+        IUIComponent* const component = in_node_child_data->_component.get();
+        if (nullptr != component)
+        {
+            int state_flag = static_cast<int>(component->GetStateFlag());
+            state_flag &= ~static_cast<int>(UIStateFlag::TMaskInput);
+            state_flag |= (static_cast<int>(in_state_flag) & static_cast<int>(UIStateFlag::TMaskInput));
+            if (true == component->SetStateFlag(static_cast<UIStateFlag>(state_flag)))
+            {
+                dirty = true;
+            }
+        }
+
+        UIHierarchyNode* const node = in_node_child_data->_node.get();
+        if (nullptr != node)
+        {
+            for (auto iter : node->GetChildData())
+            {
+                if (true == RecurseSetStateFlag(iter.get(), in_state_flag))
+                {
+                    dirty = true;
+                }
+            }
+        }
+
+        return dirty;
+    }
+
 }
 
 UIComponentSlider::UIComponentSlider(
@@ -146,7 +182,18 @@ const bool UIComponentSlider::Set(
 
 const bool UIComponentSlider::SetStateFlag(const UIStateFlag in_state_flag)
 {
-    return _component_default.SetStateFlag(in_state_flag);
+    bool dirty = false;
+    if (true == _component_default.SetStateFlag(in_state_flag))
+    {
+        dirty = true;
+    }
+
+    if (true == RecurseSetStateFlag(_child_data_knot.get(), in_state_flag))
+    {
+        dirty = true;
+    }
+
+    return dirty;
 }
 
 const UIStateFlag UIComponentSlider::GetStateFlag() const

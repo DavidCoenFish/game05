@@ -161,9 +161,10 @@ public:
         const UIScreenSpace& in_parent_screen_space
         );
 
-    void DealInput(
+    const bool DealInput(
         UIRootInputState& in_input_state,
-        const int in_state_flag = 0
+        const bool in_parent_inside,
+        const bool in_action = false
         );
 
 
