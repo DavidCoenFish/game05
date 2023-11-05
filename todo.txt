@@ -1,7 +1,4 @@
-- clean up input code, mouse -> one of n touches
-    click hold buttons, track which UIData is under the start of the touch
-- redo inner shadow
-- toggle visuals, hollow rounded corner effect
+- toggle visuals, hollow rounded corner effect (fix inner shadow?)
 - scroll
 - manual scroll
 - list box

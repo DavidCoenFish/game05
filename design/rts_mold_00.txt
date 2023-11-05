@@ -96,6 +96,28 @@ big units build a bigger building?
   ****
   ****
 
+use hex grid, not squares?
+base (max 6 add ons)
+    * *
+   * * *
+    * *
+addon
+    * *
+     *
+big base
+    * * *
+   * * * *
+  * * * * *
+   * * * *
+    * * *
+    max 9 addons?
+      * 
+   * * * *
+    * * *  
+   * * * *
+      *  
+
+
 is random to get skill of input units on building, but 100% if all four input units have the same skill
 
 can't garrison while making units? and cant make units while garrion? can ungarrison from any building?
