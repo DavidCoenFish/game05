@@ -419,9 +419,16 @@ const bool UIHierarchyNode::DealInput(
 
             if ((true == local_inside) &&
                 (nullptr != touch._active_source_token) &&
-                (touch._active_source_token == source_token))
+                (touch._active_source_token == source_token) &&
+                (nullptr != input))
             {
                 action = true;
+                input->OnInputRepeat(
+                    child_data._screen_space->GetPosRef(),
+                    touch._touch_pos_current,
+                    touch._active_duration,
+                    in_input_state.GetTimeDelta()
+                    );
             }
 
             // OnClick, needs to be over the same element as touch started on

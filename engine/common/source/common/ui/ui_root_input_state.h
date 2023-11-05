@@ -52,12 +52,14 @@ public:
     //const bool GetMouseLeftDownChange() const { return _mouse_left_down_change; }
 
     std::vector<UIRootInputStateTouch>& GetTouchArray() { return _touch_array; }
+    const float GetTimeDelta() const { return _time_delta; }
 
 private:
     std::vector<UIRootInputStateTouch> _touch_array;
 
     //// current focus, using unique pointer so no weak pointer, so just travers hierarchy to update flag?
     void* _focus_source_token;
+    float _time_delta;
 
     //void* _focus_node;
 

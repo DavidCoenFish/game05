@@ -5,16 +5,32 @@
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_geometry.h"
 
+namespace
+{
+    const int CalculateRepeatCount(const float in_time_seconds)
+    {
+        if (in_time_seconds < 0.5f)
+        {
+            return 0;
+        }
+        const float temp = in_time_seconds + 0.5f;
+        const int repeat_count = static_cast<int>(temp * temp);
+        return repeat_count;
+    }
+}
+
 UIComponentButton::UIComponentButton(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
-    const std::function<void(const VectorFloat2&)>& in_on_click
+    const std::function<void(const VectorFloat2&)>& in_on_click,
+    const bool in_allow_repeat
     )
     : _component_default(
         in_base_colour,
         in_layout
         )
     , _on_click(in_on_click)
+    , _allow_repeat(in_allow_repeat)
 {
     // Nop
 }
@@ -36,10 +52,12 @@ const bool UIComponentButton::SetBase(
 }
 
 const bool UIComponentButton::Set(
-    const std::function<void(const VectorFloat2&)>& in_on_click
+    const std::function<void(const VectorFloat2&)>& in_on_click,
+    const bool in_allow_repeat
     )
 {
     _on_click = in_on_click;
+    _allow_repeat = in_allow_repeat;
     return false;
 }
 
@@ -80,7 +98,8 @@ const bool UIComponentButton::UpdateHierarchy(
     if (nullptr != data)
     {
         if (true == Set(
-            data->GetOnClick()
+            data->GetOnClick(),
+            data->GetRepeat()
             ))
         {
             dirty = true;
@@ -91,7 +110,8 @@ const bool UIComponentButton::UpdateHierarchy(
     if (nullptr != data_toggle)
     {
         if (true == Set(
-            data_toggle->GetOnClick()
+            data_toggle->GetOnClick(),
+            false //data->GetRepeat()
             ))
         {
             dirty = true;
@@ -159,6 +179,17 @@ void UIComponentButton::GetDesiredSize(
         );
 }
 
+const bool UIComponentButton::Draw(
+    const UIManagerDrawParam& in_draw_param,
+    UIHierarchyNode& in_node
+    ) 
+{
+    return _component_default.Draw(
+        in_draw_param,
+        in_node
+        );
+}
+
 void UIComponentButton::OnInputClick(
     const VectorFloat4&, // in_screen_pos,
     const VectorFloat2& in_mouse_pos
@@ -171,14 +202,26 @@ void UIComponentButton::OnInputClick(
     return;
 }
 
-const bool UIComponentButton::Draw(
-    const UIManagerDrawParam& in_draw_param,
-    UIHierarchyNode& in_node
-    ) 
+void UIComponentButton::OnInputRepeat(
+    const VectorFloat4&,
+    const VectorFloat2& in_mouse_pos,
+    const float in_duration,
+    const float in_last_timestep
+    )
 {
-    return _component_default.Draw(
-        in_draw_param,
-        in_node
-        );
+    if ((false == _allow_repeat) ||
+        (nullptr == _on_click))
+    {
+        return;
+    }
+
+    const int count_before = CalculateRepeatCount(in_duration - in_last_timestep);
+    const int count_after = CalculateRepeatCount(in_duration);
+    if (count_before != count_after)
+    {
+        _on_click(in_mouse_pos);
+    }
+
 }
+
 

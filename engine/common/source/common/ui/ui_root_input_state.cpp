@@ -35,6 +35,8 @@ void UIRootInputState::Update(
     const VectorInt2& in_root_size
     )
 {
+    _time_delta = in_param._time_delta;
+
     std::map<int, UIRootInputStateTouch> touch_map;
     for (const auto iter : _touch_array)
     {
@@ -48,6 +50,7 @@ void UIRootInputState::Update(
             DscMath::ConvertZeroOneToNegativeOneOne(in_root_size[0] ? static_cast<float>(iter._root_relative_pos[0]) / static_cast<float>(in_root_size[0]) : 0.0f),
             DscMath::ConvertZeroOneToNegativeOneOne(in_root_size[1] ? 1.0f - (static_cast<float>(iter._root_relative_pos[1]) / static_cast<float>(in_root_size[1])) : 0.0f)
             );
+        //LOG_MESSAGE_DEBUG("%f %f", pos[0], pos[1]);
 
         auto found = touch_map.find(iter._id);
         if (found != touch_map.end())
@@ -60,6 +63,8 @@ void UIRootInputState::Update(
             if (true == back._end)
             {
                 back._active_source_token = nullptr;
+                back._active_duration = 0.0f;
+                back._end = false;
             }
 
             back._touch_pos_current = pos;
@@ -105,28 +110,6 @@ void UIRootInputState::Update(
         }
     }
 
-    //if (_mouse_valid && in_param._mouse_valid)
-    //{
-    //    _mouse_delta_x = in_param._mouse_x - _mouse_prev_x;
-    //    _mouse_delta_y = in_param._mouse_y - _mouse_prev_y;
-    //}
-    //else
-    //{
-    //    _mouse_delta_x = 0;
-    //    _mouse_delta_y = 0;
-    //}
-    //_mouse_valid = in_param._mouse_valid;
-    //_mouse_prev_x = in_param._mouse_x;
-    //_mouse_prev_y = in_param._mouse_y;
-    //_mouse_left_down_change = _mouse_prev_left_down != in_param._mouse_left_down;
-    //_mouse_prev_left_down = in_param._mouse_left_down;
-
-    //_mouse_pos = VectorFloat2(
-    //    DscMath::ConvertZeroOneToNegativeOneOne(in_root_size[0] ? static_cast<float>(in_param._mouse_x) / static_cast<float>(in_root_size[0]) : 0.0f),
-    //    DscMath::ConvertZeroOneToNegativeOneOne(in_root_size[1] ? 1.0f - (static_cast<float>(in_param._mouse_y) / static_cast<float>(in_root_size[1])) : 0.0f)
-    //    );
-
-    //LOG_MESSAGE_DEBUG("%f %f %d %d", _mouse_pos[0], _mouse_pos[1], _mouse_prev_left_down, _mouse_left_down_change);
 
     return;
 }

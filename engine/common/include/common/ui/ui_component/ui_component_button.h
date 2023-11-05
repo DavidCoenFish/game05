@@ -10,7 +10,8 @@ public:
     UIComponentButton(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
-        const std::function<void(const VectorFloat2&)>& in_on_click = nullptr
+        const std::function<void(const VectorFloat2&)>& in_on_click = nullptr,
+        const bool in_allow_repeat = false
         );
     virtual ~UIComponentButton();
 
@@ -21,7 +22,8 @@ public:
         );
 
     const bool Set(
-        const std::function<void(const VectorFloat2&)>& in_on_click
+        const std::function<void(const VectorFloat2&)>& in_on_click,
+        const bool in_allow_repeat
         );
 
 private:
@@ -62,18 +64,26 @@ private:
         UILayout* const in_layout_override = nullptr
         ) override;
 
-    virtual void OnInputClick(
-        const VectorFloat4& in_screen_pos,
-        const VectorFloat2& in_mouse_pos
-        ) override;
-
     virtual const bool Draw(
         const UIManagerDrawParam& in_draw_param,
         UIHierarchyNode& in_node
         ) override;
 
+    virtual void OnInputClick(
+        const VectorFloat4& in_screen_pos,
+        const VectorFloat2& in_mouse_pos
+        ) override;
+
+    virtual void OnInputRepeat(
+        const VectorFloat4& in_screen_pos,
+        const VectorFloat2& in_mouse_pos,
+        const float in_duration,
+        const float in_last_timestep
+        );
+
 private:
     UIComponentDefault _component_default;
     std::function<void(const VectorFloat2&)> _on_click;
+    bool _allow_repeat;
 
 };

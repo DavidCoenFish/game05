@@ -22,3 +22,14 @@ void IUIInput::OnInputClick(
     // Nop
 }
 
+void IUIInput::OnInputRepeat(
+    const VectorFloat4&,
+    const VectorFloat2&,
+    const float,
+    const float
+    )
+{
+    // Nop
+}
+
+

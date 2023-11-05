@@ -32,5 +32,11 @@ public:
         const VectorFloat4& in_screen_pos,
         const VectorFloat2& in_mouse_pos
         );
+    virtual void OnInputRepeat(
+        const VectorFloat4& in_screen_pos,
+        const VectorFloat2& in_mouse_pos,
+        const float in_duration,
+        const float in_last_timestep
+        );
 
 };

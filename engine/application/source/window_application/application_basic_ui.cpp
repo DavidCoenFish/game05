@@ -181,6 +181,7 @@ namespace
                         in_data_float->SetValue(value);
                     }
                 }, 
+                true,
                 "button_default",
                 std::vector<std::shared_ptr<UIData>>({
 
@@ -414,6 +415,7 @@ public:
 
                                                         std::make_shared<UIDataButton>(
                                                             nullptr, 
+                                                            false,
                                                             "UIDataButton",
                                                             BuildButtonData("New game")
                                                         )
@@ -426,6 +428,7 @@ public:
 
                                                         std::make_shared<UIDataButton>(
                                                             nullptr, 
+                                                            false,
                                                             "UIDataButton",
                                                             BuildButtonData("Continue")
                                                         )
@@ -439,6 +442,7 @@ public:
                                                     _data_map["modal_options"]
                                                     );
                                                 },
+                                            false,
                                             "UIDataButton",
                                             BuildButtonData("Options")
                                         ),
@@ -448,6 +452,7 @@ public:
                                                 in_application.Destroy(0);
                                                 return;
                                                 },
+                                            false,
                                             "UIDataButton",
                                             BuildButtonData("Exit")
                                         ),
@@ -512,6 +517,7 @@ public:
                         _data_map["main_launch"]
                         );
                     },
+                false,
                 "button_background",
                 std::vector<std::shared_ptr<UIData>>({
 
@@ -529,6 +535,7 @@ public:
 
                             std::make_shared<UIDataButton>(
                                 [this](const VectorFloat2&){},
+                                false,
                                 "button_modal_body",
                                 std::vector<std::shared_ptr<UIData>>({
                                     std::make_shared<UIData>(
@@ -637,6 +644,7 @@ public:
 
                                                     std::make_shared<UIDataButton>(
                                                         [&in_application](const VectorFloat2&){},
+                                                        false,
                                                         "UIDataButton",
                                                         BuildButtonData("Undo")
                                                     ),
@@ -650,6 +658,7 @@ public:
 
                                                     std::make_shared<UIDataButton>(
                                                         [&in_application](const VectorFloat2&){},
+                                                        false,
                                                         "UIDataButton",
                                                         BuildButtonData("Redo")
                                                     ),
@@ -663,6 +672,7 @@ public:
 
                                                     std::make_shared<UIDataButton>(
                                                         [&in_application](const VectorFloat2&){},
+                                                        false,
                                                         "UIDataButton",
                                                         BuildButtonData("Reset")
                                                     )

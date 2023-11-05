@@ -64,6 +64,7 @@ namespace
         return value;
     }
 
+    // move to be a static method of UIHierarchyNodeChildData? or UIHierarchyNode?
     const bool RecurseSetStateFlag(UIHierarchyNodeChildData* const in_node_child_data, const UIStateFlag in_state_flag)
     {
         bool dirty = false;

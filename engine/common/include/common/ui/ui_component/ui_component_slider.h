@@ -65,6 +65,10 @@ private:
         UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         UILayout* const in_layout_override = nullptr
         ) override;
+    virtual const bool Draw(
+        const UIManagerDrawParam& in_draw_param,
+        UIHierarchyNode& in_node
+        ) override;
 
     virtual void OnInputTouch(
         const VectorFloat4& in_screen_pos,
@@ -73,11 +77,6 @@ private:
     virtual void OnInputClick(
         const VectorFloat4& in_screen_pos,
         const VectorFloat2& in_mouse_pos
-        ) override;
-
-    virtual const bool Draw(
-        const UIManagerDrawParam& in_draw_param,
-        UIHierarchyNode& in_node
         ) override;
 
 private:
