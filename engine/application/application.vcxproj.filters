@@ -406,5 +406,8 @@
     <FxCompile Include="shader\ui_effect_innershadow_pixel.hlsl">
       <Filter>shader</Filter>
     </FxCompile>
+    <FxCompile Include="shader\ui_effect_corner_hollow_pixel.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

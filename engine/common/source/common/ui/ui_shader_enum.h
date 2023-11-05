@@ -8,6 +8,7 @@ enum class UIShaderEnum
     TEffectDropShadow,
     TEffectInnerShadow,
     TEffectRoundCorners,
+    TEffectRoundCornersHollow,
     TEffectGloss,
     TEffectFill,
     TEffectDesaturate,

@@ -19,7 +19,7 @@ float2 SampleAtOffset(
     float2 in_coverage_shadow,
     float2 in_pivot,
     float2 in_offset,
-    float2 in_i_width_i_height,
+    float2 in_iwidth_iheight,
     float in_radius,
     float in_low,
     float in_high
@@ -35,10 +35,10 @@ float2 SampleAtOffset(
         );
 #else
     float texel = 0.0;
-    texel += ClampSample((in_pivot + in_offset) * in_i_width_i_height);
-    texel += ClampSample((in_pivot - in_offset) * in_i_width_i_height);
-    texel += ClampSample((in_pivot + float2(in_offset.y, -in_offset.x)) * in_i_width_i_height);
-    texel += ClampSample((in_pivot + float2(-in_offset.y, in_offset.x)) * in_i_width_i_height);
+    texel += ClampSample((in_pivot + in_offset) * in_iwidth_iheight);
+    texel += ClampSample((in_pivot - in_offset) * in_iwidth_iheight);
+    texel += ClampSample((in_pivot + float2(in_offset.y, -in_offset.x)) * in_iwidth_iheight);
+    texel += ClampSample((in_pivot + float2(-in_offset.y, in_offset.x)) * in_iwidth_iheight);
 #endif
 
     float ratio = saturate((in_radius - in_low) / (in_high - in_low));
@@ -61,7 +61,9 @@ float CalculateShadowAlpha(
     float2 pivot = (floor((in_uv * in_width_height) - in_offset)) + float2(0.5, 0.5);
 
     // [sum value, sum coverage]
-    float2 coverage_shadow = float2(0.0, 0.0);
+    float4 texel = ClampSample(pivot * in_iwidth_iheight);
+
+    float2 coverage_shadow = float2(texel.a, 1.0);
 
     coverage_shadow = SampleAtOffset(coverage_shadow, pivot, float2(0.5, 1.5), in_iwidth_iheight, in_radius, 0.5, 2.9154);
     coverage_shadow = SampleAtOffset(coverage_shadow, pivot, float2(0.5, 3.5), in_iwidth_iheight, in_radius, 2.5, 5.1478);

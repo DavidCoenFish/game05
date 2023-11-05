@@ -85,18 +85,9 @@ namespace
     {
         return std::vector<std::shared_ptr<UIData>>({
 
-            std::make_shared<UIData>(
-                "effect_inner_shadow",
-                std::vector<std::shared_ptr<UIData>>({
-                    std::make_shared<UIData>(
-                        "canvas_grey"
-                    )
-                })
-            ),
-
-            std::make_shared<UIData>(
-                "effect_drop_shadow",
-                std::vector<std::shared_ptr<UIData>>({
+            //std::make_shared<UIData>(
+            //    "effect_drop_shadow",
+            //    std::vector<std::shared_ptr<UIData>>({
 
             std::make_shared<UIData>(
                 "effect_gloss",
@@ -110,9 +101,9 @@ namespace
                                 "UIData",
                                 std::vector<std::shared_ptr<UIData>>({
 
-                            std::make_shared<UIData>(
-                                "canvas_margin_tiny",
-                                std::vector<std::shared_ptr<UIData>>({
+                            //std::make_shared<UIData>(
+                            //    "canvas_margin_tiny",
+                            //    std::vector<std::shared_ptr<UIData>>({
 
                             std::make_shared<UIData>(
                                 "effect_corner",
@@ -122,15 +113,15 @@ namespace
                                     )
                                 })
                             )
-                                })
-                            )
+                            //    })
+                            //)
                                 })
                             )
                         })
                     )
                         })
-                    )
-                })
+                //    )
+                //})
             ),
 
             std::make_shared<UIData>(
@@ -153,17 +144,7 @@ namespace
 
     std::vector<std::shared_ptr<UIData>> BuildCheckboxFalse()
     {
-        return std::vector<std::shared_ptr<UIData>>({
-
-            std::make_shared<UIData>(
-                "effect_inner_shadow",
-                std::vector<std::shared_ptr<UIData>>({
-                    std::make_shared<UIData>(
-                        "canvas_grey"
-                    )
-                })
-            )
-        });
+        return std::vector<std::shared_ptr<UIData>>();
     }
 
     std::shared_ptr<UIData> BuildSliderButton(
@@ -233,7 +214,7 @@ namespace
 
 #else
         return std::make_shared<UIData>(
-            "canvas_widget",
+        "canvas_knot",
             std::vector<std::shared_ptr<UIData>>({
                 //std::make_shared<UIData>(
                 //    "effect_drop_shadow",
@@ -251,9 +232,9 @@ namespace
                                             "UIData",
                                             std::vector<std::shared_ptr<UIData>>({
 
-                                        std::make_shared<UIData>(
-                                            "canvas_margin_tiny",
-                                            std::vector<std::shared_ptr<UIData>>({
+                                        //std::make_shared<UIData>(
+                                        //    "canvas_margin_tiny",
+                                        //    std::vector<std::shared_ptr<UIData>>({
 
                                         std::make_shared<UIData>(
                                             "effect_corner",
@@ -263,8 +244,8 @@ namespace
                                                 )
                                             })
                                         )
-                                    })
-                                )
+                                //    })
+                                //)
                             })
                         )
                     })
@@ -277,6 +258,44 @@ namespace
             })
         );
 #endif
+    }
+
+    std::shared_ptr<UIData> BuildCheckbox(const std::shared_ptr<UIDataToggle>& in_data_toggle)
+    {
+        std::shared_ptr<UIData> result = std::make_shared<UIData>(
+            "canvas_checkbox_wrapper",
+            std::vector<std::shared_ptr<UIData>>({
+
+                std::make_shared<UIData>(
+                    "effect_drop_shadow_small",
+                    std::vector<std::shared_ptr<UIData>>({
+                        std::make_shared<UIData>(
+                            "UIData",
+                            std::vector<std::shared_ptr<UIData>>({
+                                std::make_shared<UIData>(
+                                    "canvas_margin_tiny",
+
+                                    std::vector<std::shared_ptr<UIData>>({
+                                        std::make_shared<UIData>(
+                                            "effect_corner_hollow_tiny",
+                                            std::vector<std::shared_ptr<UIData>>({
+                                                std::make_shared<UIData>(
+                                                    "canvas_grey"
+                                                    )
+                                                })
+                                            ),
+
+                                            in_data_toggle
+
+                                        })
+                                    )
+                                })
+                            )
+                        })
+                    )
+                })
+            );
+        return result;
     }
 
 };
@@ -560,7 +579,7 @@ public:
                                                                 "string_right_em"
                                                                 ),
                                                             nullptr,
-                                                            data_toggle_fps
+                                                            BuildCheckbox(data_toggle_fps)
                                                         })
                                                     ),
 
@@ -573,7 +592,7 @@ public:
                                                                 "string_right_em"
                                                                 ),
                                                             nullptr,
-                                                            data_toggle_tooltip
+                                                            BuildCheckbox(data_toggle_tooltip)
                                                         })
                                                     ),
 

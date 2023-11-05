@@ -17,6 +17,7 @@ enum class UIEffectEnum
     TDropShadow,
     TInnerShadow,
     TRoundCorners,
+    TRoundCornersHollow,
     TGloss,
     TFill,
     TDesaturate,

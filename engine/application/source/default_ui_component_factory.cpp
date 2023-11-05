@@ -90,8 +90,8 @@ namespace
     const UILayout& GetUILayoutMarginTiny()
     {
         static UILayout s_layout(
-            UICoord(UICoord::ParentSource::X, 1.0f, s_default_margin * (-0.25f)),
-            UICoord(UICoord::ParentSource::Y, 1.0f, s_default_margin * (-0.25f)),
+            UICoord(UICoord::ParentSource::X, 1.0f, -(s_default_font_size * 0.375f)), //s_default_margin * (-0.25f)),
+            UICoord(UICoord::ParentSource::Y, 1.0f, -(s_default_font_size * 0.375f)), //s_default_margin * (-0.25f)),
             UICoord(UICoord::ParentSource::X, 0.5f),
             UICoord(UICoord::ParentSource::Y, 0.5f),
             UICoord(UICoord::ParentSource::X, 0.5f),
@@ -246,14 +246,14 @@ namespace
             );
         return s_layout;
     }
-    const UILayout& GetUILayoutCheckboxLeft()
+    const UILayout& GetUILayoutCheckbox()
     {
         static UILayout s_layout(
-            UICoord(UICoord::ParentSource::X, 0.0f, s_default_font_size * 1.25f), // 1.1f),
-            UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size * 1.25f), // 1.1f),
-            UICoord(UICoord::ParentSource::X, 0.0f),
+            UICoord(UICoord::ParentSource::X, 0.0f, s_default_font_size), // 1.1f),
+            UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size), // 1.1f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
             UICoord(UICoord::ParentSource::Y, 0.5f),
-            UICoord(UICoord::ParentSource::X, 0.0f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
             UICoord(UICoord::ParentSource::Y, 0.5f)
             );
         return s_layout;
@@ -266,6 +266,33 @@ namespace
             UICoord(UICoord::ParentSource::X, 0.5f),
             UICoord(UICoord::ParentSource::Y, 0.5f),
             UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f)
+            );
+        return s_layout;
+    }
+
+    const UILayout& GetUILayoutKnot()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 0.0f, s_default_font_size * 1.0f), // 1.1f),
+            UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size * 1.25f), // 1.1f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f)
+            );
+        return s_layout;
+    }
+
+
+    const UILayout& GetUILayoutCheckboxWrapper()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 0.0f, s_default_font_size * 2.0f), // 1.1f),
+            UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size * 2.0f), // 1.1f),
+            UICoord(UICoord::ParentSource::X, 0.0f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 0.0f),
             UICoord(UICoord::ParentSource::Y, 0.5f)
             );
         return s_layout;
@@ -324,6 +351,11 @@ namespace
     const UICoord& GetUICoordDefaultGap()
     {
         static UICoord s_coord(UICoord::ParentSource::None, 0.0f, s_default_margin);
+        return s_coord;
+    }
+    const UICoord& GetUICoordDefaultGapSmall()
+    {
+        static UICoord s_coord(UICoord::ParentSource::None, 0.0f, s_default_margin * 0.75f);
         return s_coord;
     }
     const UICoord& GetUICoordDefaultGapHalf()
@@ -437,6 +469,7 @@ namespace
     }
 
     typedef const UIBaseColour (*TGetUIBaseColour)(const int in_create_index);
+    /// Default is transparent with a white tint
     const UIBaseColour GetUIBaseColourDefault(const int)
     {
         return UIBaseColour();
@@ -997,8 +1030,12 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("canvas_margin_tiny", FactoryCanvas<
         GetUILayoutMarginTiny
         >);
-    in_ui_manager.AddContentFactory("canvas_widget", FactoryCanvas<
-        GetUILayoutWidget, 
+    in_ui_manager.AddContentFactory("canvas_knot", FactoryCanvas<
+        GetUILayoutKnot, 
+        GetUIBaseColourDefault //GetUIBaseColourBlue
+        >);
+    in_ui_manager.AddContentFactory("canvas_checkbox_wrapper", FactoryCanvas<
+        GetUILayoutCheckboxWrapper, 
         GetUIBaseColourDefault //GetUIBaseColourBlue
         >);
 
@@ -1108,16 +1145,15 @@ void DefaultUIComponentFactory::Populate(
         GetUICoordDefaultGap,
         GetUICoordDefaultGap
         >);
-    in_ui_manager.AddContentFactory("effect_corner_tiny", FactoryEffect<
+    in_ui_manager.AddContentFactory("effect_corner_hollow_tiny", FactoryEffect<
         GetUILayout,
-        UIEffectEnum::TRoundCorners,
+        UIEffectEnum::TRoundCornersHollow,
         GetUIBaseColourDefault,
-        GetUICoordDefaultGapQuater,
-        GetUICoordDefaultGapQuater,
-        GetUICoordDefaultGapQuater,
-        GetUICoordDefaultGapQuater
+        GetUICoordDefaultGapHalf,
+        GetUICoordDefaultGapHalf,
+        GetUICoordDefaultGapHalf,
+        GetUICoordDefaultGapHalf
         >);
-
 
     in_ui_manager.AddContentFactory("effect_gloss", FactoryEffect<
         GetUILayout,
@@ -1233,8 +1269,8 @@ void DefaultUIComponentFactory::Populate(
         >);
 
     in_ui_manager.AddContentFactory("UIDataToggle", FactoryButton<
-        GetUILayoutCheckboxLeft, 
-        GetUIBaseColourGrey
+        GetUILayoutCheckbox, 
+        GetUIBaseColourDefault
         >);
 
     // button of a slider
