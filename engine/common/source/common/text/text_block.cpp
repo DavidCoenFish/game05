@@ -371,6 +371,15 @@ public:
                 _font_size
                 );
 
+            // the problem with resizing an existing geometry, is what if that geometry is still on a command list
+            // we can modify the data, as that just pokes different data onto the command list, but resize can end up being destructive, so better is to destroy and recreate the geometry if size changes
+            // again, found by fps text doing something like "0.0" => "59.9"
+            if ((nullptr != _geometry) && (vertex_raw_data.size() != _geometry->GetVertexDataByteSize()))
+            {
+                // note, the DrawSystem may still be holding a reference to the shared pointer if the geometry is still on an in use command list
+                _geometry.reset();
+            }
+
             if (nullptr == _geometry)
             {
                 _geometry = in_draw_system->MakeGeometryGeneric(

@@ -13,12 +13,17 @@ public:
         );
     void Draw(ID3D12GraphicsCommandList* const in_command_list);
 
+    /// Only allow update if size match for in_vertex_data_raw and _vertex_data_raw
+    /// this is why GetVertexDataByteSize is now exposed
+    /// can not push this down as GeometryGeneric is the IResource managing the lifespan, so need to check above
     void UpdateVertexData(
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list,
         ID3D12Device2* const in_device,
         const std::vector<uint8_t>& in_vertex_data_raw
         );
+
+    const size_t GetVertexDataByteSize() const;
 
 private:
     virtual void OnDeviceLost() override;
@@ -34,4 +39,5 @@ private:
     int _float_per_vertex;
     Microsoft::WRL::ComPtr<ID3D12Resource> _vertex_buffer;
     D3D12_VERTEX_BUFFER_VIEW _vertex_buffer_view;
+
 };

@@ -110,7 +110,6 @@ void IGeometry::UploadVertexData(
     const int in_vertex_count,
     const int in_byte_vertex_size,
     Microsoft::WRL::ComPtr<ID3D12Resource>& in_vertex_buffer,
-    D3D12_VERTEX_BUFFER_VIEW& in_vertex_buffer_view,
     void* in_raw_data
     )
 {
@@ -160,10 +159,6 @@ void IGeometry::UploadVertexData(
             &barrier
         );
     }
-
-    in_vertex_buffer_view.BufferLocation = in_vertex_buffer->GetGPUVirtualAddress();
-    in_vertex_buffer_view.StrideInBytes = in_byte_vertex_size;
-    in_vertex_buffer_view.SizeInBytes = byte_total_size;
 
     return;
 }

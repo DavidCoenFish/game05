@@ -41,6 +41,8 @@ void GeometryGeneric::UpdateVertexData(
     const std::vector<uint8_t>& in_vertex_data_raw
     )
 {
+    DSC_ASSERT(_vertex_raw_data.size() == in_vertex_data_raw.size(), "it is not safe to resize if the geometry is in use on a command list, possibly need a way to test if in use if we want to make this safe?");
+
     _vertex_raw_data = in_vertex_data_raw;
     if (0 == _vertex_raw_data.size())
     {
@@ -61,11 +63,15 @@ void GeometryGeneric::UpdateVertexData(
             (int)(_vertex_raw_data.size() / byte_vertex_size),
             byte_vertex_size,
             _vertex_buffer,
-            _vertex_buffer_view,
             _vertex_raw_data.data()
             );
     }
     return;
+}
+
+const size_t GeometryGeneric::GetVertexDataByteSize() const
+{
+    return _vertex_raw_data.size();
 }
 
 void GeometryGeneric::OnDeviceLost()
