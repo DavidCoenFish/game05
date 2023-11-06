@@ -2,34 +2,50 @@
 
 #include "common/ui/ui_component/i_ui_component.h"
 #include "common/ui/ui_component/ui_component_default.h"
-#include "common/ui/i_ui_input.h"
 
-enum class UIOrientation;
+class UIComponentScroll;
 
-class UIComponentScroll : public IUIComponent, public IUIInput
+/*
+
+UIHierarchyNode // N0 
+    _texture // T0 texture or backbuffer A0 draws to
+    [_input_state] // I0 optional top level input state, which node is focused, node click started on, hover node
+    _child_node_array // A0
+        _geometry // G1 geometry to draw the texture T1 onto T0
+        _shader_constant_buffer // S1 the shader constants -> moved to component default? or needs to be with? in? geometry G1
+        _component // C1 controls size of T1 and G1. model returns an array of ui data for child array A1
+        UIHierarchyNode // N1 child node
+            _texture // T1 texture or backbuffer A1 draws to
+            _child_node_array // A1
+                _geometry // G2 geometry to draw the texture T1 onto T0
+                _shader_constant_buffer // S2 the shader constants -> moved to component default? or needs to be with? in? geometry G1
+                _component // C2 controls size of T1 and G1. model returns an array of ui data for child array A1
+                UIHierarchyNode // N2 child node
+                    _texture // T2 texture or backbuffer A1 draws to
+                    _child_node_array // A2
+
+    
+    C1 is a manual scroll component
+    C2 is some arbitary child content
+    we control the scrolling of T1 for the manual scroll
+*/
+class UIComponentManualScroll : public IUIComponent
 {
 public:
-    UIComponentScroll(
+    UIComponentManualScroll(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
-        const UIOrientation in_orientation
+        const bool in_allow_horizontal_scroll = false,
+        const bool in_allow_vertical_scroll = false
         );
-    virtual ~UIComponentScroll();
+    virtual ~UIComponentManualScroll();
 
     const bool SetBase(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
-        const UIOrientation in_orientation
+        const bool in_allow_horizontal_scroll,
+        const bool in_allow_vertical_scroll
         );
-    const bool Set(
-        const std::function<void(const VectorFloat2&)>& in_value_change,
-        const VectorFloat2& in_value,
-        const VectorFloat2& in_range_low_high
-        );
-    const float GetValueRatio() const;
-    //const VectorFloat2 GetValue() const { return _value; }
-
-    const std::function<void(const VectorFloat2&)>& GetOnValueChange() const { return _value_change; }
 
 private:
     virtual const bool SetStateFlag(const UIStateFlag in_state_flag) override;
@@ -74,23 +90,20 @@ private:
         UIHierarchyNode& in_node
         ) override;
 
-    virtual void OnInputTouch(
-        const VectorFloat4& in_screen_pos,
-        const VectorFloat2& in_mouse_pos
-        );
-    virtual void OnInputClick(
-        const VectorFloat4& in_screen_pos,
-        const VectorFloat2& in_mouse_pos
-        ) override;
-
 private:
     UIComponentDefault _component_default;
 
-    UIOrientation _orientation;
+    std::shared_ptr<UIHierarchyNodeChildData> _child_data_vertical_scroll;
+    std::shared_ptr<UIHierarchyNodeChildData> _child_data_horizontal_scroll;
 
-    std::shared_ptr<UIHierarchyNodeChildData> _child_data_knot;
-    std::function<void(const VectorFloat2&)> _value_change;
-    VectorFloat2 _value;
-    VectorFloat2 _range_low_high;
+    UIComponentScroll* _horizontal_scroll;
+    UIComponentScroll* _vertical_scroll;
+
+
+    bool _allow_horizontal_scroll;
+    bool _allow_vertical_scroll;
+
+    bool _do_horizontal_scroll;
+    bool _do_vertical_scroll;
 
 };

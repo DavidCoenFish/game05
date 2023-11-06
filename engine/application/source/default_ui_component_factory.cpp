@@ -16,6 +16,7 @@
 #include "common/ui/ui_component/ui_component_disable.h"
 #include "common/ui/ui_component/ui_component_effect.h"
 #include "common/ui/ui_component/ui_component_grid.h"
+#include "common/ui/ui_component/ui_component_manual_scroll.h"
 #include "common/ui/ui_component/ui_component_scroll.h"
 #include "common/ui/ui_component/ui_component_slider.h"
 #include "common/ui/ui_component/ui_component_stack.h"
@@ -31,6 +32,8 @@
 #include "common/ui/ui_data/ui_data_string.h"
 #include "common/ui/ui_data/ui_data_float.h"
 #include "common/ui/ui_data/ui_data_text_run.h"
+#include "common/ui/ui_data/ui_data_scroll.h"
+#include "common/ui/ui_data/ui_data_manual_scroll.h"
 
 namespace
 {
@@ -145,6 +148,22 @@ namespace
             );
         return s_layout;
     }
+    const UILayout& GetUILayoutTop()
+    {
+        // Todo: is y up the screen for ui, y==0 is bottom, y==1 is top screen
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 1.0f),
+            UICoord(UICoord::ParentSource::Y, 1.0f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 1.0f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 1.0f),
+            false,
+            true
+            );
+        return s_layout;
+    }
+
     const UILayout& GetUILayoutQuadrant0() //lover left
     {
         static UILayout s_layout(
@@ -307,6 +326,32 @@ namespace
             UICoord(UICoord::ParentSource::X, 0.5f),
             UICoord(UICoord::ParentSource::Y, 0.5f),
             UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f)
+            );
+        return s_layout;
+    }
+
+    const UILayout& GetUILayoutManualScrollHorizontal()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 1.0f, s_default_margin * (-2.0f)),
+            UICoord(UICoord::ParentSource::Y, 0.0f, s_default_margin),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.0f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.0f)
+            );
+        return s_layout;
+    }
+
+    const UILayout& GetUILayoutManualScrollVertical()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 0.0f, s_default_margin),
+            UICoord(UICoord::ParentSource::Y, 1.0f, s_default_margin * (-2.0f)),
+            UICoord(UICoord::ParentSource::X, 1.0f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 1.0f),
             UICoord(UICoord::ParentSource::Y, 0.5f)
             );
         return s_layout;
@@ -1041,7 +1086,48 @@ namespace
             }
         }
         return dirty;
-    }}
+    }
+
+    template<
+        TGetUILayoutRef in_get_layout_ref = GetUILayout,
+        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
+        bool in_allow_horizontal = true,
+        bool in_allow_vertical = true
+        >
+    const bool FactoryManualScroll(
+        std::unique_ptr<IUIComponent>& in_out_content,
+        const UIComponentFactoryParam& in_factory_param
+        )
+    {
+        UIComponentManualScroll* content = dynamic_cast<UIComponentManualScroll*>(in_out_content.get());
+        bool dirty = false;
+        if (nullptr == content)
+        {
+            dirty = true;
+            auto new_content = std::make_unique<UIComponentManualScroll>(
+                in_get_base_colour(in_factory_param._create_index),
+                in_get_layout_ref(),
+                in_allow_horizontal,
+                in_allow_vertical
+                );
+            in_out_content = std::move(new_content);
+        }
+        else
+        {
+            if (true == content->SetBase(
+                in_get_base_colour(in_factory_param._create_index),
+                in_get_layout_ref(),
+                in_allow_horizontal,
+                in_allow_vertical
+                ))
+            {
+                dirty = true;
+            }
+        }
+        return dirty;
+    }
+
+}
 
 void DefaultUIComponentFactory::Populate(
     UIManager& in_ui_manager
@@ -1093,11 +1179,20 @@ void DefaultUIComponentFactory::Populate(
         GetUIBaseColourDark //GetUIBaseColourBlue
         >);
 
+    in_ui_manager.AddContentFactory("canvas_manual_scroll_horizontal", FactoryCanvas<
+        GetUILayoutManualScrollHorizontal, 
+        GetUIBaseColourDark //GetUIBaseColourBlue
+        >);
+    in_ui_manager.AddContentFactory("canvas_manual_scroll_vertical", FactoryCanvas<
+        GetUILayoutManualScrollVertical, 
+        GetUIBaseColourDark //GetUIBaseColourBlue
+        >);
+
     // UIData stack
     in_ui_manager.AddContentFactory("stack", FactoryStack<>);
 
     in_ui_manager.AddContentFactory("stack_top_down", FactoryStack<
-        GetUILayoutMarginTop,
+        GetUILayoutTop,
         GetUIBaseColourDefault,
         UIOrientation::TVertical,
         GetUICoordNone // No gap
@@ -1339,6 +1434,26 @@ void DefaultUIComponentFactory::Populate(
         >);
 
     in_ui_manager.AddContentFactory("UIDataScroll", FactoryScroll<>);
+    in_ui_manager.AddContentFactory("scroll_horizontal", FactoryScroll<>);
+    in_ui_manager.AddContentFactory("scroll_vertical", FactoryScroll<
+        GetUILayout,
+        GetUIBaseColourDefault,
+        UIOrientation::TVertical
+        >);
+
+    in_ui_manager.AddContentFactory("UIDataManualScroll", FactoryManualScroll<>);
+    in_ui_manager.AddContentFactory("manual_scroll_horizontal", FactoryManualScroll<
+        GetUILayout,
+        GetUIBaseColourDefault,
+        true, 
+        false
+        >);
+    in_ui_manager.AddContentFactory("manual_scroll_vertical", FactoryManualScroll<
+        GetUILayout,
+        GetUIBaseColourDefault,
+        false, 
+        true
+        >);
 
     return;
 }

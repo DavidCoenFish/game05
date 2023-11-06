@@ -211,6 +211,7 @@ void UIComponentStack::GetDesiredSize(
     UILayout* const in_layout_override
     )
 {
+#if 0
     return _component_default.GetDesiredSize(
         out_layout_size,
         out_desired_size,
@@ -219,6 +220,19 @@ void UIComponentStack::GetDesiredSize(
         in_out_node,
         in_layout_override
         );
+#else
+    std::vector<VectorInt4> child_window_offset_array;
+
+    GetStackDesiredSize(
+        out_layout_size,
+        out_desired_size,
+        in_parent_window,
+        in_ui_scale,
+        in_out_node,
+        child_window_offset_array,
+        in_layout_override
+        );
+#endif
 }
 
 void UIComponentStack::GetStackDesiredSize(

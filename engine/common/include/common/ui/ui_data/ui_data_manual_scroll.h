@@ -3,36 +3,32 @@
 #include "common/ui/ui_data/ui_data.h"
 #include "common/math/vector_float2.h"
 
-class UIDataFloat : public UIData
+class UIDataScroll;
+
+class UIDataManualScroll : public UIData
 {
 public:
-    UIDataFloat(
-        const float in_value = 0.0f,
-        const float in_step = 0.0f,
-        const VectorFloat2& in_range_low_high = VectorFloat2(),
-        const std::function<void(const float)>& in_on_value_change = nullptr,
-        const std::shared_ptr<UIData>& in_knot_child_data = nullptr,
-        const std::string& in_template_name = std::string("UIDataFloat"),
+    UIDataManualScroll(
+        const std::shared_ptr<UIData>& in_horizontal_scroll_wrapper = nullptr,
+        const std::shared_ptr<UIDataScroll>& in_horizontal_scroll = nullptr,
+        const std::shared_ptr<UIData>& in_vertical_scroll_wrapper = nullptr,
+        const std::shared_ptr<UIDataScroll>& in_vertical_scroll = nullptr,
+        //const bool in_allow_horizontal_scroll = false, // move to factory? run time constant?
+        //const bool in_allow_vertical_scroll = false,
+        const std::string& in_template_name = std::string("UIDataManualScroll"),
         const std::vector<std::shared_ptr<UIData>>& in_array_child_data = std::vector<std::shared_ptr<UIData>>()
         );
-    virtual ~UIDataFloat();
+    virtual ~UIDataManualScroll();
 
-    const std::function<void(const float)>& GetOnValueChange() const { return _on_value_change; }
-
-    const VectorFloat2& GetRangeLowHigh() const { return _range_low_high; } 
-
-    const float GetValue() const { return _value; } 
-    void SetValue(const float in_value);// { _value = in_value; return; }
-
-    const float GetStep() const { return _step; } 
-    UIData* const GetKnotChildData() const { return _knot_child_data.get(); } 
-    std::shared_ptr<UIData>& GetKnotChildDataShared() { return _knot_child_data; } 
+    UIData* const GetHorizontalScrollWrapper() const { return _horizontal_scroll_wrapper.get(); } 
+    UIDataScroll* const GetHorizontalScroll() const { return _horizontal_scroll.get(); } 
+    UIData* const GetVerticalScrollWrapper() const { return _vertical_scroll_wrapper.get(); } 
+    UIDataScroll* const GetVerticalScroll() const { return _vertical_scroll.get(); } 
 
 private:
-    std::function<void(const bool)> _on_value_change;
-    std::shared_ptr<UIData> _knot_child_data;
-    VectorFloat2 _range_low_high;
-    float _value;
-    float _step;
+    std::shared_ptr<UIData> _horizontal_scroll_wrapper;
+    std::shared_ptr<UIDataScroll> _horizontal_scroll;
+    std::shared_ptr<UIData> _vertical_scroll_wrapper;
+    std::shared_ptr<UIDataScroll> _vertical_scroll;
 
 };

@@ -25,6 +25,7 @@ class UIScreenSpace;
 
 struct UIComponentFactoryParam;
 struct UIDataTextRunStyle;
+struct UIHierarchyNodeUpdateHierarchyParam;
 struct UIManagerDrawParam;
 struct UIManagerUpdateLayoutParam;
 
@@ -45,8 +46,13 @@ UIHierarchyNode // N0
 the component C1 may have special rules (ie, a virtual method) to control how child array A1 is drawn to T1
 */
 
+
+/// As UIHierarchyNodeChildData keeps gaining functions, it really should be promotted to a class and moved to it's own file?
 struct UIHierarchyNodeChildData
 {
+    //can you pass    std::unique_ptr<IUIComponent>& in_content = nullptr, hmmn, wants non const but i want to use move semantics
+    static std::shared_ptr<UIHierarchyNodeChildData> Factory();
+
     UIHierarchyNodeChildData(
         std::unique_ptr<UIGeometry>& in_geometry,
         std::unique_ptr<IUIComponent>& in_component,
@@ -57,6 +63,16 @@ struct UIHierarchyNodeChildData
 
     //const bool RecurseSetStateFlagInput(const UIStateFlag in_state_flag);
     static const bool RecurseSetStateFlagInput(UIHierarchyNodeChildData* const in_data, const UIStateFlag in_state_flag);
+
+    const bool ApplyFactory(
+        UIData* const in_data,
+        const UIHierarchyNodeUpdateHierarchyParam& in_param,
+        const int in_index = 0
+        );
+
+    void Draw(const UIManagerDrawParam& in_draw_param);
+
+    const bool VisitComponents(const std::function<const bool(IUIComponent* const)>& in_visitor);
 
     /// Need to track if state changed, so not using GeometryGeneric
     std::unique_ptr<UIGeometry> _geometry;

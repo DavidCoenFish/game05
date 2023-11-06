@@ -92,16 +92,7 @@ UIComponentScroll::UIComponentScroll(
     , _value()
     , _range_low_high()
 {
-    auto geometry = std::make_unique<UIGeometry>();
-    std::unique_ptr<IUIComponent> component;
-    auto node = std::make_unique<UIHierarchyNode>();
-    auto screen_space = std::make_unique<UIScreenSpace>();
-    _child_data_knot = std::make_shared<UIHierarchyNodeChildData>(
-        geometry,
-        component,
-        node,
-        screen_space
-        );
+    _child_data_knot = UIHierarchyNodeChildData::Factory();
 }
 
 UIComponentScroll::~UIComponentScroll()
@@ -154,6 +145,15 @@ const bool UIComponentScroll::Set(
     }
 
     return dirty;
+}
+
+const float UIComponentScroll::GetValueRatio() const
+{
+    const float length = _range_low_high[1] - _range_low_high[0];
+    const float middle = (_value[0] + _value[1]) * 0.5f;
+    const float inner_length = _value[1] - _value[0];
+    const float result = 0.0f != length ? ((middle - _range_low_high[0] - (inner_length * 0.5f)) / (length - inner_length)) : 0.0f;
+    return result;
 }
 
 const bool UIComponentScroll::SetStateFlag(const UIStateFlag in_state_flag)
@@ -213,49 +213,14 @@ const bool UIComponentScroll::UpdateHierarchy(
         }
     }
 
+    UIHierarchyNodeChildData* knot = _child_data_knot.get();
     UIData* const knot_data = data ? data->GetKnotChildData() : nullptr;
-    if (nullptr != knot_data)
-    {
-        auto factory = in_param._map_content_factory.find(knot_data->GetTemplateName());
-        if (factory != in_param._map_content_factory.end())
-        {
-            UIComponentFactoryParam factory_param(
-                in_param._draw_system,
-                in_param._command_list,
-                in_param._text_manager,
-                0
-                );
-            if (true == factory->second(
-                _child_data_knot->_component,
-                factory_param
-                ))
-            {
-                dirty = true;
-                void* source_token = (void*)knot_data; //static_cast<void*>(&data); //reinterpret_cast<void*>(&data);
-                _child_data_knot->_component->SetSourceToken(source_token);
-                _child_data_knot->_node->MarkTextureDirty();
-            }
-        }
-        else
-        {
-            if (nullptr != _child_data_knot->_component)
-            {
-                _child_data_knot->_component.reset();
-                dirty = true;
-            }
-        }
 
-        if (nullptr != _child_data_knot->_component)
+    if (nullptr != knot)
+    {
+        if (true == knot->ApplyFactory(knot_data, in_param, 0))
         {
-            if (true == _child_data_knot->_component->UpdateHierarchy(
-                knot_data,
-                *(_child_data_knot.get()),
-                in_param
-                ))
-            {
-                dirty = true;
-                _child_data_knot->_node->MarkTextureDirty();
-            }
+            dirty = true;
         }
     }
 
@@ -383,35 +348,7 @@ const bool UIComponentScroll::Draw(
     {
         if (nullptr != _child_data_knot)
         {
-            UIHierarchyNodeChildData& child_data = *_child_data_knot;
-            const auto& shader = in_draw_param._ui_manager->GetShaderRef(UIShaderEnum::TDefault);
-
-            child_data._node->GetUITexture().SetShaderResource(
-                *shader,
-                0,
-                in_draw_param._frame
-                );
-
-            if (nullptr == child_data._shader_constant_buffer)
-            {
-                child_data._shader_constant_buffer = shader->MakeShaderConstantBuffer(
-                    in_draw_param._draw_system
-                    );
-            }
-
-            if (nullptr != child_data._shader_constant_buffer)
-            {
-                UIManager::TShaderConstantBuffer& buffer = child_data._shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
-                // todo: get the tint colour, from geometry?
-                buffer._tint_colour = VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f);
-            }
-
-            in_draw_param._frame->SetShader(shader, child_data._shader_constant_buffer);
-
-            child_data._geometry->Draw(
-                in_draw_param._draw_system,
-                in_draw_param._frame
-                );
+            _child_data_knot->Draw(in_draw_param);
         }
 
         dirty = true;

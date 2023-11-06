@@ -1,38 +1,27 @@
-#pragma once
+#include "common/common_pch.h"
+#include "common/ui/ui_data/ui_data_manual_scroll.h"
 
-#include "common/ui/ui_data/ui_data.h"
-#include "common/math/vector_float2.h"
-
-class UIDataFloat : public UIData
+UIDataManualScroll::UIDataManualScroll(
+    const std::shared_ptr<UIData>& in_horizontal_scroll_wrapper,
+    const std::shared_ptr<UIDataScroll>& in_horizontal_scroll,
+    const std::shared_ptr<UIData>& in_vertical_scroll_wrapper,
+    const std::shared_ptr<UIDataScroll>& in_vertical_scroll,
+    const std::string& in_template_name,
+    const std::vector<std::shared_ptr<UIData>>& in_array_child_data
+    )
+    : UIData(
+        in_template_name,
+        in_array_child_data
+        )
+    , _horizontal_scroll_wrapper(in_horizontal_scroll_wrapper)
+    , _horizontal_scroll(in_horizontal_scroll)
+    , _vertical_scroll_wrapper(in_vertical_scroll_wrapper)
+    , _vertical_scroll(in_vertical_scroll)
 {
-public:
-    UIDataFloat(
-        const float in_value = 0.0f,
-        const float in_step = 0.0f,
-        const VectorFloat2& in_range_low_high = VectorFloat2(),
-        const std::function<void(const float)>& in_on_value_change = nullptr,
-        const std::shared_ptr<UIData>& in_knot_child_data = nullptr,
-        const std::string& in_template_name = std::string("UIDataFloat"),
-        const std::vector<std::shared_ptr<UIData>>& in_array_child_data = std::vector<std::shared_ptr<UIData>>()
-        );
-    virtual ~UIDataFloat();
+    // Nop
+}
 
-    const std::function<void(const float)>& GetOnValueChange() const { return _on_value_change; }
-
-    const VectorFloat2& GetRangeLowHigh() const { return _range_low_high; } 
-
-    const float GetValue() const { return _value; } 
-    void SetValue(const float in_value);// { _value = in_value; return; }
-
-    const float GetStep() const { return _step; } 
-    UIData* const GetKnotChildData() const { return _knot_child_data.get(); } 
-    std::shared_ptr<UIData>& GetKnotChildDataShared() { return _knot_child_data; } 
-
-private:
-    std::function<void(const bool)> _on_value_change;
-    std::shared_ptr<UIData> _knot_child_data;
-    VectorFloat2 _range_low_high;
-    float _value;
-    float _step;
-
-};
+UIDataManualScroll::~UIDataManualScroll()
+{
+    // Nop
+}

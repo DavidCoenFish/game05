@@ -23,6 +23,134 @@
 #include "common/math/vector_int2.h"
 #include "common/math/vector_float4.h"
 
+std::shared_ptr<UIHierarchyNodeChildData> UIHierarchyNodeChildData::Factory()
+{
+    auto geometry = std::make_unique<UIGeometry>();
+    std::unique_ptr<IUIComponent> component;
+    auto node = std::make_unique<UIHierarchyNode>();
+    auto screen_space = std::make_unique<UIScreenSpace>();
+    return std::make_shared<UIHierarchyNodeChildData>(
+        geometry,
+        component,
+        node,
+        screen_space
+        );
+}
+
+const bool UIHierarchyNodeChildData::ApplyFactory(
+    UIData* const in_data, 
+    const UIHierarchyNodeUpdateHierarchyParam& in_param,
+    const int in_index
+    )
+{
+    bool dirty = false;
+    if (nullptr == in_data)
+    {
+        _component.reset();
+        return true;
+    }
+
+    auto& data = *in_data;
+    auto factory = in_param._map_content_factory.find(data.GetTemplateName());
+    if (factory != in_param._map_content_factory.end())
+    {
+        UIComponentFactoryParam factory_param(
+            in_param._draw_system,
+            in_param._command_list,
+            in_param._text_manager,
+            in_index
+            );
+        if (true == factory->second(
+            _component,
+            factory_param
+            ))
+        {
+            dirty = true;
+            void* source_token = (void*)&data; //static_cast<void*>(&data); //reinterpret_cast<void*>(&data);
+            _component->SetSourceToken(source_token);
+            _node->MarkTextureDirty();
+        }
+    }
+    else
+    {
+        if (nullptr != _component)
+        {
+            _component.reset();
+            dirty = true;
+        }
+    }
+
+    if (nullptr != _component)
+    {
+        if (true == _component->UpdateHierarchy(
+            &data,
+            *this,
+            in_param
+            ))
+        {
+            dirty = true;
+            _node->MarkTextureDirty();
+        }
+    }
+    return dirty;
+}
+
+void UIHierarchyNodeChildData::Draw(const UIManagerDrawParam& in_draw_param)
+{
+    const auto& shader = in_draw_param._ui_manager->GetShaderRef(UIShaderEnum::TDefault);
+
+    _node->GetUITexture().SetShaderResource(
+        *shader,
+        0,
+        in_draw_param._frame
+        );
+
+    if (nullptr == _shader_constant_buffer)
+    {
+        _shader_constant_buffer = shader->MakeShaderConstantBuffer(
+            in_draw_param._draw_system
+            );
+    }
+
+    if (nullptr != _shader_constant_buffer)
+    {
+        UIManager::TShaderConstantBuffer& buffer = _shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
+        buffer._tint_colour = VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f);
+    }
+
+    in_draw_param._frame->SetShader(shader, _shader_constant_buffer);
+
+    _geometry->Draw(
+        in_draw_param._draw_system,
+        in_draw_param._frame
+        );
+
+    return;
+}
+
+const bool UIHierarchyNodeChildData::VisitComponents(const std::function<const bool(IUIComponent* const)>& in_visitor)
+{
+    bool keep_going = true;
+    auto* component = _component.get();
+    if (nullptr != component)
+    {
+        keep_going = in_visitor(component);
+    }
+    if (true == keep_going)
+    {
+        for (auto iter : _node->GetChildData())
+        {
+            keep_going = iter->VisitComponents(in_visitor);
+            if (false == keep_going)
+            {
+                break;
+            }
+        }
+    }
+
+    return keep_going;
+}
+
 UIHierarchyNodeChildData::UIHierarchyNodeChildData(
     std::unique_ptr<UIGeometry>& in_geometry,
     std::unique_ptr<IUIComponent>& in_component,
@@ -261,16 +389,7 @@ const bool UIHierarchyNode::UpdateHierarchy(
             }
             else
             {
-                auto geometry = std::make_unique<UIGeometry>();
-                std::unique_ptr<IUIComponent> component;
-                auto node = std::make_unique<UIHierarchyNode>();
-                auto screen_space = std::make_unique<UIScreenSpace>();
-                _child_data_array[index] = std::make_shared<UIHierarchyNodeChildData>(
-                    geometry,
-                    component, 
-                    node,
-                    screen_space
-                    );
+                _child_data_array[index] = UIHierarchyNodeChildData::Factory();
                 dirty = true;
             }
         }
@@ -281,53 +400,10 @@ const bool UIHierarchyNode::UpdateHierarchy(
             auto pdata = (in_array_data_or_null->operator[](index));
             auto& child = _child_data_array[index];
 
-            if (nullptr == pdata)
+            //UIData, UIHierarchyNodeChildData, const std::map<std::string, TContentFactory>
+            if (true == child->ApplyFactory(pdata.get(), in_param, index))
             {
-                child->_component.reset();
-                continue;
-            }
-
-            auto& data = *pdata;
-            auto factory = in_param._map_content_factory.find(data.GetTemplateName());
-            if (factory != in_param._map_content_factory.end())
-            {
-                UIComponentFactoryParam factory_param(
-                    in_param._draw_system,
-                    in_param._command_list,
-                    in_param._text_manager,
-                    index
-                    );
-                if (true == factory->second(
-                    child->_component,
-                    factory_param
-                    ))
-                {
-                    dirty = true;
-                    void* source_token = (void*)&data; //static_cast<void*>(&data); //reinterpret_cast<void*>(&data);
-                    child->_component->SetSourceToken(source_token);
-                    child->_node->MarkTextureDirty();
-                }
-            }
-            else
-            {
-                if (nullptr != child->_component)
-                {
-                    child->_component.reset();
-                    dirty = true;
-                }
-            }
-
-            if (nullptr != child->_component)
-            {
-                if (true == child->_component->UpdateHierarchy(
-                    &data,
-                    *(child.get()),
-                    in_param
-                    ))
-                {
-                    dirty = true;
-                    child->_node->MarkTextureDirty();
-                }
+                dirty = true;
             }
         }
     }
