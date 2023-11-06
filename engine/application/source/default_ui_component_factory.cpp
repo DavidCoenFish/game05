@@ -1090,7 +1090,7 @@ void DefaultUIComponentFactory::Populate(
 
     in_ui_manager.AddContentFactory("canvas_scroll_horizontal_wrapper", FactoryCanvas<
         GetUILayoutScrollWrapper, 
-        GetUIBaseColourBlue // GetUIBaseColourDefault //GetUIBaseColourBlue
+        GetUIBaseColourDark //GetUIBaseColourBlue
         >);
 
     // UIData stack

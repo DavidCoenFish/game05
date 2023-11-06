@@ -64,7 +64,14 @@ namespace
         }
         VectorFloat2 result;
         result[0] = std::max(in_range_low_high[0], (in_range_low_high[0] + (ratio * (in_range_low_high[1] - in_range_low_high[0]))) - (in_length * 0.5f));
-        result[1] = std::min(result[0] + in_length, in_range_low_high[1]);
+        result[1] = result[0] + in_length; //std::min(result[0] + in_length, in_range_low_high[1]);
+        if (in_range_low_high[1] < result[1])
+        {
+            result[1] = in_range_low_high[1];
+            result[0] = result[1] - in_length;
+            // don't let result 0 go under the low range even when result 1 is clamped to top range, this may reduce length
+            result[0] = std::max(in_range_low_high[0], result[0]);
+        }
         return result;
     }
 
@@ -295,10 +302,15 @@ void UIComponentScroll::UpdateSize(
 
     if (nullptr != _child_data_knot->_component)
     {
+        const float domain = _range_low_high[1] - _range_low_high[0];
+        const VectorFloat2 value(
+            domain != 0.0f ? (_value[0] - _range_low_high[0]) / domain : 0.0f,
+            domain != 0.0f ? (_value[1] - _range_low_high[0]) / domain : 0.0f
+            );
         UILayout layout = _child_data_knot->_component->GetLayout();
         TweakLayout(
             layout, 
-            _value,
+            value,
             _orientation
             );
 

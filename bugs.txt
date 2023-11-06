@@ -1,7 +1,6 @@
 ui elements/ text being trimmed top few rows of pixels at certain ui scale
-fps text randomly having last digit truncated
-    D3D12 WARNING: ID3D12CommandList::DrawInstanced: Vertex Buffer at the input vertex slot 0 is not big enough for what the Draw*() call expects to traverse. This is OK, as reading off the end of the Buffer is defined to return 0. However the developer probably did not intend to make use of this behavior.  [ EXECUTION WARNING #210: COMMAND_LIST_DRAW_VERTEX_BUFFER_TOO_SMALL]
 draw system may not need to have texture resource handles be per frame buffer
 clean up uv coords, if geometry is -1,-1 in lover left, then have uv 0,0 in lower left, not upper left
 clean up ui hierarchy resize to do less work
 text word wrap may be incorrect
+
