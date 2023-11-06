@@ -4,6 +4,7 @@
 #include "common/draw_system/draw_system.h"
 #include "common/file_system/file_system.h"
 #include "common/log/log.h"
+#include "common/math/dsc_math.h"
 #include "common/math/vector_float2.h"
 #include "common/math/vector_float4.h"
 #include "common/math/vector_int2.h"
@@ -245,7 +246,7 @@ private:
         }
         // Now place each glyph
         int line_index = 0;
-
+        const int colour = DscMath::ConvertColourToInt(in_colour);
         for (unsigned int i = 0; i < glyph_count; i++) 
         {
             // catch any new line characters from the input string
@@ -284,7 +285,7 @@ private:
                     in_out_cursor[0] + x_offset, 
                     in_out_cursor[1] + y_offset,
                     in_width_limit_new_line_height,
-                    in_colour
+                    colour
                     );
             }
             const int x_advance = slot->advance.x / 64;

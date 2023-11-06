@@ -6,7 +6,7 @@
 
 enum class UIOrientation;
 
-class UIComponentScroll : public IUIComponent//, public IUIInput
+class UIComponentScroll : public IUIComponent, public IUIInput
 {
 public:
     UIComponentScroll(
@@ -65,14 +65,18 @@ private:
         UILayout* const in_layout_override = nullptr
         ) override;
 
-    //virtual void OnInputMouseClick(
-    //    const VectorFloat4& in_screen_pos,
-    //    const VectorFloat2& in_mouse_pos
-    //    ) override;
-
     virtual const bool Draw(
         const UIManagerDrawParam& in_draw_param,
         UIHierarchyNode& in_node
+        ) override;
+
+    virtual void OnInputTouch(
+        const VectorFloat4& in_screen_pos,
+        const VectorFloat2& in_mouse_pos
+        );
+    virtual void OnInputClick(
+        const VectorFloat4& in_screen_pos,
+        const VectorFloat2& in_mouse_pos
         ) override;
 
 private:

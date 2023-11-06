@@ -28,6 +28,8 @@ struct UIDataTextRunStyle;
 struct UIManagerDrawParam;
 struct UIManagerUpdateLayoutParam;
 
+enum class UIStateFlag;
+
 /*
 UIHierarchyNode // N0 
     _texture // T0 texture or backbuffer A0 draws to
@@ -52,6 +54,9 @@ struct UIHierarchyNodeChildData
         std::unique_ptr<UIScreenSpace>& in_screen_space
         );
     ~UIHierarchyNodeChildData();
+
+    //const bool RecurseSetStateFlagInput(const UIStateFlag in_state_flag);
+    static const bool RecurseSetStateFlagInput(UIHierarchyNodeChildData* const in_data, const UIStateFlag in_state_flag);
 
     /// Need to track if state changed, so not using GeometryGeneric
     std::unique_ptr<UIGeometry> _geometry;

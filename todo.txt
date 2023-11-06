@@ -1,4 +1,3 @@
-- toggle visuals, hollow rounded corner effect (fix inner shadow?)
 - scroll
 - manual scroll
 - list box
@@ -12,4 +11,14 @@
 - personality decal
 - shadow blob (folds upward to look around, laughs, eyes track mouse pointer...)
 - anatomy study shaders
-- rts demo
+- rts demo?
+    rts stalic lib
+        input database
+            snapshot
+                entity list (position, health)
+                visibity map
+            snapshot cache
+            retroactive insert input
+            rebuild snapshot
+        draw snapshot
+

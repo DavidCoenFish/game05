@@ -26,6 +26,7 @@
 #include "common/ui/ui_data/ui_data_button.h"
 #include "common/ui/ui_data/ui_data_disable.h"
 #include "common/ui/ui_data/ui_data_float.h"
+#include "common/ui/ui_data/ui_data_scroll.h"
 #include "common/ui/ui_data/ui_data_string.h"
 #include "common/ui/ui_data/ui_data_text_run.h"
 #include "common/ui/ui_data/ui_data_toggle.h"
@@ -412,6 +413,56 @@ public:
                 })
             );
 
+        auto debug_scroll = std::make_shared<UIDataScroll>(
+            VectorFloat2(0.5f,1.5f),
+            VectorFloat2(0.0f,3.0f),
+            [this](const VectorFloat2& in_value)
+            {
+                auto data = std::dynamic_pointer_cast<UIDataScroll>(_data_map["debug_scroll"]);
+                if (nullptr != data)
+                {
+                    data->SetValue(in_value);
+                }
+            },
+            std::make_shared<UIData>(
+                "effect_gloss",
+                std::vector<std::shared_ptr<UIData>>({
+                    std::make_shared<UIData>(
+                        "effect_fill",
+                        std::vector<std::shared_ptr<UIData>>({
+                            std::make_shared<UIData>(
+                                "effect_corner",
+                                std::vector<std::shared_ptr<UIData>>({
+                                    std::make_shared<UIData>(
+                                        "canvas_grey"
+                                        )
+                                    })
+                                )
+                            })
+                        )
+                    })
+                ),
+            "UIDataScroll"
+            );
+        _data_map["debug_scroll"] = debug_scroll;
+
+        auto debug_scroll_wrapper = std::make_shared<UIData>(
+            "canvas_scroll_horizontal_wrapper",
+            std::vector<std::shared_ptr<UIData>>({
+                std::make_shared<UIData>(
+                    "effect_drop_shadow_small",
+                    std::vector<std::shared_ptr<UIData>>({
+                        std::make_shared<UIData>(
+                            "UIData",
+                            std::vector<std::shared_ptr<UIData>>({
+                                debug_scroll
+                                })
+                            )
+                        })
+                    )
+                })
+            );
+
         // Launch Left banner
         auto data_main_launch = std::make_shared<UIData>(
             "canvas_banner_left",
@@ -622,6 +673,18 @@ public:
                                                         })
                                                     ),
 
+                                                    std::make_shared<UIData>(
+                                                        "grid_small_big_pair",
+                                                        std::vector<std::shared_ptr<UIData>>({
+                                                            std::make_shared<UIDataString>(
+                                                                "debug scroll",
+                                                                LocaleISO_639_1::Default,
+                                                                "string_right_em"
+                                                                ),
+                                                            nullptr,
+                                                            debug_scroll_wrapper
+                                                        })
+                                                    ),
                                                     std::make_shared<UIData>(
                                                         "grid_small_big_pair",
                                                         std::vector<std::shared_ptr<UIData>>({

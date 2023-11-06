@@ -34,7 +34,7 @@ void TextPreVertex::AddPreVertexScale(
     const int in_pos_x,
     const int in_pos_y,
     const float in_new_line_gap_ratio,
-    const VectorFloat4& in_colour,
+    const int in_colour,
     const float in_ui_scale
     )
 {
@@ -44,7 +44,7 @@ void TextPreVertex::AddPreVertexScale(
     AddPreVertex(
         width_height,
         bearing,
-        in_cell.GetUV(),
+        in_cell.GetUVRef(),
         in_cell.GetMask(),
         in_pos_x,
         in_pos_y,
@@ -58,13 +58,13 @@ void TextPreVertex::AddPreVertex(
     const int in_pos_x,
     const int in_pos_y,
     const int in_line_height,
-    const VectorFloat4& in_colour
+    const int in_colour
     )
 {
     AddPreVertex(
-        in_cell.GetWidthHeight(),
-        in_cell.GetBearing(),
-        in_cell.GetUV(),
+        in_cell.GetWidthHeightRef(),
+        in_cell.GetBearingRef(),
+        in_cell.GetUVRef(),
         in_cell.GetMask(),
         in_pos_x,
         in_pos_y,
@@ -77,11 +77,11 @@ void TextPreVertex::AddPreVertex(
     const VectorInt2& in_width_height,
     const VectorInt2& in_bearing,
     const VectorFloat4& in_uv,
-    const VectorFloat4& in_mask,
+    const int in_mask,
     const int in_pos_x,
     const int in_pos_y,
     const int in_line_height,
-    const VectorFloat4& in_colour
+    const int  in_colour
     )
 {
     _line_dirty = true;

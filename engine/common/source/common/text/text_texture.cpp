@@ -144,8 +144,9 @@ std::shared_ptr<TextCell> TextTexture::MakeCell(
         (float)found_row->GetTexturePosY() / (float)_texture_dimention
     );
 
-    VectorFloat4 mask;
-    mask[found_row->GetMaskIndex()] = 1.0f;
+    //VectorFloat4 mask;
+    //mask[found_row->GetMaskIndex()] = 1.0f;
+    const int mask = 0xff << (found_row->GetMaskIndex() * 8);
 
     // add cell to end of row
     auto cell = std::make_shared<TextCell>(
@@ -243,7 +244,7 @@ std::shared_ptr<TextCell> TextTexture::MakeIcon(
         (float)found_row->GetTexturePosY() / (float)_texture_dimention
     );
 
-    VectorFloat4 mask(1.0f, 1.0f, 1.0f, 1.0f);
+    int mask = 0xffffffff;
 
     // add cell to end of row
     auto cell = std::make_shared<TextCell>(

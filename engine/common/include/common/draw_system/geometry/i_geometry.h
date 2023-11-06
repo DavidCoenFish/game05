@@ -34,6 +34,7 @@ public:
         const int in_vertex_count,
         const int in_byte_vertex_size,
         Microsoft::WRL::ComPtr<ID3D12Resource>& in_vertex_buffer,
+        D3D12_VERTEX_BUFFER_VIEW& in_vertex_buffer_view, // what happens if the vertex buffer size cahnges on upload, ie, FPS text "0.0" => "59.0"
         void* in_raw_data
         );
 

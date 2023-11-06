@@ -35,6 +35,39 @@ namespace
 
         return;
     }
+
+    const VectorFloat2 CalculateTouchValue(
+        const VectorFloat4& in_screen_pos, 
+        const VectorFloat2& in_mouse_pos, 
+        const UIOrientation in_orientation, 
+        const VectorFloat2& in_range_low_high,
+        const float in_length
+        )
+    {
+        float ratio = 0.0f;
+        switch(in_orientation)
+        {
+        default:
+            break;
+        case UIOrientation::THorizontal:
+            {
+                const float width = in_screen_pos[2] - in_screen_pos[0];
+                ratio = width != 0.0f ? (in_mouse_pos.GetX() - in_screen_pos[0]) / width : 0.0f;
+            }
+            break;
+        case UIOrientation::TVertical:
+            {
+                const float height = in_screen_pos[3] - in_screen_pos[1];
+                ratio = height != 0.0f ? (in_mouse_pos.GetY() - in_screen_pos[1]) / height : 0.0f;
+            }
+            break;
+        }
+        VectorFloat2 result;
+        result[0] = std::max(in_range_low_high[0], (in_range_low_high[0] + (ratio * (in_range_low_high[1] - in_range_low_high[0]))) - (in_length * 0.5f));
+        result[1] = std::min(result[0] + in_length, in_range_low_high[1]);
+        return result;
+    }
+
 }
 
 UIComponentScroll::UIComponentScroll(
@@ -118,7 +151,18 @@ const bool UIComponentScroll::Set(
 
 const bool UIComponentScroll::SetStateFlag(const UIStateFlag in_state_flag)
 {
-    return _component_default.SetStateFlag(in_state_flag);
+    bool dirty = false;
+    if (true == _component_default.SetStateFlag(in_state_flag))
+    {
+        dirty = true;
+    }
+
+    if (true == UIHierarchyNodeChildData::RecurseSetStateFlagInput(_child_data_knot.get(), in_state_flag))
+    {
+        dirty = true;
+    }
+
+    return dirty;
 }
 
 const UIStateFlag UIComponentScroll::GetStateFlag() const
@@ -296,14 +340,6 @@ void UIComponentScroll::GetDesiredSize(
         );
 }
 
-//void UIComponentScroll::OnInputMouseClick(
-//    const VectorFloat4&, // in_screen_pos,
-//    const VectorFloat2& // in_mouse_pos
-//    )
-//{
-//    return;
-//}
-
 const bool UIComponentScroll::Draw(
     const UIManagerDrawParam& in_draw_param,
     UIHierarchyNode& in_node
@@ -373,3 +409,36 @@ const bool UIComponentScroll::Draw(
 
 }
 
+void UIComponentScroll::OnInputTouch(
+    const VectorFloat4& in_screen_pos,
+    const VectorFloat2& in_mouse_pos
+    )
+{
+    if(nullptr == _value_change)
+    {
+        return;
+    }
+
+    const VectorFloat2 value = CalculateTouchValue(in_screen_pos, in_mouse_pos, _orientation, _range_low_high, _value[1] - _value[0]);
+
+    _value_change(value);
+
+    return;
+}
+
+void UIComponentScroll::OnInputClick(
+    const VectorFloat4& in_screen_pos,
+    const VectorFloat2& in_mouse_pos
+    )
+{
+    if(nullptr == _value_change)
+    {
+        return;
+    }
+
+    const VectorFloat2 value = CalculateTouchValue(in_screen_pos, in_mouse_pos, _orientation, _range_low_high, _value[1] - _value[0]);
+
+    _value_change(value);
+
+    return;
+}

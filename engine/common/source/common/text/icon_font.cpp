@@ -4,6 +4,7 @@
 #include "common/draw_system/draw_system.h"
 #include "common/file_system/file_system.h"
 #include "common/log/log.h"
+#include "common/math/dsc_math.h"
 #include "common/math/vector_float2.h"
 #include "common/math/vector_float4.h"
 #include "common/math/vector_int2.h"
@@ -37,12 +38,10 @@ public:
         const unsigned char* const in_buffer
         )
     {
-        auto cell = _text_texture->MakeCell(
+        auto cell = _text_texture->MakeIcon(
             in_buffer,
             in_width,
-            in_height,
-            0,
-            0
+            in_height
             );
 
         if (nullptr != cell)
@@ -60,7 +59,7 @@ public:
         const bool in_width_limit_enabled,
         const int in_width_limit,
         const float in_ui_scale,
-        const VectorFloat4 in_colour_tint
+        const VectorFloat4& in_colour_tint
         )
     {
         auto found = _map_icon_cell.find(in_icon_id);
@@ -69,20 +68,20 @@ public:
             return;
         }
         auto& cell = *(found->second);
-        const VectorInt2 cell_width_height = cell.GetWidthHeight();
+        const VectorInt2& cell_width_height = cell.GetWidthHeightRef();
         const int width = static_cast<int>(round(cell_width_height.GetX() * in_ui_scale));
         if ((true == in_width_limit_enabled) &&
             (in_width_limit < (in_out_cursor.GetX() + width)))
         {
             in_out_text_pre_vertex.StartNewLine(in_out_cursor);
         }
-
+        const int colour = DscMath::ConvertColourToInt(in_colour_tint);
         in_out_text_pre_vertex.AddPreVertexScale(
             cell,
             in_out_cursor[0], 
             in_out_cursor[1],
             in_new_line_gap_ratio,
-            in_colour_tint,
+            colour,
             in_ui_scale
             );
 
@@ -141,7 +140,7 @@ void IconFont::BuildPreVertexData(
     const bool in_width_limit_enabled,
     const int in_width_limit,
     const float in_ui_scale,
-    const VectorFloat4 in_colour_tint
+    const VectorFloat4& in_colour_tint
     )
 {
     _implementation->BuildPreVertexData(

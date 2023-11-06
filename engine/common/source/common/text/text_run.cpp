@@ -314,7 +314,7 @@ public:
                     D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
                     TextManager::GetInputElementDesc(),
                     vertex_raw_data,
-                    12
+                    6
                     );
             }
             else

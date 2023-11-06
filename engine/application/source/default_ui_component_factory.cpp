@@ -16,9 +16,10 @@
 #include "common/ui/ui_component/ui_component_disable.h"
 #include "common/ui/ui_component/ui_component_effect.h"
 #include "common/ui/ui_component/ui_component_grid.h"
+#include "common/ui/ui_component/ui_component_scroll.h"
+#include "common/ui/ui_component/ui_component_slider.h"
 #include "common/ui/ui_component/ui_component_stack.h"
 #include "common/ui/ui_component/ui_component_string.h"
-#include "common/ui/ui_component/ui_component_slider.h"
 #include "common/ui/ui_component/ui_component_text_run.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_base_colour.h"
@@ -284,7 +285,6 @@ namespace
         return s_layout;
     }
 
-
     const UILayout& GetUILayoutCheckboxWrapper()
     {
         static UILayout s_layout(
@@ -293,6 +293,20 @@ namespace
             UICoord(UICoord::ParentSource::X, 0.0f),
             UICoord(UICoord::ParentSource::Y, 0.5f),
             UICoord(UICoord::ParentSource::X, 0.0f),
+            UICoord(UICoord::ParentSource::Y, 0.5f)
+            );
+        return s_layout;
+    }
+
+
+    const UILayout& GetUILayoutScrollWrapper()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 1.0f),
+            UICoord(UICoord::ParentSource::Y, 0.0f, s_default_margin),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
             UICoord(UICoord::ParentSource::Y, 0.5f)
             );
         return s_layout;
@@ -992,7 +1006,42 @@ namespace
         }
         return dirty;
     }
-}
+
+    template<
+        TGetUILayoutRef in_get_layout_ref = GetUILayout,
+        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
+        UIOrientation in_orientation = UIOrientation::THorizontal
+        >
+    const bool FactoryScroll(
+        std::unique_ptr<IUIComponent>& in_out_content,
+        const UIComponentFactoryParam& in_factory_param
+        )
+    {
+        UIComponentScroll* content = dynamic_cast<UIComponentScroll*>(in_out_content.get());
+        bool dirty = false;
+        if (nullptr == content)
+        {
+            dirty = true;
+            auto new_content = std::make_unique<UIComponentScroll>(
+                in_get_base_colour(in_factory_param._create_index),
+                in_get_layout_ref(),
+                in_orientation
+                );
+            in_out_content = std::move(new_content);
+        }
+        else
+        {
+            if (true == content->SetBase(
+                in_get_base_colour(in_factory_param._create_index),
+                in_get_layout_ref(),
+                in_orientation
+                ))
+            {
+                dirty = true;
+            }
+        }
+        return dirty;
+    }}
 
 void DefaultUIComponentFactory::Populate(
     UIManager& in_ui_manager
@@ -1037,6 +1086,11 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("canvas_checkbox_wrapper", FactoryCanvas<
         GetUILayoutCheckboxWrapper, 
         GetUIBaseColourDefault //GetUIBaseColourBlue
+        >);
+
+    in_ui_manager.AddContentFactory("canvas_scroll_horizontal_wrapper", FactoryCanvas<
+        GetUILayoutScrollWrapper, 
+        GetUIBaseColourBlue // GetUIBaseColourDefault //GetUIBaseColourBlue
         >);
 
     // UIData stack
@@ -1284,6 +1338,7 @@ void DefaultUIComponentFactory::Populate(
         GetUILayoutSliderHorizontal
         >);
 
+    in_ui_manager.AddContentFactory("UIDataScroll", FactoryScroll<>);
 
     return;
 }

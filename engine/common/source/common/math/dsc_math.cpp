@@ -38,3 +38,25 @@ const VectorFloat4 DscMath::ConvertNegativeOneOneToZeroOne(const VectorFloat4& i
         ConvertNegativeOneOneToZeroOne(in_value[3])
         );
 }
+
+const int DscMath::ConvertColourToInt(const VectorFloat4& in_value)
+{
+    const int result = 
+        ConvertFloatToByte(in_value.GetX()) |
+        (ConvertFloatToByte(in_value.GetY()) << 8) |
+        (ConvertFloatToByte(in_value.GetZ()) << 16) |
+        (ConvertFloatToByte(in_value.GetW()) << 24);
+    return result;
+}
+
+const int DscMath::ConvertFloatToByte(const float in_value)
+{
+#if 1
+    // mul by 256.0 and take the floor to get better mapping of range? converting a coin toss, you would multiply by 2?
+    const int result = std::max(0, std::min(255, static_cast<int>(floor(in_value * 256.0f))));
+#else
+    const int result = std::max(0, std::min(255, static_cast<int>(round(in_value * 255.0f))));
+#endif
+    return result;
+}
+

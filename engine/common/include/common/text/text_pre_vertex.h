@@ -22,8 +22,8 @@ public:
     {
         VectorInt4 _pos_low_high;
         VectorFloat4 _uv_low_high;
-        VectorFloat4 _mask;
-        VectorFloat4 _colour;
+        int _mask;
+        int _colour;
         int _line_index;
     };
 
@@ -39,7 +39,7 @@ public:
         const int in_pos_x,
         const int in_pos_y,
         const float in_new_line_gap_ratio,
-        const VectorFloat4& in_colour,
+        const int in_colour,
         const float in_ui_scale
         );
 
@@ -48,18 +48,18 @@ public:
         const int in_pos_x,
         const int in_pos_y,
         const int in_line_height,
-        const VectorFloat4& in_colour
+        const int in_colour
         );
 
     void AddPreVertex(
         const VectorInt2& in_width_height,
         const VectorInt2& in_bearing,
         const VectorFloat4& in_uv,
-        const VectorFloat4& in_mask,
+        const int in_mask,
         const int in_pos_x,
         const int in_pos_y,
         const int in_line_height,
-        const VectorFloat4& in_colour
+        const int in_colour
         );
 
     void AddCursor(

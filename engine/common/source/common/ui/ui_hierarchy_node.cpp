@@ -37,6 +37,42 @@ UIHierarchyNodeChildData::UIHierarchyNodeChildData(
     // Nop
 }
 
+const bool UIHierarchyNodeChildData::RecurseSetStateFlagInput(UIHierarchyNodeChildData* const in_data, const UIStateFlag in_state_flag)
+{
+    bool dirty = false;
+
+    if (nullptr == in_data)
+    {
+        return dirty;
+    }
+
+    IUIComponent* const component = in_data->_component.get();
+    if (nullptr != component)
+    {
+        int state_flag = static_cast<int>(component->GetStateFlag());
+        state_flag &= ~static_cast<int>(UIStateFlag::TMaskInput);
+        state_flag |= (static_cast<int>(in_state_flag) & static_cast<int>(UIStateFlag::TMaskInput));
+        if (true == component->SetStateFlag(static_cast<UIStateFlag>(state_flag)))
+        {
+            dirty = true;
+        }
+    }
+
+    UIHierarchyNode* const node = in_data->_node.get();
+    if (nullptr != node)
+    {
+        for (auto iter : node->GetChildData())
+        {
+            if (true == RecurseSetStateFlagInput(iter.get(), in_state_flag))
+            {
+                dirty = true;
+            }
+        }
+    }
+
+    return dirty;
+}
+
 UIHierarchyNodeChildData::~UIHierarchyNodeChildData()
 {
     // Nop

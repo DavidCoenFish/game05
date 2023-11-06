@@ -32,7 +32,7 @@ public:
         const bool in_width_limit_enabled = false,
         const int in_width_limit = 0,
         const float in_ui_scale = 1.0f,
-        const VectorFloat4 in_colour_tint = VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f)
+        const VectorFloat4& in_colour_tint = VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f)
         );
 
     void RestIconUsage();

@@ -13,4 +13,10 @@ namespace DscMath
     const float ConvertNegativeOneOneToZeroOne(const float in_value);
     const VectorFloat4 ConvertNegativeOneOneToZeroOne(const VectorFloat4& in_value);
 
+    /// 0xff000000 a:1.0f
+    /// 0x000000ff r:1.0f
+    const int ConvertColourToInt(const VectorFloat4& in_value);
+    /// map [0.0f ... 1.0f] -> [0 ... 255]
+    const int ConvertFloatToByte(const float in_value);
+
 }

@@ -61,6 +61,7 @@ void GeometryGeneric::UpdateVertexData(
             (int)(_vertex_raw_data.size() / byte_vertex_size),
             byte_vertex_size,
             _vertex_buffer,
+            _vertex_buffer_view,
             _vertex_raw_data.data()
             );
     }

@@ -63,43 +63,6 @@ namespace
         value = (in_range_low_high[0] + (value * (in_range_low_high[1] - in_range_low_high[0])));
         return value;
     }
-
-    // move to be a static method of UIHierarchyNodeChildData? or UIHierarchyNode?
-    const bool RecurseSetStateFlag(UIHierarchyNodeChildData* const in_node_child_data, const UIStateFlag in_state_flag)
-    {
-        bool dirty = false;
-        if (nullptr == in_node_child_data)
-        {
-            return dirty;
-        }
-
-        IUIComponent* const component = in_node_child_data->_component.get();
-        if (nullptr != component)
-        {
-            int state_flag = static_cast<int>(component->GetStateFlag());
-            state_flag &= ~static_cast<int>(UIStateFlag::TMaskInput);
-            state_flag |= (static_cast<int>(in_state_flag) & static_cast<int>(UIStateFlag::TMaskInput));
-            if (true == component->SetStateFlag(static_cast<UIStateFlag>(state_flag)))
-            {
-                dirty = true;
-            }
-        }
-
-        UIHierarchyNode* const node = in_node_child_data->_node.get();
-        if (nullptr != node)
-        {
-            for (auto iter : node->GetChildData())
-            {
-                if (true == RecurseSetStateFlag(iter.get(), in_state_flag))
-                {
-                    dirty = true;
-                }
-            }
-        }
-
-        return dirty;
-    }
-
 }
 
 UIComponentSlider::UIComponentSlider(
@@ -189,7 +152,7 @@ const bool UIComponentSlider::SetStateFlag(const UIStateFlag in_state_flag)
         dirty = true;
     }
 
-    if (true == RecurseSetStateFlag(_child_data_knot.get(), in_state_flag))
+    if (true == UIHierarchyNodeChildData::RecurseSetStateFlagInput(_child_data_knot.get(), in_state_flag))
     {
         dirty = true;
     }
@@ -374,40 +337,6 @@ void UIComponentSlider::GetDesiredSize(
         );
 }
 
-void UIComponentSlider::OnInputTouch(
-    const VectorFloat4& in_screen_pos,
-    const VectorFloat2& in_mouse_pos
-    )
-{
-    if(nullptr == _value_change)
-    {
-        return;
-    }
-
-    const float value = CalculateTouchValue(in_screen_pos, in_mouse_pos, _orientation, _range_low_high);
-
-    _value_change(value);
-
-    return;
-}
-
-void UIComponentSlider::OnInputClick(
-    const VectorFloat4& in_screen_pos,
-    const VectorFloat2& in_mouse_pos
-    )
-{
-    if(nullptr == _value_change)
-    {
-        return;
-    }
-
-    const float value = CalculateTouchValue(in_screen_pos, in_mouse_pos, _orientation, _range_low_high);
-
-    _value_change(value);
-
-    return;
-}
-
 const bool UIComponentSlider::Draw(
     const UIManagerDrawParam& in_draw_param,
     UIHierarchyNode& in_node
@@ -477,3 +406,36 @@ const bool UIComponentSlider::Draw(
 
 }
 
+void UIComponentSlider::OnInputTouch(
+    const VectorFloat4& in_screen_pos,
+    const VectorFloat2& in_mouse_pos
+    )
+{
+    if(nullptr == _value_change)
+    {
+        return;
+    }
+
+    const float value = CalculateTouchValue(in_screen_pos, in_mouse_pos, _orientation, _range_low_high);
+
+    _value_change(value);
+
+    return;
+}
+
+void UIComponentSlider::OnInputClick(
+    const VectorFloat4& in_screen_pos,
+    const VectorFloat2& in_mouse_pos
+    )
+{
+    if(nullptr == _value_change)
+    {
+        return;
+    }
+
+    const float value = CalculateTouchValue(in_screen_pos, in_mouse_pos, _orientation, _range_low_high);
+
+    _value_change(value);
+
+    return;
+}
