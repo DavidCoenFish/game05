@@ -92,6 +92,11 @@ const bool UIComponentGrid::SetStateFlag(const UIStateFlag in_state_flag)
     return _component_default.SetStateFlag(in_state_flag);
 }
 
+const bool UIComponentGrid::SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable)
+{
+    return _component_default.SetStateFlagBit(in_state_flag_bit, in_enable);
+}
+
 const UIStateFlag UIComponentGrid::GetStateFlag() const
 {
     return _component_default.GetStateFlag();
@@ -131,7 +136,7 @@ const bool UIComponentGrid::UpdateHierarchy(
         );
 }
 
-void UIComponentGrid::UpdateSize(
+const bool UIComponentGrid::UpdateSize(
     DrawSystem* const in_draw_system,
     const VectorInt2& in_parent_size,
     const VectorInt2& in_parent_offset,
@@ -141,8 +146,7 @@ void UIComponentGrid::UpdateSize(
     UIGeometry& in_out_geometry, 
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text,
     const UIScreenSpace& in_parent_screen_space,
-    UIScreenSpace& out_screen_space,
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&
+    UIScreenSpace& out_screen_space
     )
 {
     std::vector<VectorInt4> child_window_offset_array;
@@ -195,7 +199,6 @@ void UIComponentGrid::UpdateSize(
         );
 
     int trace = 0;
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>> extra_data;
     auto& child_data_array = in_out_node.GetChildData();
     for (auto& child_data_ptr : child_data_array)
     {
@@ -211,7 +214,7 @@ void UIComponentGrid::UpdateSize(
         const VectorInt2 offset(child_window_offset.GetZ(), child_window_offset.GetW());
         const VectorInt2 window(child_window_offset.GetX(), child_window_offset.GetY());
 
-        child_data._component->UpdateSize(
+        if (true == child_data._component->UpdateSize(
             in_draw_system,
             texture_size,
             offset,
@@ -221,15 +224,14 @@ void UIComponentGrid::UpdateSize(
             *(child_data._geometry.get()),
             *(child_data._node.get()),
             out_screen_space,
-            *(child_data._screen_space.get()),
-            extra_data
-            );
+            *(child_data._screen_space.get())
+            ))
+        {
+            dirty = true;
+        }
     }
 
-    // wanted a way of allowing manual scroll to optional add nodes post size calculation
-    child_data_array.insert(child_data_array.end(), extra_data.begin(), extra_data.end());
-
-    return;
+    return dirty;
 }
 
 void UIComponentGrid::GetDesiredSize(
@@ -240,15 +242,6 @@ void UIComponentGrid::GetDesiredSize(
     UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
-#if 0
-    return _component_default.GetDesiredSize(
-        out_layout_size,
-        out_desired_size,
-        in_parent_window,
-        in_ui_scale,
-        in_out_node
-        );
-#else
     std::vector<VectorInt4> child_window_offset; // left to right, top to bottom
 
     GetGridDesiredSize(
@@ -260,7 +253,6 @@ void UIComponentGrid::GetDesiredSize(
         child_window_offset
         );
     return;
-#endif
 }
 
 const bool UIComponentGrid::PreDraw(

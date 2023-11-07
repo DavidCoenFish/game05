@@ -1141,9 +1141,7 @@ namespace
 
     template<
         TGetUILayoutRef in_get_layout_ref = GetUILayout,
-        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
-        bool in_allow_horizontal = true,
-        bool in_allow_vertical = true
+        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault
         >
     const bool FactoryManualScroll(
         std::unique_ptr<IUIComponent>& in_out_content,
@@ -1157,9 +1155,7 @@ namespace
             dirty = true;
             auto new_content = std::make_unique<UIComponentManualScroll>(
                 in_get_base_colour(in_factory_param._create_index),
-                in_get_layout_ref(),
-                in_allow_horizontal,
-                in_allow_vertical
+                in_get_layout_ref()
                 );
             in_out_content = std::move(new_content);
         }
@@ -1167,9 +1163,7 @@ namespace
         {
             if (true == content->SetBase(
                 in_get_base_colour(in_factory_param._create_index),
-                in_get_layout_ref(),
-                in_allow_horizontal,
-                in_allow_vertical
+                in_get_layout_ref()
                 ))
             {
                 dirty = true;
@@ -1507,18 +1501,6 @@ void DefaultUIComponentFactory::Populate(
         >);
 
     in_ui_manager.AddContentFactory("UIDataManualScroll", FactoryManualScroll<>);
-    in_ui_manager.AddContentFactory("manual_scroll_horizontal", FactoryManualScroll<
-        GetUILayout,
-        GetUIBaseColourDefault,
-        true, 
-        false
-        >);
-    in_ui_manager.AddContentFactory("manual_scroll_vertical", FactoryManualScroll<
-        GetUILayout,
-        GetUIBaseColourDefault,
-        false, 
-        true
-        >);
 
     return;
 }

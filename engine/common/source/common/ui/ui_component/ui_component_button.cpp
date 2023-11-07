@@ -66,6 +66,11 @@ const bool UIComponentButton::SetStateFlag(const UIStateFlag in_state_flag)
     return _component_default.SetStateFlag(in_state_flag);
 }
 
+const bool UIComponentButton::SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable)
+{
+    return _component_default.SetStateFlagBit(in_state_flag_bit, in_enable);
+}
+
 const UIStateFlag UIComponentButton::GetStateFlag() const
 {
     return _component_default.GetStateFlag();
@@ -136,7 +141,7 @@ const bool UIComponentButton::UpdateHierarchy(
     return dirty;
 }
 
-void UIComponentButton::UpdateSize(
+const bool UIComponentButton::UpdateSize(
     DrawSystem* const in_draw_system,
     const VectorInt2& in_parent_size,
     const VectorInt2& in_parent_offset,
@@ -146,11 +151,10 @@ void UIComponentButton::UpdateSize(
     UIGeometry& in_out_geometry, 
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     const UIScreenSpace& in_parent_screen_space,
-    UIScreenSpace& out_screen_space,
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&
+    UIScreenSpace& out_screen_space
     )
 {
-    _component_default.UpdateSize(
+    return _component_default.UpdateSize(
         in_draw_system,
         *this,
         in_parent_size,

@@ -94,6 +94,11 @@ const bool UIComponentString::SetStateFlag(const UIStateFlag in_state_flag)
     return _component_default.SetStateFlag(in_state_flag);
 }
 
+const bool UIComponentString::SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable)
+{
+    return _component_default.SetStateFlagBit(in_state_flag_bit, in_enable);
+}
+
 const UIStateFlag UIComponentString::GetStateFlag() const
 {
     return _component_default.GetStateFlag();
@@ -154,7 +159,7 @@ const bool UIComponentString::UpdateHierarchy(
     return dirty;
 }
 
-void UIComponentString::UpdateSize(
+const bool UIComponentString::UpdateSize(
     DrawSystem* const in_draw_system,
     const VectorInt2& in_parent_size,
     const VectorInt2& in_parent_offset,
@@ -164,11 +169,11 @@ void UIComponentString::UpdateSize(
     UIGeometry& in_out_geometry, 
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     const UIScreenSpace& in_parent_screen_space,
-    UIScreenSpace& out_screen_space,
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&
+    UIScreenSpace& out_screen_space
     )
 {
-    _component_default.UpdateSize(
+    bool dirty = false;
+    if (true == _component_default.UpdateSize(
         in_draw_system,
         *this,
         in_parent_size,
@@ -180,14 +185,19 @@ void UIComponentString::UpdateSize(
         in_out_node,
         in_parent_screen_space,
         out_screen_space
-        );
+        ))
+    {
+        dirty = true;
+    }
 
-    // Return true if needed? no, if the size of the texture changes, then texture is marked as needs to draw
-    _text_block->SetTextContainerSize(
+    if (true ==     _text_block->SetTextContainerSize(
         in_out_node.GetTextureSize(in_draw_system)
-        );
+        ))
+    {
+        dirty = true;
+    }
 
-    return;
+    return dirty;
 }
 
 void UIComponentString::GetDesiredSize(

@@ -39,6 +39,7 @@ public:
     virtual void SetLayoutOverride(const UILayout& in_override) = 0; 
 
     virtual const bool SetStateFlag(const UIStateFlag in_state_flag) = 0;
+    virtual const bool SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable) = 0;
     virtual const UIStateFlag GetStateFlag() const = 0;
 
     /// Make sorting children easier
@@ -49,13 +50,14 @@ public:
     /// make the hirearchy match the model (UIData)
     virtual const bool UpdateHierarchy(
         UIData* const in_data,
-        UIHierarchyNodeChildData& in_out_child_data,
+        UIHierarchyNodeChildData& in_out_parent_child_data, // the parent/ owner of the current component
         const UIHierarchyNodeUpdateHierarchyParam& in_param
         ) = 0;
 
     /// convert the layout data and parent size to the texture size, geometry size and uv
     /// certain component types may do slightly different operations, but the default is to call GetDesiredSize
-    virtual void UpdateSize(
+    /// needed to return true as scroll under manual scroll would be modified without the data flagging dirty, as easier to catch geometry, but geometry change can only mark texture dirty via update size
+    virtual const bool UpdateSize(
         DrawSystem* const in_draw_system,
         const VectorInt2& in_parent_size,
         const VectorInt2& in_parent_offset,
@@ -65,9 +67,7 @@ public:
         UIGeometry& in_out_geometry, 
         UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text,
         const UIScreenSpace& in_parent_screen_space,
-        UIScreenSpace& out_screen_space,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_extra_data
-        //UILayout* const in_layout_override = nullptr
+        UIScreenSpace& out_screen_space
         ) = 0;
 
     /// certain layout data allows shrink, and certain componets may have different logic, such as stack component
@@ -84,11 +84,4 @@ public:
         const UIManagerDrawParam& in_draw_param,
         UIHierarchyNode& in_node
         ) = 0;
-
-    /// alow customisation of the component being drawn to the node texture
-    /// by default a component doesn't draw and just lets the node draw each child texture to the parent
-    virtual void Draw(
-        const UIManagerDrawParam& in_draw_param
-        );
-
 };

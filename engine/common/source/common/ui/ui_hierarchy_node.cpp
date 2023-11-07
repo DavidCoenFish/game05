@@ -46,8 +46,12 @@ const bool UIHierarchyNodeChildData::ApplyFactory(
     bool dirty = false;
     if (nullptr == in_data)
     {
-        _component.reset();
-        return true;
+        if (nullptr != _component)
+        {
+            _component.reset();
+            dirty = true;
+        }
+        return dirty;
     }
 
     auto& data = *in_data;
@@ -343,7 +347,7 @@ const bool UIHierarchyNode::UpdateHierarchy(
     {
         std::map<void*, std::shared_ptr<UIHierarchyNodeChildData>> map_temp_ownership;
 
-        //std::vector<std::shared_ptr<UIHierarchyNodeChildData>> _child_data_array;
+        // if there are too many items, put the remaining into a temp owership map
         const int target_length = (int)in_array_data_or_null->size();
         for (int index = target_length; index < (int)_child_data_array.size(); ++index)
         {
@@ -386,6 +390,7 @@ const bool UIHierarchyNode::UpdateHierarchy(
             if (found != map_temp_ownership.end())
             {
                 _child_data_array[index] = found->second;
+                map_temp_ownership.erase(found);
             }
             else
             {
@@ -450,8 +455,6 @@ void UIHierarchyNode::UpdateSize(
 {
     UpdateTextureSize(in_parent_size, in_mark_dirty);
 
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>> extra_data_array;
-
     // for each child, work out the geometry and texture size for each content
     for (auto& child_data_ptr : _child_data_array)
     {
@@ -462,7 +465,13 @@ void UIHierarchyNode::UpdateSize(
             continue;
         }
 
-        child_data._component->UpdateSize(
+        const int state_flag = static_cast<int>(child_data._component->GetStateFlag());
+        if (0 != (state_flag & static_cast<int>(UIStateFlag::THidden)))
+        {
+            continue;
+        }
+
+        if (true == child_data._component->UpdateSize(
             in_draw_system,
             in_parent_size,
             in_parent_offset,
@@ -472,13 +481,12 @@ void UIHierarchyNode::UpdateSize(
             *(child_data._geometry.get()),
             *(child_data._node.get()),
             in_parent_screen_space,
-            *(child_data._screen_space.get()),
-            extra_data_array
-            );
+            *(child_data._screen_space.get())
+            ))
+        {
+            child_data._node->MarkTextureDirty();
+        }
     }
-
-    // wanted a way of allowing manual scroll to optional add nodes post size calculation
-    _child_data_array.insert(_child_data_array.end(), extra_data_array.begin(), extra_data_array.end());
 
     return;
 }
@@ -504,7 +512,8 @@ const bool UIHierarchyNode::DealInput(
         }
 
         // nope out of disabled components, don't even recurse
-        if (0 != (local_flag & static_cast<int>(UIStateFlag::TDisable)))
+        if ((0 != (local_flag & static_cast<int>(UIStateFlag::TDisable))) ||
+            (0 != (local_flag & static_cast<int>(UIStateFlag::THidden))))
         {
             continue;
         }
@@ -674,6 +683,12 @@ const bool UIHierarchyNode::Draw(
                 continue;
             }
 
+            const int state_flag = static_cast<int>(child_data._component->GetStateFlag());
+            if (0 != (state_flag & static_cast<int>(UIStateFlag::THidden)))
+            {
+                continue;
+            }
+
             const auto& shader = in_draw_param._ui_manager->GetShaderRef(UIShaderEnum::TDefault);
 
             child_data._node->GetUITexture().SetShaderResource(
@@ -701,28 +716,7 @@ const bool UIHierarchyNode::Draw(
                 in_draw_param._draw_system,
                 in_draw_param._frame
                 );
-
-            // of do as another loop to get above all children
-            child_data._component->Draw(
-                in_draw_param
-                );
         }
-
-        #if 0
-        // overkill doing another loop?
-        for (auto& iter : _child_data_array)
-        {
-            UIHierarchyNodeChildData& child_data = *iter;
-            if (nullptr == child_data._component)
-            {
-                continue;
-            }
-
-            child_data._component->Draw(
-                in_draw_param
-                );
-        }
-        #endif
 
         _texture->SetHasDrawn(true);
     }

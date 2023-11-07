@@ -17,21 +17,18 @@
 
 UIComponentManualScroll::UIComponentManualScroll(
     const UIBaseColour& in_base_colour,
-    const UILayout& in_layout,
-    const bool in_allow_horizontal_scroll,
-    const bool in_allow_vertical_scroll
+    const UILayout& in_layout
     )
     : _component_default(
         in_base_colour,
         in_layout
         )
-    , _allow_horizontal_scroll(in_allow_horizontal_scroll)
-    , _allow_vertical_scroll(in_allow_vertical_scroll)
-    , _do_horizontal_scroll(false)
-    , _do_vertical_scroll(false)
+    , _horizontal_scroll_wrapper(nullptr)
+    , _vertical_scroll_wrapper(nullptr)
+    , _horizontal_scroll(nullptr)
+    , _vertical_scroll(nullptr)
 {
-    _child_data_vertical_scroll = UIHierarchyNodeChildData::Factory();
-    _child_data_horizontal_scroll = UIHierarchyNodeChildData::Factory();
+    // Nop
 }
 
 UIComponentManualScroll::~UIComponentManualScroll()
@@ -41,9 +38,7 @@ UIComponentManualScroll::~UIComponentManualScroll()
 
 const bool UIComponentManualScroll::SetBase(
     const UIBaseColour& in_base_colour,
-    const UILayout& in_layout,
-    const bool in_allow_horizontal_scroll,
-    const bool in_allow_vertical_scroll    
+    const UILayout& in_layout
     )
 {
     bool dirty = false;
@@ -52,18 +47,6 @@ const bool UIComponentManualScroll::SetBase(
         in_layout
         ))
     {
-        dirty = true;
-    }
-
-    if (_allow_horizontal_scroll != in_allow_horizontal_scroll)
-    {
-        _allow_horizontal_scroll = in_allow_horizontal_scroll;
-        dirty = true;
-    }
-
-    if (_allow_vertical_scroll != in_allow_vertical_scroll)
-    {
-        _allow_vertical_scroll = in_allow_vertical_scroll;
         dirty = true;
     }
 
@@ -78,17 +61,12 @@ const bool UIComponentManualScroll::SetStateFlag(const UIStateFlag in_state_flag
         dirty = true;
     }
 
-    if (true == UIHierarchyNodeChildData::RecurseSetStateFlagInput(_child_data_vertical_scroll.get(), in_state_flag))
-    {
-        dirty = true;
-    }
-
-    if (true == UIHierarchyNodeChildData::RecurseSetStateFlagInput(_child_data_horizontal_scroll.get(), in_state_flag))
-    {
-        dirty = true;
-    }
-
     return dirty;
+}
+
+const bool UIComponentManualScroll::SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable)
+{
+    return _component_default.SetStateFlagBit(in_state_flag_bit, in_enable);
 }
 
 const UIStateFlag UIComponentManualScroll::GetStateFlag() const
@@ -127,52 +105,6 @@ const bool UIComponentManualScroll::UpdateHierarchy(
     bool dirty = false;
     UIDataManualScroll* const data = dynamic_cast<UIDataManualScroll*>(in_data);
 
-    {
-        UIHierarchyNodeChildData* child_data = _child_data_horizontal_scroll.get();
-        UIData* const inner_data = data ? data->GetHorizontalScrollWrapper() : nullptr;
-        if (nullptr != child_data)
-        {
-            if (true == child_data->ApplyFactory(inner_data, in_param, 0))
-            {
-                dirty = true;
-            }
-        }
-
-        _horizontal_scroll = nullptr;
-        UIDataScroll* const scroll = data ? data->GetHorizontalScroll() : nullptr;
-        child_data->VisitComponents([this, scroll](IUIComponent* const in_component){
-                if (scroll == in_component->GetSourceToken())
-                {
-                    _horizontal_scroll = dynamic_cast<UIComponentScroll*>(in_component);
-                    return false;
-                }
-                return true;
-            });
-    }
-
-    {
-        UIHierarchyNodeChildData* child_data = _child_data_vertical_scroll.get();
-        UIData* const inner_data = data ? data->GetVerticalScrollWrapper() : nullptr;
-        if (nullptr != child_data)
-        {
-            if (true == child_data->ApplyFactory(inner_data, in_param, 0))
-            {
-                dirty = true;
-            }
-        }
-
-        _vertical_scroll = nullptr;
-        UIDataScroll* const scroll = data ? data->GetVerticalScroll() : nullptr;
-        child_data->VisitComponents([this, scroll](IUIComponent* const in_component){
-                if (scroll == in_component->GetSourceToken())
-                {
-                    _vertical_scroll = dynamic_cast<UIComponentScroll*>(in_component);
-                    return false;
-                }
-                return true;
-            });
-    }
-
     if (true == _component_default.UpdateHierarchy(
         in_data,
         in_out_child_data, 
@@ -182,10 +114,46 @@ const bool UIComponentManualScroll::UpdateHierarchy(
         dirty = true;
     }
 
+    auto& child_data_array = in_out_child_data._node->GetChildData();
+    UIHierarchyNodeChildData* const horizontal_child_data = 2 <= child_data_array.size() ? child_data_array[1].get() : nullptr;
+    _horizontal_scroll_wrapper = nullptr;
+    if (nullptr != horizontal_child_data)
+    {
+        _horizontal_scroll_wrapper = horizontal_child_data->_component.get();
+        _horizontal_scroll = nullptr;
+        UIDataScroll* const scroll = data ? data->GetHorizontalScroll() : nullptr;
+        horizontal_child_data->VisitComponents([this, scroll](IUIComponent* const in_component){
+                if (scroll == in_component->GetSourceToken())
+                {
+                    _horizontal_scroll = dynamic_cast<UIComponentScroll*>(in_component);
+                    return false;
+                }
+                return true;
+            });
+    }
+
+    UIHierarchyNodeChildData* const vertical_child_data = 3 <= child_data_array.size() ? child_data_array[2].get() : nullptr;
+    _vertical_scroll_wrapper = nullptr;
+    if (nullptr != vertical_child_data)
+    {
+        _vertical_scroll_wrapper = vertical_child_data->_component.get();
+        _vertical_scroll = nullptr;
+        UIDataScroll* const scroll = data ? data->GetVerticalScroll() : nullptr;
+
+        vertical_child_data->VisitComponents([this, scroll](IUIComponent* const in_component){
+                if (scroll == in_component->GetSourceToken())
+                {
+                    _vertical_scroll = dynamic_cast<UIComponentScroll*>(in_component);
+                    return false;
+                }
+                return true;
+            });
+    }
+
     return dirty;
 }
 
-void UIComponentManualScroll::UpdateSize(
+const bool UIComponentManualScroll::UpdateSize(
     DrawSystem* const in_draw_system,
     const VectorInt2& in_parent_size,
     const VectorInt2& in_parent_offset,
@@ -195,8 +163,7 @@ void UIComponentManualScroll::UpdateSize(
     UIGeometry& in_out_geometry, 
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     const UIScreenSpace& in_parent_screen_space,
-    UIScreenSpace& out_screen_space,
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_extra_data
+    UIScreenSpace& out_screen_space
     )
 {
     // what size this layout wants in the parent layout
@@ -211,98 +178,107 @@ void UIComponentManualScroll::UpdateSize(
         );
 
     // instead of shrinking our desired size, use it as the initial value of the max_child_size
-    //desired_size = layout_size;
-
     VectorInt2 max_child_size = desired_size;
-    // now, of "our" children, what is the biggest needed size
-    // Default is to go through children and see if anyone needs a bigger size than what we calculate
-    for (auto iter: in_out_node.GetChildData())
+
+    // first child of the manual scroll is the content we care about the size of
+    auto& child_array = in_out_node.GetChildData();
+    if ((0 < child_array.size()) && (nullptr != child_array[0]))
     {
-        UIHierarchyNodeChildData& child_data = *iter;
-        if (nullptr == child_data._component)
+        UIHierarchyNodeChildData& child_data = *child_array[0];
+        if (nullptr != child_data._component)
         {
-            continue;
+            VectorInt2 child_layout_size;
+            VectorInt2 child_desired_size;
+            child_data._component->GetDesiredSize(
+                child_layout_size,
+                child_desired_size,
+                layout_size, 
+                in_ui_scale, 
+                *child_data._node
+                );
+            max_child_size = VectorInt2::Max(max_child_size, child_desired_size);
         }
-        VectorInt2 child_layout_size;
-        VectorInt2 child_desired_size;
-        child_data._component->GetDesiredSize(
-            child_layout_size,
-            child_desired_size,
-            layout_size, 
-            in_ui_scale, 
-            *child_data._node
-            );
-        max_child_size = VectorInt2::Max(max_child_size, child_desired_size);
     }
 
     VectorFloat2 uv_scroll;
 
     // adjust our desired size for children, if allowed to scroll
-    _do_horizontal_scroll = false;
-    if ((true == _allow_horizontal_scroll) && (layout_size[0] < max_child_size[0]))
+    if (nullptr != _horizontal_scroll_wrapper)
     {
-        desired_size[0] = max_child_size[0];
-        if (nullptr != _horizontal_scroll)
+        if (layout_size[0] < max_child_size[0])
         {
-            float ratio = _horizontal_scroll->GetValueRatio();
-            uv_scroll[0] = ratio;
-            const VectorFloat2 range(0.0f, static_cast<float>(max_child_size[0]));
-            const float inner_length = static_cast<float>(layout_size[0]);
-            const float start = ratio * (range[1] - inner_length);
-            const VectorFloat2 value(start, start + inner_length);
-            auto on_value_change = _horizontal_scroll->GetOnValueChange();
-            if (nullptr != on_value_change)
+            desired_size[0] = max_child_size[0];
+            if (nullptr != _horizontal_scroll)
             {
-                on_value_change(value);
+                float ratio = _horizontal_scroll->GetValueRatio();
+                uv_scroll[0] = ratio;
+                const VectorFloat2 range(0.0f, static_cast<float>(max_child_size[0]));
+                const float inner_length = static_cast<float>(layout_size[0]);
+                const float start = ratio * (range[1] - inner_length);
+                const VectorFloat2 value(start, start + inner_length);
+                auto on_value_change = _horizontal_scroll->GetOnValueChange();
+                if (nullptr != on_value_change)
+                {
+                    on_value_change(value);
+                }
+                auto on_range_change = _horizontal_scroll->GetOnRangeChange();
+                if (nullptr != on_range_change)
+                {
+                    on_range_change(range);
+                }
+                _horizontal_scroll->Set(
+                    on_value_change,
+                    on_range_change,
+                    value,
+                    range
+                    );
             }
-            auto on_range_change = _horizontal_scroll->GetOnRangeChange();
-            if (nullptr != on_range_change)
-            {
-                on_range_change(range);
-            }
-            _horizontal_scroll->Set(
-                on_value_change,
-                on_range_change,
-                value,
-                range
-                );
-            in_extra_data.push_back(_child_data_horizontal_scroll);
-            _do_horizontal_scroll = true;
+            _horizontal_scroll_wrapper->SetStateFlagBit(UIStateFlag::THidden, false);
+        }
+        else
+        {
+            _horizontal_scroll_wrapper->SetStateFlagBit(UIStateFlag::THidden, true);
         }
     }
-    _do_vertical_scroll = false;
-    if ((true == _allow_vertical_scroll) && (layout_size[1] < max_child_size[1]))
+
+    if (nullptr != _vertical_scroll_wrapper)
     {
-        desired_size[1] = max_child_size[1];
-        if (nullptr != _vertical_scroll)
+        if (layout_size[1] < max_child_size[1])
         {
-            float ratio = _vertical_scroll->GetValueRatio();
-            uv_scroll[1] = ratio;
-            const VectorFloat2 range(0.0f, static_cast<float>(max_child_size[1]));
-            const float inner_length = static_cast<float>(layout_size[1]);
-            const float start = ratio * (range[1] - inner_length);
-            const VectorFloat2 value(start, start + inner_length);
-
-            auto on_value_change = _vertical_scroll->GetOnValueChange();
-            if (nullptr != on_value_change)
+            desired_size[1] = max_child_size[1];
+            if (nullptr != _vertical_scroll)
             {
-                on_value_change(value);
-            }
-            auto on_range_change = _vertical_scroll->GetOnRangeChange();
-            if (nullptr != on_range_change)
-            {
-                on_range_change(range);
-            }
+                float ratio = _vertical_scroll->GetValueRatio();
+                uv_scroll[1] = ratio;
+                const VectorFloat2 range(0.0f, static_cast<float>(max_child_size[1]));
+                const float inner_length = static_cast<float>(layout_size[1]);
+                const float start = ratio * (range[1] - inner_length);
+                const VectorFloat2 value(start, start + inner_length);
 
-            _vertical_scroll->Set(
-                // The advantage of obliging _vertical_scroll to implement the on change, is that it can have persistant scope, unlike UIComponentManualScroll, ie, it is in the model
-                on_value_change,
-                on_range_change,
-                value,
-                range
-                );
-            in_extra_data.push_back(_child_data_vertical_scroll);
-            _do_vertical_scroll = true;
+                auto on_value_change = _vertical_scroll->GetOnValueChange();
+                if (nullptr != on_value_change)
+                {
+                    on_value_change(value);
+                }
+                auto on_range_change = _vertical_scroll->GetOnRangeChange();
+                if (nullptr != on_range_change)
+                {
+                    on_range_change(range);
+                }
+
+                _vertical_scroll->Set(
+                    // The advantage of obliging _vertical_scroll to implement the on change, is that it can have persistant scope, unlike UIComponentManualScroll, ie, it is in the model
+                    on_value_change,
+                    on_range_change,
+                    value,
+                    range
+                    );
+            }
+            _vertical_scroll_wrapper->SetStateFlagBit(UIStateFlag::THidden, false);
+        }
+        else
+        {
+            _vertical_scroll_wrapper->SetStateFlagBit(UIStateFlag::THidden, true);
         }
     }
 
@@ -319,7 +295,7 @@ void UIComponentManualScroll::UpdateSize(
         in_parent_offset,
         in_parent_window,
         in_ui_scale,
-        in_time_delta,
+        0.0f, //in_time_delta, is there a better way to disable auto scroll?
         layout_size,
         desired_size,
         _component_default.GetLayout()
@@ -341,40 +317,6 @@ void UIComponentManualScroll::UpdateSize(
         geometry_uv
         );
 
-    if ((nullptr != _child_data_horizontal_scroll) && (nullptr != _child_data_horizontal_scroll->_component))
-    {
-        _child_data_horizontal_scroll->_component->UpdateSize(
-            in_draw_system,
-            in_parent_size,//texture_size, //in_parent_size,
-            in_parent_offset,//VectorInt2(), //in_parent_offset,
-            in_parent_window,//texture_size, //in_parent_window,
-            in_ui_scale,
-            in_time_delta, 
-            *_child_data_horizontal_scroll->_geometry, 
-            *_child_data_horizontal_scroll->_node,
-            in_parent_screen_space,
-            *_child_data_horizontal_scroll->_screen_space,
-            in_extra_data
-            );
-    }
-
-    if ((nullptr != _child_data_vertical_scroll) && (nullptr != _child_data_vertical_scroll->_component))
-    {
-        _child_data_vertical_scroll->_component->UpdateSize(
-            in_draw_system,
-            in_parent_size,//texture_size, //in_parent_size,
-            in_parent_offset,//VectorInt2(), //in_parent_offset,
-            in_parent_window,//texture_size, //in_parent_window,
-            in_ui_scale,
-            in_time_delta, 
-            *_child_data_vertical_scroll->_geometry, 
-            *_child_data_vertical_scroll->_node,
-            in_parent_screen_space,
-            *_child_data_vertical_scroll->_screen_space,
-            in_extra_data
-            );
-    }
-
     // Recurse
     in_out_node.UpdateSize(
         in_draw_system,
@@ -387,7 +329,7 @@ void UIComponentManualScroll::UpdateSize(
         out_screen_space
         );
 
-    return;
+    return dirty;
 }
 
 void UIComponentManualScroll::GetDesiredSize(
@@ -413,116 +355,9 @@ const bool UIComponentManualScroll::PreDraw(
     UIHierarchyNode& in_node
     ) 
 {
-#if 0
     return _component_default.PreDraw(
         in_draw_param,
         in_node
         );
-#else
-    bool dirty = false;
-    if (true == _component_default.PreDraw(
-        in_draw_param,
-        in_node
-        ))
-    {
-        dirty = true;
-    }
-
-    if ((nullptr != _child_data_horizontal_scroll) && (nullptr != _child_data_horizontal_scroll->_component) && (true == _do_horizontal_scroll))
-    {
-        if (true == _child_data_horizontal_scroll->_component->PreDraw(
-            in_draw_param,
-            *_child_data_horizontal_scroll->_node
-            ))
-        {
-            dirty = true;
-        }
-    }
-
-    if ((nullptr != _child_data_vertical_scroll) && (nullptr != _child_data_vertical_scroll->_component) && (true == _do_vertical_scroll))
-    {
-        if (true == _child_data_vertical_scroll->_component->PreDraw(
-            in_draw_param,
-            *_child_data_vertical_scroll->_node
-            ))
-        {
-            dirty = true;
-        }
-    }
-
-    return dirty;
-#endif
 }
 
-void UIComponentManualScroll::Draw(
-    const UIManagerDrawParam& in_draw_param
-    ) 
-{
-#if 0
-    in_draw_param;
-#else
-    if ((nullptr != _child_data_horizontal_scroll) && (nullptr != _child_data_horizontal_scroll->_component) && (true == _do_horizontal_scroll))
-    {
-        const auto& shader = in_draw_param._ui_manager->GetShaderRef(UIShaderEnum::TDefault);
-
-        _child_data_horizontal_scroll->_node->GetUITexture().SetShaderResource(
-            *shader,
-            0,
-            in_draw_param._frame
-            );
-
-        if (nullptr == _child_data_horizontal_scroll->_shader_constant_buffer)
-        {
-            _child_data_horizontal_scroll->_shader_constant_buffer = shader->MakeShaderConstantBuffer(
-                in_draw_param._draw_system
-                );
-        }
-        if (nullptr != _child_data_horizontal_scroll->_shader_constant_buffer)
-        {
-            UIManager::TShaderConstantBuffer& buffer = _child_data_horizontal_scroll->_shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
-            // todo: get the tint colour, from geometry?
-            buffer._tint_colour = VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f);
-        }
-
-        in_draw_param._frame->SetShader(shader, _child_data_horizontal_scroll->_shader_constant_buffer);
-
-        _child_data_horizontal_scroll->_geometry->Draw(
-            in_draw_param._draw_system,
-            in_draw_param._frame
-            );
-    }
-
-    if ((nullptr != _child_data_vertical_scroll) && (nullptr != _child_data_vertical_scroll->_component) && (true == _do_vertical_scroll))
-    {
-        const auto& shader = in_draw_param._ui_manager->GetShaderRef(UIShaderEnum::TDefault);
-
-        _child_data_vertical_scroll->_node->GetUITexture().SetShaderResource(
-            *shader,
-            0,
-            in_draw_param._frame
-            );
-
-        if (nullptr == _child_data_vertical_scroll->_shader_constant_buffer)
-        {
-            _child_data_vertical_scroll->_shader_constant_buffer = shader->MakeShaderConstantBuffer(
-                in_draw_param._draw_system
-                );
-        }
-        if (nullptr != _child_data_vertical_scroll->_shader_constant_buffer)
-        {
-            UIManager::TShaderConstantBuffer& buffer = _child_data_vertical_scroll->_shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
-            // todo: get the tint colour, from geometry?
-            buffer._tint_colour = VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f);
-        }
-
-        in_draw_param._frame->SetShader(shader, _child_data_vertical_scroll->_shader_constant_buffer);
-
-        _child_data_vertical_scroll->_geometry->Draw(
-            in_draw_param._draw_system,
-            in_draw_param._frame
-            );
-    }
-
-    return;
-#endif
-}

@@ -29,7 +29,8 @@ struct UIHierarchyNodeLayoutData;
 struct UIHierarchyNodeUpdateHierarchyParam;
 
 /// don't inherit functionality, but we can share methods/ components
-/// default implementation
+/// default implementation for interface methods.
+/// seemed like a good idea to not inherit functionality, but gosh darn, that is a lot of "traffic cop" functions just passing down param
 class UIComponentDefault
 {
 public:
@@ -88,7 +89,7 @@ public:
         const UIHierarchyNodeUpdateHierarchyParam& in_param
         );
 
-    void UpdateSize(
+    const bool UpdateSize(
         DrawSystem* const in_draw_system,
         IUIComponent& in_out_ui_component,
         const VectorInt2& in_parent_size,

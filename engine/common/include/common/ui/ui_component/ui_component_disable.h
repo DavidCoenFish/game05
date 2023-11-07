@@ -32,6 +32,7 @@ public:
 
 private:
     virtual const bool SetStateFlag(const UIStateFlag in_state_flag) override;
+    virtual const bool SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable) override;
     virtual const UIStateFlag GetStateFlag() const override;
 
     virtual const UILayout& GetLayout() const override; 
@@ -50,7 +51,7 @@ private:
         ) override;
 
     /// convert the layout data and parent size to the texture size, geometry size and uv
-    virtual void UpdateSize(
+    virtual const bool UpdateSize(
         DrawSystem* const in_draw_system,
         const VectorInt2& in_parent_size,
         const VectorInt2& in_parent_offset,
@@ -60,8 +61,7 @@ private:
         UIGeometry& in_out_geometry, 
         UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         const UIScreenSpace& in_parent_screen_space,
-        UIScreenSpace& out_screen_space,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_extra_data
+        UIScreenSpace& out_screen_space
         ) override;
 
     /// certain layout data allows shrink

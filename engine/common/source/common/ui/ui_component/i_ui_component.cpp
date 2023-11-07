@@ -11,11 +11,3 @@ IUIComponent::~IUIComponent()
 {
     // Nop
 }
-
-void IUIComponent::Draw(
-    const UIManagerDrawParam&
-    )
-{
-    // Nop
-}
-

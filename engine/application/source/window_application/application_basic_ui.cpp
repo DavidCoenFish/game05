@@ -300,23 +300,43 @@ namespace
         return result;
     }
 
+    std::shared_ptr<UIData> BuildScrollKnot()
+    {
+#if 1
+        return std::make_shared<UIData>(
+            "canvas_blue"
+            );
+#else
+        return std::make_shared<UIData>(
+            "effect_gloss",
+            std::vector<std::shared_ptr<UIData>>({
+                std::make_shared<UIData>(
+                    "effect_fill",
+                    std::vector<std::shared_ptr<UIData>>({
+                        std::make_shared<UIData>(
+                            "effect_corner",
+                            std::vector<std::shared_ptr<UIData>>({
+                                std::make_shared<UIData>(
+                                    "canvas_grey"
+                                    )
+                                })
+                            )
+                        })
+                    )
+                })
+            );
+#endif
+    }
+
+
     std::shared_ptr<UIData> BuildManualScroll(
         const bool in_allow_vertical, 
         const bool in_allow_horizontal,
         std::map<std::string, std::shared_ptr<UIData>>& in_data_map,
         const std::string& in_root_name,
-        const std::vector<std::shared_ptr<UIData>>& in_children
+        const std::shared_ptr<UIData>& in_subject
         )
     {
-        std::string template_name = "UIDataManualScroll";
-        if ((true == in_allow_horizontal) && (false == in_allow_vertical))
-        {
-            template_name = "manual_scroll_horizontal";
-        }
-        if ((true == in_allow_vertical) && (false == in_allow_horizontal))
-        {
-            template_name = "manual_scroll_vertical";
-        }
         DSC_ASSERT((true == in_allow_vertical) || (true == in_allow_horizontal), "need to have either or both be true");
 
         std::shared_ptr<UIData> horizontal_scroll_wrapper;
@@ -328,24 +348,7 @@ namespace
         {
             const std::string scroll_template = in_allow_vertical ? "canvas_manual_scroll_horizontal" : "canvas_manual_scroll_horizontal_long";
             const std::string name = in_root_name + std::string("_horizontal");
-            auto scroll_knot = std::make_shared<UIData>(
-                    "effect_gloss",
-                    std::vector<std::shared_ptr<UIData>>({
-                        std::make_shared<UIData>(
-                            "effect_fill",
-                            std::vector<std::shared_ptr<UIData>>({
-                                std::make_shared<UIData>(
-                                    "effect_corner",
-                                    std::vector<std::shared_ptr<UIData>>({
-                                        std::make_shared<UIData>(
-                                            "canvas_grey"
-                                            )
-                                        })
-                                    )
-                                })
-                            )
-                        })
-                    );
+            auto scroll_knot = BuildScrollKnot();
             horizontal_scroll = std::make_shared<UIDataScroll>(
                 VectorFloat2(),
                 VectorFloat2(),
@@ -396,24 +399,8 @@ namespace
             const std::string scroll_template = in_allow_horizontal ? "canvas_manual_scroll_vertical" : "canvas_manual_scroll_vertical_long";
 
             const std::string name = in_root_name + std::string("_vertical");
-            auto scroll_knot = std::make_shared<UIData>(
-                    "effect_gloss",
-                    std::vector<std::shared_ptr<UIData>>({
-                        std::make_shared<UIData>(
-                            "effect_fill",
-                            std::vector<std::shared_ptr<UIData>>({
-                                std::make_shared<UIData>(
-                                    "effect_corner",
-                                    std::vector<std::shared_ptr<UIData>>({
-                                        std::make_shared<UIData>(
-                                            "canvas_grey"
-                                            )
-                                        })
-                                    )
-                                })
-                            )
-                        })
-                    );
+            auto scroll_knot = BuildScrollKnot();
+
             vertical_scroll = std::make_shared<UIDataScroll>(
                 VectorFloat2(),
                 VectorFloat2(),
@@ -461,12 +448,14 @@ namespace
         }
 
         return std::make_shared<UIDataManualScroll>(
-            horizontal_scroll_wrapper,
             horizontal_scroll,
-            vertical_scroll_wrapper,
             vertical_scroll,
-            template_name,
-            in_children
+            "UIDataManualScroll",
+            std::vector<std::shared_ptr<UIData>>({
+                in_subject,
+                horizontal_scroll_wrapper,
+                vertical_scroll_wrapper
+                })
             );
     }
 
@@ -621,7 +610,7 @@ public:
             },
             nullptr,
             debug_scroll_knot,
-            "UIDataScroll",
+            "scroll_vertical", //"UIDataScroll",
             std::vector<std::shared_ptr<UIData>>({
                 debug_scroll_knot
                 })
@@ -629,7 +618,8 @@ public:
         _data_map["debug_scroll"] = debug_scroll;
 
         auto debug_scroll_wrapper = std::make_shared<UIData>(
-            "canvas_scroll_horizontal_wrapper",
+            //"canvas_scroll_horizontal_wrapper",
+            "canvas_manual_scroll_vertical",
             std::vector<std::shared_ptr<UIData>>({
                 std::make_shared<UIData>(
                     "effect_drop_shadow_small",
@@ -760,90 +750,90 @@ public:
             );
         _data_map["data_toggle_tooltip"] = data_toggle_tooltip;
 
-        std::vector<std::shared_ptr<UIData>> data_options_body({
-            std::make_shared<UIData>(
-                "stack_top_down",
-                std::vector<std::shared_ptr<UIData>>({
-                    std::make_shared<UIData>(
-                        "grid_small_big_pair",
-                        std::vector<std::shared_ptr<UIData>>({
-                            std::make_shared<UIDataString>(
-                                "Show FPS",
-                                LocaleISO_639_1::Default,
-                                "string_right_em"
-                                ),
-                            nullptr,
-                            BuildCheckbox(data_toggle_fps)
-                        })
-                    ),
+        auto data_options_body = std::make_shared<UIData>(
+            "stack_top_down",
+            std::vector<std::shared_ptr<UIData>>({
+                std::make_shared<UIData>(
+                    "grid_small_big_pair",
+                    std::vector<std::shared_ptr<UIData>>({
+                        std::make_shared<UIDataString>(
+                            "Show FPS",
+                            LocaleISO_639_1::Default,
+                            "string_right_em"
+                            ),
+                        nullptr,
+                        BuildCheckbox(data_toggle_fps)
+                    })
+                ),
 
-                    std::make_shared<UIData>(
-                        "grid_small_big_pair",
-                        std::vector<std::shared_ptr<UIData>>({
-                            std::make_shared<UIDataString>(
-                                "Show Tooltips",
-                                LocaleISO_639_1::Default,
-                                "string_right_em"
-                                ),
-                            nullptr,
-                            BuildCheckbox(data_toggle_tooltip)
-                        })
-                    ),
+                std::make_shared<UIData>(
+                    "grid_small_big_pair",
+                    std::vector<std::shared_ptr<UIData>>({
+                        std::make_shared<UIDataString>(
+                            "Show Tooltips",
+                            LocaleISO_639_1::Default,
+                            "string_right_em"
+                            ),
+                        nullptr,
+                        BuildCheckbox(data_toggle_tooltip)
+                    })
+                ),
 
-                    std::make_shared<UIData>(
-                        "grid_small_big_pair",
-                        std::vector<std::shared_ptr<UIData>>({
-                            std::make_shared<UIDataString>(
-                                "UI Scale",
-                                LocaleISO_639_1::Default,
-                                "string_right_em"
-                                ),
-                            nullptr,
-                            data_map_ui_scale_slider
-                        })
-                    ),
+                std::make_shared<UIData>(
+                    "grid_small_big_pair",
+                    std::vector<std::shared_ptr<UIData>>({
+                        std::make_shared<UIDataString>(
+                            "UI Scale",
+                            LocaleISO_639_1::Default,
+                            "string_right_em"
+                            ),
+                        nullptr,
+                        data_map_ui_scale_slider
+                    })
+                ),
 
-                    std::make_shared<UIData>(
-                        "grid_small_big_pair",
-                        std::vector<std::shared_ptr<UIData>>({
-                            std::make_shared<UIDataString>(
-                                "debug slider",
-                                LocaleISO_639_1::Default,
-                                "string_right_em"
-                                ),
-                            nullptr,
-                            debug_slider
-                        })
-                    ),
+                std::make_shared<UIData>(
+                    "grid_small_big_pair",
+                    std::vector<std::shared_ptr<UIData>>({
+                        std::make_shared<UIDataString>(
+                            "debug slider",
+                            LocaleISO_639_1::Default,
+                            "string_right_em"
+                            ),
+                        nullptr,
+                        debug_slider
+                    })
+                ),
+#if 0
+                std::make_shared<UIData>(
+                    "grid_small_big_pair",
+                    std::vector<std::shared_ptr<UIData>>({
+                        std::make_shared<UIDataString>(
+                            "debug scroll",
+                            LocaleISO_639_1::Default,
+                            "string_right_em"
+                            ),
+                        nullptr,
+                        debug_scroll_wrapper
+                    })
+                ),
+#endif
 
-                    std::make_shared<UIData>(
-                        "grid_small_big_pair",
-                        std::vector<std::shared_ptr<UIData>>({
-                            std::make_shared<UIDataString>(
-                                "debug scroll",
-                                LocaleISO_639_1::Default,
-                                "string_right_em"
-                                ),
-                            nullptr,
-                            debug_scroll_wrapper
-                        })
-                    ),
-                    std::make_shared<UIData>(
-                        "grid_small_big_pair",
-                        std::vector<std::shared_ptr<UIData>>({
-                            std::make_shared<UIDataString>(
-                                "Locale",
-                                LocaleISO_639_1::Default,
-                                "string_right_em"
-                                ),
-                            nullptr,
-                            std::make_shared<UIData>("canvas_blue"),
-                        })
-                    )
-
-                })
+                std::make_shared<UIData>(
+                    "grid_small_big_pair",
+                    std::vector<std::shared_ptr<UIData>>({
+                        std::make_shared<UIDataString>(
+                            "Locale",
+                            LocaleISO_639_1::Default,
+                            "string_right_em"
+                            ),
+                        nullptr,
+                        std::make_shared<UIData>("canvas_blue"),
+                    })
                 )
-            });
+
+            })
+            );
 
         // Options dialog
         auto data_modal_options = 

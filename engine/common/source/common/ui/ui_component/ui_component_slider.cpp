@@ -143,12 +143,12 @@ const bool UIComponentSlider::SetStateFlag(const UIStateFlag in_state_flag)
         dirty = true;
     }
 
-    //if (true == UIHierarchyNodeChildData::RecurseSetStateFlagInput(_child_data_knot.get(), in_state_flag))
-    //{
-    //    dirty = true;
-    //}
-
     return dirty;
+}
+
+const bool UIComponentSlider::SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable)
+{
+    return _component_default.SetStateFlagBit(in_state_flag_bit, in_enable);
 }
 
 const UIStateFlag UIComponentSlider::GetStateFlag() const
@@ -198,7 +198,6 @@ const bool UIComponentSlider::UpdateHierarchy(
         }
     }
 
-#if 1
     if (true == _component_default.UpdateHierarchy(
         in_data,
         in_out_child_data, 
@@ -219,33 +218,10 @@ const bool UIComponentSlider::UpdateHierarchy(
             return true;
         });
 
-#else
-    UIHierarchyNodeChildData* knot = _child_data_knot.get();
-    UIData* const knot_data = data ? data->GetKnotChildData() : nullptr;
-
-    if (nullptr != knot)
-    {
-        if (true == knot->ApplyFactory(knot_data, in_param, 0))
-        {
-            dirty = true;
-        }
-    }
-
-    if (true == _component_default.UpdateHierarchy(
-        in_data,
-        in_out_child_data, 
-        in_param
-        ))
-    {
-        dirty = true;
-    }
-
-#endif
-
     return dirty;
 }
 
-void UIComponentSlider::UpdateSize(
+const bool UIComponentSlider::UpdateSize(
     DrawSystem* const in_draw_system,
     const VectorInt2& in_parent_size,
     const VectorInt2& in_parent_offset,
@@ -255,11 +231,9 @@ void UIComponentSlider::UpdateSize(
     UIGeometry& in_out_geometry, 
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     const UIScreenSpace& in_parent_screen_space,
-    UIScreenSpace& out_screen_space,
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&
+    UIScreenSpace& out_screen_space
     )
 {
-#if 1
     if (nullptr != _knot)
     {
         const float domain = _range_low_high[1] - _range_low_high[0];
@@ -272,8 +246,7 @@ void UIComponentSlider::UpdateSize(
             );
         _knot->SetLayoutOverride(layout);
     }
-#endif
-    _component_default.UpdateSize(
+    return _component_default.UpdateSize(
         in_draw_system,
         *this,
         in_parent_size,
@@ -286,36 +259,6 @@ void UIComponentSlider::UpdateSize(
         in_parent_screen_space,
         out_screen_space
         );
-#if 0
-    if (nullptr != _child_data_knot->_component)
-    {
-        const float domain = _range_low_high[1] - _range_low_high[0];
-        const float value = domain != 0.0f ? (_value - _range_low_high[0]) / domain : 0.0f;
-        UILayout layout = _child_data_knot->_component->GetLayout();
-        TweakLayout(
-            layout, 
-            value,
-            _orientation
-            );
-
-        const auto texture_size = in_out_node.GetTextureSize(in_draw_system);
-        _child_data_knot->_component->UpdateSize(
-            in_draw_system,
-            texture_size, //in_parent_window,//in_parent_size,
-            VectorInt2(),//in_parent_offset,
-            texture_size, //in_parent_window,
-            in_ui_scale,
-            in_time_delta, 
-            *_child_data_knot->_geometry, 
-            *_child_data_knot->_node,
-            in_parent_screen_space,
-            *_child_data_knot->_screen_space,
-            in_extra_data,
-            &layout
-            );
-    }
-#endif
-    return;
 }
 
 void UIComponentSlider::GetDesiredSize(
@@ -344,39 +287,6 @@ const bool UIComponentSlider::PreDraw(
         in_draw_param,
         in_node
         );
-    //bool dirty = false;
-
-    //if ((nullptr != _child_data_knot) && (nullptr != _child_data_knot->_component))
-    //{
-    //    if (true == _child_data_knot->_component->PreDraw(
-    //        in_draw_param,
-    //        *(_child_data_knot->_node.get())
-    //        ))
-    //    {
-    //        dirty = true;
-    //    }
-    //}
-
-    //if (true == in_node.PreDraw(
-    //    in_draw_param
-    //    ))
-    //{
-    //    dirty = true;
-    //}
-    //if (true == in_node.Draw(
-    //    in_draw_param,
-    //    dirty
-    //    ))
-    //{
-    //    if (nullptr != _child_data_knot)
-    //    {
-    //        _child_data_knot->Draw(in_draw_param);
-    //    }
-
-    //    dirty = true;
-    //}
-
-    //return dirty;
 }
 
 void UIComponentSlider::OnInputTouch(

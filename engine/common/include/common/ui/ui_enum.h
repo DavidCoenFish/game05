@@ -49,11 +49,13 @@ enum class UIStateFlag
     TTintMask = THover | TTouch | TSelected,
 
     /// Disabled is expressed by UICompnentDisable, but need a way to comunicate with input that node is disabled?
-    TDisable = 1 << 3 
+    TDisable = 1 << 3,
+    /// Manual scroll wants to optionally hide scroll bars when child doesn't need to scroll
+    THidden = 1 << 4
 
 };
 
-/// will these need to be flags, allow shift control right click? start with simple
+/// will these need to be flags, allow "shift control right click"? start with simple
 enum class UITouchFlavour
 {
     TNone,
@@ -66,9 +68,11 @@ enum class UITouchFlavour
 enum class UINavigationType
 {
     TNone,
-    TLeft,
+    TLeft, // keys have amount 1?
     TRight,
     TUp,
     TDown,
-    TScroll //mouse scroll has an ammount? or just add an amount to everything, allow dpad?
+    TScroll, //mouse scroll has an ammount? or just add an amount to everything, allows dpad?
+    TDpadHorizontal,
+    TDpadVertical
 };

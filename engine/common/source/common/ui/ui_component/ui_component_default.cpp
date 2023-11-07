@@ -254,7 +254,7 @@ const bool UIComponentDefault::UpdateHierarchy(
     return dirty;
 }
 
-void UIComponentDefault::UpdateSize(
+const bool UIComponentDefault::UpdateSize(
     DrawSystem* const in_draw_system,
     IUIComponent& in_out_ui_component,
     const VectorInt2& in_parent_size,
@@ -325,7 +325,7 @@ void UIComponentDefault::UpdateSize(
         out_screen_space
         );
 
-    return;
+    return dirty;
 }
 
 void UIComponentDefault::GetDesiredSize(

@@ -155,6 +155,8 @@ void UIGeometry::UpdateGeometry(
             );
     }
 
+    _data_changed = false;
+
     return;
 }
 

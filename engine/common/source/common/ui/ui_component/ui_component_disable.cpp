@@ -50,11 +50,7 @@ const bool UIComponentDisable::Set(
     )
 {
     bool dirty = false;
-    //if (_disable != in_disable)
-    //{
-    //    dirty = true;
-    //    _disable = in_disable;
-    //}
+
     if (true == _component_default.SetStateFlagBit(UIStateFlag::TDisable, in_disable))
     {
         dirty = true;
@@ -66,6 +62,11 @@ const bool UIComponentDisable::Set(
 const bool UIComponentDisable::SetStateFlag(const UIStateFlag in_state_flag)
 {
     return _component_default.SetStateFlag(in_state_flag);
+}
+
+const bool UIComponentDisable::SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable)
+{
+    return _component_default.SetStateFlagBit(in_state_flag_bit, in_enable);
 }
 
 const UIStateFlag UIComponentDisable::GetStateFlag() const
@@ -136,7 +137,7 @@ const bool UIComponentDisable::UpdateHierarchy(
     return dirty;
 }
 
-void UIComponentDisable::UpdateSize(
+const bool UIComponentDisable::UpdateSize(
     DrawSystem* const in_draw_system,
     const VectorInt2& in_parent_size,
     const VectorInt2& in_parent_offset,
@@ -146,11 +147,10 @@ void UIComponentDisable::UpdateSize(
     UIGeometry& in_out_geometry, 
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     const UIScreenSpace& in_parent_screen_space,
-    UIScreenSpace& out_screen_space,
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&
+    UIScreenSpace& out_screen_space
     )
 {
-    _component_default.UpdateSize(
+    bool dirty = _component_default.UpdateSize(
         in_draw_system,
         *this,
         in_parent_size,
@@ -185,7 +185,7 @@ void UIComponentDisable::UpdateSize(
             );
     }
 
-    return;
+    return dirty;
 }
 
 void UIComponentDisable::GetDesiredSize(

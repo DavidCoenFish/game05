@@ -28,27 +28,33 @@ UIHierarchyNode // N0
     C1 is a manual scroll component
     C2 is some arbitary child content
     we control the scrolling of T1 for the manual scroll
+
+    A1 child at 0, some arbitary child content that may or may not need to be scrolled to fit
+    A1 child at 1, top level node of horizontal scroll stack, or null if we don't allow horizontal scroll
+    A1 child at 2, top level node of vertical scroll stack, or null if we don't allow vertical scroll
+
 */
 class UIComponentManualScroll : public IUIComponent
 {
 public:
     UIComponentManualScroll(
         const UIBaseColour& in_base_colour,
-        const UILayout& in_layout,
-        const bool in_allow_horizontal_scroll = false,
-        const bool in_allow_vertical_scroll = false
+        const UILayout& in_layout//,
+        //const bool in_allow_horizontal_scroll = false,
+        //const bool in_allow_vertical_scroll = false
         );
     virtual ~UIComponentManualScroll();
 
     const bool SetBase(
         const UIBaseColour& in_base_colour,
-        const UILayout& in_layout,
-        const bool in_allow_horizontal_scroll,
-        const bool in_allow_vertical_scroll
+        const UILayout& in_layout//,
+        //const bool in_allow_horizontal_scroll,
+        //const bool in_allow_vertical_scroll
         );
 
 private:
     virtual const bool SetStateFlag(const UIStateFlag in_state_flag) override;
+    virtual const bool SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable) override;
     virtual const UIStateFlag GetStateFlag() const override;
 
     virtual const UILayout& GetLayout() const override; 
@@ -63,7 +69,7 @@ private:
         const UIHierarchyNodeUpdateHierarchyParam& in_param
         ) override;
 
-    virtual void UpdateSize(
+    virtual const bool UpdateSize(
         DrawSystem* const in_draw_system,
         const VectorInt2& in_parent_size,
         const VectorInt2& in_parent_offset,
@@ -73,8 +79,7 @@ private:
         UIGeometry& in_out_geometry, 
         UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         const UIScreenSpace& in_parent_screen_space,
-        UIScreenSpace& out_screen_space,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_extra_data
+        UIScreenSpace& out_screen_space
         ) override;
 
     virtual void GetDesiredSize(
@@ -90,25 +95,22 @@ private:
         UIHierarchyNode& in_node
         ) override;
 
-    /// alow customisation of the component being drawn to the node texture
-    /// by default a component doesn't draw and just lets the node draw each child texture to the parent
-    virtual void Draw(
-        const UIManagerDrawParam& in_draw_param
-        ) override;
-
 private:
     UIComponentDefault _component_default;
 
-    std::shared_ptr<UIHierarchyNodeChildData> _child_data_vertical_scroll;
-    std::shared_ptr<UIHierarchyNodeChildData> _child_data_horizontal_scroll;
+    //std::shared_ptr<UIHierarchyNodeChildData> _child_data_vertical_scroll;
+    //std::shared_ptr<UIHierarchyNodeChildData> _child_data_horizontal_scroll;
+
+    IUIComponent* _horizontal_scroll_wrapper;
+    IUIComponent* _vertical_scroll_wrapper;
 
     UIComponentScroll* _horizontal_scroll;
     UIComponentScroll* _vertical_scroll;
 
-    bool _allow_horizontal_scroll;
-    bool _allow_vertical_scroll;
+    //bool _allow_horizontal_scroll;
+    //bool _allow_vertical_scroll;
 
-    bool _do_horizontal_scroll;
-    bool _do_vertical_scroll;
+    //bool _do_horizontal_scroll;
+    //bool _do_vertical_scroll;
 
 };
