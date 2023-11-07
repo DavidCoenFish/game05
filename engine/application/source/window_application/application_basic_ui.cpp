@@ -328,6 +328,24 @@ namespace
         {
             const std::string scroll_template = in_allow_vertical ? "canvas_manual_scroll_horizontal" : "canvas_manual_scroll_horizontal_long";
             const std::string name = in_root_name + std::string("_horizontal");
+            auto scroll_knot = std::make_shared<UIData>(
+                    "effect_gloss",
+                    std::vector<std::shared_ptr<UIData>>({
+                        std::make_shared<UIData>(
+                            "effect_fill",
+                            std::vector<std::shared_ptr<UIData>>({
+                                std::make_shared<UIData>(
+                                    "effect_corner",
+                                    std::vector<std::shared_ptr<UIData>>({
+                                        std::make_shared<UIData>(
+                                            "canvas_grey"
+                                            )
+                                        })
+                                    )
+                                })
+                            )
+                        })
+                    );
             horizontal_scroll = std::make_shared<UIDataScroll>(
                 VectorFloat2(),
                 VectorFloat2(),
@@ -347,25 +365,11 @@ namespace
                         data->SetRange(in_value);
                     }
                 },
-                std::make_shared<UIData>(
-                    "effect_gloss",
-                    std::vector<std::shared_ptr<UIData>>({
-                        std::make_shared<UIData>(
-                            "effect_fill",
-                            std::vector<std::shared_ptr<UIData>>({
-                                std::make_shared<UIData>(
-                                    "effect_corner",
-                                    std::vector<std::shared_ptr<UIData>>({
-                                        std::make_shared<UIData>(
-                                            "canvas_grey"
-                                            )
-                                        })
-                                    )
-                                })
-                            )
-                        })
-                    ),
-                "scroll_horizontal"
+                scroll_knot,
+                "scroll_horizontal",
+                std::vector<std::shared_ptr<UIData>>({
+                    scroll_knot
+                    })
             );
             in_data_map[name] = horizontal_scroll;
 
@@ -392,6 +396,24 @@ namespace
             const std::string scroll_template = in_allow_horizontal ? "canvas_manual_scroll_vertical" : "canvas_manual_scroll_vertical_long";
 
             const std::string name = in_root_name + std::string("_vertical");
+            auto scroll_knot = std::make_shared<UIData>(
+                    "effect_gloss",
+                    std::vector<std::shared_ptr<UIData>>({
+                        std::make_shared<UIData>(
+                            "effect_fill",
+                            std::vector<std::shared_ptr<UIData>>({
+                                std::make_shared<UIData>(
+                                    "effect_corner",
+                                    std::vector<std::shared_ptr<UIData>>({
+                                        std::make_shared<UIData>(
+                                            "canvas_grey"
+                                            )
+                                        })
+                                    )
+                                })
+                            )
+                        })
+                    );
             vertical_scroll = std::make_shared<UIDataScroll>(
                 VectorFloat2(),
                 VectorFloat2(),
@@ -411,25 +433,11 @@ namespace
                         data->SetRange(in_value);
                     }
                 },
-                std::make_shared<UIData>(
-                    "effect_gloss",
-                    std::vector<std::shared_ptr<UIData>>({
-                        std::make_shared<UIData>(
-                            "effect_fill",
-                            std::vector<std::shared_ptr<UIData>>({
-                                std::make_shared<UIData>(
-                                    "effect_corner",
-                                    std::vector<std::shared_ptr<UIData>>({
-                                        std::make_shared<UIData>(
-                                            "canvas_grey"
-                                            )
-                                        })
-                                    )
-                                })
-                            )
-                        })
-                    ),
-                "scroll_vertical"
+                scroll_knot,
+                "scroll_vertical",
+                std::vector<std::shared_ptr<UIData>>({
+                    scroll_knot
+                    })
             );
             in_data_map[name] = vertical_scroll;
 
@@ -498,59 +506,7 @@ public:
             "stack_vertical_bottom_right"
             );
 
-
-        auto debug_vertical_scroll = std::make_shared<UIDataScroll>(
-            VectorFloat2(0.0f, 0.25f),
-            VectorFloat2(0.0f, 1.0f),
-            [this](const VectorFloat2& in_value)
-            {
-                auto data = std::dynamic_pointer_cast<UIDataScroll>(_data_map["debug_vertical_scroll"]);
-                if (nullptr != data)
-                {
-                    data->SetValue(in_value);
-                }
-            },
-            nullptr,
-            std::make_shared<UIData>(
-                "effect_gloss",
-                std::vector<std::shared_ptr<UIData>>({
-                    std::make_shared<UIData>(
-                        "effect_fill",
-                        std::vector<std::shared_ptr<UIData>>({
-                            std::make_shared<UIData>(
-                                "effect_corner",
-                                std::vector<std::shared_ptr<UIData>>({
-                                    std::make_shared<UIData>(
-                                        "canvas_grey"
-                                        )
-                                    })
-                                )
-                            })
-                        )
-                    })
-                ),
-            "scroll_vertical"
-        );
-        _data_map["debug_vertical_scroll"] = debug_vertical_scroll;
-
-        _data_debug_scroll = std::make_shared<UIData>(
-            "canvas_debug_scroll_vertical",
-            std::vector<std::shared_ptr<UIData>>({
-                std::make_shared<UIData>(
-                    "effect_drop_shadow_small",
-                    std::vector<std::shared_ptr<UIData>>({
-                        std::make_shared<UIData>(
-                            "UIData",
-                            std::vector<std::shared_ptr<UIData>>({
-                                debug_vertical_scroll
-                                })
-                            )
-                        })
-                    )
-                })
-            );
-
-
+        auto data_ui_scale_knot = BuildSliderKnot();
         auto data_map_ui_scale = std::make_shared<UIDataFloat>(
             1.0f,
             0.05f,
@@ -562,12 +518,13 @@ public:
                     data->SetValue(in_new_value);
                 }
             },
-            BuildSliderKnot(),
+            data_ui_scale_knot,
             "slider_horizontal",
             std::vector<std::shared_ptr<UIData>>({
                 std::make_shared<UIData>(
                     "horizontal_rule"
-                    )
+                    ),
+                data_ui_scale_knot
                 })
             );
         _data_map["ui_scale"] = data_map_ui_scale;
@@ -591,6 +548,7 @@ public:
                 })
             );
 
+        auto debug_slider_knot = BuildSliderKnot();
         auto debug_slider_contents = std::make_shared<UIDataFloat>(
             0.5f,
             0.05f,
@@ -602,12 +560,13 @@ public:
                     data->SetValue(in_new_value);
                 }
             },
-            BuildSliderKnot(),
+            debug_slider_knot,
             "slider_horizontal",
             std::vector<std::shared_ptr<UIData>>({
                 std::make_shared<UIData>(
                     "horizontal_rule"
-                    )
+                    ),
+                debug_slider_knot
                 })
             );
         _data_map["debug_slider"] = debug_slider_contents;
@@ -630,6 +589,25 @@ public:
                 })
             );
 
+        auto debug_scroll_knot = std::make_shared<UIData>(
+            "effect_gloss",
+            std::vector<std::shared_ptr<UIData>>({
+                std::make_shared<UIData>(
+                    "effect_fill",
+                    std::vector<std::shared_ptr<UIData>>({
+                        std::make_shared<UIData>(
+                            "effect_corner",
+                            std::vector<std::shared_ptr<UIData>>({
+                                std::make_shared<UIData>(
+                                    "canvas_grey"
+                                    )
+                                })
+                            )
+                        })
+                    )
+                })
+            );
+
         auto debug_scroll = std::make_shared<UIDataScroll>(
             VectorFloat2(0.5f,1.5f),
             VectorFloat2(0.0f,3.0f),
@@ -642,25 +620,11 @@ public:
                 }
             },
             nullptr,
-            std::make_shared<UIData>(
-                "effect_gloss",
-                std::vector<std::shared_ptr<UIData>>({
-                    std::make_shared<UIData>(
-                        "effect_fill",
-                        std::vector<std::shared_ptr<UIData>>({
-                            std::make_shared<UIData>(
-                                "effect_corner",
-                                std::vector<std::shared_ptr<UIData>>({
-                                    std::make_shared<UIData>(
-                                        "canvas_grey"
-                                        )
-                                    })
-                                )
-                            })
-                        )
-                    })
-                ),
-            "UIDataScroll"
+            debug_scroll_knot,
+            "UIDataScroll",
+            std::vector<std::shared_ptr<UIData>>({
+                debug_scroll_knot
+                })
             );
         _data_map["debug_scroll"] = debug_scroll;
 
@@ -1085,8 +1049,6 @@ public:
 
         data_array.push_back(_data_build_version);
         data_array.push_back(_data_build_info);
-
-        data_array.push_back(_data_debug_scroll);
     }
 
 private:
@@ -1126,9 +1088,6 @@ private:
     std::shared_ptr<UIData> _data_build_version;
     std::shared_ptr<UIDataString> _data_build_fps;
 
-    std::shared_ptr<UIData> _data_debug_scroll;
-
-    
 };
 
 IWindowApplication* const ApplicationBasicUI::Factory(

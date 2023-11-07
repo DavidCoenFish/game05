@@ -102,6 +102,12 @@ const UILayout& UIComponentGrid::GetLayout() const
     return _component_default.GetLayout();
 }
 
+void UIComponentGrid::SetLayoutOverride(const UILayout& in_override)
+{
+    _component_default.SetLayoutOverride(in_override);
+    return;
+}
+
 void UIComponentGrid::SetSourceToken(void* in_source_ui_data_token)
 {
     _component_default.SetSourceToken(in_source_ui_data_token);
@@ -136,8 +142,7 @@ void UIComponentGrid::UpdateSize(
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text,
     const UIScreenSpace& in_parent_screen_space,
     UIScreenSpace& out_screen_space,
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&,
-    UILayout* const in_layout_override
+    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&
     )
 {
     std::vector<VectorInt4> child_window_offset_array;
@@ -150,8 +155,7 @@ void UIComponentGrid::UpdateSize(
         in_parent_window,
         in_ui_scale,
         in_out_node,
-        child_window_offset_array,
-        in_layout_override
+        child_window_offset_array
         );
 
     VectorFloat4 geometry_pos;
@@ -192,8 +196,8 @@ void UIComponentGrid::UpdateSize(
 
     int trace = 0;
     std::vector<std::shared_ptr<UIHierarchyNodeChildData>> extra_data;
-    auto& child_data = in_out_node.GetChildData();
-    for (auto& child_data_ptr : child_data)
+    auto& child_data_array = in_out_node.GetChildData();
+    for (auto& child_data_ptr : child_data_array)
     {
         UIHierarchyNodeChildData& child_data = *child_data_ptr;
         VectorInt4& child_window_offset = child_window_offset_array[trace];
@@ -223,7 +227,7 @@ void UIComponentGrid::UpdateSize(
     }
 
     // wanted a way of allowing manual scroll to optional add nodes post size calculation
-    child_data.insert(child_data.end(), extra_data.begin(), extra_data.end());
+    child_data_array.insert(child_data_array.end(), extra_data.begin(), extra_data.end());
 
     return;
 }
@@ -233,8 +237,7 @@ void UIComponentGrid::GetDesiredSize(
     VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
     const VectorInt2& in_parent_window,
     const float in_ui_scale,
-    UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    UILayout* const in_layout_override
+    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
 #if 0
@@ -254,8 +257,7 @@ void UIComponentGrid::GetDesiredSize(
         in_parent_window,
         in_ui_scale,
         in_out_node,
-        child_window_offset,
-        in_layout_override
+        child_window_offset
         );
     return;
 #endif
@@ -278,12 +280,10 @@ void UIComponentGrid::GetGridDesiredSize(
     const VectorInt2& in_parent_window,
     const float in_ui_scale,
     UIHierarchyNode&,// in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    std::vector<VectorInt4>& out_child_window_offset, // left to right, top to bottom
-    UILayout* const in_layout_override
+    std::vector<VectorInt4>& out_child_window_offset // left to right, top to bottom
     )
 {
-    out_layout_size = in_layout_override ? in_layout_override->GetSize(in_parent_window, in_ui_scale)
-        : _component_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
+    out_layout_size = _component_default.GetInUseLayout().GetSize(in_parent_window, in_ui_scale);
 
     std::vector<int> horizontal_sizes;
     {
@@ -379,8 +379,7 @@ void UIComponentGrid::GetGridDesiredSize(
         }
     }
 
-    out_layout_size = in_layout_override ? in_layout_override->CalculateShrinkSize(out_layout_size, out_desired_size)
-        : _component_default.GetLayout().CalculateShrinkSize(out_layout_size, out_desired_size);
+    out_layout_size = _component_default.GetInUseLayout().CalculateShrinkSize(out_layout_size, out_desired_size);
 
     return;
 }

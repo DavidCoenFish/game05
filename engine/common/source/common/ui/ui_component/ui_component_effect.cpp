@@ -166,6 +166,12 @@ const UILayout& UIComponentEffect::GetLayout() const
     return _component_default.GetLayout();
 }
 
+void UIComponentEffect::SetLayoutOverride(const UILayout& in_override)
+{
+    _component_default.SetLayoutOverride(in_override);
+    return;
+}
+
 // Make sorting children easier
 void UIComponentEffect::SetSourceToken(void* in_source_ui_data_token)
 {
@@ -220,8 +226,7 @@ void UIComponentEffect::UpdateSize(
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     const UIScreenSpace& in_parent_screen_space,
     UIScreenSpace& out_screen_space,
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&,
-    UILayout* const in_layout_override
+    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&
     )
 {
     _component_default.UpdateSize(
@@ -235,8 +240,7 @@ void UIComponentEffect::UpdateSize(
         in_out_geometry, 
         in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         in_parent_screen_space,
-        out_screen_space,
-        in_layout_override
+        out_screen_space
         );
 
     bool dirty = false;
@@ -303,8 +307,7 @@ void UIComponentEffect::GetDesiredSize(
     VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
     const VectorInt2& in_parent_window,
     const float in_ui_scale,
-    UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    UILayout* const in_layout_override
+    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
     return _component_default.GetDesiredSize(
@@ -312,8 +315,7 @@ void UIComponentEffect::GetDesiredSize(
         out_desired_size,
         in_parent_window,
         in_ui_scale,
-        in_out_node,
-        in_layout_override
+        in_out_node
         );
 }
 

@@ -1,5 +1,4 @@
-- scroll
-- manual scroll
+- cleanup
 - list box
 - combo box
 - change locale

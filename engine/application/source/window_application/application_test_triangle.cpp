@@ -37,8 +37,8 @@ ApplicationTestTriangle::ApplicationTestTriangle(
         "ApplicationTestTriangle  ctor %p",
         this
         );
-    _draw_system = std::make_unique < DrawSystem > (in_hwnd);
-    std::vector < D3D12_INPUT_ELEMENT_DESC > input_element_desc_array;
+    _draw_system = std::make_unique<DrawSystem> (in_hwnd);
+    std::vector<D3D12_INPUT_ELEMENT_DESC> input_element_desc_array;
     input_element_desc_array.push_back(D3D12_INPUT_ELEMENT_DESC
     {
         "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, \

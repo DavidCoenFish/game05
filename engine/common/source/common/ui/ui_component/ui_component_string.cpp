@@ -104,6 +104,12 @@ const UILayout& UIComponentString::GetLayout() const
     return _component_default.GetLayout();
 }
 
+void UIComponentString::SetLayoutOverride(const UILayout& in_override)
+{
+    _component_default.SetLayoutOverride(in_override);
+    return;
+}
+
 // Make sorting children easier
 void UIComponentString::SetSourceToken(void* in_source_ui_data_token)
 {
@@ -159,8 +165,7 @@ void UIComponentString::UpdateSize(
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     const UIScreenSpace& in_parent_screen_space,
     UIScreenSpace& out_screen_space,
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&,
-    UILayout* const in_layout_override
+    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&
     )
 {
     _component_default.UpdateSize(
@@ -174,8 +179,7 @@ void UIComponentString::UpdateSize(
         in_out_geometry, 
         in_out_node,
         in_parent_screen_space,
-        out_screen_space,
-        in_layout_override
+        out_screen_space
         );
 
     // Return true if needed? no, if the size of the texture changes, then texture is marked as needs to draw
@@ -191,12 +195,10 @@ void UIComponentString::GetDesiredSize(
     VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
     const VectorInt2& in_parent_window,
     const float in_ui_scale,
-    UIHierarchyNode&, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    UILayout* const in_layout_override
+    UIHierarchyNode& // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
-    out_layout_size = in_layout_override ? in_layout_override->GetSize(in_parent_window, in_ui_scale) 
-        : _component_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
+    out_layout_size = _component_default.GetInUseLayout().GetSize(in_parent_window, in_ui_scale);
 
     _text_block->SetWidthLimit(
         _text_block->GetWidthLimitEnabled(),
@@ -206,9 +208,7 @@ void UIComponentString::GetDesiredSize(
 
     out_desired_size = _text_block->GetTextBounds();
 
-    out_layout_size = in_layout_override ? in_layout_override->CalculateShrinkSize(out_layout_size, out_desired_size)
-        : _component_default.GetLayout().CalculateShrinkSize(out_layout_size, out_desired_size);
-    //out_desired_size = VectorInt2::Max(out_layout_size, out_desired_size);
+    out_layout_size = _component_default.GetInUseLayout().CalculateShrinkSize(out_layout_size, out_desired_size);
 
     return;
 }

@@ -33,7 +33,7 @@ private:
 
 private:
     typedef IWindowApplication BaseType;
-    std::unique_ptr < DrawSystem > _draw_system;
-    std::shared_ptr < Shader > _shader;
-    std::shared_ptr < GeometryGeneric > _geometry;
+    std::unique_ptr<DrawSystem> _draw_system;
+    std::shared_ptr<Shader> _shader;
+    std::shared_ptr<GeometryGeneric> _geometry;
 };

@@ -35,6 +35,9 @@ public:
     /// Allow slider to modify a component layout
     virtual const UILayout& GetLayout() const = 0; 
 
+    /// Allow slider to override the layout
+    virtual void SetLayoutOverride(const UILayout& in_override) = 0; 
+
     virtual const bool SetStateFlag(const UIStateFlag in_state_flag) = 0;
     virtual const UIStateFlag GetStateFlag() const = 0;
 
@@ -63,8 +66,8 @@ public:
         UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text,
         const UIScreenSpace& in_parent_screen_space,
         UIScreenSpace& out_screen_space,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_extra_data,
-        UILayout* const in_layout_override = nullptr
+        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_extra_data
+        //UILayout* const in_layout_override = nullptr
         ) = 0;
 
     /// certain layout data allows shrink, and certain componets may have different logic, such as stack component
@@ -73,8 +76,7 @@ public:
         VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
         const VectorInt2& in_parent_window,
         const float in_ui_scale,
-        UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-        UILayout* const in_layout_override = nullptr
+        UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         ) = 0;
 
     /// prep the children of the component for draw

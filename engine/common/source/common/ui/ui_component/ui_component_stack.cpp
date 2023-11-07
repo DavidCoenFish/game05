@@ -78,6 +78,12 @@ const UILayout& UIComponentStack::GetLayout() const
     return _component_default.GetLayout();
 }
 
+void UIComponentStack::SetLayoutOverride(const UILayout& in_override)
+{
+    _component_default.SetLayoutOverride(in_override);
+    return;
+}
+
 // Make sorting children easier
 void UIComponentStack::SetSourceToken(void* in_source_ui_data_token)
 {
@@ -113,8 +119,7 @@ void UIComponentStack::UpdateSize(
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     const UIScreenSpace& in_parent_screen_space,
     UIScreenSpace& out_screen_space,
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&,
-    UILayout* const in_layout_override
+    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&
     )
 {
     // the default UpdateSize recurses, we do want to do that, but with an offset to where to put things
@@ -129,8 +134,7 @@ void UIComponentStack::UpdateSize(
         in_parent_window,
         in_ui_scale,
         in_out_node,
-        child_window_offset_array,
-        in_layout_override
+        child_window_offset_array
         );
 
     VectorFloat4 geometry_pos;
@@ -149,7 +153,7 @@ void UIComponentStack::UpdateSize(
         in_time_delta, 
         layout_size,
         desired_size,
-        in_layout_override ? *in_layout_override : _component_default.GetLayout()
+        _component_default.GetInUseLayout()
         );
 
     // Update geometry
@@ -171,8 +175,8 @@ void UIComponentStack::UpdateSize(
 
     int trace = 0;
     std::vector<std::shared_ptr<UIHierarchyNodeChildData>> extra_data;
-    auto& child_data = in_out_node.GetChildData();
-    for (auto& child_data_ptr : child_data)
+    auto& child_data_array = in_out_node.GetChildData();
+    for (auto& child_data_ptr : child_data_array)
     {
         UIHierarchyNodeChildData& child_data = *child_data_ptr;
 
@@ -204,7 +208,7 @@ void UIComponentStack::UpdateSize(
     }
 
     // wanted a way of allowing manual scroll to optional add nodes post size calculation
-    child_data.insert(child_data.end(), extra_data.begin(), extra_data.end());
+    child_data_array.insert(child_data_array.end(), extra_data.begin(), extra_data.end());
 
     return;
 }
@@ -214,8 +218,7 @@ void UIComponentStack::GetDesiredSize(
     VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
     const VectorInt2& in_parent_window,
     const float in_ui_scale,
-    UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    UILayout* const in_layout_override
+    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
 #if 0
@@ -236,8 +239,7 @@ void UIComponentStack::GetDesiredSize(
         in_parent_window,
         in_ui_scale,
         in_out_node,
-        child_window_offset_array,
-        in_layout_override
+        child_window_offset_array
         );
 #endif
 }
@@ -248,12 +250,10 @@ void UIComponentStack::GetStackDesiredSize(
     const VectorInt2& in_parent_window,
     const float in_ui_scale,
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    std::vector<VectorInt4>& out_child_window_offset,
-    UILayout* const in_layout_override
+    std::vector<VectorInt4>& out_child_window_offset
     )
 {
-    out_layout_size = in_layout_override ? in_layout_override->GetSize(in_parent_window, in_ui_scale)
-        : _component_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
+    out_layout_size = _component_default.GetInUseLayout().GetSize(in_parent_window, in_ui_scale);
     const int gap = _gap.Calculate(in_parent_window, in_ui_scale);
 
     VectorInt2 max_desired_size;
@@ -305,8 +305,7 @@ void UIComponentStack::GetStackDesiredSize(
         out_child_window_offset.push_back(window_offset);
     }
 
-    out_layout_size = in_layout_override ? in_layout_override->CalculateShrinkSize(out_layout_size, max_desired_size)
-        : _component_default.GetLayout().CalculateShrinkSize(out_layout_size, max_desired_size);
+    out_layout_size =_component_default.GetInUseLayout().CalculateShrinkSize(out_layout_size, max_desired_size);
     out_desired_size = max_desired_size;
 
     for (auto& iter : out_child_window_offset)

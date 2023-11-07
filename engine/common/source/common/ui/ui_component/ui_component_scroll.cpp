@@ -88,12 +88,12 @@ UIComponentScroll::UIComponentScroll(
         in_layout
         )
     , _orientation(in_orientation)
-    , _child_data_knot()
+    , _knot(nullptr) //_child_data_knot()
     , _value_change()
     , _value()
     , _range_low_high()
 {
-    _child_data_knot = UIHierarchyNodeChildData::Factory();
+    //_child_data_knot = UIHierarchyNodeChildData::Factory();
 }
 
 UIComponentScroll::~UIComponentScroll()
@@ -167,10 +167,10 @@ const bool UIComponentScroll::SetStateFlag(const UIStateFlag in_state_flag)
         dirty = true;
     }
 
-    if (true == UIHierarchyNodeChildData::RecurseSetStateFlagInput(_child_data_knot.get(), in_state_flag))
-    {
-        dirty = true;
-    }
+    //if (true == UIHierarchyNodeChildData::RecurseSetStateFlagInput(_child_data_knot.get(), in_state_flag))
+    //{
+    //    dirty = true;
+    //}
 
     return dirty;
 }
@@ -183,6 +183,12 @@ const UIStateFlag UIComponentScroll::GetStateFlag() const
 const UILayout& UIComponentScroll::GetLayout() const
 {
     return _component_default.GetLayout();
+}
+
+void UIComponentScroll::SetLayoutOverride(const UILayout& in_override)
+{
+    _component_default.SetLayoutOverride(in_override);
+    return;
 }
 
 void UIComponentScroll::SetSourceToken(void* in_source_ui_data_token)
@@ -217,16 +223,16 @@ const bool UIComponentScroll::UpdateHierarchy(
         }
     }
 
-    UIHierarchyNodeChildData* knot = _child_data_knot.get();
-    UIData* const knot_data = data ? data->GetKnotChildData() : nullptr;
+    //UIHierarchyNodeChildData* knot = _child_data_knot.get();
+    //UIData* const knot_data = data ? data->GetKnotChildData() : nullptr;
 
-    if (nullptr != knot)
-    {
-        if (true == knot->ApplyFactory(knot_data, in_param, 0))
-        {
-            dirty = true;
-        }
-    }
+    //if (nullptr != knot)
+    //{
+    //    if (true == knot->ApplyFactory(knot_data, in_param, 0))
+    //    {
+    //        dirty = true;
+    //    }
+    //}
 
     if (true == _component_default.UpdateHierarchy(
         in_data,
@@ -236,6 +242,18 @@ const bool UIComponentScroll::UpdateHierarchy(
     {
         dirty = true;
     }
+
+
+    _knot = nullptr;
+    UIData* const knot_data = data ? data->GetKnotChildData() : nullptr;
+    in_out_child_data.VisitComponents([this, knot_data](IUIComponent* const in_component){
+            if (knot_data == in_component->GetSourceToken())
+            {
+                _knot = in_component;
+                return false;
+            }
+            return true;
+        });
 
     return dirty;
 }
@@ -251,10 +269,26 @@ void UIComponentScroll::UpdateSize(
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     const UIScreenSpace& in_parent_screen_space,
     UIScreenSpace& out_screen_space,
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_extra_data,
-    UILayout* const in_layout_override
+    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&
     )
 {
+    if (nullptr != _knot)
+    {
+        const float domain = _range_low_high[1] - _range_low_high[0];
+        const VectorFloat2 value(
+            domain != 0.0f ? (_value[0] - _range_low_high[0]) / domain : 0.0f,
+            domain != 0.0f ? (_value[1] - _range_low_high[0]) / domain : 0.0f
+            );
+
+        UILayout layout = _knot->GetLayout();
+        TweakLayout(
+            layout, 
+            value,
+            _orientation
+            );
+        _knot->SetLayoutOverride(layout);
+    }
+
     _component_default.UpdateSize(
         in_draw_system,
         *this,
@@ -266,40 +300,38 @@ void UIComponentScroll::UpdateSize(
         in_out_geometry, 
         in_out_node,
         in_parent_screen_space,
-        out_screen_space,
-        in_layout_override
+        out_screen_space
         );
 
-    if (nullptr != _child_data_knot->_component)
-    {
-        const float domain = _range_low_high[1] - _range_low_high[0];
-        const VectorFloat2 value(
-            domain != 0.0f ? (_value[0] - _range_low_high[0]) / domain : 0.0f,
-            domain != 0.0f ? (_value[1] - _range_low_high[0]) / domain : 0.0f
-            );
-        UILayout layout = _child_data_knot->_component->GetLayout();
-        TweakLayout(
-            layout, 
-            value,
-            _orientation
-            );
+    //if (nullptr != _child_data_knot->_component)
+    //{
+    //    const float domain = _range_low_high[1] - _range_low_high[0];
+    //    const VectorFloat2 value(
+    //        domain != 0.0f ? (_value[0] - _range_low_high[0]) / domain : 0.0f,
+    //        domain != 0.0f ? (_value[1] - _range_low_high[0]) / domain : 0.0f
+    //        );
+    //    UILayout layout = _child_data_knot->_component->GetLayout();
+    //    TweakLayout(
+    //        layout, 
+    //        value,
+    //        _orientation
+    //        );
 
-        const auto texture_size = in_out_node.GetTextureSize(in_draw_system);
-        _child_data_knot->_component->UpdateSize(
-            in_draw_system,
-            texture_size, //in_parent_size,
-            VectorInt2(), //in_parent_offset,
-            texture_size, //in_parent_window,
-            in_ui_scale,
-            in_time_delta, 
-            *_child_data_knot->_geometry, 
-            *_child_data_knot->_node,
-            in_parent_screen_space,
-            *_child_data_knot->_screen_space,
-            in_extra_data,
-            &layout
-            );
-    }
+    //    const auto texture_size = in_out_node.GetTextureSize(in_draw_system);
+    //    _child_data_knot->_component->UpdateSize(
+    //        in_draw_system,
+    //        texture_size, //in_parent_size,
+    //        VectorInt2(), //in_parent_offset,
+    //        texture_size, //in_parent_window,
+    //        in_ui_scale,
+    //        in_time_delta, 
+    //        *_child_data_knot->_geometry, 
+    //        *_child_data_knot->_node,
+    //        in_parent_screen_space,
+    //        *_child_data_knot->_screen_space,
+    //        in_extra_data
+    //        );
+    //}
 
     return;
 }
@@ -309,8 +341,7 @@ void UIComponentScroll::GetDesiredSize(
     VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
     const VectorInt2& in_parent_window,
     const float in_ui_scale,
-    UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    UILayout* const in_layout_override
+    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
     return _component_default.GetDesiredSize(
@@ -318,8 +349,7 @@ void UIComponentScroll::GetDesiredSize(
         out_desired_size,
         in_parent_window,
         in_ui_scale,
-        in_out_node,
-        in_layout_override
+        in_out_node
         );
 }
 
@@ -328,40 +358,44 @@ const bool UIComponentScroll::PreDraw(
     UIHierarchyNode& in_node
     ) 
 {
-    bool dirty = false;
-
-    if ((nullptr != _child_data_knot) && (nullptr != _child_data_knot->_component))
-    {
-        if (true == _child_data_knot->_component->PreDraw(
-            in_draw_param,
-            *(_child_data_knot->_node.get())
-            ))
-        {
-            dirty = true;
-        }
-    }
-
-    if (true == in_node.PreDraw(
-        in_draw_param
-        ))
-    {
-        dirty = true;
-    }
-    if (true == in_node.Draw(
+    return _component_default.PreDraw(
         in_draw_param,
-        dirty
-        ))
-    {
-        // this pattern is not good, it is just drawing to contents of the knot into in_node texture, move to have _child_data_knot back in the node hierarchy
-        if (nullptr != _child_data_knot)
-        {
-            _child_data_knot->Draw(in_draw_param);
-        }
+        in_node
+        );
+    //bool dirty = false;
 
-        dirty = true;
-    }
+    //if ((nullptr != _child_data_knot) && (nullptr != _child_data_knot->_component))
+    //{
+    //    if (true == _child_data_knot->_component->PreDraw(
+    //        in_draw_param,
+    //        *(_child_data_knot->_node.get())
+    //        ))
+    //    {
+    //        dirty = true;
+    //    }
+    //}
 
-    return dirty;
+    //if (true == in_node.PreDraw(
+    //    in_draw_param
+    //    ))
+    //{
+    //    dirty = true;
+    //}
+    //if (true == in_node.Draw(
+    //    in_draw_param,
+    //    dirty
+    //    ))
+    //{
+    //    // this pattern is not good, it is just drawing to contents of the knot into in_node texture, move to have _child_data_knot back in the node hierarchy
+    //    if (nullptr != _child_data_knot)
+    //    {
+    //        _child_data_knot->Draw(in_draw_param);
+    //    }
+
+    //    dirty = true;
+    //}
+
+    //return dirty;
 
 }
 

@@ -101,6 +101,12 @@ const UILayout& UIComponentManualScroll::GetLayout() const
     return _component_default.GetLayout();
 }
 
+void UIComponentManualScroll::SetLayoutOverride(const UILayout& in_override)
+{
+    _component_default.SetLayoutOverride(in_override);
+    return;
+}
+
 void UIComponentManualScroll::SetSourceToken(void* in_source_ui_data_token)
 {
     _component_default.SetSourceToken(in_source_ui_data_token);
@@ -190,8 +196,7 @@ void UIComponentManualScroll::UpdateSize(
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     const UIScreenSpace& in_parent_screen_space,
     UIScreenSpace& out_screen_space,
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_extra_data,
-    UILayout* const in_layout_override
+    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_extra_data
     )
 {
     // what size this layout wants in the parent layout
@@ -202,8 +207,7 @@ void UIComponentManualScroll::UpdateSize(
         desired_size,
         in_parent_window,
         in_ui_scale,
-        in_out_node,
-        in_layout_override
+        in_out_node
         );
 
     // instead of shrinking our desired size, use it as the initial value of the max_child_size
@@ -391,8 +395,7 @@ void UIComponentManualScroll::GetDesiredSize(
     VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
     const VectorInt2& in_parent_window,
     const float in_ui_scale,
-    UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    UILayout* const in_layout_override
+    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
     _component_default.GetDesiredSize(
@@ -400,8 +403,7 @@ void UIComponentManualScroll::GetDesiredSize(
         out_desired_size,
         in_parent_window,
         in_ui_scale,
-        in_out_node,
-        in_layout_override
+        in_out_node
         );
     return;
 }

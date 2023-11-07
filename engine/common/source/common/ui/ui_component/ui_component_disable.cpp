@@ -78,6 +78,12 @@ const UILayout& UIComponentDisable::GetLayout() const
     return _component_default.GetLayout();
 }
 
+void UIComponentDisable::SetLayoutOverride(const UILayout& in_override)
+{
+    _component_default.SetLayoutOverride(in_override);
+    return;
+}
+
 // Make sorting children easier
 void UIComponentDisable::SetSourceToken(void* in_source_ui_data_token)
 {
@@ -141,8 +147,7 @@ void UIComponentDisable::UpdateSize(
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     const UIScreenSpace& in_parent_screen_space,
     UIScreenSpace& out_screen_space,
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&,
-    UILayout* const in_layout_override
+    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&
     )
 {
     _component_default.UpdateSize(
@@ -156,8 +161,7 @@ void UIComponentDisable::UpdateSize(
         in_out_geometry, 
         in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         in_parent_screen_space,
-        out_screen_space,
-        in_layout_override
+        out_screen_space
         );
 
     if (nullptr != _shader_constant_buffer)
@@ -189,16 +193,14 @@ void UIComponentDisable::GetDesiredSize(
     VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
     const VectorInt2& in_parent_window,
     const float in_ui_scale,
-    UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    UILayout* const in_layout_override
+    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
 #if 1
     VectorInt2 max_desired_size;
 
-    out_layout_size = in_layout_override ? in_layout_override->GetSize(in_parent_window, in_ui_scale) 
-        : _component_default.GetLayout().GetSize(in_parent_window, in_ui_scale);
-
+    out_layout_size = _component_default.GetInUseLayout().GetSize(in_parent_window, in_ui_scale);
+    
     // Default is to go through children and see if anyone needs a bigger size than what we calculate
     for (auto iter: in_out_node.GetChildData())
     {
@@ -219,7 +221,7 @@ void UIComponentDisable::GetDesiredSize(
         max_desired_size = VectorInt2::Max(max_desired_size, child_desired_size);
     }
 
-    out_layout_size = _component_default.GetLayout().CalculateShrinkSize(out_layout_size, max_desired_size);
+    out_layout_size = _component_default.GetInUseLayout().CalculateShrinkSize(out_layout_size, max_desired_size);
     out_desired_size = VectorInt2::Max(out_layout_size, max_desired_size);
 
     return;

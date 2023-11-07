@@ -66,6 +66,11 @@ public:
 
    // const bool SetLayout(const UILayout& in_layout);
     const UILayout& GetLayout() const { return _layout; }
+    void SetLayoutOverride(const UILayout& in_override); 
+    /// Call GetSize of the layout or override layout
+    //const VectorInt2 LayoutGetSize(const VectorInt2& in_parent_window, const float in_ui_scale);
+    /// Get the layout that is in use, either the override layout or the normal layout
+    const UILayout& GetInUseLayout() const;
 
     VectorFloat2& GetUVScroll() { return _uv_scroll; }
 
@@ -94,8 +99,7 @@ public:
         UIGeometry& in_out_geometry, 
         UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         const UIScreenSpace& in_parent_screen_space,
-        UIScreenSpace& out_screen_space,
-        UILayout* const in_layout_override
+        UIScreenSpace& out_screen_space
         );
 
     void GetDesiredSize(
@@ -103,8 +107,7 @@ public:
         VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
         const VectorInt2& in_parent_window,
         const float in_ui_scale,
-        UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-        UILayout* const in_layout_override
+        UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         );
 
     const bool PreDraw(
@@ -120,6 +123,11 @@ private:
 
     /// layout data of the component
     UILayout _layout;
+
+    /// want a way for model to set the layout, but have sliders and scroll bars move
+    bool _use_layout_override;
+    /// the slow march to having every permutation of features have it's own data in the base class
+    UILayout _layout_override;
 
     /// uv = abs(_uv_scroll), and use range [-1...1] wrapped when advancing _uv_scroll, to allow saw tooth animation
     VectorFloat2 _uv_scroll;

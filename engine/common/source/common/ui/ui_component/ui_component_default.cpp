@@ -46,6 +46,8 @@ UIComponentDefault::UIComponentDefault(
     , _time_accumulate_seconds(0.0f)
     , _state_flag(in_state_flag)
     , _state_flag_dirty_mask(UIStateFlag::TNone)
+    , _use_layout_override(false)
+    , _layout_override()
 {
     // Nop
 }
@@ -154,6 +156,22 @@ void* UIComponentDefault::GetSourceToken() const
     return _source_token;
 }
 
+void UIComponentDefault::SetLayoutOverride(const UILayout& in_override)
+{
+    _use_layout_override = true;
+    _layout_override = in_override;
+    return;
+}
+
+const UILayout& UIComponentDefault::GetInUseLayout() const
+{
+    if (true == _use_layout_override)
+    {
+        return _layout_override;
+    }
+    return _layout;
+}
+
 //const bool UIComponentDefault::SetLayout(const UILayout& in_layout)
 //{
 //    bool dirty = false;
@@ -247,8 +265,7 @@ void UIComponentDefault::UpdateSize(
     UIGeometry& in_out_geometry, 
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     const UIScreenSpace& in_parent_screen_space,
-    UIScreenSpace& out_screen_space,
-    UILayout* const in_layout_override
+    UIScreenSpace& out_screen_space
     )
 {
     VectorInt2 layout_size;
@@ -258,8 +275,7 @@ void UIComponentDefault::UpdateSize(
         desired_size,
         in_parent_window,
         in_ui_scale,
-        in_out_node,
-        in_layout_override
+        in_out_node
         );
 
     VectorFloat4 geometry_pos;
@@ -278,7 +294,7 @@ void UIComponentDefault::UpdateSize(
         in_time_delta,
         layout_size,
         desired_size,
-        in_layout_override ? *in_layout_override : _layout
+        GetInUseLayout()
         );
 
     // Update geometry
@@ -317,12 +333,11 @@ void UIComponentDefault::GetDesiredSize(
     VectorInt2& out_desired_size,
     const VectorInt2& in_parent_window,
     const float in_ui_scale,
-    UIHierarchyNode&, //in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    UILayout* const in_layout_override
+    UIHierarchyNode& //in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
 #if 1
-    out_layout_size = in_layout_override ? in_layout_override->GetSize(in_parent_window, in_ui_scale) 
+    out_layout_size = _use_layout_override ? _layout_override.GetSize(in_parent_window, in_ui_scale) 
         : _layout.GetSize(in_parent_window, in_ui_scale);
     out_desired_size = out_layout_size;
     return;

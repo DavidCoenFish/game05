@@ -37,6 +37,7 @@ private:
     virtual const UIStateFlag GetStateFlag() const override;
 
     virtual const UILayout& GetLayout() const override; 
+    virtual void SetLayoutOverride(const UILayout& in_override) override; 
 
     virtual void SetSourceToken(void* in_source_ui_data_token) override;
     virtual void* GetSourceToken() const override;
@@ -58,8 +59,7 @@ private:
         UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         const UIScreenSpace& in_parent_screen_space,
         UIScreenSpace& out_screen_space,
-        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_extra_data,
-        UILayout* const in_layout_override = nullptr
+        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_extra_data
         ) override;
 
     virtual void GetDesiredSize(
@@ -67,8 +67,7 @@ private:
         VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
         const VectorInt2& in_parent_window,
         const float in_ui_scale,
-        UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-        UILayout* const in_layout_override = nullptr
+        UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         ) override;
 
     virtual const bool PreDraw(
@@ -90,7 +89,9 @@ private:
 
     UIOrientation _orientation;
 
-    std::shared_ptr<UIHierarchyNodeChildData> _child_data_knot;
+    //std::shared_ptr<UIHierarchyNodeChildData> _child_data_knot;
+    IUIComponent* _knot;
+
     std::function<void(const VectorFloat2&)> _value_change;
     std::function<void(const VectorFloat2&)> _range_change;
     VectorFloat2 _value;
