@@ -59,6 +59,7 @@ namespace
             {
                 const float height = in_screen_pos[3] - in_screen_pos[1];
                 ratio = height != 0.0f ? (in_mouse_pos.GetY() - in_screen_pos[1]) / height : 0.0f;
+                ratio = 1.0f - ratio;
             }
             break;
         }
@@ -124,6 +125,7 @@ const bool UIComponentScroll::SetBase(
 
 const bool UIComponentScroll::Set(
     const std::function<void(const VectorFloat2&)>& in_value_change,
+    const std::function<void(const VectorFloat2&)>& in_range_change,
     const VectorFloat2& in_value,
     const VectorFloat2& in_range_low_high
     )
@@ -131,6 +133,7 @@ const bool UIComponentScroll::Set(
     bool dirty = false;
 
     _value_change = in_value_change;
+    _range_change = in_range_change;
 
     if (_value != in_value)
     {
@@ -205,6 +208,7 @@ const bool UIComponentScroll::UpdateHierarchy(
     {
         if (true == Set(
             data->GetOnValueChange(),
+            data->GetOnRangeChange(),
             data->GetValue(),
             data->GetRangeLowHigh()
             ))
@@ -247,6 +251,7 @@ void UIComponentScroll::UpdateSize(
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     const UIScreenSpace& in_parent_screen_space,
     UIScreenSpace& out_screen_space,
+    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_extra_data,
     UILayout* const in_layout_override
     )
 {
@@ -291,6 +296,7 @@ void UIComponentScroll::UpdateSize(
             *_child_data_knot->_node,
             in_parent_screen_space,
             *_child_data_knot->_screen_space,
+            in_extra_data,
             &layout
             );
     }
@@ -317,7 +323,7 @@ void UIComponentScroll::GetDesiredSize(
         );
 }
 
-const bool UIComponentScroll::Draw(
+const bool UIComponentScroll::PreDraw(
     const UIManagerDrawParam& in_draw_param,
     UIHierarchyNode& in_node
     ) 
@@ -326,7 +332,7 @@ const bool UIComponentScroll::Draw(
 
     if ((nullptr != _child_data_knot) && (nullptr != _child_data_knot->_component))
     {
-        if (true == _child_data_knot->_component->Draw(
+        if (true == _child_data_knot->_component->PreDraw(
             in_draw_param,
             *(_child_data_knot->_node.get())
             ))
@@ -346,6 +352,7 @@ const bool UIComponentScroll::Draw(
         dirty
         ))
     {
+        // this pattern is not good, it is just drawing to contents of the knot into in_node texture, move to have _child_data_knot back in the node hierarchy
         if (nullptr != _child_data_knot)
         {
             _child_data_knot->Draw(in_draw_param);

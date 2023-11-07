@@ -81,6 +81,7 @@ void UIComponentCanvas::UpdateSize(
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     const UIScreenSpace& in_parent_screen_space,
     UIScreenSpace& out_screen_space,
+    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&,
     UILayout* const in_layout_override
     )
 {
@@ -119,12 +120,12 @@ void UIComponentCanvas::GetDesiredSize(
         );
 }
 
-const bool UIComponentCanvas::Draw(
+const bool UIComponentCanvas::PreDraw(
     const UIManagerDrawParam& in_draw_param,
     UIHierarchyNode& in_node
     ) 
 {
-    return _component_default.Draw(
+    return _component_default.PreDraw(
         in_draw_param,
         in_node
         );

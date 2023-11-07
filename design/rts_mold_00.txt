@@ -137,3 +137,24 @@ implementation
         state database can rewind (single player's undo/ and multiplay network message stitch in)
         save to current time, save full database
         - how to order input from multiple players on same frame? mod order for player index?
+
+
+extern to input is the change id of the frame input- only have what needs to be saved in the input database, but have extra data for each frame like the change id
+frame change id array std::vector<{int byte stream offset, int change id}>
+input database
+    initial config, engine version, game mode, map id, initial nb players? starting pos? bytestream length
+    byte stream of [command length, id, data....][command length, ...
+    0 frame id [4 bytes]
+    1 set selection self, unit id
+    2 add selection self, unit id
+    3 set selection generic, player count, player id, unit count, units
+    2 build drone, unit id
+    3 selected unit command gather
+    4 selected unit command gather target coord
+    5 set building waypoint
+    6 select unit move
+    6 select unit attack move 
+
+
+snapshot
+    frame id, 

@@ -13,6 +13,7 @@ public:
         Y,
         Min,
         Max
+        // make a 4:3 box in the parent and use the x or y
     };
 
     explicit UICoord(

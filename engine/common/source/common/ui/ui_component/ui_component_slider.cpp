@@ -226,6 +226,7 @@ void UIComponentSlider::UpdateSize(
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     const UIScreenSpace& in_parent_screen_space,
     UIScreenSpace& out_screen_space,
+    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_extra_data,
     UILayout* const in_layout_override
     )
 {
@@ -267,6 +268,7 @@ void UIComponentSlider::UpdateSize(
             *_child_data_knot->_node,
             in_parent_screen_space,
             *_child_data_knot->_screen_space,
+            in_extra_data,
             &layout
             );
     }
@@ -293,7 +295,7 @@ void UIComponentSlider::GetDesiredSize(
         );
 }
 
-const bool UIComponentSlider::Draw(
+const bool UIComponentSlider::PreDraw(
     const UIManagerDrawParam& in_draw_param,
     UIHierarchyNode& in_node
     ) 
@@ -302,7 +304,7 @@ const bool UIComponentSlider::Draw(
 
     if ((nullptr != _child_data_knot) && (nullptr != _child_data_knot->_component))
     {
-        if (true == _child_data_knot->_component->Draw(
+        if (true == _child_data_knot->_component->PreDraw(
             in_draw_param,
             *(_child_data_knot->_node.get())
             ))

@@ -190,6 +190,7 @@ void UIComponentManualScroll::UpdateSize(
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     const UIScreenSpace& in_parent_screen_space,
     UIScreenSpace& out_screen_space,
+    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_extra_data,
     UILayout* const in_layout_override
     )
 {
@@ -245,11 +246,23 @@ void UIComponentManualScroll::UpdateSize(
             const float inner_length = static_cast<float>(layout_size[0]);
             const float start = ratio * (range[1] - inner_length);
             const VectorFloat2 value(start, start + inner_length);
+            auto on_value_change = _horizontal_scroll->GetOnValueChange();
+            if (nullptr != on_value_change)
+            {
+                on_value_change(value);
+            }
+            auto on_range_change = _horizontal_scroll->GetOnRangeChange();
+            if (nullptr != on_range_change)
+            {
+                on_range_change(range);
+            }
             _horizontal_scroll->Set(
-                _horizontal_scroll->GetOnValueChange(),
+                on_value_change,
+                on_range_change,
                 value,
                 range
                 );
+            in_extra_data.push_back(_child_data_horizontal_scroll);
             _do_horizontal_scroll = true;
         }
     }
@@ -265,12 +278,26 @@ void UIComponentManualScroll::UpdateSize(
             const float inner_length = static_cast<float>(layout_size[1]);
             const float start = ratio * (range[1] - inner_length);
             const VectorFloat2 value(start, start + inner_length);
+
+            auto on_value_change = _vertical_scroll->GetOnValueChange();
+            if (nullptr != on_value_change)
+            {
+                on_value_change(value);
+            }
+            auto on_range_change = _vertical_scroll->GetOnRangeChange();
+            if (nullptr != on_range_change)
+            {
+                on_range_change(range);
+            }
+
             _vertical_scroll->Set(
                 // The advantage of obliging _vertical_scroll to implement the on change, is that it can have persistant scope, unlike UIComponentManualScroll, ie, it is in the model
-                _vertical_scroll->GetOnValueChange(),
+                on_value_change,
+                on_range_change,
                 value,
                 range
                 );
+            in_extra_data.push_back(_child_data_vertical_scroll);
             _do_vertical_scroll = true;
         }
     }
@@ -314,15 +341,16 @@ void UIComponentManualScroll::UpdateSize(
     {
         _child_data_horizontal_scroll->_component->UpdateSize(
             in_draw_system,
-            texture_size, //in_parent_size,
-            VectorInt2(), //in_parent_offset,
-            texture_size, //in_parent_window,
+            in_parent_size,//texture_size, //in_parent_size,
+            in_parent_offset,//VectorInt2(), //in_parent_offset,
+            in_parent_window,//texture_size, //in_parent_window,
             in_ui_scale,
             in_time_delta, 
             *_child_data_horizontal_scroll->_geometry, 
             *_child_data_horizontal_scroll->_node,
             in_parent_screen_space,
-            *_child_data_horizontal_scroll->_screen_space
+            *_child_data_horizontal_scroll->_screen_space,
+            in_extra_data
             );
     }
 
@@ -330,15 +358,16 @@ void UIComponentManualScroll::UpdateSize(
     {
         _child_data_vertical_scroll->_component->UpdateSize(
             in_draw_system,
-            texture_size, //in_parent_size,
-            VectorInt2(), //in_parent_offset,
-            texture_size, //in_parent_window,
+            in_parent_size,//texture_size, //in_parent_size,
+            in_parent_offset,//VectorInt2(), //in_parent_offset,
+            in_parent_window,//texture_size, //in_parent_window,
             in_ui_scale,
             in_time_delta, 
             *_child_data_vertical_scroll->_geometry, 
             *_child_data_vertical_scroll->_node,
             in_parent_screen_space,
-            *_child_data_vertical_scroll->_screen_space
+            *_child_data_vertical_scroll->_screen_space,
+            in_extra_data
             );
     }
 
@@ -377,18 +406,31 @@ void UIComponentManualScroll::GetDesiredSize(
     return;
 }
 
-const bool UIComponentManualScroll::Draw(
+const bool UIComponentManualScroll::PreDraw(
     const UIManagerDrawParam& in_draw_param,
     UIHierarchyNode& in_node
     ) 
 {
+#if 0
+    return _component_default.PreDraw(
+        in_draw_param,
+        in_node
+        );
+#else
     bool dirty = false;
+    if (true == _component_default.PreDraw(
+        in_draw_param,
+        in_node
+        ))
+    {
+        dirty = true;
+    }
 
     if ((nullptr != _child_data_horizontal_scroll) && (nullptr != _child_data_horizontal_scroll->_component) && (true == _do_horizontal_scroll))
     {
-        if (true == _child_data_horizontal_scroll->_component->Draw(
+        if (true == _child_data_horizontal_scroll->_component->PreDraw(
             in_draw_param,
-            *(_child_data_horizontal_scroll->_node.get())
+            *_child_data_horizontal_scroll->_node
             ))
         {
             dirty = true;
@@ -397,39 +439,88 @@ const bool UIComponentManualScroll::Draw(
 
     if ((nullptr != _child_data_vertical_scroll) && (nullptr != _child_data_vertical_scroll->_component) && (true == _do_vertical_scroll))
     {
-        if (true == _child_data_vertical_scroll->_component->Draw(
+        if (true == _child_data_vertical_scroll->_component->PreDraw(
             in_draw_param,
-            *(_child_data_vertical_scroll->_node.get())
+            *_child_data_vertical_scroll->_node
             ))
         {
             dirty = true;
         }
     }
 
-    if (true == in_node.PreDraw(
-        in_draw_param
-        ))
-    {
-        dirty = true;
-    }
-    if (true == in_node.Draw(
-        in_draw_param,
-        dirty
-        ))
-    {
-        if ((nullptr != _child_data_horizontal_scroll) && (true == _do_horizontal_scroll))
-        {
-            _child_data_horizontal_scroll->Draw(in_draw_param);
-        }
-
-        if ((nullptr != _child_data_vertical_scroll) && (true == _do_vertical_scroll))
-        {
-            _child_data_vertical_scroll->Draw(in_draw_param);
-        }
-
-        dirty = true;
-    }
-
     return dirty;
+#endif
+}
 
+void UIComponentManualScroll::Draw(
+    const UIManagerDrawParam& in_draw_param
+    ) 
+{
+#if 0
+    in_draw_param;
+#else
+    if ((nullptr != _child_data_horizontal_scroll) && (nullptr != _child_data_horizontal_scroll->_component) && (true == _do_horizontal_scroll))
+    {
+        const auto& shader = in_draw_param._ui_manager->GetShaderRef(UIShaderEnum::TDefault);
+
+        _child_data_horizontal_scroll->_node->GetUITexture().SetShaderResource(
+            *shader,
+            0,
+            in_draw_param._frame
+            );
+
+        if (nullptr == _child_data_horizontal_scroll->_shader_constant_buffer)
+        {
+            _child_data_horizontal_scroll->_shader_constant_buffer = shader->MakeShaderConstantBuffer(
+                in_draw_param._draw_system
+                );
+        }
+        if (nullptr != _child_data_horizontal_scroll->_shader_constant_buffer)
+        {
+            UIManager::TShaderConstantBuffer& buffer = _child_data_horizontal_scroll->_shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
+            // todo: get the tint colour, from geometry?
+            buffer._tint_colour = VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f);
+        }
+
+        in_draw_param._frame->SetShader(shader, _child_data_horizontal_scroll->_shader_constant_buffer);
+
+        _child_data_horizontal_scroll->_geometry->Draw(
+            in_draw_param._draw_system,
+            in_draw_param._frame
+            );
+    }
+
+    if ((nullptr != _child_data_vertical_scroll) && (nullptr != _child_data_vertical_scroll->_component) && (true == _do_vertical_scroll))
+    {
+        const auto& shader = in_draw_param._ui_manager->GetShaderRef(UIShaderEnum::TDefault);
+
+        _child_data_vertical_scroll->_node->GetUITexture().SetShaderResource(
+            *shader,
+            0,
+            in_draw_param._frame
+            );
+
+        if (nullptr == _child_data_vertical_scroll->_shader_constant_buffer)
+        {
+            _child_data_vertical_scroll->_shader_constant_buffer = shader->MakeShaderConstantBuffer(
+                in_draw_param._draw_system
+                );
+        }
+        if (nullptr != _child_data_vertical_scroll->_shader_constant_buffer)
+        {
+            UIManager::TShaderConstantBuffer& buffer = _child_data_vertical_scroll->_shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
+            // todo: get the tint colour, from geometry?
+            buffer._tint_colour = VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f);
+        }
+
+        in_draw_param._frame->SetShader(shader, _child_data_vertical_scroll->_shader_constant_buffer);
+
+        _child_data_vertical_scroll->_geometry->Draw(
+            in_draw_param._draw_system,
+            in_draw_param._frame
+            );
+    }
+
+    return;
+#endif
 }

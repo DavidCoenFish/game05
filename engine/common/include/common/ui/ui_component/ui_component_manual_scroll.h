@@ -73,6 +73,7 @@ private:
         UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         const UIScreenSpace& in_parent_screen_space,
         UIScreenSpace& out_screen_space,
+        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_extra_data,
         UILayout* const in_layout_override = nullptr
         ) override;
 
@@ -85,9 +86,15 @@ private:
         UILayout* const in_layout_override = nullptr
         ) override;
 
-    virtual const bool Draw(
+    virtual const bool PreDraw(
         const UIManagerDrawParam& in_draw_param,
         UIHierarchyNode& in_node
+        ) override;
+
+    /// alow customisation of the component being drawn to the node texture
+    /// by default a component doesn't draw and just lets the node draw each child texture to the parent
+    virtual void Draw(
+        const UIManagerDrawParam& in_draw_param
         ) override;
 
 private:

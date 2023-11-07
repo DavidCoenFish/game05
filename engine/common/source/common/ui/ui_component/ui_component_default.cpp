@@ -358,7 +358,7 @@ void UIComponentDefault::GetDesiredSize(
 #endif
 }
 
-const bool UIComponentDefault::Draw(
+const bool UIComponentDefault::PreDraw(
     const UIManagerDrawParam& in_draw_param,
     UIHierarchyNode& in_node
     )

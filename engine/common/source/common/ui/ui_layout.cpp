@@ -93,8 +93,8 @@ void UILayout::SetScrollHorizontal(const VectorFloat2& in_value)
 void UILayout::SetScrollVertical(const VectorFloat2& in_value)
 {
     _data_size[1] = UICoord(UICoord::ParentSource::Y, in_value[1] - in_value[0]);
-    _data_pivot[1] = UICoord(UICoord::ParentSource::Y, in_value[0]);
-    _data_attach[1] = UICoord(UICoord::ParentSource::Y, 0.0f);
+    _data_pivot[1] = UICoord(UICoord::ParentSource::Y, 1.0f - in_value[0]);
+    _data_attach[1] = UICoord(UICoord::ParentSource::Y, 1.0f);
 }
 
 const bool UILayout::operator==(const UILayout& in_rhs) const

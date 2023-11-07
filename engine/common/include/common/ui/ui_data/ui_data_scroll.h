@@ -10,6 +10,7 @@ public:
         const VectorFloat2& in_value = VectorFloat2(),
         const VectorFloat2& in_range_low_high = VectorFloat2(),
         const std::function<void(const VectorFloat2&)>& in_on_value_change = nullptr,
+        const std::function<void(const VectorFloat2&)>& in_on_range_change = nullptr,
         const std::shared_ptr<UIData>& in_knot_child_data = nullptr,
         const std::string& in_template_name = std::string("UIDataScroll"),
         const std::vector<std::shared_ptr<UIData>>& in_array_child_data = std::vector<std::shared_ptr<UIData>>()
@@ -17,7 +18,9 @@ public:
     virtual ~UIDataScroll();
 
     const std::function<void(const VectorFloat2&)>& GetOnValueChange() const { return _on_value_change; }
+    const std::function<void(const VectorFloat2&)>& GetOnRangeChange() const { return _on_range_change; }
 
+    void SetRange(const VectorFloat2& in_range);
     const VectorFloat2& GetRangeLowHigh() const { return _range_low_high; } 
 
     const VectorFloat2& GetValue() const { return _value; } 
@@ -27,6 +30,7 @@ public:
 
 private:
     std::function<void(const VectorFloat2&)> _on_value_change;
+    std::function<void(const VectorFloat2&)> _on_range_change;
     std::shared_ptr<UIData> _knot_child_data;
     VectorFloat2 _range_low_high;
     VectorFloat2 _value;

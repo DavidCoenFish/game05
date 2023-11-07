@@ -220,6 +220,7 @@ void UIComponentEffect::UpdateSize(
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     const UIScreenSpace& in_parent_screen_space,
     UIScreenSpace& out_screen_space,
+    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&,
     UILayout* const in_layout_override
     )
 {
@@ -316,7 +317,7 @@ void UIComponentEffect::GetDesiredSize(
         );
 }
 
-const bool UIComponentEffect::Draw(
+const bool UIComponentEffect::PreDraw(
     const UIManagerDrawParam& in_draw_param,
     UIHierarchyNode& in_node
     )
@@ -330,6 +331,7 @@ const bool UIComponentEffect::Draw(
         dirty = true;
     }
 
+    // Rather than put this in Component::Draw(), as we dont call the component_default::PreDraw which calls Node::Draw and Component::Draw
     UITexture& texture = in_node.GetUITexture();
     if ((true == dirty) ||
         (false == texture.GetHasDrawn()) ||

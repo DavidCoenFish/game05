@@ -153,6 +153,7 @@ void UIComponentTextRun::UpdateSize(
     UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     const UIScreenSpace& in_parent_screen_space,
     UIScreenSpace& out_screen_space,
+    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>&,
     UILayout* const in_layout_override
     )
 {
@@ -200,7 +201,7 @@ void UIComponentTextRun::GetDesiredSize(
     return;
 }
 
-const bool UIComponentTextRun::Draw(
+const bool UIComponentTextRun::PreDraw(
     const UIManagerDrawParam& in_draw_param,
     UIHierarchyNode& in_node
     ) 

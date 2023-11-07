@@ -450,6 +450,8 @@ void UIHierarchyNode::UpdateSize(
 {
     UpdateTextureSize(in_parent_size, in_mark_dirty);
 
+    std::vector<std::shared_ptr<UIHierarchyNodeChildData>> extra_data_array;
+
     // for each child, work out the geometry and texture size for each content
     for (auto& child_data_ptr : _child_data_array)
     {
@@ -470,9 +472,13 @@ void UIHierarchyNode::UpdateSize(
             *(child_data._geometry.get()),
             *(child_data._node.get()),
             in_parent_screen_space,
-            *(child_data._screen_space.get())
+            *(child_data._screen_space.get()),
+            extra_data_array
             );
     }
+
+    // wanted a way of allowing manual scroll to optional add nodes post size calculation
+    _child_data_array.insert(_child_data_array.end(), extra_data_array.begin(), extra_data_array.end());
 
     return;
 }
@@ -627,7 +633,7 @@ const bool UIHierarchyNode::PreDraw(
             continue;
         }
 
-        if (true == iter->_component->Draw(
+        if (true == iter->_component->PreDraw(
             in_draw_param,
             *(iter->_node.get())
             ))
@@ -695,7 +701,28 @@ const bool UIHierarchyNode::Draw(
                 in_draw_param._draw_system,
                 in_draw_param._frame
                 );
+
+            // of do as another loop to get above all children
+            child_data._component->Draw(
+                in_draw_param
+                );
         }
+
+        #if 0
+        // overkill doing another loop?
+        for (auto& iter : _child_data_array)
+        {
+            UIHierarchyNodeChildData& child_data = *iter;
+            if (nullptr == child_data._component)
+            {
+                continue;
+            }
+
+            child_data._component->Draw(
+                in_draw_param
+                );
+        }
+        #endif
 
         _texture->SetHasDrawn(true);
     }

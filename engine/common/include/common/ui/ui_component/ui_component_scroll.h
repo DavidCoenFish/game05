@@ -23,13 +23,14 @@ public:
         );
     const bool Set(
         const std::function<void(const VectorFloat2&)>& in_value_change,
+        const std::function<void(const VectorFloat2&)>& in_range_change,
         const VectorFloat2& in_value,
         const VectorFloat2& in_range_low_high
         );
     const float GetValueRatio() const;
-    //const VectorFloat2 GetValue() const { return _value; }
 
     const std::function<void(const VectorFloat2&)>& GetOnValueChange() const { return _value_change; }
+    const std::function<void(const VectorFloat2&)>& GetOnRangeChange() const { return _range_change; }
 
 private:
     virtual const bool SetStateFlag(const UIStateFlag in_state_flag) override;
@@ -57,6 +58,7 @@ private:
         UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         const UIScreenSpace& in_parent_screen_space,
         UIScreenSpace& out_screen_space,
+        std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& in_extra_data,
         UILayout* const in_layout_override = nullptr
         ) override;
 
@@ -69,7 +71,7 @@ private:
         UILayout* const in_layout_override = nullptr
         ) override;
 
-    virtual const bool Draw(
+    virtual const bool PreDraw(
         const UIManagerDrawParam& in_draw_param,
         UIHierarchyNode& in_node
         ) override;
@@ -90,6 +92,7 @@ private:
 
     std::shared_ptr<UIHierarchyNodeChildData> _child_data_knot;
     std::function<void(const VectorFloat2&)> _value_change;
+    std::function<void(const VectorFloat2&)> _range_change;
     VectorFloat2 _value;
     VectorFloat2 _range_low_high;
 

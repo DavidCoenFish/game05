@@ -148,6 +148,21 @@ namespace
             );
         return s_layout;
     }
+    const UILayout& GetUILayoutTopSideMargin()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 1.0f, s_default_margin * (-2.0f)),
+            UICoord(UICoord::ParentSource::Y, 1.0f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 1.0f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 1.0f),
+            false,
+            true
+            );
+        return s_layout;
+    }
+
     const UILayout& GetUILayoutTop()
     {
         // Todo: is y up the screen for ui, y==0 is bottom, y==1 is top screen
@@ -344,11 +359,47 @@ namespace
         return s_layout;
     }
 
+    const UILayout& GetUILayoutManualScrollHorizontalLong()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 1.0f),
+            UICoord(UICoord::ParentSource::Y, 0.0f, s_default_margin),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.0f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.0f)
+            );
+        return s_layout;
+    }
     const UILayout& GetUILayoutManualScrollVertical()
     {
         static UILayout s_layout(
             UICoord(UICoord::ParentSource::X, 0.0f, s_default_margin),
             UICoord(UICoord::ParentSource::Y, 1.0f, s_default_margin * (-2.0f)),
+            UICoord(UICoord::ParentSource::X, 1.0f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 1.0f),
+            UICoord(UICoord::ParentSource::Y, 0.5f)
+            );
+        return s_layout;
+    }
+    const UILayout& GetUILayoutManualScrollVerticalLong()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 0.0f, s_default_margin),
+            UICoord(UICoord::ParentSource::Y, 1.0f),
+            UICoord(UICoord::ParentSource::X, 1.0f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 1.0f),
+            UICoord(UICoord::ParentSource::Y, 0.5f)
+            );
+        return s_layout;
+    }
+    const UILayout& GetUILayoutDebugScrollVertical()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 0.0f, s_default_margin),
+            UICoord(UICoord::ParentSource::Y, 0.0f, 100.0f),
             UICoord(UICoord::ParentSource::X, 1.0f),
             UICoord(UICoord::ParentSource::Y, 0.5f),
             UICoord(UICoord::ParentSource::X, 1.0f),
@@ -1187,12 +1238,26 @@ void DefaultUIComponentFactory::Populate(
         GetUILayoutManualScrollVertical, 
         GetUIBaseColourDark //GetUIBaseColourBlue
         >);
+    in_ui_manager.AddContentFactory("canvas_manual_scroll_horizontal_long", FactoryCanvas<
+        GetUILayoutManualScrollHorizontalLong, 
+        GetUIBaseColourDark //GetUIBaseColourBlue
+        >);
+    in_ui_manager.AddContentFactory("canvas_manual_scroll_vertical_long", FactoryCanvas<
+        GetUILayoutManualScrollVerticalLong, 
+        GetUIBaseColourDark //GetUIBaseColourBlue
+        >);
+
+
+    in_ui_manager.AddContentFactory("canvas_debug_scroll_vertical", FactoryCanvas<
+        GetUILayoutDebugScrollVertical, 
+        GetUIBaseColourDark //GetUIBaseColourBlue
+        >);
 
     // UIData stack
     in_ui_manager.AddContentFactory("stack", FactoryStack<>);
 
     in_ui_manager.AddContentFactory("stack_top_down", FactoryStack<
-        GetUILayoutTop,
+        GetUILayoutTopSideMargin,
         GetUIBaseColourDefault,
         UIOrientation::TVertical,
         GetUICoordNone // No gap

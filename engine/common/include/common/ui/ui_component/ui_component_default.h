@@ -107,7 +107,7 @@ public:
         UILayout* const in_layout_override
         );
 
-    const bool Draw(
+    const bool PreDraw(
         const UIManagerDrawParam& in_draw_param,
         UIHierarchyNode& in_node
         );
