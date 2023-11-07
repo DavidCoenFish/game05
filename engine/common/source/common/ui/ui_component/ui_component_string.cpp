@@ -115,6 +115,12 @@ void UIComponentString::SetLayoutOverride(const UILayout& in_override)
     return;
 }
 
+void UIComponentString::SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool in_manual_horizontal, const bool in_manual_vertical)
+{
+    _component_default.SetUVScrollManual(in_uv_scroll, in_manual_horizontal, in_manual_vertical);
+    return;
+}
+
 // Make sorting children easier
 void UIComponentString::SetSourceToken(void* in_source_ui_data_token)
 {

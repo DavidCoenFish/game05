@@ -57,6 +57,12 @@ void UIComponentCanvas::SetLayoutOverride(const UILayout& in_override)
     return;
 }
 
+void UIComponentCanvas::SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool in_manual_horizontal, const bool in_manual_vertical)
+{
+    _component_default.SetUVScrollManual(in_uv_scroll, in_manual_horizontal, in_manual_vertical);
+    return;
+}
+
 void UIComponentCanvas::SetSourceToken(void* in_source_ui_data_token)
 {
     _component_default.SetSourceToken(in_source_ui_data_token);

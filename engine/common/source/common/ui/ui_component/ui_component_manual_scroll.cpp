@@ -4,6 +4,7 @@
 #include "common/draw_system/shader/shader.h"
 #include "common/draw_system/shader/shader_constant_buffer.h"
 #include "common/draw_system/draw_system_frame.h"
+#include "common/log/log.h"
 #include "common/ui/ui_component/ui_component_scroll.h"
 #include "common/ui/ui_data/ui_data_manual_scroll.h"
 #include "common/ui/ui_data/ui_data_scroll.h"
@@ -82,6 +83,12 @@ const UILayout& UIComponentManualScroll::GetLayout() const
 void UIComponentManualScroll::SetLayoutOverride(const UILayout& in_override)
 {
     _component_default.SetLayoutOverride(in_override);
+    return;
+}
+
+void UIComponentManualScroll::SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool in_manual_horizontal, const bool in_manual_vertical)
+{
+    _component_default.SetUVScrollManual(in_uv_scroll, in_manual_horizontal, in_manual_vertical);
     return;
 }
 
@@ -166,6 +173,8 @@ const bool UIComponentManualScroll::UpdateSize(
     UIScreenSpace& out_screen_space
     )
 {
+    bool dirty = false;
+
     // what size this layout wants in the parent layout
     VectorInt2 layout_size;
     VectorInt2 desired_size;
@@ -182,32 +191,33 @@ const bool UIComponentManualScroll::UpdateSize(
 
     // first child of the manual scroll is the content we care about the size of
     auto& child_array = in_out_node.GetChildData();
-    if ((0 < child_array.size()) && (nullptr != child_array[0]))
+    UIHierarchyNodeChildData* const main_child_data = 0 < child_array.size() ? child_array[0].get() : nullptr;
+    IUIComponent* const main_component =  main_child_data ? main_child_data->_component.get() : nullptr;
+    if (nullptr != main_component)
     {
-        UIHierarchyNodeChildData& child_data = *child_array[0];
-        if (nullptr != child_data._component)
-        {
-            VectorInt2 child_layout_size;
-            VectorInt2 child_desired_size;
-            child_data._component->GetDesiredSize(
-                child_layout_size,
-                child_desired_size,
-                layout_size, 
-                in_ui_scale, 
-                *child_data._node
-                );
-            max_child_size = VectorInt2::Max(max_child_size, child_desired_size);
-        }
+        VectorInt2 child_layout_size;
+        VectorInt2 child_desired_size;
+        main_component->GetDesiredSize(
+            child_layout_size,
+            child_desired_size,
+            layout_size, 
+            in_ui_scale, 
+            *(main_child_data->_node)
+            );
+        max_child_size = VectorInt2::Max(max_child_size, child_desired_size);
     }
 
     VectorFloat2 uv_scroll;
+    bool scroll_horizontal = false;
+    bool scroll_vertical = false;
 
     // adjust our desired size for children, if allowed to scroll
     if (nullptr != _horizontal_scroll_wrapper)
     {
         if (layout_size[0] < max_child_size[0])
         {
-            desired_size[0] = max_child_size[0];
+            scroll_horizontal = true;
+            //desired_size[0] = max_child_size[0];
             if (nullptr != _horizontal_scroll)
             {
                 float ratio = _horizontal_scroll->GetValueRatio();
@@ -217,21 +227,24 @@ const bool UIComponentManualScroll::UpdateSize(
                 const float start = ratio * (range[1] - inner_length);
                 const VectorFloat2 value(start, start + inner_length);
                 auto on_value_change = _horizontal_scroll->GetOnValueChange();
-                if (nullptr != on_value_change)
-                {
-                    on_value_change(value);
-                }
                 auto on_range_change = _horizontal_scroll->GetOnRangeChange();
-                if (nullptr != on_range_change)
-                {
-                    on_range_change(range);
-                }
-                _horizontal_scroll->Set(
+                if (true == _horizontal_scroll->Set(
                     on_value_change,
                     on_range_change,
                     value,
                     range
-                    );
+                    ))
+                {
+                    dirty = true;
+                    if (nullptr != on_value_change)
+                    {
+                        on_value_change(value);
+                    }
+                    if (nullptr != on_range_change)
+                    {
+                        on_range_change(range);
+                    }
+                }
             }
             _horizontal_scroll_wrapper->SetStateFlagBit(UIStateFlag::THidden, false);
         }
@@ -245,7 +258,9 @@ const bool UIComponentManualScroll::UpdateSize(
     {
         if (layout_size[1] < max_child_size[1])
         {
-            desired_size[1] = max_child_size[1];
+            scroll_vertical = true;
+
+            //desired_size[1] = max_child_size[1];
             if (nullptr != _vertical_scroll)
             {
                 float ratio = _vertical_scroll->GetValueRatio();
@@ -256,30 +271,40 @@ const bool UIComponentManualScroll::UpdateSize(
                 const VectorFloat2 value(start, start + inner_length);
 
                 auto on_value_change = _vertical_scroll->GetOnValueChange();
-                if (nullptr != on_value_change)
-                {
-                    on_value_change(value);
-                }
                 auto on_range_change = _vertical_scroll->GetOnRangeChange();
-                if (nullptr != on_range_change)
-                {
-                    on_range_change(range);
-                }
 
-                _vertical_scroll->Set(
+                if (true == _vertical_scroll->Set(
                     // The advantage of obliging _vertical_scroll to implement the on change, is that it can have persistant scope, unlike UIComponentManualScroll, ie, it is in the model
                     on_value_change,
                     on_range_change,
                     value,
                     range
-                    );
+                    ))
+                {
+                    //LOG_CONSOLE("vertical scroll value change [%f %f]", value[0], value[1]);
+                    dirty = true;
+
+                    if (nullptr != on_value_change)
+                    {
+                        on_value_change(value);
+                    }
+                    if (nullptr != on_range_change)
+                    {
+                        on_range_change(range);
+                    }
+                }
             }
             _vertical_scroll_wrapper->SetStateFlagBit(UIStateFlag::THidden, false);
         }
         else
         {
-            _vertical_scroll_wrapper->SetStateFlagBit(UIStateFlag::THidden, true);
+           _vertical_scroll_wrapper->SetStateFlagBit(UIStateFlag::THidden, true);
         }
+    }
+
+    if (nullptr != main_component)
+    {
+        main_component->SetUVScrollManual(uv_scroll, scroll_horizontal, scroll_vertical);
     }
 
     VectorFloat4 geometry_pos;
@@ -290,24 +315,28 @@ const bool UIComponentManualScroll::UpdateSize(
         geometry_pos,
         geometry_uv,
         texture_size,
-        uv_scroll,
+        _component_default.GetUVScroll(),
+        _component_default.GetUVScrollManualX(),
+        _component_default.GetUVScrollManualY(),
         in_parent_size,
         in_parent_offset,
         in_parent_window,
         in_ui_scale,
-        0.0f, //in_time_delta, is there a better way to disable auto scroll?
+        in_time_delta,
         layout_size,
         desired_size,
         _component_default.GetLayout()
         );
 
     // Update geometry
-    bool dirty = false;
     if (true == in_out_geometry.Set(
         geometry_pos,
         geometry_uv
         ))
     {
+        //LOG_CONSOLE("manual scroll geometry dirty pos:[%f %f %f %f] uv:[%f %f %f %f]", 
+        //    geometry_pos[0], geometry_pos[1], geometry_pos[2], geometry_pos[3],
+        //    geometry_uv[0], geometry_uv[1], geometry_uv[2], geometry_uv[3]);
         dirty = true;
     }
 

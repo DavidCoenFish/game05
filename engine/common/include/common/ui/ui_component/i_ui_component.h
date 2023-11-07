@@ -11,6 +11,7 @@ class UILayout;
 class UIScreenSpace;
 class UITexture;
 class VectorInt2;
+class VectorFloat2;
 class VectorFloat4;
 
 struct UIManagerDrawData;
@@ -37,6 +38,7 @@ public:
 
     /// Allow slider to override the layout
     virtual void SetLayoutOverride(const UILayout& in_override) = 0; 
+    virtual void SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool in_manual_horizontal, const bool in_manual_vertical) = 0;
 
     virtual const bool SetStateFlag(const UIStateFlag in_state_flag) = 0;
     virtual const bool SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable) = 0;

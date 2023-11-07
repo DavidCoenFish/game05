@@ -81,7 +81,8 @@ private:
     unsigned int _options;
     RenderTargetFormatData _target_format_data;
     RenderTargetDepthData _target_depth_data;
-    Microsoft::WRL::ComPtr<IDXGIFactory6> _dxgi_factory;
+    //Microsoft::WRL::ComPtr<IDXGIFactory2> _dxgi_factory_2;
+    Microsoft::WRL::ComPtr<IDXGIFactory7> _dxgi_factory;
     DWORD _dxgi_factory_flags;
     Microsoft::WRL::ComPtr<ID3D12Device2> _device;
     Microsoft::WRL::ComPtr<ID3D12CommandQueue> _command_queue;

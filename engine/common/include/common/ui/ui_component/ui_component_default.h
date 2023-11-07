@@ -47,6 +47,8 @@ public:
         VectorFloat4& out_geometry_uv,
         VectorInt2& out_texture_size,
         VectorFloat2& in_out_scroll,
+        const bool in_uv_scroll_manual_x,
+        const bool in_uv_scroll_manual_y,
         const VectorInt2& in_parent_size,
         const VectorInt2& in_parent_offset,
         const VectorInt2& in_parent_window,
@@ -74,6 +76,9 @@ public:
     const UILayout& GetInUseLayout() const;
 
     VectorFloat2& GetUVScroll() { return _uv_scroll; }
+    const bool GetUVScrollManualX() { return _uv_scroll_manual_x; }
+    const bool GetUVScrollManualY() { return _uv_scroll_manual_y; }
+    void SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool in_manual_horizontal, const bool in_manual_vertical);
 
     /// Return true if bits under _state_flag_dirty_mask change. 
     /// Is a direct setter too raw, move to enable/disable bit rather than entire flag.
@@ -132,6 +137,10 @@ private:
 
     /// uv = abs(_uv_scroll), and use range [-1...1] wrapped when advancing _uv_scroll, to allow saw tooth animation
     VectorFloat2 _uv_scroll;
+    /// the uv scroll value is manually set
+    bool _uv_scroll_manual_x;
+    bool _uv_scroll_manual_y;
+
 
     /// keep track of lifespan/ duration of the component
     float _time_accumulate_seconds;

@@ -79,6 +79,12 @@ const UILayout& UIComponentDisable::GetLayout() const
     return _component_default.GetLayout();
 }
 
+void UIComponentDisable::SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool in_manual_horizontal, const bool in_manual_vertical)
+{
+    _component_default.SetUVScrollManual(in_uv_scroll, in_manual_horizontal, in_manual_vertical);
+    return;
+}
+
 void UIComponentDisable::SetLayoutOverride(const UILayout& in_override)
 {
     _component_default.SetLayoutOverride(in_override);

@@ -9,6 +9,8 @@
 #include "common/math/vector_int2.h"
 #include "common/util/utf8.h"
 
+#include<unknwn.h>
+
 DeviceResources::DeviceResources(
     const unsigned int in_back_buffer_count,
     const D3D_FEATURE_LEVEL in_d3d_feature_level,
@@ -72,10 +74,26 @@ DeviceResources::DeviceResources(
         }
 #endif
 
+#if 1
     DX::ThrowIfFailed(CreateDXGIFactory2(
         _dxgi_factory_flags,
         IID_PPV_ARGS(_dxgi_factory.ReleaseAndGetAddressOf())
         ));
+#else
+    //https://stackoverflow.com/questions/64903828/proper-way-to-create-a-idxgifactory7
+    //use CreateDXGIFactory2() to create an IDXGIFactory2 and use QueryInterface() on that to obtain the one for IDXGIFactory7.
+    DX::ThrowIfFailed(CreateDXGIFactory2(
+        _dxgi_factory_flags,
+        IID_PPV_ARGS(_dxgi_factory_2.ReleaseAndGetAddressOf())
+        ));
+
+    DX::ThrowIfFailed(_dxgi_factory_2->QueryInterface(
+        __uuidof(IDXGIFactory7), 
+        (void**)_dxgi_factory.ReleaseAndGetAddressOf()
+        ));
+
+#endif
+
     // Determines whether tearing support is available for fullscreen borderless windows.
     if (_options&c_allow_tearing)
     {

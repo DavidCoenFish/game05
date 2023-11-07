@@ -4,6 +4,7 @@
 #include "common/draw_system/shader/shader.h"
 #include "common/draw_system/shader/shader_constant_buffer.h"
 #include "common/draw_system/draw_system_frame.h"
+#include "common/log/log.h"
 #include "common/ui/ui_data/ui_data_scroll.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_geometry.h"
@@ -191,6 +192,12 @@ void UIComponentScroll::SetLayoutOverride(const UILayout& in_override)
     return;
 }
 
+void UIComponentScroll::SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool in_manual_horizontal, const bool in_manual_vertical)
+{
+    _component_default.SetUVScrollManual(in_uv_scroll, in_manual_horizontal, in_manual_vertical);
+    return;
+}
+
 void UIComponentScroll::SetSourceToken(void* in_source_ui_data_token)
 {
     _component_default.SetSourceToken(in_source_ui_data_token);
@@ -274,10 +281,12 @@ const bool UIComponentScroll::UpdateSize(
             value,
             _orientation
             );
+
         _knot->SetLayoutOverride(layout);
     }
 
-    return _component_default.UpdateSize(
+    bool dirty = false;
+    if (true == _component_default.UpdateSize(
         in_draw_system,
         *this,
         in_parent_size,
@@ -289,7 +298,11 @@ const bool UIComponentScroll::UpdateSize(
         in_out_node,
         in_parent_screen_space,
         out_screen_space
-        );
+        ))
+    {
+        dirty = true;
+    }
+    return true;
 }
 
 void UIComponentScroll::GetDesiredSize(
@@ -334,6 +347,8 @@ void UIComponentScroll::OnInputTouch(
 
     _value_change(value);
 
+    //LOG_CONSOLE("OnInputTouch [%f %f]", value[0], value[1]);
+
     return;
 }
 
@@ -350,6 +365,8 @@ void UIComponentScroll::OnInputClick(
     const VectorFloat2 value = CalculateTouchValue(in_screen_pos, in_mouse_pos, _orientation, _range_low_high, _value[1] - _value[0]);
 
     _value_change(value);
+
+    //LOG_CONSOLE("OnInputClick [%f %f]", value[0], value[1]);
 
     return;
 }

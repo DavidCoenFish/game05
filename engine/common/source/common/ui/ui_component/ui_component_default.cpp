@@ -4,6 +4,7 @@
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/draw_system_frame.h"
 #include "common/draw_system/shader/shader.h"
+#include "common/log/log.h"
 #include "common/math/vector_int2.h"
 #include "common/math/vector_float4.h"
 #include "common/ui/ui_geometry.h"
@@ -48,6 +49,8 @@ UIComponentDefault::UIComponentDefault(
     , _state_flag_dirty_mask(UIStateFlag::TNone)
     , _use_layout_override(false)
     , _layout_override()
+    , _uv_scroll_manual_x(false)
+    , _uv_scroll_manual_y(false)
 {
     // Nop
 }
@@ -62,6 +65,8 @@ void UIComponentDefault::CalculateGeometry(
     VectorFloat4& out_geometry_uv,
     VectorInt2& out_texture_size,
     VectorFloat2& in_out_scroll,
+    const bool in_uv_scroll_manual_x,
+    const bool in_uv_scroll_manual_y,
     const VectorInt2& in_parent_size,
     const VectorInt2& in_parent_offset,
     const VectorInt2& in_parent_window,
@@ -92,26 +97,32 @@ void UIComponentDefault::CalculateGeometry(
         );
     if (0 < delta[0])
     {
-        const float delta_f = static_cast<float>(delta[0]);
-        float new_value = in_out_scroll[0] + (s_scroll_speed * in_time_delta / delta_f);
-        new_value = fmodf(new_value + 1.0f, 2.0f) - 1.0f; // want range [-1.0 ... 1.0]
-        in_out_scroll[0] = new_value;
+        if (false == in_uv_scroll_manual_x)
+        {
+            const float delta_f = static_cast<float>(delta[0]);
+            float new_value = in_out_scroll[0] + (s_scroll_speed * in_time_delta / delta_f);
+            new_value = fmodf(new_value + 1.0f, 2.0f) - 1.0f; // want range [-1.0 ... 1.0]
+            in_out_scroll[0] = new_value;
+        }
 
         const float length = (static_cast<float>(in_layout_size[0]) / static_cast<float>(in_desired_size[0]));//
-        const float offset = (1.0f - length) * abs(new_value);
+        const float offset = (1.0f - length) * abs(in_out_scroll[0]);
         out_geometry_uv[0] = offset;
         out_geometry_uv[2] = offset + length;
     }
 
     if (0 < delta[1])
     {
-        const float delta_f = static_cast<float>(delta[1]);
-        float new_value = in_out_scroll[1] + (s_scroll_speed * in_time_delta / delta_f);
-        new_value = fmodf(new_value + 1.0f, 2.0f) - 1.0f; // want range [-1.0 ... 1.0]
-        in_out_scroll[1] = new_value;
+        if (false == in_uv_scroll_manual_y)
+        {
+            const float delta_f = static_cast<float>(delta[1]);
+            float new_value = in_out_scroll[1] + (s_scroll_speed * in_time_delta / delta_f);
+            new_value = fmodf(new_value + 1.0f, 2.0f) - 1.0f; // want range [-1.0 ... 1.0]
+            in_out_scroll[1] = new_value;
+        }
 
         const float length = (static_cast<float>(in_layout_size[1]) / static_cast<float>(in_desired_size[1]));//
-        const float offset = (1.0f - length) * abs(new_value);
+        const float offset = (1.0f - length) * abs(in_out_scroll[1]);
         out_geometry_uv[1] = offset + length;
         out_geometry_uv[3] = offset;
     }
@@ -159,6 +170,13 @@ void* UIComponentDefault::GetSourceToken() const
 void UIComponentDefault::SetLayoutOverride(const UILayout& in_override)
 {
     _use_layout_override = true;
+    #if 0
+    if (_layout_override != in_override)
+    {
+        LOG_CONSOLE("LayoutOverride Change");
+    }
+    #endif
+
     _layout_override = in_override;
     return;
 }
@@ -172,25 +190,32 @@ const UILayout& UIComponentDefault::GetInUseLayout() const
     return _layout;
 }
 
-//const bool UIComponentDefault::SetLayout(const UILayout& in_layout)
-//{
-//    bool dirty = false;
-//    if (_layout != in_layout)
-//    {
-//        _layout = in_layout;
-//    }
-//    return dirty;
-//}
+void UIComponentDefault::SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool in_manual_horizontal, const bool in_manual_vertical)
+{
+    _uv_scroll_manual_x = in_manual_horizontal;
+    _uv_scroll_manual_y = in_manual_vertical;
+    if (true == _uv_scroll_manual_x)
+    {
+        _uv_scroll[0] = in_uv_scroll[0];
+    }
+    if (true == _uv_scroll_manual_y)
+    {
+        _uv_scroll[1] = in_uv_scroll[1];
+    }
+    return;
+}
 
 /// return true if any bits under the dirty flag are modified
 const bool UIComponentDefault::SetStateFlag(const UIStateFlag in_state_flag)
 {
     const bool dirty = (static_cast<int>(_state_flag) & static_cast<int>(_state_flag_dirty_mask)) 
         != (static_cast<int>(in_state_flag) & static_cast<int>(_state_flag_dirty_mask));
-    //if (true == dirty)
-    //{
-    //    LOG_CONSOLE("SetStateFlag %d => %d", _state_flag, in_state_flag);
-    //}
+    #if 0
+    if (true == dirty)
+    {
+        LOG_CONSOLE("SetStateFlag %d => %d", _state_flag, in_state_flag);
+    }
+    #endif
     _state_flag = in_state_flag;
     return dirty;
 }
@@ -287,6 +312,8 @@ const bool UIComponentDefault::UpdateSize(
         geometry_uv,
         texture_size,
         _uv_scroll,
+        _uv_scroll_manual_x,
+        _uv_scroll_manual_y,
         in_parent_size,
         in_parent_offset,
         in_parent_window,
@@ -336,41 +363,10 @@ void UIComponentDefault::GetDesiredSize(
     UIHierarchyNode& //in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
-#if 1
     out_layout_size = _use_layout_override ? _layout_override.GetSize(in_parent_window, in_ui_scale) 
         : _layout.GetSize(in_parent_window, in_ui_scale);
     out_desired_size = out_layout_size;
     return;
-#else
-    VectorInt2 max_desired_size;
-
-    out_layout_size = _layout.GetSize(in_parent_window, in_ui_scale);
-
-    // Default is to go through children and see if anyone needs a bigger size than what we calculate
-    for (auto iter: in_out_node.GetChildData())
-    {
-        UIHierarchyNodeChildData& child_data = *iter;
-        if (nullptr == child_data._component)
-        {
-            continue;
-        }
-        VectorInt2 child_layout_size;
-        VectorInt2 child_desired_size;
-        child_data._component->GetDesiredSize(
-            child_layout_size,
-            child_desired_size,
-            out_layout_size, 
-            in_ui_scale, 
-            *child_data._node
-            );
-        max_desired_size = VectorInt2::Max(max_desired_size, child_desired_size);
-    }
-
-    out_layout_size = _layout.CalculateShrinkSize(out_layout_size, max_desired_size);
-    out_desired_size = VectorInt2::Max(out_layout_size, max_desired_size);
-
-    return;
-#endif
 }
 
 const bool UIComponentDefault::PreDraw(

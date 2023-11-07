@@ -89,6 +89,12 @@ void UIComponentStack::SetLayoutOverride(const UILayout& in_override)
     return;
 }
 
+void UIComponentStack::SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool in_manual_horizontal, const bool in_manual_vertical)
+{
+    _component_default.SetUVScrollManual(in_uv_scroll, in_manual_horizontal, in_manual_vertical);
+    return;
+}
+
 // Make sorting children easier
 void UIComponentStack::SetSourceToken(void* in_source_ui_data_token)
 {
@@ -150,6 +156,8 @@ const bool UIComponentStack::UpdateSize(
         geometry_uv,
         texture_size,
         _component_default.GetUVScroll(),
+        _component_default.GetUVScrollManualX(),
+        _component_default.GetUVScrollManualY(),
         in_parent_size,
         in_parent_offset,
         in_parent_window,

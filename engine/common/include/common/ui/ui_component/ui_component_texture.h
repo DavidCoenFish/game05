@@ -50,6 +50,7 @@ private:
 
     virtual const UILayout& GetLayout() const override; 
     virtual void SetLayoutOverride(const UILayout& in_override) override; 
+    virtual void SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool manual_horizontal, const bool manual_vertical) override;
 
     // Make sorting children easier
     virtual void SetSourceToken(void* in_source_ui_data_token) override;

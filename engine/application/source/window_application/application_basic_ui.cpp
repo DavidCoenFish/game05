@@ -302,7 +302,7 @@ namespace
 
     std::shared_ptr<UIData> BuildScrollKnot()
     {
-#if 1
+#if 0
         return std::make_shared<UIData>(
             "canvas_blue"
             );

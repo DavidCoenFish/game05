@@ -267,11 +267,6 @@ UIRootInputState& UIHierarchyNode::GetOrMakeRootInputState()
     return *_root_input_state;
 }
 
-//std::shared_ptr<HeapWrapperItem> UIHierarchyNode::GetShaderResourceHeapWrapperItem() const
-//{
-//    return _texture->GetShaderResourceHeapWrapperItem();
-//}
-
 void UIHierarchyNode::AddChild(
     std::unique_ptr<IUIComponent>& in_content
     )

@@ -4,6 +4,7 @@
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/draw_system_frame.h"
 #include "common/draw_system/geometry/geometry_generic.h"
+#include "common/log/log.h"
 #include "common/ui/ui_manager.h"
 #include "common/util/vector_helper.h"
 
@@ -110,9 +111,16 @@ const bool UIGeometry::Set(
     {
         return false;
     }
+
+    //LOG_CONSOLE("UIGeometry Change before pos:[%f %f %f %f] uv:[%f %f %f %f]", _pos[0], _pos[1], _pos[2], _pos[3],
+    //    _uv[0], _uv[1], _uv[2], _uv[3]);
+
+    _data_changed = true;
     _pos = in_pos;
     _uv = in_uv;
-    _data_changed = true;
+
+    //LOG_CONSOLE("UIGeometry Change after pos:[%f %f %f %f] uv:[%f %f %f %f]", _pos[0], _pos[1], _pos[2], _pos[3],
+    //    _uv[0], _uv[1], _uv[2], _uv[3]);
 
     return true;
 }
