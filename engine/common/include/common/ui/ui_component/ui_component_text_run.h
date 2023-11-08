@@ -14,13 +14,15 @@ public:
     UIComponentTextRun(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
         std::unique_ptr<TextRun>& in_text_run
         );
     ~UIComponentTextRun();
 
     const bool SetBase(
         const UIBaseColour& in_base_colour,
-        const UILayout& in_layout
+        const UILayout& in_layout,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
         );
 
     const bool Set(
@@ -74,6 +76,8 @@ private:
         const UIManagerDrawParam& in_draw_param,
         UIHierarchyNode& in_node
         ) override;
+
+    virtual const VectorFloat4 GetTintColour() const override;
 
 private:
     UIComponentDefault _component_default;

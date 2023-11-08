@@ -13,6 +13,7 @@ public:
     UIComponentSlider(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
         const UIOrientation in_orientation
         );
     virtual ~UIComponentSlider();
@@ -20,6 +21,7 @@ public:
     const bool SetBase(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
         const UIOrientation in_orientation
         );
     const bool Set(
@@ -80,6 +82,8 @@ private:
         const VectorFloat2& in_mouse_pos
         ) override;
 
+    virtual const VectorFloat4 GetTintColour() const override;
+
 private:
     UIComponentDefault _component_default;
 
@@ -87,6 +91,8 @@ private:
 
     // Is it simpler to just have the last child node be the knot? but then we have to control how it's layout is updated
     //std::shared_ptr<UIHierarchyNodeChildData> _child_data_knot;
+
+    /// Reference to the know that was somewhere under us in the node hierarchy
     IUIComponent* _knot;
 
     std::function<void(const float)> _value_change;

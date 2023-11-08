@@ -29,6 +29,7 @@ public:
     UIData* const GetKnotChildData() const { return _knot_child_data.get(); } 
 
 private:
+    /// the use of the callbacks is to pass to the UIComponentScroll/UIManualScroll so it can change
     std::function<void(const VectorFloat2&)> _on_value_change;
     std::function<void(const VectorFloat2&)> _on_range_change;
     std::shared_ptr<UIData> _knot_child_data;

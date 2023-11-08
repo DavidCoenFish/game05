@@ -10,18 +10,19 @@
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_texture.h"
 #include "common/ui/ui_enum.h"
-#include "common/ui/ui_shader_enum.h"
 #include "common/ui/ui_component/ui_component_effect.h"
 #include "common/ui/ui_data/ui_data_disable.h"
 
 UIComponentDisable::UIComponentDisable(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
     const bool in_disable
     )
     : _component_default(
         in_base_colour,
-        in_layout
+        in_layout,
+        in_state_flag_tint_array
         )
     //, _disable(false)
 {
@@ -36,12 +37,14 @@ UIComponentDisable::~UIComponentDisable()
 
 const bool UIComponentDisable::SetBase(
     const UIBaseColour& in_base_colour,
-    const UILayout& in_layout
+    const UILayout& in_layout,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
     )
 {
     return _component_default.SetBase(
         in_base_colour,
-        in_layout
+        in_layout,
+        in_state_flag_tint_array
         );
 }
 
@@ -284,6 +287,17 @@ const bool UIComponentDisable::PreDraw(
                 in_draw_param._frame
                 );
 
+            // the tint array index may be changed by input after update size and before draw
+            if (nullptr != _shader_constant_buffer)
+            {
+                UIManager::TShaderConstantBuffer& constant_0 = _shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
+                const auto new_tint = _component_default.GetTintColour();
+                if (constant_0._tint_colour != new_tint)
+                {
+                    constant_0._tint_colour = new_tint;
+                }
+            }
+
             in_draw_param._frame->SetShader(shader, _shader_constant_buffer);
 
             VectorFloat4 geometry_pos;
@@ -306,5 +320,11 @@ const bool UIComponentDisable::PreDraw(
     }
 
     return dirty;
+}
+
+// this Component already uses the tint colour in it's custom PreDraw
+const VectorFloat4 UIComponentDisable::GetTintColour() const
+{
+    return VectorFloat4::s_white;
 }
 

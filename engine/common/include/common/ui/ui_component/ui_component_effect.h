@@ -26,18 +26,19 @@ public:
 #endif
     };
 
-    typedef std::array<VectorFloat4, static_cast<int>(UIStateFlag::TTintPermutationCount)> TStateFlagTintArray;
+    //typedef std::array<VectorFloat4, static_cast<int>(UIStateFlag::TTintPermutationCount)> TStateFlagTintArray;
 
     /// weak contract to construct via factory UIManager::TContentFactory
     UIComponentEffect(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
         const UIEffectEnum in_type,
         const UICoord& in_coord_a,
         const UICoord& in_coord_b,
         const UICoord& in_coord_c,
-        const UICoord& in_coord_d,
-        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_array_or_null = nullptr
+        const UICoord& in_coord_d
+        //const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_array_or_null = nullptr
         );
     /// destructed by base type IUIComponent which has virtual dtor, so virtual here may be redundant but does provide info
     virtual ~UIComponentEffect();
@@ -46,12 +47,13 @@ public:
     const bool Set(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
         const UIEffectEnum in_type,
         const UICoord& in_coord_a,
         const UICoord& in_coord_b,
         const UICoord& in_coord_c,
-        const UICoord& in_coord_d,
-        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_array_or_null = nullptr
+        const UICoord& in_coord_d
+        //const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_array_or_null = nullptr
         );
 
 private:
@@ -104,6 +106,8 @@ private:
         UIHierarchyNode& in_node
         ) override;
 
+    virtual const VectorFloat4 GetTintColour() const override;
+
 private:
     /// composition rather than inheratence
     UIComponentDefault _component_default;
@@ -124,7 +128,7 @@ private:
     std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;
 
     /// Do we have valid tint data, treat as const resource, ie, not allowed to modify tint data other than componet factory setting it to null or another set of data
-    std::shared_ptr<const TStateFlagTintArray> _state_flag_tint_array;
+    //std::shared_ptr<const TStateFlagTintArray> _state_flag_tint_array;
     //bool _use_state_flag_tint_array;
     //TStateFlagTintArray _state_flag_tint_array;
 

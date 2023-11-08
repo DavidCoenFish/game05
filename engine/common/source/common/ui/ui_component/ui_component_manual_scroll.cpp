@@ -11,18 +11,20 @@
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_manager.h"
-#include "common/ui/ui_shader_enum.h"
+#include "common/ui/ui_enum.h"
 #include "common/ui/ui_texture.h"
 #include "common/ui/ui_screen_space.h"
 #include "common/ui/ui_enum.h"
 
 UIComponentManualScroll::UIComponentManualScroll(
     const UIBaseColour& in_base_colour,
-    const UILayout& in_layout
+    const UILayout& in_layout,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
     )
     : _component_default(
         in_base_colour,
-        in_layout
+        in_layout,
+        in_state_flag_tint_array
         )
     , _horizontal_scroll_wrapper(nullptr)
     , _vertical_scroll_wrapper(nullptr)
@@ -39,13 +41,15 @@ UIComponentManualScroll::~UIComponentManualScroll()
 
 const bool UIComponentManualScroll::SetBase(
     const UIBaseColour& in_base_colour,
-    const UILayout& in_layout
+    const UILayout& in_layout,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
     )
 {
     bool dirty = false;
     if (true == _component_default.SetBase(
         in_base_colour,
-        in_layout
+        in_layout,
+        in_state_flag_tint_array
         ))
     {
         dirty = true;
@@ -173,7 +177,14 @@ const bool UIComponentManualScroll::UpdateSize(
     UIScreenSpace& out_screen_space
     )
 {
-    bool dirty = false;
+    // the default _component_default.UpdateSize recurses, we do want to do that, but with custom uv scroll for the first child
+    // else the default behaviour is canvas to draw all the children over the top of each other
+
+    bool dirty = false; 
+    if (true == _component_default.Update(in_time_delta))
+    {
+        dirty = true;
+    }
 
     // what size this layout wants in the parent layout
     VectorInt2 layout_size;
@@ -217,7 +228,8 @@ const bool UIComponentManualScroll::UpdateSize(
         if (layout_size[0] < max_child_size[0])
         {
             scroll_horizontal = true;
-            //desired_size[0] = max_child_size[0];
+
+            // TODO: resolve duplication of calling both _horizontal_scroll->Set AND on_value_change
             if (nullptr != _horizontal_scroll)
             {
                 float ratio = _horizontal_scroll->GetValueRatio();
@@ -260,7 +272,6 @@ const bool UIComponentManualScroll::UpdateSize(
         {
             scroll_vertical = true;
 
-            //desired_size[1] = max_child_size[1];
             if (nullptr != _vertical_scroll)
             {
                 float ratio = _vertical_scroll->GetValueRatio();
@@ -390,3 +401,7 @@ const bool UIComponentManualScroll::PreDraw(
         );
 }
 
+const VectorFloat4 UIComponentManualScroll::GetTintColour() const
+{
+    return _component_default.GetTintColour();
+}

@@ -10,6 +10,7 @@ public:
     UIComponentButton(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
         const std::function<void(const VectorFloat2&)>& in_on_click = nullptr,
         const bool in_allow_repeat = false
         );
@@ -18,7 +19,8 @@ public:
     /// Called from factory
     const bool SetBase(
         const UIBaseColour& in_base_colour,
-        const UILayout& in_layout
+        const UILayout& in_layout,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
         );
 
     const bool Set(
@@ -81,6 +83,8 @@ private:
         const float in_duration,
         const float in_last_timestep
         );
+
+    virtual const VectorFloat4 GetTintColour() const override;
 
 private:
     UIComponentDefault _component_default;

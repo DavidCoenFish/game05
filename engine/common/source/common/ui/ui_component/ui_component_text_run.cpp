@@ -14,11 +14,13 @@
 UIComponentTextRun::UIComponentTextRun(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
     std::unique_ptr<TextRun>& in_text_run
     )
     : _component_default(
         in_base_colour,
-        in_layout
+        in_layout,
+        in_state_flag_tint_array
         )
     , _text_run(std::move(in_text_run))
     , _change_id(0)
@@ -33,13 +35,15 @@ UIComponentTextRun::~UIComponentTextRun()
 
 const bool UIComponentTextRun::SetBase(
     const UIBaseColour& in_base_colour,
-    const UILayout& in_layout
+    const UILayout& in_layout,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
     )
 {
     bool dirty = false;
     if (true == _component_default.SetBase(
         in_base_colour,
-        in_layout
+        in_layout,
+        in_state_flag_tint_array
         ))
     {
         dirty = true;
@@ -253,4 +257,9 @@ const bool UIComponentTextRun::PreDraw(
     }
 
     return dirty;
+}
+
+const VectorFloat4 UIComponentTextRun::GetTintColour() const
+{
+    return _component_default.GetTintColour();
 }

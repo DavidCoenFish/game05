@@ -12,6 +12,7 @@ public:
     UIComponentStack(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
         const UIOrientation in_orientation,
         const UICoord& in_gap
         );
@@ -20,6 +21,7 @@ public:
     const bool Set(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
         const UIOrientation in_orientation,
         const UICoord& in_gap
         );
@@ -79,6 +81,8 @@ private:
         const UIManagerDrawParam& in_draw_param,
         UIHierarchyNode& in_node
         ) override;
+
+    virtual const VectorFloat4 GetTintColour() const override;
 
 private:
     UIComponentDefault _component_default;

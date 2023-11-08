@@ -40,10 +40,11 @@ const bool UIComponentGridSizeData::operator!=(const UIComponentGridSizeData& in
 UIComponentGrid::UIComponentGrid(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
     const std::vector<UIComponentGridSizeData>& in_horizontal_size_array,
     const std::vector<UIComponentGridSizeData>& in_vertical_size_array
     )
-    : _component_default(in_base_colour, in_layout)
+    : _component_default(in_base_colour, in_layout, in_state_flag_tint_array)
     , _horizontal_size_array(in_horizontal_size_array)
     , _vertical_size_array(in_vertical_size_array)
 {
@@ -58,6 +59,7 @@ UIComponentGrid::~UIComponentGrid()
 const bool UIComponentGrid::Set(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
     const std::vector<UIComponentGridSizeData>& in_horizontal_size_array,
     const std::vector<UIComponentGridSizeData>& in_vertical_size_array
     )
@@ -66,7 +68,8 @@ const bool UIComponentGrid::Set(
 
     if (true == _component_default.SetBase(
         in_base_colour,
-        in_layout
+        in_layout,
+        in_state_flag_tint_array
         ))
     {
         dirty = true;
@@ -157,6 +160,12 @@ const bool UIComponentGrid::UpdateSize(
 {
     std::vector<VectorInt4> child_window_offset_array;
 
+    bool dirty = false;
+    if (true == _component_default.Update(in_time_delta))
+    {
+        dirty = true;
+    }
+
     VectorInt2 layout_size;
     VectorInt2 desired_size;
     GetGridDesiredSize(
@@ -190,7 +199,6 @@ const bool UIComponentGrid::UpdateSize(
         );
 
     // Update geometry
-    bool dirty = false;
     if (true == in_out_geometry.Set(
         geometry_pos,
         geometry_uv
@@ -382,4 +390,9 @@ void UIComponentGrid::GetGridDesiredSize(
     out_layout_size = _component_default.GetInUseLayout().CalculateShrinkSize(out_layout_size, out_desired_size);
 
     return;
+}
+
+const VectorFloat4 UIComponentGrid::GetTintColour() const
+{
+    return _component_default.GetTintColour();
 }

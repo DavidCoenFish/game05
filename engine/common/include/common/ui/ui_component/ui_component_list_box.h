@@ -3,46 +3,24 @@
 #include "common/ui/ui_component/i_ui_component.h"
 #include "common/ui/ui_component/ui_component_default.h"
 
-class DrawSystemFrame;
-class HeapWrapperItem;
-class Shader;
-class IResource;
-class UIGeometry;
-class UITexture;
-struct UIHierarchyNodeChildData;
-
-/*
-UIHierarchyNode // N0 
-    _texture // T0 texture or backbuffer A0 draws to
-    [_input_state] // I0 optional top level input state, which node is focused, node click started on, hover node
-    _child_node_array // A0
-        _geometry // G1 geometry to draw the texture T1 onto T0
-        _shader_constant_buffer // S1 the shader constants -> moved to component default? or needs to be with? in? geometry G1
-        _component // C1 controls size of T1 and G1. model returns an array of ui data for child array A1
-        UIHierarchyNode // N1 child node
-            _texture // T1 texture or backbuffer A1 draws to
-            _child_node_array // A1
-
-if _component C1 is our UIComponentTexture, it has an custom set texture which is drawn to _texture T1 using out local geometry
-_geometry G1 is then used by the UIHierarchyNode::Draw to draw T1 to T0
-*/
-
-class UIComponentTexture : public IUIComponent
+class UIComponentListBox : public IUIComponent
 {
 public:
-    UIComponentTexture(
+    UIComponentListBox(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
-        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
-        const std::shared_ptr<HeapWrapperItem>& in_shader_resource_view_handle,
-        const std::shared_ptr<IResource>& in_shader_resource
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
         );
-    virtual ~UIComponentTexture();
+    virtual ~UIComponentListBox();
 
-    void SetTexture(
-        const std::shared_ptr<HeapWrapperItem>& in_shader_resource_view_handle,
-        const std::shared_ptr<IResource>& in_shader_resource
+    const bool SetBase(
+        const UIBaseColour& in_base_colour,
+        const UILayout& in_layout,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
         );
+
+    /// inpoint for item button callbacks
+    void SetSelectedIndex(const int in_selected_index);
 
 private:
     virtual const bool SetStateFlag(const UIStateFlag in_state_flag) override;
@@ -53,7 +31,6 @@ private:
     virtual void SetLayoutOverride(const UILayout& in_override) override; 
     virtual void SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool manual_horizontal, const bool manual_vertical) override;
 
-    // Make sorting children easier
     virtual void SetSourceToken(void* in_source_ui_data_token) override;
     virtual void* GetSourceToken() const override;
 
@@ -94,10 +71,10 @@ private:
 private:
     UIComponentDefault _component_default;
 
-    bool _dirty;
-    std::shared_ptr<HeapWrapperItem> _shader_resource_view_handle;
-    std::shared_ptr<IResource> _shader_resource;
-    std::unique_ptr<UIGeometry> _geometry;
-    std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;
+    std::function<void(const int)> _on_selection_change;
+
+    // moving away from having a shadow copy of state in ui components, do need the on change callback though
+    // coudl be usefull to filter out non change input?
+    //int _selection_index;
 
 };

@@ -12,6 +12,7 @@ public:
     UIComponentScroll(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
         const UIOrientation in_orientation
         );
     virtual ~UIComponentScroll();
@@ -19,6 +20,7 @@ public:
     const bool SetBase(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
         const UIOrientation in_orientation
         );
     const bool Set(
@@ -84,6 +86,8 @@ private:
         const VectorFloat4& in_screen_pos,
         const VectorFloat2& in_mouse_pos
         ) override;
+
+    virtual const VectorFloat4 GetTintColour() const override;
 
 private:
     UIComponentDefault _component_default;

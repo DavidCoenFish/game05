@@ -15,11 +15,13 @@
 UIComponentString::UIComponentString(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
     std::unique_ptr<TextBlock>& in_text_block
     )
     : _component_default(
         in_base_colour,
-        in_layout
+        in_layout,
+        in_state_flag_tint_array
         )
     , _text_block(std::move(in_text_block))
 {
@@ -33,12 +35,14 @@ UIComponentString::~UIComponentString()
 
 const bool UIComponentString::SetBase(
     const UIBaseColour& in_base_colour,
-    const UILayout& in_layout
+    const UILayout& in_layout,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
     )
 {
     if (true == _component_default.SetBase(
         in_base_colour,
-        in_layout
+        in_layout,
+        in_state_flag_tint_array
         ))
     {
         return true;
@@ -261,4 +265,9 @@ const bool UIComponentString::PreDraw(
     }
 
     return dirty;
+}
+
+const VectorFloat4 UIComponentString::GetTintColour() const
+{
+    return _component_default.GetTintColour();
 }

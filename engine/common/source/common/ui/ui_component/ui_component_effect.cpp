@@ -10,7 +10,7 @@
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_texture.h"
 #include "common/ui/ui_enum.h"
-#include "common/ui/ui_shader_enum.h"
+#include "common/ui/ui_enum.h"
 
 #include "common/log/log.h"
 
@@ -57,31 +57,27 @@ namespace
 UIComponentEffect::UIComponentEffect(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
     const UIEffectEnum in_type,
     const UICoord& in_coord_a,
     const UICoord& in_coord_b,
     const UICoord& in_coord_c,
-    const UICoord& in_coord_d,
-    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_array_or_null
+    const UICoord& in_coord_d
     )
     : _component_default(
         in_base_colour,
-        in_layout
+        in_layout,
+        in_state_flag_tint_array
         )
     , _type(in_type)
     , _coord_a(in_coord_a)
     , _coord_b(in_coord_b)
     , _coord_c(in_coord_c)
     , _coord_d(in_coord_d)
-    , _state_flag_tint_array(in_state_flag_array_or_null)
 {
 #if defined(GEOMETRY_SIZE_INTO_SHADER)
     _geometry = std::make_unique<UIGeometry>();
 #endif
-    if (nullptr != _state_flag_tint_array)
-    {
-        _component_default.SetStateFlagDirty(UIStateFlag::TTintMask);
-    }
 }
 
 UIComponentEffect::~UIComponentEffect()
@@ -93,19 +89,20 @@ UIComponentEffect::~UIComponentEffect()
 const bool UIComponentEffect::Set(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
     const UIEffectEnum in_type,
     const UICoord& in_coord_a,
     const UICoord& in_coord_b,
     const UICoord& in_coord_c,
-    const UICoord& in_coord_d,
-    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_array_or_null
+    const UICoord& in_coord_d
     )
 {
     bool dirty = false;
 
     if (true == _component_default.SetBase(
         in_base_colour,
-        in_layout
+        in_layout,
+        in_state_flag_tint_array
         ))
     {
         dirty = true;
@@ -140,12 +137,6 @@ const bool UIComponentEffect::Set(
     {
         dirty = true;
         _coord_d = in_coord_d;
-    }
-
-    if (_state_flag_tint_array != in_state_flag_array_or_null)
-    {
-        dirty = true;
-        _state_flag_tint_array = in_state_flag_array_or_null;
     }
 
     return dirty;
@@ -255,22 +246,6 @@ const bool UIComponentEffect::UpdateSize(
 
     if (nullptr != _shader_constant_buffer)
     {
-        UIManager::TShaderConstantBuffer& constant_0 = _shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
-        const VectorFloat4* tint_override = nullptr;
-        const auto tint_array = _state_flag_tint_array.get();        
-        if (nullptr != tint_array)
-        {
-            const int tint_index = static_cast<int>(_component_default.GetStateFlag()) & static_cast<int>(UIStateFlag::TTintMask);
-            tint_override = &(*tint_array)[tint_index];
-        }
-        const auto new_tint = _component_default.GetTintColour(tint_override);
-        if (constant_0._tint_colour != new_tint)
-        {
-            dirty = true;
-            constant_0._tint_colour = new_tint;
-            //LOG_CONSOLE("tint_index %d", tint_index);
-        }
-
         const VectorInt2 texture_size = in_out_node.GetTextureSize(in_draw_system);
         TShaderConstantBuffer& constant_1 = _shader_constant_buffer->GetConstant<TShaderConstantBuffer>(1);
         if (UIEffectEnum::TNone != _type)
@@ -368,15 +343,10 @@ const bool UIComponentEffect::PreDraw(
                 );
 
             // the tint array index may be changed by input after update size and before draw
-            const auto tint_array = _state_flag_tint_array.get();
-            if ((nullptr != _shader_constant_buffer) && (nullptr != tint_array))
+            if (nullptr != _shader_constant_buffer)
             {
                 UIManager::TShaderConstantBuffer& constant_0 = _shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
-                const VectorFloat4* tint_override = nullptr;
-                const int tint_index = static_cast<int>(_component_default.GetStateFlag()) & static_cast<int>(UIStateFlag::TTintMask);
-                tint_override = &(*tint_array)[tint_index];
-
-                const auto new_tint = _component_default.GetTintColour(tint_override);
+                const auto new_tint = _component_default.GetTintColour();
                 if (constant_0._tint_colour != new_tint)
                 {
                     constant_0._tint_colour = new_tint;
@@ -391,6 +361,8 @@ const bool UIComponentEffect::PreDraw(
                 in_draw_param._frame
                 );
 #else
+
+#if defined(_DEBUG)
             VectorFloat4 geometry_pos;
             VectorFloat4 geometry_uv;
             child_data._geometry->Get(
@@ -400,6 +372,7 @@ const bool UIComponentEffect::PreDraw(
             DSC_ASSERT(geometry_pos == VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f), "Expect child geometry to be full screen");
             // atention Y inverted
             DSC_ASSERT(geometry_uv == VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f), "Expect child geometry to be full screen uv"); 
+#endif
 
             child_data._geometry->Draw(
                 in_draw_param._draw_system,
@@ -414,3 +387,8 @@ const bool UIComponentEffect::PreDraw(
     return dirty;
 }
 
+// this Component already uses the tint colour in it's custom PreDraw
+const VectorFloat4 UIComponentEffect::GetTintColour() const
+{
+    return VectorFloat4::s_white;
+}

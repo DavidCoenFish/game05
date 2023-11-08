@@ -13,12 +13,14 @@
 UIComponentStack::UIComponentStack(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
     const UIOrientation in_orientation,
     const UICoord& in_gap
     )
     : _component_default(
         in_base_colour,
-        in_layout
+        in_layout,
+        in_state_flag_tint_array
         )
     , _orientation(in_orientation)
     , _gap(in_gap)
@@ -34,6 +36,7 @@ UIComponentStack::~UIComponentStack()
 const bool UIComponentStack::Set(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
     const UIOrientation in_orientation,
     const UICoord& in_gap
     )
@@ -42,7 +45,8 @@ const bool UIComponentStack::Set(
 
     if (true == _component_default.SetBase(
         in_base_colour,
-        in_layout
+        in_layout,
+        in_state_flag_tint_array
         ))
     {
         dirty = true;
@@ -132,9 +136,16 @@ const bool UIComponentStack::UpdateSize(
     UIScreenSpace& out_screen_space
     )
 {
-    // the default UpdateSize recurses, we do want to do that, but with an offset to where to put things
+    // the default _component_default.UpdateSize recurses, we do want to do that, but with an offset to where to put things
+    // else the default behaviour is canvas to draw all the children over the top of each other
+ 
+    bool dirty = false;
+    if (true == _component_default.Update(in_time_delta))
+    {
+        dirty = true;
+    }
 
-    std::vector<VectorInt4> child_window_offset_array;
+     std::vector<VectorInt4> child_window_offset_array;
 
     VectorInt2 layout_size;
     VectorInt2 desired_size;
@@ -169,7 +180,6 @@ const bool UIComponentStack::UpdateSize(
         );
 
     // Update geometry
-    bool dirty = false;
     if (true == in_out_geometry.Set(
         geometry_pos,
         geometry_uv
@@ -232,7 +242,6 @@ void UIComponentStack::GetDesiredSize(
     )
 {
     std::vector<VectorInt4> child_window_offset_array;
-
     GetStackDesiredSize(
         out_layout_size,
         out_desired_size,
@@ -334,4 +343,9 @@ const bool UIComponentStack::PreDraw(
         in_draw_param,
         in_node
         );
+}
+
+const VectorFloat4 UIComponentStack::GetTintColour() const
+{
+    return _component_default.GetTintColour();
 }

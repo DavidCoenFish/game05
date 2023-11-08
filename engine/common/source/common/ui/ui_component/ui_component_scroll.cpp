@@ -9,7 +9,7 @@
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_manager.h"
-#include "common/ui/ui_shader_enum.h"
+#include "common/ui/ui_enum.h"
 #include "common/ui/ui_texture.h"
 #include "common/ui/ui_screen_space.h"
 #include "common/ui/ui_enum.h"
@@ -82,11 +82,13 @@ namespace
 UIComponentScroll::UIComponentScroll(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
     const UIOrientation in_orientation
     )
     : _component_default(
         in_base_colour,
-        in_layout
+        in_layout,
+        in_state_flag_tint_array
         )
     , _orientation(in_orientation)
     , _knot(nullptr) //_child_data_knot()
@@ -105,13 +107,15 @@ UIComponentScroll::~UIComponentScroll()
 const bool UIComponentScroll::SetBase(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
     const UIOrientation in_orientation
     )
 {
     bool dirty = false;
     if (true == _component_default.SetBase(
         in_base_colour,
-        in_layout
+        in_layout,
+        in_state_flag_tint_array
         ))
     {
         dirty = true;
@@ -369,4 +373,9 @@ void UIComponentScroll::OnInputClick(
     //LOG_CONSOLE("OnInputClick [%f %f]", value[0], value[1]);
 
     return;
+}
+
+const VectorFloat4 UIComponentScroll::GetTintColour() const
+{
+    return _component_default.GetTintColour();
 }

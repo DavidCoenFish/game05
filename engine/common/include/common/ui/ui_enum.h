@@ -19,8 +19,9 @@ enum class UIEffectEnum
     TRoundCorners,
     TRoundCornersHollow,
     TGloss,
-    TFill,
+    TFill, // use tint to make chrom gradient
     TDesaturate,
+    //TTint, // just combine input with tint. this is the same was what the default shader does, but effect has _state_flag_tint_array. add _state_flag_tint_array to all?
 
     // TInnerShadow, // Invert of drop shadow, draw over solid, not transparent
     // TEdgeShadow,
@@ -29,6 +30,26 @@ enum class UIEffectEnum
     // TChromeFill move fill to a different element?
 
     TCount
+};
+
+/// The effect shaders use an additional shader constant buffer to the default ui shader, complicating intermingling
+/// possibly could put a switch in the UIComponentEffect code to support, or have seperate enums
+enum class UIShaderEnum
+{
+    TDefault = 0,
+
+    TEffectDebug,
+    TEffectDropShadow,
+    TEffectInnerShadow,
+    TEffectRoundCorners,
+    TEffectRoundCornersHollow,
+    TEffectGloss,
+    TEffectFill,
+    TEffectDesaturate,
+    //TEffectTint,
+
+    TCount,
+    TEffectStart = TEffectDebug
 };
 
 enum class UIStateFlag

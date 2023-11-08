@@ -1,5 +1,7 @@
 #pragma once
 
+#include "common/ui/ui_enum.h"
+
 class DrawSystem;
 class DrawSystemFrame;
 class HeapWrapperItem;
@@ -28,6 +30,8 @@ enum class UIStateFlag;
 class IUIComponent
 {
 public:
+    typedef std::array<VectorFloat4, static_cast<int>(UIStateFlag::TTintPermutationCount)> TStateFlagTintArray;
+
     /// pure interface
     IUIComponent();
     /// virtual dtor as this class is used to store derrived types
@@ -86,4 +90,8 @@ public:
         const UIManagerDrawParam& in_draw_param,
         UIHierarchyNode& in_node
         ) = 0;
+
+    /// allow the UIHierarchicalNode::Draw to access the tint colour, though some components my use it in there custom PreDraw
+    virtual const VectorFloat4 GetTintColour() const = 0;
+
 };

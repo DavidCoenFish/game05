@@ -35,6 +35,7 @@ public:
     UIComponentGrid(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
         // shared pointers or raw? think raw
         const std::vector<UIComponentGridSizeData>& in_horizontal_size_array, // Left to right
         const std::vector<UIComponentGridSizeData>& in_vertical_size_array // Top to bottom
@@ -44,6 +45,7 @@ public:
     const bool Set(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
         const std::vector<UIComponentGridSizeData>& in_horizontal_size_array, // Left to right
         const std::vector<UIComponentGridSizeData>& in_vertical_size_array // Top to bottom
         );
@@ -109,6 +111,7 @@ private:
         std::vector<VectorInt4>& out_child_window_offset // left to right, top to bottom
         );
 
+    virtual const VectorFloat4 GetTintColour() const override;
 
 private:
     /// Default properties of a component

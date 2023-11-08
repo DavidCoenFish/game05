@@ -20,6 +20,8 @@ public:
         const VectorFloat4* const in_override_tint
         ) const;
 
+    const bool GetTimeChangeDirty(const float in_pre_time, const float in_new_time) const;
+
     const VectorFloat4& GetClearColourRef() const { return _clear_colour; }
     const bool GetClearBackground() const { return _clear_background; }
 

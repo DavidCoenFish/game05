@@ -5,6 +5,8 @@ class VectorFloat2;
 class VectorFloat4
 {
 public:
+    static const VectorFloat4 s_white;
+
     explicit VectorFloat4(
         const float in_x = 0,
         const float in_y = 0,

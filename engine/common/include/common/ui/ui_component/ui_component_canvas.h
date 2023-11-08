@@ -8,13 +8,15 @@ class UIComponentCanvas : public IUIComponent
 public:
     UIComponentCanvas(
         const UIBaseColour& in_base_colour,
-        const UILayout& in_layout
+        const UILayout& in_layout,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
         );
     virtual ~UIComponentCanvas();
 
     const bool Set(
         const UIBaseColour& in_base_colour,
-        const UILayout& in_layout
+        const UILayout& in_layout,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
         );
 
 private:
@@ -62,6 +64,8 @@ private:
         const UIManagerDrawParam& in_draw_param,
         UIHierarchyNode& in_node
         ) override;
+
+    virtual const VectorFloat4 GetTintColour() const override;
 
 private:
     UIComponentDefault _component_default;

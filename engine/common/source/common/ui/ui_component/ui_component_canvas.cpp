@@ -5,11 +5,13 @@
 
 UIComponentCanvas::UIComponentCanvas(
     const UIBaseColour& in_base_colour,
-    const UILayout& in_layout
+    const UILayout& in_layout,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
     )
     : _component_default(
         in_base_colour,
-        in_layout
+        in_layout,
+        in_state_flag_tint_array
         )
 {
     // Nop
@@ -22,12 +24,14 @@ UIComponentCanvas::~UIComponentCanvas()
 
 const bool UIComponentCanvas::Set(
     const UIBaseColour& in_base_colour,
-    const UILayout& in_layout
+    const UILayout& in_layout,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
     )
 {
     return _component_default.SetBase(
         in_base_colour,
-        in_layout
+        in_layout,
+        in_state_flag_tint_array
         );
 }
 
@@ -141,4 +145,9 @@ const bool UIComponentCanvas::PreDraw(
         in_draw_param,
         in_node
         );
+}
+
+const VectorFloat4 UIComponentCanvas::GetTintColour() const
+{
+    return _component_default.GetTintColour();
 }

@@ -22,12 +22,14 @@ namespace
 UIComponentButton::UIComponentButton(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
     const std::function<void(const VectorFloat2&)>& in_on_click,
     const bool in_allow_repeat
     )
     : _component_default(
         in_base_colour,
-        in_layout
+        in_layout,
+        in_state_flag_tint_array
         )
     , _on_click(in_on_click)
     , _allow_repeat(in_allow_repeat)
@@ -42,12 +44,14 @@ UIComponentButton::~UIComponentButton()
 
 const bool UIComponentButton::SetBase(
     const UIBaseColour& in_base_colour,
-    const UILayout& in_layout
+    const UILayout& in_layout,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
     )
 {
     return _component_default.SetBase(
         in_base_colour,
-        in_layout
+        in_layout,
+        in_state_flag_tint_array
         );
 }
 
@@ -237,4 +241,7 @@ void UIComponentButton::OnInputRepeat(
 
 }
 
-
+const VectorFloat4 UIComponentButton::GetTintColour() const
+{
+    return _component_default.GetTintColour();
+}

@@ -14,6 +14,7 @@ public:
     UIComponentDisable(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
         const bool in_disable = false
         );
     /// destructed by base type IUIComponent which has virtual dtor, so virtual here may be redundant but does provide info
@@ -22,7 +23,8 @@ public:
     /// return true if modified, else false
     const bool SetBase(
         const UIBaseColour& in_base_colour,
-        const UILayout& in_layout
+        const UILayout& in_layout,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
         );
 
     /// return true if modified, else false
@@ -79,6 +81,8 @@ private:
         const UIManagerDrawParam& in_draw_param,
         UIHierarchyNode& in_node
         ) override;
+
+    virtual const VectorFloat4 GetTintColour() const override;
 
 private:
     /// composition rather than inheratence

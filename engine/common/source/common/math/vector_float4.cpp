@@ -3,6 +3,8 @@
 #include "common/math/vector_float4.h"
 #include "common/math/vector_float2.h"
 
+const VectorFloat4 VectorFloat4::s_white(1.0f, 1.0f, 1.0f, 1.0f);
+
 VectorFloat4::VectorFloat4(
     const float in_x,
     const float in_y,

@@ -227,6 +227,19 @@ namespace
             );
         return s_layout;
     }
+    const UILayout& GetUILayoutListBoxRow()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 1.0f),
+            UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f)
+            );
+        return s_layout;
+    }
+
     const UILayout& GetUILayoutBottomRightShrink()
     {
         static UILayout s_layout(
@@ -445,6 +458,21 @@ namespace
             );
         return s_layout;
     }
+
+    const UILayout& GetUILayoutListBoxWrapper()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 1.0f),
+            UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size * 8.0f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f)
+            );
+        return s_layout;
+    }
+
+    
     
 
     typedef const UICoord& (*TGetUICoordRef)();
@@ -721,7 +749,8 @@ namespace
 
     template<
         TGetUILayoutRef in_get_layout_ref = GetUILayout,
-        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault
+        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
+        TGetUIStateFlagTintArray in_get_ui_state_flag_tint_array = GetUIStateFlagTintArray
         >
     const bool FactoryCanvas(
         std::unique_ptr<IUIComponent>& in_out_content,
@@ -733,14 +762,18 @@ namespace
         {
             in_out_content = std::make_unique<UIComponentCanvas>(
                 in_get_base_colour(in_factory_param._create_index),
-                in_get_layout_ref());
+                in_get_layout_ref(),
+                in_get_ui_state_flag_tint_array()
+                );
             return true;
         }
         else
         {
             if (true == canvas->Set(
                 in_get_base_colour(in_factory_param._create_index),
-                in_get_layout_ref()))
+                in_get_layout_ref(),
+                in_get_ui_state_flag_tint_array()
+                ))
             {
                 return true;
             }
@@ -751,7 +784,8 @@ namespace
 
     template<
         TGetUILayoutRef in_get_layout_ref = GetUILayout,
-        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault
+        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
+        TGetUIStateFlagTintArray in_get_ui_state_flag_tint_array = GetUIStateFlagTintArray
         >
     const bool FactoryButton(
         std::unique_ptr<IUIComponent>& in_out_content,
@@ -763,14 +797,18 @@ namespace
         {
             in_out_content = std::make_unique<UIComponentButton>(
                 in_get_base_colour(in_factory_param._create_index),
-                in_get_layout_ref());
+                in_get_layout_ref(),
+                in_get_ui_state_flag_tint_array()
+                );
             return true;
         }
         else
         {
             if (true == content->SetBase(
                 in_get_base_colour(in_factory_param._create_index),
-                in_get_layout_ref()))
+                in_get_layout_ref(),
+                in_get_ui_state_flag_tint_array()
+                ))
             {
                 return true;
             }
@@ -783,11 +821,11 @@ namespace
         TGetUILayoutRef in_get_layout_ref = GetUILayout,
         UIEffectEnum in_effect_type = UIEffectEnum::TNone,
         TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
+        TGetUIStateFlagTintArray in_get_ui_state_flag_tint_array = GetUIStateFlagTintArray,
         TGetUICoordRef in_get_ui_coord_a = GetUICoordNone,
         TGetUICoordRef in_get_ui_coord_b = GetUICoordNone,
         TGetUICoordRef in_get_ui_coord_c = GetUICoordNone,
-        TGetUICoordRef in_get_ui_coord_d = GetUICoordNone,
-        TGetUIStateFlagTintArray in_get_ui_state_flag_tint_array = GetUIStateFlagTintArray
+        TGetUICoordRef in_get_ui_coord_d = GetUICoordNone
         >
     const bool FactoryEffect(
         std::unique_ptr<IUIComponent>& in_out_content,
@@ -801,12 +839,12 @@ namespace
             in_out_content = std::make_unique<UIComponentEffect>(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
+                in_get_ui_state_flag_tint_array(),
                 in_effect_type,
                 in_get_ui_coord_a(),
                 in_get_ui_coord_b(),
                 in_get_ui_coord_c(),
-                in_get_ui_coord_d(),
-                in_get_ui_state_flag_tint_array()
+                in_get_ui_coord_d()
                 );
             dirty = true;
         }
@@ -815,12 +853,12 @@ namespace
             if (true == content->Set(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
+                in_get_ui_state_flag_tint_array(),
                 in_effect_type,
                 in_get_ui_coord_a(),
                 in_get_ui_coord_b(),
                 in_get_ui_coord_c(),
-                in_get_ui_coord_d(),
-                in_get_ui_state_flag_tint_array()
+                in_get_ui_coord_d()
                 ))
             {
                 dirty = true;
@@ -831,7 +869,8 @@ namespace
     }
 
     template<
-        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault
+        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
+        TGetUIStateFlagTintArray in_get_ui_state_flag_tint_array = GetUIStateFlagTintArray
         >
     const bool FactoryDisable(
         std::unique_ptr<IUIComponent>& in_out_content,
@@ -844,7 +883,8 @@ namespace
         {
             in_out_content = std::make_unique<UIComponentDisable>(
                 in_get_base_colour(in_factory_param._create_index),
-                GetUILayoutShrink() //GetUILayout()
+                GetUILayoutShrink(), //GetUILayout()
+                GetUIStateFlagTintArray()
                 );
             dirty = true;
         }
@@ -852,7 +892,8 @@ namespace
         {
             if (true == content->SetBase(
                 in_get_base_colour(in_factory_param._create_index),
-                GetUILayoutShrink())) //GetUILayout()))
+                GetUILayoutShrink(), //GetUILayout()))
+                GetUIStateFlagTintArray()))
             {
                 dirty = true;
             }
@@ -864,6 +905,7 @@ namespace
     template<
         TGetUILayoutRef in_get_layout_ref = GetUILayout,
         TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
+        TGetUIStateFlagTintArray in_get_ui_state_flag_tint_array = GetUIStateFlagTintArray,
         TGetPathRef in_get_path_ref = GetFontPathDefault,
         int in_font_size = s_default_font_size,
         int in_new_line_gap = s_new_line_gap,
@@ -901,6 +943,7 @@ namespace
             in_out_content = std::move(std::make_unique<UIComponentString>(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(), 
+                in_get_ui_state_flag_tint_array(),
                 text_block
                 ));
             dirty = true;
@@ -909,7 +952,8 @@ namespace
         {
             if (true == content->SetBase(
                     in_get_base_colour(in_factory_param._create_index),
-                    in_get_layout_ref()))
+                    in_get_layout_ref(),
+                    in_get_ui_state_flag_tint_array()))
             {
                 dirty = true;
             }
@@ -934,6 +978,7 @@ namespace
     template<
         TGetUILayoutRef in_get_layout_ref = GetUILayout,
         TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
+        TGetUIStateFlagTintArray in_get_ui_state_flag_tint_array = GetUIStateFlagTintArray,
         int in_em_size = s_default_font_size,
         TextEnum::HorizontalLineAlignment in_horizontal = TextEnum::HorizontalLineAlignment::Left,
         TextEnum::VerticalBlockAlignment in_vertical = TextEnum::VerticalBlockAlignment::Top,
@@ -961,6 +1006,7 @@ namespace
             in_out_content = std::move(std::make_unique<UIComponentTextRun>(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(), 
+                in_get_ui_state_flag_tint_array(),
                 text_run
                 ));
             dirty = true;
@@ -969,7 +1015,9 @@ namespace
         {
             if (true == content->SetBase(
                     in_get_base_colour(in_factory_param._create_index),
-                    in_get_layout_ref()))
+                    in_get_layout_ref(),
+                    in_get_ui_state_flag_tint_array()
+                    ))
             {
                 dirty = true;
             }
@@ -991,6 +1039,7 @@ namespace
     template<
         TGetUILayoutRef in_get_layout_ref = GetUILayout,
         TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
+        TGetUIStateFlagTintArray in_get_ui_state_flag_tint_array = GetUIStateFlagTintArray,
         UIOrientation in_orientation = UIOrientation::TVertical,
         TGetUICoordRef in_get_gap_ref = GetUICoordDefaultGap
         >
@@ -1007,6 +1056,7 @@ namespace
             auto new_content = std::make_unique<UIComponentStack>(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
+                in_get_ui_state_flag_tint_array(),
                 in_orientation,
                 in_get_gap_ref()
                 );
@@ -1017,6 +1067,7 @@ namespace
             if (true == content->Set(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
+                in_get_ui_state_flag_tint_array(),
                 in_orientation,
                 in_get_gap_ref()
                 ))
@@ -1031,6 +1082,7 @@ namespace
     template<
         TGetUILayoutRef in_get_layout_ref = GetUILayout,
         TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
+        TGetUIStateFlagTintArray in_get_ui_state_flag_tint_array = GetUIStateFlagTintArray,
         TGetUIGridSizeData in_get_grid_size_horizontal = GetUIGridSizeDataDefaultHorizontal,
         TGetUIGridSizeData in_get_grid_size_vertical = GetUIGridSizeDataDefaultVertical
         >
@@ -1047,6 +1099,7 @@ namespace
             auto new_content = std::make_unique<UIComponentGrid>(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
+                in_get_ui_state_flag_tint_array(),
                 in_get_grid_size_horizontal(),
                 in_get_grid_size_vertical()
                 );
@@ -1057,6 +1110,7 @@ namespace
             if (true == content->Set(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
+                in_get_ui_state_flag_tint_array(),
                 in_get_grid_size_horizontal(),
                 in_get_grid_size_vertical()
                 ))
@@ -1070,6 +1124,7 @@ namespace
     template<
         TGetUILayoutRef in_get_layout_ref = GetUILayout,
         TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
+        TGetUIStateFlagTintArray in_get_ui_state_flag_tint_array = GetUIStateFlagTintArray,
         UIOrientation in_orientation = UIOrientation::THorizontal
         >
     const bool FactorySlider(
@@ -1085,6 +1140,7 @@ namespace
             auto new_content = std::make_unique<UIComponentSlider>(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
+                in_get_ui_state_flag_tint_array(),
                 in_orientation
                 );
             in_out_content = std::move(new_content);
@@ -1094,6 +1150,7 @@ namespace
             if (true == content->SetBase(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
+                in_get_ui_state_flag_tint_array(),
                 in_orientation
                 ))
             {
@@ -1106,6 +1163,7 @@ namespace
     template<
         TGetUILayoutRef in_get_layout_ref = GetUILayout,
         TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
+        TGetUIStateFlagTintArray in_get_ui_state_flag_tint_array = GetUIStateFlagTintArray,
         UIOrientation in_orientation = UIOrientation::THorizontal
         >
     const bool FactoryScroll(
@@ -1121,6 +1179,7 @@ namespace
             auto new_content = std::make_unique<UIComponentScroll>(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
+                in_get_ui_state_flag_tint_array(),
                 in_orientation
                 );
             in_out_content = std::move(new_content);
@@ -1130,6 +1189,7 @@ namespace
             if (true == content->SetBase(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
+                in_get_ui_state_flag_tint_array(),
                 in_orientation
                 ))
             {
@@ -1141,7 +1201,8 @@ namespace
 
     template<
         TGetUILayoutRef in_get_layout_ref = GetUILayout,
-        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault
+        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
+        TGetUIStateFlagTintArray in_get_ui_state_flag_tint_array = GetUIStateFlagTintArray
         >
     const bool FactoryManualScroll(
         std::unique_ptr<IUIComponent>& in_out_content,
@@ -1155,7 +1216,8 @@ namespace
             dirty = true;
             auto new_content = std::make_unique<UIComponentManualScroll>(
                 in_get_base_colour(in_factory_param._create_index),
-                in_get_layout_ref()
+                in_get_layout_ref(),
+                in_get_ui_state_flag_tint_array()
                 );
             in_out_content = std::move(new_content);
         }
@@ -1163,7 +1225,8 @@ namespace
         {
             if (true == content->SetBase(
                 in_get_base_colour(in_factory_param._create_index),
-                in_get_layout_ref()
+                in_get_layout_ref(),
+                in_get_ui_state_flag_tint_array()
                 ))
             {
                 dirty = true;
@@ -1195,6 +1258,10 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("canvas_grey", FactoryCanvas<
         GetUILayout, 
         GetUIBaseColourGrey
+        >);
+    in_ui_manager.AddContentFactory("canvas_white", FactoryCanvas<
+        GetUILayout, 
+        GetUIBaseColourWhite
         >);
     in_ui_manager.AddContentFactory("horizontal_rule", FactoryCanvas<
         GetUILayoutHorizontalRule, 
@@ -1247,12 +1314,18 @@ void DefaultUIComponentFactory::Populate(
         GetUIBaseColourDark //GetUIBaseColourBlue
         >);
 
+    in_ui_manager.AddContentFactory("canvas_list_box_wrapper", FactoryCanvas<
+        GetUILayoutListBoxWrapper, 
+        GetUIBaseColourBlue
+        >);
+
     // UIData stack
     in_ui_manager.AddContentFactory("stack", FactoryStack<>);
 
     in_ui_manager.AddContentFactory("stack_top_down", FactoryStack<
         GetUILayoutTopSideMargin,
         GetUIBaseColourDefault,
+        GetUIStateFlagTintArray,
         UIOrientation::TVertical,
         GetUICoordNone // No gap
         >);
@@ -1260,12 +1333,14 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("stack_vertical_bottom_right", FactoryStack<
         GetUILayoutMarginBottomRightShrink,
         GetUIBaseColourStaggerClearTransparent,
+        GetUIStateFlagTintArray,
         UIOrientation::TVertical,
         GetUICoordDefaultGap
         >);
     in_ui_manager.AddContentFactory("stack_vertical_middle", FactoryStack<
         GetUILayoutMarginMiddleShrinkVertical,
         GetUIBaseColourStaggerClearTransparent,
+        GetUIStateFlagTintArray,
         UIOrientation::TVertical,
         GetUICoordDefaultGap
         >);
@@ -1274,12 +1349,14 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("grid_dialog_header_body_footer", FactoryGrid<
         GetUILayout,
         GetUIBaseColourDefault,
+        GetUIStateFlagTintArray,
         GetUIGridSizeDataDefaultHorizontal,
         GetUIGridSizeDataHeaderBodyFooter
         >);
     in_ui_manager.AddContentFactory("grid_three_buttons", FactoryGrid<
         GetUILayout,
         GetUIBaseColourDefault,
+        GetUIStateFlagTintArray,
         GetUIGridSizeDataThreeButtonsHorizontal,
         GetUIGridSizeDataDefaultVertical
         >);
@@ -1287,6 +1364,7 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("grid_small_big_pair", FactoryGrid<
         GetUILayoutShrinkVertical,
         GetUIBaseColourDefault,
+        GetUIStateFlagTintArray,
         GetUIGridSizeDataSmallBigHorizontal,
         GetUIGridSizeDataBigRowVertical
         >);
@@ -1294,6 +1372,7 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("grid_slider_horizontal", FactoryGrid<
         GetUILayoutGridSliderHorizontal,
         GetUIBaseColourDefault,
+        GetUIStateFlagTintArray,
         GetUIGridSliderHorizontalWidth,
         GetUIGridSliderHorizontalHeight
         >);
@@ -1309,6 +1388,7 @@ void DefaultUIComponentFactory::Populate(
         GetUILayout,
         UIEffectEnum::TDropShadow,
         GetUIBaseColourClearDark,
+        GetUIStateFlagTintArray,
         GetUICoordDefaultGapQuater,
         GetUICoordDefaultGapHalf,
         GetUICoordDefaultGap
@@ -1317,6 +1397,7 @@ void DefaultUIComponentFactory::Populate(
         GetUILayout,
         UIEffectEnum::TDropShadow,
         GetUIBaseColourClearDark,
+        GetUIStateFlagTintArray,
         GetUICoordDefaultGapEigth,
         GetUICoordDefaultGapEigth,
         GetUICoordDefaultGapQuater
@@ -1330,6 +1411,7 @@ void DefaultUIComponentFactory::Populate(
         GetUILayout,
         UIEffectEnum::TDropShadow,
         GetUIBaseColourClearLight,
+        GetUIStateFlagTintArray,
         GetUICoordNone,
         GetUICoordNone,
         GetUICoordDefaultGap
@@ -1339,6 +1421,7 @@ void DefaultUIComponentFactory::Populate(
         GetUILayout,
         UIEffectEnum::TRoundCorners,
         GetUIBaseColourDefault,
+        GetUIStateFlagTintArray,
         GetUICoordDefaultGap,
         GetUICoordDefaultGap,
         GetUICoordDefaultGap,
@@ -1348,6 +1431,7 @@ void DefaultUIComponentFactory::Populate(
         GetUILayoutModal,
         UIEffectEnum::TRoundCorners,
         GetUIBaseColourDefault,
+        GetUIStateFlagTintArray,
         GetUICoordDefaultGap,
         GetUICoordDefaultGap,
         GetUICoordDefaultGap,
@@ -1357,6 +1441,7 @@ void DefaultUIComponentFactory::Populate(
         GetUILayout,
         UIEffectEnum::TRoundCornersHollow,
         GetUIBaseColourDefault,
+        GetUIStateFlagTintArray,
         GetUICoordDefaultGapHalf,
         GetUICoordDefaultGapHalf,
         GetUICoordDefaultGapHalf,
@@ -1372,11 +1457,11 @@ void DefaultUIComponentFactory::Populate(
         GetUILayout,
         UIEffectEnum::TFill,
         GetUIBaseColourClearBlue,
+        GetUIStateFlagTintArrayDefault,
         GetUICoordDefaultGapHalf,
         GetUICoordNone,
         GetUICoordNone,
-        GetUICoordNone,
-        GetUIStateFlagTintArrayDefault
+        GetUICoordNone
         >);
 
     in_ui_manager.AddContentFactory("UIDataDisable", FactoryDisable<
@@ -1389,6 +1474,7 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("string_middle_em", FactoryString<
         GetUILayout,
         GetUIBaseColourDefault,
+        GetUIStateFlagTintArray,
         GetFontPathDefault,
         s_default_font_size,
         s_new_line_gap,
@@ -1398,6 +1484,7 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("string_middle", FactoryString<
         GetUILayout,
         GetUIBaseColourDefault,
+        GetUIStateFlagTintArray,
         GetFontPathDefault,
         s_default_font_size,
         s_new_line_gap,
@@ -1407,6 +1494,7 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("string_right", FactoryString<
         GetUILayout,
         GetUIBaseColourDefault,
+        GetUIStateFlagTintArray,
         GetFontPathDefault,
         s_default_font_size,
         s_new_line_gap,
@@ -1417,6 +1505,7 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("string_right_em", FactoryString<
         GetUILayout,
         GetUIBaseColourDefault, //GetUIBaseColourDebugRed, //
+        GetUIStateFlagTintArray,
         GetFontPathDefault,
         s_default_font_size,
         s_new_line_gap_small,
@@ -1426,6 +1515,7 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("string_small_right_em", FactoryString<
         GetUILayout,
         GetUIBaseColourDefault, //GetUIBaseColourDebugRed, //
+        GetUIStateFlagTintArray,
         GetFontPathDefault,
         s_default_font_size_small,
         s_new_line_gap_small,
@@ -1435,6 +1525,7 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("string_small_right_fixed", FactoryString<
         GetUILayoutBottomRightShrink,
         GetUIBaseColourDefault, //GetUIBaseColourDebugRed, //
+        GetUIStateFlagTintArray,
         GetFontPathFixedWidth,
         s_default_font_size_small,
         s_new_line_gap_small,
@@ -1446,6 +1537,7 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("text_run_small_right", FactoryTextRun<
         GetUILayoutBottomRightShrink,
         GetUIBaseColourDefault,
+        GetUIStateFlagTintArray,
         s_default_font_size_small,
         TextEnum::HorizontalLineAlignment::Left,
         TextEnum::VerticalBlockAlignment::Top
@@ -1453,6 +1545,7 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("UIDataTextRunWrap", FactoryTextRun<
         GetUILayoutQuadrant0,
         GetUIBaseColourDefault,
+        GetUIStateFlagTintArray,
         s_default_font_size,
         TextEnum::HorizontalLineAlignment::Left,
         TextEnum::VerticalBlockAlignment::Top,
@@ -1497,6 +1590,7 @@ void DefaultUIComponentFactory::Populate(
     in_ui_manager.AddContentFactory("scroll_vertical", FactoryScroll<
         GetUILayout,
         GetUIBaseColourDefault,
+        GetUIStateFlagTintArray,
         UIOrientation::TVertical
         >);
 

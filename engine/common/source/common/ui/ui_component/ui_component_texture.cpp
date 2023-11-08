@@ -11,17 +11,19 @@
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_enum.h"
-#include "common/ui/ui_shader_enum.h"
+#include "common/ui/ui_enum.h"
 
 UIComponentTexture::UIComponentTexture(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
     const std::shared_ptr<HeapWrapperItem>& in_shader_resource_view_handle,
     const std::shared_ptr<IResource>& in_shader_resource
     )
     : _component_default(
         in_base_colour,
-        in_layout
+        in_layout,
+        in_state_flag_tint_array
         )
     , _shader_resource_view_handle(in_shader_resource_view_handle)
     , _shader_resource(in_shader_resource)
@@ -213,4 +215,10 @@ const bool UIComponentTexture::PreDraw(
     return dirty;
 
 #endif
+}
+
+// this Component already uses the tint colour in it's custom PreDraw
+const VectorFloat4 UIComponentTexture::GetTintColour() const
+{
+    return VectorFloat4::s_white;
 }

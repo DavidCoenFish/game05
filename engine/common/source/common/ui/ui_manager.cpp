@@ -12,11 +12,10 @@
 #include "common/ui/ui_enum.h"
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_hierarchy_node.h"
-#include "common/ui/ui_shader_enum.h"
+#include "common/ui/ui_enum.h"
 #include "common/ui/i_ui_model.h"
 #include "common/ui/ui_root_input_state.h"
 #include "common/ui/ui_screen_space.h"
-#include "common/ui/ui_shader_enum.h"
 #include "common/ui/ui_component/ui_component_effect.h"
 #include "common/ui/ui_component/ui_component_stack.h"
 #include "common/ui/ui_data/ui_data.h"
@@ -87,15 +86,11 @@ UIManagerUpdateParam::UIManagerUpdateParam(
 UIManagerDealInputTouch::UIManagerDealInputTouch(
     const VectorInt2& in_root_relative_pos,
     const bool in_active,
-    //const bool in_start, 
-    //const bool in_end,
     const int in_id,
     const UITouchFlavour in_flavour
     )
     : _root_relative_pos(in_root_relative_pos)
     , _active(in_active)
-    //, _start(in_start)
-    //, _end(in_end)
     , _id(in_id)
     , _flavour(in_flavour)
 {

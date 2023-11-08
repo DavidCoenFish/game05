@@ -34,9 +34,12 @@ struct UIHierarchyNodeUpdateHierarchyParam;
 class UIComponentDefault
 {
 public:
+    typedef std::array<VectorFloat4, static_cast<int>(UIStateFlag::TTintPermutationCount)> TStateFlagTintArray;
+
     UIComponentDefault(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array = nullptr,
         void* in_source_token = nullptr,
         const UIStateFlag in_state_flag = UIStateFlag::TNone
         );
@@ -61,7 +64,8 @@ public:
 
     const bool SetBase(
         const UIBaseColour& in_base_colour,
-        const UILayout& in_layout
+        const UILayout& in_layout,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
         );
 
     void SetSourceToken(void* in_source_ui_data_token);
@@ -94,6 +98,10 @@ public:
         const UIHierarchyNodeUpdateHierarchyParam& in_param
         );
 
+    const bool Update(
+        const float in_time_delta
+        );
+
     const bool UpdateSize(
         DrawSystem* const in_draw_system,
         IUIComponent& in_out_ui_component,
@@ -121,7 +129,7 @@ public:
         UIHierarchyNode& in_node
         );
 
-    const VectorFloat4 GetTintColour(const VectorFloat4* const in_override_tint = nullptr) const;
+    const VectorFloat4 GetTintColour() const;
 
 private:
     /// colour data, like the clear colour, tint colour, fade profile
@@ -132,7 +140,7 @@ private:
 
     /// want a way for model to set the layout, but have sliders and scroll bars move
     bool _use_layout_override;
-    /// the slow march to having every permutation of features have it's own data in the base class
+    /// the slow march to having every permutation of features have it's own data in UIComponentDefault
     UILayout _layout_override;
 
     /// uv = abs(_uv_scroll), and use range [-1...1] wrapped when advancing _uv_scroll, to allow saw tooth animation
@@ -152,5 +160,9 @@ private:
     UIStateFlag _state_flag;
     /// there are bit when if changed, return dirty
     UIStateFlag _state_flag_dirty_mask;
+
+    /// an array of tint colours for certain permutations of the state flag, ie UIStateFlag::TTintPermutationCount
+    /// This can be null, only want cerrtain components like effects or canvas to have tint
+    std::shared_ptr<const TStateFlagTintArray> _state_flag_tint_array;
 
 };

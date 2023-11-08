@@ -460,6 +460,57 @@ namespace
     }
 
 
+    std::shared_ptr<UIData> BuildListBox(
+        std::map<std::string, std::shared_ptr<UIData>>& in_data_map,
+        const std::string& in_root_name,
+        const std::vector<std::shared_ptr<UIData>>& in_array_items
+        )
+    {
+        std::vector<std::shared_ptr<UIData>> content_array;
+        for (auto& item : in_array_items)
+        {
+            
+        }
+
+        auto data_stack = std::make_shared<UIData>(
+            "stack_top_down",
+            content_array
+            );
+
+        return std::make_shared<UIData>(
+            "canvas_list_box_wrapper",
+            std::vector<std::shared_ptr<UIData>>({
+               std::make_shared<UIData>(
+                    "effect_drop_shadow_small",
+                    std::vector<std::shared_ptr<UIData>>({
+                        std::make_shared<UIData>(
+                            "UIData",
+                            std::vector<std::shared_ptr<UIData>>({
+                                std::make_shared<UIData>(
+                                    "canvas_margin_tiny",
+
+                                    std::vector<std::shared_ptr<UIData>>({
+                                        std::make_shared<UIData>(
+                                            "effect_corner_hollow_tiny",
+                                            std::vector<std::shared_ptr<UIData>>({
+                                                std::make_shared<UIData>(
+                                                    "canvas_grey"
+                                                    )
+                                                })
+                                            ),
+
+                                            data_stack
+
+                                        })
+                                    )
+                                })
+                            )
+                        })
+                    )
+                })
+            );
+    }
+
 };
 
 class UIModel : public IUIModel
@@ -818,6 +869,56 @@ public:
                     })
                 ),
 #endif
+                std::make_shared<UIData>(
+                    "grid_small_big_pair",
+                    std::vector<std::shared_ptr<UIData>>({
+                        std::make_shared<UIDataString>(
+                            "Locale",
+                            LocaleISO_639_1::Default,
+                            "string_right_em"
+                            ),
+                        nullptr,
+                        BuildListBox(
+                            _data_map,
+                            "list_box",
+                            std::vector<std::shared_ptr<UIData>>({
+                                std::make_shared<UIDataTextRun>(
+                                    "<Locale en>"
+                                    ),
+                                std::make_shared<UIDataTextRun>(
+                                    "<Locale es>"
+                                    ),
+                                std::make_shared<UIDataTextRun>(
+                                    "<Locale hi>"
+                                    ),
+                                std::make_shared<UIDataTextRun>(
+                                    "<Locale ar>"
+                                    ),
+                                std::make_shared<UIDataTextRun>(
+                                    "<Locale pt>"
+                                    ),
+                                std::make_shared<UIDataTextRun>(
+                                    "<Locale bn>"
+                                    ),
+                                std::make_shared<UIDataTextRun>(
+                                    "<Locale ru>"
+                                    ),
+                                std::make_shared<UIDataTextRun>(
+                                    "<Locale ja>"
+                                    ),
+                                std::make_shared<UIDataTextRun>(
+                                    "<Locale pa>"
+                                    ),
+                                std::make_shared<UIDataTextRun>(
+                                    "<Locale de>"
+                                    ),
+                                std::make_shared<UIDataTextRun>(
+                                    "<Locale jv>"
+                                    )
+                                })
+                            )
+                    })
+                ),
 
                 std::make_shared<UIData>(
                     "grid_small_big_pair",

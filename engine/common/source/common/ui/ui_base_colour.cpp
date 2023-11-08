@@ -65,6 +65,21 @@ const VectorFloat4 UIBaseColour::GetTintColour(
     return result;
 }
 
+const bool UIBaseColour::GetTimeChangeDirty(const float in_pre_time, const float in_new_time) const
+{
+    /// only ensure no state change over previous to new time if both are before the range of the fade, or both after
+    if ((_fade_end_seconds <= in_pre_time) && (_fade_end_seconds <= in_new_time))
+    {
+        return false;
+    }
+    if ((in_pre_time <= _fade_start_seconds) && (in_new_time <= _fade_start_seconds))
+    {
+        return false;
+    }
+
+    return true;
+}
+
 const bool UIBaseColour::operator==(const UIBaseColour& in_rhs) const
 {
     if (_clear_colour != in_rhs._clear_colour)

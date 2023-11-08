@@ -101,6 +101,7 @@
     <ClCompile Include="source\common\ui\ui_component\ui_component_disable.cpp" />
     <ClCompile Include="source\common\ui\ui_component\ui_component_effect.cpp" />
     <ClCompile Include="source\common\ui\ui_component\ui_component_grid.cpp" />
+    <ClCompile Include="source\common\ui\ui_component\ui_component_list_box.cpp" />
     <ClCompile Include="source\common\ui\ui_component\ui_component_manual_scroll.cpp" />
     <ClCompile Include="source\common\ui\ui_component\ui_component_scroll.cpp" />
     <ClCompile Include="source\common\ui\ui_component\ui_component_slider.cpp" />
@@ -113,6 +114,7 @@
     <ClCompile Include="source\common\ui\ui_data\ui_data_button.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_disable.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_float.cpp" />
+    <ClCompile Include="source\common\ui\ui_data\ui_data_list_box.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_manual_scroll.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_scroll.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_string.cpp" />
@@ -199,6 +201,7 @@
     <ClInclude Include="include\common\ui\ui_component\ui_component_disable.h" />
     <ClInclude Include="include\common\ui\ui_component\ui_component_effect.h" />
     <ClInclude Include="include\common\ui\ui_component\ui_component_grid.h" />
+    <ClInclude Include="include\common\ui\ui_component\ui_component_list_box.h" />
     <ClInclude Include="include\common\ui\ui_component\ui_component_manual_scroll.h" />
     <ClInclude Include="include\common\ui\ui_component\ui_component_scroll.h" />
     <ClInclude Include="include\common\ui\ui_component\ui_component_slider.h" />
@@ -211,6 +214,7 @@
     <ClInclude Include="include\common\ui\ui_data\ui_data_button.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_disable.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_float.h" />
+    <ClInclude Include="include\common\ui\ui_data\ui_data_list_box.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_manual_scroll.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_scroll.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_string.h" />
@@ -258,7 +262,6 @@
     <ClInclude Include="source\common\ui\ui_geometry.h" />
     <ClInclude Include="source\common\ui\ui_root_input_state.h" />
     <ClInclude Include="source\common\ui\ui_screen_space.h" />
-    <ClInclude Include="source\common\ui\ui_shader_enum.h" />
     <ClInclude Include="source\common\window\window_helper.h" />
   </ItemGroup>
   <ItemGroup>

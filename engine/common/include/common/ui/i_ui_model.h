@@ -2,6 +2,9 @@
 
 class UIData;
 
+/// What is currentl missing from IUIModel/UIData is a mechanisim to mark heierarchy dirty and only recaculate hierarchy as needed
+/// Then resolving the hierarchy to set size dirty, and only resolve size when needed
+/// Needing to render is expressed by UITexture::[has drawn, always draw] flags...
 class IUIModel
 {
 public:

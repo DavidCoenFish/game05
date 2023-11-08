@@ -39,7 +39,8 @@ class UIComponentManualScroll : public IUIComponent
 public:
     UIComponentManualScroll(
         const UIBaseColour& in_base_colour,
-        const UILayout& in_layout//,
+        const UILayout& in_layout,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
         //const bool in_allow_horizontal_scroll = false,
         //const bool in_allow_vertical_scroll = false
         );
@@ -47,7 +48,8 @@ public:
 
     const bool SetBase(
         const UIBaseColour& in_base_colour,
-        const UILayout& in_layout//,
+        const UILayout& in_layout,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
         //const bool in_allow_horizontal_scroll,
         //const bool in_allow_vertical_scroll
         );
@@ -96,22 +98,15 @@ private:
         UIHierarchyNode& in_node
         ) override;
 
+    virtual const VectorFloat4 GetTintColour() const override;
+
 private:
     UIComponentDefault _component_default;
-
-    //std::shared_ptr<UIHierarchyNodeChildData> _child_data_vertical_scroll;
-    //std::shared_ptr<UIHierarchyNodeChildData> _child_data_horizontal_scroll;
 
     IUIComponent* _horizontal_scroll_wrapper;
     IUIComponent* _vertical_scroll_wrapper;
 
     UIComponentScroll* _horizontal_scroll;
     UIComponentScroll* _vertical_scroll;
-
-    //bool _allow_horizontal_scroll;
-    //bool _allow_vertical_scroll;
-
-    //bool _do_horizontal_scroll;
-    //bool _do_vertical_scroll;
 
 };

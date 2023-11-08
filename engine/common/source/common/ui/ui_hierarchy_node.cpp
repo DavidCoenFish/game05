@@ -19,7 +19,7 @@
 #include "common/ui/ui_texture.h"
 #include "common/ui/ui_data/ui_data.h"
 #include "common/ui/ui_root_input_state.h"
-#include "common/ui/ui_shader_enum.h"
+#include "common/ui/ui_enum.h"
 #include "common/math/vector_int2.h"
 #include "common/math/vector_float4.h"
 
@@ -701,8 +701,7 @@ const bool UIHierarchyNode::Draw(
             if (nullptr != child_data._shader_constant_buffer)
             {
                 UIManager::TShaderConstantBuffer& buffer = child_data._shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
-                // todo: get the tint colour, from geometry?
-                buffer._tint_colour = VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f);
+                buffer._tint_colour = child_data._component->GetTintColour();
             }
 
             in_draw_param._frame->SetShader(shader, child_data._shader_constant_buffer);

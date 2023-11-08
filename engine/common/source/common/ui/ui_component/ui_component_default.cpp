@@ -38,11 +38,13 @@ namespace
 UIComponentDefault::UIComponentDefault(
     const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
     void* in_source_token,
     const UIStateFlag in_state_flag
     )
     : _base_colour(in_base_colour)
     , _layout(in_layout)
+    , _state_flag_tint_array(in_state_flag_tint_array)
     , _source_token(in_source_token)
     , _time_accumulate_seconds(0.0f)
     , _state_flag(in_state_flag)
@@ -52,7 +54,14 @@ UIComponentDefault::UIComponentDefault(
     , _uv_scroll_manual_x(false)
     , _uv_scroll_manual_y(false)
 {
-    // Nop
+    if (nullptr != _state_flag_tint_array)
+    {
+        SetStateFlagDirty(UIStateFlag::TTintMask);
+    }
+    else
+    {
+        SetStateFlagDirty(UIStateFlag::TNone);
+    }
 }
 
 UIComponentDefault::~UIComponentDefault()
@@ -135,7 +144,8 @@ void UIComponentDefault::CalculateGeometry(
 
 const bool UIComponentDefault::SetBase(
     const UIBaseColour& in_base_colour,
-    const UILayout& in_layout
+    const UILayout& in_layout,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
     )
 {
     bool dirty = false;
@@ -151,6 +161,21 @@ const bool UIComponentDefault::SetBase(
         dirty = true;
         _layout == in_layout;
         _uv_scroll = VectorFloat2();
+    }
+
+    if (_state_flag_tint_array != in_state_flag_tint_array)
+    {
+        dirty = true;
+        _state_flag_tint_array = in_state_flag_tint_array;
+
+        if (nullptr != _state_flag_tint_array)
+        {
+            SetStateFlagDirty(UIStateFlag::TTintMask);
+        }
+        else
+        {
+            SetStateFlagDirty(UIStateFlag::TNone);
+        }
     }
 
     return dirty;
@@ -279,6 +304,16 @@ const bool UIComponentDefault::UpdateHierarchy(
     return dirty;
 }
 
+const bool UIComponentDefault::Update(
+    const float in_time_delta
+    )
+{
+    const float prev_time = _time_accumulate_seconds;
+    _time_accumulate_seconds += in_time_delta;
+    const bool dirty = _base_colour.GetTimeChangeDirty(prev_time, _time_accumulate_seconds);
+    return dirty;
+}
+
 const bool UIComponentDefault::UpdateSize(
     DrawSystem* const in_draw_system,
     IUIComponent& in_out_ui_component,
@@ -293,6 +328,13 @@ const bool UIComponentDefault::UpdateSize(
     UIScreenSpace& out_screen_space
     )
 {
+    bool dirty = false;
+
+    if (true == Update(in_time_delta))
+    {
+        dirty = true;
+    }
+
     VectorInt2 layout_size;
     VectorInt2 desired_size;
     in_out_ui_component.GetDesiredSize(
@@ -325,7 +367,6 @@ const bool UIComponentDefault::UpdateSize(
         );
 
     // Update geometry
-    bool dirty = false;
     if (true == in_out_geometry.Set(
         geometry_pos,
         geometry_uv
@@ -393,8 +434,17 @@ const bool UIComponentDefault::PreDraw(
     return dirty;
 }
 
-const VectorFloat4 UIComponentDefault::GetTintColour(const VectorFloat4* const in_override_tint) const
+const VectorFloat4 UIComponentDefault::GetTintColour() const
 {
-    return _base_colour.GetTintColour(_time_accumulate_seconds, in_override_tint);
+    const VectorFloat4* override_tint = nullptr;
+    const TStateFlagTintArray* const state_flag_tint_array = _state_flag_tint_array.get();
+
+    if (nullptr != state_flag_tint_array)
+    {
+        const int tint_index = static_cast<int>(GetStateFlag()) & static_cast<int>(UIStateFlag::TTintMask);
+        override_tint = &(*state_flag_tint_array)[tint_index];
+    }
+
+    return _base_colour.GetTintColour(_time_accumulate_seconds, override_tint);
 }
 
