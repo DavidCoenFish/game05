@@ -25,12 +25,14 @@ public:
 
     const std::function<void(const int)>& GetOnSelectedIndexChange() const { return _on_select_index_change; } 
     const int GetSelectedIndex() const { return _selected_index; } 
+
+
     //UIData* const GetContainer() const { return _container.get(); } 
     //UIData* const GetItemHostTemplate() const { return _item_host_template.get(); } 
     //UIDataButton* const GetItemHostButton() const { return _item_host_button.get(); } 
 
-    /// push more things through using callback for setting index, _on_select_index_change
-    //void SetSelectedIndex(const float in_selected_index);// { _selected_index = in_selected_index; return; }
+    /// push more things through using callback for setting index? _on_select_index_change. but what does the callback use to update state?
+    void SetSelectedIndex(const int in_selected_index) { _selected_index = in_selected_index; return; }
 
     const std::vector<std::shared_ptr<UIDataButton>>& GetItemHostButtonArrayRef() const { return _item_host_button_array; }
 

@@ -133,7 +133,7 @@ const bool UIComponentManualScroll::UpdateHierarchy(
         _horizontal_scroll_wrapper = horizontal_child_data->_component.get();
         _horizontal_scroll = nullptr;
         UIDataScroll* const scroll = data ? data->GetHorizontalScroll() : nullptr;
-        horizontal_child_data->VisitComponents([this, scroll](IUIComponent* const in_component){
+        horizontal_child_data->VisitComponents([this, scroll](IUIComponent* const in_component, UIHierarchyNode* const){
                 if (scroll == in_component->GetSourceToken())
                 {
                     _horizontal_scroll = dynamic_cast<UIComponentScroll*>(in_component);
@@ -151,7 +151,7 @@ const bool UIComponentManualScroll::UpdateHierarchy(
         _vertical_scroll = nullptr;
         UIDataScroll* const scroll = data ? data->GetVerticalScroll() : nullptr;
 
-        vertical_child_data->VisitComponents([this, scroll](IUIComponent* const in_component){
+        vertical_child_data->VisitComponents([this, scroll](IUIComponent* const in_component, UIHierarchyNode* const){
                 if (scroll == in_component->GetSourceToken())
                 {
                     _vertical_scroll = dynamic_cast<UIComponentScroll*>(in_component);

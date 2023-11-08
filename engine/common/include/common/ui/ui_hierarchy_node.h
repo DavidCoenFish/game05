@@ -72,7 +72,7 @@ struct UIHierarchyNodeChildData
 
     void Draw(const UIManagerDrawParam& in_draw_param);
 
-    const bool VisitComponents(const std::function<const bool(IUIComponent* const)>& in_visitor);
+    const bool VisitComponents(const std::function<const bool(IUIComponent* const, UIHierarchyNode* const)>& in_visitor);
 
     /// Need to track if state changed, so not using GeometryGeneric
     std::unique_ptr<UIGeometry> _geometry;

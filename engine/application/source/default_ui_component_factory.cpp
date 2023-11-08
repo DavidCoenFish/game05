@@ -16,6 +16,7 @@
 #include "common/ui/ui_component/ui_component_disable.h"
 #include "common/ui/ui_component/ui_component_effect.h"
 #include "common/ui/ui_component/ui_component_grid.h"
+#include "common/ui/ui_component/ui_component_list_box.h"
 #include "common/ui/ui_component/ui_component_manual_scroll.h"
 #include "common/ui/ui_component/ui_component_scroll.h"
 #include "common/ui/ui_component/ui_component_slider.h"
@@ -33,6 +34,7 @@
 #include "common/ui/ui_data/ui_data_float.h"
 #include "common/ui/ui_data/ui_data_text_run.h"
 #include "common/ui/ui_data/ui_data_scroll.h"
+#include "common/ui/ui_data/ui_data_list_box.h"
 #include "common/ui/ui_data/ui_data_manual_scroll.h"
 
 namespace
@@ -557,7 +559,13 @@ namespace
         });
         return s_data;
     }
-
+    const std::vector<UIComponentGridSizeData>& GetUIGridSizeDataBigRowVerticalTall()
+    {
+        static std::vector<UIComponentGridSizeData> s_data({
+            UIComponentGridSizeData(UICoord(UICoord::ParentSource::Y, 0.0f, s_default_font_size * 8.0f))
+        });
+        return s_data;
+    }
     const std::vector<UIComponentGridSizeData>& GetUIGridSliderHorizontalWidth()
     {
         static std::vector<UIComponentGridSizeData> s_data({
@@ -1235,6 +1243,41 @@ namespace
         return dirty;
     }
 
+    template<
+        TGetUILayoutRef in_get_layout_ref = GetUILayout,
+        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
+        TGetUIStateFlagTintArray in_get_ui_state_flag_tint_array = GetUIStateFlagTintArray
+        >
+    const bool FactoryListBox(
+        std::unique_ptr<IUIComponent>& in_out_content,
+        const UIComponentFactoryParam& in_factory_param
+        )
+    {
+        UIComponentListBox* content = dynamic_cast<UIComponentListBox*>(in_out_content.get());
+        bool dirty = false;
+        if (nullptr == content)
+        {
+            dirty = true;
+            auto new_content = std::make_unique<UIComponentListBox>(
+                in_get_base_colour(in_factory_param._create_index),
+                in_get_layout_ref(),
+                in_get_ui_state_flag_tint_array()
+                );
+            in_out_content = std::move(new_content);
+        }
+        else
+        {
+            if (true == content->SetBase(
+                in_get_base_colour(in_factory_param._create_index),
+                in_get_layout_ref(),
+                in_get_ui_state_flag_tint_array()
+                ))
+            {
+                dirty = true;
+            }
+        }
+        return dirty;
+    }
 }
 
 void DefaultUIComponentFactory::Populate(
@@ -1316,7 +1359,12 @@ void DefaultUIComponentFactory::Populate(
 
     in_ui_manager.AddContentFactory("canvas_list_box_wrapper", FactoryCanvas<
         GetUILayoutListBoxWrapper, 
-        GetUIBaseColourBlue
+        GetUIBaseColourRed
+        >);
+
+    in_ui_manager.AddContentFactory("canvas_row", FactoryCanvas<
+        GetUILayoutRow, 
+        GetUIBaseColourDefault
         >);
 
     // UIData stack
@@ -1367,6 +1415,14 @@ void DefaultUIComponentFactory::Populate(
         GetUIStateFlagTintArray,
         GetUIGridSizeDataSmallBigHorizontal,
         GetUIGridSizeDataBigRowVertical
+        >);
+
+    in_ui_manager.AddContentFactory("grid_small_big_pair_tall", FactoryGrid<
+        GetUILayoutShrinkVertical,
+        GetUIBaseColourDefault,
+        GetUIStateFlagTintArray,
+        GetUIGridSizeDataSmallBigHorizontal,
+        GetUIGridSizeDataBigRowVerticalTall
         >);
 
     in_ui_manager.AddContentFactory("grid_slider_horizontal", FactoryGrid<
@@ -1568,7 +1624,11 @@ void DefaultUIComponentFactory::Populate(
         GetUILayout, //GetUILayoutModal, 
         GetUIBaseColourGrey
         >);
-
+    in_ui_manager.AddContentFactory("button_listbox_item", FactoryButton<
+        GetUILayout, 
+        GetUIBaseColourWhite,
+        GetUIStateFlagTintArrayDefault
+        >);
     in_ui_manager.AddContentFactory("UIDataToggle", FactoryButton<
         GetUILayoutCheckbox, 
         GetUIBaseColourDefault
@@ -1595,6 +1655,7 @@ void DefaultUIComponentFactory::Populate(
         >);
 
     in_ui_manager.AddContentFactory("UIDataManualScroll", FactoryManualScroll<>);
+    in_ui_manager.AddContentFactory("UIDataListBox", FactoryListBox<>);
 
     return;
 }

@@ -149,7 +149,7 @@ const bool UIComponentListBox::UpdateHierarchy(
 
     if (0 < source_token_list_box_index.size())
     {
-        in_out_child_data.VisitComponents([this, &source_token_list_box_index, selection_index](IUIComponent* const in_component){
+        in_out_child_data.VisitComponents([this, &source_token_list_box_index, selection_index](IUIComponent* const in_component, UIHierarchyNode* const in_node){
             if (nullptr != in_component)
             {
                 auto found = source_token_list_box_index.find(in_component->GetSourceToken());
@@ -157,7 +157,13 @@ const bool UIComponentListBox::UpdateHierarchy(
                 {
                     const int found_index = found->second;
                     const bool is_selected = selection_index == found_index;
-                    in_component->SetStateFlagBit(UIStateFlag::TSelected, is_selected);
+                    if (true == in_component->SetStateFlagBit(UIStateFlag::TSelected, is_selected))
+                    {
+                        if (nullptr != in_node)
+                        {
+                            in_node->MarkTextureDirty();
+                        }
+                    }
 
                     // alternative is to make a UIComponentListBoxItem rather than UIComponentButton?
                     // improvement would be to throttle how often hierarchy update is called, as we now create a lambda for every item every update

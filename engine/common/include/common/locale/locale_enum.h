@@ -191,7 +191,9 @@ enum class LocaleISO_639_1
     Yiddish,
     Yoruba,
     Zhuang,
-    Zulu
+    Zulu,
+
+    Invalid = -1
 };
 
 template <> 

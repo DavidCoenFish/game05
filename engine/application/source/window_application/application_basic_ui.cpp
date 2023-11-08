@@ -26,6 +26,7 @@
 #include "common/ui/ui_data/ui_data_button.h"
 #include "common/ui/ui_data/ui_data_disable.h"
 #include "common/ui/ui_data/ui_data_float.h"
+#include "common/ui/ui_data/ui_data_list_box.h"
 #include "common/ui/ui_data/ui_data_manual_scroll.h"
 #include "common/ui/ui_data/ui_data_scroll.h"
 #include "common/ui/ui_data/ui_data_string.h"
@@ -467,42 +468,74 @@ namespace
         )
     {
         std::vector<std::shared_ptr<UIData>> content_array;
+        std::vector<std::shared_ptr<UIDataButton>> item_host_button_array;
         for (auto& item : in_array_items)
         {
-            
+            auto data_button = std::make_shared<UIDataButton>(
+                nullptr,
+                false,
+                "button_listbox_item"
+                );
+
+            auto listbox_item = std::make_shared<UIData>(
+                "canvas_row",
+                std::vector<std::shared_ptr<UIData>>({
+                    data_button,
+                    item
+                    })
+                );
+
+            content_array.push_back(listbox_item);
+            item_host_button_array.push_back(data_button);
         }
 
-        auto data_stack = std::make_shared<UIData>(
-            "stack_top_down",
-            content_array
+        auto list_box = std::make_shared<UIDataListBox>(
+                [in_root_name, &in_data_map](int in_selected_index){
+                    auto data = std::dynamic_pointer_cast<UIDataListBox>(in_data_map[in_root_name]);
+                    if (nullptr != data)
+                    {
+                        data->SetSelectedIndex(in_selected_index);
+                    }
+                },
+                1,
+                item_host_button_array,
+                "UIDataListBox",
+                std::vector<std::shared_ptr<UIData>>({
+                    BuildManualScroll(
+                        true,
+                        false,
+                        in_data_map,
+                        in_root_name + "_manual",
+                        std::make_shared<UIData>(
+                            "stack_top_down",
+                            content_array
+                            )
+                        )
+                    })
             );
+        in_data_map[in_root_name] = list_box;
 
         return std::make_shared<UIData>(
-            "canvas_list_box_wrapper",
+            "effect_drop_shadow_small",
             std::vector<std::shared_ptr<UIData>>({
-               std::make_shared<UIData>(
-                    "effect_drop_shadow_small",
+                std::make_shared<UIData>(
+                    "UIData",
                     std::vector<std::shared_ptr<UIData>>({
                         std::make_shared<UIData>(
-                            "UIData",
+                            "canvas_margin_tiny",
+
                             std::vector<std::shared_ptr<UIData>>({
                                 std::make_shared<UIData>(
-                                    "canvas_margin_tiny",
-
+                                    "effect_corner_hollow_tiny",
                                     std::vector<std::shared_ptr<UIData>>({
                                         std::make_shared<UIData>(
-                                            "effect_corner_hollow_tiny",
-                                            std::vector<std::shared_ptr<UIData>>({
-                                                std::make_shared<UIData>(
-                                                    "canvas_grey"
-                                                    )
-                                                })
-                                            ),
-
-                                            data_stack
-
+                                            "canvas_grey"
+                                            )
                                         })
-                                    )
+                                    ),
+
+                                    list_box
+
                                 })
                             )
                         })
@@ -870,10 +903,10 @@ public:
                 ),
 #endif
                 std::make_shared<UIData>(
-                    "grid_small_big_pair",
+                    "grid_small_big_pair_tall",
                     std::vector<std::shared_ptr<UIData>>({
                         std::make_shared<UIDataString>(
-                            "Locale",
+                            "List Box",
                             LocaleISO_639_1::Default,
                             "string_right_em"
                             ),
@@ -883,37 +916,48 @@ public:
                             "list_box",
                             std::vector<std::shared_ptr<UIData>>({
                                 std::make_shared<UIDataTextRun>(
-                                    "<Locale en>"
+                                    "<Locale en>",
+                                    LocaleISO_639_1::English
                                     ),
                                 std::make_shared<UIDataTextRun>(
-                                    "<Locale es>"
+                                    "<Locale es>",
+                                    LocaleISO_639_1::English
                                     ),
                                 std::make_shared<UIDataTextRun>(
-                                    "<Locale hi>"
+                                    "<Locale hi>",
+                                    LocaleISO_639_1::English
                                     ),
                                 std::make_shared<UIDataTextRun>(
-                                    "<Locale ar>"
+                                    "<Locale ar>",
+                                    LocaleISO_639_1::English
                                     ),
                                 std::make_shared<UIDataTextRun>(
-                                    "<Locale pt>"
+                                    "<Locale pt>",
+                                    LocaleISO_639_1::English
                                     ),
                                 std::make_shared<UIDataTextRun>(
-                                    "<Locale bn>"
+                                    "<Locale bn>",
+                                    LocaleISO_639_1::English
                                     ),
                                 std::make_shared<UIDataTextRun>(
-                                    "<Locale ru>"
+                                    "<Locale ru>",
+                                    LocaleISO_639_1::English
                                     ),
                                 std::make_shared<UIDataTextRun>(
-                                    "<Locale ja>"
+                                    "<Locale ja>",
+                                    LocaleISO_639_1::English
                                     ),
                                 std::make_shared<UIDataTextRun>(
-                                    "<Locale pa>"
+                                    "<Locale pa>",
+                                    LocaleISO_639_1::English
                                     ),
                                 std::make_shared<UIDataTextRun>(
-                                    "<Locale de>"
+                                    "<Locale de>",
+                                    LocaleISO_639_1::English
                                     ),
                                 std::make_shared<UIDataTextRun>(
-                                    "<Locale jv>"
+                                    "<Locale jv>",
+                                    LocaleISO_639_1::English
                                     )
                                 })
                             )

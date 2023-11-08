@@ -8,6 +8,8 @@ private:
     typedef std::map<std::string, std::string> TDataMap;
 public:
     LocaleSystemImplementation()
+    : _last_locale(LocaleISO_639_1::Invalid)
+    , _last_data_map(nullptr)
     {
         // Nop
     }
@@ -76,15 +78,18 @@ private:
         const LocaleISO_639_1 in_locale
         )
     {
-        if (_last_locale == in_locale)
+        //const LocaleISO_639_1 locale = in_locale == LocaleISO_639_1::Default ? LocaleISO_639_1::English : in_locale;
+        const LocaleISO_639_1 locale = in_locale;
+
+        if (_last_locale == locale)
         {
             return _last_data_map;
         }
-        auto found = _locale_data_map.find(in_locale);
+        auto found = _locale_data_map.find(locale);
         if (found != _locale_data_map.end())
         {
             _last_data_map = found->second.get();
-            _last_locale = in_locale;
+            _last_locale = locale;
             return _last_data_map;
         }
         // if not found, don't update _last_data_map

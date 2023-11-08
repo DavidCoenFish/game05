@@ -246,7 +246,7 @@ const bool UIComponentScroll::UpdateHierarchy(
 
     _knot = nullptr;
     UIData* const knot_data = data ? data->GetKnotChildData() : nullptr;
-    in_out_child_data.VisitComponents([this, knot_data](IUIComponent* const in_component){
+    in_out_child_data.VisitComponents([this, knot_data](IUIComponent* const in_component, UIHierarchyNode* const){
             if (knot_data == in_component->GetSourceToken())
             {
                 _knot = in_component;

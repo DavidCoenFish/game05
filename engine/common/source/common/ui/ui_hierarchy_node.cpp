@@ -132,13 +132,13 @@ void UIHierarchyNodeChildData::Draw(const UIManagerDrawParam& in_draw_param)
     return;
 }
 
-const bool UIHierarchyNodeChildData::VisitComponents(const std::function<const bool(IUIComponent* const)>& in_visitor)
+const bool UIHierarchyNodeChildData::VisitComponents(const std::function<const bool(IUIComponent* const, UIHierarchyNode* const)>& in_visitor)
 {
     bool keep_going = true;
     auto* component = _component.get();
     if (nullptr != component)
     {
-        keep_going = in_visitor(component);
+        keep_going = in_visitor(component, _node.get());
     }
     if (true == keep_going)
     {
