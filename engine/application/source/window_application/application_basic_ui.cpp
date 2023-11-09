@@ -329,7 +329,6 @@ namespace
 #endif
     }
 
-
     std::shared_ptr<UIData> BuildManualScroll(
         const bool in_allow_vertical, 
         const bool in_allow_horizontal,
@@ -460,7 +459,6 @@ namespace
             );
     }
 
-
     std::shared_ptr<UIData> BuildListBox(
         std::map<std::string, std::shared_ptr<UIData>>& in_data_map,
         const std::string& in_root_name,
@@ -490,29 +488,29 @@ namespace
         }
 
         auto list_box = std::make_shared<UIDataListBox>(
-                [in_root_name, &in_data_map](int in_selected_index){
-                    auto data = std::dynamic_pointer_cast<UIDataListBox>(in_data_map[in_root_name]);
-                    if (nullptr != data)
-                    {
-                        data->SetSelectedIndex(in_selected_index);
-                    }
-                },
-                1,
-                item_host_button_array,
-                "UIDataListBox",
-                std::vector<std::shared_ptr<UIData>>({
-                    BuildManualScroll(
-                        true,
-                        false,
-                        in_data_map,
-                        in_root_name + "_manual",
-                        std::make_shared<UIData>(
-                            "stack_top_down",
-                            content_array
+                    [in_root_name, &in_data_map](int in_selected_index){
+                        auto data = std::dynamic_pointer_cast<UIDataListBox>(in_data_map[in_root_name]);
+                        if (nullptr != data)
+                        {
+                            data->SetSelectedIndex(in_selected_index);
+                        }
+                    },
+                    1,
+                    item_host_button_array,
+                    "UIDataListBox",
+                    std::vector<std::shared_ptr<UIData>>({
+                        BuildManualScroll(
+                            true,
+                            false,
+                            in_data_map,
+                            in_root_name + "_manual",
+                            std::make_shared<UIData>(
+                                "stack_list_box", //"stack", //, //"stack_top_down",
+                                content_array
+                                )
                             )
-                        )
-                    })
-            );
+                        })
+                );
         in_data_map[in_root_name] = list_box;
 
         return std::make_shared<UIData>(
@@ -525,17 +523,21 @@ namespace
                             "canvas_margin_tiny",
 
                             std::vector<std::shared_ptr<UIData>>({
-                                std::make_shared<UIData>(
-                                    "effect_corner_hollow_tiny",
-                                    std::vector<std::shared_ptr<UIData>>({
-                                        std::make_shared<UIData>(
-                                            "canvas_grey"
-                                            )
-                                        })
-                                    ),
+                                    std::make_shared<UIData>(
+                                        "effect_corner_hollow_tiny",
+                                        std::vector<std::shared_ptr<UIData>>({
+                                            std::make_shared<UIData>(
+                                                "canvas_grey"
+                                                )
+                                            })
+                                        ),
 
-                                    list_box
-
+                                    std::make_shared<UIData>(
+                                        "canvas_margin",
+                                        std::vector<std::shared_ptr<UIData>>({
+                                            list_box
+                                            })
+                                        )
                                 })
                             )
                         })

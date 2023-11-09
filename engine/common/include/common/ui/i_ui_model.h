@@ -27,4 +27,6 @@ public:
         UIData* const data = GetData(in_key);
         return dynamic_cast<InType*>(data);
     }
+
+    // make a visitor, or provide tools to set locale on string/textrun resources? (or both)
 };

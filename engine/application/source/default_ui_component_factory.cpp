@@ -347,7 +347,6 @@ namespace
         return s_layout;
     }
 
-
     const UILayout& GetUILayoutScrollWrapper()
     {
         static UILayout s_layout(
@@ -473,6 +472,22 @@ namespace
             );
         return s_layout;
     }
+
+    const UILayout& GetUILayoutStackListBox()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 1.0f, -s_default_margin),
+            UICoord(UICoord::ParentSource::Y, 1.0f),
+            UICoord(UICoord::ParentSource::X, 0.0f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 0.0f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            false,
+            true
+            );
+        return s_layout;
+    }
+
 
     
     
@@ -1391,6 +1406,14 @@ void DefaultUIComponentFactory::Populate(
         GetUIStateFlagTintArray,
         UIOrientation::TVertical,
         GetUICoordDefaultGap
+        >);
+
+    in_ui_manager.AddContentFactory("stack_list_box", FactoryStack<
+        GetUILayoutStackListBox,
+        GetUIBaseColourDefault,
+        GetUIStateFlagTintArray,
+        UIOrientation::TVertical,
+        GetUICoordNone
         >);
 
     // UIData grid
