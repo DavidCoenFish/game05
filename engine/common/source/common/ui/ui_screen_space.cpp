@@ -24,8 +24,8 @@ namespace
             );
 
         const VectorFloat2 zero_one_geometry_pivot(
-            zero_one_geometry_pos[0] - (zero_one_geometry_pos[0] * in_geometry_uv[0]),
-            zero_one_geometry_pos[1] - (zero_one_geometry_pos[1] * (1.0f - in_geometry_uv[1]))
+            zero_one_geometry_pos[0] - (zero_one_geometry_length[0] * in_geometry_uv[0]),
+            zero_one_geometry_pos[1] - (zero_one_geometry_length[1] * (1.0f - in_geometry_uv[1]))
             );
 
         const VectorFloat2 zero_one_new_pivot(
@@ -50,14 +50,15 @@ namespace
 
     const VectorFloat4 CalculateClip(
         const VectorFloat4& in_parent_clip, 
+        const VectorFloat4& in_geometry_pos,
         const VectorFloat4& in_pos
         )
     {
         VectorFloat4 result(
-            std::max(in_parent_clip[0], in_pos[0]),
-            std::max(in_parent_clip[1], in_pos[1]),
-            std::min(in_parent_clip[2], in_pos[2]),
-            std::min(in_parent_clip[3], in_pos[3])
+            std::max(std::max(in_parent_clip[0], in_pos[0]), in_geometry_pos[0]),
+            std::max(std::max(in_parent_clip[1], in_pos[1]), in_geometry_pos[1]),
+            std::min(std::min(in_parent_clip[2], in_pos[2]), in_geometry_pos[2]),
+            std::min(std::min(in_parent_clip[3], in_pos[3]), in_geometry_pos[3])
             );
         result[0] = std::min(result[0], result[2]);
         result[1] = std::min(result[1], result[3]);
@@ -105,7 +106,9 @@ void UIScreenSpace::Update(
     )
 {
     VectorFloat4 pos = CalculatePos(in_parent.GetPosRef(), in_geometry_pos, in_geometry_uv);
-    VectorFloat4 clip = CalculateClip(in_parent.GetClipRef(), pos); 
+    // As well as clipping to our parent, we need to clip to our own geometry, which we can do by using default uv, calling this pure/ without uv modification
+    VectorFloat4 pos_pure = CalculatePos(in_parent.GetPosRef(), in_geometry_pos, VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f));
+    VectorFloat4 clip = CalculateClip(in_parent.GetClipRef(), pos_pure, pos); 
 
     Set(pos, clip);
 

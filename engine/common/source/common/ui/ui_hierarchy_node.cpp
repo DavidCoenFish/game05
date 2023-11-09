@@ -517,6 +517,7 @@ const bool UIHierarchyNode::DealInput(
 
         bool inside = false;
         bool action = nullptr == input ? in_action : false;
+        bool hover = false;
 
         // update state flag for all touches
         for (auto& touch : in_input_state.GetTouchArray())
@@ -527,6 +528,12 @@ const bool UIHierarchyNode::DealInput(
                 (true == local_inside))
             {
                 inside = true;
+
+                if ((nullptr == touch._active_source_token) || 
+                    (touch._active_source_token == source_token))
+                {
+                    hover = true;
+                }
             }
 
             // OnDrag, drag slider, can be outside, but protected by matching source token
@@ -539,6 +546,7 @@ const bool UIHierarchyNode::DealInput(
                 input->OnInputTouch(child_data._screen_space->GetPosRef(), touch._touch_pos_current);
             }
 
+            // Click and hold button (repeat)
             if ((true == local_inside) &&
                 (nullptr != touch._active_source_token) &&
                 (touch._active_source_token == source_token) &&
@@ -599,7 +607,7 @@ const bool UIHierarchyNode::DealInput(
 
         }
 
-        if (true == inside)
+        if (true == hover) //inside)
         {
             local_flag |= static_cast<int>(UIStateFlag::THover);
         }

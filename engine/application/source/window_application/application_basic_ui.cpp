@@ -524,20 +524,21 @@ namespace
 
                             std::vector<std::shared_ptr<UIData>>({
                                     std::make_shared<UIData>(
+                                        "canvas_margin_listbox",
+                                        std::vector<std::shared_ptr<UIData>>({
+                                            list_box
+                                            })
+                                        ),
+
+                                    std::make_shared<UIData>(
                                         "effect_corner_hollow_tiny",
                                         std::vector<std::shared_ptr<UIData>>({
                                             std::make_shared<UIData>(
                                                 "canvas_grey"
                                                 )
                                             })
-                                        ),
-
-                                    std::make_shared<UIData>(
-                                        "canvas_margin",
-                                        std::vector<std::shared_ptr<UIData>>({
-                                            list_box
-                                            })
                                         )
+
                                 })
                             )
                         })
@@ -721,6 +722,59 @@ public:
                 })
             );
 
+        auto locale_name_array = std::vector<std::shared_ptr<UIData>>({
+            std::make_shared<UIDataTextRun>(
+                "<Locale en>",
+                LocaleISO_639_1::English
+                ),
+            std::make_shared<UIDataTextRun>(
+                "<Locale es>",
+                LocaleISO_639_1::English
+                ),
+            std::make_shared<UIDataTextRun>(
+                "<Locale hi>",
+                LocaleISO_639_1::English
+                ),
+            std::make_shared<UIDataTextRun>(
+                "<Locale ar>",
+                LocaleISO_639_1::English
+                ),
+            std::make_shared<UIDataTextRun>(
+                "<Locale pt>",
+                LocaleISO_639_1::English
+                ),
+            std::make_shared<UIDataTextRun>(
+                "<Locale bn>",
+                LocaleISO_639_1::English
+                ),
+            std::make_shared<UIDataTextRun>(
+                "<Locale ru>",
+                LocaleISO_639_1::English
+                ),
+            std::make_shared<UIDataTextRun>(
+                "<Locale ja>",
+                LocaleISO_639_1::English
+                ),
+            std::make_shared<UIDataTextRun>(
+                "<Locale pa>",
+                LocaleISO_639_1::English
+                ),
+            std::make_shared<UIDataTextRun>(
+                "<Locale de>",
+                LocaleISO_639_1::English
+                ),
+            std::make_shared<UIDataTextRun>(
+                "<Locale jv>",
+                LocaleISO_639_1::English
+                )
+            });
+
+        auto locale_list_box = BuildListBox(
+            _data_map,
+            "list_box",
+            locale_name_array
+            );
+
         // Launch Left banner
         auto data_main_launch = std::make_shared<UIData>(
             "canvas_banner_left",
@@ -736,6 +790,7 @@ public:
                                     "stack_vertical_middle",
                                     std::vector<std::shared_ptr<UIData>>({
 
+#if 1
                                         std::make_shared<UIDataDisable>(
                                             true,
                                             "UIDataDisable",
@@ -784,6 +839,9 @@ public:
                                             "UIDataButton",
                                             BuildButtonData("Exit")
                                         ),
+#else
+                                        locale_list_box
+#endif
 
                                         })
                                     )
@@ -913,56 +971,7 @@ public:
                             "string_right_em"
                             ),
                         nullptr,
-                        BuildListBox(
-                            _data_map,
-                            "list_box",
-                            std::vector<std::shared_ptr<UIData>>({
-                                std::make_shared<UIDataTextRun>(
-                                    "<Locale en>",
-                                    LocaleISO_639_1::English
-                                    ),
-                                std::make_shared<UIDataTextRun>(
-                                    "<Locale es>",
-                                    LocaleISO_639_1::English
-                                    ),
-                                std::make_shared<UIDataTextRun>(
-                                    "<Locale hi>",
-                                    LocaleISO_639_1::English
-                                    ),
-                                std::make_shared<UIDataTextRun>(
-                                    "<Locale ar>",
-                                    LocaleISO_639_1::English
-                                    ),
-                                std::make_shared<UIDataTextRun>(
-                                    "<Locale pt>",
-                                    LocaleISO_639_1::English
-                                    ),
-                                std::make_shared<UIDataTextRun>(
-                                    "<Locale bn>",
-                                    LocaleISO_639_1::English
-                                    ),
-                                std::make_shared<UIDataTextRun>(
-                                    "<Locale ru>",
-                                    LocaleISO_639_1::English
-                                    ),
-                                std::make_shared<UIDataTextRun>(
-                                    "<Locale ja>",
-                                    LocaleISO_639_1::English
-                                    ),
-                                std::make_shared<UIDataTextRun>(
-                                    "<Locale pa>",
-                                    LocaleISO_639_1::English
-                                    ),
-                                std::make_shared<UIDataTextRun>(
-                                    "<Locale de>",
-                                    LocaleISO_639_1::English
-                                    ),
-                                std::make_shared<UIDataTextRun>(
-                                    "<Locale jv>",
-                                    LocaleISO_639_1::English
-                                    )
-                                })
-                            )
+                        locale_list_box
                     })
                 ),
 

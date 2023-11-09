@@ -26,7 +26,9 @@ public:
     const VectorFloat4& GetClipRef() const { return _clip; }
 
 private:
+    /// screen space pos we would end up at, ie, flattenened
     VectorFloat4 _pos;
+    /// if each UISceenSpace clipped content at bounds, what would our screen space coverage be
     VectorFloat4 _clip;
 
 };

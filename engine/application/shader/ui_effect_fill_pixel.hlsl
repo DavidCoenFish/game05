@@ -2,6 +2,8 @@
 #include "ui_common_pixel.hlsli"
 #include "ui_effect_common_pixel.hlsli"
 
+// Todo: rename ui_effect_chrome_pixel.hlsl
+
 float SumQuadrantSample(
     float2 in_pivot,
     float2 in_offset,
@@ -64,7 +66,7 @@ Pixel main(Interpolant in_input)
     float4 _tint_light = float4(1.0 - (_tint.xyz * 0.4), _tint.a);
     float4 _tint_invert = float4((1.0 - _tint.xyz) * 0.3, _tint.a);
 
-    float u = smoothstep(0.48, 0.52, ratio);
+    float u = smoothstep(0.495, 0.505, ratio);
 
     float t2 = ratio * 2.0;
     //t2 *= t2;

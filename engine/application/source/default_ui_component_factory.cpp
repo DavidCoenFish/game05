@@ -93,6 +93,19 @@ namespace
             );
         return s_layout;
     }
+    const UILayout& GetUILayoutMarginListbox()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 1.0f, s_default_margin * (-1.0f)),
+            UICoord(UICoord::ParentSource::Y, 1.0f, s_default_margin * (-1.0f)),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f)
+            );
+        return s_layout;
+    }
+
     const UILayout& GetUILayoutMarginTiny()
     {
         static UILayout s_layout(
@@ -1331,6 +1344,9 @@ void DefaultUIComponentFactory::Populate(
         >);
     in_ui_manager.AddContentFactory("canvas_margin", FactoryCanvas<
         GetUILayoutMargin
+        >);
+    in_ui_manager.AddContentFactory("canvas_margin_listbox", FactoryCanvas<
+        GetUILayoutMarginListbox
         >);
     in_ui_manager.AddContentFactory("canvas_margin_tiny", FactoryCanvas<
         GetUILayoutMarginTiny
