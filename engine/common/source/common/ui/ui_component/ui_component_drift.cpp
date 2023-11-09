@@ -141,6 +141,7 @@ void UIComponentDrift::TriggerSlideOut()
             _component_default.SetTimeAccumulateSeconds(_duration);
         }
         _reverse = true;
+        _component_default.SetStateFlagBit(UIStateFlag::THidden, false);
     }
 }
 
@@ -153,6 +154,7 @@ void UIComponentDrift::TriggerSlideIn()
             _component_default.SetTimeAccumulateSeconds(0.0f);
         }
         _reverse = false;
+        _component_default.SetStateFlagBit(UIStateFlag::THidden, false);
     }
 }
 
