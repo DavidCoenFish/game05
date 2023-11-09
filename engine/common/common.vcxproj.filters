@@ -352,6 +352,9 @@
     <ClCompile Include="source\common\ui\ui_component\ui_component_list_box.cpp">
       <Filter>souce\common\ui\ui_component</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\ui\ui_component\ui_component_drift.cpp">
+      <Filter>souce\common\ui\ui_component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -727,6 +730,9 @@
       <Filter>include\common\ui\ui_data</Filter>
     </ClInclude>
     <ClInclude Include="include\common\ui\ui_component\ui_component_list_box.h">
+      <Filter>include\common\ui\ui_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_component\ui_component_drift.h">
       <Filter>include\common\ui\ui_component</Filter>
     </ClInclude>
   </ItemGroup>

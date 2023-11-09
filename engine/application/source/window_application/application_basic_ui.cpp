@@ -803,6 +803,11 @@ public:
                         std::make_shared<UIData>(
                             "UIData",
                             std::vector<std::shared_ptr<UIData>>({
+
+                        std::make_shared<UIData>(
+                            "drift_from_top",
+                            std::vector<std::shared_ptr<UIData>>({
+
                                 std::make_shared<UIData>(
                                     "stack_vertical_middle",
                                     std::vector<std::shared_ptr<UIData>>({
@@ -862,6 +867,8 @@ public:
 
                                         })
                                     )
+                                })
+                            )
                                 })
                             )
                         })

@@ -97,3 +97,13 @@ enum class UINavigationType
     TDpadHorizontal,
     TDpadVertical
 };
+
+enum class UISlideDirection
+{
+    TNone,
+    TFromLeft, //start with node out to the left, and drift in to the default pos 
+    TFromTop,
+    TFromRight,
+    TFromBottom
+
+};

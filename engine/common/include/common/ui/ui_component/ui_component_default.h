@@ -84,6 +84,9 @@ public:
     const bool GetUVScrollManualY() { return _uv_scroll_manual_y; }
     void SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool in_manual_horizontal, const bool in_manual_vertical);
 
+    const float GetTimeAccumulateSeconds() const { return _time_accumulate_seconds; }
+    void SetTimeAccumulateSeconds(const float in_time_accumulate_seconds) { _time_accumulate_seconds = in_time_accumulate_seconds; return; }
+
     /// Return true if bits under _state_flag_dirty_mask change. 
     /// Is a direct setter too raw, move to enable/disable bit rather than entire flag.
     const bool SetStateFlag(const UIStateFlag in_state_flag);

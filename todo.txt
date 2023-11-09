@@ -1,5 +1,4 @@
-- fix screen space and scroll
-- list box
+- component slide
 - combo box
 - change locale
 - transition out effect
@@ -20,4 +19,9 @@
             retroactive insert input
             rebuild snapshot
         draw snapshot
+    ui build factory from content, ref dag collection
+        ui to select units
+        ui to build building
+
+
 

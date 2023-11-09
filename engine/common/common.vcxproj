@@ -99,6 +99,7 @@
     <ClCompile Include="source\common\ui\ui_component\ui_component_canvas.cpp" />
     <ClCompile Include="source\common\ui\ui_component\ui_component_default.cpp" />
     <ClCompile Include="source\common\ui\ui_component\ui_component_disable.cpp" />
+    <ClCompile Include="source\common\ui\ui_component\ui_component_drift.cpp" />
     <ClCompile Include="source\common\ui\ui_component\ui_component_effect.cpp" />
     <ClCompile Include="source\common\ui\ui_component\ui_component_grid.cpp" />
     <ClCompile Include="source\common\ui\ui_component\ui_component_list_box.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="include\common\ui\ui_component\ui_component_list_box.h" />
     <ClInclude Include="include\common\ui\ui_component\ui_component_manual_scroll.h" />
     <ClInclude Include="include\common\ui\ui_component\ui_component_scroll.h" />
+    <ClInclude Include="include\common\ui\ui_component\ui_component_drift.h" />
     <ClInclude Include="include\common\ui\ui_component\ui_component_slider.h" />
     <ClInclude Include="include\common\ui\ui_component\ui_component_stack.h" />
     <ClInclude Include="include\common\ui\ui_component\ui_component_string.h" />

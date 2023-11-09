@@ -14,6 +14,7 @@
 #include "common/ui/ui_component/ui_component_button.h"
 #include "common/ui/ui_component/ui_component_canvas.h"
 #include "common/ui/ui_component/ui_component_disable.h"
+#include "common/ui/ui_component/ui_component_drift.h"
 #include "common/ui/ui_component/ui_component_effect.h"
 #include "common/ui/ui_component/ui_component_grid.h"
 #include "common/ui/ui_component/ui_component_list_box.h"
@@ -1306,6 +1307,50 @@ namespace
         }
         return dirty;
     }
+
+    template<
+        UISlideDirection in_direction = UISlideDirection::TFromLeft,
+        int in_duration_times_1000 = 1000,
+        TGetUILayoutRef in_get_layout_ref = GetUILayout,
+        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
+        TGetUIStateFlagTintArray in_get_ui_state_flag_tint_array = GetUIStateFlagTintArray
+        >
+    const bool FactoryDrift(
+        std::unique_ptr<IUIComponent>& in_out_content,
+        const UIComponentFactoryParam& in_factory_param
+        )
+    {
+        const float duration = static_cast<float>(in_duration_times_1000) / 1000.0f;
+        UIComponentDrift* content = dynamic_cast<UIComponentDrift*>(in_out_content.get());
+        bool dirty = false;
+        if (nullptr == content)
+        {
+            dirty = true;
+            auto new_content = std::make_unique<UIComponentDrift>(
+                in_get_base_colour(in_factory_param._create_index),
+                in_get_layout_ref(),
+                in_get_ui_state_flag_tint_array(),
+                in_direction,
+                duration
+                );
+            in_out_content = std::move(new_content);
+        }
+        else
+        {
+            if (true == content->Set(
+                in_get_base_colour(in_factory_param._create_index),
+                in_get_layout_ref(),
+                in_get_ui_state_flag_tint_array(),
+                in_direction,
+                duration
+                ))
+            {
+                dirty = true;
+            }
+        }
+        return dirty;
+    }
+
 }
 
 void DefaultUIComponentFactory::Populate(
@@ -1698,6 +1743,11 @@ void DefaultUIComponentFactory::Populate(
 
     in_ui_manager.AddContentFactory("UIDataManualScroll", FactoryManualScroll<>);
     in_ui_manager.AddContentFactory("UIDataListBox", FactoryListBox<>);
+    in_ui_manager.AddContentFactory("drift_from_top", FactoryDrift<
+        UISlideDirection::TFromTop,
+        1000
+        >);
+
 
     return;
 }
