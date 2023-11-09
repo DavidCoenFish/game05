@@ -96,8 +96,8 @@ namespace
     const UILayout& GetUILayoutMarginListbox()
     {
         static UILayout s_layout(
-            UICoord(UICoord::ParentSource::X, 1.0f, s_default_margin * (-1.0f)),
-            UICoord(UICoord::ParentSource::Y, 1.0f, s_default_margin * (-1.0f)),
+            UICoord(UICoord::ParentSource::X, 1.0f, s_default_margin * (-1.875f)),// (-1.75f)),
+            UICoord(UICoord::ParentSource::Y, 1.0f, s_default_margin * (-1.875f)),// (-1.75f)),
             UICoord(UICoord::ParentSource::X, 0.5f),
             UICoord(UICoord::ParentSource::Y, 0.5f),
             UICoord(UICoord::ParentSource::X, 0.5f),
@@ -1636,6 +1636,9 @@ void DefaultUIComponentFactory::Populate(
         s_default_font_size_small,
         TextEnum::HorizontalLineAlignment::Left,
         TextEnum::VerticalBlockAlignment::Top
+        >);
+    in_ui_manager.AddContentFactory("text_run_middle", FactoryTextRun<
+        GetUILayoutShrink
         >);
     in_ui_manager.AddContentFactory("UIDataTextRunWrap", FactoryTextRun<
         GetUILayoutQuadrant0,

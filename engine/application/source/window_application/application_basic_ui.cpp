@@ -514,31 +514,37 @@ namespace
         in_data_map[in_root_name] = list_box;
 
         return std::make_shared<UIData>(
-            "effect_drop_shadow_small",
+            "UIData",
             std::vector<std::shared_ptr<UIData>>({
+
                 std::make_shared<UIData>(
-                    "UIData",
+                    "canvas_margin_listbox",
+                    std::vector<std::shared_ptr<UIData>>({
+                        list_box
+                        })
+                    ),
+
+                std::make_shared<UIData>(
+                    "effect_drop_shadow_small",
                     std::vector<std::shared_ptr<UIData>>({
                         std::make_shared<UIData>(
-                            "canvas_margin_tiny",
-
+                            "UIData",
                             std::vector<std::shared_ptr<UIData>>({
-                                    std::make_shared<UIData>(
-                                        "canvas_margin_listbox",
-                                        std::vector<std::shared_ptr<UIData>>({
-                                            list_box
-                                            })
-                                        ),
+                                std::make_shared<UIData>(
+                                    "canvas_margin_tiny",
 
-                                    std::make_shared<UIData>(
-                                        "effect_corner_hollow_tiny",
-                                        std::vector<std::shared_ptr<UIData>>({
+                                    std::vector<std::shared_ptr<UIData>>({
                                             std::make_shared<UIData>(
-                                                "canvas_grey"
+                                                "effect_corner_hollow_tiny",
+                                                std::vector<std::shared_ptr<UIData>>({
+                                                    std::make_shared<UIData>(
+                                                        "canvas_grey"
+                                                        )
+                                                    })
                                                 )
-                                            })
-                                        )
 
+                                        })
+                                    )
                                 })
                             )
                         })
@@ -725,47 +731,58 @@ public:
         auto locale_name_array = std::vector<std::shared_ptr<UIData>>({
             std::make_shared<UIDataTextRun>(
                 "<Locale en>",
-                LocaleISO_639_1::English
+                LocaleISO_639_1::English,
+                "text_run_middle"
                 ),
             std::make_shared<UIDataTextRun>(
                 "<Locale es>",
-                LocaleISO_639_1::English
+                LocaleISO_639_1::English,
+                "text_run_middle"
                 ),
             std::make_shared<UIDataTextRun>(
                 "<Locale hi>",
-                LocaleISO_639_1::English
+                LocaleISO_639_1::English,
+                "text_run_middle"
                 ),
             std::make_shared<UIDataTextRun>(
                 "<Locale ar>",
-                LocaleISO_639_1::English
+                LocaleISO_639_1::English,
+                "text_run_middle"
                 ),
             std::make_shared<UIDataTextRun>(
                 "<Locale pt>",
-                LocaleISO_639_1::English
+                LocaleISO_639_1::English,
+                "text_run_middle"
                 ),
             std::make_shared<UIDataTextRun>(
                 "<Locale bn>",
-                LocaleISO_639_1::English
+                LocaleISO_639_1::English,
+                "text_run_middle"
                 ),
             std::make_shared<UIDataTextRun>(
                 "<Locale ru>",
-                LocaleISO_639_1::English
+                LocaleISO_639_1::English,
+                "text_run_middle"
                 ),
             std::make_shared<UIDataTextRun>(
                 "<Locale ja>",
-                LocaleISO_639_1::English
+                LocaleISO_639_1::English,
+                "text_run_middle"
                 ),
             std::make_shared<UIDataTextRun>(
                 "<Locale pa>",
-                LocaleISO_639_1::English
+                LocaleISO_639_1::English,
+                "text_run_middle"
                 ),
             std::make_shared<UIDataTextRun>(
                 "<Locale de>",
-                LocaleISO_639_1::English
+                LocaleISO_639_1::English,
+                "text_run_middle"
                 ),
             std::make_shared<UIDataTextRun>(
                 "<Locale jv>",
-                LocaleISO_639_1::English
+                LocaleISO_639_1::English,
+                "text_run_middle"
                 )
             });
 
