@@ -295,9 +295,6 @@
     <ClCompile Include="source\common\ui\ui_component\ui_component_canvas.cpp">
       <Filter>souce\common\ui\ui_component</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\ui\ui_component\ui_component_default.cpp">
-      <Filter>souce\common\ui\ui_component</Filter>
-    </ClCompile>
     <ClCompile Include="source\common\ui\ui_component\ui_component_effect.cpp">
       <Filter>souce\common\ui\ui_component</Filter>
     </ClCompile>
@@ -325,7 +322,7 @@
     <ClCompile Include="source\common\ui\ui_component\ui_component_disable.cpp">
       <Filter>souce\common\ui\ui_component</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\ui\ui_data\ui_data_float.cpp">
+    <ClCompile Include="source\common\ui\ui_data\ui_data_slider.cpp">
       <Filter>souce\common\ui\ui_data</Filter>
     </ClCompile>
     <ClCompile Include="source\common\ui\ui_data\ui_data_toggle.cpp">
@@ -353,6 +350,12 @@
       <Filter>souce\common\ui\ui_component</Filter>
     </ClCompile>
     <ClCompile Include="source\common\ui\ui_component\ui_component_drift.cpp">
+      <Filter>souce\common\ui\ui_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_data\ui_data_tooltip_layer.cpp">
+      <Filter>souce\common\ui\ui_data</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_component\ui_component_tooltip_layer.cpp">
       <Filter>souce\common\ui\ui_component</Filter>
     </ClCompile>
   </ItemGroup>
@@ -663,9 +666,6 @@
     <ClInclude Include="include\common\ui\ui_base_colour.h">
       <Filter>include\common\ui</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\ui\ui_component\ui_component_default.h">
-      <Filter>include\common\ui\ui_component</Filter>
-    </ClInclude>
     <ClInclude Include="include\common\ui\ui_component\ui_component_effect.h">
       <Filter>include\common\ui\ui_component</Filter>
     </ClInclude>
@@ -702,7 +702,7 @@
     <ClInclude Include="include\common\ui\ui_component\ui_component_disable.h">
       <Filter>include\common\ui\ui_component</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\ui\ui_data\ui_data_float.h">
+    <ClInclude Include="include\common\ui\ui_data\ui_data_slider.h">
       <Filter>include\common\ui\ui_data</Filter>
     </ClInclude>
     <ClInclude Include="include\common\ui\ui_data\ui_data_toggle.h">
@@ -733,6 +733,12 @@
       <Filter>include\common\ui\ui_component</Filter>
     </ClInclude>
     <ClInclude Include="include\common\ui\ui_component\ui_component_drift.h">
+      <Filter>include\common\ui\ui_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_data\ui_data_tooltip_layer.h">
+      <Filter>include\common\ui\ui_data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_component\ui_component_tooltip_layer.h">
       <Filter>include\common\ui\ui_component</Filter>
     </ClInclude>
   </ItemGroup>

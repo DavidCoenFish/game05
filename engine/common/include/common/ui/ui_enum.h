@@ -71,8 +71,19 @@ enum class UIStateFlag
 
     /// Disabled is expressed by UICompnentDisable, but need a way to comunicate with input that node is disabled?
     TDisable = 1 << 3,
-    /// Manual scroll wants to optionally hide scroll bars when child doesn't need to scroll
-    THidden = 1 << 4
+    /// Manual scroll wants to optionally hide scroll bars when child doesn't need to scroll. 
+    /// Warning, kind of needs to be set by a parent, as if set by its self, the code to turn it back on may never be reached, ref: UIComponentDrift
+    THidden = 1 << 4,
+
+    /// A layout override is set by component, not the model
+    TLayoutOverride = 1 << 5,
+    /// disable the automatic ppinpong of uv for x axis
+    TManualScrollX = 1 << 6,
+    /// disable the automatic ppinpong of uv for y axis
+    TManualScrollY = 1 << 7,
+
+    /// tooltip layer only has reference to a component, and needs to mark it as dirty external to Update (is in deal input)
+    TDirty = 1 << 31
 
 };
 
@@ -107,3 +118,11 @@ enum class UISlideDirection
     TFromBottom
 
 };
+
+enum class UITooltipType
+{
+    TNone,
+    TRelativeToTouch,
+    TBottomLeft,
+};
+

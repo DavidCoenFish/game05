@@ -26,7 +26,7 @@ UIComponentButton::UIComponentButton(
     const std::function<void(const VectorFloat2&)>& in_on_click,
     const bool in_allow_repeat
     )
-    : _component_default(
+    : IUIComponent(
         in_base_colour,
         in_layout,
         in_state_flag_tint_array
@@ -42,19 +42,6 @@ UIComponentButton::~UIComponentButton()
     // Nop
 }
 
-const bool UIComponentButton::SetBase(
-    const UIBaseColour& in_base_colour,
-    const UILayout& in_layout,
-    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
-    )
-{
-    return _component_default.SetBase(
-        in_base_colour,
-        in_layout,
-        in_state_flag_tint_array
-        );
-}
-
 const bool UIComponentButton::Set(
     const std::function<void(const VectorFloat2&)>& in_on_click,
     const bool in_allow_repeat
@@ -63,49 +50,6 @@ const bool UIComponentButton::Set(
     _on_click = in_on_click;
     _allow_repeat = in_allow_repeat;
     return false;
-}
-
-const bool UIComponentButton::SetStateFlag(const UIStateFlag in_state_flag)
-{
-    return _component_default.SetStateFlag(in_state_flag);
-}
-
-const bool UIComponentButton::SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable)
-{
-    return _component_default.SetStateFlagBit(in_state_flag_bit, in_enable);
-}
-
-const UIStateFlag UIComponentButton::GetStateFlag() const
-{
-    return _component_default.GetStateFlag();
-}
-
-const UILayout& UIComponentButton::GetLayout() const
-{
-    return _component_default.GetLayout();
-}
-
-void UIComponentButton::SetLayoutOverride(const UILayout& in_override)
-{
-    _component_default.SetLayoutOverride(in_override);
-    return;
-}
-
-void UIComponentButton::SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool in_manual_horizontal, const bool in_manual_vertical)
-{
-    _component_default.SetUVScrollManual(in_uv_scroll, in_manual_horizontal, in_manual_vertical);
-    return;
-}
-
-void UIComponentButton::SetSourceToken(void* in_source_ui_data_token)
-{
-    _component_default.SetSourceToken(in_source_ui_data_token);
-    return;
-}
-
-void* UIComponentButton::GetSourceToken() const
-{
-    return _component_default.GetSourceToken();
 }
 
 const bool UIComponentButton::UpdateHierarchy(
@@ -139,7 +83,7 @@ const bool UIComponentButton::UpdateHierarchy(
         }
     }
 
-    if (true == _component_default.UpdateHierarchy(
+    if (true == TSuper::UpdateHierarchy(
         in_data,
         in_out_child_data, 
         in_param
@@ -149,62 +93,6 @@ const bool UIComponentButton::UpdateHierarchy(
     }
 
     return dirty;
-}
-
-const bool UIComponentButton::UpdateSize(
-    DrawSystem* const in_draw_system,
-    const VectorInt2& in_parent_size,
-    const VectorInt2& in_parent_offset,
-    const VectorInt2& in_parent_window,
-    const float in_ui_scale,
-    const float in_time_delta, 
-    UIGeometry& in_out_geometry, 
-    UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    const UIScreenSpace& in_parent_screen_space,
-    UIScreenSpace& out_screen_space
-    )
-{
-    return _component_default.UpdateSize(
-        in_draw_system,
-        *this,
-        in_parent_size,
-        in_parent_offset,
-        in_parent_window,
-        in_ui_scale, 
-        in_time_delta,
-        in_out_geometry, 
-        in_out_node,
-        in_parent_screen_space,
-        out_screen_space
-        );
-}
-
-void UIComponentButton::GetDesiredSize(
-    VectorInt2& out_layout_size, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
-    VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
-    const VectorInt2& in_parent_window,
-    const float in_ui_scale,
-    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    )
-{
-    return _component_default.GetDesiredSize(
-        out_layout_size,
-        out_desired_size,
-        in_parent_window,
-        in_ui_scale,
-        in_out_node
-        );
-}
-
-const bool UIComponentButton::PreDraw(
-    const UIManagerDrawParam& in_draw_param,
-    UIHierarchyNode& in_node
-    ) 
-{
-    return _component_default.PreDraw(
-        in_draw_param,
-        in_node
-        );
 }
 
 void UIComponentButton::OnInputClick(
@@ -223,7 +111,8 @@ void UIComponentButton::OnInputRepeat(
     const VectorFloat4&,
     const VectorFloat2& in_mouse_pos,
     const float in_duration,
-    const float in_last_timestep
+    const float in_last_timestep,
+    std::string& out_tooltip
     )
 {
     if ((false == _allow_repeat) ||
@@ -239,9 +128,5 @@ void UIComponentButton::OnInputRepeat(
         _on_click(in_mouse_pos);
     }
 
-}
-
-const VectorFloat4 UIComponentButton::GetTintColour() const
-{
-    return _component_default.GetTintColour();
+    return;
 }

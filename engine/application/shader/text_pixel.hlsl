@@ -16,9 +16,9 @@ Pixel main(Interpolant in_input)
     float alpha = dot(texel, in_input._mask);
     // Premultiplied alpha blending
     result._colour = float4(
-        in_input._colour.x,
-        in_input._colour.y,
-        in_input._colour.z,
+        in_input._colour.x * alpha,
+        in_input._colour.y * alpha,
+        in_input._colour.z * alpha,
         in_input._colour.w * alpha
         );
 

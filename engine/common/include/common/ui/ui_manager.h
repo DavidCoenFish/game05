@@ -8,11 +8,12 @@
 class DrawSystem;
 class DrawSystemFrame;
 class IUIComponent;
-class UIData;
 class IUIModel;
 class LocaleSystem;
 class Shader;
 class TextManager;
+class UIComponentTooltipLayer;
+class UIData;
 class UIHierarchyNode;
 class UIManager;
 class UIManagerImplementation;
@@ -217,6 +218,8 @@ public:
     /// root node owns the input state
     void DealInput(
         UIHierarchyNode& in_root,
+        //UIData* const in_dropdown_layer,
+        UIData* const in_tooltip_layer,
         const UIManagerDealInputParam& in_param
         );
 

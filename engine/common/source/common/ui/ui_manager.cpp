@@ -9,6 +9,7 @@
 #include "common/draw_system/shader/shader_resource_info.h"
 #include "common/file_system/file_system.h"
 #include "common/log/log.h"
+#include "common/text/text_manager.h"
 #include "common/ui/ui_enum.h"
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_hierarchy_node.h"
@@ -17,9 +18,8 @@
 #include "common/ui/ui_root_input_state.h"
 #include "common/ui/ui_screen_space.h"
 #include "common/ui/ui_component/ui_component_effect.h"
-#include "common/ui/ui_component/ui_component_stack.h"
+#include "common/ui/ui_component/ui_component_tooltip_layer.h"
 #include "common/ui/ui_data/ui_data.h"
-#include "common/text/text_manager.h"
 #include "common/util/vector_helper.h"
 
 namespace
@@ -277,17 +277,20 @@ public:
 
     void DealInput(
         UIHierarchyNode& in_root,
+        UIData* const in_tooltip_layer,
         const UIManagerDealInputParam& in_param
         )
     {
         const VectorInt2 texture_size = in_root.GetTextureSize(in_param._draw_system);
         UIRootInputState& input_state = in_root.GetOrMakeRootInputState();
-        input_state.Update(in_param, texture_size);
+        input_state.Update(in_param, texture_size, in_tooltip_layer);
 
         in_root.DealInput(
             input_state,
             true 
             );
+
+        input_state.FinialiseTooltip(in_param);
 
         //LOG_MESSAGE_DEBUG("%d %d %d %d", in_param._mouse_x, in_param._mouse_y, in_param._mouse_left_down, in_param._mouse_right_down, in_param._mouse_scroll);
         //where is the mouse
@@ -390,11 +393,13 @@ void UIManager::Update(
 // Deal input
 void UIManager::DealInput(
     UIHierarchyNode& in_root,
+    UIData* const in_tooltip_layer,
     const UIManagerDealInputParam& in_param
     )
 {
     _implementation->DealInput(
         in_root, 
+        in_tooltip_layer,
         in_param
         );
     return;

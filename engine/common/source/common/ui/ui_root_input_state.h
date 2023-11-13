@@ -1,9 +1,34 @@
 #pragma once
 
 #include "common/math/vector_float2.h"
+#include "common/math/vector_float4.h"
 
+class IUIComponent;
+class UIData;
+class UIComponentTooltipLayer;
 class VectorInt2;
 struct UIManagerDealInputParam;
+
+struct TooltipRequestData
+{
+    explicit TooltipRequestData(
+        const VectorFloat2& in_touch_pos = VectorFloat2(),
+        const VectorFloat4& in_emitter_screenspace = VectorFloat4(),
+        const std::string& in_text_run_string = std::string(),
+        void* const in_source_token = nullptr
+        )
+        : _touch_pos(in_touch_pos)
+        , _emitter_screenspace(in_emitter_screenspace)
+        , _text_run_string(in_text_run_string)
+        , _source_token(in_source_token)
+    {
+        // Nop
+    }
+    VectorFloat2 _touch_pos;
+    VectorFloat4 _emitter_screenspace;
+    std::string _text_run_string;
+    void* _source_token;
+};
 
 struct UIRootInputStateTouch
 {
@@ -43,7 +68,8 @@ public:
 
     void Update(
         const UIManagerDealInputParam& in_param,
-        const VectorInt2& in_root_size
+        const VectorInt2& in_root_size,
+        UIData* const in_tooltip_layer_source_token
         );
 
     //const VectorFloat2& GetMousePosRef() const { return _mouse_pos; }
@@ -54,27 +80,34 @@ public:
     std::vector<UIRootInputStateTouch>& GetTouchArray() { return _touch_array; }
     const float GetTimeDelta() const { return _time_delta; }
 
+    void SubmitComponent(IUIComponent* const in_component);
+
+    void RequestTooltip(
+        const VectorFloat2& in_touch_pos, 
+        const VectorFloat4& in_emitter_screenspace_clip, 
+        const std::string& in_text_run_string,
+        void* const in_source_token
+        );
+
+    /// Finialise tooltip, or does that just when we hit the UIComponentTooltipLayer, or is that the input to Finialise
+    /// this may need UpdateHierarchy/size param? 
+    void FinialiseTooltip(
+        const UIManagerDealInputParam& in_param
+        );
+
+    //const std::vector<TooltipRequestData>& GetTooltipRequestData() const { return _tooltip_request_data; }
+
 private:
     std::vector<UIRootInputStateTouch> _touch_array;
 
-    //// current focus, using unique pointer so no weak pointer, so just travers hierarchy to update flag?
-    void* _focus_source_token;
+    /// current focus, using unique pointer so no weak pointer, so just traverse hierarchy to update flag?
+    //void* _focus_source_token;
     float _time_delta;
 
-    //void* _focus_node;
+    // cache the tooltip layer reference
+    UIData* _tooltip_layer_source_token;
+    UIComponentTooltipLayer* _tooltip_layer;
 
-    //// node that click started on
-    //// node that drag started from
-    //// node being dragged
-
-    //bool _mouse_valid;
-    //int _mouse_prev_x;
-    //int _mouse_prev_y;
-    //int _mouse_delta_x;
-    //int _mouse_delta_y;
-    //bool _mouse_prev_left_down;
-    //bool _mouse_left_down_change;
-
-    //VectorFloat2 _mouse_pos;
+    std::vector<TooltipRequestData> _tooltip_request_data;
 
 };

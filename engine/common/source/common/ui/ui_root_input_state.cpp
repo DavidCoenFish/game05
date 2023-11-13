@@ -1,5 +1,7 @@
 #include "common/common_pch.h"
 #include "common/ui/ui_root_input_state.h"
+
+#include "common/ui/ui_component/ui_component_tooltip_layer.h"
 #include "common/ui/ui_manager.h"
 #include "common/log/log.h"
 #include "common/math/dsc_math.h"
@@ -25,17 +27,25 @@ UIRootInputStateTouch::UIRootInputStateTouch(
 
 UIRootInputState::UIRootInputState()
     : _touch_array()
-    , _focus_source_token(nullptr)
+    , _time_delta(0.0f)
+    , _tooltip_layer_source_token(nullptr)
+    , _tooltip_layer(nullptr)
+    //, _focus_source_token(nullptr)
 {
     // Nop
 }
 
 void UIRootInputState::Update(
     const UIManagerDealInputParam& in_param,
-    const VectorInt2& in_root_size
+    const VectorInt2& in_root_size,
+    UIData* const in_tooltip_layer_source_token
     )
 {
-    _time_delta = in_param._time_delta;
+    //_time_delta = in_param._time_delta;
+
+    _tooltip_request_data.clear();
+    _tooltip_layer = nullptr;
+    _tooltip_layer_source_token = in_tooltip_layer_source_token;
 
     std::map<int, UIRootInputStateTouch> touch_map;
     for (const auto iter : _touch_array)
@@ -110,7 +120,49 @@ void UIRootInputState::Update(
         }
     }
 
-
     return;
 }
 
+void UIRootInputState::SubmitComponent(IUIComponent* const in_component)
+{
+    if (nullptr == in_component)
+    {
+        return;
+    }
+    if (_tooltip_layer_source_token == in_component->GetSourceToken())
+    {
+        _tooltip_layer = dynamic_cast<UIComponentTooltipLayer*>(in_component);
+    }
+    return;
+}
+
+void UIRootInputState::RequestTooltip(
+    const VectorFloat2& in_touch_pos, 
+    const VectorFloat4& in_emitter_screenspace_clip, 
+    const std::string& in_text_run_string,
+    void* const in_source_token
+    )
+{
+    _tooltip_request_data.push_back(TooltipRequestData(
+        in_touch_pos, 
+        in_emitter_screenspace_clip, 
+        in_text_run_string,
+        in_source_token
+        ));
+}
+
+// Finialise tooltip, or does that just when we hit the UIComponentTooltipLayer, or is that the input to Finialise
+// this may need UpdateHierarchy/size param? 
+void UIRootInputState::FinialiseTooltip(
+    const UIManagerDealInputParam& in_param
+    )
+{
+    if (nullptr != _tooltip_layer)
+    {
+        _tooltip_layer->FinalizeTooltips(
+            _tooltip_request_data,
+            in_param
+            );
+    }
+    return;
+}

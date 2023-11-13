@@ -1,7 +1,6 @@
 #pragma once
 
 #include "common/ui/ui_component/i_ui_component.h"
-#include "common/ui/ui_component/ui_component_default.h"
 #include "common/text/text_enum.h"
 
 class ITextRunData;
@@ -10,6 +9,7 @@ class TextFont;
 
 class UIComponentTextRun : public IUIComponent
 {
+    typedef IUIComponent TSuper;
 public:
     UIComponentTextRun(
         const UIBaseColour& in_base_colour,
@@ -19,12 +19,6 @@ public:
         );
     ~UIComponentTextRun();
 
-    const bool SetBase(
-        const UIBaseColour& in_base_colour,
-        const UILayout& in_layout,
-        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
-        );
-
     const bool Set(
         const bool in_width_limit_enabled,
         const TextEnum::HorizontalLineAlignment in_horizontal,
@@ -33,18 +27,6 @@ public:
         );
 
 private:
-    virtual const bool SetStateFlag(const UIStateFlag in_state_flag) override;
-    virtual const bool SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable) override;
-    virtual const UIStateFlag GetStateFlag() const override;
-
-    virtual const UILayout& GetLayout() const override; 
-    virtual void SetLayoutOverride(const UILayout& in_override) override; 
-    virtual void SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool manual_horizontal, const bool manual_vertical) override;
-
-    // Make sorting children easier
-    virtual void SetSourceToken(void* in_source_ui_data_token) override;
-    virtual void* GetSourceToken() const override;
-
     virtual const bool UpdateHierarchy(
         UIData* const in_data,
         UIHierarchyNodeChildData& in_out_child_data,
@@ -77,11 +59,7 @@ private:
         UIHierarchyNode& in_node
         ) override;
 
-    virtual const VectorFloat4 GetTintColour() const override;
-
 private:
-    UIComponentDefault _component_default;
-
     int _change_id;
     std::unique_ptr<TextRun> _text_run;
 

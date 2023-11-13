@@ -8,7 +8,8 @@ IUIInput::~IUIInput()
 
 void IUIInput::OnInputTouch(
     const VectorFloat4&,
-    const VectorFloat2&
+    const VectorFloat2&,
+    std::string&
     )
 {
     // Nop
@@ -26,7 +27,17 @@ void IUIInput::OnInputRepeat(
     const VectorFloat4&,
     const VectorFloat2&,
     const float,
-    const float
+    const float,
+    std::string&
+    )
+{
+    // Nop
+}
+
+void IUIInput::OnHover(
+    const VectorFloat4&,
+    const VectorFloat2&,
+    std::string&
     )
 {
     // Nop

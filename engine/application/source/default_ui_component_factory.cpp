@@ -24,6 +24,7 @@
 #include "common/ui/ui_component/ui_component_stack.h"
 #include "common/ui/ui_component/ui_component_string.h"
 #include "common/ui/ui_component/ui_component_text_run.h"
+#include "common/ui/ui_component/ui_component_tooltip_layer.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_base_colour.h"
 #include "common/ui/ui_enum.h"
@@ -31,12 +32,13 @@
 #include "common/ui/ui_layout.h"
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_data/ui_data_disable.h"
-#include "common/ui/ui_data/ui_data_string.h"
-#include "common/ui/ui_data/ui_data_float.h"
-#include "common/ui/ui_data/ui_data_text_run.h"
-#include "common/ui/ui_data/ui_data_scroll.h"
 #include "common/ui/ui_data/ui_data_list_box.h"
 #include "common/ui/ui_data/ui_data_manual_scroll.h"
+#include "common/ui/ui_data/ui_data_scroll.h"
+#include "common/ui/ui_data/ui_data_slider.h"
+#include "common/ui/ui_data/ui_data_string.h"
+#include "common/ui/ui_data/ui_data_text_run.h"
+#include "common/ui/ui_data/ui_data_tooltip_layer.h"
 
 namespace
 {
@@ -207,6 +209,21 @@ namespace
             );
         return s_layout;
     }
+    const UILayout& GetUILayoutQuaterShrink()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.0f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            true,
+            true
+            );
+        return s_layout;
+    }
+
     const UILayout& GetUILayoutQuadrant1() //upper left
     {
         static UILayout s_layout(
@@ -746,6 +763,14 @@ namespace
             VectorFloat4(0.75f, 0.75f, 0.75f, 1.0f) //0.5f, 0.5f, 0.5f, 0.5f)
             );
     }
+    const UIBaseColour GetUIBaseColourDarkWhite(const int)
+    {
+        return UIBaseColour(
+            VectorFloat4(0.5f, 0.5f, 0.5f, 0.5f),
+            true,
+            VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f)
+            );
+    }
 
     typedef const VectorFloat4& (*TGetColour)();
     const VectorFloat4& GetColourTransparent()
@@ -806,7 +831,7 @@ namespace
         }
         else
         {
-            if (true == canvas->Set(
+            if (true == canvas->SetModel(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
                 in_get_ui_state_flag_tint_array()
@@ -841,7 +866,7 @@ namespace
         }
         else
         {
-            if (true == content->SetBase(
+            if (true == content->SetModel(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
                 in_get_ui_state_flag_tint_array()
@@ -887,10 +912,15 @@ namespace
         }
         else
         {
-            if (true == content->Set(
+            if (true == content->SetModel(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
-                in_get_ui_state_flag_tint_array(),
+                in_get_ui_state_flag_tint_array()
+                ))
+            {
+                dirty = true;
+            }
+            if (true == content->SetModelOther(
                 in_effect_type,
                 in_get_ui_coord_a(),
                 in_get_ui_coord_b(),
@@ -927,7 +957,7 @@ namespace
         }
         else
         {
-            if (true == content->SetBase(
+            if (true == content->SetModel(
                 in_get_base_colour(in_factory_param._create_index),
                 GetUILayoutShrink(), //GetUILayout()))
                 GetUIStateFlagTintArray()))
@@ -987,7 +1017,7 @@ namespace
         }
         else
         {
-            if (true == content->SetBase(
+            if (true == content->SetModel(
                     in_get_base_colour(in_factory_param._create_index),
                     in_get_layout_ref(),
                     in_get_ui_state_flag_tint_array()))
@@ -1050,7 +1080,7 @@ namespace
         }
         else
         {
-            if (true == content->SetBase(
+            if (true == content->SetModel(
                     in_get_base_colour(in_factory_param._create_index),
                     in_get_layout_ref(),
                     in_get_ui_state_flag_tint_array()
@@ -1101,10 +1131,15 @@ namespace
         }
         else
         {
-            if (true == content->Set(
+            if (true == content->SetModel(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
-                in_get_ui_state_flag_tint_array(),
+                in_get_ui_state_flag_tint_array()
+                ))
+            {
+                dirty = true;
+            }
+            if (true == content->SetModelOther(
                 in_orientation,
                 in_get_gap_ref()
                 ))
@@ -1144,10 +1179,15 @@ namespace
         }
         else
         {
-            if (true == content->Set(
+            if (true == content->SetModel(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
-                in_get_ui_state_flag_tint_array(),
+                in_get_ui_state_flag_tint_array()
+                ))
+            {
+                dirty = true;
+            }
+            if (true == content->SetModelOther(
                 in_get_grid_size_horizontal(),
                 in_get_grid_size_vertical()
                 ))
@@ -1184,10 +1224,15 @@ namespace
         }
         else
         {
-            if (true == content->SetBase(
+            if (true == content->SetModel(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
-                in_get_ui_state_flag_tint_array(),
+                in_get_ui_state_flag_tint_array()
+                ))
+            {
+                dirty = true;
+            }
+            if (true == content->SetModelOther(
                 in_orientation
                 ))
             {
@@ -1223,10 +1268,15 @@ namespace
         }
         else
         {
-            if (true == content->SetBase(
+            if (true == content->SetModel(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
-                in_get_ui_state_flag_tint_array(),
+                in_get_ui_state_flag_tint_array()
+                ))
+            {
+                dirty = true;
+            }
+            if (true == content->SetModelOther(
                 in_orientation
                 ))
             {
@@ -1260,7 +1310,7 @@ namespace
         }
         else
         {
-            if (true == content->SetBase(
+            if (true == content->SetModel(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
                 in_get_ui_state_flag_tint_array()
@@ -1296,7 +1346,7 @@ namespace
         }
         else
         {
-            if (true == content->SetBase(
+            if (true == content->SetModel(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
                 in_get_ui_state_flag_tint_array()
@@ -1337,12 +1387,53 @@ namespace
         }
         else
         {
-            if (true == content->Set(
+            if (true == content->SetModel(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
-                in_get_ui_state_flag_tint_array(),
+                in_get_ui_state_flag_tint_array()
+                ))
+            {
+                dirty = true;
+            }
+            if (true == content->SetModelOther(
                 in_direction,
                 duration
+                ))
+            {
+                dirty = true;
+            }
+        }
+        return dirty;
+    }
+
+    template<
+        TGetUILayoutRef in_get_layout_ref = GetUILayout,
+        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
+        TGetUIStateFlagTintArray in_get_ui_state_flag_tint_array = GetUIStateFlagTintArray
+        >
+    const bool FactoryTooltipLayer(
+        std::unique_ptr<IUIComponent>& in_out_content,
+        const UIComponentFactoryParam& in_factory_param
+        )
+    {
+        UIComponentTooltipLayer* content = dynamic_cast<UIComponentTooltipLayer*>(in_out_content.get());
+        bool dirty = false;
+        if (nullptr == content)
+        {
+            dirty = true;
+            auto new_content = std::make_unique<UIComponentTooltipLayer>(
+                in_get_base_colour(in_factory_param._create_index),
+                in_get_layout_ref(),
+                in_get_ui_state_flag_tint_array()
+                );
+            in_out_content = std::move(new_content);
+        }
+        else
+        {
+            if (true == content->SetModel(
+                in_get_base_colour(in_factory_param._create_index),
+                in_get_layout_ref(),
+                in_get_ui_state_flag_tint_array()
                 ))
             {
                 dirty = true;
@@ -1567,6 +1658,17 @@ void DefaultUIComponentFactory::Populate(
         GetUICoordDefaultGap,
         GetUICoordDefaultGap
         >);
+    in_ui_manager.AddContentFactory("effect_corner_tiny", FactoryEffect<
+        GetUILayout,
+        UIEffectEnum::TRoundCorners,
+        GetUIBaseColourDefault,
+        GetUIStateFlagTintArray,
+        GetUICoordDefaultGapHalf,
+        GetUICoordDefaultGapHalf,
+        GetUICoordDefaultGapHalf,
+        GetUICoordDefaultGapHalf
+        >);
+
     in_ui_manager.AddContentFactory("effect_corner_modal", FactoryEffect<
         GetUILayoutModal,
         UIEffectEnum::TRoundCorners,
@@ -1694,6 +1796,15 @@ void DefaultUIComponentFactory::Populate(
         TextEnum::VerticalBlockAlignment::Top,
         true
         >);
+    in_ui_manager.AddContentFactory("text_run_tooltip", FactoryTextRun<
+        GetUILayoutQuaterShrink,
+        GetUIBaseColourDarkWhite,
+        GetUIStateFlagTintArray,
+        s_default_font_size,
+        TextEnum::HorizontalLineAlignment::Middle,
+        TextEnum::VerticalBlockAlignment::Top,
+        true
+        >);
 
     in_ui_manager.AddContentFactory("UIDataButton", FactoryButton<
         GetUILayoutRow, 
@@ -1727,7 +1838,7 @@ void DefaultUIComponentFactory::Populate(
         GetUIBaseColourGrey
         >);
 
-    in_ui_manager.AddContentFactory("UIDataFloat", FactorySlider<>);
+    in_ui_manager.AddContentFactory("UIDataSlider", FactorySlider<>);
     in_ui_manager.AddContentFactory("slider_horizontal", FactorySlider<
         GetUILayoutSliderHorizontal
         >);
@@ -1747,6 +1858,7 @@ void DefaultUIComponentFactory::Populate(
         UISlideDirection::TFromTop,
         1000
         >);
+    in_ui_manager.AddContentFactory("UIDataTooltipLayer", FactoryTooltipLayer<>);
 
 
     return;

@@ -64,7 +64,7 @@ UIComponentEffect::UIComponentEffect(
     const UICoord& in_coord_c,
     const UICoord& in_coord_d
     )
-    : _component_default(
+    : IUIComponent(
         in_base_colour,
         in_layout,
         in_state_flag_tint_array
@@ -86,10 +86,7 @@ UIComponentEffect::~UIComponentEffect()
 }
 
 // return true if modified, else false
-const bool UIComponentEffect::Set(
-    const UIBaseColour& in_base_colour,
-    const UILayout& in_layout,
-    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
+const bool UIComponentEffect::SetModelOther(
     const UIEffectEnum in_type,
     const UICoord& in_coord_a,
     const UICoord& in_coord_b,
@@ -98,15 +95,6 @@ const bool UIComponentEffect::Set(
     )
 {
     bool dirty = false;
-
-    if (true == _component_default.SetBase(
-        in_base_colour,
-        in_layout,
-        in_state_flag_tint_array
-        ))
-    {
-        dirty = true;
-    }
 
     if (_type != in_type)
     {
@@ -142,50 +130,6 @@ const bool UIComponentEffect::Set(
     return dirty;
 }
 
-const bool UIComponentEffect::SetStateFlag(const UIStateFlag in_state_flag)
-{
-    return _component_default.SetStateFlag(in_state_flag);
-}
-
-const bool UIComponentEffect::SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable)
-{
-    return _component_default.SetStateFlagBit(in_state_flag_bit, in_enable);
-}
-
-const UIStateFlag UIComponentEffect::GetStateFlag() const
-{
-    return _component_default.GetStateFlag();
-}
-
-const UILayout& UIComponentEffect::GetLayout() const
-{
-    return _component_default.GetLayout();
-}
-
-void UIComponentEffect::SetLayoutOverride(const UILayout& in_override)
-{
-    _component_default.SetLayoutOverride(in_override);
-    return;
-}
-
-void UIComponentEffect::SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool in_manual_horizontal, const bool in_manual_vertical)
-{
-    _component_default.SetUVScrollManual(in_uv_scroll, in_manual_horizontal, in_manual_vertical);
-    return;
-}
-
-// Make sorting children easier
-void UIComponentEffect::SetSourceToken(void* in_source_ui_data_token)
-{
-    _component_default.SetSourceToken(in_source_ui_data_token);
-    return;
-}
-
-void* UIComponentEffect::GetSourceToken() const
-{
-    return _component_default.GetSourceToken();
-}
-
 const bool UIComponentEffect::UpdateHierarchy(
     UIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
@@ -193,7 +137,7 @@ const bool UIComponentEffect::UpdateHierarchy(
     )
 {
     bool dirty = false;
-    if (true == _component_default.UpdateHierarchy(
+    if (true == TSuper::UpdateHierarchy(
         in_data,
         in_out_child_data,
         in_param
@@ -230,9 +174,8 @@ const bool UIComponentEffect::UpdateSize(
     UIScreenSpace& out_screen_space
     )
 {
-    bool dirty = _component_default.UpdateSize(
+    bool dirty = TSuper::UpdateSize(
         in_draw_system,
-        *this,
         in_parent_size,
         in_parent_offset,
         in_parent_window,
@@ -279,23 +222,6 @@ const bool UIComponentEffect::UpdateSize(
     }
 
     return dirty;
-}
-
-void UIComponentEffect::GetDesiredSize(
-    VectorInt2& out_layout_size, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
-    VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
-    const VectorInt2& in_parent_window,
-    const float in_ui_scale,
-    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    )
-{
-    return _component_default.GetDesiredSize(
-        out_layout_size,
-        out_desired_size,
-        in_parent_window,
-        in_ui_scale,
-        in_out_node
-        );
 }
 
 const bool UIComponentEffect::PreDraw(
@@ -346,7 +272,7 @@ const bool UIComponentEffect::PreDraw(
             if (nullptr != _shader_constant_buffer)
             {
                 UIManager::TShaderConstantBuffer& constant_0 = _shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
-                const auto new_tint = _component_default.GetTintColour();
+                const auto new_tint = TSuper::GetTintColour();
                 if (constant_0._tint_colour != new_tint)
                 {
                     constant_0._tint_colour = new_tint;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "common/ui/ui_component/i_ui_component.h"
-#include "common/ui/ui_component/ui_component_default.h"
+
 #include "common/ui/ui_coord.h"
 
 class VectorInt4;
@@ -31,6 +31,7 @@ private:
 /// put the childrent, left to right, top to bottom, into the cells defined by the arrays of UIComponentGridSizeData
 class UIComponentGrid : public IUIComponent
 {
+    typedef IUIComponent TSuper;
 public:
     UIComponentGrid(
         const UIBaseColour& in_base_colour,
@@ -42,35 +43,12 @@ public:
         );
     virtual ~UIComponentGrid();
 
-    const bool Set(
-        const UIBaseColour& in_base_colour,
-        const UILayout& in_layout,
-        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
+    const bool SetModelOther(
         const std::vector<UIComponentGridSizeData>& in_horizontal_size_array, // Left to right
         const std::vector<UIComponentGridSizeData>& in_vertical_size_array // Top to bottom
         );
 
 private:
-    virtual const bool SetStateFlag(const UIStateFlag in_state_flag) override;
-    virtual const bool SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable) override;
-    virtual const UIStateFlag GetStateFlag() const override;
-
-    virtual const UILayout& GetLayout() const override; 
-    virtual void SetLayoutOverride(const UILayout& in_override) override; 
-    virtual void SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool manual_horizontal, const bool manual_vertical) override;
-
-    /// Make sorting children easier
-    virtual void SetSourceToken(void* in_source_ui_data_token) override;
-    /// Make sorting children easier
-    virtual void* GetSourceToken() const override;
-
-    /// make the hirearchy match the model (UIData)
-    virtual const bool UpdateHierarchy(
-        UIData* const in_data,
-        UIHierarchyNodeChildData& in_out_child_data,
-        const UIHierarchyNodeUpdateHierarchyParam& in_param
-        ) override;
-
     /// convert the layout data and parent size to the texture size, geometry size and uv
     /// certain component types may do slightly different operations, but the default is to call GetDesiredSize
     virtual const bool UpdateSize(
@@ -95,12 +73,6 @@ private:
         UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         ) override;
 
-    /// deal with the component being drawn to the node texture
-    virtual const bool PreDraw(
-        const UIManagerDrawParam& in_draw_param,
-        UIHierarchyNode& in_node
-        ) override;
-
     /// we don't expand for children, but do have to get the offest and window size for each child cells
     void GetGridDesiredSize(
         VectorInt2& out_layout_size, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
@@ -111,11 +83,7 @@ private:
         std::vector<VectorInt4>& out_child_window_offset // left to right, top to bottom
         );
 
-    virtual const VectorFloat4 GetTintColour() const override;
-
 private:
-    /// Default properties of a component
-    UIComponentDefault _component_default;
     /// Left to right
     std::vector<UIComponentGridSizeData> _horizontal_size_array;
     /// Top to bottom

@@ -1,42 +1,47 @@
 #pragma once
 
+class UIRootInputState;
 class VectorFloat2;
 class VectorFloat4;
 
-//enum class UIInputMouseAction
-//{
-//    TNone,
-//    TLeftDown,
-//    TDrag,
-//    TClick, // Left up on the same element that got the left down
-//    TDiscard, // Left up off element
-//    TDrop, // Left up over this element, but it didn't have the left down
-//    THover
-//};
 
+/// Interface class for elments interacting with input.
+/// moving towards treating mouse input as anoter touch.
+/// may mean an extra touch is added when right mouse button is down, and a persitant touch for left button up or down
 class IUIInput
 {
 public:
     virtual ~IUIInput();
 
-    //virtual void OnMouse(
-    //    const UIInputMouseAction in_action,
-    //    const VectorFloat2& in_screen_pos_or_delta //
-    //    ) = 0;
-
+    /// treat mouse as just another touch, and touch as finger pressing/touching screen, or mouse click held down
+    /// output a string for the tooltip, if there is any
     virtual void OnInputTouch(
         const VectorFloat4& in_screen_pos,
-        const VectorFloat2& in_mouse_pos
+        const VectorFloat2& in_touch_pos,
+        std::string& out_tooltip
         );
+
+    /// A click is when the touch is released over the same element the touch started on, ie, allow drag off and release as cancel
     virtual void OnInputClick(
         const VectorFloat4& in_screen_pos,
-        const VectorFloat2& in_mouse_pos
+        const VectorFloat2& in_touch_pos
         );
+
+    /// allow slider buttons to step value when button is held, holding touch on element can repeat an action
+    /// output a string for the tooltip, if there is any
     virtual void OnInputRepeat(
         const VectorFloat4& in_screen_pos,
-        const VectorFloat2& in_mouse_pos,
+        const VectorFloat2& in_touch_pos,
         const float in_duration,
-        const float in_last_timestep
+        const float in_last_timestep,
+        std::string& out_tooltip
+        );
+
+    /// output a string for the tooltip, if there is any
+    virtual void OnHover(
+        const VectorFloat4& in_screen_pos,
+        const VectorFloat2& in_touch_pos,
+        std::string& out_tooltip
         );
 
 };

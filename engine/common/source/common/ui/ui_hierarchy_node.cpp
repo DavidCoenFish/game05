@@ -8,10 +8,11 @@
 #include "common/ui/i_ui_input.h"
 #include "common/ui/i_ui_model.h"
 #include "common/ui/ui_component/ui_component_canvas.h"
-#include "common/ui/ui_component/ui_component_default.h"
+
 #include "common/ui/ui_component/ui_component_stack.h"
 #include "common/ui/ui_component/ui_component_string.h"
 #include "common/ui/ui_component/ui_component_texture.h"
+#include "common/ui/ui_component/ui_component_tooltip_layer.h"
 #include "common/ui/ui_coord.h"
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_manager.h"
@@ -486,6 +487,7 @@ void UIHierarchyNode::UpdateSize(
     return;
 }
 
+// TODO: at some point need to collect "input" elements as potential navigation targets/ resolve navigation keypress
 const bool UIHierarchyNode::DealInput(
     UIRootInputState& in_input_state,
     const bool in_parent_inside,
@@ -514,6 +516,7 @@ const bool UIHierarchyNode::DealInput(
         }
 
         IUIInput* const input = dynamic_cast<IUIInput*>(component);
+        in_input_state.SubmitComponent(component);
 
         bool inside = false;
         bool action = nullptr == input ? in_action : false;
@@ -522,6 +525,7 @@ const bool UIHierarchyNode::DealInput(
         // update state flag for all touches
         for (auto& touch : in_input_state.GetTouchArray())
         {
+            std::string tooltip;
             const bool local_inside = child_data._screen_space->GetClipRef().Inside(touch._touch_pos_current);
 
             if ((true == in_parent_inside) && 
@@ -533,6 +537,10 @@ const bool UIHierarchyNode::DealInput(
                     (touch._active_source_token == source_token))
                 {
                     hover = true;
+                    if (nullptr != input)
+                    {
+                        input->OnHover(child_data._screen_space->GetPosRef(), touch._touch_pos_current, tooltip);
+                    }
                 }
             }
 
@@ -543,7 +551,7 @@ const bool UIHierarchyNode::DealInput(
                 (touch._active_source_token == source_token) &&
                 (false == touch._end))
             {
-                input->OnInputTouch(child_data._screen_space->GetPosRef(), touch._touch_pos_current);
+                input->OnInputTouch(child_data._screen_space->GetPosRef(), touch._touch_pos_current, tooltip);
             }
 
             // Click and hold button (repeat)
@@ -557,7 +565,8 @@ const bool UIHierarchyNode::DealInput(
                     child_data._screen_space->GetPosRef(),
                     touch._touch_pos_current,
                     touch._active_duration,
-                    in_input_state.GetTimeDelta()
+                    in_input_state.GetTimeDelta(),
+                    tooltip
                     );
             }
 
@@ -576,6 +585,10 @@ const bool UIHierarchyNode::DealInput(
                 //touch._end = false; // consume input, is done by matching source_token
             }
 
+            if (false == tooltip.empty())
+            {
+                in_input_state.RequestTooltip(touch._touch_pos_current, child_data._screen_space->GetClipRef(), tooltip, source_token);
+            }
         }
 
         // recurse
@@ -625,6 +638,13 @@ const bool UIHierarchyNode::DealInput(
                 dirty = true;
              }
         }
+
+        // alternative to casting every component to a tooltip layer is making a seperate UIManager method/extrnally having a reference to the tooltip layer to hand the input state?
+        //UIComponentTooltipLayer* const tooltip_layer = dynamic_cast<UIComponentTooltipLayer*>(component);
+        //if (nullptr != tooltip_layer)
+        //{
+        //    in_input_state.FinialiseTooltip(*tooltip_layer);
+        //}
     }
 
     return dirty;

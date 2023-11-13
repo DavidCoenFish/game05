@@ -18,6 +18,7 @@
 #include "common/text/text_manager.h"
 #include "common/ui/ui_component/ui_component_canvas.h"
 #include "common/ui/ui_component/ui_component_texture.h"
+#include "common/ui/ui_component/ui_component_tooltip_layer.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_manager.h"
 #include "common/ui/i_ui_model.h"
@@ -25,13 +26,14 @@
 #include "common/ui/ui_data/ui_data.h"
 #include "common/ui/ui_data/ui_data_button.h"
 #include "common/ui/ui_data/ui_data_disable.h"
-#include "common/ui/ui_data/ui_data_float.h"
+#include "common/ui/ui_data/ui_data_slider.h"
 #include "common/ui/ui_data/ui_data_list_box.h"
 #include "common/ui/ui_data/ui_data_manual_scroll.h"
 #include "common/ui/ui_data/ui_data_scroll.h"
 #include "common/ui/ui_data/ui_data_string.h"
 #include "common/ui/ui_data/ui_data_text_run.h"
 #include "common/ui/ui_data/ui_data_toggle.h"
+#include "common/ui/ui_data/ui_data_tooltip_layer.h"
 #include "common/util/timer.h"
 #include "common/util/vector_helper.h"
 #include "common/window/window_application_param.h"
@@ -151,7 +153,7 @@ namespace
     }
 
     std::shared_ptr<UIData> BuildSliderButton(
-        const std::shared_ptr<UIDataFloat>& in_data_float, 
+        const std::shared_ptr<UIDataSlider>& in_data_float, 
         const float in_step_mul,
         const std::string& in_text
         )
@@ -553,6 +555,70 @@ namespace
             );
     }
 
+    std::shared_ptr<UIData> BuildTooltipLayer()
+    {
+        std::vector<std::shared_ptr<UIData>> array_child_data;
+        UIDataTooltipLayer::TTooltipLayoutTargetArray tooltip_layout_target_array;
+        std::vector<std::shared_ptr<UIDataTextRun>> text_run_array;
+        for (int index = 0; index < UIDataTooltipLayer::Variables::TMaxTooltipCount; ++index)
+        {
+            auto text_run = std::make_shared<UIDataTextRun>(
+                "<Colour 1 1 1 1>Hello Human", 
+                LocaleISO_639_1::Default,
+                "text_run_tooltip"
+                );
+            text_run_array.push_back(text_run);
+#if 1
+            tooltip_layout_target_array[index] = text_run;
+            array_child_data.push_back(text_run);
+#else
+            tooltip_layout_target_array[index] = std::make_shared<UIData>("UIData", 
+                std::vector<std::shared_ptr<UIData>>({
+                    std::make_shared<UIData>(
+                        "effect_drop_shadow_small",
+                        std::vector<std::shared_ptr<UIData>>({
+                            std::make_shared<UIData>(
+                                "UIData",
+                                std::vector<std::shared_ptr<UIData>>({
+                                    std::make_shared<UIData>(
+                                        "canvas_margin_tiny",
+
+                                        std::vector<std::shared_ptr<UIData>>({
+                                            std::make_shared<UIData>(
+                                                "effect_corner_tiny",
+                                                std::vector<std::shared_ptr<UIData>>({
+                                                    text_run
+                                                })
+                                            )
+                                        })
+                                    )
+                                })
+                            )
+                        })
+                    )
+                })
+            );
+#endif
+        }
+
+        UIDataTooltipLayer::TOnTooltipChange on_tooltip_change = [text_run_array](const int in_tooltip_index, const VectorFloat2&, const VectorFloat4&, const std::string& in_tooltip){
+            if ((in_tooltip_index < 0) || (text_run_array.size() <= in_tooltip_index))
+            {
+                return;
+            }
+            text_run_array[in_tooltip_index]->SetMarkupStringUtf8(in_tooltip);
+            return;
+        };
+
+        return std::make_shared<UIDataTooltipLayer>(
+            tooltip_layout_target_array,
+            on_tooltip_change,
+            UITooltipType::TRelativeToTouch,
+            1.0f, 
+            "UIDataTooltipLayer",
+            array_child_data
+            );
+    }
 };
 
 class UIModel : public IUIModel
@@ -589,16 +655,29 @@ public:
             );
 
         auto data_ui_scale_knot = BuildSliderKnot();
-        auto data_map_ui_scale = std::make_shared<UIDataFloat>(
+        auto data_map_ui_scale = std::make_shared<UIDataSlider>(
             1.0f,
             0.05f,
             VectorFloat2(0.25f, 3.0f),
             [this](const float in_new_value){
-                auto data = std::dynamic_pointer_cast<UIDataFloat>(_data_map["ui_scale"]);
+                auto data = std::dynamic_pointer_cast<UIDataSlider>(_data_map["ui_scale"]);
                 if (nullptr != data)
                 {
                     data->SetValue(in_new_value);
                 }
+            },
+            [this]()->const std::string{
+                auto data = std::dynamic_pointer_cast<UIDataSlider>(_data_map["ui_scale"]);
+                if (nullptr != data)
+                {
+                    std::stringstream stream;
+                    stream << std::fixed;
+                    stream << std::setprecision(1);
+                    stream << data->GetValue();
+                    std::string stream_string = stream.str();
+                    return stream_string;
+                }
+                return std::string();
             },
             data_ui_scale_knot,
             "slider_horizontal",
@@ -631,16 +710,29 @@ public:
             );
 
         auto debug_slider_knot = BuildSliderKnot();
-        auto debug_slider_contents = std::make_shared<UIDataFloat>(
+        auto debug_slider_contents = std::make_shared<UIDataSlider>(
             0.5f,
             0.05f,
             VectorFloat2(0.0f, 1.0f),
             [this](const float in_new_value){
-                auto data = std::dynamic_pointer_cast<UIDataFloat>(_data_map["debug_slider"]);
+                auto data = std::dynamic_pointer_cast<UIDataSlider>(_data_map["debug_slider"]);
                 if (nullptr != data)
                 {
                     data->SetValue(in_new_value);
                 }
+            },
+            [this]()->const std::string{
+                auto data = std::dynamic_pointer_cast<UIDataSlider>(_data_map["debug_slider"]);
+                if (nullptr != data)
+                {
+                    std::stringstream stream;
+                    stream << std::fixed;
+                    stream << std::setprecision(1);
+                    stream << data->GetValue();
+                    std::string stream_string = stream.str();
+                    return stream_string;
+                }
+                return std::string();
             },
             debug_slider_knot,
             "slider_horizontal",
@@ -791,6 +883,9 @@ public:
             "list_box",
             locale_name_array
             );
+
+        auto data_tooltip_layer = BuildTooltipLayer();
+        _data_map["tooltip_layer"] = data_tooltip_layer;
 
         // Launch Left banner
         auto data_main_launch = std::make_shared<UIData>(
@@ -1159,12 +1254,6 @@ public:
                 ),
 #endif
 
-#if 0
-            // debug string
-            _data_build_info,
-#endif
-
-
 #if 1
             // Main page data
             _data_main,
@@ -1177,8 +1266,14 @@ public:
 
 #if 1
             // Build info
-            _data_build
+            _data_build,
 #endif
+
+#if 1
+            // tooltip layer
+            data_tooltip_layer
+#endif
+
 
             });
     }
@@ -1257,7 +1352,6 @@ private:
     std::shared_ptr<UIData> _data_build_info;
     std::shared_ptr<UIData> _data_build_version;
     std::shared_ptr<UIDataString> _data_build_fps;
-
 };
 
 IWindowApplication* const ApplicationBasicUI::Factory(
@@ -1371,7 +1465,7 @@ void ApplicationBasicUI::Update()
         #if 1
         if ((nullptr != _draw_resource) && (nullptr != _draw_resource->_ui_model))
         {
-            auto data = dynamic_cast<UIDataFloat*>(_draw_resource->_ui_model->GetData("ui_scale"));
+            auto data = dynamic_cast<UIDataSlider*>(_draw_resource->_ui_model->GetData("ui_scale"));
             if (nullptr != data)
             {
                 ui_scale = data->GetValue();
@@ -1416,8 +1510,10 @@ void ApplicationBasicUI::Update()
                 mouse_left_button,
                 mouse_right_button
                 );
+            UIData* const tooltip_layer = _draw_resource->_ui_model->GetData("tooltip_layer");
              _draw_resource->_ui_manager->DealInput(
                 *_draw_resource->_ui_hierarchy_node,
+                tooltip_layer,
                 UIManagerDealInputParam(
                     std::vector<UIManagerDealInputTouch>({
                         UIManagerDealInputTouch(

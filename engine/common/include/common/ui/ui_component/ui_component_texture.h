@@ -1,11 +1,12 @@
 #pragma once
 
 #include "common/ui/ui_component/i_ui_component.h"
-#include "common/ui/ui_component/ui_component_default.h"
+
 
 class DrawSystemFrame;
 class HeapWrapperItem;
 class Shader;
+class ShaderConstantBuffer;
 class IResource;
 class UIGeometry;
 class UITexture;
@@ -23,19 +24,20 @@ UIHierarchyNode // N0
             _texture // T1 texture or backbuffer A1 draws to
             _child_node_array // A1
 
-if _component C1 is our UIComponentTexture, it has an custom set texture which is drawn to _texture T1 using out local geometry
-_geometry G1 is then used by the UIHierarchyNode::Draw to draw T1 to T0
+if _component C1 is our UIComponentTexture, it has an custom set texture which is drawn to _texture T1 using our local geometry
+_geometry G1 is then used by the UIHierarchyNode::Draw of N0 to draw T1 to T0
 */
 
 class UIComponentTexture : public IUIComponent
 {
+    typedef IUIComponent TSuper;
 public:
     UIComponentTexture(
         const UIBaseColour& in_base_colour,
         const UILayout& in_layout,
         const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
-        const std::shared_ptr<HeapWrapperItem>& in_shader_resource_view_handle,
-        const std::shared_ptr<IResource>& in_shader_resource
+        const std::shared_ptr<HeapWrapperItem>& in_shader_resource_view_handle = nullptr,
+        const std::shared_ptr<IResource>& in_shader_resource = nullptr
         );
     virtual ~UIComponentTexture();
 
@@ -45,43 +47,10 @@ public:
         );
 
 private:
-    virtual const bool SetStateFlag(const UIStateFlag in_state_flag) override;
-    virtual const bool SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable) override;
-    virtual const UIStateFlag GetStateFlag() const override;
-
-    virtual const UILayout& GetLayout() const override; 
-    virtual void SetLayoutOverride(const UILayout& in_override) override; 
-    virtual void SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool manual_horizontal, const bool manual_vertical) override;
-
-    // Make sorting children easier
-    virtual void SetSourceToken(void* in_source_ui_data_token) override;
-    virtual void* GetSourceToken() const override;
-
     virtual const bool UpdateHierarchy(
         UIData* const in_data,
         UIHierarchyNodeChildData& in_out_child_data,
         const UIHierarchyNodeUpdateHierarchyParam& in_param
-        ) override;
-
-    virtual const bool UpdateSize(
-        DrawSystem* const in_draw_system,
-        const VectorInt2& in_parent_size,
-        const VectorInt2& in_parent_offset,
-        const VectorInt2& in_parent_window,
-        const float in_ui_scale,
-        const float in_time_delta, 
-        UIGeometry& in_out_geometry, 
-        UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-        const UIScreenSpace& in_parent_screen_space,
-        UIScreenSpace& out_screen_space
-        ) override;
-
-    virtual void GetDesiredSize(
-        VectorInt2& out_layout_size, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
-        VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
-        const VectorInt2& in_parent_window,
-        const float in_ui_scale,
-        UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
         ) override;
 
     virtual const bool PreDraw(
@@ -92,8 +61,6 @@ private:
     virtual const VectorFloat4 GetTintColour() const override;
 
 private:
-    UIComponentDefault _component_default;
-
     bool _dirty;
     std::shared_ptr<HeapWrapperItem> _shader_resource_view_handle;
     std::shared_ptr<IResource> _shader_resource;

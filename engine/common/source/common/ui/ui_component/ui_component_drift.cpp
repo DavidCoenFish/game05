@@ -82,7 +82,7 @@ UIComponentDrift::UIComponentDrift(
     const UISlideDirection in_direction,
     const float in_duration
     )
-    : _component_default(
+    : IUIComponent(
         in_base_colour,
         in_layout,
         in_state_flag_tint_array
@@ -99,23 +99,12 @@ UIComponentDrift::~UIComponentDrift()
     // Nop
 }
 
-const bool UIComponentDrift::Set(
-    const UIBaseColour& in_base_colour,
-    const UILayout& in_layout,
-    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
+const bool UIComponentDrift::SetModelOther(
     const UISlideDirection in_direction,
     const float in_duration
     )
 {
     bool dirty = false;
-    if (true == _component_default.SetBase(
-        in_base_colour,
-        in_layout,
-        in_state_flag_tint_array
-        ))
-    {
-        dirty = true;
-    }
 
     if (_direction != in_direction)
     {
@@ -136,12 +125,12 @@ void UIComponentDrift::TriggerSlideOut()
 {
     if (false == _reverse)
     {
-        if (_duration < _component_default.GetTimeAccumulateSeconds())
+        if (_duration < GetTimeAccumulateSeconds())
         {
-            _component_default.SetTimeAccumulateSeconds(_duration);
+            SetTimeAccumulateSeconds(_duration);
         }
         _reverse = true;
-        _component_default.SetStateFlagBit(UIStateFlag::THidden, false);
+        SetStateFlagBit(UIStateFlag::THidden, false);
     }
 }
 
@@ -149,69 +138,13 @@ void UIComponentDrift::TriggerSlideIn()
 {
     if (true == _reverse)
     {
-        if (_component_default.GetTimeAccumulateSeconds() < 0.0f)
+        if (GetTimeAccumulateSeconds() < 0.0f)
         {
-            _component_default.SetTimeAccumulateSeconds(0.0f);
+            SetTimeAccumulateSeconds(0.0f);
         }
         _reverse = false;
-        _component_default.SetStateFlagBit(UIStateFlag::THidden, false);
+        SetStateFlagBit(UIStateFlag::THidden, false);
     }
-}
-
-const bool UIComponentDrift::SetStateFlag(const UIStateFlag in_state_flag)
-{
-    return _component_default.SetStateFlag(in_state_flag);
-}
-
-const bool UIComponentDrift::SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable)
-{
-    return _component_default.SetStateFlagBit(in_state_flag_bit, in_enable);
-}
-
-const UIStateFlag UIComponentDrift::GetStateFlag() const
-{
-    return _component_default.GetStateFlag();
-}
-
-const UILayout& UIComponentDrift::GetLayout() const
-{
-    return _component_default.GetLayout();
-}
-
-void UIComponentDrift::SetLayoutOverride(const UILayout& in_override)
-{
-    _component_default.SetLayoutOverride(in_override);
-    return;
-}
-
-void UIComponentDrift::SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool in_manual_horizontal, const bool in_manual_vertical)
-{
-    _component_default.SetUVScrollManual(in_uv_scroll, in_manual_horizontal, in_manual_vertical);
-    return;
-}
-
-void UIComponentDrift::SetSourceToken(void* in_source_ui_data_token)
-{
-    _component_default.SetSourceToken(in_source_ui_data_token);
-    return;
-}
-
-void* UIComponentDrift::GetSourceToken() const
-{
-    return _component_default.GetSourceToken();
-}
-
-const bool UIComponentDrift::UpdateHierarchy(
-    UIData* const in_data,
-    UIHierarchyNodeChildData& in_out_child_data,
-    const UIHierarchyNodeUpdateHierarchyParam& in_param
-    )
-{
-    return _component_default.UpdateHierarchy(
-        in_data,
-        in_out_child_data, 
-        in_param
-        );
 }
 
 const bool UIComponentDrift::UpdateSize(
@@ -227,12 +160,11 @@ const bool UIComponentDrift::UpdateSize(
     UIScreenSpace& out_screen_space
     )
 {
-#if 1
     bool dirty = false;
 
     const float time_deta = _reverse ? -in_time_delta : in_time_delta;
 
-    if (true == _component_default.Update(time_deta))
+    if (true == Update(time_deta))
     {
         dirty = true;
     }
@@ -251,13 +183,17 @@ const bool UIComponentDrift::UpdateSize(
     VectorFloat4 geometry_uv;
     VectorInt2 texture_size;
 
-    UIComponentDefault::CalculateGeometry(
+    const auto state_flag = GetStateFlag();
+    const bool uv_scroll_manual_x = 0 != (static_cast<int>(state_flag) & static_cast<int>(UIStateFlag::TManualScrollX));
+    const bool uv_scroll_manual_y = 0 != (static_cast<int>(state_flag) & static_cast<int>(UIStateFlag::TManualScrollY));
+
+    CalculateGeometry(
         geometry_pos,
         geometry_uv,
         texture_size,
-        _component_default.GetUVScroll(),
-        _component_default.GetUVScrollManualX(),
-        _component_default.GetUVScrollManualY(),
+        GetUVScroll(),
+        uv_scroll_manual_x,
+        uv_scroll_manual_y,
         in_parent_size,
         in_parent_offset,
         in_parent_window,
@@ -265,13 +201,14 @@ const bool UIComponentDrift::UpdateSize(
         in_time_delta,
         layout_size,
         desired_size,
-        _component_default.GetInUseLayout()
+        GetLayout()
         );
 
-    const float ratio = CalculateRatio(_duration, _component_default.GetTimeAccumulateSeconds());
+    const float ratio = CalculateRatio(_duration, GetTimeAccumulateSeconds());
     if (ratio <= 0.0f)
     {
-        if (true == _component_default.SetStateFlagBit(UIStateFlag::THidden, true))
+        /// this is a little dangerous, UpdateSize may not be call once the component is hidder, and will require external input to turn off (TriggerSlideIn)
+        if (true == SetStateFlagBit(UIStateFlag::THidden, true))
         {
             dirty = true;
         }
@@ -279,7 +216,7 @@ const bool UIComponentDrift::UpdateSize(
     }
     else
     {
-        if (true == _component_default.SetStateFlagBit(UIStateFlag::THidden, false))
+        if (true == SetStateFlagBit(UIStateFlag::THidden, false))
         {
             dirty = true;
         }
@@ -323,52 +260,4 @@ const bool UIComponentDrift::UpdateSize(
         );
 
     return dirty;
-#else
-    return _component_default.UpdateSize(
-        in_draw_system,
-        *this,
-        in_parent_size,
-        in_parent_offset,
-        in_parent_window,
-        in_ui_scale, 
-        in_time_delta,
-        in_out_geometry, 
-        in_out_node,
-        in_parent_screen_space,
-        out_screen_space
-        );
-#endif
-}
-
-void UIComponentDrift::GetDesiredSize(
-    VectorInt2& out_layout_size, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
-    VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
-    const VectorInt2& in_parent_window,
-    const float in_ui_scale,
-    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    )
-{
-    return _component_default.GetDesiredSize(
-        out_layout_size,
-        out_desired_size,
-        in_parent_window,
-        in_ui_scale,
-        in_out_node
-        );
-}
-
-const bool UIComponentDrift::PreDraw(
-    const UIManagerDrawParam& in_draw_param,
-    UIHierarchyNode& in_node
-    ) 
-{
-    return _component_default.PreDraw(
-        in_draw_param,
-        in_node
-        );
-}
-
-const VectorFloat4 UIComponentDrift::GetTintColour() const
-{
-    return _component_default.GetTintColour();
 }

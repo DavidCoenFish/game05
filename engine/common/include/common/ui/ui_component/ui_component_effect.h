@@ -1,19 +1,21 @@
 #pragma once
 
 #include "common/ui/ui_component/i_ui_component.h"
-#include "common/ui/ui_component/ui_component_default.h"
+
 #include "common/ui/ui_enum.h"
 #include "common/math/vector_float4.h"
 
 enum class UIEffectEnum;
+class ShaderConstantBuffer;
 
 // passing geometry info into the shader worked, but is rather expensive on the shader, drop shadow had more than 512 instructions
 // #define GEOMETRY_SIZE_INTO_SHADER
 
-/// initially thought effect would what multiple shader inputs, but is one enought?
-/// if we want more than one shader input, switch count based on UIEffectEnum
+/// initially thought effect would have multiple shader inputs, but is one enought?
+/// if we want more than one shader input, switch count based on UIEffectEnum? (or make a new class?)
 class UIComponentEffect : public IUIComponent
 {
+    typedef IUIComponent TSuper;
 public:
     /// the generic data for the effect shaders
     struct TShaderConstantBuffer
@@ -44,10 +46,7 @@ public:
     virtual ~UIComponentEffect();
 
     /// return true if modified, else false
-    const bool Set(
-        const UIBaseColour& in_base_colour,
-        const UILayout& in_layout,
-        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
+    const bool SetModelOther(
         const UIEffectEnum in_type,
         const UICoord& in_coord_a,
         const UICoord& in_coord_b,
@@ -57,19 +56,6 @@ public:
         );
 
 private:
-    virtual const bool SetStateFlag(const UIStateFlag in_state_flag) override;
-    virtual const bool SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable) override;
-    virtual const UIStateFlag GetStateFlag() const override;
-
-    virtual const UILayout& GetLayout() const override; 
-    virtual void SetLayoutOverride(const UILayout& in_override) override; 
-    virtual void SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool manual_horizontal, const bool manual_vertical) override;
-
-    /// Make sorting children easier
-    virtual void SetSourceToken(void* in_source_ui_data_token) override;
-    /// Make sorting children easier
-    virtual void* GetSourceToken() const override;
-
     /// ensure that the data structure matches the model (UIData)
     virtual const bool UpdateHierarchy(
         UIData* const in_data,
@@ -91,15 +77,6 @@ private:
         UIScreenSpace& out_screen_space
         ) override;
 
-    /// certain layout data allows shrink
-    virtual void GetDesiredSize(
-        VectorInt2& out_layout_size, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
-        VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
-        const VectorInt2& in_parent_window,
-        const float in_ui_scale,
-        UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-        ) override;
-
     /// deal with the component being drawn to the node texture
     virtual const bool PreDraw(
         const UIManagerDrawParam& in_draw_param,
@@ -109,10 +86,7 @@ private:
     virtual const VectorFloat4 GetTintColour() const override;
 
 private:
-    /// composition rather than inheratence
-    UIComponentDefault _component_default;
-
-    /// either we don't use type none, or need to be carefull with type to use with _shader_constant_buffer
+    /// either we don't use type none as default ui shader, or need to be carefull with type to use with _shader_constant_buffer
     UIEffectEnum _type;
 
     /// used to build the shader constants
@@ -126,11 +100,6 @@ private:
 
     /// The shader constants for this effect
     std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;
-
-    /// Do we have valid tint data, treat as const resource, ie, not allowed to modify tint data other than componet factory setting it to null or another set of data
-    //std::shared_ptr<const TStateFlagTintArray> _state_flag_tint_array;
-    //bool _use_state_flag_tint_array;
-    //TStateFlagTintArray _state_flag_tint_array;
 
 #if defined(GEOMETRY_SIZE_INTO_SHADER)
     /// full size to the render target draw surface

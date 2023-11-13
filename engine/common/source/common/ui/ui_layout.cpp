@@ -1,5 +1,6 @@
 #include "common/common_pch.h"
 #include "common/ui/ui_layout.h"
+#include "common/math/dsc_math.h"
 
 UILayout UILayout::FactoryFull()
 {
@@ -95,6 +96,14 @@ void UILayout::SetScrollVertical(const VectorFloat2& in_value)
     _data_size[1] = UICoord(UICoord::ParentSource::Y, in_value[1] - in_value[0]);
     _data_pivot[1] = UICoord(UICoord::ParentSource::Y, 1.0f - in_value[0]);
     _data_attach[1] = UICoord(UICoord::ParentSource::Y, 1.0f);
+}
+
+void UILayout::SetTooltip(const VectorFloat2& in_tooltip_pos)
+{
+    _data_pivot[0] = UICoord(UICoord::ParentSource::X, DscMath::ConvertNegativeOneOneToZeroOne(in_tooltip_pos[0]));
+    _data_pivot[1] = UICoord(UICoord::ParentSource::Y, DscMath::ConvertNegativeOneOneToZeroOne(in_tooltip_pos[1]));
+    _data_attach[0] = UICoord(UICoord::ParentSource::X, 0.5f);
+    _data_attach[1] = UICoord(UICoord::ParentSource::Y, 0.0f);
 }
 
 const bool UILayout::operator==(const UILayout& in_rhs) const

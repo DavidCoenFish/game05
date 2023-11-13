@@ -1,7 +1,7 @@
 #pragma once
 
 #include "common/ui/ui_component/i_ui_component.h"
-#include "common/ui/ui_component/ui_component_default.h"
+
 #include "common/math/vector_float4.h"
 
 class ShaderConstantBuffer;
@@ -9,6 +9,7 @@ enum class UIEffectEnum;
 
 class UIComponentDisable : public IUIComponent
 {
+    typedef IUIComponent TSuper;
 public:
     /// weak contract to construct via factory UIManager::TContentFactory
     UIComponentDisable(
@@ -33,19 +34,6 @@ public:
         );
 
 private:
-    virtual const bool SetStateFlag(const UIStateFlag in_state_flag) override;
-    virtual const bool SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable) override;
-    virtual const UIStateFlag GetStateFlag() const override;
-
-    virtual const UILayout& GetLayout() const override; 
-    virtual void SetLayoutOverride(const UILayout& in_override) override; 
-    virtual void SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool manual_horizontal, const bool manual_vertical) override;
-
-    /// Make sorting children easier
-    virtual void SetSourceToken(void* in_source_ui_data_token) override;
-    /// Make sorting children easier
-    virtual void* GetSourceToken() const override;
-
     /// ensure that the data structure matches the model (UIData)
     virtual const bool UpdateHierarchy(
         UIData* const in_data,
@@ -85,13 +73,10 @@ private:
     virtual const VectorFloat4 GetTintColour() const override;
 
 private:
-    /// composition rather than inheratence
-    UIComponentDefault _component_default;
-
     /// the shader constants for this effect
     std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;
 
-    /// should this state only be expressed by the _component_default state flag?
+    /// should this state only be expressed by the state flag? makes it easier for UIManager::DealInput to read
     //bool _disable;
 
 };

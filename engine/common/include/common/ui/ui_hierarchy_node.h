@@ -82,7 +82,7 @@ struct UIHierarchyNodeChildData
     std::unique_ptr<UIHierarchyNode> _node;
     /// size relative to screen for input
     std::unique_ptr<UIScreenSpace> _screen_space;
-    /// shader constants to allow for tint
+    /// shader constants to allow for tint, shared as it has ownership incremented by use in the render list
     std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;
 
 };

@@ -18,7 +18,7 @@ UIComponentString::UIComponentString(
     const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
     std::unique_ptr<TextBlock>& in_text_block
     )
-    : _component_default(
+    : IUIComponent(
         in_base_colour,
         in_layout,
         in_state_flag_tint_array
@@ -31,23 +31,6 @@ UIComponentString::UIComponentString(
 UIComponentString::~UIComponentString()
 {
     return;
-}
-
-const bool UIComponentString::SetBase(
-    const UIBaseColour& in_base_colour,
-    const UILayout& in_layout,
-    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
-    )
-{
-    if (true == _component_default.SetBase(
-        in_base_colour,
-        in_layout,
-        in_state_flag_tint_array
-        ))
-    {
-        return true;
-    }
-    return false;
 }
 
 const bool UIComponentString::Set(
@@ -93,52 +76,7 @@ const bool UIComponentString::Set(
     return dirty;
 }
 
-const bool UIComponentString::SetStateFlag(const UIStateFlag in_state_flag)
-{
-    return _component_default.SetStateFlag(in_state_flag);
-}
-
-const bool UIComponentString::SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable)
-{
-    return _component_default.SetStateFlagBit(in_state_flag_bit, in_enable);
-}
-
-const UIStateFlag UIComponentString::GetStateFlag() const
-{
-    return _component_default.GetStateFlag();
-}
-
-const UILayout& UIComponentString::GetLayout() const
-{
-    return _component_default.GetLayout();
-}
-
-void UIComponentString::SetLayoutOverride(const UILayout& in_override)
-{
-    _component_default.SetLayoutOverride(in_override);
-    return;
-}
-
-void UIComponentString::SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool in_manual_horizontal, const bool in_manual_vertical)
-{
-    _component_default.SetUVScrollManual(in_uv_scroll, in_manual_horizontal, in_manual_vertical);
-    return;
-}
-
-// Make sorting children easier
-void UIComponentString::SetSourceToken(void* in_source_ui_data_token)
-{
-    _component_default.SetSourceToken(in_source_ui_data_token);
-    return;
-}
-
-void* UIComponentString::GetSourceToken() const
-{
-    return _component_default.GetSourceToken();
-}
-
 const bool UIComponentString::UpdateHierarchy(
-    //std::vector<std::shared_ptr<UIData>>*& out_array_data_or_null,
     UIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
     const UIHierarchyNodeUpdateHierarchyParam& in_param
@@ -157,7 +95,7 @@ const bool UIComponentString::UpdateHierarchy(
         }
     }
 
-    if (true == _component_default.UpdateHierarchy(
+    if (true == TSuper::UpdateHierarchy(
         in_data,
         in_out_child_data,
         in_param
@@ -183,9 +121,8 @@ const bool UIComponentString::UpdateSize(
     )
 {
     bool dirty = false;
-    if (true == _component_default.UpdateSize(
+    if (true == TSuper::UpdateSize(
         in_draw_system,
-        *this,
         in_parent_size,
         in_parent_offset,
         in_parent_window,
@@ -200,7 +137,7 @@ const bool UIComponentString::UpdateSize(
         dirty = true;
     }
 
-    if (true ==     _text_block->SetTextContainerSize(
+    if (true == _text_block->SetTextContainerSize(
         in_out_node.GetTextureSize(in_draw_system)
         ))
     {
@@ -218,7 +155,7 @@ void UIComponentString::GetDesiredSize(
     UIHierarchyNode& // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
-    out_layout_size = _component_default.GetInUseLayout().GetSize(in_parent_window, in_ui_scale);
+    out_layout_size = GetLayout().GetSize(in_parent_window, in_ui_scale);
 
     _text_block->SetWidthLimit(
         _text_block->GetWidthLimitEnabled(),
@@ -228,7 +165,7 @@ void UIComponentString::GetDesiredSize(
 
     out_desired_size = _text_block->GetTextBounds();
 
-    out_layout_size = _component_default.GetInUseLayout().CalculateShrinkSize(out_layout_size, out_desired_size);
+    out_layout_size = GetLayout().CalculateShrinkSize(out_layout_size, out_desired_size);
 
     return;
 }
@@ -265,9 +202,4 @@ const bool UIComponentString::PreDraw(
     }
 
     return dirty;
-}
-
-const VectorFloat4 UIComponentString::GetTintColour() const
-{
-    return _component_default.GetTintColour();
 }

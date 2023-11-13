@@ -20,7 +20,7 @@ UIComponentTexture::UIComponentTexture(
     const std::shared_ptr<HeapWrapperItem>& in_shader_resource_view_handle,
     const std::shared_ptr<IResource>& in_shader_resource
     )
-    : _component_default(
+    : IUIComponent(
         in_base_colour,
         in_layout,
         in_state_flag_tint_array
@@ -47,49 +47,6 @@ void UIComponentTexture::SetTexture(
     _shader_resource = in_shader_resource;
 }
 
-const bool UIComponentTexture::SetStateFlag(const UIStateFlag in_state_flag)
-{
-    return _component_default.SetStateFlag(in_state_flag);
-}
-
-const bool UIComponentTexture::SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable)
-{
-    return _component_default.SetStateFlagBit(in_state_flag_bit, in_enable);
-}
-
-const UIStateFlag UIComponentTexture::GetStateFlag() const
-{
-    return _component_default.GetStateFlag();
-}
-
-const UILayout& UIComponentTexture::GetLayout() const
-{
-    return _component_default.GetLayout();
-}
-
-void UIComponentTexture::SetLayoutOverride(const UILayout& in_override)
-{
-    _component_default.SetLayoutOverride(in_override);
-    return;
-}
-
-void UIComponentTexture::SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool in_manual_horizontal, const bool in_manual_vertical)
-{
-    _component_default.SetUVScrollManual(in_uv_scroll, in_manual_horizontal, in_manual_vertical);
-    return;
-}
-
-void UIComponentTexture::SetSourceToken(void* in_source_ui_data_token)
-{
-    _component_default.SetSourceToken(in_source_ui_data_token);
-    return;
-}
-
-void* UIComponentTexture::GetSourceToken() const
-{
-    return _component_default.GetSourceToken();
-}
-
 const bool UIComponentTexture::UpdateHierarchy(
     UIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
@@ -97,7 +54,7 @@ const bool UIComponentTexture::UpdateHierarchy(
     )
 {
     bool dirty = false;
-    dirty = _component_default.UpdateHierarchy(
+    dirty = TSuper::UpdateHierarchy(
         in_data,
         in_out_child_data, 
         in_param
@@ -110,62 +67,11 @@ const bool UIComponentTexture::UpdateHierarchy(
     return dirty;
 }
 
-const bool UIComponentTexture::UpdateSize(
-    DrawSystem* const in_draw_system,
-    const VectorInt2& in_parent_size,
-    const VectorInt2& in_parent_offset,
-    const VectorInt2& in_parent_window,
-    const float in_ui_scale,
-    const float in_time_delta, 
-    UIGeometry& in_out_geometry, 
-    UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    const UIScreenSpace& in_parent_screen_space,
-    UIScreenSpace& out_screen_space
-    )
-{
-    return _component_default.UpdateSize(
-        in_draw_system,
-        *this,
-        in_parent_size,
-        in_parent_offset,
-        in_parent_window,
-        in_ui_scale, 
-        in_time_delta,
-        in_out_geometry, 
-        in_out_node,
-        in_parent_screen_space,
-        out_screen_space
-        );
-}
-
-void UIComponentTexture::GetDesiredSize(
-    VectorInt2& out_layout_size, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
-    VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
-    const VectorInt2& in_parent_window,
-    const float in_ui_scale,
-    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    )
-{
-    return _component_default.GetDesiredSize(
-        out_layout_size,
-        out_desired_size,
-        in_parent_window,
-        in_ui_scale,
-        in_out_node
-        );
-}
-
 const bool UIComponentTexture::PreDraw(
     const UIManagerDrawParam& in_draw_param,
     UIHierarchyNode& in_node
     ) 
 {
-#if 0
-    return _component_default.Draw(
-        in_draw_param,
-        in_node
-        );
-#else
     bool dirty = false;
     auto& texture = in_node.GetUITexture();
     if ((false == texture.GetHasDrawn()) ||
@@ -199,7 +105,7 @@ const bool UIComponentTexture::PreDraw(
         if (nullptr != _shader_constant_buffer)
         {
             UIManager::TShaderConstantBuffer& buffer = _shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
-            buffer._tint_colour = _component_default.GetTintColour();
+            buffer._tint_colour = TSuper::GetTintColour();
         }
 
         in_draw_param._frame->SetShader(shader, _shader_constant_buffer);
@@ -213,8 +119,6 @@ const bool UIComponentTexture::PreDraw(
     }
 
     return dirty;
-
-#endif
 }
 
 // this Component already uses the tint colour in it's custom PreDraw

@@ -85,7 +85,7 @@ UIComponentScroll::UIComponentScroll(
     const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
     const UIOrientation in_orientation
     )
-    : _component_default(
+    : IUIComponent(
         in_base_colour,
         in_layout,
         in_state_flag_tint_array
@@ -104,22 +104,11 @@ UIComponentScroll::~UIComponentScroll()
     // Nop
 }
 
-const bool UIComponentScroll::SetBase(
-    const UIBaseColour& in_base_colour,
-    const UILayout& in_layout,
-    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
+const bool UIComponentScroll::SetModelOther(
     const UIOrientation in_orientation
     )
 {
     bool dirty = false;
-    if (true == _component_default.SetBase(
-        in_base_colour,
-        in_layout,
-        in_state_flag_tint_array
-        ))
-    {
-        dirty = true;
-    }
     if (_orientation != in_orientation)
     {
         _orientation = in_orientation;
@@ -164,55 +153,6 @@ const float UIComponentScroll::GetValueRatio() const
     return result;
 }
 
-const bool UIComponentScroll::SetStateFlag(const UIStateFlag in_state_flag)
-{
-    bool dirty = false;
-    if (true == _component_default.SetStateFlag(in_state_flag))
-    {
-        dirty = true;
-    }
-
-    return dirty;
-}
-
-const bool UIComponentScroll::SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable)
-{
-    return _component_default.SetStateFlagBit(in_state_flag_bit, in_enable);
-}
-
-const UIStateFlag UIComponentScroll::GetStateFlag() const
-{
-    return _component_default.GetStateFlag();
-}
-
-const UILayout& UIComponentScroll::GetLayout() const
-{
-    return _component_default.GetLayout();
-}
-
-void UIComponentScroll::SetLayoutOverride(const UILayout& in_override)
-{
-    _component_default.SetLayoutOverride(in_override);
-    return;
-}
-
-void UIComponentScroll::SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool in_manual_horizontal, const bool in_manual_vertical)
-{
-    _component_default.SetUVScrollManual(in_uv_scroll, in_manual_horizontal, in_manual_vertical);
-    return;
-}
-
-void UIComponentScroll::SetSourceToken(void* in_source_ui_data_token)
-{
-    _component_default.SetSourceToken(in_source_ui_data_token);
-    return;
-}
-
-void* UIComponentScroll::GetSourceToken() const
-{
-    return _component_default.GetSourceToken();
-}
-
 const bool UIComponentScroll::UpdateHierarchy(
     UIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
@@ -234,7 +174,7 @@ const bool UIComponentScroll::UpdateHierarchy(
         }
     }
 
-    if (true == _component_default.UpdateHierarchy(
+    if (true == TSuper::UpdateHierarchy(
         in_data,
         in_out_child_data, 
         in_param
@@ -290,9 +230,8 @@ const bool UIComponentScroll::UpdateSize(
     }
 
     bool dirty = false;
-    if (true == _component_default.UpdateSize(
+    if (true == TSuper::UpdateSize(
         in_draw_system,
-        *this,
         in_parent_size,
         in_parent_offset,
         in_parent_window,
@@ -309,37 +248,10 @@ const bool UIComponentScroll::UpdateSize(
     return true;
 }
 
-void UIComponentScroll::GetDesiredSize(
-    VectorInt2& out_layout_size, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
-    VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
-    const VectorInt2& in_parent_window,
-    const float in_ui_scale,
-    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    )
-{
-    return _component_default.GetDesiredSize(
-        out_layout_size,
-        out_desired_size,
-        in_parent_window,
-        in_ui_scale,
-        in_out_node
-        );
-}
-
-const bool UIComponentScroll::PreDraw(
-    const UIManagerDrawParam& in_draw_param,
-    UIHierarchyNode& in_node
-    ) 
-{
-    return _component_default.PreDraw(
-        in_draw_param,
-        in_node
-        );
-}
-
 void UIComponentScroll::OnInputTouch(
     const VectorFloat4& in_screen_pos,
-    const VectorFloat2& in_mouse_pos
+    const VectorFloat2& in_mouse_pos,
+    std::string& out_tooltip
     )
 {
     if(nullptr == _value_change)
@@ -373,9 +285,4 @@ void UIComponentScroll::OnInputClick(
     //LOG_CONSOLE("OnInputClick [%f %f]", value[0], value[1]);
 
     return;
-}
-
-const VectorFloat4 UIComponentScroll::GetTintColour() const
-{
-    return _component_default.GetTintColour();
 }

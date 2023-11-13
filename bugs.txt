@@ -4,3 +4,4 @@ clean up uv coords, if geometry is -1,-1 in lover left, then have uv 0,0 in lowe
 clean up ui hierarchy resize to do less work
 text word wrap may be incorrect
 
+move to a different project static libs that do not change (free_type, harf_buzz)

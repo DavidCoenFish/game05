@@ -1,4 +1,7 @@
+- tool tip
+ - if it is a shrink layout, it needs to look at children?
 - combo box
+  - dropdown
 - change locale
 - transition out effect
 - fade in effect

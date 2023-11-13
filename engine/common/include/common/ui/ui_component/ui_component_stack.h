@@ -1,13 +1,13 @@
 #pragma once
 
 #include "common/ui/ui_component/i_ui_component.h"
-#include "common/ui/ui_component/ui_component_default.h"
 
 class VectorInt4;
 enum class UIOrientation;
 
 class UIComponentStack : public IUIComponent
 {
+    typedef IUIComponent TSuper;
 public:
     UIComponentStack(
         const UIBaseColour& in_base_colour,
@@ -18,33 +18,12 @@ public:
         );
     virtual ~UIComponentStack();
 
-    const bool Set(
-        const UIBaseColour& in_base_colour,
-        const UILayout& in_layout,
-        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
+    const bool SetModelOther(
         const UIOrientation in_orientation,
         const UICoord& in_gap
         );
 
 private:
-    virtual const bool SetStateFlag(const UIStateFlag in_state_flag) override;
-    virtual const bool SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable) override;
-    virtual const UIStateFlag GetStateFlag() const override;
-
-    virtual const UILayout& GetLayout() const override; 
-    virtual void SetLayoutOverride(const UILayout& in_override) override; 
-    virtual void SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool manual_horizontal, const bool manual_vertical) override;
-
-    // Make sorting children easier
-    virtual void SetSourceToken(void* in_source_ui_data_token) override;
-    virtual void* GetSourceToken() const override;
-
-    virtual const bool UpdateHierarchy(
-        UIData* const in_data,
-        UIHierarchyNodeChildData& in_out_child_data,
-        const UIHierarchyNodeUpdateHierarchyParam& in_param
-        ) override;
-
     virtual const bool UpdateSize(
         DrawSystem* const in_draw_system,
         const VectorInt2& in_parent_size,
@@ -77,15 +56,7 @@ private:
         std::vector<VectorInt4>& out_child_window_offset
         );
 
-    virtual const bool PreDraw(
-        const UIManagerDrawParam& in_draw_param,
-        UIHierarchyNode& in_node
-        ) override;
-
-    virtual const VectorFloat4 GetTintColour() const override;
-
 private:
-    UIComponentDefault _component_default;
     UIOrientation _orientation;
     UICoord _gap;
 
