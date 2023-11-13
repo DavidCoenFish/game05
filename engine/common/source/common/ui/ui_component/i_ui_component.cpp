@@ -368,9 +368,46 @@ void IUIComponent::GetDesiredSize(
     VectorInt2& out_desired_size,
     const VectorInt2& in_parent_window,
     const float in_ui_scale,
-    UIHierarchyNode& //in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
     )
 {
+    if (((true == _layout.GetShrinkWidth()) || (true == _layout.GetShrinkHeight()))
+        && (0 < in_out_node.GetChildData().size()))
+    {
+        VectorInt2 max_child_desired;
+        VectorInt2 max_child_layout;
+        for (auto& child : in_out_node.GetChildData())
+        {
+            IUIComponent* const child_component = child ? child->_component.get() : nullptr;
+            if ((nullptr == child_component) || (nullptr == child->_node))
+            {
+                continue;
+            }
+            VectorInt2 child_layout_size;
+            VectorInt2 child_desired_size;
+
+            child_component->GetDesiredSize(
+                child_layout_size,
+                child_desired_size,
+                in_parent_window,
+                in_ui_scale,
+                *child->_node
+                );
+
+            max_child_layout = VectorInt2::Max(max_child_layout, child_layout_size);
+            max_child_desired = VectorInt2::Max(max_child_desired, child_desired_size);
+        }
+
+        if ((0 < max_child_desired.GetX()) && (0 < max_child_desired.GetY()))
+        {
+            //desired or layout?
+            // desired has assert on UIScale != 1.0f for effect size of tooltip dropshadow geometry not being full size
+            //out_layout_size = _layout.GetSize(max_child_desired, in_ui_scale); 
+            out_layout_size = _layout.GetSize(max_child_layout, in_ui_scale);
+            out_desired_size = out_layout_size;
+            return;
+        }
+    }
     out_layout_size = _layout.GetSize(in_parent_window, in_ui_scale);
     out_desired_size = out_layout_size;
     return;

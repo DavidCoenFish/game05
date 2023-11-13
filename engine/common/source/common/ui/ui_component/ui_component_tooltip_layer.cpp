@@ -20,6 +20,7 @@ namespace
     /// touch and emitter are in [-1,-1 ... 1,1]
     const VectorFloat2 CalculateTooltipUV(const VectorFloat2& in_touch_pos, const VectorFloat4& in_emitter_screenspace, const UITooltipType in_tooltip_type)
     {
+        in_touch_pos;
         in_emitter_screenspace;
         VectorFloat2 result;
         switch(in_tooltip_type)
@@ -27,7 +28,7 @@ namespace
         default:
             break;
         case UITooltipType::TRelativeToTouch:
-            result = VectorFloat2((in_emitter_screenspace[2] + in_emitter_screenspace[0]) * 0.5f, in_emitter_screenspace[3]);
+            result = VectorFloat2((in_emitter_screenspace[2] + in_emitter_screenspace[0]) * 0.5f, std::min(0.9f, in_emitter_screenspace[3]));
             break;
         case UITooltipType::TBottomLeft:
             result = VectorFloat2(0.25f, 0.1f);
@@ -48,7 +49,11 @@ UIComponentTooltipLayer::UIComponentTooltipLayer(
         in_state_flag_tint_array
         )
 {
-    // Nop
+    for (int index = 0; index < UIDataTooltipLayer::Variables::TMaxTooltipCount; ++index)
+    {
+        _tooltip_layout_target_array[index] = nullptr;
+    }
+    return;
 }
 
 UIComponentTooltipLayer::~UIComponentTooltipLayer()
@@ -88,6 +93,7 @@ void UIComponentTooltipLayer::RequestTooltip(
 
         tooltip_layout_target->SetLayoutOverride(layout);
     }
+    return;
 }
 
 void UIComponentTooltipLayer::FinalizeTooltips(
@@ -95,6 +101,7 @@ void UIComponentTooltipLayer::FinalizeTooltips(
     const UIManagerDealInputParam& in_param
     )
 {
+    in_param;
     std::set<int> used_index;
     //std::set<void*> inuse_source_tokens;
     std::map<void*, int> map_active_tooltips;
@@ -184,6 +191,7 @@ const bool UIComponentTooltipLayer::UpdateHierarchy(
         dirty = true;
     }
 
+#if 1
     UIDataTooltipLayer* const data = dynamic_cast<UIDataTooltipLayer*>(in_data);
     if (nullptr != data)
     {
@@ -231,6 +239,6 @@ const bool UIComponentTooltipLayer::UpdateHierarchy(
             return true;
         });
     }
-
+#endif
     return dirty;
 }

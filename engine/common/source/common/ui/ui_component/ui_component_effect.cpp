@@ -295,6 +295,7 @@ const bool UIComponentEffect::PreDraw(
                 geometry_pos,
                 geometry_uv
                 );
+            // well, till fixing layout model, shrinking the UIScale < 1.0 seems to break effect/ text is wrapping in a post shrunk container that should have been correct size to avoid wrap?
             DSC_ASSERT(geometry_pos == VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f), "Expect child geometry to be full screen");
             // atention Y inverted
             DSC_ASSERT(geometry_uv == VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f), "Expect child geometry to be full screen uv"); 

@@ -313,6 +313,22 @@ namespace
             );
         return s_layout;
     }
+
+    const UILayout& GetUILayoutMarginShrink()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 1.0f, s_default_margin),
+            UICoord(UICoord::ParentSource::Y, 1.0f, s_default_margin),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            UICoord(UICoord::ParentSource::X, 0.5f),
+            UICoord(UICoord::ParentSource::Y, 0.5f),
+            true,
+            true
+            );
+        return s_layout;
+    }
+
     const UILayout& GetUILayoutShrinkVertical()
     {
         static UILayout s_layout(
@@ -1534,6 +1550,16 @@ void DefaultUIComponentFactory::Populate(
         GetUIBaseColourDefault
         >);
 
+    in_ui_manager.AddContentFactory("canvas_grey_margin_shrink", FactoryCanvas<
+        GetUILayoutMarginShrink, 
+        GetUIBaseColourGrey
+        >);
+
+    in_ui_manager.AddContentFactory("canvas_transparent_margin_shrink", FactoryCanvas<
+        GetUILayoutMarginShrink, 
+        GetUIBaseColourDefault
+        >);
+
     // UIData stack
     in_ui_manager.AddContentFactory("stack", FactoryStack<>);
 
@@ -1626,6 +1652,15 @@ void DefaultUIComponentFactory::Populate(
         >);
     in_ui_manager.AddContentFactory("effect_drop_shadow_small", FactoryEffect<
         GetUILayout,
+        UIEffectEnum::TDropShadow,
+        GetUIBaseColourClearDark,
+        GetUIStateFlagTintArray,
+        GetUICoordDefaultGapEigth,
+        GetUICoordDefaultGapEigth,
+        GetUICoordDefaultGapQuater
+        >);
+        in_ui_manager.AddContentFactory("effect_drop_shadow_small_shrink", FactoryEffect<
+        GetUILayoutShrink,
         UIEffectEnum::TDropShadow,
         GetUIBaseColourClearDark,
         GetUIStateFlagTintArray,
@@ -1797,8 +1832,8 @@ void DefaultUIComponentFactory::Populate(
         true
         >);
     in_ui_manager.AddContentFactory("text_run_tooltip", FactoryTextRun<
-        GetUILayoutQuaterShrink,
-        GetUIBaseColourDarkWhite,
+        GetUILayoutShrink,
+        GetUIBaseColourClearDark, //,
         GetUIStateFlagTintArray,
         s_default_font_size,
         TextEnum::HorizontalLineAlignment::Middle,

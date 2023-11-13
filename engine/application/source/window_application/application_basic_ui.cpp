@@ -577,11 +577,30 @@ namespace
                 "text_run_tooltip"
                 );
             text_run_array.push_back(text_run);
-#if 1
+#if 0
             tooltip_layout_target_array[index] = text_run;
             array_child_data.push_back(text_run);
+#elif 1
+            auto contents = 
+
+            std::make_shared<UIData>("effect_drop_shadow_small_shrink",
+                std::vector<std::shared_ptr<UIData>>({
+                    std::make_shared<UIData>("canvas_transparent_margin_shrink",
+                        std::vector<std::shared_ptr<UIData>>({
+                            std::make_shared<UIData>("canvas_grey_margin_shrink",
+                                std::vector<std::shared_ptr<UIData>>({
+                                    text_run
+                                })
+                            )
+                        })
+                    )
+                })
+            );
+
+            tooltip_layout_target_array[index] = contents;
+            array_child_data.push_back(contents);
 #else
-            tooltip_layout_target_array[index] = std::make_shared<UIData>("UIData", 
+            auto contents = std::make_shared<UIData>("UIData", 
                 std::vector<std::shared_ptr<UIData>>({
                     std::make_shared<UIData>(
                         "effect_drop_shadow_small",
@@ -607,6 +626,8 @@ namespace
                     )
                 })
             );
+            tooltip_layout_target_array[index] = contents;
+            array_child_data.push_back(contents);
 #endif
         }
 
