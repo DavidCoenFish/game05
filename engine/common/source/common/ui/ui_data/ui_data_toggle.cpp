@@ -3,7 +3,8 @@
 
 UIDataToggle::UIDataToggle(
     const bool in_value,
-    const std::function<void(const VectorFloat2&)>& in_on_click,
+    const TOnValueChange& in_on_click,
+    const TGetTooltip& in_get_tooltip,
     const std::string& in_template_name,
     const std::vector<std::shared_ptr<UIData>>& in_array_child_data_true,
     const std::vector<std::shared_ptr<UIData>>& in_array_child_data_false
@@ -13,6 +14,7 @@ UIDataToggle::UIDataToggle(
         in_value ? in_array_child_data_true : in_array_child_data_false
         )
     , _on_click(in_on_click)
+    , _get_tooltip(in_get_tooltip)
     , _value(in_value)
 {
     _array_child_data[0] = in_array_child_data_false;

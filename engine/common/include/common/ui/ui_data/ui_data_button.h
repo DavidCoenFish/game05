@@ -7,19 +7,26 @@ class VectorFloat2;
 class UIDataButton : public UIData
 {
 public:
+    typedef std::function<void(const VectorFloat2&)> TOnValueChange;
+    typedef std::function<const std::string()> TGetTooltip;
+
     UIDataButton(
-        const std::function<void(const VectorFloat2&)>& in_on_click = nullptr,
+        const TOnValueChange& in_on_click = nullptr,
+        const TGetTooltip& in_get_tooltip = nullptr,
         const bool in_repeat = false,
         const std::string& in_template_name = std::string("UIDataButton"),
         const std::vector<std::shared_ptr<UIData>>& in_array_child_data = std::vector<std::shared_ptr<UIData>>()
         );
     virtual ~UIDataButton();
 
-    const std::function<void(const VectorFloat2&)>& GetOnClick() const { return _on_click; }
+    const TOnValueChange& GetOnClick() const { return _on_click; }
+    const TGetTooltip& GetTooltip() const { return _get_tooltip; }
+
     const bool GetRepeat() const { return _repeat; }
 
 private:
-    std::function<void(const VectorFloat2&)> _on_click;
+    TOnValueChange _on_click;
+    TGetTooltip _get_tooltip;
     bool _repeat;
 
 };

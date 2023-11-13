@@ -252,6 +252,7 @@ void UIComponentSlider::OnInputClick(
 
     return;
 }
+
 void UIComponentSlider::OnHover(
     const VectorFloat4&,
     const VectorFloat2&,

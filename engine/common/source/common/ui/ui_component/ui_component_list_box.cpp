@@ -106,6 +106,7 @@ const bool UIComponentListBox::UpdateHierarchy(
                             [this, found_index](const VectorFloat2&){
                                 this->SetSelectedIndex(found_index);
                             },
+                            nullptr,
                             false
                             );
                     }

@@ -167,6 +167,14 @@ namespace
                         in_data_float->SetValue(value);
                     }
                 }, 
+                [in_data_float](){
+                    std::stringstream stream;
+                    stream << std::fixed;
+                    stream << std::setprecision(1);
+                    stream << in_data_float->GetValue();
+                    std::string stream_string = stream.str();
+                    return stream_string;
+                },
                 true,
                 "button_default",
                 std::vector<std::shared_ptr<UIData>>({
@@ -472,6 +480,7 @@ namespace
         for (auto& item : in_array_items)
         {
             auto data_button = std::make_shared<UIDataButton>(
+                nullptr,
                 nullptr,
                 false,
                 "button_listbox_item"
@@ -915,6 +924,7 @@ public:
 
                                                         std::make_shared<UIDataButton>(
                                                             nullptr, 
+                                                            nullptr, 
                                                             false,
                                                             "UIDataButton",
                                                             BuildButtonData("New game")
@@ -927,6 +937,7 @@ public:
                                                     std::vector<std::shared_ptr<UIData>>({
 
                                                         std::make_shared<UIDataButton>(
+                                                            nullptr, 
                                                             nullptr, 
                                                             false,
                                                             "UIDataButton",
@@ -942,6 +953,9 @@ public:
                                                     _data_map["modal_options"]
                                                     );
                                                 },
+                                            [](){
+                                                return std::string("<Locale open_options_dialog>");
+                                            },
                                             false,
                                             "UIDataButton",
                                             BuildButtonData("Options")
@@ -952,6 +966,9 @@ public:
                                                 in_application.Destroy(0);
                                                 return;
                                                 },
+                                            [](){
+                                                return std::string("<Locale exit_application>");
+                                            },
                                             false,
                                             "UIDataButton",
                                             BuildButtonData("Exit")
@@ -991,6 +1008,22 @@ public:
                     data->ToggleValue();
                 }
             },
+            [this]()
+            {
+                auto data = std::dynamic_pointer_cast<UIDataToggle>(_data_map["data_toggle_fps"]);
+                if (nullptr != data)
+                {
+                    if (data->GetValue())
+                    {
+                        return std::string("<Locale fps_display_is_on>");
+                    }
+                    else
+                    {
+                        return std::string("<Locale fps_display_is_off>");
+                    }
+                }
+                return std::string();
+            },
             "UIDataToggle",
             BuildCheckboxTrue(),
             BuildCheckboxFalse()
@@ -998,7 +1031,7 @@ public:
         _data_map["data_toggle_fps"] = data_toggle_fps;
 
         auto data_toggle_tooltip = std::make_shared<UIDataToggle>(
-            false,
+            true,
             [this](const VectorFloat2&)
             {
                 auto data = std::dynamic_pointer_cast<UIDataToggle>(_data_map["data_toggle_tooltip"]);
@@ -1006,6 +1039,34 @@ public:
                 {
                     data->ToggleValue();
                 }
+                auto tooltip_layer = std::dynamic_pointer_cast<UIDataTooltipLayer>(_data_map["tooltip_layer"]);
+                if (nullptr != tooltip_layer)
+                {
+                    if (true == data->GetValue())
+                    {
+                        tooltip_layer->SetTooltipType(UITooltipType::TRelativeToTouch);
+                    }
+                    else
+                    {
+                        tooltip_layer->SetTooltipType(UITooltipType::TNone);
+                    }
+                }
+            },
+            [this]()
+            {
+                auto data = std::dynamic_pointer_cast<UIDataToggle>(_data_map["data_toggle_tooltip"]);
+                if (nullptr != data)
+                {
+                    if (data->GetValue())
+                    {
+                        return std::string("<Locale tooltip_display_is_on>");
+                    }
+                    else
+                    {
+                        return std::string("<Locale tooltip_display_is_off>");
+                    }
+                }
+                return std::string();
             },
             "UIDataToggle",
             BuildCheckboxTrue(),
@@ -1119,6 +1180,9 @@ public:
                         _data_map["main_launch"]
                         );
                     },
+                [](){
+                    return std::string("<Locale close_dialog>");
+                },
                 false,
                 "button_background",
                 std::vector<std::shared_ptr<UIData>>({
@@ -1136,7 +1200,8 @@ public:
                         std::vector<std::shared_ptr<UIData>>({
 
                             std::make_shared<UIDataButton>(
-                                [this](const VectorFloat2&){},
+                                nullptr,
+                                nullptr,
                                 false,
                                 "button_modal_body",
                                 std::vector<std::shared_ptr<UIData>>({
@@ -1180,7 +1245,8 @@ public:
                                                     std::vector<std::shared_ptr<UIData>>({
 
                                                     std::make_shared<UIDataButton>(
-                                                        [&in_application](const VectorFloat2&){},
+                                                        nullptr,
+                                                        nullptr,
                                                         false,
                                                         "UIDataButton",
                                                         BuildButtonData("Undo")
@@ -1194,7 +1260,8 @@ public:
                                                     std::vector<std::shared_ptr<UIData>>({
 
                                                     std::make_shared<UIDataButton>(
-                                                        [&in_application](const VectorFloat2&){},
+                                                        nullptr,
+                                                        nullptr,
                                                         false,
                                                         "UIDataButton",
                                                         BuildButtonData("Redo")
@@ -1208,7 +1275,8 @@ public:
                                                     std::vector<std::shared_ptr<UIData>>({
 
                                                     std::make_shared<UIDataButton>(
-                                                        [&in_application](const VectorFloat2&){},
+                                                        nullptr,
+                                                        nullptr,
                                                         false,
                                                         "UIDataButton",
                                                         BuildButtonData("Reset")

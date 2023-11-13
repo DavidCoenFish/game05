@@ -36,6 +36,7 @@ public:
     virtual ~UIDataTooltipLayer();
 
     const UITooltipType GetTooltipType() const { return _tooltip_type; } 
+    void SetTooltipType(const UITooltipType in_tooltip_layer) { _tooltip_type = in_tooltip_layer; return; } 
     const TOnTooltipChange GetOnTooltipChange() const { return _on_tooltip_change; } 
     const TTooltipLayoutTargetArray& GetTooltipLayoutTargetArray() const { return _tooltip_layout_target_array; }
     const bool GetTooltipScale() const { return _tooltip_scale; } 

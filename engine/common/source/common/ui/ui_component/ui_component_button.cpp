@@ -43,11 +43,13 @@ UIComponentButton::~UIComponentButton()
 }
 
 const bool UIComponentButton::Set(
-    const std::function<void(const VectorFloat2&)>& in_on_click,
+    const TOnValueChange& in_on_click,
+    const TGetTooltip& in_get_tooltip,
     const bool in_allow_repeat
     )
 {
     _on_click = in_on_click;
+    _get_tooltip = in_get_tooltip;
     _allow_repeat = in_allow_repeat;
     return false;
 }
@@ -64,6 +66,7 @@ const bool UIComponentButton::UpdateHierarchy(
     {
         if (true == Set(
             data->GetOnClick(),
+            data->GetTooltip(),
             data->GetRepeat()
             ))
         {
@@ -76,7 +79,8 @@ const bool UIComponentButton::UpdateHierarchy(
     {
         if (true == Set(
             data_toggle->GetOnClick(),
-            false //data->GetRepeat()
+            data_toggle->GetTooltip(),
+            false
             ))
         {
             dirty = true;
@@ -128,5 +132,25 @@ void UIComponentButton::OnInputRepeat(
         _on_click(in_mouse_pos);
     }
 
+    if (nullptr != _get_tooltip)
+    {
+        out_tooltip = _get_tooltip();
+    }
+
     return;
 }
+
+void UIComponentButton::OnHover(
+    const VectorFloat4&,
+    const VectorFloat2&,
+    std::string& out_tooltip
+    )
+{
+    if (nullptr != _get_tooltip)
+    {
+        out_tooltip = _get_tooltip();
+    }
+
+    return;
+}
+

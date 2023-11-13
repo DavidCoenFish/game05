@@ -41,7 +41,7 @@ void UIRootInputState::Update(
     UIData* const in_tooltip_layer_source_token
     )
 {
-    //_time_delta = in_param._time_delta;
+    _time_delta = in_param._time_delta;
 
     _tooltip_request_data.clear();
     _tooltip_layer = nullptr;
