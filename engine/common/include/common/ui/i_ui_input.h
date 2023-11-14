@@ -23,6 +23,7 @@ public:
 
     /// A click is when the touch is released over the same element the touch started on, ie, allow drag off and release as cancel
     virtual void OnInputClick(
+        UIRootInputState& in_input_state,
         const VectorFloat4& in_screen_pos,
         const VectorFloat2& in_touch_pos
         );

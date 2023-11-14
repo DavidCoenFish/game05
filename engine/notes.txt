@@ -14,4 +14,10 @@ UIHierarchyNode // N0
             _texture // T1 texture or backbuffer A1 draws to, mostly always a render target texture once past the root~ cant use backbuffer as shader resource
             _child_node_array // A1
 
-the component C1 may have special rules (ie, a virtual method) to control how child array A1 is drawn to T1, how size is calculated
+ui longterm todo.
+have way of not recalculating heirarchy each frame, dirty flag in UIData, propergation dirty to parent on modify
+have way of not recalculating layout each frame, cache input sizes/ desired size output, layout dirty flag in IUIComponent state flag?
+have way of loading ui from content, defined custom builder types (ie, checkbox? listbox, slider), then define mapping of controls in layout to dag data, also define dag from content?
+
+
+

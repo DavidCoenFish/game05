@@ -2,6 +2,7 @@
 #include "common/ui/ui_root_input_state.h"
 
 #include "common/ui/ui_component/ui_component_tooltip_layer.h"
+#include "common/ui/ui_component/ui_component_combo_box_layer.h"
 #include "common/ui/ui_manager.h"
 #include "common/log/log.h"
 #include "common/math/dsc_math.h"
@@ -30,6 +31,8 @@ UIRootInputState::UIRootInputState()
     , _time_delta(0.0f)
     , _tooltip_layer_source_token(nullptr)
     , _tooltip_layer(nullptr)
+    , _combo_box_layer_source_token(nullptr)
+    , _combo_box_layer(nullptr)
     //, _focus_source_token(nullptr)
 {
     // Nop
@@ -38,7 +41,8 @@ UIRootInputState::UIRootInputState()
 void UIRootInputState::Update(
     const UIManagerDealInputParam& in_param,
     const VectorInt2& in_root_size,
-    UIData* const in_tooltip_layer_source_token
+    UIData* const in_tooltip_layer_source_token,
+    UIData* const in_combo_box_layer_source_token
     )
 {
     _time_delta = in_param._time_delta;
@@ -46,6 +50,10 @@ void UIRootInputState::Update(
     _tooltip_request_data.clear();
     _tooltip_layer = nullptr;
     _tooltip_layer_source_token = in_tooltip_layer_source_token;
+
+    _combo_box_dropdown = nullptr;
+    _combo_box_layer = nullptr;
+    _combo_box_layer_source_token = in_combo_box_layer_source_token;
 
     std::map<int, UIRootInputStateTouch> touch_map;
     for (const auto iter : _touch_array)
@@ -133,6 +141,11 @@ void UIRootInputState::SubmitComponent(IUIComponent* const in_component)
     {
         _tooltip_layer = dynamic_cast<UIComponentTooltipLayer*>(in_component);
     }
+    if (_combo_box_layer_source_token == in_component->GetSourceToken())
+    {
+        _combo_box_layer = dynamic_cast<UIComponentComboBoxLayer*>(in_component);
+    }
+
     return;
 }
 
@@ -153,16 +166,30 @@ void UIRootInputState::RequestTooltip(
 
 // Finialise tooltip, or does that just when we hit the UIComponentTooltipLayer, or is that the input to Finialise
 // this may need UpdateHierarchy/size param? 
-void UIRootInputState::FinialiseTooltip(
-    const UIManagerDealInputParam& in_param
-    )
+void UIRootInputState::FinialiseTooltip()
 {
     if (nullptr != _tooltip_layer)
     {
         _tooltip_layer->FinalizeTooltips(
-            _tooltip_request_data,
-            in_param
+            _tooltip_request_data
             );
+    }
+    return;
+}
+
+void UIRootInputState::RequestComboBoxDropdown(
+    std::shared_ptr<UIHierarchyNodeChildData>& in_dropdown
+    )
+{
+    _combo_box_dropdown = in_dropdown;
+    return;
+}
+
+void UIRootInputState::FinialiseComboBox()
+{
+    if ((nullptr != _combo_box_layer) && (nullptr != _combo_box_dropdown))
+    {
+        _combo_box_layer->TriggerComboBoxDropDown(_combo_box_dropdown);
     }
     return;
 }

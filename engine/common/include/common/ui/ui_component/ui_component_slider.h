@@ -54,6 +54,7 @@ private:
         std::string& out_tooltip
         ) override;
     virtual void OnInputClick(
+        UIRootInputState& in_input_state,
         const VectorFloat4& in_screen_pos,
         const VectorFloat2& in_mouse_pos
         ) override;

@@ -38,6 +38,8 @@ public:
 
     void SetTooltip(const VectorFloat2& in_tooltip_pos);
 
+    void SetComboBoxDropdown(const VectorFloat4& in_combo_box_screen_pos);
+
     const bool operator==(const UILayout& in_rhs) const;
     const bool operator!=(const UILayout& in_rhs) const;
 

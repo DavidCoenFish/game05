@@ -16,6 +16,7 @@ void IUIInput::OnInputTouch(
 }
 
 void IUIInput::OnInputClick(
+    UIRootInputState&,
     const VectorFloat4&,
     const VectorFloat2&
     )

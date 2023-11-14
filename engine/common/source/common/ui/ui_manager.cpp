@@ -278,19 +278,21 @@ public:
     void DealInput(
         UIHierarchyNode& in_root,
         UIData* const in_tooltip_layer,
+        UIData* const in_combo_box_layer,
         const UIManagerDealInputParam& in_param
         )
     {
         const VectorInt2 texture_size = in_root.GetTextureSize(in_param._draw_system);
         UIRootInputState& input_state = in_root.GetOrMakeRootInputState();
-        input_state.Update(in_param, texture_size, in_tooltip_layer);
+        input_state.Update(in_param, texture_size, in_tooltip_layer, in_combo_box_layer);
 
         in_root.DealInput(
             input_state,
             true 
             );
 
-        input_state.FinialiseTooltip(in_param);
+        input_state.FinialiseTooltip();
+        input_state.FinialiseComboBox();
 
         //LOG_MESSAGE_DEBUG("%d %d %d %d", in_param._mouse_x, in_param._mouse_y, in_param._mouse_left_down, in_param._mouse_right_down, in_param._mouse_scroll);
         //where is the mouse
@@ -394,12 +396,14 @@ void UIManager::Update(
 void UIManager::DealInput(
     UIHierarchyNode& in_root,
     UIData* const in_tooltip_layer,
+    UIData* const in_combo_box_layer,
     const UIManagerDealInputParam& in_param
     )
 {
     _implementation->DealInput(
         in_root, 
         in_tooltip_layer,
+        in_combo_box_layer,
         in_param
         );
     return;

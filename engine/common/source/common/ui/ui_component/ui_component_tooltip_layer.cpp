@@ -97,11 +97,9 @@ void UIComponentTooltipLayer::RequestTooltip(
 }
 
 void UIComponentTooltipLayer::FinalizeTooltips(
-    const std::vector<TooltipRequestData>& in_tooltip_request_data_array,
-    const UIManagerDealInputParam& in_param
+    const std::vector<TooltipRequestData>& in_tooltip_request_data_array
     )
 {
-    in_param;
     std::set<int> used_index;
     //std::set<void*> inuse_source_tokens;
     std::map<void*, int> map_active_tooltips;

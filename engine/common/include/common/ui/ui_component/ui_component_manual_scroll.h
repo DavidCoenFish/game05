@@ -29,6 +29,8 @@ UIHierarchyNode // N0
     C2 is some arbitary child content
     we control the scrolling of T1 for the manual scroll
 */
+
+/// TODO: provide multiple UILayout for permutations of horizontal/vertical scroll being active?
 class UIComponentManualScroll : public IUIComponent
 {
     typedef IUIComponent TSuper;

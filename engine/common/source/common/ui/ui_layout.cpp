@@ -106,6 +106,17 @@ void UILayout::SetTooltip(const VectorFloat2& in_tooltip_pos)
     _data_attach[1] = UICoord(UICoord::ParentSource::Y, 0.0f);
 }
 
+void UILayout::SetComboBoxDropdown(const VectorFloat4& in_combo_box_screen_pos)
+{
+    const float width = (in_combo_box_screen_pos[2] - in_combo_box_screen_pos[0]) * 0.5f;
+    const float mid_x = (in_combo_box_screen_pos[2] + in_combo_box_screen_pos[0]) * 0.5f;
+    _data_size[0] = UICoord(UICoord::ParentSource::X, width);
+    _data_pivot[0] = UICoord(UICoord::ParentSource::X, DscMath::ConvertNegativeOneOneToZeroOne(mid_x));
+    _data_pivot[1] = UICoord(UICoord::ParentSource::Y, DscMath::ConvertNegativeOneOneToZeroOne(in_combo_box_screen_pos[1]));
+    _data_attach[0] = UICoord(UICoord::ParentSource::X, 0.5f);
+    _data_attach[1] = UICoord(UICoord::ParentSource::Y, 1.0f);
+}
+
 const bool UILayout::operator==(const UILayout& in_rhs) const
 {
     if (_data_size[0] != in_rhs._data_size[0])

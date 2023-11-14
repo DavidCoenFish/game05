@@ -31,8 +31,7 @@ public:
 
     // pass everything needed to do a late update hierarchy, update size on children
     void FinalizeTooltips(
-        const std::vector<TooltipRequestData>& in_tooltip_request_data_array,
-        const UIManagerDealInputParam& in_param
+        const std::vector<TooltipRequestData>& in_tooltip_request_data_array
         );
 
 private:

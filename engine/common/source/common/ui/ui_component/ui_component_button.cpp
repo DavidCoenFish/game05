@@ -100,6 +100,7 @@ const bool UIComponentButton::UpdateHierarchy(
 }
 
 void UIComponentButton::OnInputClick(
+    UIRootInputState&,
     const VectorFloat4&, // in_screen_pos,
     const VectorFloat2& in_mouse_pos
     )

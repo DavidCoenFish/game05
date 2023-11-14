@@ -25,6 +25,8 @@
 #include "common/ui/ui_texture.h"
 #include "common/ui/ui_data/ui_data.h"
 #include "common/ui/ui_data/ui_data_button.h"
+#include "common/ui/ui_data/ui_data_combo_box.h"
+#include "common/ui/ui_data/ui_data_combo_box_layer.h"
 #include "common/ui/ui_data/ui_data_disable.h"
 #include "common/ui/ui_data/ui_data_slider.h"
 #include "common/ui/ui_data/ui_data_list_box.h"
@@ -649,6 +651,164 @@ namespace
             array_child_data
             );
     }
+
+    std::shared_ptr<UIData> BuildComboBoxLayer(
+        std::map<std::string, std::shared_ptr<UIData>>& in_data_map,
+        const std::string& in_root_name
+        )
+    {
+        auto dismiss_button = std::make_shared<UIDataButton>(
+                [&in_data_map, in_root_name](const VectorFloat2&){
+                    UIDataComboBoxLayer* const layer = dynamic_cast<UIDataComboBoxLayer*>(in_data_map[in_root_name].get());
+                    if (nullptr != layer)
+                    {
+                        layer->SetActive(false);
+                    }
+                    },
+                [](){
+                    return std::string("<Locale close_combo_box_dropdown>");
+                },
+                false,
+                "button_background"
+                );
+
+        return std::make_shared<UIDataComboBoxLayer>(
+            [&in_data_map, in_root_name](){
+                UIDataComboBoxLayer* const layer = dynamic_cast<UIDataComboBoxLayer*>(in_data_map[in_root_name].get());
+                if (nullptr != layer)
+                {
+                    layer->SetActive(true);
+                }
+            },
+            false,
+            dismiss_button,
+            "UIDataComboBoxLayer",
+            std::vector<std::shared_ptr<UIData>>({
+                dismiss_button
+                })
+            );
+    }
+
+    std::shared_ptr<UIData> BuildComboBox(
+        std::map<std::string, std::shared_ptr<UIData>>& in_data_map,
+        const std::string& in_combo_box_layer_name,
+        const std::string& in_root_name,
+        std::vector<std::shared_ptr<UIData>>& in_array_items
+        )
+    {
+        std::shared_ptr<UIData> parent_selected_item;
+        std::shared_ptr<UIDataListBox> dropdown_listbox;
+        std::shared_ptr<UIData> child_data_dropdown;
+        std::vector<std::shared_ptr<UIData>> content_array;
+        std::vector<std::shared_ptr<UIDataButton>> item_host_button_array;
+        for (auto& item : in_array_items)
+        {
+            auto data_button = std::make_shared<UIDataButton>(
+                nullptr,
+                nullptr,
+                false,
+                "button_listbox_item"
+                );
+
+            auto listbox_item = std::make_shared<UIData>(
+                "canvas_row",
+                std::vector<std::shared_ptr<UIData>>({
+                    data_button,
+                    item
+                    })
+                );
+
+            content_array.push_back(listbox_item);
+            item_host_button_array.push_back(data_button);
+        }
+
+        parent_selected_item = std::make_shared<UIData>();
+
+        dropdown_listbox = std::make_shared<UIDataListBox>(
+                [in_root_name, in_combo_box_layer_name, &in_data_map](int in_selected_index){
+                    auto data = std::dynamic_pointer_cast<UIDataListBox>(in_data_map[in_root_name + "_list_box"]);
+                    if (nullptr != data)
+                    {
+                        data->SetSelectedIndex(in_selected_index);
+                    }
+
+                    auto combo_box = std::dynamic_pointer_cast<UIDataComboBox>(in_data_map[in_root_name + "_combo_box"]);
+                    if (nullptr != combo_box)
+                    {
+                        combo_box->OnSelectItem(in_selected_index);
+                    }
+
+                    auto layer = std::dynamic_pointer_cast<UIDataComboBoxLayer>(in_data_map[in_combo_box_layer_name]);
+                    if (nullptr != layer)
+                    {
+                        layer->SetActive(false);
+                    }
+                },
+                1,
+                item_host_button_array,
+                "UIDataListBox",
+                std::vector<std::shared_ptr<UIData>>({
+                    BuildManualScroll(
+                        true,
+                        false,
+                        in_data_map,
+                        in_root_name + "_manual",
+                        std::make_shared<UIData>(
+                            "combo_box_list_box",
+                            content_array
+                            )
+                        )
+                    })
+            );
+
+        std::vector<std::shared_ptr<UIData>> content_array_combo = std::vector<std::shared_ptr<UIData>>({
+
+            std::make_shared<UIData>(
+                "effect_gloss",
+                std::vector<std::shared_ptr<UIData>>({
+
+                    std::make_shared<UIData>(
+                        "effect_fill",
+                        std::vector<std::shared_ptr<UIData>>({
+
+                            std::make_shared<UIData>(
+                                "effect_corner",
+                                std::vector<std::shared_ptr<UIData>>({
+                                    std::make_shared<UIData>(
+                                        "canvas_grey"
+                                    )
+                                })
+                            )
+                        })
+                    )
+                })
+            ),
+
+            std::make_shared<UIData>(
+                "effect_drop_glow",
+                std::vector<std::shared_ptr<UIData>>({
+                std::make_shared<UIData>(
+                    "UIData",
+                    std::vector<std::shared_ptr<UIData>>({
+                        parent_selected_item
+            }))}))
+        });
+
+        in_data_map[in_root_name + "_list_box"] = dropdown_listbox;
+
+        // TODO: put some sort of frame, dropshadow around listbox
+        child_data_dropdown = dropdown_listbox;
+
+        return std::make_shared<UIDataComboBox>(
+            parent_selected_item,
+            dropdown_listbox,
+            "UIDataComboBox",
+            content_array_combo,
+            child_data_dropdown,
+            in_array_items
+            );
+    }
+
 };
 
 class UIModel : public IUIModel
@@ -911,6 +1071,20 @@ public:
         auto locale_list_box = BuildListBox(
             _data_map,
             "list_box",
+            locale_name_array
+            );
+
+        auto data_combo_box_layer = BuildComboBoxLayer(
+            _data_map,
+            "combo_box_layer"
+            );
+        //std::make_shared<UIDataComboBoxLayer>();
+        _data_map["combo_box_layer"] = data_combo_box_layer;
+
+        auto data_combo_box_locale = BuildComboBox(
+            _data_map,
+            "combo_box_layer",
+            "combo_box_locale",
             locale_name_array
             );
 
@@ -1185,7 +1359,8 @@ public:
                             "string_right_em"
                             ),
                         nullptr,
-                        std::make_shared<UIData>("canvas_blue"),
+                        //std::make_shared<UIData>("canvas_blue"),
+                        data_combo_box_locale
                     })
                 )
 
@@ -1345,24 +1520,28 @@ public:
 
 #if 1
             // Main page data
-            _data_main,
+            _data_main
 #endif
 
 #if 1
             // Modal page data
-            _data_modal,
+            , _data_modal
 #endif
 
 #if 1
             // Build info
-            _data_build,
+            , _data_build
+#endif
+
+#if 1
+            // combo box dropdown layer
+            , data_combo_box_layer
 #endif
 
 #if 1
             // tooltip layer
-            data_tooltip_layer
+            , data_tooltip_layer
 #endif
-
 
             });
     }
@@ -1600,9 +1779,11 @@ void ApplicationBasicUI::Update()
                 mouse_right_button
                 );
             UIData* const tooltip_layer = _draw_resource->_ui_model->GetData("tooltip_layer");
+            UIData* const combo_box_layer = _draw_resource->_ui_model->GetData("combo_box_layer");
              _draw_resource->_ui_manager->DealInput(
                 *_draw_resource->_ui_hierarchy_node,
                 tooltip_layer,
+                combo_box_layer,
                 UIManagerDealInputParam(
                     std::vector<UIManagerDealInputTouch>({
                         UIManagerDealInputTouch(

@@ -28,9 +28,9 @@ struct UIHierarchyNodeUpdateHierarchyParam;
 
 enum class UIStateFlag;
 
-/// interface base class for the ui components, do not store members here, see UIComponentDefault
+/// interface base class for the ui components, previously had a UIComponentDefault for members and implmentation
 /// while it was cute to not inherit implmementation, the amount of traffic copy virtual functions to
-/// add accessors to interface was becoming problematic, so merging IUIComponent and UIComponentDefault
+/// add accessors to interface was becoming problematic, so merging UIComponentDefault into IUIComponent
 class IUIComponent
 {
 public:
@@ -151,6 +151,7 @@ private:
     UILayout _layout;
 
     /// uv = abs(_uv_scroll), and use range [-1...1] wrapped when advancing _uv_scroll, to allow saw tooth animation
+    /// this is not in layout to simplify comparison, ie, this may change, but don't want uv animation to dirty layout
     VectorFloat2 _uv_scroll;
 
     /// keep track of lifespan/ duration of the component
@@ -161,7 +162,7 @@ private:
 
     /// input hover, touch, selected, disabled....
     UIStateFlag _state_flag;
-    /// there are bit when if changed, return dirty
+    /// there are bit when changed, return dirty
     UIStateFlag _state_flag_dirty_mask;
 
     /// an array of tint colours for certain permutations of the state flag, ie UIStateFlag::TTintPermutationCount

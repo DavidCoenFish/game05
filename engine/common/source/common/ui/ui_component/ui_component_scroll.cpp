@@ -251,7 +251,7 @@ const bool UIComponentScroll::UpdateSize(
 void UIComponentScroll::OnInputTouch(
     const VectorFloat4& in_screen_pos,
     const VectorFloat2& in_mouse_pos,
-    std::string& out_tooltip
+    std::string&
     )
 {
     if(nullptr == _value_change)
@@ -269,6 +269,7 @@ void UIComponentScroll::OnInputTouch(
 }
 
 void UIComponentScroll::OnInputClick(
+    UIRootInputState&,
     const VectorFloat4& in_screen_pos,
     const VectorFloat2& in_mouse_pos
     )

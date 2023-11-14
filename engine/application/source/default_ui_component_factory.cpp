@@ -13,6 +13,8 @@
 #include "common/ui/ui_component/i_ui_component.h"
 #include "common/ui/ui_component/ui_component_button.h"
 #include "common/ui/ui_component/ui_component_canvas.h"
+#include "common/ui/ui_component/ui_component_combo_box.h"
+#include "common/ui/ui_component/ui_component_combo_box_layer.h"
 #include "common/ui/ui_component/ui_component_disable.h"
 #include "common/ui/ui_component/ui_component_drift.h"
 #include "common/ui/ui_component/ui_component_effect.h"
@@ -535,6 +537,20 @@ namespace
         return s_layout;
     }
 
+    const UILayout& GetUILayoutComboBoxListBox()
+    {
+        static UILayout s_layout(
+            UICoord(UICoord::ParentSource::X, 1.0f, -s_default_margin),
+            UICoord(UICoord::ParentSource::Y, 1.0f),
+            UICoord(UICoord::ParentSource::X, 0.0f),
+            UICoord(UICoord::ParentSource::Y, 0.0f),
+            UICoord(UICoord::ParentSource::X, 0.0f),
+            UICoord(UICoord::ParentSource::Y, 0.0f),
+            false,
+            false
+            );
+        return s_layout;
+    }
 
     
     
@@ -823,76 +839,6 @@ namespace
     {
         static VectorFloat4 s_colour(1.0f, 1.0f, 1.0f, 1.0f);
         return s_colour;
-    }
-
-    template<
-        TGetUILayoutRef in_get_layout_ref = GetUILayout,
-        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
-        TGetUIStateFlagTintArray in_get_ui_state_flag_tint_array = GetUIStateFlagTintArray
-        >
-    const bool FactoryCanvas(
-        std::unique_ptr<IUIComponent>& in_out_content,
-        const UIComponentFactoryParam& in_factory_param
-        )
-    {
-        UIComponentCanvas* canvas = dynamic_cast<UIComponentCanvas*>(in_out_content.get());
-        if (nullptr == canvas)
-        {
-            in_out_content = std::make_unique<UIComponentCanvas>(
-                in_get_base_colour(in_factory_param._create_index),
-                in_get_layout_ref(),
-                in_get_ui_state_flag_tint_array()
-                );
-            return true;
-        }
-        else
-        {
-            if (true == canvas->SetModel(
-                in_get_base_colour(in_factory_param._create_index),
-                in_get_layout_ref(),
-                in_get_ui_state_flag_tint_array()
-                ))
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    template<
-        TGetUILayoutRef in_get_layout_ref = GetUILayout,
-        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
-        TGetUIStateFlagTintArray in_get_ui_state_flag_tint_array = GetUIStateFlagTintArray
-        >
-    const bool FactoryButton(
-        std::unique_ptr<IUIComponent>& in_out_content,
-        const UIComponentFactoryParam& in_factory_param
-        )
-    {
-        UIComponentButton* content = dynamic_cast<UIComponentButton*>(in_out_content.get());
-        if (nullptr == content)
-        {
-            in_out_content = std::make_unique<UIComponentButton>(
-                in_get_base_colour(in_factory_param._create_index),
-                in_get_layout_ref(),
-                in_get_ui_state_flag_tint_array()
-                );
-            return true;
-        }
-        else
-        {
-            if (true == content->SetModel(
-                in_get_base_colour(in_factory_param._create_index),
-                in_get_layout_ref(),
-                in_get_ui_state_flag_tint_array()
-                ))
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     template<
@@ -1303,78 +1249,6 @@ namespace
     }
 
     template<
-        TGetUILayoutRef in_get_layout_ref = GetUILayout,
-        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
-        TGetUIStateFlagTintArray in_get_ui_state_flag_tint_array = GetUIStateFlagTintArray
-        >
-    const bool FactoryManualScroll(
-        std::unique_ptr<IUIComponent>& in_out_content,
-        const UIComponentFactoryParam& in_factory_param
-        )
-    {
-        UIComponentManualScroll* content = dynamic_cast<UIComponentManualScroll*>(in_out_content.get());
-        bool dirty = false;
-        if (nullptr == content)
-        {
-            dirty = true;
-            auto new_content = std::make_unique<UIComponentManualScroll>(
-                in_get_base_colour(in_factory_param._create_index),
-                in_get_layout_ref(),
-                in_get_ui_state_flag_tint_array()
-                );
-            in_out_content = std::move(new_content);
-        }
-        else
-        {
-            if (true == content->SetModel(
-                in_get_base_colour(in_factory_param._create_index),
-                in_get_layout_ref(),
-                in_get_ui_state_flag_tint_array()
-                ))
-            {
-                dirty = true;
-            }
-        }
-        return dirty;
-    }
-
-    template<
-        TGetUILayoutRef in_get_layout_ref = GetUILayout,
-        TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
-        TGetUIStateFlagTintArray in_get_ui_state_flag_tint_array = GetUIStateFlagTintArray
-        >
-    const bool FactoryListBox(
-        std::unique_ptr<IUIComponent>& in_out_content,
-        const UIComponentFactoryParam& in_factory_param
-        )
-    {
-        UIComponentListBox* content = dynamic_cast<UIComponentListBox*>(in_out_content.get());
-        bool dirty = false;
-        if (nullptr == content)
-        {
-            dirty = true;
-            auto new_content = std::make_unique<UIComponentListBox>(
-                in_get_base_colour(in_factory_param._create_index),
-                in_get_layout_ref(),
-                in_get_ui_state_flag_tint_array()
-                );
-            in_out_content = std::move(new_content);
-        }
-        else
-        {
-            if (true == content->SetModel(
-                in_get_base_colour(in_factory_param._create_index),
-                in_get_layout_ref(),
-                in_get_ui_state_flag_tint_array()
-                ))
-            {
-                dirty = true;
-            }
-        }
-        return dirty;
-    }
-
-    template<
         UISlideDirection in_direction = UISlideDirection::TFromLeft,
         int in_duration_times_1000 = 1000,
         TGetUILayoutRef in_get_layout_ref = GetUILayout,
@@ -1423,21 +1297,22 @@ namespace
     }
 
     template<
+        typename in_type,
         TGetUILayoutRef in_get_layout_ref = GetUILayout,
         TGetUIBaseColour in_get_base_colour = GetUIBaseColourDefault,
         TGetUIStateFlagTintArray in_get_ui_state_flag_tint_array = GetUIStateFlagTintArray
         >
-    const bool FactoryTooltipLayer(
+    const bool FactoryGeneric(
         std::unique_ptr<IUIComponent>& in_out_content,
         const UIComponentFactoryParam& in_factory_param
         )
     {
-        UIComponentTooltipLayer* content = dynamic_cast<UIComponentTooltipLayer*>(in_out_content.get());
+        in_type* content = dynamic_cast<in_type*>(in_out_content.get());
         bool dirty = false;
         if (nullptr == content)
         {
             dirty = true;
-            auto new_content = std::make_unique<UIComponentTooltipLayer>(
+            auto new_content = std::make_unique<in_type>(
                 in_get_base_colour(in_factory_param._create_index),
                 in_get_layout_ref(),
                 in_get_ui_state_flag_tint_array()
@@ -1457,7 +1332,6 @@ namespace
         }
         return dirty;
     }
-
 }
 
 void DefaultUIComponentFactory::Populate(
@@ -1465,97 +1339,118 @@ void DefaultUIComponentFactory::Populate(
     )
 {
     // UIData canvas
-    in_ui_manager.AddContentFactory("UIData", FactoryCanvas<>);
-    in_ui_manager.AddContentFactory("canvas_debug_quad0", FactoryCanvas<
+    in_ui_manager.AddContentFactory("UIData", FactoryGeneric<UIComponentCanvas>);
+    in_ui_manager.AddContentFactory("canvas_debug_quad0", FactoryGeneric<
+        UIComponentCanvas,
         GetUILayoutQuadrant0, 
         GetUIBaseColourRed
         >);
-    in_ui_manager.AddContentFactory("canvas_banner_left", FactoryCanvas<
+    in_ui_manager.AddContentFactory("canvas_banner_left", FactoryGeneric<
+        UIComponentCanvas,
         GetUILayoutBannerLeft, 
         GetUIBaseColourStaggerClearDark
         >);
-    in_ui_manager.AddContentFactory("canvas_red", FactoryCanvas<
+    in_ui_manager.AddContentFactory("canvas_red", FactoryGeneric<
+        UIComponentCanvas,
         GetUILayout, 
         GetUIBaseColourRed
         >);
-    in_ui_manager.AddContentFactory("canvas_grey", FactoryCanvas<
+    in_ui_manager.AddContentFactory("canvas_grey", FactoryGeneric<
+        UIComponentCanvas,
         GetUILayout, 
         GetUIBaseColourGrey
         >);
-    in_ui_manager.AddContentFactory("canvas_white", FactoryCanvas<
+    in_ui_manager.AddContentFactory("canvas_white", FactoryGeneric<
+        UIComponentCanvas,
         GetUILayout, 
         GetUIBaseColourWhite
         >);
-    in_ui_manager.AddContentFactory("horizontal_rule", FactoryCanvas<
+    in_ui_manager.AddContentFactory("horizontal_rule", FactoryGeneric<
+        UIComponentCanvas,
         GetUILayoutHorizontalRule, 
         GetUIBaseColourGrey
         >);
-    in_ui_manager.AddContentFactory("canvas_blue", FactoryCanvas<
+    in_ui_manager.AddContentFactory("canvas_blue", FactoryGeneric<
+        UIComponentCanvas,
         GetUILayout, 
         GetUIBaseColourBlue
         >);
-    in_ui_manager.AddContentFactory("canvas_margin", FactoryCanvas<
+    in_ui_manager.AddContentFactory("canvas_margin", FactoryGeneric<
+        UIComponentCanvas,
         GetUILayoutMargin
         >);
-    in_ui_manager.AddContentFactory("canvas_margin_listbox", FactoryCanvas<
+    in_ui_manager.AddContentFactory("canvas_margin_listbox", FactoryGeneric<
+        UIComponentCanvas,
         GetUILayoutMarginListbox
         >);
-    in_ui_manager.AddContentFactory("canvas_margin_tiny", FactoryCanvas<
+    in_ui_manager.AddContentFactory("canvas_margin_tiny", FactoryGeneric<
+        UIComponentCanvas,
         GetUILayoutMarginTiny
         >);
-    in_ui_manager.AddContentFactory("canvas_knot", FactoryCanvas<
+    in_ui_manager.AddContentFactory("canvas_knot", FactoryGeneric<
+        UIComponentCanvas,
         GetUILayoutKnot, 
         GetUIBaseColourDefault //GetUIBaseColourBlue
         >);
-    in_ui_manager.AddContentFactory("canvas_checkbox_wrapper", FactoryCanvas<
+    in_ui_manager.AddContentFactory("canvas_checkbox_wrapper", FactoryGeneric<
+        UIComponentCanvas,
         GetUILayoutCheckboxWrapper, 
         GetUIBaseColourDefault //GetUIBaseColourBlue
         >);
 
-    in_ui_manager.AddContentFactory("canvas_scroll_horizontal_wrapper", FactoryCanvas<
+    in_ui_manager.AddContentFactory("canvas_scroll_horizontal_wrapper", FactoryGeneric<
+        UIComponentCanvas,
         GetUILayoutScrollWrapper, 
         GetUIBaseColourDark //GetUIBaseColourBlue
         >);
 
-    in_ui_manager.AddContentFactory("canvas_manual_scroll_horizontal", FactoryCanvas<
+    in_ui_manager.AddContentFactory("canvas_manual_scroll_horizontal", FactoryGeneric<
+        UIComponentCanvas,
         GetUILayoutManualScrollHorizontal, 
         GetUIBaseColourDark //GetUIBaseColourBlue
         >);
-    in_ui_manager.AddContentFactory("canvas_manual_scroll_vertical", FactoryCanvas<
+    in_ui_manager.AddContentFactory("canvas_manual_scroll_vertical", FactoryGeneric<
+        UIComponentCanvas,
         GetUILayoutManualScrollVertical, 
         GetUIBaseColourDark //GetUIBaseColourBlue
         >);
-    in_ui_manager.AddContentFactory("canvas_manual_scroll_horizontal_long", FactoryCanvas<
+    in_ui_manager.AddContentFactory("canvas_manual_scroll_horizontal_long", FactoryGeneric<
+        UIComponentCanvas,
         GetUILayoutManualScrollHorizontalLong, 
         GetUIBaseColourDark //GetUIBaseColourBlue
         >);
-    in_ui_manager.AddContentFactory("canvas_manual_scroll_vertical_long", FactoryCanvas<
+    in_ui_manager.AddContentFactory("canvas_manual_scroll_vertical_long", FactoryGeneric<
+        UIComponentCanvas,
         GetUILayoutManualScrollVerticalLong, 
         GetUIBaseColourDark //GetUIBaseColourBlue
         >);
 
-
-    in_ui_manager.AddContentFactory("canvas_debug_scroll_vertical", FactoryCanvas<
+    in_ui_manager.AddContentFactory("canvas_debug_scroll_vertical", FactoryGeneric<
+        UIComponentCanvas,
         GetUILayoutDebugScrollVertical, 
         GetUIBaseColourDark //GetUIBaseColourBlue
         >);
 
-    in_ui_manager.AddContentFactory("canvas_list_box_wrapper", FactoryCanvas<
+    in_ui_manager.AddContentFactory("canvas_list_box_wrapper", FactoryGeneric<
+        UIComponentCanvas,
         GetUILayoutListBoxWrapper, 
         GetUIBaseColourRed
         >);
 
-    in_ui_manager.AddContentFactory("canvas_row", FactoryCanvas<
+    in_ui_manager.AddContentFactory("canvas_row", FactoryGeneric<
+        UIComponentCanvas,
         GetUILayoutRow, 
         GetUIBaseColourDefault
         >);
 
-    in_ui_manager.AddContentFactory("canvas_grey_margin_shrink", FactoryCanvas<
+    in_ui_manager.AddContentFactory("canvas_grey_margin_shrink", FactoryGeneric<
+        UIComponentCanvas,
         GetUILayoutMarginShrink, 
         GetUIBaseColourGrey
         >);
 
-    in_ui_manager.AddContentFactory("canvas_transparent_margin_shrink", FactoryCanvas<
+    in_ui_manager.AddContentFactory("canvas_transparent_margin_shrink", FactoryGeneric<
+        UIComponentCanvas,
         GetUILayoutMarginShrink, 
         GetUIBaseColourDefault
         >);
@@ -1593,6 +1488,15 @@ void DefaultUIComponentFactory::Populate(
         UIOrientation::TVertical,
         GetUICoordNone
         >);
+
+    in_ui_manager.AddContentFactory("combo_box_list_box", FactoryStack<
+        GetUILayoutComboBoxListBox,
+        GetUIBaseColourDefault,
+        GetUIStateFlagTintArray,
+        UIOrientation::TVertical,
+        GetUICoordNone
+        >);
+
 
     // UIData grid
     in_ui_manager.AddContentFactory("grid_dialog_header_body_footer", FactoryGrid<
@@ -1841,34 +1745,41 @@ void DefaultUIComponentFactory::Populate(
         true
         >);
 
-    in_ui_manager.AddContentFactory("UIDataButton", FactoryButton<
+    in_ui_manager.AddContentFactory("UIDataButton", FactoryGeneric<
+        UIComponentButton,
         GetUILayoutRow, 
         GetUIBaseColourDefault //GetUIBaseColourRed
         >);
-    in_ui_manager.AddContentFactory("button_default", FactoryButton<
+    in_ui_manager.AddContentFactory("button_default", FactoryGeneric<
+        UIComponentButton,
         GetUILayout, 
         GetUIBaseColourDefault //GetUIBaseColourRed
         >);
-    in_ui_manager.AddContentFactory("button_background", FactoryButton<
+    in_ui_manager.AddContentFactory("button_background", FactoryGeneric<
+        UIComponentButton,
         GetUILayout, 
         GetUIBaseColourDark
         >);
-    in_ui_manager.AddContentFactory("button_modal_body", FactoryButton<
+    in_ui_manager.AddContentFactory("button_modal_body", FactoryGeneric<
+        UIComponentButton,
         GetUILayout, //GetUILayoutModal, 
         GetUIBaseColourGrey
         >);
-    in_ui_manager.AddContentFactory("button_listbox_item", FactoryButton<
+    in_ui_manager.AddContentFactory("button_listbox_item", FactoryGeneric<
+        UIComponentButton,
         GetUILayout, 
         GetUIBaseColourWhite,
         GetUIStateFlagTintArrayDefault
         >);
-    in_ui_manager.AddContentFactory("UIDataToggle", FactoryButton<
+    in_ui_manager.AddContentFactory("UIDataToggle", FactoryGeneric<
+        UIComponentButton,
         GetUILayoutCheckbox, 
         GetUIBaseColourDefault
         >);
 
     // button of a slider
-    in_ui_manager.AddContentFactory("button_widget", FactoryButton<
+    in_ui_manager.AddContentFactory("button_widget", FactoryGeneric<
+        UIComponentButton,
         GetUILayoutWidget, 
         GetUIBaseColourGrey
         >);
@@ -1887,13 +1798,15 @@ void DefaultUIComponentFactory::Populate(
         UIOrientation::TVertical
         >);
 
-    in_ui_manager.AddContentFactory("UIDataManualScroll", FactoryManualScroll<>);
-    in_ui_manager.AddContentFactory("UIDataListBox", FactoryListBox<>);
+    in_ui_manager.AddContentFactory("UIDataManualScroll", FactoryGeneric<UIComponentManualScroll>);
+    in_ui_manager.AddContentFactory("UIDataListBox", FactoryGeneric<UIComponentListBox>);
     in_ui_manager.AddContentFactory("drift_from_top", FactoryDrift<
         UISlideDirection::TFromTop,
         1000
         >);
-    in_ui_manager.AddContentFactory("UIDataTooltipLayer", FactoryTooltipLayer<>);
+    in_ui_manager.AddContentFactory("UIDataTooltipLayer", FactoryGeneric<UIComponentTooltipLayer>);
+    in_ui_manager.AddContentFactory("UIDataComboBox", FactoryGeneric<UIComponentComboBox>);
+    in_ui_manager.AddContentFactory("UIDataComboBoxLayer", FactoryGeneric<UIComponentComboBoxLayer>);
 
 
     return;

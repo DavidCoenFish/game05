@@ -579,6 +579,7 @@ const bool UIHierarchyNode::DealInput(
                 (touch._active_source_token == source_token))
             {
                 input->OnInputClick(
+                    in_input_state,
                     child_data._screen_space->GetPosRef(),
                     touch._touch_pos_current
                     );
