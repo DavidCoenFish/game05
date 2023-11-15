@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="props">
+      <UniqueIdentifier>{125b65c2-6d18-4462-82c1-cef9831f4025}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="script">
+      <UniqueIdentifier>{6d0910c1-5bf5-4fe6-9740-b0194717ee02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources">
+      <UniqueIdentifier>{1db216d4-99c0-4d81-bf77-440e61fe60ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{cb94c8ae-9e85-4309-87a0-b11e32a02e52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="task">
+      <UniqueIdentifier>{a4274af9-8d6e-4590-8545-c7e23bcdfd15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="task\demo_00">
+      <UniqueIdentifier>{23eee9de-c527-43d3-839e-9d999165536c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\window_application">
+      <UniqueIdentifier>{7950f642-7c8c-4c5f-a83b-db17651e4e9b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="props\application_rts_00.props">
+      <Filter>props</Filter>
+    </None>
+    <None Include="script\util_make_host_define.cmd">
+      <Filter>script</Filter>
+    </None>
+    <None Include="script\util_make_resource.cmd">
+      <Filter>script</Filter>
+    </None>
+    <None Include="script\util_search_replace.cmd">
+      <Filter>script</Filter>
+    </None>
+    <None Include="script\prebuild.cmd">
+      <Filter>script</Filter>
+    </None>
+    <None Include="script\replace_if_different.ps1">
+      <Filter>script</Filter>
+    </None>
+    <None Include="resources\application_rts_00.rc.template">
+      <Filter>resources</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\application_rts_00.ico">
+      <Filter>resources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resources\resource.h">
+      <Filter>resources</Filter>
+    </ClInclude>
+    <ClInclude Include="source\application_rts_00_pch.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\build.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\host_define.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\window_application\application_demo_00.h">
+      <Filter>source\window_application</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\build.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\main.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\application_rts_00_pch.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\window_application\application_demo_00.cpp">
+      <Filter>source\window_application</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="task\demo_00\application.json">
+      <Filter>task\demo_00</Filter>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources\application_rts_00.rc">
+      <Filter>resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

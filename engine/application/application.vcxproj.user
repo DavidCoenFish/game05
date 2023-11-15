@@ -5,4 +5,8 @@
     <RemoteDebuggerCommandArguments>basic_ui</RemoteDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LocalDebuggerCommandArguments>basic_ui</LocalDebuggerCommandArguments>
+    <RemoteDebuggerCommandArguments>basic_ui</RemoteDebuggerCommandArguments>
+  </PropertyGroup>
 </Project>

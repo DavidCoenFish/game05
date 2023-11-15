@@ -11,8 +11,10 @@
    #define DSC_ASSERT(CONDITION, MESSAGE) assert(MESSAGE && (CONDITION))
    #define DSC_ASSERT_ALWAYS(MESSAGE) assert(MESSAGE && false)
 #else
-   #define DSC_ASSERT(CONDITION) (void)0
-   #define DSC_ASSERT_ALWAYS (void)0
+   //#define DSC_ASSERT(CONDITION, MESSAGE) (void)0
+   //#define DSC_ASSERT_ALWAYS (void)0
+   #define DSC_ASSERT(CONDITION, MESSAGE) __noop
+   #define DSC_ASSERT_ALWAYS __noop
 #endif
 
 #define DSC_TODO(MESSAGE, ...) DSC_ASSERT_ALWAYS(MESSAGE)

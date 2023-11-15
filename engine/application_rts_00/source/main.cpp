@@ -1,4 +1,4 @@
-#include "application_pch.h"
+#include "application_rts_00_pch.h"
 
 #include "build.h"
 
@@ -9,15 +9,7 @@
 #include "common/util/command_line.h"
 #include "common/util/utf8.h"
 
-#include "window_application/application_basic_ui.h"
-#include "window_application/application_multi_line.h"
-#include "window_application/application_multi_line_compute.h"
-#include "window_application/application_test_compute.h"
-#include "window_application/application_test_coord.h"
-#include "window_application/application_test_line.h"
-#include "window_application/application_test_text.h"
-#include "window_application/application_test_text_run.h"
-#include "window_application/application_test_triangle.h"
+#include "window_application/application_demo_00.h"
 
 #include <json/json.hpp>
 
@@ -45,15 +37,7 @@ static std::map< std::string, TWindowApplicationFactory >& GetWindowApplicationF
 {
     static std::map< std::string, TWindowApplicationFactory > s_map(
         {
-            {"BasicUI", ApplicationBasicUI::Factory},
-            {"MultiLine", ApplicationMultiLine::Factory},
-            {"MultiLineCompute", ApplicationMultiLineCompute::Factory},
-            {"TestCompute", ApplicationTestCompute::Factory},
-            {"TestCoord", ApplicationTestCoord::Factory},
-            {"TestLine", ApplicationTestLine::Factory},
-            {"TestText", ApplicationTestText::Factory},
-            {"TestTextRun", ApplicationTestTextRun::Factory},
-            {"TestTriangle", ApplicationTestTriangle::Factory}
+            {"demo_00", ApplicationDemo00::Factory},
         });
     return s_map;
 }
