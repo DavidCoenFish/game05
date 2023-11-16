@@ -12,7 +12,7 @@
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_root_input_state.h"
 #include "common/ui/ui_texture.h"
-#include "common/ui/ui_data/ui_data_tooltip_layer.h"
+//#include "common/ui/ui_data/ui_data_tooltip_layer.h"
 
 namespace
 {

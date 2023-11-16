@@ -1,0 +1,10 @@
+- UIData refactor, 
+    link to parent
+    flag for hierarchy change, layout change, render change
+    add layout
+    layout refactor, size from content, 
+- pollish pass on text placement, 
+    check wrap
+    clean up EM align (modify "zero" row of font glyph texture?)
+- rebuild "update layout" logic to not run unless something changes
+- svg

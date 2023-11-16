@@ -55,20 +55,16 @@ namespace
 }
 
 UIComponentEffect::UIComponentEffect(
-    const UIBaseColour& in_base_colour,
-    const UILayout& in_layout,
-    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
+    //const UIBaseColour& in_base_colour,
+    //const UILayout& in_layout,
+    //const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
     const UIEffectEnum in_type,
     const UICoord& in_coord_a,
     const UICoord& in_coord_b,
     const UICoord& in_coord_c,
     const UICoord& in_coord_d
     )
-    : IUIComponent(
-        in_base_colour,
-        in_layout,
-        in_state_flag_tint_array
-        )
+    : IUIComponent()
     , _type(in_type)
     , _coord_a(in_coord_a)
     , _coord_b(in_coord_b)
@@ -130,6 +126,7 @@ const bool UIComponentEffect::SetModelOther(
     return dirty;
 }
 
+/*
 const bool UIComponentEffect::UpdateHierarchy(
     UIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
@@ -223,6 +220,7 @@ const bool UIComponentEffect::UpdateSize(
 
     return dirty;
 }
+*/
 
 const bool UIComponentEffect::PreDraw(
     const UIManagerDrawParam& in_draw_param,
@@ -269,15 +267,15 @@ const bool UIComponentEffect::PreDraw(
                 );
 
             // the tint array index may be changed by input after update size and before draw
-            if (nullptr != _shader_constant_buffer)
-            {
-                UIManager::TShaderConstantBuffer& constant_0 = _shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
-                const auto new_tint = TSuper::GetTintColour();
-                if (constant_0._tint_colour != new_tint)
-                {
-                    constant_0._tint_colour = new_tint;
-                }
-            }
+            //if (nullptr != _shader_constant_buffer)
+            //{
+            //    UIManager::TShaderConstantBuffer& constant_0 = _shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
+            //    const auto new_tint = TSuper::GetTintColour();
+            //    if (constant_0._tint_colour != new_tint)
+            //    {
+            //        constant_0._tint_colour = new_tint;
+            //    }
+            //}
 
             in_draw_param._frame->SetShader(shader, _shader_constant_buffer);
 
@@ -313,9 +311,9 @@ const bool UIComponentEffect::PreDraw(
 
     return dirty;
 }
-
-// this Component already uses the tint colour in it's custom PreDraw
-const VectorFloat4 UIComponentEffect::GetTintColour() const
-{
-    return VectorFloat4::s_white;
-}
+//
+//// this Component already uses the tint colour in it's custom PreDraw
+//const VectorFloat4 UIComponentEffect::GetTintColour() const
+//{
+//    return VectorFloat4::s_white;
+//}

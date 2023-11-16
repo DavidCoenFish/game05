@@ -223,12 +223,6 @@
     <ClCompile Include="source\common\ui\ui_texture.cpp">
       <Filter>souce\common\ui</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\ui\ui_data\ui_data_button.cpp">
-      <Filter>souce\common\ui\ui_data</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_data\ui_data_text_run.cpp">
-      <Filter>souce\common\ui\ui_data</Filter>
-    </ClCompile>
     <ClCompile Include="source\common\ui\ui_data\ui_data.cpp">
       <Filter>souce\common\ui\ui_data</Filter>
     </ClCompile>
@@ -237,9 +231,6 @@
     </ClCompile>
     <ClCompile Include="source\common\ui\ui_root_input_state.cpp">
       <Filter>souce\common\ui</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_data\ui_data_string.cpp">
-      <Filter>souce\common\ui\ui_data</Filter>
     </ClCompile>
     <ClCompile Include="source\common\text\text_pre_vertex.cpp">
       <Filter>souce\common\text</Filter>
@@ -289,86 +280,17 @@
     <ClCompile Include="source\common\ui\ui_component\i_ui_component.cpp">
       <Filter>souce\common\ui\ui_component</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\ui\ui_component\ui_component_button.cpp">
-      <Filter>souce\common\ui\ui_component</Filter>
-    </ClCompile>
     <ClCompile Include="source\common\ui\ui_component\ui_component_canvas.cpp">
-      <Filter>souce\common\ui\ui_component</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_component\ui_component_effect.cpp">
-      <Filter>souce\common\ui\ui_component</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_component\ui_component_stack.cpp">
-      <Filter>souce\common\ui\ui_component</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_component\ui_component_string.cpp">
-      <Filter>souce\common\ui\ui_component</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_component\ui_component_text_run.cpp">
-      <Filter>souce\common\ui\ui_component</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_component\ui_component_texture.cpp">
-      <Filter>souce\common\ui\ui_component</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_component\ui_component_grid.cpp">
       <Filter>souce\common\ui\ui_component</Filter>
     </ClCompile>
     <ClCompile Include="source\common\draw_system\draw_system_resource_list.cpp">
       <Filter>souce\common\draw_system</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\ui\ui_data\ui_data_disable.cpp">
-      <Filter>souce\common\ui\ui_data</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_component\ui_component_disable.cpp">
+    <ClCompile Include="source\common\ui\ui_component\ui_component_effect.cpp">
       <Filter>souce\common\ui\ui_component</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\ui\ui_data\ui_data_slider.cpp">
+    <ClCompile Include="source\common\ui\ui_data\ui_data_text_run.cpp">
       <Filter>souce\common\ui\ui_data</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_data\ui_data_toggle.cpp">
-      <Filter>souce\common\ui\ui_data</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_component\ui_component_scroll.cpp">
-      <Filter>souce\common\ui\ui_component</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_component\ui_component_slider.cpp">
-      <Filter>souce\common\ui\ui_component</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_data\ui_data_scroll.cpp">
-      <Filter>souce\common\ui\ui_data</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_component\ui_component_manual_scroll.cpp">
-      <Filter>souce\common\ui\ui_component</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_data\ui_data_manual_scroll.cpp">
-      <Filter>souce\common\ui\ui_data</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_data\ui_data_list_box.cpp">
-      <Filter>souce\common\ui\ui_data</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_component\ui_component_list_box.cpp">
-      <Filter>souce\common\ui\ui_component</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_component\ui_component_drift.cpp">
-      <Filter>souce\common\ui\ui_component</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_data\ui_data_tooltip_layer.cpp">
-      <Filter>souce\common\ui\ui_data</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_component\ui_component_tooltip_layer.cpp">
-      <Filter>souce\common\ui\ui_component</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_data\ui_data_combo_box.cpp">
-      <Filter>souce\common\ui\ui_data</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_data\ui_data_combo_box_layer.cpp">
-      <Filter>souce\common\ui\ui_data</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_component\ui_component_combo_box_layer.cpp">
-      <Filter>souce\common\ui\ui_component</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\ui\ui_component\ui_component_combo_box.cpp">
-      <Filter>souce\common\ui\ui_component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -609,13 +531,7 @@
     <ClInclude Include="include\common\ui\ui_texture.h">
       <Filter>include\common\ui</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\ui\ui_data\ui_data_button.h">
-      <Filter>include\common\ui\ui_data</Filter>
-    </ClInclude>
     <ClInclude Include="include\common\ui\ui_data\ui_data.h">
-      <Filter>include\common\ui\ui_data</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_data\ui_data_text_run.h">
       <Filter>include\common\ui\ui_data</Filter>
     </ClInclude>
     <ClInclude Include="include\common\ui\i_ui_model.h">
@@ -623,9 +539,6 @@
     </ClInclude>
     <ClInclude Include="source\common\ui\ui_root_input_state.h">
       <Filter>souce\common\ui</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_data\ui_data_string.h">
-      <Filter>include\common\ui\ui_data</Filter>
     </ClInclude>
     <ClInclude Include="include\common\text\text_pre_vertex.h">
       <Filter>include\common\text</Filter>
@@ -678,92 +591,23 @@
     <ClInclude Include="include\common\ui\ui_base_colour.h">
       <Filter>include\common\ui</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\ui\ui_component\ui_component_effect.h">
-      <Filter>include\common\ui\ui_component</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_component\ui_component_stack.h">
-      <Filter>include\common\ui\ui_component</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_component\ui_component_string.h">
-      <Filter>include\common\ui\ui_component</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_component\ui_component_text_run.h">
-      <Filter>include\common\ui\ui_component</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_component\ui_component_texture.h">
-      <Filter>include\common\ui\ui_component</Filter>
-    </ClInclude>
     <ClInclude Include="include\common\ui\ui_component\i_ui_component.h">
-      <Filter>include\common\ui\ui_component</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_component\ui_component_button.h">
       <Filter>include\common\ui\ui_component</Filter>
     </ClInclude>
     <ClInclude Include="include\common\ui\ui_component\ui_component_canvas.h">
       <Filter>include\common\ui\ui_component</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\ui\ui_component\ui_component_grid.h">
-      <Filter>include\common\ui\ui_component</Filter>
-    </ClInclude>
     <ClInclude Include="include\common\draw_system\draw_system_resource_list.h">
       <Filter>include\common\draw_system</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_data\ui_data_disable.h">
-      <Filter>include\common\ui\ui_data</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_component\ui_component_disable.h">
-      <Filter>include\common\ui\ui_component</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_data\ui_data_slider.h">
-      <Filter>include\common\ui\ui_data</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_data\ui_data_toggle.h">
-      <Filter>include\common\ui\ui_data</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_component\ui_component_scroll.h">
-      <Filter>include\common\ui\ui_component</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_component\ui_component_slider.h">
-      <Filter>include\common\ui\ui_component</Filter>
     </ClInclude>
     <ClInclude Include="include\common\ui\ui_enum.h">
       <Filter>include\common\ui</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\ui\ui_data\ui_data_scroll.h">
-      <Filter>include\common\ui\ui_data</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_data\ui_data_manual_scroll.h">
-      <Filter>include\common\ui\ui_data</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_component\ui_component_manual_scroll.h">
+    <ClInclude Include="include\common\ui\ui_component\ui_component_effect.h">
       <Filter>include\common\ui\ui_component</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\ui\ui_data\ui_data_list_box.h">
+    <ClInclude Include="include\common\ui\ui_data\ui_data_text_run.h">
       <Filter>include\common\ui\ui_data</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_component\ui_component_list_box.h">
-      <Filter>include\common\ui\ui_component</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_component\ui_component_drift.h">
-      <Filter>include\common\ui\ui_component</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_data\ui_data_tooltip_layer.h">
-      <Filter>include\common\ui\ui_data</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_component\ui_component_tooltip_layer.h">
-      <Filter>include\common\ui\ui_component</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_data\ui_data_combo_box.h">
-      <Filter>include\common\ui\ui_data</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_data\ui_data_combo_box_layer.h">
-      <Filter>include\common\ui\ui_data</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_component\ui_component_combo_box.h">
-      <Filter>include\common\ui\ui_component</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\ui\ui_component\ui_component_combo_box_layer.h">
-      <Filter>include\common\ui\ui_component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

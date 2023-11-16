@@ -54,7 +54,6 @@ UIComponentFactoryParam::UIComponentFactoryParam(
 UIManagerUpdateParam::UIManagerUpdateParam(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list,
-    const IUIModel* const in_ui_model,
     const UIDataTextRunStyle* const in_default_text_style,
     LocaleSystem* const in_locale_system,
     TextManager* const in_text_manager,
@@ -62,13 +61,10 @@ UIManagerUpdateParam::UIManagerUpdateParam(
     const float in_time_delta,
     const bool in_draw_every_frame, // mark top level as dirty each frame, the destination render target may have other systems drawing to it
     const bool in_draw_to_texture, // Draw to texture or backbuffer?
-    const VectorInt2& in_texture_size, // If in_draw_to_texture is true, size to use for texture
-    const bool in_allow_clear,
-    const VectorFloat4& in_clear_colour
+    const VectorInt2& in_texture_size // If in_draw_to_texture is true, size to use for texture
     )
     : _draw_system(in_draw_system)
     , _command_list(in_command_list)
-    , _ui_model(in_ui_model)
     , _locale_system(in_locale_system)
     , _text_manager(in_text_manager)
     , _ui_scale(in_ui_scale)
@@ -76,8 +72,6 @@ UIManagerUpdateParam::UIManagerUpdateParam(
     , _draw_to_texture(in_draw_to_texture)
     , _draw_every_frame(in_draw_every_frame)
     , _texture_size(in_texture_size)
-    , _allow_clear(in_allow_clear)
-    , _clear_colour(in_clear_colour)
     , _default_text_style(in_default_text_style)
 {
     // Nop
@@ -205,73 +199,61 @@ public:
         return;
     }
 
-    void AddContentFactory(
-        const std::string& in_content_name,
-        const UIManager::TContentFactory& in_factory
-        )
-    {
-        _map_content_factory[in_content_name] = in_factory;
-        return;
-    }
-
     // Update layout
     void Update(
         std::shared_ptr<UIHierarchyNode>& in_out_target_or_null,
-        const UIManagerUpdateParam& in_param,
-        const std::string& in_model_key,
-        UIManager* const in_ui_manager
+        UIData* const in_ui_data,
+        const UIManagerUpdateParam& in_param
         )
     {
-        const UIScreenSpace parent_screen_space;
-        UIHierarchyNodeUpdateHierarchyParam hierarchy_param(
-            _map_content_factory,
-            in_param._draw_system,
-            in_param._command_list,
-            in_param._ui_model,
-            in_ui_manager,
-            in_param._locale_system,
-            in_param._text_manager,
-            in_param._default_text_style
-            );
-        if (false == in_param._ui_model->VisitDataArray(
-            in_model_key,
-            [&in_out_target_or_null, &in_param, &hierarchy_param, &parent_screen_space](const std::vector<std::shared_ptr<UIData>>& in_array_data){
+        if (nullptr == in_ui_data)
+        {
+            if (nullptr != in_out_target_or_null)
+            {
+                in_out_target_or_null = nullptr;
+            }
+        }
+        else
+        {
+            if (true == in_ui_data->GetDirtyBit(UIDataDirty::THierarchy))
+            {
                 if (nullptr == in_out_target_or_null)
                 {
                     in_out_target_or_null = std::make_shared<UIHierarchyNode>();
                 }
 
-                bool dirty = false;
-                if(true == in_out_target_or_null->UpdateHierarchy(
-                    hierarchy_param,
-                    &in_array_data,
-                    in_param._draw_to_texture,
-                    in_param._draw_every_frame,
-                    in_param._allow_clear,
-                    in_param._clear_colour
-                    ))
-                {
-                    dirty = true;
-                }
-
-                const VectorInt2 top_level_size = in_out_target_or_null->GetTextureSize(
-                    in_param._draw_system
-                    );
-
-                in_out_target_or_null->UpdateSize(
+                UIHierarchyNodeUpdateHierarchyParam update_param(
                     in_param._draw_system,
-                    top_level_size,
-                    VectorInt2(),
-                    top_level_size,
-                    in_param._ui_scale,
-                    in_param._time_delta,
-                    dirty,
-                    parent_screen_space
+                    in_param._command_list,
+                    //this,
+                    in_param._locale_system,
+                    in_param._text_manager,
+                    in_param._default_text_style
                     );
-            }))
-        {
-            in_out_target_or_null = nullptr;
+                in_out_target_or_null->UpdateHierarchy(
+                    update_param,
+                    *in_ui_data
+                    );
+            }
+
+            if ((nullptr != in_out_target_or_null) && (true == in_ui_data->GetDirtyBit(UIDataDirty::TLayoutRender)))
+            {
+                UIHierarchyNodeUpdateLayoutRenderParam update_param(
+                    in_param._draw_system,
+                    in_param._ui_scale,
+                    in_param._time_delta
+                    );
+                in_out_target_or_null->UpdateLayoutRender(
+                    in_out_target_or_null->GetTextureSize(
+                        in_param._draw_system
+                        ),
+                    update_param,
+                    *in_ui_data,
+                    UIScreenSpace()
+                    );
+            }
         }
+
         return;
     }
 
@@ -319,8 +301,6 @@ public:
 
 private:
     std::shared_ptr<Shader> _shader;
-    std::map<std::string, UIManager::TContentFactory> _map_content_factory;
-
     std::array<std::shared_ptr<Shader>, static_cast<size_t>(UIEffectEnum::TCount)> _shader_array;
 
 };
@@ -364,30 +344,17 @@ void UIManager::BuildGeometryData(
     return;
 }
 
-void UIManager::AddContentFactory(
-    const std::string& in_content_name,
-    const TContentFactory& in_factory
-    )
-{
-    _implementation->AddContentFactory(
-        in_content_name,
-        in_factory
-        );
-    return;
-}
-
 // Update layout
 void UIManager::Update(
     std::shared_ptr<UIHierarchyNode>& in_out_target_or_null,
-    const UIManagerUpdateParam& in_param,
-    const std::string& in_model_key
+    UIData* const in_ui_data,
+    const UIManagerUpdateParam& in_param
     )
 {
     _implementation->Update(
         in_out_target_or_null, 
-        in_param,
-        in_model_key,
-        this
+        in_ui_data,
+        in_param
         );
     return;
 }

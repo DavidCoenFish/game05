@@ -1,27 +1,6 @@
-- combo box
-  - dropdown
-- change locale
-- transition out effect
-- fade in effect
-- fade exit
-- character selection screen stub
+- ui (see todo_ui.txt)
+- rts demo (see todo_rts.txt)
 - blob renderer
 - personality decal
 - shadow blob (folds upward to look around, laughs, eyes track mouse pointer...)
 - anatomy study shaders
-- rts demo?
-    rts stalic lib
-        input database
-            snapshot
-                entity list (position, health)
-                visibity map
-            snapshot cache
-            retroactive insert input
-            rebuild snapshot
-        draw snapshot
-    ui build factory from content, ref dag collection
-        ui to select units
-        ui to build building
-
-
-

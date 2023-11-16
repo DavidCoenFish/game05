@@ -168,12 +168,12 @@ void UIRootInputState::RequestTooltip(
 // this may need UpdateHierarchy/size param? 
 void UIRootInputState::FinialiseTooltip()
 {
-    if (nullptr != _tooltip_layer)
-    {
-        _tooltip_layer->FinalizeTooltips(
-            _tooltip_request_data
-            );
-    }
+    //if (nullptr != _tooltip_layer)
+    //{
+    //    _tooltip_layer->FinalizeTooltips(
+    //        _tooltip_request_data
+    //        );
+    //}
     return;
 }
 
@@ -187,9 +187,9 @@ void UIRootInputState::RequestComboBoxDropdown(
 
 void UIRootInputState::FinialiseComboBox()
 {
-    if ((nullptr != _combo_box_layer) && (nullptr != _combo_box_dropdown))
-    {
-        _combo_box_layer->TriggerComboBoxDropDown(_combo_box_dropdown);
-    }
+    //if ((nullptr != _combo_box_layer) && (nullptr != _combo_box_dropdown))
+    //{
+    //    _combo_box_layer->TriggerComboBoxDropDown(_combo_box_dropdown);
+    //}
     return;
 }

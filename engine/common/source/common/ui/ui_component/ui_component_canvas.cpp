@@ -3,16 +3,8 @@
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_geometry.h"
 
-UIComponentCanvas::UIComponentCanvas(
-    const UIBaseColour& in_base_colour,
-    const UILayout& in_layout,
-    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
-    )
-    : IUIComponent(
-        in_base_colour,
-        in_layout,
-        in_state_flag_tint_array
-        )
+UIComponentCanvas::UIComponentCanvas()
+    : IUIComponent()
 {
     // Nop
 }

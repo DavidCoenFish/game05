@@ -5,16 +5,16 @@ UIBaseColour::UIBaseColour(
     const VectorFloat4& in_clear_colour,
     const bool in_clear_background,
     const VectorFloat4& in_tint_colour,
-    //const float in_fade_duration_seconds,
-    //const float in_delay_per_create_index_seconds
+    const bool in_draw_to_texture,
+    const bool in_always_dirty,
     const float in_fade_start_seconds,
     const float in_fade_end_seconds
     )
     : _clear_colour(in_clear_colour)
     , _clear_background(in_clear_background)
     , _tint_colour(in_tint_colour)
-    //, _fade_duration_seconds(in_fade_duration_seconds)
-    //, _delay_per_create_index_seconds(in_delay_per_create_index_seconds)
+    , _draw_to_texture(in_draw_to_texture)
+    , _always_dirty(in_always_dirty)
     , _fade_start_seconds(in_fade_start_seconds)
     , _fade_end_seconds(in_fade_end_seconds)
 {
@@ -94,6 +94,16 @@ const bool UIBaseColour::operator==(const UIBaseColour& in_rhs) const
     {
         return false;
     }
+
+    if (_draw_to_texture != in_rhs._draw_to_texture)
+    {
+        return false;
+    }
+    if (_always_dirty != in_rhs._always_dirty)
+    {
+        return false;
+    }
+
     if (_fade_start_seconds != in_rhs._fade_start_seconds)
     {
         return false;

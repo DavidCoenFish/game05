@@ -9,11 +9,7 @@ class UIComponentCanvas : public IUIComponent
 {
     typedef IUIComponent TSuper;
 public:
-    UIComponentCanvas(
-        const UIBaseColour& in_base_colour,
-        const UILayout& in_layout,
-        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
-        );
+    UIComponentCanvas();
     virtual ~UIComponentCanvas();
 
 };

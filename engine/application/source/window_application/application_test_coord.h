@@ -48,8 +48,8 @@ private:
         std::shared_ptr<Shader> _present_shader;
         std::shared_ptr<GeometryGeneric> _panel_geometry[2];
 
-        std::shared_ptr<UIHierarchyNode> _ui_hierarchy_node;
-        std::shared_ptr<UIComponentTexture> _ui_texture[2];
+        //std::shared_ptr<UIHierarchyNode> _ui_hierarchy_node;
+        //std::shared_ptr<UIComponentTexture> _ui_texture[2];
         
     };
     std::unique_ptr<DrawResource> _draw_resource;

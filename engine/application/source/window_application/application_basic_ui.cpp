@@ -17,8 +17,8 @@
 #include "common/math/vector_int4.h"
 #include "common/text/text_manager.h"
 #include "common/ui/ui_component/ui_component_canvas.h"
-#include "common/ui/ui_component/ui_component_texture.h"
-#include "common/ui/ui_component/ui_component_tooltip_layer.h"
+//#include "common/ui/ui_component/ui_component_texture.h"
+//#include "common/ui/ui_component/ui_component_tooltip_layer.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_manager.h"
 #include "common/ui/i_ui_model.h"
@@ -48,6 +48,7 @@ class UIModel;
 
 namespace
 {
+/*
     std::vector<std::shared_ptr<UIData>> BuildButtonData(const std::string& in_body)
     {
         return std::vector<std::shared_ptr<UIData>>({
@@ -808,14 +809,15 @@ namespace
             in_array_items
             );
     }
-
+*/
 };
 
 class UIModel : public IUIModel
 {
 public:
-    UIModel(IWindowApplication& in_application)
+    UIModel(IWindowApplication& )//in_application)
     {
+/*
         _data_build_version = std::make_shared<UIDataString>(
             std::string(Build::GetBuildTime()) + " " + Build::GetBuildVersion(),
             LocaleISO_639_1::Default,
@@ -1544,6 +1546,7 @@ public:
 #endif
 
             });
+*/
     }
 
     virtual ~UIModel()
@@ -1569,9 +1572,9 @@ public:
             stream << in_nice_fps;
             std::string stream_string = stream.str();
 
-            _data_build_fps->SetString(stream_string);
+            //_data_build_fps->SetString(stream_string);
         }
-
+/*
         auto& data_array = _data_build->ModifyData();
         data_array.clear();
 
@@ -1582,6 +1585,7 @@ public:
 
         data_array.push_back(_data_build_version);
         data_array.push_back(_data_build_info);
+*/
     }
 
 private:
@@ -1743,7 +1747,7 @@ void ApplicationBasicUI::Update()
 
         auto frame = _draw_system->CreateNewFrame();
         frame->SetRenderTarget(_draw_system->GetRenderTargetBackBuffer());
-
+/*
         // Update ui layout
         {
             UIManagerUpdateParam update_param(
@@ -1816,6 +1820,7 @@ void ApplicationBasicUI::Update()
                 );
         }
         #endif
+*/
     }
 }
 

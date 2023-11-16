@@ -30,7 +30,6 @@ struct UIDataTextRunStyle
 
 /*
 the ui system passes in 
-*/
 class UIDataTextRun : public UIData
 {
 public:
@@ -78,3 +77,4 @@ private:
     std::vector<std::shared_ptr<ITextRunData>> _data;
 
 };
+*/

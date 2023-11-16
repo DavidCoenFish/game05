@@ -8,11 +8,7 @@ class UIComponentComboBoxLayer : public IUIComponent
 public:
     //typedef std::function<void(const std::vector<std::shared_ptr<UIData>>&)> TTriggerComboBoxDropDown;
 
-    UIComponentComboBoxLayer(
-        const UIBaseColour& in_base_colour,
-        const UILayout& in_layout,
-        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
-        );
+    UIComponentComboBoxLayer();
     virtual ~UIComponentComboBoxLayer();
 
     // or is all this done in the background of the model away from the components, ie, the combobox on click does the work of putting data into the UIComponentComboBoxLayer
@@ -21,12 +17,12 @@ public:
         const std::shared_ptr<UIHierarchyNodeChildData>& in_combo_box_dropdown
         );
 
-private:
-    virtual const bool UpdateHierarchy(
-        UIData* const in_data,
-        UIHierarchyNodeChildData& in_out_child_data,
-        const UIHierarchyNodeUpdateHierarchyParam& in_param
-        ) override;
+//private:
+//    virtual const bool UpdateHierarchy(
+//        UIData* const in_data,
+//        UIHierarchyNodeChildData& in_out_child_data,
+//        const UIHierarchyNodeUpdateHierarchyParam& in_param
+//        ) override;
 
 private:
     // there are two paths to deactivation, which both may be expressed via the model, clicking outside the dropdown, or selecting something in the dropdown

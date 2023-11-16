@@ -11,37 +11,62 @@
 #include "common/text/text_manager.h"
 #include "common/text/text_run.h"
 #include "common/ui/ui_component/i_ui_component.h"
-#include "common/ui/ui_component/ui_component_button.h"
+//#include "common/ui/ui_component/ui_component_button.h"
 #include "common/ui/ui_component/ui_component_canvas.h"
-#include "common/ui/ui_component/ui_component_combo_box.h"
-#include "common/ui/ui_component/ui_component_combo_box_layer.h"
-#include "common/ui/ui_component/ui_component_disable.h"
-#include "common/ui/ui_component/ui_component_drift.h"
-#include "common/ui/ui_component/ui_component_effect.h"
-#include "common/ui/ui_component/ui_component_grid.h"
-#include "common/ui/ui_component/ui_component_list_box.h"
-#include "common/ui/ui_component/ui_component_manual_scroll.h"
-#include "common/ui/ui_component/ui_component_scroll.h"
-#include "common/ui/ui_component/ui_component_slider.h"
-#include "common/ui/ui_component/ui_component_stack.h"
-#include "common/ui/ui_component/ui_component_string.h"
-#include "common/ui/ui_component/ui_component_text_run.h"
-#include "common/ui/ui_component/ui_component_tooltip_layer.h"
+//#include "common/ui/ui_component/ui_component_combo_box.h"
+//#include "common/ui/ui_component/ui_component_combo_box_layer.h"
+//#include "common/ui/ui_component/ui_component_disable.h"
+//#include "common/ui/ui_component/ui_component_drift.h"
+//#include "common/ui/ui_component/ui_component_effect.h"
+//#include "common/ui/ui_component/ui_component_grid.h"
+//#include "common/ui/ui_component/ui_component_list_box.h"
+//#include "common/ui/ui_component/ui_component_manual_scroll.h"
+//#include "common/ui/ui_component/ui_component_scroll.h"
+//#include "common/ui/ui_component/ui_component_slider.h"
+//#include "common/ui/ui_component/ui_component_stack.h"
+//#include "common/ui/ui_component/ui_component_string.h"
+//#include "common/ui/ui_component/ui_component_text_run.h"
+//#include "common/ui/ui_component/ui_component_tooltip_layer.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_base_colour.h"
 #include "common/ui/ui_enum.h"
 #include "common/ui/ui_enum.h"
 #include "common/ui/ui_layout.h"
 #include "common/ui/ui_manager.h"
-#include "common/ui/ui_data/ui_data_disable.h"
-#include "common/ui/ui_data/ui_data_list_box.h"
-#include "common/ui/ui_data/ui_data_manual_scroll.h"
-#include "common/ui/ui_data/ui_data_scroll.h"
-#include "common/ui/ui_data/ui_data_slider.h"
-#include "common/ui/ui_data/ui_data_string.h"
+//#include "common/ui/ui_data/ui_data_disable.h"
+//#include "common/ui/ui_data/ui_data_list_box.h"
+//#include "common/ui/ui_data/ui_data_manual_scroll.h"
+//#include "common/ui/ui_data/ui_data_scroll.h"
+//#include "common/ui/ui_data/ui_data_slider.h"
+//#include "common/ui/ui_data/ui_data_string.h"
 #include "common/ui/ui_data/ui_data_text_run.h"
-#include "common/ui/ui_data/ui_data_tooltip_layer.h"
+//#include "common/ui/ui_data/ui_data_tooltip_layer.h"
 
+namespace
+{
+    const std::filesystem::path& GetFontPathDefault()
+    {
+        static std::filesystem::path s_data = std::filesystem::path("data") / "code2000.ttf";
+        return s_data;
+    }
+    constexpr int s_default_font_size = 16;
+    constexpr int s_default_font_size_small = 12;
+    constexpr float s_default_newling_ratio = 0.25f;
+
+    const VectorFloat4& GetColourBlack()
+    {
+        static VectorFloat4 s_colour(0.0f, 0.0f, 0.0f, 1.0f);
+        return s_colour;
+    }
+    const VectorFloat4& GetColourWhite()
+    {
+        static VectorFloat4 s_colour(1.0f, 1.0f, 1.0f, 1.0f);
+        return s_colour;
+    }
+
+}
+
+/*
 namespace
 {
     enum class AlignmentHorizontal
@@ -1811,6 +1836,14 @@ void DefaultUIComponentFactory::Populate(
 
     return;
 }
+*/
+void DefaultUIComponentFactory::Populate(
+    UIManager& //in_ui_manager
+    )
+{
+    // Nop
+}
+
 
 const UIDataTextRunStyle* const DefaultUIComponentFactory::GetDefaultTextStyle()
 {
@@ -1828,4 +1861,6 @@ const std::string DefaultUIComponentFactory::GetTextRunTagSmallFont()
 {
     return std::string("<Size ") + std::to_string(s_default_font_size_small) + ">";
 }
+
+
 

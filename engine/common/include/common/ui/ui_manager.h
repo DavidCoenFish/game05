@@ -43,14 +43,13 @@ struct UIComponentFactoryParam
 
 ///  locale should be an aspect of the UIData, not the ui update param
 ///  however, Harfbuz want to know the locale to help pos the text.
-///  so Locale in is used to resolve the locale system keys to text, but we still pass locale key
+///  so Locale is used to resolve the locale system keys to text on the UIData side, but we still pass locale key for harfbuz
 /// \related UIManager
 struct UIManagerUpdateParam
 {
     explicit UIManagerUpdateParam(
         DrawSystem* const in_draw_system = nullptr,
         ID3D12GraphicsCommandList* const in_command_list = nullptr,
-        const IUIModel* const in_ui_model = nullptr,
         const UIDataTextRunStyle* const in_default_text_style = nullptr,
         LocaleSystem* const in_locale_system = nullptr,
         TextManager* const in_text_manager = nullptr,
@@ -58,14 +57,11 @@ struct UIManagerUpdateParam
         const float in_time_delta = 0.0f,
         const bool in_draw_every_frame = false, // mark top level as dirty each frame, the destination render target may have other systems drawing to it
         const bool in_draw_to_texture = false, // Draw to texture or backbuffer?
-        const VectorInt2& in_texture_size = VectorInt2(0,0), // If in_draw_to_texture is true, size to use for texture
-        const bool in_allow_clear = false,
-        const VectorFloat4& in_clear_colour = VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f)
+        const VectorInt2& in_texture_size = VectorInt2(0,0) // If in_draw_to_texture is true, size to use for texture
         );
 
     DrawSystem* const _draw_system;
     ID3D12GraphicsCommandList* const _command_list;
-    const IUIModel* const _ui_model;
     const UIDataTextRunStyle* const _default_text_style;
     LocaleSystem* const _locale_system;
     TextManager* const _text_manager;
@@ -74,8 +70,6 @@ struct UIManagerUpdateParam
     bool _draw_to_texture;
     bool _draw_every_frame;
     VectorInt2 _texture_size;
-    bool _allow_clear;
-    VectorFloat4 _clear_colour;
 
 };
 
@@ -87,25 +81,15 @@ struct UIManagerDealInputTouch
     explicit UIManagerDealInputTouch(
         const VectorInt2& in_root_relative_pos = VectorInt2(),
         const bool in_active = false,
-        //const bool in_start = false, 
-        //const bool in_end = false,
-        //const float in_duration = 0.0f,
         const int in_id = 0,
         const UITouchFlavour in_flavour = UITouchFlavour::TNone
         );
 
     /// Pixel coords relative to application window
     VectorInt2 _root_relative_pos;
-    /// Mouse left button down, finger touching screen
+    /// Mouse button down/ finger touching screen
     bool _active; 
-    /// First frame with touch active
-    //bool _start; 
-    /// Active changed from true to false this frame
-    //bool _end;
-    /// How long this touch has been active, how long mouse button left down
-    /// Only valid if _active or _end is true
-    //float _duration; //duration gets calculated internally?
-    /// Each continous touch gets an id
+    /// Each continous touch gets an id, may be zero for mouse move and mouse left button
     int _id;
     /// Hint on touch type
     UITouchFlavour _flavour;
@@ -155,15 +139,13 @@ struct UIManagerDrawParam
         DrawSystem* const in_draw_system = nullptr,
         DrawSystemFrame* const in_frame = nullptr,
         TextManager* const in_text_manager = nullptr,
-        UIManager* const in_ui_manager = nullptr//,
-        //const float in_ui_scale = 1.0f
+        UIManager* const in_ui_manager = nullptr
         );
 
     DrawSystem* const _draw_system;
     DrawSystemFrame* const _frame;
     TextManager* const _text_manager;
     UIManager* const _ui_manager;
-   // const float _ui_scale;
 
     // Need some way of detecticting if device was reset
     //const bool in_force_total_redraw = false
@@ -177,7 +159,6 @@ public:
     struct TShaderConstantBuffer
     {
         VectorFloat4 _tint_colour;
-        //float _tint_colour[4];
     };
 
     UIManager(
@@ -196,29 +177,19 @@ public:
         const VectorFloat4& in_uv = VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f) // atention Y inverted
         );
 
-    // Add content factories, layout templates can be expressed through the content class
-    typedef std::function< const bool(
-        std::unique_ptr<IUIComponent>& in_out_content,
-        const UIComponentFactoryParam& in_param
-        )> TContentFactory;
-    // Clear flag and background colour moved to IUIComponent
-    void AddContentFactory(
-        const std::string& in_content_name,
-        const TContentFactory& in_factory
-        );
-
-    /// Update [heirearchy, desired size, layout], in_out_target can start out as null to kick things off
+    /// Update [heirearchy, layout], in_out_target can start out as null to kick things off
     /// Don't recurse through this method, intended for kicking off the root node
+    /// Initially wanted to provide an array of UIData to populate the children of the target, 
+    /// But want a top level UIData to be the endpoint for the [hierarchy, layout, render] flags
     void Update(
         std::shared_ptr<UIHierarchyNode>& in_out_target_or_null,
-        const UIManagerUpdateParam& in_param,
-        const std::string& in_model_key = ""
+        UIData* const in_root_ui_data,
+        const UIManagerUpdateParam& in_param
         );
 
     /// root node owns the input state
     void DealInput(
         UIHierarchyNode& in_root,
-        //UIData* const in_dropdown_layer,
         UIData* const in_tooltip_layer,
         UIData* const in_combo_box_layer,
         const UIManagerDealInputParam& in_param

@@ -32,9 +32,9 @@ public:
 
     /// weak contract to construct via factory UIManager::TContentFactory
     UIComponentEffect(
-        const UIBaseColour& in_base_colour,
-        const UILayout& in_layout,
-        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
+        //const UIBaseColour& in_base_colour,
+        //const UILayout& in_layout,
+        //const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
         const UIEffectEnum in_type,
         const UICoord& in_coord_a,
         const UICoord& in_coord_b,
@@ -56,26 +56,26 @@ public:
         );
 
 private:
-    /// ensure that the data structure matches the model (UIData)
-    virtual const bool UpdateHierarchy(
-        UIData* const in_data,
-        UIHierarchyNodeChildData& in_out_child_data,
-        const UIHierarchyNodeUpdateHierarchyParam& in_param
-        ) override;
+    ///// ensure that the data structure matches the model (UIData)
+    //virtual const bool UpdateHierarchy(
+    //    UIData* const in_data,
+    //    UIHierarchyNodeChildData& in_out_child_data,
+    //    const UIHierarchyNodeUpdateHierarchyParam& in_param
+    //    ) override;
 
-    /// convert the layout data and parent size to the texture size, geometry size and uv
-    virtual const bool UpdateSize(
-        DrawSystem* const in_draw_system,
-        const VectorInt2& in_parent_size,
-        const VectorInt2& in_parent_offset,
-        const VectorInt2& in_parent_window,
-        const float in_ui_scale,
-        const float in_time_delta, 
-        UIGeometry& in_out_geometry, 
-        UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-        const UIScreenSpace& in_parent_screen_space,
-        UIScreenSpace& out_screen_space
-        ) override;
+    ///// convert the layout data and parent size to the texture size, geometry size and uv
+    //virtual const bool UpdateSize(
+    //    DrawSystem* const in_draw_system,
+    //    const VectorInt2& in_parent_size,
+    //    const VectorInt2& in_parent_offset,
+    //    const VectorInt2& in_parent_window,
+    //    const float in_ui_scale,
+    //    const float in_time_delta, 
+    //    UIGeometry& in_out_geometry, 
+    //    UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+    //    const UIScreenSpace& in_parent_screen_space,
+    //    UIScreenSpace& out_screen_space
+    //    ) override;
 
     /// deal with the component being drawn to the node texture
     virtual const bool PreDraw(
@@ -83,7 +83,7 @@ private:
         UIHierarchyNode& in_node
         ) override;
 
-    virtual const VectorFloat4 GetTintColour() const override;
+    //virtual const VectorFloat4 GetTintColour() const override;
 
 private:
     /// either we don't use type none as default ui shader, or need to be carefull with type to use with _shader_constant_buffer

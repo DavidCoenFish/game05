@@ -2,26 +2,18 @@
 
 namespace VectorHelper
 {
+    void AppendData(std::vector<uint8_t>& in_out_data, const uint8_t* const in_value, const int32_t in_size);
+
     template<typename IN_TYPE>
     void AppendValue(std::vector<uint8_t>& in_out_data, const IN_TYPE in_value)
     {
-        const auto address = (uint8_t*)(&in_value);
-        const auto length = sizeof(IN_TYPE);
-        for (int index = 0; index < length; ++index)
-        {
-            in_out_data.push_back(address[index]);
-        }
+        AppendData(in_out_data, (const uint8_t* const)(&in_value), sizeof(IN_TYPE));
     }
 
     template<typename IN_TYPE>
     void AppendValueRef(std::vector<uint8_t>& in_out_data, const IN_TYPE& in_value)
     {
-        const auto address = (uint8_t*)(&in_value);
-        const auto length = sizeof(IN_TYPE);
-        for (int index = 0; index < length; ++index)
-        {
-            in_out_data.push_back(address[index]);
-        }
+        AppendData(in_out_data, (const uint8_t* const)(&in_value), sizeof(IN_TYPE));
     }
 
     template<typename IN_TYPE, int N>
@@ -29,10 +21,7 @@ namespace VectorHelper
     {
         const auto address = (uint8_t*)(&in_value[0]);
         const auto length = N * sizeof(IN_TYPE);
-        for (int index = 0; index < length; ++index)
-        {
-            in_out_data.push_back(address[index]);
-        }
+        AppendData(in_out_data, address, length);
     }
 
     template<typename IN_TYPE, int N>

@@ -14,11 +14,7 @@ class UIComponentTooltipLayer : public IUIComponent
 public:
     //typedef std::function<void(const int, const VectorFloat2&, const VectorFloat4&, const std::string&)> TOnTooltipChange;
 
-    UIComponentTooltipLayer(
-        const UIBaseColour& in_base_colour,
-        const UILayout& in_layout,
-        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
-        );
+    UIComponentTooltipLayer();
     virtual ~UIComponentTooltipLayer();
 
     //void ResetTooltip();
@@ -34,12 +30,12 @@ public:
         const std::vector<TooltipRequestData>& in_tooltip_request_data_array
         );
 
-private:
-    virtual const bool UpdateHierarchy(
-        UIData* const in_data,
-        UIHierarchyNodeChildData& in_out_child_data,
-        const UIHierarchyNodeUpdateHierarchyParam& in_param
-        ) override;
+//private:
+//    virtual const bool UpdateHierarchy(
+//        UIData* const in_data,
+//        UIHierarchyNodeChildData& in_out_child_data,
+//        const UIHierarchyNodeUpdateHierarchyParam& in_param
+//        ) override;
 
 private:
     /// how do we set text, tell the text run to not use text from model? or do we set the model, add OnSetTooltip callback

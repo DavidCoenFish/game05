@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root_items", "root_items", 
 		..\reset.cmd = ..\reset.cmd
 		..\sync.cmd = ..\sync.cmd
 		..\todo.txt = ..\todo.txt
+		..\todo_rts.txt = ..\todo_rts.txt
+		..\todo_ui.txt = ..\todo_ui.txt
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common", "common\common.vcxproj", "{3DE01963-E730-4A3F-9D8A-76DC5A1F1683}"

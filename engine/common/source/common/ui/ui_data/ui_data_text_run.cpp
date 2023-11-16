@@ -388,6 +388,7 @@ UIDataTextRunStyle::UIDataTextRunStyle(
     // Nop
 }
 
+/*
 void UIDataTextRun::BuildTextRunData(
     std::vector<std::shared_ptr<ITextRunData>>& out_run_data,
     const std::string& in_markup_string_utf8,
@@ -529,3 +530,4 @@ const bool UIDataTextRun::VisitData(
 
     return dirty;
 }
+*/

@@ -1,5 +1,15 @@
 #pragma once
 
+enum class UIDataDirty
+{
+    TNone = 0,
+    THierarchy = 1 << 0,
+    TLayout = 1 << 1,
+    TRender = 1 << 2,
+
+    TLayoutRender = TLayout | TRender
+};
+
 enum class UIOrientation
 {
     TVertical, // TopToBottom

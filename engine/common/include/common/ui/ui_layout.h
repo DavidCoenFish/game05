@@ -10,24 +10,27 @@ class UILayout
 public:
     static UILayout FactoryFull();
     explicit UILayout(
-        const UICoord& in_size_x = UICoord(UICoord::ParentSource::X),
-        const UICoord& in_size_y = UICoord(UICoord::ParentSource::Y),
-        const UICoord& in_attach_x = UICoord(UICoord::ParentSource::X),
-        const UICoord& in_attach_y = UICoord(UICoord::ParentSource::Y),
-        const UICoord& in_pivot_x = UICoord(UICoord::ParentSource::X),
-        const UICoord& in_pivot_y = UICoord(UICoord::ParentSource::Y),
-        const bool in_shrink_width = false,
-        const bool in_shrink_height = false
+        const UICoord& in_size_x = UICoord(UICoord::TSource::ParentX),
+        const UICoord& in_size_y = UICoord(UICoord::TSource::ParentY),
+        const UICoord& in_attach_x = UICoord(UICoord::TSource::ParentX),
+        const UICoord& in_attach_y = UICoord(UICoord::TSource::ParentY),
+        const UICoord& in_pivot_x = UICoord(UICoord::TSource::ParentX),
+        const UICoord& in_pivot_y = UICoord(UICoord::TSource::ParentY)
+        //const bool in_shrink_width = false,
+        //const bool in_shrink_height = false
         );
 
-    const VectorInt2 GetSize(const VectorInt2& in_parent_size, const float in_ui_scale) const;
-    const VectorInt2 CalculateShrinkSize(const VectorInt2& in_layout_size, const VectorInt2& in_desired_size) const;
+    const VectorInt2 GetSize(const VectorInt2& in_parent_size, const float in_ui_scale, const VectorInt2& in_content_size) const;
+    //const VectorInt2 CalculateShrinkSize(const VectorInt2& in_layout_size, const VectorInt2& in_desired_size) const;
 
     const VectorInt2 GetAttach(const VectorInt2& in_size, const float in_ui_scale) const;
-    const VectorInt2 GetPivot(const VectorInt2& in_parent_size, const float in_ui_scale) const;
+    const VectorInt2 GetPivot(const VectorInt2& in_parent_size, const float in_ui_scale, const VectorInt2& in_content_size) const;
 
-    const bool GetShrinkWidth() const { return _shrink_width; }
-    const bool GetShrinkHeight() const { return _shrink_height; }
+    //const bool GetShrinkWidth() const { return _shrink_width; }
+    //const bool GetShrinkHeight() const { return _shrink_height; }
+
+    /// return true if _source wants content size for calculation
+    const bool UsesContentSize() const;
 
     /// TODO: would it be better to just have accessors to set _data_attach and _data_pivot, and have SetSliderHorizontal... be helper functions?
     void SetSliderHorizontal(const float in_value);
@@ -53,8 +56,8 @@ private:
     UICoord _data_pivot[2];
 
     // TODO: should we change the concept of shrink to use child size?
-    bool _shrink_width;
-    bool _shrink_height;
+    //bool _shrink_width;
+    //bool _shrink_height;
 
 };
 

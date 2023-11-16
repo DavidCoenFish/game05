@@ -19,28 +19,14 @@ namespace
 }
 
 IUIComponent::IUIComponent(
-    const UIBaseColour& in_base_colour,
-    const UILayout& in_layout,
-    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
     void* in_source_token,
     const UIStateFlag in_state_flag
     )
-    : _base_colour(in_base_colour)
-    , _layout(in_layout)
-    , _state_flag_tint_array(in_state_flag_tint_array)
-    , _source_token(in_source_token)
+    : _source_token(in_source_token)
     , _time_accumulate_seconds(0.0f)
     , _state_flag(in_state_flag)
-    , _state_flag_dirty_mask(UIStateFlag::TNone)
 {
-    if (nullptr != _state_flag_tint_array)
-    {
-        SetStateFlagDirty(UIStateFlag::TTintMask);
-    }
-    else
-    {
-        SetStateFlagDirty(UIStateFlag::TNone);
-    }
+    // Nop
 }
 
 IUIComponent::~IUIComponent()
@@ -65,7 +51,7 @@ void IUIComponent::CalculateGeometry(
     const UILayout& in_layout 
     )
 {
-    const VectorInt2 pivot = in_layout.GetPivot(in_parent_window, in_ui_scale) + in_parent_offset; 
+    const VectorInt2 pivot = in_layout.GetPivot(in_parent_window, in_ui_scale, VectorInt2()) + in_parent_offset; 
     const VectorInt2 attach = in_layout.GetAttach(in_layout_size, in_ui_scale);
 
     // Deal pos
@@ -120,49 +106,49 @@ void IUIComponent::CalculateGeometry(
 
     return;
 }
-
-const bool IUIComponent::SetModel(
-    const UIBaseColour& in_base_colour,
-    const UILayout& in_layout,
-    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
-    )
-{
-    bool dirty = false;
-
-    if (_base_colour != in_base_colour)
-    {
-        dirty = true;
-        _base_colour = in_base_colour;
-    }
-
-    // base (model) layout changes only count when we are not in layout override mode
-    if (0 == (static_cast<int>(_state_flag) & static_cast<int>(UIStateFlag::TLayoutOverride)))
-    {
-        if (_layout != in_layout)
-        {
-            dirty = true;
-            _layout == in_layout;
-            _uv_scroll = VectorFloat2();
-        }
-    }
-
-    if (_state_flag_tint_array != in_state_flag_tint_array)
-    {
-        dirty = true;
-        _state_flag_tint_array = in_state_flag_tint_array;
-
-        if (nullptr != _state_flag_tint_array)
-        {
-            SetStateFlagDirty(UIStateFlag::TTintMask);
-        }
-        else
-        {
-            SetStateFlagDirty(UIStateFlag::TNone);
-        }
-    }
-
-    return dirty;
-}
+//
+//const bool IUIComponent::SetModel(
+//    const UIBaseColour& in_base_colour,
+//    const UILayout& in_layout,
+//    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
+//    )
+//{
+//    bool dirty = false;
+//
+//    if (_base_colour != in_base_colour)
+//    {
+//        dirty = true;
+//        _base_colour = in_base_colour;
+//    }
+//
+//    // base (model) layout changes only count when we are not in layout override mode
+//    if (0 == (static_cast<int>(_state_flag) & static_cast<int>(UIStateFlag::TLayoutOverride)))
+//    {
+//        if (_layout != in_layout)
+//        {
+//            dirty = true;
+//            _layout == in_layout;
+//            _uv_scroll = VectorFloat2();
+//        }
+//    }
+//
+//    if (_state_flag_tint_array != in_state_flag_tint_array)
+//    {
+//        dirty = true;
+//        _state_flag_tint_array = in_state_flag_tint_array;
+//
+//        if (nullptr != _state_flag_tint_array)
+//        {
+//            SetStateFlagDirty(UIStateFlag::TTintMask);
+//        }
+//        else
+//        {
+//            SetStateFlagDirty(UIStateFlag::TNone);
+//        }
+//    }
+//
+//    return dirty;
+//}
 
 // Make sorting children easier
 void IUIComponent::SetSourceToken(void* in_source_ui_data_token)
@@ -175,17 +161,10 @@ void* IUIComponent::GetSourceToken() const
     return _source_token;
 }
 
-void IUIComponent::SetLayoutOverride(const UILayout& in_override)
-{
-    SetStateFlagBit(UIStateFlag::TLayoutOverride, true);
-    _layout = in_override;
-    return;
-}
-
 void IUIComponent::SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool in_manual_horizontal, const bool in_manual_vertical)
 {
-    SetStateFlagBit(UIStateFlag::TManualScrollX, in_manual_horizontal);
-    SetStateFlagBit(UIStateFlag::TManualScrollY, in_manual_vertical);
+    //SetStateFlagBit(UIStateFlag::TManualScrollX, in_manual_horizontal);
+    //SetStateFlagBit(UIStateFlag::TManualScrollY, in_manual_vertical);
 
     if (true == in_manual_horizontal)
     {
@@ -202,8 +181,7 @@ void IUIComponent::SetUVScrollManual(const VectorFloat2& in_uv_scroll, const boo
 /// return true if any bits under the dirty flag are modified
 const bool IUIComponent::SetStateFlag(const UIStateFlag in_state_flag)
 {
-    const bool dirty = (static_cast<int>(_state_flag) & static_cast<int>(_state_flag_dirty_mask)) 
-        != (static_cast<int>(in_state_flag) & static_cast<int>(_state_flag_dirty_mask));
+    const bool dirty = _state_flag != in_state_flag;
     #if 0
     if (true == dirty)
     {
@@ -228,190 +206,195 @@ const bool IUIComponent::SetStateFlagBit(const UIStateFlag in_state_flag_bit, co
     return SetStateFlag(static_cast<UIStateFlag>(state_flag));
 }
 
-const bool IUIComponent::UpdateHierarchy(
-    UIData* const in_data,
-    UIHierarchyNodeChildData& in_out_child_data,
-    const UIHierarchyNodeUpdateHierarchyParam& in_param
-    )
+const bool IUIComponent::GetStateFlagBit(const UIStateFlag in_state_flag_bit) const
 {
-    bool dirty = false;
-    if (nullptr != in_data)
-    {
-        if (true == in_data->VisitDataArray([
-            &in_out_child_data,
-            &in_param,
-            this
-            ](const std::vector<std::shared_ptr<UIData>>& in_array_data)->bool{
-            return in_out_child_data._node->UpdateHierarchy(
-                in_param,
-                &in_array_data,
-                true,
-                false,
-                _base_colour.GetClearBackground(),
-                _base_colour.GetClearColourRef()
-                );
-        }))
-        {
-            dirty =true;
-        }
-    }
-    else
-    {
-        if (true == in_out_child_data._node->UpdateHierarchy(
-            in_param,
-            nullptr,
-            true,
-            false,
-            _base_colour.GetClearBackground(),
-            _base_colour.GetClearColourRef()
-            ))
-        {
-            dirty = true;
-        }
-    }
-
-    if (0 != (static_cast<int>(_state_flag) & static_cast<int>(UIStateFlag::TDirty)))
-    {
-        dirty = true;
-        SetStateFlagBit(UIStateFlag::TDirty, false);
-    }
-
-    return dirty;
+    return 0 != (static_cast<int>(_state_flag) & static_cast<int>(in_state_flag_bit));
 }
 
-const bool IUIComponent::UpdateSize(
-    DrawSystem* const in_draw_system,
-    const VectorInt2& in_parent_size,
-    const VectorInt2& in_parent_offset,
-    const VectorInt2& in_parent_window,
-    const float in_ui_scale,
-    const float in_time_delta, 
-    UIGeometry& in_out_geometry, 
-    UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    const UIScreenSpace& in_parent_screen_space,
-    UIScreenSpace& out_screen_space
-    )
-{
-    bool dirty = false;
-
-    if (true == Update(in_time_delta))
-    {
-        dirty = true;
-    }
-
-    VectorInt2 layout_size;
-    VectorInt2 desired_size;
-    GetDesiredSize(
-        layout_size,
-        desired_size,
-        in_parent_window,
-        in_ui_scale,
-        in_out_node
-        );
-
-    VectorFloat4 geometry_pos;
-    VectorFloat4 geometry_uv;
-    VectorInt2 texture_size;
-
-    const bool uv_scroll_manual_x = 0 != (static_cast<int>(_state_flag) & static_cast<int>(UIStateFlag::TManualScrollX));
-    const bool uv_scroll_manual_y = 0 != (static_cast<int>(_state_flag) & static_cast<int>(UIStateFlag::TManualScrollY));
-
-    CalculateGeometry(
-        geometry_pos,
-        geometry_uv,
-        texture_size,
-        _uv_scroll,
-        uv_scroll_manual_x,
-        uv_scroll_manual_y,
-        in_parent_size,
-        in_parent_offset,
-        in_parent_window,
-        in_ui_scale,
-        in_time_delta,
-        layout_size,
-        desired_size,
-        _layout
-        );
-
-    // Update geometry
-    if (true == in_out_geometry.Set(
-        geometry_pos,
-        geometry_uv
-        ))
-    {
-        dirty = true;
-    }
-
-    out_screen_space.Update(
-        in_parent_screen_space,
-        geometry_pos,
-        geometry_uv
-        );
-
-    // Recurse
-    in_out_node.UpdateSize(
-        in_draw_system,
-        texture_size, // by default, we use the generated size and scroll if required. a stack control may modify this
-        VectorInt2(),
-        texture_size,
-        in_ui_scale,
-        in_time_delta,
-        dirty,
-        out_screen_space
-        );
-
-    return dirty;
-}
-
-void IUIComponent::GetDesiredSize(
-    VectorInt2& out_layout_size,
-    VectorInt2& out_desired_size,
-    const VectorInt2& in_parent_window,
-    const float in_ui_scale,
-    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    )
-{
-    if (((true == _layout.GetShrinkWidth()) || (true == _layout.GetShrinkHeight()))
-        && (0 < in_out_node.GetChildData().size()))
-    {
-        VectorInt2 max_child_desired;
-        VectorInt2 max_child_layout;
-        for (auto& child : in_out_node.GetChildData())
-        {
-            IUIComponent* const child_component = child ? child->_component.get() : nullptr;
-            if ((nullptr == child_component) || (nullptr == child->_node))
-            {
-                continue;
-            }
-            VectorInt2 child_layout_size;
-            VectorInt2 child_desired_size;
-
-            child_component->GetDesiredSize(
-                child_layout_size,
-                child_desired_size,
-                in_parent_window,
-                in_ui_scale,
-                *child->_node
-                );
-
-            max_child_layout = VectorInt2::Max(max_child_layout, child_layout_size);
-            max_child_desired = VectorInt2::Max(max_child_desired, child_desired_size);
-        }
-
-        if ((0 < max_child_desired.GetX()) && (0 < max_child_desired.GetY()))
-        {
-            //desired or layout?
-            // desired has assert on UIScale != 1.0f for effect size of tooltip dropshadow geometry not being full size
-            //out_layout_size = _layout.GetSize(max_child_desired, in_ui_scale); 
-            out_layout_size = _layout.GetSize(max_child_layout, in_ui_scale);
-            out_desired_size = out_layout_size;
-            return;
-        }
-    }
-    out_layout_size = _layout.GetSize(in_parent_window, in_ui_scale);
-    out_desired_size = out_layout_size;
-    return;
-}
+//const bool IUIComponent::UpdateHierarchy(
+//    UIData* const in_data,
+//    UIHierarchyNodeChildData& in_out_child_data,
+//    const UIHierarchyNodeUpdateHierarchyParam& in_param
+//    )
+//{
+//    bool dirty = false;
+//    if (nullptr != in_data)
+//    {
+//        if (true == in_data->VisitDataArray([
+//            &in_out_child_data,
+//            &in_param,
+//            this
+//            ](const std::vector<std::shared_ptr<UIData>>& in_array_data)->bool{
+//            return in_out_child_data._node->UpdateHierarchy(
+//                in_param,
+//                &in_array_data,
+//                true,
+//                false,
+//                _base_colour.GetClearBackground(),
+//                _base_colour.GetClearColourRef()
+//                );
+//        }))
+//        {
+//            dirty =true;
+//        }
+//    }
+//    else
+//    {
+//        if (true == in_out_child_data._node->UpdateHierarchy(
+//            in_param,
+//            nullptr,
+//            true,
+//            false,
+//            _base_colour.GetClearBackground(),
+//            _base_colour.GetClearColourRef()
+//            ))
+//        {
+//            dirty = true;
+//        }
+//    }
+//
+//    if (0 != (static_cast<int>(_state_flag) & static_cast<int>(UIStateFlag::TDirty)))
+//    {
+//        dirty = true;
+//        SetStateFlagBit(UIStateFlag::TDirty, false);
+//    }
+//
+//    return dirty;
+//}
+//
+//const bool IUIComponent::UpdateSize(
+//    DrawSystem* const in_draw_system,
+//    const VectorInt2& in_parent_size,
+//    const VectorInt2& in_parent_offset,
+//    const VectorInt2& in_parent_window,
+//    const float in_ui_scale,
+//    const float in_time_delta, 
+//    UIGeometry& in_out_geometry, 
+//    UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+//    const UIScreenSpace& in_parent_screen_space,
+//    UIScreenSpace& out_screen_space
+//    )
+//{
+//    bool dirty = false;
+//
+//    if (true == Update(in_time_delta))
+//    {
+//        dirty = true;
+//    }
+//
+//    VectorInt2 layout_size;
+//    VectorInt2 desired_size;
+//    GetDesiredSize(
+//        layout_size,
+//        desired_size,
+//        in_parent_window,
+//        in_ui_scale,
+//        in_out_node
+//        );
+//
+//    VectorFloat4 geometry_pos;
+//    VectorFloat4 geometry_uv;
+//    VectorInt2 texture_size;
+//
+//    const bool uv_scroll_manual_x = 0 != (static_cast<int>(_state_flag) & static_cast<int>(UIStateFlag::TManualScrollX));
+//    const bool uv_scroll_manual_y = 0 != (static_cast<int>(_state_flag) & static_cast<int>(UIStateFlag::TManualScrollY));
+//
+//    CalculateGeometry(
+//        geometry_pos,
+//        geometry_uv,
+//        texture_size,
+//        _uv_scroll,
+//        uv_scroll_manual_x,
+//        uv_scroll_manual_y,
+//        in_parent_size,
+//        in_parent_offset,
+//        in_parent_window,
+//        in_ui_scale,
+//        in_time_delta,
+//        layout_size,
+//        desired_size,
+//        _layout
+//        );
+//
+//    // Update geometry
+//    if (true == in_out_geometry.Set(
+//        geometry_pos,
+//        geometry_uv
+//        ))
+//    {
+//        dirty = true;
+//    }
+//
+//    out_screen_space.Update(
+//        in_parent_screen_space,
+//        geometry_pos,
+//        geometry_uv
+//        );
+//
+//    // Recurse
+//    in_out_node.UpdateSize(
+//        in_draw_system,
+//        texture_size, // by default, we use the generated size and scroll if required. a stack control may modify this
+//        VectorInt2(),
+//        texture_size,
+//        in_ui_scale,
+//        in_time_delta,
+//        dirty,
+//        out_screen_space
+//        );
+//
+//    return dirty;
+//}
+//
+//void IUIComponent::GetDesiredSize(
+//    VectorInt2& out_layout_size,
+//    VectorInt2& out_desired_size,
+//    const VectorInt2& in_parent_window,
+//    const float in_ui_scale,
+//    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+//    )
+//{
+//    if (((true == _layout.GetShrinkWidth()) || (true == _layout.GetShrinkHeight()))
+//        && (0 < in_out_node.GetChildData().size()))
+//    {
+//        VectorInt2 max_child_desired;
+//        VectorInt2 max_child_layout;
+//        for (auto& child : in_out_node.GetChildData())
+//        {
+//            IUIComponent* const child_component = child ? child->_component.get() : nullptr;
+//            if ((nullptr == child_component) || (nullptr == child->_node))
+//            {
+//                continue;
+//            }
+//            VectorInt2 child_layout_size;
+//            VectorInt2 child_desired_size;
+//
+//            child_component->GetDesiredSize(
+//                child_layout_size,
+//                child_desired_size,
+//                in_parent_window,
+//                in_ui_scale,
+//                *child->_node
+//                );
+//
+//            max_child_layout = VectorInt2::Max(max_child_layout, child_layout_size);
+//            max_child_desired = VectorInt2::Max(max_child_desired, child_desired_size);
+//        }
+//
+//        if ((0 < max_child_desired.GetX()) && (0 < max_child_desired.GetY()))
+//        {
+//            //desired or layout?
+//            // desired has assert on UIScale != 1.0f for effect size of tooltip dropshadow geometry not being full size
+//            //out_layout_size = _layout.GetSize(max_child_desired, in_ui_scale); 
+//            out_layout_size = _layout.GetSize(max_child_layout, in_ui_scale);
+//            out_desired_size = out_layout_size;
+//            return;
+//        }
+//    }
+//    out_layout_size = _layout.GetSize(in_parent_window, in_ui_scale);
+//    out_desired_size = out_layout_size;
+//    return;
+//}
 
 const bool IUIComponent::PreDraw(
     const UIManagerDrawParam& in_draw_param,
@@ -437,19 +420,19 @@ const bool IUIComponent::PreDraw(
     return dirty;
 }
 
-const VectorFloat4 IUIComponent::GetTintColour() const
-{
-    const VectorFloat4* override_tint = nullptr;
-    const TStateFlagTintArray* const state_flag_tint_array = _state_flag_tint_array.get();
-
-    if (nullptr != state_flag_tint_array)
-    {
-        const int tint_index = static_cast<int>(GetStateFlag()) & static_cast<int>(UIStateFlag::TTintMask);
-        override_tint = &(*state_flag_tint_array)[tint_index];
-    }
-
-    return _base_colour.GetTintColour(_time_accumulate_seconds, override_tint);
-}
+//const VectorFloat4 IUIComponent::GetTintColour() const
+//{
+//    const VectorFloat4* override_tint = nullptr;
+//    const TStateFlagTintArray* const state_flag_tint_array = _state_flag_tint_array.get();
+//
+//    if (nullptr != state_flag_tint_array)
+//    {
+//        const int tint_index = static_cast<int>(GetStateFlag()) & static_cast<int>(UIStateFlag::TTintMask);
+//        override_tint = &(*state_flag_tint_array)[tint_index];
+//    }
+//
+//    return _base_colour.GetTintColour(_time_accumulate_seconds, override_tint);
+//}
 
 const bool IUIComponent::Update(
     const float in_time_delta
@@ -457,6 +440,6 @@ const bool IUIComponent::Update(
 {
     const float prev_time = _time_accumulate_seconds;
     _time_accumulate_seconds += in_time_delta;
-    const bool dirty = _base_colour.GetTimeChangeDirty(prev_time, _time_accumulate_seconds);
+    const bool dirty = false; //_base_colour.GetTimeChangeDirty(prev_time, _time_accumulate_seconds);
     return dirty;
 }

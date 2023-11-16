@@ -62,13 +62,13 @@ struct UIHierarchyNodeChildData
     ~UIHierarchyNodeChildData();
 
     //const bool RecurseSetStateFlagInput(const UIStateFlag in_state_flag);
-    static const bool RecurseSetStateFlagInput(UIHierarchyNodeChildData* const in_data, const UIStateFlag in_state_flag);
+    //static const bool RecurseSetStateFlagInput(UIHierarchyNodeChildData* const in_data, const UIStateFlag in_state_flag);
 
-    const bool ApplyFactory(
-        UIData* const in_data,
-        const UIHierarchyNodeUpdateHierarchyParam& in_param,
-        const int in_index = 0
-        );
+    //void UpdateHierarchy(
+    //    UIData* const in_data,
+    //    const UIHierarchyNodeUpdateHierarchyParam& in_param,
+    //    const int in_index = 0
+    //    );
 
     void Draw(const UIManagerDrawParam& in_draw_param);
 
@@ -89,30 +89,33 @@ struct UIHierarchyNodeChildData
 
 struct UIHierarchyNodeUpdateHierarchyParam
 {
-    typedef std::function< const bool(
-        std::unique_ptr<IUIComponent>& in_out_content,
-        const UIComponentFactoryParam& in_param
-        )> TContentFactory;
-
     explicit UIHierarchyNodeUpdateHierarchyParam(
-        const std::map<std::string, TContentFactory>& in_map_content_factory = std::map<std::string, TContentFactory>(),
         DrawSystem* const in_draw_system = nullptr,
         ID3D12GraphicsCommandList* const in_command_list = nullptr,
-        const IUIModel* const in_ui_model = nullptr,
-        UIManager* const in_ui_manager = nullptr,
+        //UIManager* const in_ui_manager = nullptr,
         LocaleSystem* const in_locale_system = nullptr,
         TextManager* const in_text_manager = nullptr,
         const UIDataTextRunStyle* const in_default_text_style = nullptr
         );
-    const std::map<std::string, TContentFactory>& _map_content_factory;
     DrawSystem* const _draw_system;
     ID3D12GraphicsCommandList* const _command_list;
-    const IUIModel* const _ui_model;
-    UIManager* const _ui_manager;
+    //UIManager* const _ui_manager;
     LocaleSystem* const _locale_system;
     TextManager* const _text_manager;
     const UIDataTextRunStyle* const _default_text_style;
 
+};
+
+struct UIHierarchyNodeUpdateLayoutRenderParam
+{
+    explicit UIHierarchyNodeUpdateLayoutRenderParam(
+        DrawSystem* const in_draw_system = nullptr,
+        const float in_ui_scale = 1.0f,
+        const float in_time_delta = 0.0f
+        );
+    DrawSystem* const _draw_system;
+    float _ui_scale;
+    float _time_delta;
 };
 
 struct UIHierarchyNodeUpdateDesiredSize
@@ -151,13 +154,16 @@ public:
     std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& GetChildData() { return _child_data_array; }
 
     /// create/ destroy nodes to match model, make content match type from factory, update content?
-    const bool UpdateHierarchy(
+    void UpdateHierarchy(
         const UIHierarchyNodeUpdateHierarchyParam& in_param,
-        const std::vector<std::shared_ptr<UIData>>* const in_array_data_or_null,
-        const bool in_draw_to_texture,
-        const bool in_always_dirty,
-        const bool in_allow_clear = false,
-        const VectorFloat4& in_clear_colour = VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f)
+        const UIData& in_data
+        );
+
+    void UpdateLayoutRender(
+        const VectorInt2& in_target_size,
+        const UIHierarchyNodeUpdateLayoutRenderParam& in_param,
+        const UIData& in_data,
+        const UIScreenSpace& in_parent_screen_space
         );
     
     void MarkTextureDirty();
