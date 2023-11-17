@@ -164,15 +164,11 @@ void* IUIComponent::GetSourceToken() const
 const bool IUIComponent::CheckLayoutCache(
     VectorInt2& out_layout_size, 
     VectorInt2& out_desired_size, 
-    const VectorInt2& in_parent_size, 
-    const VectorInt2& in_parent_offset, 
     const VectorInt2& in_parent_window, 
     const VectorInt2& in_content_size
     )
 {
-    if ((_parent_size == in_parent_size) &&
-        (_parent_offset == in_parent_offset) &&
-        (_parent_window == in_parent_window) &&
+    if ((_parent_window == in_parent_window) &&
         (_content_size == in_content_size))
     {
         out_layout_size = _layout_size;
@@ -185,16 +181,12 @@ const bool IUIComponent::CheckLayoutCache(
 void IUIComponent::SetLayoutCache(
     const VectorInt2& in_layout_size, 
     const VectorInt2& in_desired_size, 
-    const VectorInt2& in_parent_size, 
-    const VectorInt2& in_parent_offset, 
     const VectorInt2& in_parent_window, 
     const VectorInt2& in_content_size
     )
 {
     _layout_size = in_layout_size;
     _desired_size = in_desired_size;
-    _parent_size = in_parent_size;
-    _parent_offset = in_parent_offset;
     _parent_window = in_parent_window;
     _content_size = in_content_size;
     return;

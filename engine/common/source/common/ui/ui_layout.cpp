@@ -26,6 +26,18 @@ const UILayout UILayout::FactoryParentMiddleQuater()
         );
 }
 
+const UILayout UILayout::FactoryContentMiddle()
+{
+    return UILayout(
+        UICoord(UICoord::TSource::ContentX, 1.0f, 0.0f),
+        UICoord(UICoord::TSource::ContentY, 1.0f, 0.0f),
+        UICoord(UICoord::TSource::ParentX, 0.5f, 0.0f),
+        UICoord(UICoord::TSource::ParentY, 0.5f, 0.0f),
+        UICoord(UICoord::TSource::ParentX, 0.5f, 0.0f),
+        UICoord(UICoord::TSource::ParentY, 0.5f, 0.0f)
+        );
+}
+
 UILayout::UILayout(
     const UICoord& in_size_x,
     const UICoord& in_size_y,

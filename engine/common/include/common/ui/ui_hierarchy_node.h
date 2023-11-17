@@ -167,15 +167,15 @@ public:
         const VectorInt2& in_target_window,
         const UIScreenSpace& in_parent_screen_space
         );
-    void RecurseUpdateLayoutRender(
-        const UIHierarchyNodeUpdateLayoutRenderParam& in_param,
-        const std::vector<std::shared_ptr<UIData>>& in_ui_data_array,
-        const VectorInt2& in_parent_size,
-        const VectorInt2& in_parent_offset,
-        const VectorInt2& in_parent_window,
-        const UIScreenSpace& in_parent_screen_space,
-        const bool in_mark_dirty
-        );
+    //void RecurseUpdateLayoutRender(
+    //    const UIHierarchyNodeUpdateLayoutRenderParam& in_param,
+    //    const std::vector<std::shared_ptr<UIData>>& in_ui_data_array,
+    //    const VectorInt2& in_parent_size,
+    //    const VectorInt2& in_parent_offset,
+    //    const VectorInt2& in_parent_window,
+    //    const UIScreenSpace& in_parent_screen_space,
+    //    const bool in_mark_dirty
+    //    );
 
     void MarkTextureDirty();
 

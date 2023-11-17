@@ -440,53 +440,53 @@ void UIHierarchyNode::UpdateLayoutRender(
             );
     }
 
-    //const bool mark_dirty = in_ui_data.GetDirtyBit(UIDataDirty::TRender);
-    //in_ui_data.SetDirtyBit(UIDataDirty::TRender, false);
+    const bool mark_dirty = in_ui_data.GetDirtyBit(UIDataDirty::TRender);
+    in_ui_data.SetDirtyBit(UIDataDirty::TRender, false);
 
-    //UpdateTextureSize(in_target_size, mark_dirty);
+    UpdateTextureSize(in_target_size, mark_dirty);
 }
 
-void UIHierarchyNode::RecurseUpdateLayoutRender(
-    const UIHierarchyNodeUpdateLayoutRenderParam& in_param,
-    const std::vector<std::shared_ptr<UIData>>& in_ui_data_array,
-    const VectorInt2& in_parent_size,
-    const VectorInt2& in_parent_offset,
-    const VectorInt2& in_parent_window,
-    const UIScreenSpace& in_parent_screen_space,
-    const bool in_mark_dirty
-    )
-{
-    const int target_length = static_cast<int>(in_ui_data_array.size());
-    DSC_ASSERT(target_length == _child_data_array.size(), "we expect size of data children and size child data array to match");
-
-    // ensure each content is created/ passed through factory
-    for (int index = 0; index < target_length; ++index)
-    {
-        UIData* const data = in_ui_data_array[index].get();
-        UIHierarchyNodeChildData* const child = _child_data_array[index].get();
-
-        if (nullptr == data)
-        {
-            continue;
-        }
-        DSC_ASSERT(nullptr != child->_component, "expect component not to be null if data is valid");
-
-        child->_node->UpdateLayoutRender(
-            in_param,
-            *data,
-            in_parent_size,
-            in_parent_offset,
-            in_parent_window,
-            in_parent_screen_space
-            );
-    }
-
-    //const bool mark_dirty = in_ui_data.GetDirtyBit(UIDataDirty::TRender);
-    //in_ui_data.SetDirtyBit(UIDataDirty::TRender, false);
-    UpdateTextureSize(in_parent_window, in_mark_dirty);
-
-    return;
-}
+//void UIHierarchyNode::RecurseUpdateLayoutRender(
+//    const UIHierarchyNodeUpdateLayoutRenderParam& in_param,
+//    const std::vector<std::shared_ptr<UIData>>& in_ui_data_array,
+//    const VectorInt2& in_parent_size,
+//    const VectorInt2& in_parent_offset,
+//    const VectorInt2& in_parent_window,
+//    const UIScreenSpace& in_parent_screen_space,
+//    const bool in_mark_dirty
+//    )
+//{
+//    const int target_length = static_cast<int>(in_ui_data_array.size());
+//    DSC_ASSERT(target_length == _child_data_array.size(), "we expect size of data children and size child data array to match");
+//
+//    // ensure each content is created/ passed through factory
+//    for (int index = 0; index < target_length; ++index)
+//    {
+//        UIData* const data = in_ui_data_array[index].get();
+//        UIHierarchyNodeChildData* const child = _child_data_array[index].get();
+//
+//        if (nullptr == data)
+//        {
+//            continue;
+//        }
+//        DSC_ASSERT(nullptr != child->_component, "expect component not to be null if data is valid");
+//
+//        child->_node->UpdateLayoutRender(
+//            in_param,
+//            *data,
+//            in_parent_size,
+//            in_parent_offset,
+//            in_parent_window,
+//            in_parent_screen_space
+//            );
+//    }
+//
+//    //const bool mark_dirty = in_ui_data.GetDirtyBit(UIDataDirty::TRender);
+//    //in_ui_data.SetDirtyBit(UIDataDirty::TRender, false);
+//    //UpdateTextureSize(in_parent_window, in_mark_dirty);
+//
+//    return;
+//}
 
 
 void UIHierarchyNode::MarkTextureDirty()

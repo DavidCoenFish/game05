@@ -97,8 +97,10 @@
     <ClCompile Include="source\common\ui\ui_component\i_ui_component.cpp" />
     <ClCompile Include="source\common\ui\ui_component\ui_component_canvas.cpp" />
     <ClCompile Include="source\common\ui\ui_component\ui_component_effect.cpp" />
+    <ClCompile Include="source\common\ui\ui_component\ui_component_string.cpp" />
     <ClCompile Include="source\common\ui\ui_coord.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data.cpp" />
+    <ClCompile Include="source\common\ui\ui_data\ui_data_string.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_text_run.cpp" />
     <ClCompile Include="source\common\ui\ui_geometry.cpp" />
     <ClCompile Include="source\common\ui\ui_hierarchy_node.cpp" />
@@ -177,8 +179,10 @@
     <ClInclude Include="include\common\ui\ui_component\i_ui_component.h" />
     <ClInclude Include="include\common\ui\ui_component\ui_component_canvas.h" />
     <ClInclude Include="include\common\ui\ui_component\ui_component_effect.h" />
+    <ClInclude Include="include\common\ui\ui_component\ui_component_string.h" />
     <ClInclude Include="include\common\ui\ui_coord.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data.h" />
+    <ClInclude Include="include\common\ui\ui_data\ui_data_string.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_text_run.h" />
     <ClInclude Include="include\common\ui\ui_enum.h" />
     <ClInclude Include="include\common\ui\ui_hierarchy_node.h" />

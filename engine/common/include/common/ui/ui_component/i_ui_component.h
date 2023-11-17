@@ -79,16 +79,12 @@ public:
     const bool CheckLayoutCache(
         VectorInt2& out_layout_size, 
         VectorInt2& out_desired_size, 
-        const VectorInt2& in_parent_size, 
-        const VectorInt2& in_parent_offset, 
         const VectorInt2& in_parent_window, 
         const VectorInt2& in_content_size
         );
     void SetLayoutCache(
         const VectorInt2& in_layout_size, 
         const VectorInt2& in_desired_size, 
-        const VectorInt2& in_parent_size, 
-        const VectorInt2& in_parent_offset, 
         const VectorInt2& in_parent_window, 
         const VectorInt2& in_content_size
         );
@@ -159,8 +155,6 @@ private:
     /// values for a layout cache, change to hash [parent size, offse, window, content size]?
     VectorInt2 _layout_size;
     VectorInt2 _desired_size; 
-    VectorInt2 _parent_size;
-    VectorInt2 _parent_offset; 
     VectorInt2 _parent_window; 
     VectorInt2 _content_size;
 

@@ -13,16 +13,9 @@
 
 
 UIComponentString::UIComponentString(
-    const UIBaseColour& in_base_colour,
-    const UILayout& in_layout,
-    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
     std::unique_ptr<TextBlock>& in_text_block
     )
-    : IUIComponent(
-        in_base_colour,
-        in_layout,
-        in_state_flag_tint_array
-        )
+    : IUIComponent()
     , _text_block(std::move(in_text_block))
 {
     return;
@@ -31,6 +24,19 @@ UIComponentString::UIComponentString(
 UIComponentString::~UIComponentString()
 {
     return;
+}
+
+const bool UIComponentString::SetText(
+    const std::string& in_string_utf8,
+    const TextLocale* const in_locale_token
+    )
+{
+    bool dirty = false;
+    if (true == _text_block->SetText(in_string_utf8, in_locale_token))
+    {
+        dirty = true;
+    }
+    return dirty;
 }
 
 const bool UIComponentString::Set(
@@ -76,6 +82,28 @@ const bool UIComponentString::Set(
     return dirty;
 }
 
+
+const VectorInt2 UIComponentString::GetDesiredSize(
+    const VectorInt2& in_layout_size,
+    const float in_ui_scale
+    )
+{
+    _text_block->SetWidthLimit(
+        _text_block->GetWidthLimitEnabled(),
+        in_layout_size[0]
+        );
+    _text_block->SetUIScale(in_ui_scale);
+
+    const VectorInt2 result = _text_block->GetTextBounds();
+    return result;
+}
+
+void UIComponentString::SetContainerSize(const VectorInt2& in_size)
+{
+    _text_block->SetTextContainerSize(in_size);
+}
+
+/*
 const bool UIComponentString::UpdateHierarchy(
     UIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
@@ -169,6 +197,7 @@ void UIComponentString::GetDesiredSize(
 
     return;
 }
+*/
 
 const bool UIComponentString::PreDraw(
     const UIManagerDrawParam& in_draw_param,

@@ -73,25 +73,19 @@ public:
 private:
     /// GetChild desired size? layout is now part of UIData?
     virtual const VectorInt2 GetContentSize(
+        IUIComponent& in_component,
         const VectorInt2& in_target_size, 
+        const float in_ui_scale,
         UIHierarchyNodeChildData& in_component_owner
         );
 
     /// by default, the desired size is just the layout size. something like text block or stack may want to override
     virtual const VectorInt2 GetDesiredSize(
-        const VectorInt2& in_layout_size, 
-        const VectorInt2& in_content_size
+        IUIComponent& in_component,
+        const VectorInt2& in_target_size, 
+        const float in_ui_scale,
+        UIHierarchyNodeChildData& in_component_owner
         );
-
-    /// move to node? it would be nice for node to deal with recusion
-    void RecurseUpdateLayoutRender(
-        UIHierarchyNodeChildData& in_component_owner,
-        const UIHierarchyNodeUpdateLayoutRenderParam& in_param,
-        const VectorInt2& in_parent_size,
-        const VectorInt2& in_parent_offset,
-        const VectorInt2& in_parent_window
-        );
-
 
 private:
     /// don't have a copy of UILayout in the IUIComponent anymore, IUIComponent has UIGeometry though

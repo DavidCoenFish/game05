@@ -17,8 +17,7 @@
 #include "common/math/vector_int4.h"
 #include "common/text/text_manager.h"
 #include "common/ui/ui_component/ui_component_canvas.h"
-//#include "common/ui/ui_component/ui_component_texture.h"
-//#include "common/ui/ui_component/ui_component_tooltip_layer.h"
+#include "common/ui/ui_component/ui_component_string.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_manager.h"
 #include "common/ui/i_ui_model.h"
@@ -1551,10 +1550,21 @@ public:
             UILayout::FactoryFull(),
             UIBaseColour::FactoryRoot(true)
             );
+        auto data_debug_quad = std::make_shared<UIData>(
+            UILayout::FactoryParentMiddleQuater(),
+            UIBaseColour::FactoryRedBackground()
+            );
+
         data_main->AddChild(
-            std::make_shared<UIData>(
-                UILayout::FactoryParentMiddleQuater(),
-                UIBaseColour::FactoryRedBackground()
+            data_debug_quad
+            );
+            
+        data_debug_quad->AddChild(
+            std::make_shared<UIDataString>(
+                UILayout::FactoryContentMiddle(),
+                UIBaseColour::FactoryBlueBackground(),
+                nullptr,
+                "Hello human"
                 )
             );
 

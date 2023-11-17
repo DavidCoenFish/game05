@@ -2,11 +2,11 @@
 #include "common/ui/ui_data/ui_data.h"
 
 #include "common/ui/ui_component/ui_component_canvas.h"
+#include "common/ui/ui_data/ui_data_text_run.h"
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_screen_space.h"
-
 
 UIData::UIData(
     const UILayout& in_layout,
@@ -93,7 +93,7 @@ void UIData::SetDirtyBit(const UIDataDirty in_flag, const bool in_active)
 
 void UIData::UpdateHierarchy(
     std::unique_ptr<IUIComponent>& in_out_component,
-    const UIHierarchyNodeUpdateHierarchyParam&, //in_param,
+    const UIHierarchyNodeUpdateHierarchyParam&, // in_param,
     const int //in_index
     )
 {
@@ -102,6 +102,7 @@ void UIData::UpdateHierarchy(
     if (nullptr == content)
     {
         auto new_content = std::make_unique<UIComponentCanvas>();
+        content = new_content.get();
         in_out_component = std::move(new_content);
         SetDirtyBit(UIDataDirty::TLayout, true);
     }
@@ -125,22 +126,32 @@ void UIData::UpdateLayoutRender(
     VectorInt2 content_size;
     if (true == _layout.UsesContentSize())
     {
-        content_size = GetContentSize(in_parent_window, in_component_owner);
+        content_size = GetContentSize(
+            in_component,
+            in_parent_window, 
+            in_param._ui_scale,
+            in_component_owner
+            );
     }
 
     VectorInt2 layout_size;
     VectorInt2 desired_size;
     if ((true == GetDirtyBit(UIDataDirty::TLayout)) ||
-        (false == in_component.CheckLayoutCache(layout_size, desired_size, in_parent_size, in_parent_offset, in_parent_window, content_size)))
+        (false == in_component.CheckLayoutCache(layout_size, desired_size, in_parent_window, content_size)))
     {
         layout_size = _layout.GetSize(
             in_parent_window, 
             in_param._ui_scale,
             content_size
             );
-        desired_size = GetDesiredSize(layout_size, content_size);
+        desired_size = GetDesiredSize(
+            in_component,
+            layout_size, 
+            in_param._ui_scale,
+            in_component_owner
+            );
 
-        in_component.SetLayoutCache(layout_size, desired_size, in_parent_size, in_parent_offset, in_parent_window, content_size);
+        in_component.SetLayoutCache(layout_size, desired_size, in_parent_window, content_size);
         SetDirtyBit(UIDataDirty::TLayout, false);
     }
 
@@ -184,54 +195,66 @@ void UIData::UpdateLayoutRender(
             );
     }
 
-    bool mark_dirty = false;
-    if (true == GetDirtyBit(UIDataDirty::TRender))
-    {
-        mark_dirty = true;
-        SetDirtyBit(UIDataDirty::TRender, false);
-    }
-
-    in_component_owner._node->RecurseUpdateLayoutRender(
+    in_component_owner._node->UpdateLayoutRender(
         in_param,
-        GetArrayChildData(),
-        desired_size,
+        *this,
+        texture_size,
         VectorInt2(),
-        desired_size,
-        *(in_component_owner._screen_space),
-        mark_dirty
+        texture_size,
+        *(in_component_owner._screen_space)
         );
 
     return;
 }
 
 const VectorInt2 UIData::GetContentSize(
+    IUIComponent&, //in_component,
     const VectorInt2& in_target_size, 
+    const float in_ui_scale,
     UIHierarchyNodeChildData& in_component_owner
     )
 {
     // std::vector<std::shared_ptr<UIData>> _array_child_data;
-    if ((0 == _array_child_data.size()) || (nullptr == _array_child_data[0]))
+    if (0 == _array_child_data.size())
     {
         return VectorInt2();
     }
     const int target_length = static_cast<int>(_array_child_data.size());
     DSC_ASSERT(target_length == in_component_owner._node->GetChildData().size(), "we expect size of data children and size child data array to match");
 
-    UIHierarchyNodeChildData& child_component_owner = *(in_component_owner._node->GetChildData()[0]);
+    VectorInt2 result;
+    for (int index = 0; index < target_length; ++index)
+    {
+        UIHierarchyNodeChildData* const child_component_owner = in_component_owner._node->GetChildData()[index].get();
+        UIData* const child_data = _array_child_data[index].get();
 
-    UIData& child_data = *(_array_child_data[0]);
-
-    return child_data.GetContentSize(
-        in_target_size,
-        child_component_owner
-        );
+        if ((nullptr != child_component_owner) && (nullptr != child_data))
+        {
+            const VectorInt2 child_size = child_data->GetDesiredSize(
+                *child_component_owner->_component,
+                in_target_size,
+                in_ui_scale,
+                *child_component_owner
+                );
+            result = VectorInt2::Max(result, child_size);
+        }
+    }
+    return result;
 }
 
 const VectorInt2 UIData::GetDesiredSize(
-    const VectorInt2& in_layout_size, 
-    const VectorInt2& //in_content_size
+    IUIComponent& in_component,
+    const VectorInt2& in_target_size, 
+    const float in_ui_scale,
+    UIHierarchyNodeChildData& in_component_owner
     )
 {
-    return in_layout_size;
+    // would it be better to just use the max size of the children? canvas desired size is the max of the children
+    return GetContentSize(
+        in_component,
+        in_target_size,
+        in_ui_scale,
+        in_component_owner
+        );
 }
 

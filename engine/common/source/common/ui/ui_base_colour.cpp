@@ -17,6 +17,16 @@ const UIBaseColour UIBaseColour::FactoryRedBackground()
     return UIBaseColour(VectorFloat4(1.0f, 0.0f, 0.0f, 1.0f));
 }
 
+const UIBaseColour UIBaseColour::FactoryGreenBackground()
+{
+    return UIBaseColour(VectorFloat4(0.0f, 1.0f, 0.0f, 1.0f));
+}
+
+const UIBaseColour UIBaseColour::FactoryBlueBackground()
+{
+    return UIBaseColour(VectorFloat4(0.0f, 0.0f, 1.0f, 1.0f));
+}
+
 UIBaseColour::UIBaseColour(
     const VectorFloat4& in_clear_colour,
     const bool in_clear_background,
