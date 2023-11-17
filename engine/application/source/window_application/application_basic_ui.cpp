@@ -47,6 +47,7 @@ class UIModel;
 
 namespace
 {
+    constexpr float s_default_margin = 8.0f;
 /*
     std::vector<std::shared_ptr<UIData>> BuildButtonData(const std::string& in_body)
     {
@@ -1561,10 +1562,14 @@ public:
             
         data_debug_quad->AddChild(
             std::make_shared<UIDataString>(
-                UILayout::FactoryContentMiddle(),
+                UILayout::FactoryContentMiddleMargin(s_default_margin),
                 UIBaseColour::FactoryBlueBackground(),
                 nullptr,
-                "Hello human"
+                "Hello human",
+                LocaleISO_639_1::Default,
+                false,
+                TextEnum::HorizontalLineAlignment::Middle,
+                TextEnum::VerticalBlockAlignment::Middle
                 )
             );
 
@@ -1611,20 +1616,6 @@ public:
     }
 
 private:
-    //virtual const bool VisitDataArray(
-    //    const std::string& in_key,
-    //    const std::function<void(const std::vector<std::shared_ptr<UIData>>&)>& in_visitor
-    //    ) const override
-    //{
-    //    const auto found = _data_array_map.find(in_key);
-    //    if (found != _data_array_map.end())
-    //    {
-    //        in_visitor(found->second);
-    //        return true;
-    //    }
-    //    return false;
-    //}
-
     virtual UIData* const GetData(
         const std::string& in_key
         ) const override

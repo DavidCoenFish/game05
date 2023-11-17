@@ -11,6 +11,7 @@ public:
     static const UILayout FactoryFull();
     static const UILayout FactoryParentMiddleQuater();
     static const UILayout FactoryContentMiddle();
+    static const UILayout FactoryContentMiddleMargin(const float in_margin);
 
     explicit UILayout(
         const UICoord& in_size_x = UICoord(UICoord::TSource::ParentX),

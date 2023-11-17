@@ -38,6 +38,18 @@ const UILayout UILayout::FactoryContentMiddle()
         );
 }
 
+const UILayout UILayout::FactoryContentMiddleMargin(const float in_margin)
+{
+    return UILayout(
+        UICoord(UICoord::TSource::ContentX, 1.0f, in_margin * 2.0f),
+        UICoord(UICoord::TSource::ContentY, 1.0f, in_margin * 2.0f),
+        UICoord(UICoord::TSource::ParentX, 0.5f, 0.0f),
+        UICoord(UICoord::TSource::ParentY, 0.5f, 0.0f),
+        UICoord(UICoord::TSource::ParentX, 0.5f, 0.0f),
+        UICoord(UICoord::TSource::ParentY, 0.5f, 0.0f)
+        );
+}
+
 UILayout::UILayout(
     const UICoord& in_size_x,
     const UICoord& in_size_y,
