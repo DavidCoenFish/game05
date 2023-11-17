@@ -215,13 +215,15 @@ public:
         }
         else
         {
-            if (true == in_ui_data->GetDirtyBit(UIDataDirty::THierarchy))
+            bool dirty = false;
+            if (nullptr == in_out_target_or_null)
             {
-                if (nullptr == in_out_target_or_null)
-                {
-                    in_out_target_or_null = std::make_shared<UIHierarchyNode>();
-                }
+                in_out_target_or_null = std::make_shared<UIHierarchyNode>();
+                dirty = true;
+            }
 
+            if ((true == dirty) || (true == in_ui_data->GetDirtyBit(UIDataDirty::THierarchy)))
+            {
                 UIHierarchyNodeUpdateHierarchyParam update_param(
                     in_param._draw_system,
                     in_param._command_list,
@@ -236,19 +238,22 @@ public:
                     );
             }
 
-            if ((nullptr != in_out_target_or_null) && (true == in_ui_data->GetDirtyBit(UIDataDirty::TLayoutRender)))
+            // since we have auto scroll, we need to always visit some nodes, unless we selectivly mark tree with auto scroll
+            //if ((nullptr != in_out_target_or_null) && (true == in_ui_data->GetDirtyBit(UIDataDirty::TLayoutRender)))
+            if (nullptr != in_out_target_or_null) 
             {
                 UIHierarchyNodeUpdateLayoutRenderParam update_param(
                     in_param._draw_system,
                     in_param._ui_scale,
                     in_param._time_delta
                     );
+                const VectorInt2 target_size = in_out_target_or_null->GetTextureSize(in_param._draw_system);
                 in_out_target_or_null->UpdateLayoutRender(
-                    in_out_target_or_null->GetTextureSize(
-                        in_param._draw_system
-                        ),
                     update_param,
                     *in_ui_data,
+                    target_size,
+                    VectorInt2(),
+                    target_size,
                     UIScreenSpace()
                     );
             }

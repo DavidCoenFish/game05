@@ -26,7 +26,7 @@ public:
     UIData(
         const UILayout& in_layout,
         const UIBaseColour& in_base_colour,
-        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null,
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null = nullptr,
         UIData* const in_parent_or_null = nullptr
         );
     virtual ~UIData();
@@ -59,13 +59,39 @@ public:
         );
 
     /// replacing what was done in the factory/ component
+    /// return true means parent  texture needs to be set dirty
     virtual void UpdateLayoutRender(
         IUIComponent& in_component,
         UIHierarchyNodeChildData& in_component_owner,
-        const VectorInt2& in_texture_size,
         const UIHierarchyNodeUpdateLayoutRenderParam& in_param,
+        const VectorInt2& in_parent_size,
+        const VectorInt2& in_parent_offset,
+        const VectorInt2& in_parent_window,
         const UIScreenSpace& in_parent_screen_space
         );
+
+private:
+    /// GetChild desired size? layout is now part of UIData?
+    virtual const VectorInt2 GetContentSize(
+        const VectorInt2& in_target_size, 
+        UIHierarchyNodeChildData& in_component_owner
+        );
+
+    /// by default, the desired size is just the layout size. something like text block or stack may want to override
+    virtual const VectorInt2 GetDesiredSize(
+        const VectorInt2& in_layout_size, 
+        const VectorInt2& in_content_size
+        );
+
+    /// move to node? it would be nice for node to deal with recusion
+    void RecurseUpdateLayoutRender(
+        UIHierarchyNodeChildData& in_component_owner,
+        const UIHierarchyNodeUpdateLayoutRenderParam& in_param,
+        const VectorInt2& in_parent_size,
+        const VectorInt2& in_parent_offset,
+        const VectorInt2& in_parent_window
+        );
+
 
 private:
     /// don't have a copy of UILayout in the IUIComponent anymore, IUIComponent has UIGeometry though
@@ -77,9 +103,11 @@ private:
     std::shared_ptr<const TStateFlagTintArray> _state_flag_tint_array_or_null;
     /// parent can be null if we are the root node
     UIData* _parent_or_null;
-    /// to help speedup UI update, have a change tree, if a child has a dirty flag set, also set parent
-    UIDataDirty _dirty_flag;
     /// children array, currently no recusion protection
     std::vector<std::shared_ptr<UIData>> _array_child_data;
+
+    /// TODO: should the dirty flag have been in the IUIComponent, what if we want to reuse UIData multiple times on screen at once.
+    /// to help speedup UI update, have a change tree, if a child has a dirty flag set, also set parent
+    UIDataDirty _dirty_flag;
 
 };

@@ -270,7 +270,7 @@ const bool UIHierarchyNode::ClearChildren()
 
 void UIHierarchyNode::UpdateHierarchy(
     const UIHierarchyNodeUpdateHierarchyParam& in_param,
-    const UIData& in_ui_data
+    UIData& in_ui_data
     )
 {
     bool dirty = false;
@@ -394,6 +394,8 @@ void UIHierarchyNode::UpdateHierarchy(
         }
     }
 
+    in_ui_data.SetDirtyBit(UIDataDirty::THierarchy, false);
+
     if ((true == dirty) && (nullptr != _texture))
     {
         _texture->MarkDirty();
@@ -403,9 +405,11 @@ void UIHierarchyNode::UpdateHierarchy(
 }
 
 void UIHierarchyNode::UpdateLayoutRender(
-    const VectorInt2& in_target_size,
     const UIHierarchyNodeUpdateLayoutRenderParam& in_param,
-    const UIData& in_ui_data,
+    UIData& in_ui_data,
+    const VectorInt2& in_target_size,
+    const VectorInt2& in_target_offset,
+    const VectorInt2& in_target_window,
     const UIScreenSpace& in_parent_screen_space
     )
 {
@@ -423,30 +427,67 @@ void UIHierarchyNode::UpdateLayoutRender(
         {
             continue;
         }
-
         DSC_ASSERT(nullptr != child->_component, "expect component not to be null if data is valid");
 
         data->UpdateLayoutRender(
             *child->_component,
             *child,
+            in_param,
             in_target_size,
-            in_param,
+            in_target_offset,
+            in_target_window,
             in_parent_screen_space
-            );
-
-        child->_node->UpdateLayoutRender(
-            child->_node->GetTextureSize(
-                in_param._draw_system
-                ),
-            in_param,
-            *data,
-            *(child->_screen_space)
             );
     }
 
-    const bool mark_dirty = in_ui_data.GetDirtyBit(UIDataDirty::TRender);
-    UpdateTextureSize(in_target_size, mark_dirty);
+    //const bool mark_dirty = in_ui_data.GetDirtyBit(UIDataDirty::TRender);
+    //in_ui_data.SetDirtyBit(UIDataDirty::TRender, false);
+
+    //UpdateTextureSize(in_target_size, mark_dirty);
 }
+
+void UIHierarchyNode::RecurseUpdateLayoutRender(
+    const UIHierarchyNodeUpdateLayoutRenderParam& in_param,
+    const std::vector<std::shared_ptr<UIData>>& in_ui_data_array,
+    const VectorInt2& in_parent_size,
+    const VectorInt2& in_parent_offset,
+    const VectorInt2& in_parent_window,
+    const UIScreenSpace& in_parent_screen_space,
+    const bool in_mark_dirty
+    )
+{
+    const int target_length = static_cast<int>(in_ui_data_array.size());
+    DSC_ASSERT(target_length == _child_data_array.size(), "we expect size of data children and size child data array to match");
+
+    // ensure each content is created/ passed through factory
+    for (int index = 0; index < target_length; ++index)
+    {
+        UIData* const data = in_ui_data_array[index].get();
+        UIHierarchyNodeChildData* const child = _child_data_array[index].get();
+
+        if (nullptr == data)
+        {
+            continue;
+        }
+        DSC_ASSERT(nullptr != child->_component, "expect component not to be null if data is valid");
+
+        child->_node->UpdateLayoutRender(
+            in_param,
+            *data,
+            in_parent_size,
+            in_parent_offset,
+            in_parent_window,
+            in_parent_screen_space
+            );
+    }
+
+    //const bool mark_dirty = in_ui_data.GetDirtyBit(UIDataDirty::TRender);
+    //in_ui_data.SetDirtyBit(UIDataDirty::TRender, false);
+    UpdateTextureSize(in_parent_window, in_mark_dirty);
+
+    return;
+}
+
 
 void UIHierarchyNode::MarkTextureDirty()
 {
@@ -764,13 +805,14 @@ const bool UIHierarchyNode::Draw(
                     in_draw_param._draw_system
                     );
             }
-/*
+
             if (nullptr != child_data._shader_constant_buffer)
             {
                 UIManager::TShaderConstantBuffer& buffer = child_data._shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
-                buffer._tint_colour = child_data._component->GetTintColour();
+                //buffer._tint_colour = child_data._component->GetTintColour();
+                buffer._tint_colour = VectorFloat4(1.0f,1.0f,1.0f,1.0f);
             }
-*/
+
             in_draw_param._frame->SetShader(shader, child_data._shader_constant_buffer);
 
             child_data._geometry->Draw(

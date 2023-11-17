@@ -61,9 +61,7 @@ public:
         );
 
     void SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool in_manual_horizontal, const bool in_manual_vertical);
-
     VectorFloat2& GetUVScrollRef(){ return _uv_scroll; }
-
 
     /// return true bits changed
     const bool SetStateFlag(const UIStateFlag in_state_flag);
@@ -75,11 +73,26 @@ public:
     /// Make sorting children easier
     void* GetSourceToken() const;
 
-protected:
-    /// this should be const, but for usages by component_drift to invoke CalculateGeometry. make protected?
-    VectorFloat2& GetUVScroll() { return _uv_scroll; }
     const float GetTimeAccumulateSeconds() const { return _time_accumulate_seconds; }
     void SetTimeAccumulateSeconds(const float in_time_accumulate_seconds) { _time_accumulate_seconds = in_time_accumulate_seconds; return; }
+
+    const bool CheckLayoutCache(
+        VectorInt2& out_layout_size, 
+        VectorInt2& out_desired_size, 
+        const VectorInt2& in_parent_size, 
+        const VectorInt2& in_parent_offset, 
+        const VectorInt2& in_parent_window, 
+        const VectorInt2& in_content_size
+        );
+    void SetLayoutCache(
+        const VectorInt2& in_layout_size, 
+        const VectorInt2& in_desired_size, 
+        const VectorInt2& in_parent_size, 
+        const VectorInt2& in_parent_offset, 
+        const VectorInt2& in_parent_window, 
+        const VectorInt2& in_content_size
+        );
+
 
 public:
     ///// make the hirearchy match the model (UIData)
@@ -142,5 +155,13 @@ private:
 
     /// still have need of hidden and disabled?
     UIStateFlag _state_flag;
+
+    /// values for a layout cache, change to hash [parent size, offse, window, content size]?
+    VectorInt2 _layout_size;
+    VectorInt2 _desired_size; 
+    VectorInt2 _parent_size;
+    VectorInt2 _parent_offset; 
+    VectorInt2 _parent_window; 
+    VectorInt2 _content_size;
 
 };

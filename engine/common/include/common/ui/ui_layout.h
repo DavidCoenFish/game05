@@ -8,7 +8,9 @@
 class UILayout
 {
 public:
-    static UILayout FactoryFull();
+    static const UILayout FactoryFull();
+    static const UILayout FactoryParentMiddleQuater();
+
     explicit UILayout(
         const UICoord& in_size_x = UICoord(UICoord::TSource::ParentX),
         const UICoord& in_size_y = UICoord(UICoord::TSource::ParentY),

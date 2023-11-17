@@ -161,10 +161,49 @@ void* IUIComponent::GetSourceToken() const
     return _source_token;
 }
 
+const bool IUIComponent::CheckLayoutCache(
+    VectorInt2& out_layout_size, 
+    VectorInt2& out_desired_size, 
+    const VectorInt2& in_parent_size, 
+    const VectorInt2& in_parent_offset, 
+    const VectorInt2& in_parent_window, 
+    const VectorInt2& in_content_size
+    )
+{
+    if ((_parent_size == in_parent_size) &&
+        (_parent_offset == in_parent_offset) &&
+        (_parent_window == in_parent_window) &&
+        (_content_size == in_content_size))
+    {
+        out_layout_size = _layout_size;
+        out_desired_size = _desired_size;
+        return true;
+    }
+    return false;
+}
+
+void IUIComponent::SetLayoutCache(
+    const VectorInt2& in_layout_size, 
+    const VectorInt2& in_desired_size, 
+    const VectorInt2& in_parent_size, 
+    const VectorInt2& in_parent_offset, 
+    const VectorInt2& in_parent_window, 
+    const VectorInt2& in_content_size
+    )
+{
+    _layout_size = in_layout_size;
+    _desired_size = in_desired_size;
+    _parent_size = in_parent_size;
+    _parent_offset = in_parent_offset;
+    _parent_window = in_parent_window;
+    _content_size = in_content_size;
+    return;
+}
+
 void IUIComponent::SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool in_manual_horizontal, const bool in_manual_vertical)
 {
-    //SetStateFlagBit(UIStateFlag::TManualScrollX, in_manual_horizontal);
-    //SetStateFlagBit(UIStateFlag::TManualScrollY, in_manual_vertical);
+    SetStateFlagBit(UIStateFlag::TManualScrollX, in_manual_horizontal);
+    SetStateFlagBit(UIStateFlag::TManualScrollY, in_manual_vertical);
 
     if (true == in_manual_horizontal)
     {

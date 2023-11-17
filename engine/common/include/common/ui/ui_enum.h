@@ -5,6 +5,7 @@ enum class UIDataDirty
     TNone = 0,
     THierarchy = 1 << 0,
     TLayout = 1 << 1,
+    // TAutoScroll
     TRender = 1 << 2,
 
     TLayoutRender = TLayout | TRender

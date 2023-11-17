@@ -156,16 +156,27 @@ public:
     /// create/ destroy nodes to match model, make content match type from factory, update content?
     void UpdateHierarchy(
         const UIHierarchyNodeUpdateHierarchyParam& in_param,
-        const UIData& in_data
+        UIData& in_data
         );
 
     void UpdateLayoutRender(
-        const VectorInt2& in_target_size,
         const UIHierarchyNodeUpdateLayoutRenderParam& in_param,
-        const UIData& in_data,
+        UIData& in_ui_data,
+        const VectorInt2& in_target_size,
+        const VectorInt2& in_target_offset,
+        const VectorInt2& in_target_window,
         const UIScreenSpace& in_parent_screen_space
         );
-    
+    void RecurseUpdateLayoutRender(
+        const UIHierarchyNodeUpdateLayoutRenderParam& in_param,
+        const std::vector<std::shared_ptr<UIData>>& in_ui_data_array,
+        const VectorInt2& in_parent_size,
+        const VectorInt2& in_parent_offset,
+        const VectorInt2& in_parent_window,
+        const UIScreenSpace& in_parent_screen_space,
+        const bool in_mark_dirty
+        );
+
     void MarkTextureDirty();
 
     const VectorInt2 GetTextureSize(

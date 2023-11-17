@@ -10,10 +10,10 @@ class IUIModel
 public:
     virtual ~IUIModel();
 
-    virtual const bool VisitDataArray(
-        const std::string& in_key,
-        const std::function<void(const std::vector<std::shared_ptr<UIData>>&)>& in_visitor
-        ) const = 0;
+    //virtual const bool VisitDataArray(
+    //    const std::string& in_key,
+    //    const std::function<void(const std::vector<std::shared_ptr<UIData>>&)>& in_visitor
+    //    ) const = 0;
 
     virtual UIData* const GetData(
         const std::string& in_key

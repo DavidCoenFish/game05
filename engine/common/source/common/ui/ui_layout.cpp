@@ -2,7 +2,7 @@
 #include "common/ui/ui_layout.h"
 #include "common/math/dsc_math.h"
 
-UILayout UILayout::FactoryFull()
+const UILayout UILayout::FactoryFull()
 {
     return UILayout(
         UICoord(UICoord::TSource::ParentX, 1.0f, 0.0f),
@@ -11,6 +11,18 @@ UILayout UILayout::FactoryFull()
         UICoord(UICoord::TSource::ParentY, 0.0f, 0.0f),
         UICoord(UICoord::TSource::ParentX, 0.0f, 0.0f),
         UICoord(UICoord::TSource::ParentY, 0.0f, 0.0f)
+        );
+}
+
+const UILayout UILayout::FactoryParentMiddleQuater()
+{
+    return UILayout(
+        UICoord(UICoord::TSource::ParentX, 0.5f, 0.0f),
+        UICoord(UICoord::TSource::ParentY, 0.5f, 0.0f),
+        UICoord(UICoord::TSource::ParentX, 0.5f, 0.0f),
+        UICoord(UICoord::TSource::ParentY, 0.5f, 0.0f),
+        UICoord(UICoord::TSource::ParentX, 0.5f, 0.0f),
+        UICoord(UICoord::TSource::ParentY, 0.5f, 0.0f)
         );
 }
 

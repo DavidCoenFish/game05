@@ -5,6 +5,9 @@
 class UIBaseColour
 {
 public:
+    static const UIBaseColour FactoryRoot(const bool in_always_dirty);
+    static const UIBaseColour FactoryRedBackground();
+
     explicit UIBaseColour(
         const VectorFloat4& in_clear_colour = VectorFloat4(0.0f, 0.0f, 0.0f, 0.0f),
         const bool in_clear_background = true,

@@ -1547,6 +1547,18 @@ public:
 
             });
 */
+        auto data_main = std::make_shared<UIData>(
+            UILayout::FactoryFull(),
+            UIBaseColour::FactoryRoot(true)
+            );
+        data_main->AddChild(
+            std::make_shared<UIData>(
+                UILayout::FactoryParentMiddleQuater(),
+                UIBaseColour::FactoryRedBackground()
+                )
+            );
+
+        _data_map["main"] = data_main;
     }
 
     virtual ~UIModel()
@@ -1589,19 +1601,19 @@ public:
     }
 
 private:
-    virtual const bool VisitDataArray(
-        const std::string& in_key,
-        const std::function<void(const std::vector<std::shared_ptr<UIData>>&)>& in_visitor
-        ) const override
-    {
-        const auto found = _data_array_map.find(in_key);
-        if (found != _data_array_map.end())
-        {
-            in_visitor(found->second);
-            return true;
-        }
-        return false;
-    }
+    //virtual const bool VisitDataArray(
+    //    const std::string& in_key,
+    //    const std::function<void(const std::vector<std::shared_ptr<UIData>>&)>& in_visitor
+    //    ) const override
+    //{
+    //    const auto found = _data_array_map.find(in_key);
+    //    if (found != _data_array_map.end())
+    //    {
+    //        in_visitor(found->second);
+    //        return true;
+    //    }
+    //    return false;
+    //}
 
     virtual UIData* const GetData(
         const std::string& in_key
@@ -1747,13 +1759,12 @@ void ApplicationBasicUI::Update()
 
         auto frame = _draw_system->CreateNewFrame();
         frame->SetRenderTarget(_draw_system->GetRenderTargetBackBuffer());
-/*
+
         // Update ui layout
         {
             UIManagerUpdateParam update_param(
                 _draw_system.get(),
                 frame->GetCommandList(),
-                _draw_resource->_ui_model.get(),
                 DefaultUIComponentFactory::GetDefaultTextStyle(),
                 _draw_resource->_locale_system.get(),
                 _draw_resource->_text_manager.get(),
@@ -1763,12 +1774,14 @@ void ApplicationBasicUI::Update()
                 false, //in_draw_to_texture = false, // Draw to texture or backbuffer?
                 VectorInt2(0,0) //in_texture_size = VectorInt2(0,0) // If in_draw_to_texture is true, size to use for texture
                 );
+            UIData* const root_data = _draw_resource->_ui_model->GetData("main");
             _draw_resource->_ui_manager->Update(
                 _draw_resource->_ui_hierarchy_node,
+                root_data,
                 update_param
                 );
         }
-
+/*
         // Deal input
         if ((nullptr != _draw_resource->_ui_hierarchy_node) && (true == _active))
         {
@@ -1805,8 +1818,9 @@ void ApplicationBasicUI::Update()
             _scroll_key_state = 0;
             _scroll_z = 0;
         }
-        #if 1
+*/
         // Draw
+        #if 1
         if (nullptr != _draw_resource->_ui_hierarchy_node)
         {
              _draw_resource->_ui_manager->Draw(
@@ -1820,7 +1834,7 @@ void ApplicationBasicUI::Update()
                 );
         }
         #endif
-*/
+
     }
 }
 
