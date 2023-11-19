@@ -51,20 +51,17 @@ namespace
 
         return result;
     }
-
 }
 
 UIComponentEffect::UIComponentEffect(
-    //const UIBaseColour& in_base_colour,
-    //const UILayout& in_layout,
-    //const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
     const UIEffectEnum in_type,
     const UICoord& in_coord_a,
     const UICoord& in_coord_b,
     const UICoord& in_coord_c,
-    const UICoord& in_coord_d
+    const UICoord& in_coord_d,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_array_or_null
     )
-    : IUIComponent()
+    : IUIComponent(in_state_flag_array_or_null)
     , _type(in_type)
     , _coord_a(in_coord_a)
     , _coord_b(in_coord_b)
@@ -82,12 +79,13 @@ UIComponentEffect::~UIComponentEffect()
 }
 
 // return true if modified, else false
-const bool UIComponentEffect::SetModelOther(
+const bool UIComponentEffect::Set(
     const UIEffectEnum in_type,
     const UICoord& in_coord_a,
     const UICoord& in_coord_b,
     const UICoord& in_coord_c,
-    const UICoord& in_coord_d
+    const UICoord& in_coord_d,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_array_or_null
     )
 {
     bool dirty = false;
@@ -121,6 +119,11 @@ const bool UIComponentEffect::SetModelOther(
     {
         dirty = true;
         _coord_d = in_coord_d;
+    }
+
+    if (true == SetStateFlagArrayOrNull(in_state_flag_array_or_null))
+    {
+        dirty = true;
     }
 
     return dirty;
@@ -183,20 +186,38 @@ const bool UIComponentEffect::UpdateSize(
         in_parent_screen_space,
         out_screen_space
         );
+*/
+
+const bool UIComponentEffect::SetContainerSize(
+    const VectorInt2& in_texture_size,
+    const UIHierarchyNodeUpdateLayoutRenderParam& in_param
+    )
+{
+    bool dirty = false;
+    if (nullptr == _shader_constant_buffer)
+    {
+        const auto shader_type = GetShaderType(_type);
+        const Shader* const shader = in_param._ui_manager->GetShaderRef(shader_type).get();
+        if (nullptr != shader)
+        {
+            _shader_constant_buffer = shader->MakeShaderConstantBuffer(
+                in_param._draw_system
+                );
+        }
+    }
 
     if (nullptr != _shader_constant_buffer)
     {
-        const VectorInt2 texture_size = in_out_node.GetTextureSize(in_draw_system);
         TShaderConstantBuffer& constant_1 = _shader_constant_buffer->GetConstant<TShaderConstantBuffer>(1);
         if (UIEffectEnum::TNone != _type)
         {
-            VectorFloat2 texture_size_float(static_cast<float>(texture_size.GetX()), static_cast<float>(texture_size.GetY()));
+            VectorFloat2 texture_size_float(static_cast<float>(in_texture_size.GetX()), static_cast<float>(in_texture_size.GetY()));
 
             const VectorFloat4 data(
-                _coord_a.Calculate(texture_size_float, in_ui_scale),
-                _coord_b.Calculate(texture_size_float, in_ui_scale),
-                _coord_c.Calculate(texture_size_float, in_ui_scale),
-                _coord_d.Calculate(texture_size_float, in_ui_scale)
+                _coord_a.Calculate(texture_size_float, in_param._ui_scale),
+                _coord_b.Calculate(texture_size_float, in_param._ui_scale),
+                _coord_c.Calculate(texture_size_float, in_param._ui_scale),
+                _coord_d.Calculate(texture_size_float, in_param._ui_scale)
                 );
             if (constant_1._data != data)
             {
@@ -205,10 +226,10 @@ const bool UIComponentEffect::UpdateSize(
             }
 
             const VectorFloat4 width_height_iwidth_iheight(
-                static_cast<float>(texture_size.GetX()),
-                static_cast<float>(texture_size.GetY()),
-                1.0f / static_cast<float>(texture_size.GetX()),
-                1.0f / static_cast<float>(texture_size.GetY())
+                texture_size_float.GetX(),
+                texture_size_float.GetY(),
+                1.0f / texture_size_float.GetX(),
+                1.0f / texture_size_float.GetY()
                 );
             if (constant_1._width_height_iwidth_iheight != width_height_iwidth_iheight)
             {
@@ -220,7 +241,6 @@ const bool UIComponentEffect::UpdateSize(
 
     return dirty;
 }
-*/
 
 const bool UIComponentEffect::PreDraw(
     const UIManagerDrawParam& in_draw_param,
@@ -267,15 +287,15 @@ const bool UIComponentEffect::PreDraw(
                 );
 
             // the tint array index may be changed by input after update size and before draw
-            //if (nullptr != _shader_constant_buffer)
-            //{
-            //    UIManager::TShaderConstantBuffer& constant_0 = _shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
-            //    const auto new_tint = TSuper::GetTintColour();
-            //    if (constant_0._tint_colour != new_tint)
-            //    {
-            //        constant_0._tint_colour = new_tint;
-            //    }
-            //}
+            if (nullptr != _shader_constant_buffer)
+            {
+                UIManager::TShaderConstantBuffer& constant_0 = _shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
+                const auto new_tint = GetTintColour();
+                if (constant_0._tint_colour != new_tint)
+                {
+                    constant_0._tint_colour = new_tint;
+                }
+            }
 
             in_draw_param._frame->SetShader(shader, _shader_constant_buffer);
 
@@ -311,9 +331,4 @@ const bool UIComponentEffect::PreDraw(
 
     return dirty;
 }
-//
-//// this Component already uses the tint colour in it's custom PreDraw
-//const VectorFloat4 UIComponentEffect::GetTintColour() const
-//{
-//    return VectorFloat4::s_white;
-//}
+

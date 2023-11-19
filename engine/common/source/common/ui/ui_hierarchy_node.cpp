@@ -196,10 +196,12 @@ UIHierarchyNodeUpdateHierarchyParam::UIHierarchyNodeUpdateHierarchyParam(
 
 UIHierarchyNodeUpdateLayoutRenderParam::UIHierarchyNodeUpdateLayoutRenderParam(
     DrawSystem* const in_draw_system,
+    UIManager* const in_ui_manager,
     const float in_ui_scale,
     const float in_time_delta
     )
     : _draw_system(in_draw_system)
+    , _ui_manager(in_ui_manager)
     , _ui_scale(in_ui_scale)
     , _time_delta(in_time_delta)
 {

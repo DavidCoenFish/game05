@@ -203,7 +203,8 @@ public:
     void Update(
         std::shared_ptr<UIHierarchyNode>& in_out_target_or_null,
         UIData* const in_ui_data,
-        const UIManagerUpdateParam& in_param
+        const UIManagerUpdateParam& in_param,
+        UIManager* const in_manager
         )
     {
         if (nullptr == in_ui_data)
@@ -227,7 +228,6 @@ public:
                 UIHierarchyNodeUpdateHierarchyParam update_param(
                     in_param._draw_system,
                     in_param._command_list,
-                    //this,
                     in_param._locale_system,
                     in_param._text_manager,
                     in_param._default_text_style
@@ -244,6 +244,7 @@ public:
             {
                 UIHierarchyNodeUpdateLayoutRenderParam update_param(
                     in_param._draw_system,
+                    in_manager,
                     in_param._ui_scale,
                     in_param._time_delta
                     );
@@ -359,7 +360,8 @@ void UIManager::Update(
     _implementation->Update(
         in_out_target_or_null, 
         in_ui_data,
-        in_param
+        in_param,
+        this
         );
     return;
 }

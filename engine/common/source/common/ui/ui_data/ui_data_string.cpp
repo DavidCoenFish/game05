@@ -24,7 +24,7 @@ UIDataString::UIDataString(
         )
     , _data(in_data)
     , _locale(in_locale)
-    , _width_limit_enabled(false)
+    , _width_limit_enabled(in_width_limit_enabled)
     , _horizontal(in_horizontal)
     , _vertical(in_vertical)
 {

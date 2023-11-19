@@ -250,11 +250,16 @@ const VectorInt2 UIData::GetDesiredSize(
     )
 {
     // would it be better to just use the max size of the children? canvas desired size is the max of the children
-    return GetContentSize(
+    VectorInt2 content_size = GetContentSize(
         in_component,
         in_target_size,
         in_ui_scale,
         in_component_owner
         );
+    if (true == _layout.UsesContentSize())
+    {
+        content_size = _layout.GetSize(content_size, in_ui_scale, content_size);
+    }
+    return content_size;
 }
 

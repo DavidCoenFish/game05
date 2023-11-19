@@ -24,6 +24,7 @@
 #include "common/ui/ui_texture.h"
 #include "common/ui/ui_data/ui_data.h"
 #include "common/ui/ui_data/ui_data_button.h"
+#include "common/ui/ui_data/ui_data_effect.h"
 #include "common/ui/ui_data/ui_data_combo_box.h"
 #include "common/ui/ui_data/ui_data_combo_box_layer.h"
 #include "common/ui/ui_data/ui_data_disable.h"
@@ -1561,6 +1562,24 @@ public:
             );
             
         data_debug_quad->AddChild(
+#if 0
+            std::make_shared<UIDataEffect>(
+                UILayout::FactoryContentMiddle(),
+                UIBaseColour(),
+                nullptr,
+                UIEffectEnum::TRoundCorners,
+                UICoord(UICoord::TSource::None, 0.0f, s_default_margin),
+                UICoord(UICoord::TSource::None, 0.0f, s_default_margin),
+                UICoord(UICoord::TSource::None, 0.0f, s_default_margin),
+                UICoord(UICoord::TSource::None, 0.0f, s_default_margin)
+                )
+#else
+            std::make_shared<UIData>(
+                UILayout::FactoryContentMiddleMargin(s_default_margin),
+                UIBaseColour::FactoryGreenBackground()
+                )
+#endif
+            )->AddChild(
             std::make_shared<UIDataString>(
                 UILayout::FactoryContentMiddleMargin(s_default_margin),
                 UIBaseColour::FactoryBlueBackground(),

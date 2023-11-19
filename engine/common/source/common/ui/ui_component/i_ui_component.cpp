@@ -19,10 +19,12 @@ namespace
 }
 
 IUIComponent::IUIComponent(
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_array_or_null,
     void* in_source_token,
     const UIStateFlag in_state_flag
     )
-    : _source_token(in_source_token)
+    : _state_flag_array_or_null(in_state_flag_array_or_null)
+    , _source_token(in_source_token)
     , _time_accumulate_seconds(0.0f)
     , _state_flag(in_state_flag)
 {
@@ -242,6 +244,18 @@ const bool IUIComponent::GetStateFlagBit(const UIStateFlag in_state_flag_bit) co
     return 0 != (static_cast<int>(_state_flag) & static_cast<int>(in_state_flag_bit));
 }
 
+const bool IUIComponent::SetStateFlagArrayOrNull(const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_array_or_null)// { _state_flag_array_or_null = in_state_flag_array_or_null; return; }
+{
+    bool dirty = false;
+    if (_state_flag_array_or_null != in_state_flag_array_or_null)
+    {
+        dirty = true;
+        _state_flag_array_or_null = in_state_flag_array_or_null;
+    }
+
+    return dirty;
+}
+
 //const bool IUIComponent::UpdateHierarchy(
 //    UIData* const in_data,
 //    UIHierarchyNodeChildData& in_out_child_data,
@@ -451,19 +465,21 @@ const bool IUIComponent::PreDraw(
     return dirty;
 }
 
-//const VectorFloat4 IUIComponent::GetTintColour() const
-//{
-//    const VectorFloat4* override_tint = nullptr;
-//    const TStateFlagTintArray* const state_flag_tint_array = _state_flag_tint_array.get();
-//
-//    if (nullptr != state_flag_tint_array)
-//    {
-//        const int tint_index = static_cast<int>(GetStateFlag()) & static_cast<int>(UIStateFlag::TTintMask);
-//        override_tint = &(*state_flag_tint_array)[tint_index];
-//    }
-//
-//    return _base_colour.GetTintColour(_time_accumulate_seconds, override_tint);
-//}
+const VectorFloat4 IUIComponent::GetTintColour() const
+{
+    //const VectorFloat4* override_tint = nullptr;
+    VectorFloat4 tint(1.0f, 1.0f, 1.0f, 1.0f);
+    const TStateFlagTintArray* const state_flag_tint_array = _state_flag_array_or_null.get();
+
+    if (nullptr != state_flag_tint_array)
+    {
+        const int tint_index = static_cast<int>(_state_flag) & static_cast<int>(UIStateFlag::TTintMask);
+        tint = (*state_flag_tint_array)[tint_index];
+    }
+
+    //return _base_colour.GetTintColour(_time_accumulate_seconds, override_tint);
+    return tint;
+}
 
 const bool IUIComponent::Update(
     const float in_time_delta

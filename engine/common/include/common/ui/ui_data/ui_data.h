@@ -49,7 +49,8 @@ public:
     //
     const UILayout& GetLayout() const { return _layout; }
     const UIBaseColour& GetBaseColour() const { return _base_colour; }
-    const TStateFlagTintArray* const GetStateFlagTintArray() const { return _state_flag_tint_array_or_null.get(); }
+    //const TStateFlagTintArray* const GetStateFlagTintArray() const { return _state_flag_tint_array_or_null.get(); }
+    const std::shared_ptr<const TStateFlagTintArray>& GetStateFlagTintArray() const { return _state_flag_tint_array_or_null; }
 
     /// Make component type match what the data wants, default is UIComponentCanvas
     virtual void UpdateHierarchy(
