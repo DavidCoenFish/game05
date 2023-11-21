@@ -9,36 +9,32 @@ enum class UIEffectEnum;
 class ShaderConstantBuffer;
 struct UIHierarchyNodeUpdateLayoutRenderParam;
 
-// passing geometry info into the shader worked, but is rather expensive on the shader, drop shadow had more than 512 instructions
-// #define GEOMETRY_SIZE_INTO_SHADER
-
-/// initially thought effect would have multiple shader inputs, but is one enought?
+/// Initially thought effect would have multiple shader inputs, but is one enought?
 /// if we want more than one shader input, switch count based on UIEffectEnum? (or make a new class?)
-class UIComponentEffect : public IUIComponent
+/// geometry is a pos(-1,-1 1,1) uv(0,1 1,0) which can be shared in the UIManager?
+class UIEffectComponent
 {
-    typedef IUIComponent TSuper;
 public:
+    typedef std::array<VectorFloat4, static_cast<int>(UIStateFlag::TTintPermutationCount)> TStateFlagTintArray;
+
     /// the generic data for the effect shaders
     struct TShaderConstantBuffer
     {
-        VectorFloat4 _data;
         VectorFloat4 _width_height_iwidth_iheight;
-#if defined(GEOMETRY_SIZE_INTO_SHADER)
-        VectorFloat4 _geometry_pos;
-        VectorFloat4 _geometry_uv;
-#endif
+        VectorFloat4 _data;
+        VectorFloat4 _tint;
     };
 
-    UIComponentEffect(
+    UIEffectComponent(
         const UIEffectEnum in_type,
         const UICoord& in_coord_a,
         const UICoord& in_coord_b,
         const UICoord& in_coord_c,
         const UICoord& in_coord_d,
-        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_array_or_null = nullptr
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null = nullptr
         );
     /// destructed by base type IUIComponent which has virtual dtor, so virtual here may be redundant but does provide info
-    virtual ~UIComponentEffect();
+    virtual ~UIEffectComponent();
 
     /// return true if modified, else false
     const bool Set(
@@ -47,32 +43,24 @@ public:
         const UICoord& in_coord_b,
         const UICoord& in_coord_c,
         const UICoord& in_coord_d,
-        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_array_or_null = nullptr
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null = nullptr
         );
 
-    const bool SetContainerSize(
-        const VectorInt2& in_texture_size,
+    void Update(
+        const VectorInt2& in_target_size,
         const UIHierarchyNodeUpdateLayoutRenderParam& in_param
         );
 
-private:
     /// deal with the component being drawn to the node texture
-    virtual const bool PreDraw(
+    void Render(
         const UIManagerDrawParam& in_draw_param,
-        UIHierarchyNode& in_node
-        ) override;
+        UITexture& in_input_texture,
+        const UIStateFlag in_state_flag
+        );
 
 private:
     /// The shader constants for this effect
     std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;
-
-#if defined(GEOMETRY_SIZE_INTO_SHADER)
-    /// full size to the render target draw surface
-    /// we don't use the child component geometry as we may want to draw outside it, ie, dropshadow
-    std::unique_ptr<UIGeometry> _geometry;
-#endif
-
-    /// The following could be kept in UIData, but trying to decouple UIData from [input,render]
 
     /// either we don't use type none as default ui shader, or need to be carefull with type to use with _shader_constant_buffer
     UIEffectEnum _type;
@@ -85,5 +73,14 @@ private:
     UICoord _coord_c;
     /// used to build the shader constants
     UICoord _coord_d;
+
+    /// optional array of tint colours selected via input state flag in Render
+    std::shared_ptr<const TStateFlagTintArray> _state_flag_tint_array_or_null;
+
+    /// keep around the input target size
+    VectorInt2 _target_size;
+
+    /// Hold the render target or wrap the backbuffer as a texture
+    std::unique_ptr<UITexture> _texture;
 
 };

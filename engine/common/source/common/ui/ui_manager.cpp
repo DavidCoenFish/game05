@@ -17,7 +17,6 @@
 #include "common/ui/i_ui_model.h"
 #include "common/ui/ui_root_input_state.h"
 #include "common/ui/ui_screen_space.h"
-#include "common/ui/ui_component/ui_component_effect.h"
 #include "common/ui/ui_component/ui_component_tooltip_layer.h"
 #include "common/ui/ui_data/ui_data.h"
 #include "common/util/vector_helper.h"

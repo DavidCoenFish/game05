@@ -210,23 +210,18 @@ public:
         UIData& in_data
         );
 
-    void UpdateLayoutRender(
-        const UIHierarchyNodeUpdateLayoutRenderParam& in_param,
-        UIData& in_ui_data,
+    void UpdateLayout(
+        const UIHierarchyNodeUpdateParam& in_param,
+        //UIData& in_ui_data,
         const VectorInt2& in_target_size,
         const VectorInt2& in_target_offset,
-        const VectorInt2& in_target_window,
+        const VectorInt2& in_target_window
+        );
+
+    void UpdateResources(
+        const UIHierarchyNodeUpdateParam& in_param,
         const UIScreenSpace& in_parent_screen_space
         );
-    //void RecurseUpdateLayoutRender(
-    //    const UIHierarchyNodeUpdateLayoutRenderParam& in_param,
-    //    const std::vector<std::shared_ptr<UIData>>& in_ui_data_array,
-    //    const VectorInt2& in_parent_size,
-    //    const VectorInt2& in_parent_offset,
-    //    const VectorInt2& in_parent_window,
-    //    const UIScreenSpace& in_parent_screen_space,
-    //    const bool in_mark_dirty
-    //    );
 
     void MarkTextureDirty();
 
@@ -239,16 +234,16 @@ public:
         const bool in_mark_dirty
         );
 
-    void UpdateSize(
-        DrawSystem* const in_draw_system,
-        const VectorInt2& in_parent_size,
-        const VectorInt2& in_parent_offset,
-        const VectorInt2& in_parent_window,
-        const float in_ui_scale,
-        const float in_time_delta,
-        const bool in_mark_dirty,
-        const UIScreenSpace& in_parent_screen_space
-        );
+    //void UpdateSize(
+    //    DrawSystem* const in_draw_system,
+    //    const VectorInt2& in_parent_size,
+    //    const VectorInt2& in_parent_offset,
+    //    const VectorInt2& in_parent_window,
+    //    const float in_ui_scale,
+    //    const float in_time_delta,
+    //    const bool in_mark_dirty,
+    //    const UIScreenSpace& in_parent_screen_space
+    //    );
 
     const bool DealInput(
         UIRootInputState& in_input_state,
@@ -273,6 +268,9 @@ public:
 private:
     /// recursion data structure, holds a UIHierarchyNode, component, geometry...
     std::vector<std::shared_ptr<UIHierarchyNodeChildData>> _child_data_array;
+
+    /// array of effects on the node
+    std::vector<std::shared_ptr<UIEffectComponent>> _array_effect_component;
 
     /// Hold the render target or wrap the backbuffer as a texture
     std::unique_ptr<UITexture> _texture;

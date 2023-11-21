@@ -1,26 +1,19 @@
 #include "common/common_pch.h"
-#include "common/ui/ui_data/ui_data_effect.h"
+#include "common/ui/ui_effect/ui_effect_data.h"
 
-#include "common/ui/ui_component/ui_component_effect.h"
+#include "common/ui/ui_effect/ui_effect_component.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_manager.h"
 
-UIDataEffect::UIDataEffect(
-    const UILayout& in_layout,
-    const UIBaseColour& in_base_colour,
-    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null,
+UIEffectData::UIEffectData(
     const UIEffectEnum in_type,
     const UICoord& in_coord_a,
     const UICoord& in_coord_b,
     const UICoord& in_coord_c,
-    const UICoord& in_coord_d
+    const UICoord& in_coord_d,
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null
     )
-    : UIData(
-        in_layout,
-        in_base_colour,
-        in_state_flag_tint_array_or_null
-        )
-    , _type(in_type)
+    : _type(in_type)
     , _coord_a(in_coord_a)
     , _coord_b(in_coord_b)
     , _coord_c(in_coord_c)
@@ -29,12 +22,12 @@ UIDataEffect::UIDataEffect(
     // Nop
 }
 
-UIDataEffect::~UIDataEffect()
+UIEffectData::~UIEffectData()
 {
     // Nop
 }
 
-void UIDataEffect::UpdateHierarchy(
+void UIEffectData::UpdateHierarchy(
     std::unique_ptr<IUIComponent>& in_out_component,
     const UIHierarchyNodeUpdateHierarchyParam&, //in_param,
     const int// in_index
@@ -82,7 +75,7 @@ void UIDataEffect::UpdateHierarchy(
     return;
 }
 
-void UIDataEffect::UpdateLayoutRender(
+void UIEffectData::UpdateLayoutRender(
     IUIComponent& in_component,
     UIHierarchyNodeChildData& in_component_owner,
     const UIHierarchyNodeUpdateLayoutRenderParam& in_param,

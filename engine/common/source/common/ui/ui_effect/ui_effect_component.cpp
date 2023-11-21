@@ -1,5 +1,5 @@
 #include "common/common_pch.h"
-#include "common/ui/ui_component/ui_component_effect.h"
+#include "common/ui/ui_effect/ui_effect_component.h"
 
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/draw_system_frame.h"

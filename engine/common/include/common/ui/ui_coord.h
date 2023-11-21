@@ -19,9 +19,7 @@ public:
         ParentMax,
         // make a 4:3 box in the parent and use the x or y
         ParentRatio_4_3_X,
-        ParentRatio_4_3_Y,
-        ContentX,
-        ContentY
+        ParentRatio_4_3_Y
     };
 
     explicit UICoord(

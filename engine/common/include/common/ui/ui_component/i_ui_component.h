@@ -23,8 +23,7 @@ struct UIManagerDrawParam;
 struct UIManagerUpdateLayoutParam;
 struct UIManagerDealInputParam;
 struct UIHierarchyNodeChildData;
-struct UIHierarchyNodeLayoutData;
-struct UIHierarchyNodeUpdateHierarchyParam;
+struct UIHierarchyNodeUpdateParam;
 
 enum class UIStateFlag;
 
@@ -79,25 +78,36 @@ public:
     const float GetTimeAccumulateSeconds() const { return _time_accumulate_seconds; }
     void SetTimeAccumulateSeconds(const float in_time_accumulate_seconds) { _time_accumulate_seconds = in_time_accumulate_seconds; return; }
 
-    const bool SetStateFlagArrayOrNull(const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_array_or_null);// { _state_flag_array_or_null = in_state_flag_array_or_null; return; }
-
     const bool CheckLayoutCache(
         VectorInt2& out_layout_size, 
         VectorInt2& out_desired_size, 
-        const VectorInt2& in_parent_window, 
-        const VectorInt2& in_content_size
+        const VectorInt2& in_parent_window
         );
     void SetLayoutCache(
         const VectorInt2& in_layout_size, 
         const VectorInt2& in_desired_size, 
-        const VectorInt2& in_parent_window, 
-        const VectorInt2& in_content_size
+        const VectorInt2& in_parent_window
         );
 
-    /// allow the UIHierarchicalNode::Draw to access the tint colour, some components my use it in their custom PreDraw so return white here
-    const VectorFloat4 GetTintColour() const;
+    virtual void UpdateLayout(
+        UIHierarchyNodeChildData& in_component_owner,
+        const UIHierarchyNodeUpdateParam& in_param,
+        const VectorInt2& in_parent_size,
+        const VectorInt2& in_parent_offset,
+        const VectorInt2& in_parent_window,
+        );
 
-public:
+    virtual const VectorInt2 GetDesiredSize(
+        const UIHierarchyNodeUpdateParam& in_layout_param,
+        const VectorInt2& in_parent_window
+        );
+
+    virtual void UpdateLayout(
+        const UIHierarchyNodeUpdateParam& in_param,
+        const UIScreenSpace& in_parent_screen_space
+        );
+
+
     /// prep the children of the component for draw. 
     /// for example, component string may use this to run the TextBock::Draw, setting up the components' nodes' texture for the component to be drawn to it's parent latter in the Node::Draw
     virtual const bool PreDraw(
@@ -112,9 +122,8 @@ protected:
         );
 
 private:
-    /// optional tint colour, was moved to UIData, but back here to decouple UIData from [Input,Draw]
-    /// do have visiblity of UIData during update, but input may change state before draw
-    std::shared_ptr<const TStateFlagTintArray> _state_flag_array_or_null;
+    /// We either need to have a copy of the layout from the UIData, or pass around the relevant UIData while doing the layout update
+    UILayout _layout;
 
     /// uv = abs(_uv_scroll), and use range [-1...1] wrapped when advancing _uv_scroll, to allow saw tooth animation
     /// this is not in layout to simplify comparison, ie, this may change, but don't want uv animation to dirty layout

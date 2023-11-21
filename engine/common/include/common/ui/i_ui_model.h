@@ -15,6 +15,10 @@ public:
     //    const std::function<void(const std::vector<std::shared_ptr<UIData>>&)>& in_visitor
     //    ) const = 0;
 
+    virtual const std::vector<std::shared_ptr<UIData>>& GetDataArray(
+        const std::string& in_key
+        ) const = 0;
+
     virtual UIData* const GetData(
         const std::string& in_key
         ) const = 0;

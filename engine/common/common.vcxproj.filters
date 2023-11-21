@@ -286,9 +286,6 @@
     <ClCompile Include="source\common\draw_system\draw_system_resource_list.cpp">
       <Filter>souce\common\draw_system</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\ui\ui_component\ui_component_effect.cpp">
-      <Filter>souce\common\ui\ui_component</Filter>
-    </ClCompile>
     <ClCompile Include="source\common\ui\ui_data\ui_data_text_run.cpp">
       <Filter>souce\common\ui\ui_data</Filter>
     </ClCompile>
@@ -298,8 +295,11 @@
     <ClCompile Include="source\common\ui\ui_component\ui_component_string.cpp">
       <Filter>souce\common\ui\ui_component</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\ui\ui_data\ui_data_effect.cpp">
-      <Filter>souce\common\ui\ui_data</Filter>
+    <ClCompile Include="source\common\ui\ui_effect\ui_effect_component.cpp">
+      <Filter>souce\common\ui\ui_effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_effect\ui_effect_data.cpp">
+      <Filter>souce\common\ui\ui_effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -612,9 +612,6 @@
     <ClInclude Include="include\common\ui\ui_enum.h">
       <Filter>include\common\ui</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\ui\ui_component\ui_component_effect.h">
-      <Filter>include\common\ui\ui_component</Filter>
-    </ClInclude>
     <ClInclude Include="include\common\ui\ui_data\ui_data_text_run.h">
       <Filter>include\common\ui\ui_data</Filter>
     </ClInclude>
@@ -624,8 +621,11 @@
     <ClInclude Include="include\common\ui\ui_component\ui_component_string.h">
       <Filter>include\common\ui\ui_component</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\ui\ui_data\ui_data_effect.h">
-      <Filter>include\common\ui\ui_data</Filter>
+    <ClInclude Include="include\common\ui\ui_effect\ui_effect_component.h">
+      <Filter>include\common\ui\ui_effect</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_effect\ui_effect_data.h">
+      <Filter>include\common\ui\ui_effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -754,6 +754,12 @@
     </Filter>
     <Filter Include="souce\common\ui\ui_component">
       <UniqueIdentifier>{cd80b2d5-46fe-46b6-bda1-eb0783177f17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\ui\ui_effect">
+      <UniqueIdentifier>{7bf84af4-95b1-4338-ba04-16ccb722d286}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\ui\ui_effect">
+      <UniqueIdentifier>{7ede6d3a-bc6c-4d31-af5f-1789eed6030a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

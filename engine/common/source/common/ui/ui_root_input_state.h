@@ -57,6 +57,9 @@ struct UIRootInputStateTouch
     //bool _start; use null _active_source_token to allow click drag off element
     /// did the touch end this frame
     bool _end;
+
+    /// mark the touch as consumed if an element has used the touch
+    bool _consumed;
 };
 
 class UIRootInputState

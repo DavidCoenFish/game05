@@ -26,42 +26,16 @@ const UILayout UILayout::FactoryParentMiddleQuater()
         );
 }
 
-const UILayout UILayout::FactoryContentMiddle()
-{
-    return UILayout(
-        UICoord(UICoord::TSource::ContentX, 1.0f, 0.0f),
-        UICoord(UICoord::TSource::ContentY, 1.0f, 0.0f),
-        UICoord(UICoord::TSource::ParentX, 0.5f, 0.0f),
-        UICoord(UICoord::TSource::ParentY, 0.5f, 0.0f),
-        UICoord(UICoord::TSource::ParentX, 0.5f, 0.0f),
-        UICoord(UICoord::TSource::ParentY, 0.5f, 0.0f)
-        );
-}
-
-const UILayout UILayout::FactoryContentMiddleMargin(const float in_margin)
-{
-    return UILayout(
-        UICoord(UICoord::TSource::ContentX, 1.0f, in_margin * 2.0f),
-        UICoord(UICoord::TSource::ContentY, 1.0f, in_margin * 2.0f),
-        UICoord(UICoord::TSource::ParentX, 0.5f, 0.0f),
-        UICoord(UICoord::TSource::ParentY, 0.5f, 0.0f),
-        UICoord(UICoord::TSource::ParentX, 0.5f, 0.0f),
-        UICoord(UICoord::TSource::ParentY, 0.5f, 0.0f)
-        );
-}
-
 UILayout::UILayout(
     const UICoord& in_size_x,
     const UICoord& in_size_y,
     const UICoord& in_attach_x,
     const UICoord& in_attach_y,
     const UICoord& in_pivot_x,
-    const UICoord& in_pivot_y
-    //const bool in_shrink_width,
-    //const bool in_shrink_height
+    const UICoord& in_pivot_y,
+    const TAdjustmentType in_adjustment_type_x,
+    const TAdjustmentType in_adjustment_type_y
     )
-    //: _shrink_width(in_shrink_width)
-    //, _shrink_height(in_shrink_height)
 {
     _data_size[0] = in_size_x;
     _data_size[1] = in_size_y;
@@ -69,6 +43,8 @@ UILayout::UILayout(
     _data_attach[1] = in_attach_y;
     _data_pivot[0] = in_pivot_x;
     _data_pivot[1] = in_pivot_y;
+    _adjustment_type[0] = in_adjustment_type_x;
+    _adjustment_type[1] = in_adjustment_type_y;
     return;
 }
 
