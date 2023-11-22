@@ -136,54 +136,25 @@ struct UIHierarchyNodeChildData
 
 };
 
-struct UIHierarchyNodeUpdateHierarchyParam
+struct UIHierarchyNodeUpdateParam
 {
-    explicit UIHierarchyNodeUpdateHierarchyParam(
+    explicit UIHierarchyNodeUpdateParam(
         DrawSystem* const in_draw_system = nullptr,
         ID3D12GraphicsCommandList* const in_command_list = nullptr,
-        //UIManager* const in_ui_manager = nullptr,
+        UIManager* const in_ui_manager = nullptr,
         LocaleSystem* const in_locale_system = nullptr,
         TextManager* const in_text_manager = nullptr,
         const UIDataTextRunStyle* const in_default_text_style = nullptr
         );
     DrawSystem* const _draw_system;
     ID3D12GraphicsCommandList* const _command_list;
-    //UIManager* const _ui_manager;
+    UIManager* const _ui_manager;
     LocaleSystem* const _locale_system;
     TextManager* const _text_manager;
     const UIDataTextRunStyle* const _default_text_style;
 
 };
 
-struct UIHierarchyNodeUpdateLayoutRenderParam
-{
-    explicit UIHierarchyNodeUpdateLayoutRenderParam(
-        DrawSystem* const in_draw_system = nullptr,
-        UIManager* const in_ui_manager = nullptr,
-        const float in_ui_scale = 1.0f,
-        const float in_time_delta = 0.0f
-        );
-    DrawSystem* const _draw_system;
-    UIManager* _ui_manager;
-    float _ui_scale;
-    float _time_delta;
-};
-
-struct UIHierarchyNodeUpdateDesiredSize
-{
-    explicit UIHierarchyNodeUpdateDesiredSize(
-        const float in_ui_scale = 1.0f,
-        const float in_time_delta = 0.0f
-        );
-    const float _ui_scale;
-    const float _time_delta;
-
-};
-
-struct UIHierarchyNodeUpdateSize
-{
-    explicit UIHierarchyNodeUpdateSize();
-};
 
 class UIHierarchyNode
 {
@@ -206,13 +177,17 @@ public:
 
     /// create/ destroy nodes to match model, make content match type from factory, update content?
     void UpdateHierarchy(
-        const UIHierarchyNodeUpdateHierarchyParam& in_param,
-        UIData& in_data
+        const UIHierarchyNodeUpdateParam& in_param,
+        const std::vector<std::shared_ptr<UIData>>& in_array_child_data,
+        const bool in_dirty,
+        const bool in_render_to_texture,
+        const bool in_always_dirty,
+        const bool in_allow_clear,
+        const VectorFloat4& in_clear_colour
         );
 
     void UpdateLayout(
         const UIHierarchyNodeUpdateParam& in_param,
-        //UIData& in_ui_data,
         const VectorInt2& in_target_size,
         const VectorInt2& in_target_offset,
         const VectorInt2& in_target_window
@@ -230,8 +205,7 @@ public:
         ) const;
 
     void UpdateTextureSize(
-        const VectorInt2& in_parent_size,
-        const bool in_mark_dirty
+        const VectorInt2& in_parent_size
         );
 
     //void UpdateSize(

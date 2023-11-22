@@ -200,13 +200,18 @@ public:
 
     // Update layout
     void Update(
+        UIManager* const in_manager,
         std::shared_ptr<UIHierarchyNode>& in_out_target_or_null,
-        UIData* const in_ui_data,
+        const std::vector<std::shared_ptr<UIData>>& in_array_child_data,
         const UIManagerUpdateParam& in_param,
-        UIManager* const in_manager
+        const bool in_render_to_texture,
+        const VectorInt2& in_render_texture_size,
+        const bool in_always_dirty,
+        const bool in_allow_clear,
+        const VectorFloat4& in_clear_colour
         )
     {
-        if (nullptr == in_ui_data)
+        if (0 == in_array_child_data.size())
         {
             if (nullptr != in_out_target_or_null)
             {
@@ -222,41 +227,38 @@ public:
                 dirty = true;
             }
 
-            if ((true == dirty) || (true == in_ui_data->GetDirtyBit(UIDataDirty::THierarchy)))
+            UIHierarchyNodeUpdateParam update_param(
+                in_param._draw_system,
+                in_param._command_list,
+                in_manager,
+                in_param._locale_system,
+                in_param._text_manager,
+                in_param._default_text_style
+                );
+            in_out_target_or_null->UpdateHierarchy(
+                update_param, 
+                in_array_child_data,
+                dirty,
+                in_render_to_texture,
+                in_always_dirty,
+                in_allow_clear,
+                in_clear_colour
+                );
+            if (true == in_render_to_texture)
             {
-                UIHierarchyNodeUpdateHierarchyParam update_param(
-                    in_param._draw_system,
-                    in_param._command_list,
-                    in_param._locale_system,
-                    in_param._text_manager,
-                    in_param._default_text_style
-                    );
-                in_out_target_or_null->UpdateHierarchy(
-                    update_param,
-                    *in_ui_data
+                in_out_target_or_null->UpdateTextureSize(
+                    in_render_texture_size
                     );
             }
 
-            // since we have auto scroll, we need to always visit some nodes, unless we selectivly mark tree with auto scroll
-            //if ((nullptr != in_out_target_or_null) && (true == in_ui_data->GetDirtyBit(UIDataDirty::TLayoutRender)))
-            if (nullptr != in_out_target_or_null) 
-            {
-                UIHierarchyNodeUpdateLayoutRenderParam update_param(
-                    in_param._draw_system,
-                    in_manager,
-                    in_param._ui_scale,
-                    in_param._time_delta
-                    );
-                const VectorInt2 target_size = in_out_target_or_null->GetTextureSize(in_param._draw_system);
-                in_out_target_or_null->UpdateLayoutRender(
-                    update_param,
-                    *in_ui_data,
-                    target_size,
-                    VectorInt2(),
-                    target_size,
-                    UIScreenSpace()
-                    );
-            }
+            const VectorInt2 target_size = in_out_target_or_null->GetTextureSize(in_param._draw_system);
+            in_out_target_or_null->UpdateLayout(
+                update_param,
+                target_size,
+                VectorInt2::s_zero,
+                target_size
+                );
+
         }
 
         return;
@@ -352,15 +354,26 @@ void UIManager::BuildGeometryData(
 // Update layout
 void UIManager::Update(
     std::shared_ptr<UIHierarchyNode>& in_out_target_or_null,
-    UIData* const in_ui_data,
-    const UIManagerUpdateParam& in_param
+    const std::vector<std::shared_ptr<UIData>>& in_array_child_data,
+    const UIManagerUpdateParam& in_param,
+
+    const bool in_render_to_texture, // if false, rather than render to texture, we render to the draw system backbuffer
+    const VectorInt2& in_render_texture_size, // if in_render_to_texture is true, 
+    const bool in_always_dirty, //still draw to the top level target even if nothing has changed
+    const bool in_allow_clear,
+    const VectorFloat4& in_clear_colour
     )
 {
     _implementation->Update(
+        this,
         in_out_target_or_null, 
-        in_ui_data,
+        in_array_child_data,
         in_param,
-        this
+        in_render_to_texture, // if false, rather than render to texture, we render to the draw system backbuffer
+        in_render_texture_size, // if in_render_to_texture is true, 
+        in_always_dirty, //still draw to the top level target even if nothing has changed
+        in_allow_clear,
+        in_clear_colour
         );
     return;
 }

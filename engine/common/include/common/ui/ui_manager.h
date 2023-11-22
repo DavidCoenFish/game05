@@ -187,11 +187,11 @@ public:
         const std::vector<std::shared_ptr<UIData>>& in_array_child_data,
         const UIManagerUpdateParam& in_param,
 
-        const bool in_always_dirty_top_level_texture, //still draw to the top level target even if nothing has changed
         const bool in_render_to_texture, // if false, rather than render to texture, we render to the draw system backbuffer
         const VectorInt2& in_render_texture_size, // if in_render_to_texture is true, 
-        const bool in_allow_clear,
-        const VectorFloat4& in_clear_colour
+        const bool in_always_dirty = false, //still draw to the top level target even if nothing has changed
+        const bool in_allow_clear = false,
+        const VectorFloat4& in_clear_colour = VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f)
         );
 
     /// root node owns the input state

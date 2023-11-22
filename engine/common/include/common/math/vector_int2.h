@@ -3,6 +3,8 @@
 class VectorInt2
 {
 public:
+    static const VectorInt2 s_zero;
+
     explicit VectorInt2(
         const int in_x = 0,
         const int in_y = 0

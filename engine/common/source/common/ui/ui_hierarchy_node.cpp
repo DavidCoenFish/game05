@@ -9,10 +9,6 @@
 #include "common/ui/i_ui_model.h"
 #include "common/ui/ui_component/ui_component_canvas.h"
 
-//#include "common/ui/ui_component/ui_component_stack.h"
-//#include "common/ui/ui_component/ui_component_string.h"
-//#include "common/ui/ui_component/ui_component_texture.h"
-//#include "common/ui/ui_component/ui_component_tooltip_layer.h"
 #include "common/ui/ui_coord.h"
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_manager.h"
@@ -39,29 +35,19 @@ std::shared_ptr<UIHierarchyNodeChildData> UIHierarchyNodeChildData::Factory()
         );
 }
 
-//void UIHierarchyNodeChildData::UpdateHierarchy(
-//    UIData* const in_data, 
-//    const UIHierarchyNodeUpdateHierarchyParam& in_param,
-//    const int in_index
-//    )
-//{
-//    if (nullptr == in_data)
-//    {
-//        if (nullptr != _component)
-//        {
-//            _component.reset();
-//        }
-//        return;
-//    }
-//
-//    in_data->UpdateHierarchy(
-//        _component,
-//        in_param,
-//        in_index
-//        );
-//
-//    return;
-//}
+UIHierarchyNodeChildData::UIHierarchyNodeChildData(
+    std::unique_ptr<UIGeometry>& in_geometry,
+    std::unique_ptr<IUIComponent>& in_component,
+    std::unique_ptr<UIHierarchyNode>& in_node,
+    std::unique_ptr<UIScreenSpace>& in_screen_space
+    )
+    : _geometry(std::move(in_geometry))
+    , _component(std::move(in_component))
+    , _node(std::move(in_node))
+    , _screen_space(std::move(in_screen_space))
+{
+    // Nop
+}
 
 void UIHierarchyNodeChildData::Draw(const UIManagerDrawParam& in_draw_param)
 {
@@ -119,20 +105,6 @@ const bool UIHierarchyNodeChildData::VisitComponents(const std::function<const b
     return keep_going;
 }
 
-UIHierarchyNodeChildData::UIHierarchyNodeChildData(
-    std::unique_ptr<UIGeometry>& in_geometry,
-    std::unique_ptr<IUIComponent>& in_component,
-    std::unique_ptr<UIHierarchyNode>& in_node,
-    std::unique_ptr<UIScreenSpace>& in_screen_space
-    )
-    : _geometry(std::move(in_geometry))
-    , _component(std::move(in_component))
-    , _node(std::move(in_node))
-    , _screen_space(std::move(in_screen_space))
-{
-    // Nop
-}
-
 /*
 const bool UIHierarchyNodeChildData::RecurseSetStateFlagInput(UIHierarchyNodeChildData* const in_data, const UIStateFlag in_state_flag)
 {
@@ -176,52 +148,23 @@ UIHierarchyNodeChildData::~UIHierarchyNodeChildData()
     // Nop
 }
 
-UIHierarchyNodeUpdateHierarchyParam::UIHierarchyNodeUpdateHierarchyParam(
+UIHierarchyNodeUpdateParam::UIHierarchyNodeUpdateParam(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list,
-    //UIManager* const in_ui_manager,
+    UIManager* const in_ui_manager,
     LocaleSystem* const in_locale_system,
     TextManager* const in_text_manager,
     const UIDataTextRunStyle* const in_default_text_style
     )
     : _draw_system(in_draw_system)
     , _command_list(in_command_list)
-    //, _ui_manager(in_ui_manager)
+    , _ui_manager(in_ui_manager)
     , _locale_system(in_locale_system)
     , _text_manager(in_text_manager)
     , _default_text_style(in_default_text_style)
 {
     // Nop
 }
-
-UIHierarchyNodeUpdateLayoutRenderParam::UIHierarchyNodeUpdateLayoutRenderParam(
-    DrawSystem* const in_draw_system,
-    UIManager* const in_ui_manager,
-    const float in_ui_scale,
-    const float in_time_delta
-    )
-    : _draw_system(in_draw_system)
-    , _ui_manager(in_ui_manager)
-    , _ui_scale(in_ui_scale)
-    , _time_delta(in_time_delta)
-{
-    // Nop
-}
-
-UIHierarchyNodeUpdateDesiredSize::UIHierarchyNodeUpdateDesiredSize(
-    const float in_ui_scale,
-    const float in_time_delta
-    )
-    : _ui_scale(in_ui_scale)
-    , _time_delta(in_time_delta)
-{
-    // Nop
-};
-
-UIHierarchyNodeUpdateSize::UIHierarchyNodeUpdateSize()
-{
-    // Nop
-};
 
 UIHierarchyNode::UIHierarchyNode()
 {
@@ -271,30 +214,35 @@ const bool UIHierarchyNode::ClearChildren()
 }
 
 void UIHierarchyNode::UpdateHierarchy(
-    const UIHierarchyNodeUpdateHierarchyParam& in_param,
-    UIData& in_ui_data
+    const UIHierarchyNodeUpdateParam& in_param,
+    const std::vector<std::shared_ptr<UIData>>& in_array_child_data,
+    const bool in_dirty,
+    const bool in_render_to_texture,
+    const bool in_always_dirty,
+    const bool in_allow_clear,
+    const VectorFloat4& in_clear_colour
     )
 {
-    bool dirty = false;
+    bool dirty = in_dirty; //false;
 
     // Update texture
     if (nullptr == _texture)
     {
         _texture = std::make_unique<UITexture>(
-            in_ui_data.GetBaseColour().GetDrawToTexture(),
-            in_ui_data.GetBaseColour().GetAlwaysDirty(),
-            in_ui_data.GetBaseColour().GetClearBackground(),
-            in_ui_data.GetBaseColour().GetClearColourRef()
+            in_render_to_texture,
+            in_always_dirty,
+            in_allow_clear,
+            in_clear_colour
             );
         dirty = true;
     }
     else
     {
         if (true == _texture->Update(
-            in_ui_data.GetBaseColour().GetDrawToTexture(),
-            in_ui_data.GetBaseColour().GetAlwaysDirty(),
-            in_ui_data.GetBaseColour().GetClearBackground(),
-            in_ui_data.GetBaseColour().GetClearColourRef()
+            in_render_to_texture,
+            in_always_dirty,
+            in_allow_clear,
+            in_clear_colour
             ))
         {
             dirty = true;
@@ -302,7 +250,7 @@ void UIHierarchyNode::UpdateHierarchy(
     }
 
     // Update child data array
-    if (0 == in_ui_data.GetArrayChildData().size())
+    if (0 == in_array_child_data.size())
     {
         if (0 != _child_data_array.size())
         {
@@ -314,8 +262,8 @@ void UIHierarchyNode::UpdateHierarchy(
     {
         std::map<void*, std::shared_ptr<UIHierarchyNodeChildData>> map_temp_ownership;
 
-        // if there are too many items, put the remaining into a temp owership map
-        const int target_length = static_cast<int>(in_ui_data.GetArrayChildData().size());
+        // if there are too many items, put the remaining into the temp owership map
+        const int target_length = static_cast<int>(in_array_child_data.size());
         for (int index = target_length; index < static_cast<int>(_child_data_array.size()); ++index)
         {
             auto child = _child_data_array[index];
@@ -327,7 +275,7 @@ void UIHierarchyNode::UpdateHierarchy(
         // Remove mismatched items in child data array
         for (int index = 0; index < target_length; ++index)
         {
-            const auto& data = *(in_ui_data.GetArrayChildData()[index]);
+            const auto& data = *(in_array_child_data[index]);
             const auto& child = _child_data_array[index];
             if (nullptr != child)
             {
@@ -352,7 +300,7 @@ void UIHierarchyNode::UpdateHierarchy(
             {
                 continue;
             }
-            auto& data = *(in_ui_data.GetArrayChildData()[index]);
+            auto& data = *(in_array_child_data[index]);
             void* data_token = (void*)&data;
             auto found = map_temp_ownership.find(data_token);
             if (found != map_temp_ownership.end())
@@ -365,6 +313,7 @@ void UIHierarchyNode::UpdateHierarchy(
                 _child_data_array[index] = UIHierarchyNodeChildData::Factory();
                 dirty = true;
                 // createing a node means it doesn't have the correct layout
+                data.SetDirtyBit(UIDataDirty::THierarchy, true);
                 data.SetDirtyBit(UIDataDirty::TLayout, true);
             }
         }
@@ -372,17 +321,17 @@ void UIHierarchyNode::UpdateHierarchy(
         // ensure each content is created/ passed through factory
         for (int index = 0; index < target_length; ++index)
         {
-            UIData* const data = in_ui_data.GetArrayChildData()[index].get();
+            UIData* const data = in_array_child_data[index].get();
             UIHierarchyNodeChildData* const child = _child_data_array[index].get();
 
             if (nullptr == data)
             {
                 child->_component.reset();
             }
-            else
+            else if ((true == in_dirty) || (true == data->GetDirtyBit(UIDataDirty::THierarchy)))
             {
                 // ensure component is the correct type
-                data->UpdateHierarchy(
+                data->ApplyComponent(
                     child->_component,
                     in_param
                     );
@@ -390,13 +339,19 @@ void UIHierarchyNode::UpdateHierarchy(
                 // recurse
                 child->_node->UpdateHierarchy(
                     in_param,
-                    *data
+                    data->GetArrayChildData(),
+                    in_dirty, 
+                    data->GetBaseColour().GetDrawToTexture(),
+                    data->GetBaseColour().GetAlwaysDirty(),
+                    data->GetBaseColour().GetClearBackground(),
+                    data->GetBaseColour().GetClearColourRef()
                     );
+
+                data->SetDirtyBit(UIDataDirty::THierarchy, false);
             }
         }
     }
 
-    in_ui_data.SetDirtyBit(UIDataDirty::THierarchy, false);
 
     if ((true == dirty) && (nullptr != _texture))
     {
@@ -406,90 +361,66 @@ void UIHierarchyNode::UpdateHierarchy(
     return;
 }
 
-void UIHierarchyNode::UpdateLayoutRender(
-    const UIHierarchyNodeUpdateLayoutRenderParam& in_param,
-    UIData& in_ui_data,
+void UIHierarchyNode::UpdateLayout(
+    const UIHierarchyNodeUpdateParam& in_param,
     const VectorInt2& in_target_size,
     const VectorInt2& in_target_offset,
-    const VectorInt2& in_target_window,
-    const UIScreenSpace& in_parent_screen_space
+    const VectorInt2& in_target_window
     )
 {
-    const int target_length = static_cast<int>(in_ui_data.GetArrayChildData().size());
-
-    DSC_ASSERT(target_length == _child_data_array.size(), "we expect size of data children and size child data array to match");
-
-    // ensure each content is created/ passed through factory
-    for (int index = 0; index < target_length; ++index)
+    for (auto& child : _child_data_array)
     {
-        UIData* const data = in_ui_data.GetArrayChildData()[index].get();
-        UIHierarchyNodeChildData* const child = _child_data_array[index].get();
-
-        if (nullptr == data)
+        IUIComponent* component = child ? child->_component.get() : nullptr;
+        if (nullptr == component)
         {
             continue;
         }
-        DSC_ASSERT(nullptr != child->_component, "expect component not to be null if data is valid");
 
-        data->UpdateLayoutRender(
-            *child->_component,
+        component->UpdateLayout(
             *child,
             in_param,
             in_target_size,
             in_target_offset,
-            in_target_window,
-            in_parent_screen_space
+            in_target_window
             );
     }
 
-    const bool mark_dirty = in_ui_data.GetDirtyBit(UIDataDirty::TRender);
-    in_ui_data.SetDirtyBit(UIDataDirty::TRender, false);
-
-    UpdateTextureSize(in_target_size, mark_dirty);
+    return;
 }
 
-//void UIHierarchyNode::RecurseUpdateLayoutRender(
-//    const UIHierarchyNodeUpdateLayoutRenderParam& in_param,
-//    const std::vector<std::shared_ptr<UIData>>& in_ui_data_array,
-//    const VectorInt2& in_parent_size,
-//    const VectorInt2& in_parent_offset,
-//    const VectorInt2& in_parent_window,
-//    const UIScreenSpace& in_parent_screen_space,
-//    const bool in_mark_dirty
-//    )
-//{
-//    const int target_length = static_cast<int>(in_ui_data_array.size());
-//    DSC_ASSERT(target_length == _child_data_array.size(), "we expect size of data children and size child data array to match");
-//
-//    // ensure each content is created/ passed through factory
-//    for (int index = 0; index < target_length; ++index)
-//    {
-//        UIData* const data = in_ui_data_array[index].get();
-//        UIHierarchyNodeChildData* const child = _child_data_array[index].get();
-//
-//        if (nullptr == data)
-//        {
-//            continue;
-//        }
-//        DSC_ASSERT(nullptr != child->_component, "expect component not to be null if data is valid");
-//
-//        child->_node->UpdateLayoutRender(
-//            in_param,
-//            *data,
-//            in_parent_size,
-//            in_parent_offset,
-//            in_parent_window,
-//            in_parent_screen_space
-//            );
-//    }
-//
-//    //const bool mark_dirty = in_ui_data.GetDirtyBit(UIDataDirty::TRender);
-//    //in_ui_data.SetDirtyBit(UIDataDirty::TRender, false);
-//    //UpdateTextureSize(in_parent_window, in_mark_dirty);
-//
-//    return;
-//}
+void UIHierarchyNode::UpdateResources(
+    const UIHierarchyNodeUpdateParam& in_param,
+    const UIScreenSpace& in_parent_screen_space
+    )
+{
+    for (auto& child : _child_data_array)
+    {
+        IUIComponent* component = child ? child->_component.get() : nullptr;
+        if (nullptr == component)
+        {
+            continue;
+        }
 
+        //child->_screen_space->Update(
+        //    in_parent_screen_space,
+        component->UpdateResources(
+            in_param,
+            *child, //->_screen_space,
+            in_parent_screen_space
+            );
+
+        // we set the child texture size, but not the current node. 
+        // the top level node's texture is special and set externally
+        child->_node->UpdateTextureSize(component->GetTextureSize());
+
+        child->_node->UpdateResources(
+            in_param,
+            *(child->_screen_space)
+            );
+    }
+
+    //UpdateTextureSize(target_size);
+}
 
 void UIHierarchyNode::MarkTextureDirty()
 {
@@ -505,29 +436,24 @@ const VectorInt2 UIHierarchyNode::GetTextureSize(
 }
 
 void UIHierarchyNode::UpdateTextureSize(
-    const VectorInt2& in_parent_size,
-    const bool in_mark_dirty
+    const VectorInt2& in_parent_size
     )
 {
     _texture->SetSize(in_parent_size);
-    if (true == in_mark_dirty)
-    {
-        _texture->MarkDirty();
-    }
 }
 
-// todo: UpdateSize doesn't need to return, _texture marks self as needs to draw on size change
-void UIHierarchyNode::UpdateSize(
-    DrawSystem* const, //in_draw_system,
-    const VectorInt2&, //in_parent_size,
-    const VectorInt2&, //in_parent_offset,
-    const VectorInt2&, //in_parent_window,
-    const float, //in_ui_scale,
-    const float, //in_time_delta,
-    const bool, //in_mark_dirty,
-    const UIScreenSpace& //in_parent_screen_space
-    )
-{
+//// todo: UpdateSize doesn't need to return, _texture marks self as needs to draw on size change
+//void UIHierarchyNode::UpdateSize(
+//    DrawSystem* const, //in_draw_system,
+//    const VectorInt2&, //in_parent_size,
+//    const VectorInt2&, //in_parent_offset,
+//    const VectorInt2&, //in_parent_window,
+//    const float, //in_ui_scale,
+//    const float, //in_time_delta,
+//    const bool, //in_mark_dirty,
+//    const UIScreenSpace& //in_parent_screen_space
+//    )
+//{
 /*
     UpdateTextureSize(in_parent_size, in_mark_dirty);
 
@@ -564,8 +490,8 @@ void UIHierarchyNode::UpdateSize(
         }
     }
 */
-    return;
-}
+//    return;
+//}
 
 // TODO: at some point need to collect "input" elements as potential navigation targets/ resolve navigation keypress
 const bool UIHierarchyNode::DealInput(

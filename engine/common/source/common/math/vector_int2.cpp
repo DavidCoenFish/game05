@@ -2,6 +2,8 @@
 
 #include "common/math/vector_int2.h"
 
+const VectorInt2 VectorInt2::s_zero(0, 0);
+
 VectorInt2::VectorInt2(
     const int in_x,
     const int in_y

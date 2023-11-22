@@ -154,18 +154,8 @@ void UITexture::SetSize(
     _size = in_size;
     _has_drawn = false;
 
-#if 1
+    // resizing the render target seems to be triggering a object deleted while still in use error, so reset the resource on resize
     _render_target_texture.reset();
-#else
-    // resizing the render target seems to be triggering a object deleted while still in use error
-    _needs_resize = true;
-
-    if ((_size.GetX() <= 0) ||
-       (_size.GetY() <= 0))
-    {
-        _render_target_texture.reset();
-    }
-#endif
 
     return;
 }
