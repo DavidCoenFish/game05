@@ -91,23 +91,29 @@ void UIData::SetDirtyBit(const UIDataDirty in_flag, const bool in_active)
     return;
 }
 
-void UIData::Apply(
+void UIData::ApplyComponent(
     std::unique_ptr<IUIComponent>& in_out_component,
-    const UIHierarchyNodeApplyParam&, // in_param,
-    const int //in_index
+    const UIHierarchyNodeApplyParam& in_param,
+    const int in_index = 0
     )
 {
     // if in_out_component is not a UIComponentCanvas, remake it as one
-    UIComponentCanvas* content = dynamic_cast<UIComponentCanvas*>(in_out_component.get());
-    if (nullptr == content)
+    UIComponentCanvas* component = dynamic_cast<UIComponentCanvas*>(in_out_component.get());
+    if (nullptr == component)
     {
-        auto new_content = std::make_unique<UIComponentCanvas>();
-        content = new_content.get();
-        in_out_component = std::move(new_content);
-        SetDirtyBit(UIDataDirty::TLayout, true);
+        auto new_component = std::make_unique<UIComponentCanvas>(
+            _layout,
+            this
+            );
+        //component = new_component.get();
+        in_out_component = std::move(new_component);
     }
-
-    SetDirtyBit(UIDataDirty::THierarchy, false);
+    else
+    {
+        component->ApplyData(
+            _layout
+            );
+    }
 
     return;
 }

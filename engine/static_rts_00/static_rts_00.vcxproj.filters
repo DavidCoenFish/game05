@@ -16,6 +16,9 @@
     <Filter Include="source\static_rts_00">
       <UniqueIdentifier>{60e4476b-18c1-47a6-a33a-5d9efad725ac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\static_rts_00\path_finder">
+      <UniqueIdentifier>{a5d2288f-5657-4b6b-a36e-09a4b175f6c8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="props\static_rts_00.props">
@@ -54,6 +57,15 @@
     </ClInclude>
     <ClInclude Include="include\static_rts_00\snapshot_cache.h">
       <Filter>include\static_rts_00</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_rts_00\path_finder\path_finder_map.h">
+      <Filter>include\static_rts_00\path_finder</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_rts_00\path_finder\path_finder_tile.h">
+      <Filter>include\static_rts_00\path_finder</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_rts_00\path_finder\path_finder_math.h">
+      <Filter>include\static_rts_00\path_finder</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

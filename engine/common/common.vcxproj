@@ -75,6 +75,7 @@
     <ClCompile Include="source\common\math\vector_int2.cpp" />
     <ClCompile Include="source\common\math\vector_int4.cpp" />
     <ClCompile Include="source\common\math\vector_math.cpp" />
+    <ClCompile Include="source\common\math\vector_short2.cpp" />
     <ClCompile Include="source\common\platform.cpp" />
     <ClCompile Include="source\common\task\i_task.cpp" />
     <ClCompile Include="source\common\task\task_window.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="include\common\math\vector_int2.h" />
     <ClInclude Include="include\common\math\vector_int4.h" />
     <ClInclude Include="include\common\math\vector_math.h" />
+    <ClInclude Include="include\common\math\vector_short2.h" />
     <ClInclude Include="include\common\platform.h" />
     <ClInclude Include="include\common\task\i_task.h" />
     <ClInclude Include="include\common\task\task_window.h" />

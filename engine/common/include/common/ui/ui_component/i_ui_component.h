@@ -35,10 +35,8 @@ enum class UIStateFlag;
 class IUIComponent
 {
 public:
-    typedef std::array<VectorFloat4, static_cast<int>(UIStateFlag::TTintPermutationCount)> TStateFlagTintArray;
-
     IUIComponent(
-        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_array_or_null = nullptr,
+        const UIlayout& in_layout,
         void* in_source_token = nullptr,
         const UIStateFlag in_state_flag = UIStateFlag::TNone
         );
@@ -70,6 +68,12 @@ public:
     const bool SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable);
     const bool GetStateFlagBit(const UIStateFlag in_state_flag_bit) const;
 
+    /// Set layout dirty flag on change
+    void SetLayout(
+        const UIlayout& in_layout
+        );
+    const UILayout& GetLayout() const { return _layout; }
+
     /// Make sorting children easier
     void SetSourceToken(void* in_source_ui_data_token);
     /// Make sorting children easier
@@ -94,9 +98,11 @@ public:
         const UIHierarchyNodeUpdateParam& in_param,
         const VectorInt2& in_parent_size,
         const VectorInt2& in_parent_offset,
-        const VectorInt2& in_parent_window,
+        const VectorInt2& in_parent_window
         );
 
+    /// For text, the textblock size. 
+    /// Do we need an assert that text with width limit can not be child of a layout with shrink? do not want in_parent_window to change during update
     virtual const VectorInt2 GetDesiredSize(
         const UIHierarchyNodeUpdateParam& in_layout_param,
         const VectorInt2& in_parent_window
@@ -106,7 +112,6 @@ public:
         const UIHierarchyNodeUpdateParam& in_param,
         const UIScreenSpace& in_parent_screen_space
         );
-
 
     /// prep the children of the component for draw. 
     /// for example, component string may use this to run the TextBock::Draw, setting up the components' nodes' texture for the component to be drawn to it's parent latter in the Node::Draw
@@ -122,7 +127,13 @@ protected:
         );
 
 private:
-    /// We either need to have a copy of the layout from the UIData, or pass around the relevant UIData while doing the layout update
+    // moved to effect
+    //std::shared_ptr<const TStateFlagTintArray> _state_flag_array_or_null;
+
+    /// We either need to have a copy of the layout from the UIData, 
+    ///  or pass around the relevant UIData while doing the layout update
+    ///  or store a lot of values like parent size, offset, window?
+    /// don't need to override layout if changes for scroll ect are sent to the UIData layout via calbacks?
     UILayout _layout;
 
     /// uv = abs(_uv_scroll), and use range [-1...1] wrapped when advancing _uv_scroll, to allow saw tooth animation
@@ -138,10 +149,9 @@ private:
     /// still have need of hidden and disabled? plus input state [hover, touch, action]
     UIStateFlag _state_flag;
 
-    /// values for a layout cache, change to hash [parent size, offse, window, content size]?
-    VectorInt2 _layout_size;
-    VectorInt2 _desired_size; 
-    VectorInt2 _parent_window; 
-    VectorInt2 _content_size;
+    /// values for a layout cache, change to hash? [parent size, offse, window, content size]?
+    VectorInt2 _cache_layout_size;
+    VectorInt2 _cache_desired_size; 
+    VectorInt2 _cache_parent_window; 
 
 };

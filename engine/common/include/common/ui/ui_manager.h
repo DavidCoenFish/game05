@@ -14,6 +14,7 @@ class Shader;
 class TextManager;
 class UIComponentTooltipLayer;
 class UIData;
+class UIGeometry;
 class UIHierarchyNode;
 class UIManager;
 class UIManagerImplementation;
@@ -209,6 +210,7 @@ public:
         );
 
     const std::shared_ptr<Shader>& GetShaderRef(const UIShaderEnum in_type) const;
+    const UIGeometry& GetEffectGeometryRef() const;
 
 private:
     std::unique_ptr<UIManagerImplementation> _implementation;

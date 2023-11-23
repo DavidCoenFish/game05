@@ -53,7 +53,7 @@ public:
     const UIBaseColour& GetBaseColour() const { return _base_colour; }
 
     /// Make component type match what the data wants, default is UIComponentCanvas
-    virtual void Apply(
+    virtual void ApplyComponent(
         std::unique_ptr<IUIComponent>& in_out_component,
         const UIHierarchyNodeApplyParam& in_param,
         const int in_index = 0

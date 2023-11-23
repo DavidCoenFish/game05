@@ -19,6 +19,7 @@
 #include "common/ui/ui_screen_space.h"
 #include "common/ui/ui_component/ui_component_tooltip_layer.h"
 #include "common/ui/ui_data/ui_data.h"
+#include "common/ui/ui_effect/ui_effect_component.h"
 #include "common/util/vector_helper.h"
 
 namespace
@@ -168,13 +169,7 @@ public:
         std::vector<std::shared_ptr<ConstantBufferInfo>> array_shader_constants_info_effect;
         array_shader_constants_info_effect.push_back(
             ConstantBufferInfo::Factory(
-                UIManager::TShaderConstantBuffer(),
-                D3D12_SHADER_VISIBILITY_PIXEL
-                )
-            );
-        array_shader_constants_info_effect.push_back(
-            ConstantBufferInfo::Factory(
-                UIComponentEffect::TShaderConstantBuffer(),
+                UIEffectComponent::TShaderConstantBuffer(),
                 D3D12_SHADER_VISIBILITY_PIXEL
                 )
             );
@@ -191,7 +186,7 @@ public:
                 nullptr,
                 pixel_shader_data,
                 array_shader_resource_info,
-                index ? array_shader_constants_info_effect : array_shader_constants_info_default
+                0 != index ? array_shader_constants_info_effect : array_shader_constants_info_default
                 );
         }
 
