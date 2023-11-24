@@ -12,7 +12,9 @@ class UIComponentString : public IUIComponent
     typedef IUIComponent TSuper;
 public:
     UIComponentString(
-        std::unique_ptr<TextBlock>& in_text_block
+        std::unique_ptr<TextBlock>& in_text_block,
+        const UILayout& in_layout,
+        void* in_source_token = nullptr
         );
     ~UIComponentString();
 

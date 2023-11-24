@@ -10,7 +10,7 @@ class UIEffectData;
 class UIHierarchyNode;
 class UIScreenSpace;
 struct UIHierarchyNodeChildData;
-struct UIHierarchyNodeApplyParam;
+struct UIHierarchyNodeUpdateParam;
 
 /// base ui data class ends up representing minimal data for ui hierarchy
 /// moving towards only run time modified data (like a string) to be in a class derrived from UIData
@@ -27,7 +27,7 @@ public:
     UIData(
         const UILayout& in_layout,
         const UIBaseColour& in_base_colour,
-        const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
+        const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data = std::vector<std::shared_ptr<UIEffectData>>(),
         UIData* const in_parent_or_null = nullptr
         );
     virtual ~UIData();
@@ -55,7 +55,7 @@ public:
     /// Make component type match what the data wants, default is UIComponentCanvas
     virtual void ApplyComponent(
         std::unique_ptr<IUIComponent>& in_out_component,
-        const UIHierarchyNodeApplyParam& in_param,
+        const UIHierarchyNodeUpdateParam& in_param,
         const int in_index = 0
         );
 

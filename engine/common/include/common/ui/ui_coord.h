@@ -32,8 +32,7 @@ public:
     /// expect client code to check if it needs the content size via UsesContentSize and to provide correct data if needed
     const float Calculate(
         const VectorFloat2& in_parent_size,
-        const float in_ui_scale,
-        const VectorFloat2& in_content_size = VectorFloat2(0.0f, 0.0f)
+        const float in_ui_scale
         ) const;
 
 
@@ -41,15 +40,11 @@ public:
     /// certain calculations, like render target size, use int
     const int Calculate(
         const VectorInt2& in_size,
-        const float in_ui_scale,
-        const VectorInt2& in_content_size = VectorInt2(0, 0)
+        const float in_ui_scale
         ) const;
 
     const bool operator==(const UICoord& in_rhs) const;
     const bool operator!=(const UICoord& in_rhs) const;
-
-    /// return true if _source wants content size for calculation
-    const bool UsesContentSize() const;
 
 private:
     /// What method should be use to calculate 

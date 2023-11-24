@@ -36,7 +36,7 @@ class IUIComponent
 {
 public:
     IUIComponent(
-        const UIlayout& in_layout,
+        const UILayout& in_layout,
         void* in_source_token = nullptr,
         const UIStateFlag in_state_flag = UIStateFlag::TNone
         );
@@ -70,7 +70,7 @@ public:
 
     /// Set layout dirty flag on change
     void SetLayout(
-        const UIlayout& in_layout
+        const UILayout& in_layout
         );
     const UILayout& GetLayout() const { return _layout; }
 
@@ -108,10 +108,13 @@ public:
         const VectorInt2& in_parent_window
         );
 
-    virtual void UpdateLayout(
+    virtual void UpdateResources(
+        UIHierarchyNodeChildData& in_component_owner,
         const UIHierarchyNodeUpdateParam& in_param,
         const UIScreenSpace& in_parent_screen_space
         );
+
+    const VectorInt2 GetTextureSize();
 
     /// prep the children of the component for draw. 
     /// for example, component string may use this to run the TextBock::Draw, setting up the components' nodes' texture for the component to be drawn to it's parent latter in the Node::Draw

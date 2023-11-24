@@ -53,39 +53,37 @@ namespace
     }
 }
 
-UIComponentEffect::UIComponentEffect(
+UIEffectComponent::UIEffectComponent(
     const UIEffectEnum in_type,
     const UICoord& in_coord_a,
     const UICoord& in_coord_b,
     const UICoord& in_coord_c,
     const UICoord& in_coord_d,
-    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_array_or_null
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null
     )
-    : IUIComponent(in_state_flag_array_or_null)
+    : _state_flag_tint_array_or_null(in_state_flag_tint_array_or_null)
     , _type(in_type)
     , _coord_a(in_coord_a)
     , _coord_b(in_coord_b)
     , _coord_c(in_coord_c)
     , _coord_d(in_coord_d)
 {
-#if defined(GEOMETRY_SIZE_INTO_SHADER)
-    _geometry = std::make_unique<UIGeometry>();
-#endif
+    // Nop
 }
 
-UIComponentEffect::~UIComponentEffect()
+UIEffectComponent::~UIEffectComponent()
 {
     // Nop
 }
 
 // return true if modified, else false
-const bool UIComponentEffect::Set(
+const bool UIEffectComponent::Set(
     const UIEffectEnum in_type,
     const UICoord& in_coord_a,
     const UICoord& in_coord_b,
     const UICoord& in_coord_c,
     const UICoord& in_coord_d,
-    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_array_or_null
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null
     )
 {
     bool dirty = false;
@@ -121,16 +119,17 @@ const bool UIComponentEffect::Set(
         _coord_d = in_coord_d;
     }
 
-    if (true == SetStateFlagArrayOrNull(in_state_flag_array_or_null))
+    if (_state_flag_tint_array_or_null != in_state_flag_tint_array_or_null)
     {
         dirty = true;
+        _state_flag_tint_array_or_null = in_state_flag_tint_array_or_null;
     }
 
     return dirty;
 }
 
 /*
-const bool UIComponentEffect::UpdateHierarchy(
+const bool UIEffectComponent::UpdateHierarchy(
     UIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
     const UIHierarchyNodeUpdateHierarchyParam& in_param
@@ -161,7 +160,7 @@ const bool UIComponentEffect::UpdateHierarchy(
     return dirty;
 }
 
-const bool UIComponentEffect::UpdateSize(
+const bool UIEffectComponent::UpdateSize(
     DrawSystem* const in_draw_system,
     const VectorInt2& in_parent_size,
     const VectorInt2& in_parent_offset,
@@ -186,9 +185,8 @@ const bool UIComponentEffect::UpdateSize(
         in_parent_screen_space,
         out_screen_space
         );
-*/
 
-const bool UIComponentEffect::SetContainerSize(
+const bool UIEffectComponent::SetContainerSize(
     const VectorInt2& in_texture_size,
     const UIHierarchyNodeUpdateLayoutRenderParam& in_param
     )
@@ -242,7 +240,7 @@ const bool UIComponentEffect::SetContainerSize(
     return dirty;
 }
 
-const bool UIComponentEffect::PreDraw(
+const bool UIEffectComponent::PreDraw(
     const UIManagerDrawParam& in_draw_param,
     UIHierarchyNode& in_node
     )
@@ -331,4 +329,5 @@ const bool UIComponentEffect::PreDraw(
 
     return dirty;
 }
+*/
 

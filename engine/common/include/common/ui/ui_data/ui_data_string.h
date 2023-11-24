@@ -5,7 +5,9 @@
 #include "common/text/text_enum.h"
 
 class LocaleSystem;
+struct UIHierarchyNodeUpdateParam;
 
+/// TODO: add margin
 class UIDataString : public UIData
 {
     typedef UIData TSuper;
@@ -14,12 +16,12 @@ public:
     UIDataString(
         const UILayout& in_layout,
         const UIBaseColour& in_base_colour,
-        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null = nullptr,
+        const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
         const std::string& in_data = std::string(),
         const LocaleISO_639_1 in_locale = LocaleISO_639_1::Default,
-        bool _width_limit_enabled = false,
-        TextEnum::HorizontalLineAlignment _horizontal = TextEnum::HorizontalLineAlignment::Left,
-        TextEnum::VerticalBlockAlignment _vertical = TextEnum::VerticalBlockAlignment::Bottom
+        const bool in_width_limit_enabled = false,
+        const TextEnum::HorizontalLineAlignment in_horizontal = TextEnum::HorizontalLineAlignment::Left,
+        const TextEnum::VerticalBlockAlignment in_vertical = TextEnum::VerticalBlockAlignment::Bottom
         );
     virtual ~UIDataString();
 
@@ -29,37 +31,43 @@ public:
     void SetString(const std::string& in_data);
 
 private:
-    /// Make component type match what the data wants, default is UIComponentCanvas
-    virtual void UpdateHierarchy(
+    virtual void ApplyComponent(
         std::unique_ptr<IUIComponent>& in_out_component,
-        const UIHierarchyNodeUpdateHierarchyParam& in_param,
+        const UIHierarchyNodeUpdateParam& in_param,
         const int in_index = 0
         ) override;
 
-    virtual void UpdateLayoutRender(
-        IUIComponent& in_component,
-        UIHierarchyNodeChildData& in_component_owner,
-        const UIHierarchyNodeUpdateLayoutRenderParam& in_param,
-        const VectorInt2& in_parent_size,
-        const VectorInt2& in_parent_offset,
-        const VectorInt2& in_parent_window,
-        const UIScreenSpace& in_parent_screen_space
-        ) override;
+    ///// Make component type match what the data wants, default is UIComponentCanvas
+    //virtual void UpdateHierarchy(
+    //    std::unique_ptr<IUIComponent>& in_out_component,
+    //    const UIHierarchyNodeUpdateHierarchyParam& in_param,
+    //    const int in_index = 0
+    //    ) override;
 
-    /// GetChild desired size? layout is now part of UIData?
-    virtual const VectorInt2 GetContentSize(
-        IUIComponent& in_component,
-        const VectorInt2& in_target_size, 
-        const float in_ui_scale,
-        UIHierarchyNodeChildData& in_component_owner
-        ) override;
+    //virtual void UpdateLayoutRender(
+    //    IUIComponent& in_component,
+    //    UIHierarchyNodeChildData& in_component_owner,
+    //    const UIHierarchyNodeUpdateLayoutRenderParam& in_param,
+    //    const VectorInt2& in_parent_size,
+    //    const VectorInt2& in_parent_offset,
+    //    const VectorInt2& in_parent_window,
+    //    const UIScreenSpace& in_parent_screen_space
+    //    ) override;
 
-    virtual const VectorInt2 GetDesiredSize(
-        IUIComponent& in_component,
-        const VectorInt2& in_target_size, 
-        const float in_ui_scale,
-        UIHierarchyNodeChildData& in_component_owner
-        ) override;
+    ///// GetChild desired size? layout is now part of UIData?
+    //virtual const VectorInt2 GetContentSize(
+    //    IUIComponent& in_component,
+    //    const VectorInt2& in_target_size, 
+    //    const float in_ui_scale,
+    //    UIHierarchyNodeChildData& in_component_owner
+    //    ) override;
+
+    //virtual const VectorInt2 GetDesiredSize(
+    //    IUIComponent& in_component,
+    //    const VectorInt2& in_target_size, 
+    //    const float in_ui_scale,
+    //    UIHierarchyNodeChildData& in_component_owner
+    //    ) override;
 
 private:
     std::string _data;

@@ -48,11 +48,11 @@ UILayout::UILayout(
     return;
 }
 
-const VectorInt2 UILayout::GetSize(const VectorInt2& in_parent_size, const float in_ui_scale, const VectorInt2& in_content_size) const
+const VectorInt2 UILayout::GetSize(const VectorInt2& in_parent_size, const float in_ui_scale) const
 {
     return VectorInt2(
-        _data_size[0].Calculate(in_parent_size, in_ui_scale, in_content_size),
-        _data_size[1].Calculate(in_parent_size, in_ui_scale, in_content_size)
+        _data_size[0].Calculate(in_parent_size, in_ui_scale),
+        _data_size[1].Calculate(in_parent_size, in_ui_scale)
         );
 }
 
@@ -72,19 +72,11 @@ const VectorInt2 UILayout::GetAttach(const VectorInt2& in_size, const float in_u
         );
 }
 
-const VectorInt2 UILayout::GetPivot(const VectorInt2& in_parent_size, const float in_ui_scale, const VectorInt2& in_content_size) const
+const VectorInt2 UILayout::GetPivot(const VectorInt2& in_parent_size, const float in_ui_scale) const
 {
     return VectorInt2(
-        _data_pivot[0].Calculate(in_parent_size, in_ui_scale, in_content_size),
-        _data_pivot[1].Calculate(in_parent_size, in_ui_scale, in_content_size)
-        );
-}
-
-const bool UILayout::UsesContentSize() const
-{
-    return (
-        _data_size[0].UsesContentSize() ||
-        _data_size[1].UsesContentSize()
+        _data_pivot[0].Calculate(in_parent_size, in_ui_scale),
+        _data_pivot[1].Calculate(in_parent_size, in_ui_scale)
         );
 }
 
@@ -166,15 +158,15 @@ const bool UILayout::operator==(const UILayout& in_rhs) const
         return false;
     }
 
-    //if (_shrink_width != in_rhs._shrink_width)
-    //{
-    //    return false;
-    //}
+    if (_adjustment_type[0] != in_rhs._adjustment_type[0])
+    {
+        return false;
+    }
 
-    //if (_shrink_height != in_rhs._shrink_height)
-    //{
-    //    return false;
-    //}
+    if (_adjustment_type[1] != in_rhs._adjustment_type[1])
+    {
+        return false;
+    }
 
     return true;
 }

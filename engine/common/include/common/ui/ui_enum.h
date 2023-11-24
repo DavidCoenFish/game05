@@ -86,8 +86,8 @@ enum class UIStateFlag
     /// Warning, kind of needs to be set by a parent, as if set by its self, the code to turn it back on may never be reached, ref: UIComponentDrift
     THidden = 1 << 4,
 
-    /// A layout override is set by component, not the model
-    TLayoutOverride = 1 << 5,
+    /// A layout has changed
+    TLayoutDirty = 1 << 5,
     /// disable the automatic ppinpong of uv for x axis
     TManualScrollX = 1 << 6,
     /// disable the automatic ppinpong of uv for y axis

@@ -13,9 +13,13 @@
 
 
 UIComponentString::UIComponentString(
-    std::unique_ptr<TextBlock>& in_text_block
+    std::unique_ptr<TextBlock>& in_text_block,
+    const UILayout& in_layout,
+    void* in_source_token
     )
-    : IUIComponent()
+    : IUIComponent(
+        in_layout, 
+        in_source_token)
     , _text_block(std::move(in_text_block))
 {
     return;
@@ -81,7 +85,6 @@ const bool UIComponentString::Set(
 
     return dirty;
 }
-
 
 const VectorInt2 UIComponentString::GetDesiredSize(
     const VectorInt2& in_layout_size,

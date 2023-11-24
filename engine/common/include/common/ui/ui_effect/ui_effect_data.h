@@ -4,11 +4,10 @@
 #include "common/ui/ui_enum.h"
 #include "common/ui/ui_coord.h"
 
-class IUIComponent;
+class UIEffectComponent;
 
-class UIEffectData : public UIData
+class UIEffectData
 {
-    typedef UIData TSuper;
 public:
     typedef std::array<VectorFloat4, static_cast<int>(UIStateFlag::TTintPermutationCount)> TStateFlagTintArray;
 
@@ -22,6 +21,12 @@ public:
         const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null = nullptr
         );
     virtual ~UIEffectData();
+
+    void ApplyComponent(
+        std::shared_ptr<UIEffectComponent>& in_out_component,
+        const UIHierarchyNodeUpdateParam& in_param,
+        const int in_index = 0
+        );
 
 private:
     /// either we don't use type none as default ui shader, or need to be carefull with type to use with _shader_constant_buffer

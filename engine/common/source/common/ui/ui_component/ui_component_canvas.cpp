@@ -4,7 +4,7 @@
 #include "common/ui/ui_geometry.h"
 
 UIComponentCanvas::UIComponentCanvas(
-    const UIlayout& in_layout,
+    const UILayout& in_layout,
     void* in_source_token
     )
     : IUIComponent(
@@ -18,12 +18,5 @@ UIComponentCanvas::UIComponentCanvas(
 UIComponentCanvas::~UIComponentCanvas()
 {
     // Nop
-}
-
-void UIComponentCanvas::ApplyData(
-    const UIlayout& in_layout
-    )
-{
-    if (_layout
 }
 

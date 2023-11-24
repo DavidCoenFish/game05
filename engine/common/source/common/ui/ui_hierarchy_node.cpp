@@ -401,11 +401,9 @@ void UIHierarchyNode::UpdateResources(
             continue;
         }
 
-        //child->_screen_space->Update(
-        //    in_parent_screen_space,
         component->UpdateResources(
+            *child,
             in_param,
-            *child, //->_screen_space,
             in_parent_screen_space
             );
 

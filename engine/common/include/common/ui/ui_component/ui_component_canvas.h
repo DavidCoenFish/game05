@@ -2,7 +2,7 @@
 
 #include "common/ui/ui_component/i_ui_component.h"
 
-class UIlayout;
+class UILayout;
 
 /// Currently the default behaviour of IUIComponent is to act as a canvas
 /// each child is drawn to the parent at the given layout
@@ -12,13 +12,9 @@ class UIComponentCanvas : public IUIComponent
     typedef IUIComponent TSuper;
 public:
     UIComponentCanvas(
-        const UIlayout& in_layout,
+        const UILayout& in_layout,
         void* in_source_token = nullptr
         );
     virtual ~UIComponentCanvas();
-
-    void ApplyData(
-        const UIlayout& in_layout
-        );
 
 };

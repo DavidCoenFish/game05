@@ -93,8 +93,8 @@ void UIData::SetDirtyBit(const UIDataDirty in_flag, const bool in_active)
 
 void UIData::ApplyComponent(
     std::unique_ptr<IUIComponent>& in_out_component,
-    const UIHierarchyNodeApplyParam& in_param,
-    const int in_index = 0
+    const UIHierarchyNodeUpdateParam&, //in_param,
+    const int //in_index
     )
 {
     // if in_out_component is not a UIComponentCanvas, remake it as one
@@ -110,9 +110,7 @@ void UIData::ApplyComponent(
     }
     else
     {
-        component->ApplyData(
-            _layout
-            );
+        component->SetLayout(_layout);
     }
 
     return;

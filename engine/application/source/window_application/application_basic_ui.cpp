@@ -16,15 +16,14 @@
 #include "common/math/vector_int2.h"
 #include "common/math/vector_int4.h"
 #include "common/text/text_manager.h"
-#include "common/ui/ui_component/ui_component_canvas.h"
-#include "common/ui/ui_component/ui_component_string.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_manager.h"
 #include "common/ui/i_ui_model.h"
 #include "common/ui/ui_texture.h"
+#include "common/ui/ui_component/ui_component_canvas.h"
+#include "common/ui/ui_component/ui_component_string.h"
 #include "common/ui/ui_data/ui_data.h"
 #include "common/ui/ui_data/ui_data_button.h"
-#include "common/ui/ui_data/ui_data_effect.h"
 #include "common/ui/ui_data/ui_data_combo_box.h"
 #include "common/ui/ui_data/ui_data_combo_box_layer.h"
 #include "common/ui/ui_data/ui_data_disable.h"
@@ -36,6 +35,7 @@
 #include "common/ui/ui_data/ui_data_text_run.h"
 #include "common/ui/ui_data/ui_data_toggle.h"
 #include "common/ui/ui_data/ui_data_tooltip_layer.h"
+#include "common/ui/ui_effect/ui_effect_data.h"
 #include "common/util/timer.h"
 #include "common/util/vector_helper.h"
 #include "common/window/window_application_param.h"
@@ -1560,7 +1560,7 @@ public:
         data_main->AddChild(
             data_debug_quad
             );
-            
+/*            
         data_debug_quad->AddChild(
 #if 0
             std::make_shared<UIDataEffect>(
@@ -1591,7 +1591,7 @@ public:
                 TextEnum::VerticalBlockAlignment::Middle
                 )
             );
-
+*/
         _data_map["main"] = data_main;
     }
 
@@ -1635,6 +1635,19 @@ public:
     }
 
 private:
+    virtual const std::vector<std::shared_ptr<UIData>>& GetDataArray(
+        const std::string& in_key
+        ) const override
+    {
+        const auto found = _data_array_map.find(in_key);
+        if (found != _data_array_map.end())
+        {
+            return found->second;
+        }
+        static std::vector<std::shared_ptr<UIData>> s_dummy;
+        return s_dummy;
+    }
+
     virtual UIData* const GetData(
         const std::string& in_key
         ) const override
@@ -1794,11 +1807,14 @@ void ApplicationBasicUI::Update()
                 false, //in_draw_to_texture = false, // Draw to texture or backbuffer?
                 VectorInt2(0,0) //in_texture_size = VectorInt2(0,0) // If in_draw_to_texture is true, size to use for texture
                 );
-            UIData* const root_data = _draw_resource->_ui_model->GetData("main");
             _draw_resource->_ui_manager->Update(
                 _draw_resource->_ui_hierarchy_node,
-                root_data,
-                update_param
+                _draw_resource->_ui_model->GetDataArray("main"),
+                update_param,
+                false,
+                VectorInt2::s_zero,
+                false,
+                true
                 );
         }
 /*

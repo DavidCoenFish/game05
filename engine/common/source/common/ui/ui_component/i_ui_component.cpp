@@ -19,11 +19,11 @@ namespace
 }
 
 IUIComponent::IUIComponent(
-    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_array_or_null,
+    const UILayout& in_layout,
     void* in_source_token,
     const UIStateFlag in_state_flag
     )
-    : _state_flag_array_or_null(in_state_flag_array_or_null)
+    : _layout(in_layout)
     , _source_token(in_source_token)
     , _time_accumulate_seconds(0.0f)
     , _state_flag(in_state_flag)
@@ -53,7 +53,7 @@ void IUIComponent::CalculateGeometry(
     const UILayout& in_layout 
     )
 {
-    const VectorInt2 pivot = in_layout.GetPivot(in_parent_window, in_ui_scale, VectorInt2()) + in_parent_offset; 
+    const VectorInt2 pivot = in_layout.GetPivot(in_parent_window, in_ui_scale) + in_parent_offset; 
     const VectorInt2 attach = in_layout.GetAttach(in_layout_size, in_ui_scale);
 
     // Deal pos
@@ -166,15 +166,13 @@ void* IUIComponent::GetSourceToken() const
 const bool IUIComponent::CheckLayoutCache(
     VectorInt2& out_layout_size, 
     VectorInt2& out_desired_size, 
-    const VectorInt2& in_parent_window, 
-    const VectorInt2& in_content_size
+    const VectorInt2& in_parent_window
     )
 {
-    if ((_parent_window == in_parent_window) &&
-        (_content_size == in_content_size))
+    if (_cache_parent_window == in_parent_window)
     {
-        out_layout_size = _layout_size;
-        out_desired_size = _desired_size;
+        out_layout_size = _cache_layout_size;
+        out_desired_size = _cache_desired_size;
         return true;
     }
     return false;
@@ -183,14 +181,12 @@ const bool IUIComponent::CheckLayoutCache(
 void IUIComponent::SetLayoutCache(
     const VectorInt2& in_layout_size, 
     const VectorInt2& in_desired_size, 
-    const VectorInt2& in_parent_window, 
-    const VectorInt2& in_content_size
+    const VectorInt2& in_parent_window
     )
 {
-    _layout_size = in_layout_size;
-    _desired_size = in_desired_size;
-    _parent_window = in_parent_window;
-    _content_size = in_content_size;
+    _cache_layout_size = in_layout_size;
+    _cache_desired_size = in_desired_size;
+    _cache_parent_window = in_parent_window;
     return;
 }
 
@@ -244,16 +240,19 @@ const bool IUIComponent::GetStateFlagBit(const UIStateFlag in_state_flag_bit) co
     return 0 != (static_cast<int>(_state_flag) & static_cast<int>(in_state_flag_bit));
 }
 
-const bool IUIComponent::SetStateFlagArrayOrNull(const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_array_or_null)// { _state_flag_array_or_null = in_state_flag_array_or_null; return; }
+/// Set layout dirty flag on change
+void IUIComponent::SetLayout(
+    const UILayout& in_layout
+    )
 {
-    bool dirty = false;
-    if (_state_flag_array_or_null != in_state_flag_array_or_null)
+    if (_layout != in_layout)
     {
-        dirty = true;
-        _state_flag_array_or_null = in_state_flag_array_or_null;
+        _layout == in_layout;
+        // TODO: do we need to set up the parent change the layout dirty flag?
+        SetStateFlagBit(UIStateFlag::TLayoutDirty, true);
     }
 
-    return dirty;
+    return;
 }
 
 //const bool IUIComponent::UpdateHierarchy(
@@ -463,22 +462,6 @@ const bool IUIComponent::PreDraw(
     }
 
     return dirty;
-}
-
-const VectorFloat4 IUIComponent::GetTintColour() const
-{
-    //const VectorFloat4* override_tint = nullptr;
-    VectorFloat4 tint(1.0f, 1.0f, 1.0f, 1.0f);
-    const TStateFlagTintArray* const state_flag_tint_array = _state_flag_array_or_null.get();
-
-    if (nullptr != state_flag_tint_array)
-    {
-        const int tint_index = static_cast<int>(_state_flag) & static_cast<int>(UIStateFlag::TTintMask);
-        tint = (*state_flag_tint_array)[tint_index];
-    }
-
-    //return _base_colour.GetTintColour(_time_accumulate_seconds, override_tint);
-    return tint;
 }
 
 const bool IUIComponent::Update(
