@@ -190,6 +190,37 @@ void IUIComponent::SetLayoutCache(
     return;
 }
 
+void IUIComponent::UpdateLayout(
+    UIHierarchyNodeChildData& in_component_owner,
+    const UIHierarchyNodeUpdateParam& in_param,
+    const VectorInt2& in_parent_size,
+    const VectorInt2& in_parent_offset,
+    const VectorInt2& in_parent_window
+    )
+{
+}
+
+const VectorInt2 IUIComponent::GetDesiredSize(
+    const UIHierarchyNodeUpdateParam& in_layout_param,
+    const VectorInt2& in_pre_shrink_layout_size //in_parent_window
+    )
+{
+    return VectorInt2::s_zero;
+}
+
+void IUIComponent::UpdateResources(
+    UIHierarchyNodeChildData& in_component_owner,
+    const UIHierarchyNodeUpdateParam& in_param,
+    const UIScreenSpace& in_parent_screen_space
+    )
+{
+}
+
+const VectorInt2 IUIComponent::GetTextureSize()
+{
+    return _cache_desired_size;
+}
+
 void IUIComponent::SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool in_manual_horizontal, const bool in_manual_vertical)
 {
     SetStateFlagBit(UIStateFlag::TManualScrollX, in_manual_horizontal);
