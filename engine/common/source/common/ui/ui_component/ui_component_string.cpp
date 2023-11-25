@@ -87,15 +87,15 @@ const bool UIComponentString::Set(
 }
 
 const VectorInt2 UIComponentString::GetDesiredSize(
-    const VectorInt2& in_layout_size,
-    const float in_ui_scale
+    const UIHierarchyNodeUpdateParam& in_layout_param,
+    const VectorInt2& in_pre_shrink_layout_size //in_parent_window
     )
 {
     _text_block->SetWidthLimit(
         _text_block->GetWidthLimitEnabled(),
-        in_layout_size[0]
+        in_pre_shrink_layout_size[0]
         );
-    _text_block->SetUIScale(in_ui_scale);
+    _text_block->SetUIScale(in_layout_param._ui_scale);
 
     const VectorInt2 result = _text_block->GetTextBounds();
     return result;

@@ -154,7 +154,8 @@ UIHierarchyNodeUpdateParam::UIHierarchyNodeUpdateParam(
     UIManager* const in_ui_manager,
     LocaleSystem* const in_locale_system,
     TextManager* const in_text_manager,
-    const UIDataTextRunStyle* const in_default_text_style
+    const UIDataTextRunStyle* const in_default_text_style,
+    const float in_ui_scale
     )
     : _draw_system(in_draw_system)
     , _command_list(in_command_list)
@@ -162,6 +163,7 @@ UIHierarchyNodeUpdateParam::UIHierarchyNodeUpdateParam(
     , _locale_system(in_locale_system)
     , _text_manager(in_text_manager)
     , _default_text_style(in_default_text_style)
+    , _ui_scale(in_ui_scale)
 {
     // Nop
 }

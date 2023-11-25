@@ -145,7 +145,8 @@ struct UIHierarchyNodeUpdateParam
         UIManager* const in_ui_manager = nullptr,
         LocaleSystem* const in_locale_system = nullptr,
         TextManager* const in_text_manager = nullptr,
-        const UIDataTextRunStyle* const in_default_text_style = nullptr
+        const UIDataTextRunStyle* const in_default_text_style = nullptr,
+        const float in_ui_scale = 1.0f
         );
     DrawSystem* const _draw_system;
     ID3D12GraphicsCommandList* const _command_list;
@@ -153,6 +154,7 @@ struct UIHierarchyNodeUpdateParam
     LocaleSystem* const _locale_system;
     TextManager* const _text_manager;
     const UIDataTextRunStyle* const _default_text_style;
+    float _ui_scale;
 
 };
 

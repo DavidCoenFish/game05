@@ -34,10 +34,10 @@ public:
         const VectorFloat4& in_text_colour
         );
 
-    const VectorInt2 GetDesiredSize(
-        const VectorInt2& in_layout_size,
-        const float in_ui_scale
-        );
+    virtual const VectorInt2 GetDesiredSize(
+        const UIHierarchyNodeUpdateParam& in_layout_param,
+        const VectorInt2& in_pre_shrink_layout_size //in_parent_window
+        ) override;
 
     void SetContainerSize(const VectorInt2& in_size);
 
