@@ -34,8 +34,10 @@ UILayout::UILayout(
     const UICoord& in_pivot_x,
     const UICoord& in_pivot_y,
     const TAdjustmentType in_adjustment_type_x,
-    const TAdjustmentType in_adjustment_type_y
+    const TAdjustmentType in_adjustment_type_y,
+    const VectorInt4& in_desired_margin
     )
+    : _desired_margin(in_desired_margin)
 {
     _data_size[0] = in_size_x;
     _data_size[1] = in_size_y;

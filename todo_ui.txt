@@ -8,3 +8,42 @@
     clean up EM align (modify "zero" row of font glyph texture?)
 - rebuild "update layout" logic to not run unless something changes
 - svg
+
+UIHierarchyNode // N0 
+    [_input_state] // I0 optional top level input state, which node is focused, node click started on, hover node
+    _texture // T0 texture or backbuffer contents of A0 draws to
+    _effect_stack // E0
+    _child_node_array // A0
+        _component // C1 controls size of T1 and G1. model returns an array of ui data for child array A1
+        _geometry // G1 geometry to draw the texture T1 onto T0
+        _shader_constant_buffer // S1 the shader constants -> moved to component default? or needs to be with? in? geometry G1
+        UIHierarchyNode // N1 child node
+            _texture // T1 texture or backbuffer A1 draws to
+            _effect_stack // E1
+            _child_node_array // A1
+
+layout
+case A. tooltip, want margin around text block
+case B. tooltip 2, want margin around text block, then another margin with dropshadow
+
+text component is source of desired size, text bounds  example 90,10
+margin 5 added to desired size from component, so  100,20
+wrapping component, uilayout size 0,0 but set to expand, use child size as desired 100,20 via component?
+wrapping component margin 5, 
+
+node::update layout (in parent window)
+    for each child A0
+        component::update layout
+            calculate layout size given parent window
+            recurse node::update layout
+            component::desired(parent window or layout size? layout size may yet to be modified...)
+            finialise layout size (shrink/expand)
+
+
+
+
+
+aim of layout, is the specification of the geometry size to draw the child to the parent
+desired size is the texture size of the child.
+use uvscroll to position texture on 
+

@@ -2,6 +2,8 @@
 
 #include "common/math/vector_int4.h"
 
+const VectorInt4 VectorInt4::s_zero(0, 0, 0, 0);
+
 VectorInt4::VectorInt4(
     const int in_x,
     const int in_y,

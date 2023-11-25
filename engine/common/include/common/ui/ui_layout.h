@@ -4,6 +4,7 @@
 #include "common/math/vector_float2.h"
 #include "common/math/vector_float4.h"
 #include "common/math/vector_int2.h"
+#include "common/math/vector_int4.h"
 
 class UILayout
 {
@@ -28,7 +29,8 @@ public:
         const UICoord& in_pivot_x = UICoord(UICoord::TSource::ParentX),
         const UICoord& in_pivot_y = UICoord(UICoord::TSource::ParentY),
         const TAdjustmentType in_adjustment_type_x = TAdjustmentType::None,
-        const TAdjustmentType in_adjustment_type_y = TAdjustmentType::None
+        const TAdjustmentType in_adjustment_type_y = TAdjustmentType::None,
+        const VectorInt4& in_desired_margin = VectorInt4::s_zero
         );
 
     /// Get the size of the layout element
@@ -64,6 +66,8 @@ private:
 
     /// how to adjust the x,y axis of the layout size against a desired size
     TAdjustmentType _adjustment_type[2];
+
+    VectorInt4 _desired_margin;
 
 };
 
