@@ -22,9 +22,30 @@ UIHierarchyNode // N0
             _effect_stack // E1
             _child_node_array // A1
 
+example A
+N0 // Top level node
+ _T0 // backbuffer
+ _A0
+  _C1 text
+  _N1
+   _T1
+
+example B
+N0 // Top level node
+ _T0 // backbuffer
+ _A0
+  _C1 shrunk canvas with margin
+  _E1 drop shadow
+  _N1
+   _T1
+   _A1
+    _C2 text with margin
+
+
 layout
-case A. tooltip, want margin around text block
-case B. tooltip 2, want margin around text block, then another margin with dropshadow
+case A. red quad quater size of screen, with text "hello human" in the center internally.
+case B. tooltip somewhere on screen, want margin around text block.
+case C. tooltip 2, want margin around text block, then another margin with dropshadow
 
 text component is source of desired size, text bounds  example 90,10
 margin 5 added to desired size from component, so  100,20
@@ -40,10 +61,87 @@ node::update layout (in parent window)
             finialise layout size (shrink/expand)
 
 
+component calculates the texture size it wants, based on parent window, and contents
+component calculates geometry based on parent window, texture size, uv scroll
+
+layout size is a starting point, ratio of parent window
+parent_window_pivot (float2)
+texture_attach (float2)
+
+text component has a desired size (text bounds) 
+we want a canvas around it? or the UIComponent itself gets the margin?
+for C'N' want to add the margin to the texture T'N', adjusting G'N + 1' (child geometry/ parent window offset)
+so a default margin would generate a parent size, offset and window inset by the margin?
+
+uilayout
+    UICoord[2] layout size
+    float2 layout attach
+    float2 parent pivot
+    adjust rules // enum shrink, shrink/grow. grow // how to adjust the layout size given the texture size
+    texture margin
+
+
+
 
 
 
 aim of layout, is the specification of the geometry size to draw the child to the parent
 desired size is the texture size of the child.
 use uvscroll to position texture on 
+
+
+UpdateTextureSize(before_shrink_layout_size_hint) //, enum shrink x, enum shrink y)
+UpdateLayout(parent size, parent offset, parent window)
+
+
+N0 // node
+ _T0 // ui texture, the backbuffer or a render target
+ _A0 // child array
+  _C1 // component
+  _E1 // effect stack
+  _N1 // Recurse back to node with texture and child array
+
+layout
+case A. red quad quater size of screen, with text "hello human" in the center internally.
+case B. tooltip somewhere on screen, want margin around text block.
+case C. tooltip 2, want margin around text block, then another margin with dropshadow
+
+case A. red quad quater size of screen, with text "hello human" in the center internally.
+N0
+ _T0 //backbuffer
+ _A0
+   _C1 // red quad canvas, uilayout - quater of screen
+   _N1
+    _T1 // texture size of red quad
+    _A1
+     _C2 // text component,  uilayout - shrink
+     _N2
+      _T2 // texture for text manager to draw C2 text block to, size from text block, but constrained to T1
+
+case B. tooltip somewhere on screen, want margin around text block. // 3 nodes
+N0
+ _T0 //backbuffer
+ _A0
+   _C1 // grey quad somewhere on screen with margin around _C2 texture size, shrink to _T2 size plus margin from _C2
+   _N1
+    _T1
+    _A1
+     _C2 // text component, shrink
+     _N2
+      _T2 // texture for text manager to draw C2 text block
+
+// lets try 2 nodes
+N0 
+ _T0 //backbuffer
+ _A0
+   _C1 // text component with margin, shrink. draw grey background
+   _E1 // round corners...
+   _N1
+    _T1 texture for text manager to draw C1 text block
+
+a component shrinks to it's children size, but UIComponentText has a text block instead of node children
+UIComponentCanvas (ie, IUIComponent default implementation) uses zero or are implementation of Desired size special?
+when handing down plack holder layout size for desired size/ texture size calculation, don't perform shrink
+
+case C. tooltip 2, want margin around text block, then another margin with dropshadow
 

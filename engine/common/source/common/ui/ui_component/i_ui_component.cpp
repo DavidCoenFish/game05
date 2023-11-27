@@ -190,6 +190,14 @@ void IUIComponent::SetLayoutCache(
     return;
 }
 
+/// default behavoiur, ie, canvas
+/// node::update layout (in parent window)
+///     for each child A0
+///         component::update layout
+///             calculate layout size given parent window
+///             recurse node::update layout
+///             component::desired(parent window or layout size? layout size may yet to be modified...)
+///             finialise layout size (shrink/expand)
 void IUIComponent::UpdateLayout(
     UIHierarchyNodeChildData& in_component_owner,
     const UIHierarchyNodeUpdateParam& in_param,
@@ -198,6 +206,27 @@ void IUIComponent::UpdateLayout(
     const VectorInt2& in_parent_window
     )
 {
+    // calculate layout size given parent window
+    const VectorInt2 base_layout_size = _layout.GetSize(in_parent_window, in_param._ui_scale);
+
+    // recurse node::update layout
+    in_component_owner._node->UpdateLayout(
+        in_param,
+        base_layout_size,
+        VectorInt2::s_zero,
+        base_layout_size
+        );
+
+    // component::desired(parent window or layout size? layout size may yet to be modified...)
+    const VectorInt2 base_desired_size = GetDesiredSize(in_param, base_layout_size);
+
+    // finialise layout size (shrink/expand)
+    _layout.FinialiseSize(
+        _layout_size,
+        _desired_size,
+        base_layout_size,
+        base_desired_size
+        );
 }
 
 const VectorInt2 IUIComponent::GetDesiredSize(

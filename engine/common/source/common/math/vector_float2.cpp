@@ -3,6 +3,8 @@
 #include "common/math/vector_float2.h"
 #include "common/math/vector_math.h"
 
+const VectorFloat2 VectorFloat2::s_zero(0.0f, 0.0f);
+
 VectorFloat2::VectorFloat2(
     const float in_x,
     const float in_y

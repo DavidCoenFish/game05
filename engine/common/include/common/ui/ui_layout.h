@@ -17,33 +17,43 @@ public:
     enum class TAdjustmentType
     {
         None,
-        Shrink,
-        Grow
+        Shrink, //ok to reduce the layout size to match the desired size for the given axis
+        ShrinkOrGrow // ok to shrink or grow the layout size to match the desired size for the given axis
     };
 
     explicit UILayout(
         const UICoord& in_size_x = UICoord(UICoord::TSource::ParentX),
         const UICoord& in_size_y = UICoord(UICoord::TSource::ParentY),
-        const UICoord& in_attach_x = UICoord(UICoord::TSource::ParentX),
-        const UICoord& in_attach_y = UICoord(UICoord::TSource::ParentY),
-        const UICoord& in_pivot_x = UICoord(UICoord::TSource::ParentX),
-        const UICoord& in_pivot_y = UICoord(UICoord::TSource::ParentY),
+        const VectorFloat2& in_layout_attach_ratio = VectorFloat2::s_zero,
+        const VectorFloat2& in_parent_window_pivot_ratio = VectorFloat2::s_zero,
         const TAdjustmentType in_adjustment_type_x = TAdjustmentType::None,
         const TAdjustmentType in_adjustment_type_y = TAdjustmentType::None,
-        const VectorInt4& in_desired_margin = VectorInt4::s_zero
+        const VectorInt4& in_texture_margin = VectorInt4::s_zero // left, top, right, bottom
         );
 
+    const VectorInt4& GetTextureMarginRef() const { return _texture_margin; }
+
     /// Get the size of the layout element
-    const VectorInt2 GetSize(const VectorInt2& in_reference_size, const float in_ui_scale) const;
+    const VectorInt2 GetLayoutSize(const VectorInt2& in_parent_window_size, const float in_ui_scale) const;
 
     /// Where on the layout to attached to the pivot
     const VectorInt2 GetAttach(const VectorInt2& in_layout_size, const float in_ui_scale) const;
 
     /// Get the pivot on the parent to attach the layout element
-    const VectorInt2 GetPivot(const VectorInt2& in_reference_size, const float in_ui_scale) const;
+    const VectorInt2 GetPivot(const VectorInt2& in_parent_window_size, const float in_ui_scale) const;
 
-    /// return an adjusted layout size for the UILayout adjustment type
-    const VectorInt2 AdjustLayoutSize(const VectorInt2& in_layout_size, const VectorInt2& in_desired_size) const;
+    /// We don't append the margin to the texture (inflating the texture) we want to deal with this at the geometry level
+    ///  does this mean we subtract the margin from the layout size?
+    //const VectorInt2 ApplyTextureMargin(const VectorInt2& in_texture_size, const float in_ui_scale) const;
+
+    /// calculate an adjusted layout and texture size for our adjustment type, 
+    /// texture size is increaced to at least match the layout size, ie, it can be bigger, but it may not be smaller
+    void Finalise(
+        VectorInt2& out_layout_size,
+        VectorInt2& out_texture_size, //_with_margin,
+        const VectorInt2& in_layout_size,
+        const VectorInt2& in_texture_size //_with_margin
+        ) const;
 
     /// TODO: would it be better to just have accessors to set _data_attach and _data_pivot, and have SetSliderHorizontal... be helper functions?
     void SetSliderHorizontal(const float in_value);
@@ -58,16 +68,15 @@ public:
 
 private:
     /// Coord data to calculate the size of layout element
-    UICoord _data_size[2];
+    UICoord _size[2];
     /// Position on the layout element that is attached to the pivot on the parent
-    UICoord _data_attach[2];
+    VectorFloat2 _layout_attach_ratio;
     /// The pivot on the parent layout that the layout element is attached to
-    UICoord _data_pivot[2];
-
-    /// how to adjust the x,y axis of the layout size against a desired size
+    VectorFloat2 _parent_window_pivot_ratio;
+    /// how to adjust the x,y axis of the layout size against a texture size
     TAdjustmentType _adjustment_type[2];
-
-    VectorInt4 _desired_margin;
+    /// amount to inflate the texture size with
+    VectorInt4 _texture_margin;
 
 };
 

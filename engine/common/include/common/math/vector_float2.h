@@ -2,6 +2,8 @@
 class VectorFloat2
 {
 public:
+    static const VectorFloat2 s_zero;
+
     explicit VectorFloat2(
         const float in_x = 0,
         const float in_y = 0

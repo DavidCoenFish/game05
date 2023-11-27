@@ -363,6 +363,13 @@ void UIHierarchyNode::UpdateHierarchy(
     return;
 }
 
+/// node::update layout (in parent window)
+///     for each child A0
+///         component::update layout
+///             calculate layout size given parent window
+///             recurse node::update layout
+///             component::desired(parent window or layout size? layout size may yet to be modified...)
+///             finialise layout size (shrink/expand)
 void UIHierarchyNode::UpdateLayout(
     const UIHierarchyNodeUpdateParam& in_param,
     const VectorInt2& in_target_size,
