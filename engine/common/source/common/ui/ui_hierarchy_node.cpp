@@ -372,9 +372,7 @@ void UIHierarchyNode::UpdateHierarchy(
 ///             finialise layout size (shrink/expand)
 void UIHierarchyNode::UpdateLayout(
     const UIHierarchyNodeUpdateParam& in_param,
-    const VectorInt2& in_target_size,
-    const VectorInt2& in_target_offset,
-    const VectorInt2& in_target_window
+    const VectorInt2& in_parent_window
     )
 {
     for (auto& child : _child_data_array)
@@ -388,9 +386,7 @@ void UIHierarchyNode::UpdateLayout(
         component->UpdateLayout(
             *child,
             in_param,
-            in_target_size,
-            in_target_offset,
-            in_target_window
+            in_parent_window
             );
     }
 
@@ -402,6 +398,8 @@ void UIHierarchyNode::UpdateResources(
     const UIScreenSpace& in_parent_screen_space
     )
 {
+    const VectorInt2 texture_size = _texture->GetSize(in_param._draw_system);
+
     for (auto& child : _child_data_array)
     {
         IUIComponent* component = child ? child->_component.get() : nullptr;
@@ -413,20 +411,15 @@ void UIHierarchyNode::UpdateResources(
         component->UpdateResources(
             *child,
             in_param,
-            in_parent_screen_space
+            in_parent_screen_space,
+            texture_size
             );
 
-        // we set the child texture size, but not the current node. 
-        // the top level node's texture is special and set externally
-        child->_node->UpdateTextureSize(component->GetTextureSize());
-
-        child->_node->UpdateResources(
-            in_param,
-            *(child->_screen_space)
-            );
+        //child->_node->UpdateResources(
+        //    in_param,
+        //    *(child->_screen_space)
+        //    );
     }
-
-    //UpdateTextureSize(target_size);
 }
 
 void UIHierarchyNode::MarkTextureDirty()
@@ -442,11 +435,11 @@ const VectorInt2 UIHierarchyNode::GetTextureSize(
     return _texture->GetSize(in_draw_system);
 }
 
-void UIHierarchyNode::UpdateTextureSize(
-    const VectorInt2& in_parent_size
+void UIHierarchyNode::SetTextureSize(
+    const VectorInt2& in_texture_size
     )
 {
-    _texture->SetSize(in_parent_size);
+    _texture->SetSize(in_texture_size);
 }
 
 //// todo: UpdateSize doesn't need to return, _texture marks self as needs to draw on size change

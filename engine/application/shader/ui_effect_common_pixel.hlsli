@@ -1,7 +1,9 @@
-cbuffer ConstantBufferEffect : register(b1)
+cbuffer ConstantBufferEffect : register(b0)
 {
-    float4 _constant_buffer_1_data0; //radius
     float4 _width_height_iwidth_iheight;
+    float4 _data;
+    float4 _tint;
+
 #if defined(GEOMETRY_SIZE_INTO_SHADER)
     float4 _geometry_pos;
     float4 _geometry_uv;

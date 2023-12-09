@@ -1,6 +1,11 @@
 #include "ui_interpolant.hlsli"
 #include "ui_common_pixel.hlsli"
 
+cbuffer ConstantBufferBlock : register(b0)
+{
+    float4 _tint;
+};
+
 Pixel main(Interpolant in_input)
 {
     float4 texel = g_texture.Sample(g_sampler_state, in_input._uv);

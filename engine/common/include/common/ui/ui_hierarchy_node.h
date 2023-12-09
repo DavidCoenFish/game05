@@ -191,9 +191,7 @@ public:
 
     void UpdateLayout(
         const UIHierarchyNodeUpdateParam& in_param,
-        const VectorInt2& in_target_size,
-        const VectorInt2& in_target_offset,
-        const VectorInt2& in_target_window
+        const VectorInt2& in_parent_window
         );
 
     void UpdateResources(
@@ -207,8 +205,8 @@ public:
         DrawSystem* const in_draw_system
         ) const;
 
-    void UpdateTextureSize(
-        const VectorInt2& in_parent_size
+    void SetTextureSize(
+        const VectorInt2& in_texture_size
         );
 
     //void UpdateSize(

@@ -17,7 +17,9 @@ public:
     const int GetY() const;
     const int GetZ() const;
     const int GetW() const;
+
     const bool operator==(const VectorInt4& in_rhs) const;
+    const bool operator!=(const VectorInt4& in_rhs) const;
 
 private:
     enum Index

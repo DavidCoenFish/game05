@@ -60,7 +60,7 @@ Pixel main(Interpolant in_input)
         float2(_width_height_iwidth_iheight.z, _width_height_iwidth_iheight.w)
         );
 
-    float ratio = in_input._uv.y - (blur * _constant_buffer_1_data0.x * _width_height_iwidth_iheight.w);
+    float ratio = in_input._uv.y - (blur * _data.x * _width_height_iwidth_iheight.w);
 
     //_tint
     float4 _tint_light = float4(1.0 - (_tint.xyz * 0.4), _tint.a);

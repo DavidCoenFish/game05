@@ -54,7 +54,7 @@ Pixel main(Interpolant in_input)
 
     float alpha = CalculateAlpha(
         in_input._uv,
-        _constant_buffer_1_data0,
+        _data,
         float2(_width_height_iwidth_iheight.x, _width_height_iwidth_iheight.y),
         float2(_width_height_iwidth_iheight.z, _width_height_iwidth_iheight.w)
         );

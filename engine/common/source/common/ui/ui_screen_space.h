@@ -2,9 +2,11 @@
 
 #include "common/math/vector_float4.h"
 
+/// using render coordinates, -1,-1 is the lower left of the screen, 1,1 is the upper right
 class UIScreenSpace
 {
 public:
+    /// default constructor is a full screen with no clipping
     UIScreenSpace(
         const VectorFloat4& in_pos = VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f),
         const VectorFloat4& in_clip = VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f)

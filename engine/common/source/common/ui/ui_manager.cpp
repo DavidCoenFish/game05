@@ -241,7 +241,7 @@ public:
                 );
             if (true == in_render_to_texture)
             {
-                in_out_target_or_null->UpdateTextureSize(
+                in_out_target_or_null->SetTextureSize(
                     in_render_texture_size
                     );
             }
@@ -249,11 +249,13 @@ public:
             const VectorInt2 target_size = in_out_target_or_null->GetTextureSize(in_param._draw_system);
             in_out_target_or_null->UpdateLayout(
                 update_param,
-                target_size,
-                VectorInt2::s_zero,
                 target_size
                 );
 
+            in_out_target_or_null->UpdateResources(
+                update_param,
+                UIScreenSpace()
+                );
         }
 
         return;

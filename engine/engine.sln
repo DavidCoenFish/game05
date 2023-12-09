@@ -56,6 +56,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "design", "design", "{2C0B0486-D021-4003-A738-299429143C78}"
 	ProjectSection(SolutionItems) = preProject
 		..\design\rpg_legendary_quest_00.txt = ..\design\rpg_legendary_quest_00.txt
+		..\design\rpg_succubus_survival_00.txt = ..\design\rpg_succubus_survival_00.txt
 		..\design\rts_mold_00.txt = ..\design\rts_mold_00.txt
 		..\design\sandbox_jank_00.txt = ..\design\sandbox_jank_00.txt
 	EndProjectSection

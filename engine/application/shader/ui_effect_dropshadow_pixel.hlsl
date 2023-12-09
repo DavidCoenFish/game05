@@ -93,8 +93,8 @@ Pixel main(Interpolant in_input)
 
     float shadow_alpha = CalculateShadowAlpha(
         in_input._uv,
-        float2(_constant_buffer_1_data0.x, _constant_buffer_1_data0.y),
-        _constant_buffer_1_data0.z,
+        float2(_data.x, _data.y),
+        _data.z,
         float2(_width_height_iwidth_iheight.x, _width_height_iwidth_iheight.y),
         float2(_width_height_iwidth_iheight.z, _width_height_iwidth_iheight.w)
         );
