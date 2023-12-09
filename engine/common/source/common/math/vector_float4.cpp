@@ -3,6 +3,7 @@
 #include "common/math/vector_float4.h"
 #include "common/math/vector_float2.h"
 
+const VectorFloat4 VectorFloat4::s_zero(0.0f, 0.0f, 0.0f, 0.0f);
 const VectorFloat4 VectorFloat4::s_white(1.0f, 1.0f, 1.0f, 1.0f);
 
 VectorFloat4::VectorFloat4(

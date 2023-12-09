@@ -1,15 +1,9 @@
 #include "common/common_pch.h"
 #include "common/ui/ui_base_colour.h"
 
-const UIBaseColour UIBaseColour::FactoryRoot(const bool in_always_dirty)
+const UIBaseColour UIBaseColour::FactoryDefault()
 {
-    return UIBaseColour(
-        VectorFloat4(0.0f, 0.0f, 0.0f, 0.0f),
-        true,
-        VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f),
-        false,
-        in_always_dirty
-        );
+    return UIBaseColour();
 }
 
 const UIBaseColour UIBaseColour::FactoryRedBackground()

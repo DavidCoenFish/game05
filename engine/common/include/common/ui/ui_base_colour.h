@@ -5,7 +5,7 @@
 class UIBaseColour
 {
 public:
-    static const UIBaseColour FactoryRoot(const bool in_always_dirty);
+    static const UIBaseColour FactoryDefault();
     static const UIBaseColour FactoryRedBackground();
     static const UIBaseColour FactoryGreenBackground();
     static const UIBaseColour FactoryBlueBackground();

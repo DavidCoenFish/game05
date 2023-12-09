@@ -1550,7 +1550,7 @@ public:
 */
         auto data_main = std::make_shared<UIData>(
             UILayout::FactoryFull(),
-            UIBaseColour::FactoryRoot(true)
+            UIBaseColour::FactoryDefault()
             );
         auto data_debug_quad = std::make_shared<UIData>(
             UILayout::FactoryParentMiddleQuater(),
@@ -1593,6 +1593,9 @@ public:
             );
 */
         _data_map["main"] = data_main;
+        _data_array_map["main"] = std::vector<std::shared_ptr<UIData>>({
+            data_main
+            });
     }
 
     virtual ~UIModel()
