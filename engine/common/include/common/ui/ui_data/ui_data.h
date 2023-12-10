@@ -23,6 +23,7 @@ class UIData
 {
 public:
     typedef std::array<VectorFloat4, static_cast<int>(UIStateFlag::TTintPermutationCount)> TStateFlagTintArray;
+    static const std::vector<std::shared_ptr<UIEffectData>> s_empty_effect_data_array;
 
     UIData(
         const UILayout& in_layout,

@@ -852,6 +852,23 @@ namespace
             });
     }
 
+    void BuildModelData02_Text(
+        std::map<std::string, std::vector<std::shared_ptr<UIData>>>& in_out_data_array_map,
+        std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
+        )
+    {
+        auto data_main = std::make_shared<UIDataString>(
+            UILayout::FactoryFull(),
+            UIBaseColour::FactoryDefault(),
+            UIData::s_empty_effect_data_array,
+            "hello human"
+            );
+
+        in_out_data_map["main"] = data_main;
+        in_out_data_array_map["main"] = std::vector<std::shared_ptr<UIData>>({
+            data_main
+            });
+    }
 };
 
 class UIModel : public IUIModel
@@ -859,8 +876,9 @@ class UIModel : public IUIModel
 public:
     UIModel(IWindowApplication& )//in_application)
     {
-        BuildModelData00_OneRedQuad(_data_array_map, _data_map);
-        //BuildModelData01_ChildRedQuad(_data_array_map, _data_map);
+        //BuildModelData00_OneRedQuad(_data_array_map, _data_map);
+        BuildModelData01_ChildRedQuad(_data_array_map, _data_map);
+        BuildModelData02_Text(_data_array_map, _data_map);
 
 /*
         _data_build_version = std::make_shared<UIDataString>(

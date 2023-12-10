@@ -214,6 +214,9 @@ const bool UIComponentString::PreDraw(
         (true == texture.GetAlwaysDirty())
         )
     {
+        _text_block->SetTextContainerSize(
+            texture.GetSize(in_draw_param._draw_system)
+            );
         if (false == texture.SetRenderTarget(
             in_draw_param._draw_system,
             in_draw_param._frame

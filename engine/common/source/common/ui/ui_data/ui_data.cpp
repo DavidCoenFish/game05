@@ -8,6 +8,9 @@
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_screen_space.h"
 
+const std::vector<std::shared_ptr<UIEffectData>> UIData::s_empty_effect_data_array;
+
+
 UIData::UIData(
     const UILayout& in_layout,
     const UIBaseColour& in_base_colour,
