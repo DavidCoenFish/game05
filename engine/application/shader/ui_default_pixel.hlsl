@@ -16,6 +16,7 @@ Pixel main(Interpolant in_input)
     //result._colour = float4(in_input._uv.x, in_input._uv.y, 0.0, 1.0);
     //result = foreground + (1 - foreground.alpha) * background
     //result._colour = texel + ((1.0f - texel.a) * _tint);
+    result._colour = texel;
 
     return result;
 }

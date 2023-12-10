@@ -8,8 +8,8 @@ class UIScreenSpace
 public:
     /// default constructor is a full screen with no clipping
     UIScreenSpace(
-        const VectorFloat4& in_pos = VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f),
-        const VectorFloat4& in_clip = VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f)
+        const VectorFloat4& in_pos = VectorFloat4::s_render_coordinates_full,
+        const VectorFloat4& in_clip = VectorFloat4::s_render_coordinates_full
         );
     ~UIScreenSpace();
 

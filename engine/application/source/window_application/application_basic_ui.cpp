@@ -811,6 +811,47 @@ namespace
             );
     }
 */
+
+    void BuildModelData00_OneRedQuad(
+        std::map<std::string, std::vector<std::shared_ptr<UIData>>>& in_out_data_array_map,
+        std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
+        )
+    {
+        auto data_main = std::make_shared<UIData>(
+            UILayout::FactoryParentMiddleQuater(),
+            UIBaseColour::FactoryRedBackground()
+            );
+
+        in_out_data_map["main"] = data_main;
+        in_out_data_array_map["main"] = std::vector<std::shared_ptr<UIData>>({
+            data_main
+            });
+    }
+
+    void BuildModelData01_ChildRedQuad(
+        std::map<std::string, std::vector<std::shared_ptr<UIData>>>& in_out_data_array_map,
+        std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
+        )
+    {
+        auto data_main = std::make_shared<UIData>(
+            UILayout::FactoryFull(),
+            UIBaseColour::FactoryDefault()
+            );
+        auto data_debug_quad = std::make_shared<UIData>(
+            UILayout::FactoryParentMiddleQuater(),
+            UIBaseColour::FactoryRedBackground()
+            );
+
+        data_main->AddChild(
+            data_debug_quad
+            );
+
+        in_out_data_map["main"] = data_main;
+        in_out_data_array_map["main"] = std::vector<std::shared_ptr<UIData>>({
+            data_main
+            });
+    }
+
 };
 
 class UIModel : public IUIModel
@@ -818,6 +859,9 @@ class UIModel : public IUIModel
 public:
     UIModel(IWindowApplication& )//in_application)
     {
+        BuildModelData00_OneRedQuad(_data_array_map, _data_map);
+        //BuildModelData01_ChildRedQuad(_data_array_map, _data_map);
+
 /*
         _data_build_version = std::make_shared<UIDataString>(
             std::string(Build::GetBuildTime()) + " " + Build::GetBuildVersion(),
@@ -1548,18 +1592,6 @@ public:
 
             });
 */
-        auto data_main = std::make_shared<UIData>(
-            UILayout::FactoryFull(),
-            UIBaseColour::FactoryDefault()
-            );
-        auto data_debug_quad = std::make_shared<UIData>(
-            UILayout::FactoryParentMiddleQuater(),
-            UIBaseColour::FactoryRedBackground()
-            );
-
-        data_main->AddChild(
-            data_debug_quad
-            );
 /*            
         data_debug_quad->AddChild(
 #if 0
@@ -1592,10 +1624,6 @@ public:
                 )
             );
 */
-        _data_map["main"] = data_main;
-        _data_array_map["main"] = std::vector<std::shared_ptr<UIData>>({
-            data_main
-            });
     }
 
     virtual ~UIModel()
@@ -1816,7 +1844,7 @@ void ApplicationBasicUI::Update()
                 update_param,
                 false,
                 VectorInt2::s_zero,
-                false,
+                true,
                 true
                 );
         }

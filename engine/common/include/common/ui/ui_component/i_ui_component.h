@@ -158,6 +158,7 @@ private:
 
     /// uv = abs(_uv_scroll), and use range [-1...1] wrapped when advancing _uv_scroll, to allow saw tooth animation
     /// this is not in layout to simplify comparison, ie, this may change, but don't want uv animation to dirty layout
+    /// Do want the geometry uv change to dirty render however
     VectorFloat2 _uv_scroll;
 
     /// keep track of lifespan/ duration of the component

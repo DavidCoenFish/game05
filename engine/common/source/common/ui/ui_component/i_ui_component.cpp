@@ -340,10 +340,37 @@ void IUIComponent::UpdateResources(
     const VectorInt2& in_parent_texture_size
     )
 {
+    const bool uv_scroll_manual_x = 0 != (static_cast<int>(_state_flag) & static_cast<int>(UIStateFlag::TManualScrollX));
+    const bool uv_scroll_manual_y = 0 != (static_cast<int>(_state_flag) & static_cast<int>(UIStateFlag::TManualScrollY));
+
+    const VectorInt2 texture_size = in_component_owner._node->GetTextureSize(in_param._draw_system);
+
+    UpdateScroll(
+        _uv_scroll,
+        uv_scroll_manual_x,
+        uv_scroll_manual_y,
+        in_param._delta_time_seconds,
+        _layout_size,
+        texture_size
+        );
+
     VectorFloat4 geometry_pos;
     VectorFloat4 geometry_uv;
+    CalculateGeometry(
+        geometry_pos,
+        geometry_uv,
+        in_parent_texture_size,
+        _layout_offset,
+        _layout_size,
+        texture_size,
+        _uv_scroll,
+        _layout
+        );
 
-
+    in_component_owner._geometry->Set(
+        geometry_pos,
+        geometry_uv
+        );
 
     in_component_owner._screen_space->Update(
         in_parent_screen_space,

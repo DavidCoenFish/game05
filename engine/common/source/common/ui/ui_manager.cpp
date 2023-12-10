@@ -228,7 +228,9 @@ public:
                 in_manager,
                 in_param._locale_system,
                 in_param._text_manager,
-                in_param._default_text_style
+                in_param._default_text_style,
+                in_param._ui_scale,
+                in_param._time_delta
                 );
             in_out_target_or_null->UpdateHierarchy(
                 update_param, 

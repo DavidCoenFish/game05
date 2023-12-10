@@ -146,7 +146,8 @@ struct UIHierarchyNodeUpdateParam
         LocaleSystem* const in_locale_system = nullptr,
         TextManager* const in_text_manager = nullptr,
         const UIDataTextRunStyle* const in_default_text_style = nullptr,
-        const float in_ui_scale = 1.0f
+        const float in_ui_scale = 1.0f,
+        const float in_delta_time_seconds = 0.0f
         );
     DrawSystem* const _draw_system;
     ID3D12GraphicsCommandList* const _command_list;
@@ -155,6 +156,7 @@ struct UIHierarchyNodeUpdateParam
     TextManager* const _text_manager;
     const UIDataTextRunStyle* const _default_text_style;
     float _ui_scale;
+    float _delta_time_seconds;
 
 };
 
@@ -189,6 +191,8 @@ public:
         const VectorFloat4& in_clear_colour
         );
 
+    /// UpdateLayout split from UpdateResources to allow texture size to be based on child size, rather than just top down layout size
+    /// Use case, tooltips with a dropshadow margin around text
     void UpdateLayout(
         const UIHierarchyNodeUpdateParam& in_param,
         const VectorInt2& in_parent_window

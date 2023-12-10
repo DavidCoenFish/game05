@@ -7,6 +7,7 @@ class VectorFloat4
 public:
     static const VectorFloat4 s_zero;
     static const VectorFloat4 s_white;
+    static const VectorFloat4 s_render_coordinates_full;
 
     explicit VectorFloat4(
         const float in_x = 0,
