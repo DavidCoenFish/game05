@@ -78,14 +78,14 @@ void UILayout::Finalise(
     default:
     case TAdjustmentType::GrowTextureToLayout:
         out_layout_size[0] = in_layout_size[0];
-        out_texture_size[0] = std::max(out_texture_size[0], out_layout_size[0]);
+        out_texture_size[0] = std::max(in_texture_size[0], in_layout_size[0]);
         break;
     case TAdjustmentType::ShrinkLayoutToTexture:
-        out_layout_size[0] = std::min(out_texture_size[0], out_layout_size[0]);
+        out_layout_size[0] = std::min(in_texture_size[0], in_layout_size[0]);
         out_texture_size[0] = in_texture_size[0];
         break;
     case TAdjustmentType::ShrinkOrGrowLayoutToTexture:
-        out_layout_size[0] = out_texture_size[0];
+        out_layout_size[0] = in_texture_size[0];
         out_texture_size[0] = in_texture_size[0];
         break;
     }
@@ -94,18 +94,29 @@ void UILayout::Finalise(
     default:
     case TAdjustmentType::GrowTextureToLayout:
         out_layout_size[1] = in_layout_size[1];
-        out_texture_size[1] = std::max(out_texture_size[1], out_layout_size[1]);
+        out_texture_size[1] = std::max(in_texture_size[1], in_layout_size[1]);
         break;
     case TAdjustmentType::ShrinkLayoutToTexture:
-        out_layout_size[1] = std::min(out_texture_size[1], out_layout_size[1]);
+        out_layout_size[1] = std::min(in_texture_size[1], in_layout_size[1]);
         out_texture_size[1] = in_texture_size[1];
         break;
     case TAdjustmentType::ShrinkOrGrowLayoutToTexture:
-        out_layout_size[1] = out_texture_size[1];
+        out_layout_size[1] = in_texture_size[1];
         out_texture_size[1] = in_texture_size[1];
         break;
     }
     return;
+}
+
+const VectorInt2 UILayout::ApplyMargin(
+    const VectorInt2& in_size,
+    const float in_ui_scale
+    ) const
+{
+    return VectorInt2(
+        in_size[0] + static_cast<int>(roundf((_texture_margin[0] + _texture_margin[2]) * in_ui_scale)),
+        in_size[1] + static_cast<int>(roundf((_texture_margin[1] + _texture_margin[3]) * in_ui_scale))
+        );
 }
 
 void UILayout::SetSliderHorizontal(const float in_value)

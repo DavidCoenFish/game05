@@ -278,11 +278,17 @@ void* IUIComponent::GetSourceToken() const
 //}
 
 const VectorInt2 IUIComponent::GetDesiredSize(
-    const UIHierarchyNodeUpdateParam&, // in_layout_param,
-    const VectorInt2& //in_pre_shrink_layout_size //in_parent_window
+    UIHierarchyNodeChildData& in_component_owner,
+    const UIHierarchyNodeUpdateParam& in_layout_param,
+    const VectorInt2& in_parent_window
     )
 {
-    return VectorInt2::s_zero;
+    VectorInt2 max_child_size;
+
+    return _layout.ApplyMargin(
+        max_child_size,
+        in_layout_param._ui_scale
+        );
 }
 
 /// default behavoiur, ie, canvas
@@ -317,7 +323,7 @@ void IUIComponent::UpdateLayout(
         );
 
     // component::desired(parent window or layout size? layout size may yet to be modified...)
-    const VectorInt2 base_desired_size = GetDesiredSize(in_param, base_layout_size);
+    const VectorInt2 base_desired_size = GetDesiredSize(in_component_owner, in_param, base_layout_size);
 
     VectorInt2 texture_size;
 

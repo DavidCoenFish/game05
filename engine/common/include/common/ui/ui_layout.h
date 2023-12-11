@@ -58,10 +58,10 @@ public:
         ) const;
 
     // shring the window by texture margin, also nudge the window offset
-    void ApplyMargin(
-        VectorInt2& in_out_window_offset,
-        VectorInt2& in_out_window
-        );
+    const VectorInt2 ApplyMargin(
+        const VectorInt2& in_size,
+        const float in_ui_scale
+        ) const;
 
     // Merge Finalise and ApplyMargin? or is that up to the component to deal with, ie, stack
 

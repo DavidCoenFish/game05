@@ -114,6 +114,7 @@ public:
     /// For text, the textblock size. 
     /// Do we need an assert that text with width limit can not be child of a layout with shrink? do not want in_parent_window to change during update
     virtual const VectorInt2 GetDesiredSize(
+        UIHierarchyNodeChildData& in_component_owner,
         const UIHierarchyNodeUpdateParam& in_layout_param,
         const VectorInt2& in_pre_shrink_layout_size //in_parent_window
         );

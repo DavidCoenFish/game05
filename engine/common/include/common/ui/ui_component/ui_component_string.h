@@ -34,40 +34,22 @@ public:
         const VectorFloat4& in_text_colour
         );
 
+
+    //void SetContainerSize(const VectorInt2& in_size);
+
+private:
     virtual const VectorInt2 GetDesiredSize(
+        UIHierarchyNodeChildData& in_component_owner,
         const UIHierarchyNodeUpdateParam& in_layout_param,
         const VectorInt2& in_pre_shrink_layout_size //in_parent_window
         ) override;
 
-    void SetContainerSize(const VectorInt2& in_size);
-
-private:
-    //virtual const bool UpdateHierarchy(
-    //    UIData* const in_data,
-    //    UIHierarchyNodeChildData& in_out_child_data,
-    //    const UIHierarchyNodeUpdateHierarchyParam& in_param
-    //    ) override;
-
-    //virtual const bool UpdateSize(
-    //    DrawSystem* const in_draw_system,
-    //    const VectorInt2& in_parent_size,
-    //    const VectorInt2& in_parent_offset,
-    //    const VectorInt2& in_parent_window,
-    //    const float in_ui_scale,
-    //    const float in_time_delta, 
-    //    UIGeometry& in_out_geometry, 
-    //    UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    //    const UIScreenSpace& in_parent_screen_space,
-    //    UIScreenSpace& out_screen_space
-    //    ) override;
-
-    //virtual void GetDesiredSize(
-    //    VectorInt2& out_layout_size, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
-    //    VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
-    //    const VectorInt2& in_parent_window,
-    //    const float in_ui_scale,
-    //    UIHierarchyNode& in_out_node // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    //    ) override;
+    virtual void UpdateResources(
+        UIHierarchyNodeChildData& in_component_owner,
+        const UIHierarchyNodeUpdateParam& in_param,
+        const UIScreenSpace& in_parent_screen_space,
+        const VectorInt2& in_parent_texture_size
+        ) override;
 
     virtual const bool PreDraw(
         const UIManagerDrawParam& in_draw_param,

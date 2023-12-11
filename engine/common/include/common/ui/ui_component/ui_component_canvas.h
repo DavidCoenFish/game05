@@ -17,4 +17,11 @@ public:
         );
     virtual ~UIComponentCanvas();
 
+private:
+    virtual const VectorInt2 GetDesiredSize(
+        UIHierarchyNodeChildData& in_component_owner,
+        const UIHierarchyNodeUpdateParam& in_layout_param,
+        const VectorInt2& in_pre_shrink_layout_size //in_parent_window
+        ) override;
+
 };

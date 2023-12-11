@@ -861,7 +861,11 @@ namespace
             UILayout::FactoryFull(),
             UIBaseColour::FactoryDefault(),
             UIData::s_empty_effect_data_array,
-            "hello human"
+            "hello human",
+            LocaleISO_639_1::Default,
+            false,
+            TextEnum::HorizontalLineAlignment::Middle,
+            TextEnum::VerticalBlockAlignment::Middle
             );
 
         in_out_data_map["main"] = data_main;
@@ -869,6 +873,101 @@ namespace
             data_main
             });
     }
+
+    void BuildModelData03_ShrunkText(
+        std::map<std::string, std::vector<std::shared_ptr<UIData>>>& in_out_data_array_map,
+        std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
+        )
+    {
+        auto data_main = std::make_shared<UIData>(
+            UILayout::FactoryFull(),
+            UIBaseColour::FactoryDefault()
+            );
+
+        auto data_text = std::make_shared<UIDataString>(
+            UILayout(
+                UICoord(UICoord::TSource::ParentX, 1.0f),
+                UICoord(UICoord::TSource::ParentY, 1.0f),
+                VectorFloat2(0.5f, 0.5f),
+                VectorFloat2(0.5f, 0.5f),
+                UILayout::TAdjustmentType::ShrinkLayoutToTexture,
+                UILayout::TAdjustmentType::ShrinkLayoutToTexture,
+                VectorInt4(8, 8, 8, 8)
+                ),
+            UIBaseColour::FactoryRedBackground(),
+            UIData::s_empty_effect_data_array,
+            "hello human",
+            LocaleISO_639_1::Default,
+            false,
+            TextEnum::HorizontalLineAlignment::Middle,
+            TextEnum::VerticalBlockAlignment::Middle
+            );
+
+        data_main->AddChild(
+            data_text
+            );
+
+        in_out_data_map["main"] = data_main;
+        in_out_data_array_map["main"] = std::vector<std::shared_ptr<UIData>>({
+            data_main
+            });
+    }
+
+    void BuildModelData04_ShrunkTextChildMargin(
+        std::map<std::string, std::vector<std::shared_ptr<UIData>>>& in_out_data_array_map,
+        std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
+        )
+    {
+        auto data_main = std::make_shared<UIData>(
+            UILayout::FactoryFull(),
+            UIBaseColour::FactoryDefault()
+            );
+
+        auto data_margin = std::make_shared<UIData>(
+            UILayout(
+                UICoord(UICoord::TSource::ParentX, 1.0f),
+                UICoord(UICoord::TSource::ParentY, 1.0f),
+                VectorFloat2(0.5f, 0.5f),
+                VectorFloat2(0.5f, 0.5f),
+                UILayout::TAdjustmentType::ShrinkLayoutToTexture,
+                UILayout::TAdjustmentType::ShrinkLayoutToTexture,
+                VectorInt4(8, 8, 8, 8)
+                ),
+            UIBaseColour::FactoryBlueBackground()
+            );
+
+        auto data_text = std::make_shared<UIDataString>(
+            UILayout(
+                UICoord(UICoord::TSource::ParentX, 1.0f),
+                UICoord(UICoord::TSource::ParentY, 1.0f),
+                VectorFloat2(0.5f, 0.5f),
+                VectorFloat2(0.5f, 0.5f),
+                UILayout::TAdjustmentType::ShrinkLayoutToTexture,
+                UILayout::TAdjustmentType::ShrinkLayoutToTexture,
+                VectorInt4(8, 8, 8, 8)
+                ),
+            UIBaseColour::FactoryRedBackground(),
+            UIData::s_empty_effect_data_array,
+            "hello human",
+            LocaleISO_639_1::Default,
+            false,
+            TextEnum::HorizontalLineAlignment::Middle,
+            TextEnum::VerticalBlockAlignment::Middle
+            );
+
+        data_main->AddChild(
+            data_margin
+            );
+        data_margin->AddChild(
+            data_text
+            );
+
+        in_out_data_map["main"] = data_main;
+        in_out_data_array_map["main"] = std::vector<std::shared_ptr<UIData>>({
+            data_main
+            });
+    }
+
 };
 
 class UIModel : public IUIModel
@@ -877,8 +976,10 @@ public:
     UIModel(IWindowApplication& )//in_application)
     {
         //BuildModelData00_OneRedQuad(_data_array_map, _data_map);
-        BuildModelData01_ChildRedQuad(_data_array_map, _data_map);
-        BuildModelData02_Text(_data_array_map, _data_map);
+        //BuildModelData01_ChildRedQuad(_data_array_map, _data_map);
+        //BuildModelData02_Text(_data_array_map, _data_map);
+        //BuildModelData03_ShrunkText(_data_array_map, _data_map);
+        BuildModelData04_ShrunkTextChildMargin(_data_array_map, _data_map);
 
 /*
         _data_build_version = std::make_shared<UIDataString>(

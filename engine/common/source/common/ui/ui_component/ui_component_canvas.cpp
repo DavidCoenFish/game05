@@ -20,3 +20,33 @@ UIComponentCanvas::~UIComponentCanvas()
     // Nop
 }
 
+const VectorInt2 UIComponentCanvas::GetDesiredSize(
+    UIHierarchyNodeChildData& in_component_owner,
+    const UIHierarchyNodeUpdateParam& in_layout_param,
+    const VectorInt2& in_parent_window
+    )
+{
+    VectorInt2 max_child_size;
+
+    for (auto child: in_component_owner._node->GetChildData())
+    {
+        if (nullptr == child->_component)
+        {
+            continue;
+        }
+        max_child_size = VectorInt2::Max(
+            max_child_size,
+            child->_component->GetDesiredSize(
+                *child,
+                in_layout_param,
+                in_parent_window
+                )
+            );
+    }
+
+    return GetLayout().ApplyMargin(
+        max_child_size,
+        in_layout_param._ui_scale
+        );
+}
+

@@ -87,6 +87,7 @@ const bool UIComponentString::Set(
 }
 
 const VectorInt2 UIComponentString::GetDesiredSize(
+    UIHierarchyNodeChildData&,
     const UIHierarchyNodeUpdateParam& in_layout_param,
     const VectorInt2& in_pre_shrink_layout_size //in_parent_window
     )
@@ -97,110 +98,36 @@ const VectorInt2 UIComponentString::GetDesiredSize(
         );
     _text_block->SetUIScale(in_layout_param._ui_scale);
 
-    const VectorInt2 result = _text_block->GetTextBounds();
+    const VectorInt2 bounds = _text_block->GetTextBounds();
+    const VectorInt2 result = GetLayout().ApplyMargin(bounds, in_layout_param._ui_scale);
     return result;
 }
 
-void UIComponentString::SetContainerSize(const VectorInt2& in_size)
-{
-    _text_block->SetTextContainerSize(in_size);
-}
+//void UIComponentString::SetContainerSize(const VectorInt2& in_size)
+//{
+//    _text_block->SetTextContainerSize(in_size);
+//}
 
-/*
-const bool UIComponentString::UpdateHierarchy(
-    UIData* const in_data,
-    UIHierarchyNodeChildData& in_out_child_data,
-    const UIHierarchyNodeUpdateHierarchyParam& in_param
-    )
-{
-    bool dirty = false;
-    const UIDataString* const data_string = dynamic_cast<const UIDataString*>(in_data);
-    if (nullptr != data_string)
-    {
-        if (true == _text_block->SetText(
-            data_string->GetStringRef(),
-            in_param._text_manager->GetLocaleToken(data_string->GetLocale())
-            ))
-        {
-            dirty = true;
-        }
-    }
-
-    if (true == TSuper::UpdateHierarchy(
-        in_data,
-        in_out_child_data,
-        in_param
-        ))
-    {
-        dirty = true;
-    }
-
-    return dirty;
-}
-
-const bool UIComponentString::UpdateSize(
-    DrawSystem* const in_draw_system,
-    const VectorInt2& in_parent_size,
-    const VectorInt2& in_parent_offset,
-    const VectorInt2& in_parent_window,
-    const float in_ui_scale,
-    const float in_time_delta, 
-    UIGeometry& in_out_geometry, 
-    UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
+void UIComponentString::UpdateResources(
+    UIHierarchyNodeChildData& in_component_owner,
+    const UIHierarchyNodeUpdateParam& in_param,
     const UIScreenSpace& in_parent_screen_space,
-    UIScreenSpace& out_screen_space
+    const VectorInt2& in_parent_texture_size
     )
 {
-    bool dirty = false;
-    if (true == TSuper::UpdateSize(
-        in_draw_system,
-        in_parent_size,
-        in_parent_offset,
-        in_parent_window,
-        in_ui_scale, 
-        in_time_delta,
-        in_out_geometry, 
-        in_out_node,
+    TSuper::UpdateResources(
+        in_component_owner,
+        in_param,
         in_parent_screen_space,
-        out_screen_space
-        ))
-    {
-        dirty = true;
-    }
-
-    if (true == _text_block->SetTextContainerSize(
-        in_out_node.GetTextureSize(in_draw_system)
-        ))
-    {
-        dirty = true;
-    }
-
-    return dirty;
-}
-
-void UIComponentString::GetDesiredSize(
-    VectorInt2& out_layout_size, // if layout has shrink enabled, and desired size was smaller than layout size, the layout size can shrink
-    VectorInt2& out_desired_size, // if bigger than layout size, we need to scroll
-    const VectorInt2& in_parent_window,
-    const float in_ui_scale,
-    UIHierarchyNode& // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    )
-{
-    out_layout_size = GetLayout().GetSize(in_parent_window, in_ui_scale);
-
-    _text_block->SetWidthLimit(
-        _text_block->GetWidthLimitEnabled(),
-        out_layout_size[0]
+        in_parent_texture_size
         );
-    _text_block->SetUIScale(in_ui_scale);
 
-    out_desired_size = _text_block->GetTextBounds();
-
-    out_layout_size = GetLayout().CalculateShrinkSize(out_layout_size, out_desired_size);
+    _text_block->SetTextContainerSize(
+        in_component_owner._node->GetTextureSize(in_param._draw_system)
+        );
 
     return;
 }
-*/
 
 const bool UIComponentString::PreDraw(
     const UIManagerDrawParam& in_draw_param,
@@ -214,9 +141,6 @@ const bool UIComponentString::PreDraw(
         (true == texture.GetAlwaysDirty())
         )
     {
-        _text_block->SetTextContainerSize(
-            texture.GetSize(in_draw_param._draw_system)
-            );
         if (false == texture.SetRenderTarget(
             in_draw_param._draw_system,
             in_draw_param._frame
