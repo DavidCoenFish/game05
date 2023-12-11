@@ -27,6 +27,8 @@ const VectorInt2 UIComponentCanvas::GetDesiredSize(
     )
 {
     VectorInt2 max_child_size;
+    // want something indicitive of size for text with width limit
+    const VectorInt2 window_size = GetLayout().GetLayoutSize(in_parent_window, in_layout_param._ui_scale);
 
     for (auto child: in_component_owner._node->GetChildData())
     {
@@ -39,7 +41,7 @@ const VectorInt2 UIComponentCanvas::GetDesiredSize(
             child->_component->GetDesiredSize(
                 *child,
                 in_layout_param,
-                in_parent_window
+                window_size
                 )
             );
     }

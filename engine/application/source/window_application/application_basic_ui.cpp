@@ -994,6 +994,23 @@ namespace
             });
     }
 
+    void BuildModelData06_Stack(
+        std::map<std::string, std::vector<std::shared_ptr<UIData>>>& in_out_data_array_map,
+        std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
+        )
+    {
+/*
+        auto data_main = std::make_shared<UIDataStack>(
+            UILayout::FactoryParentMiddleQuater(),
+            UIBaseColour::FactoryRedBackground()
+            );
+
+        in_out_data_map["main"] = data_main;
+        in_out_data_array_map["main"] = std::vector<std::shared_ptr<UIData>>({
+            data_main
+            });
+*/
+    }
 };
 
 class UIModel : public IUIModel
@@ -1006,7 +1023,8 @@ public:
         //BuildModelData02_Text(_data_array_map, _data_map);
         //BuildModelData03_ShrunkText(_data_array_map, _data_map);
         //BuildModelData04_ShrunkTextChildMargin(_data_array_map, _data_map);
-        BuildModelData05_Effect(_data_array_map, _data_map);
+        //BuildModelData05_Effect(_data_array_map, _data_map);
+        BuildModelData06_Stack(_data_array_map, _data_map);
 
 /*
         _data_build_version = std::make_shared<UIDataString>(

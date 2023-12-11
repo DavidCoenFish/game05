@@ -11,10 +11,7 @@
 #include "common/ui/ui_texture.h"
 #include "common/ui/ui_enum.h"
 #include "common/ui/ui_enum.h"
-
 #include "common/log/log.h"
-
-//        LOG_CONSOLE("SetStateFlag %d => %d", _state_flag, in_state_flag);
 
 namespace
 {
@@ -50,6 +47,20 @@ namespace
         }
 
         return result;
+    }
+
+    const VectorFloat4 CalculateTintColour(
+        const UIStateFlag in_state_flag, 
+        const std::array<VectorFloat4, static_cast<int>(UIStateFlag::TTintPermutationCount)>* const in_state_flag_tint_array_or_null
+        )
+    {
+        if (nullptr == in_state_flag_tint_array_or_null)
+        {
+            return VectorFloat4::s_white;
+        }
+
+        const int index = static_cast<int>(in_state_flag) & static_cast<int>(UIStateFlag::TTintMask);
+        return (*in_state_flag_tint_array_or_null)[index];
     }
 }
 
@@ -134,7 +145,7 @@ const bool UIEffectComponent::Set(
 }
 
 void UIEffectComponent::Update(
-    const UIHierarchyNodeUpdateParam& in_param,
+    const UIHierarchyNodeUpdateParam&,// in_param,
     const VectorInt2& in_target_size
     )
 {
@@ -145,7 +156,7 @@ void UIEffectComponent::Update(
 void UIEffectComponent::Render(
     const UIManagerDrawParam& in_draw_param,
     UITexture& in_input_texture,
-    const UIStateFlag //in_state_flag
+    const UIStateFlag in_state_flag
     )
 {
     _texture->SetRenderTarget(in_draw_param._draw_system, in_draw_param._frame);
@@ -186,8 +197,7 @@ void UIEffectComponent::Render(
             1.0f / texture_size_float.GetY()
             );
     
-        // Todo:
-        buffer._tint = VectorFloat4::s_white;
+        buffer._tint = CalculateTintColour(in_state_flag, _state_flag_tint_array_or_null.get());
     }
 
     in_draw_param._frame->SetShader(shader, _shader_constant_buffer);
@@ -198,207 +208,3 @@ void UIEffectComponent::Render(
 
     return;
 }
-
-/*
-const bool UIEffectComponent::UpdateHierarchy(
-    UIData* const in_data,
-    UIHierarchyNodeChildData& in_out_child_data,
-    const UIHierarchyNodeUpdateHierarchyParam& in_param
-    )
-{
-    bool dirty = false;
-    if (true == TSuper::UpdateHierarchy(
-        in_data,
-        in_out_child_data,
-        in_param
-        ))
-    {
-        dirty = true;
-    }
-
-    if (nullptr == _shader_constant_buffer)
-    {
-        const auto shader_type = GetShaderType(_type);
-        const Shader* const shader = in_param._ui_manager->GetShaderRef(shader_type).get();
-        if (nullptr != shader)
-        {
-            _shader_constant_buffer = shader->MakeShaderConstantBuffer(
-                in_param._draw_system
-                );
-        }
-    }
-
-    return dirty;
-}
-
-const bool UIEffectComponent::UpdateSize(
-    DrawSystem* const in_draw_system,
-    const VectorInt2& in_parent_size,
-    const VectorInt2& in_parent_offset,
-    const VectorInt2& in_parent_window,
-    const float in_ui_scale,
-    const float in_time_delta, 
-    UIGeometry& in_out_geometry, 
-    UIHierarchyNode& in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-    const UIScreenSpace& in_parent_screen_space,
-    UIScreenSpace& out_screen_space
-    )
-{
-    bool dirty = TSuper::UpdateSize(
-        in_draw_system,
-        in_parent_size,
-        in_parent_offset,
-        in_parent_window,
-        in_ui_scale,
-        in_time_delta, 
-        in_out_geometry, 
-        in_out_node, // ::GetDesiredSize may not be const, allow cache pre vertex data for text
-        in_parent_screen_space,
-        out_screen_space
-        );
-
-const bool UIEffectComponent::SetContainerSize(
-    const VectorInt2& in_texture_size,
-    const UIHierarchyNodeUpdateLayoutRenderParam& in_param
-    )
-{
-    bool dirty = false;
-    if (nullptr == _shader_constant_buffer)
-    {
-        const auto shader_type = GetShaderType(_type);
-        const Shader* const shader = in_param._ui_manager->GetShaderRef(shader_type).get();
-        if (nullptr != shader)
-        {
-            _shader_constant_buffer = shader->MakeShaderConstantBuffer(
-                in_param._draw_system
-                );
-        }
-    }
-
-    if (nullptr != _shader_constant_buffer)
-    {
-        TShaderConstantBuffer& constant_1 = _shader_constant_buffer->GetConstant<TShaderConstantBuffer>(1);
-        if (UIEffectEnum::TNone != _type)
-        {
-            VectorFloat2 texture_size_float(static_cast<float>(in_texture_size.GetX()), static_cast<float>(in_texture_size.GetY()));
-
-            const VectorFloat4 data(
-                _coord_a.Calculate(texture_size_float, in_param._ui_scale),
-                _coord_b.Calculate(texture_size_float, in_param._ui_scale),
-                _coord_c.Calculate(texture_size_float, in_param._ui_scale),
-                _coord_d.Calculate(texture_size_float, in_param._ui_scale)
-                );
-            if (constant_1._data != data)
-            {
-                dirty = true;
-                constant_1._data = data;
-            }
-
-            const VectorFloat4 width_height_iwidth_iheight(
-                texture_size_float.GetX(),
-                texture_size_float.GetY(),
-                1.0f / texture_size_float.GetX(),
-                1.0f / texture_size_float.GetY()
-                );
-            if (constant_1._width_height_iwidth_iheight != width_height_iwidth_iheight)
-            {
-                dirty = true;
-                constant_1._width_height_iwidth_iheight = width_height_iwidth_iheight;
-            }
-        }
-    }
-
-    return dirty;
-}
-
-const bool UIEffectComponent::PreDraw(
-    const UIManagerDrawParam& in_draw_param,
-    UIHierarchyNode& in_node
-    )
-{
-    bool dirty = false;
-
-    if (true == in_node.PreDraw(
-        in_draw_param
-        ))
-    {
-        dirty = true;
-    }
-
-    // Rather than put this in Component::Draw(), as we dont call the component_default::PreDraw which calls Node::Draw and Component::Draw
-    UITexture& texture = in_node.GetUITexture();
-    if ((true == dirty) ||
-        (false == texture.GetHasDrawn()) ||
-        (true == texture.GetAlwaysDirty())
-        )
-    {
-        if (false == texture.SetRenderTarget(
-            in_draw_param._draw_system,
-            in_draw_param._frame
-            ))
-        {
-            return dirty;
-        }
-
-        dirty = true;
-
-        auto& child_data_array = in_node.GetChildData();
-        if (0 != child_data_array.size())
-        {
-            UIHierarchyNodeChildData& child_data = *(child_data_array[0]);
-            const auto shader_type = GetShaderType(_type);
-            const auto& shader = in_draw_param._ui_manager->GetShaderRef(shader_type);
-
-            child_data._node->GetUITexture().SetShaderResource(
-                *shader,
-                0,
-                in_draw_param._frame
-                );
-
-            // the tint array index may be changed by input after update size and before draw
-            if (nullptr != _shader_constant_buffer)
-            {
-                UIManager::TShaderConstantBuffer& constant_0 = _shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
-                const auto new_tint = GetTintColour();
-                if (constant_0._tint_colour != new_tint)
-                {
-                    constant_0._tint_colour = new_tint;
-                }
-            }
-
-            in_draw_param._frame->SetShader(shader, _shader_constant_buffer);
-
-#if defined(GEOMETRY_SIZE_INTO_SHADER)
-            _geometry->Draw(
-                in_draw_param._draw_system,
-                in_draw_param._frame
-                );
-#else
-
-#if defined(_DEBUG)
-            VectorFloat4 geometry_pos;
-            VectorFloat4 geometry_uv;
-            child_data._geometry->Get(
-                geometry_pos,
-                geometry_uv
-                );
-            // well, till fixing layout model, shrinking the UIScale < 1.0 seems to break effect/ text is wrapping in a post shrunk container that should have been correct size to avoid wrap?
-            DSC_ASSERT(geometry_pos == VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f), "Expect child geometry to be full screen");
-            // atention Y inverted
-            DSC_ASSERT(geometry_uv == VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f), "Expect child geometry to be full screen uv"); 
-#endif
-
-            child_data._geometry->Draw(
-                in_draw_param._draw_system,
-                in_draw_param._frame
-                );
-#endif
-        }
-
-        texture.SetHasDrawn(true);
-    }
-
-    return dirty;
-}
-*/
-

@@ -304,6 +304,12 @@
     <ClCompile Include="source\common\math\vector_short2.cpp">
       <Filter>souce\common\math</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\ui\ui_data\ui_data_stack.cpp">
+      <Filter>souce\common\ui\ui_data</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_component\ui_component_stack.cpp">
+      <Filter>souce\common\ui\ui_component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -632,6 +638,12 @@
     </ClInclude>
     <ClInclude Include="include\common\math\vector_short2.h">
       <Filter>include\common\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_data\ui_data_stack.h">
+      <Filter>include\common\ui\ui_data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_component\ui_component_stack.h">
+      <Filter>include\common\ui\ui_component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

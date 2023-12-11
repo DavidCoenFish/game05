@@ -11,16 +11,14 @@
 #include "common/ui/ui_enum.h"
 
 UIComponentStack::UIComponentStack(
-    const UIBaseColour& in_base_colour,
     const UILayout& in_layout,
-    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
+    void* in_source_token,
     const UIOrientation in_orientation,
     const UICoord& in_gap
     )
     : IUIComponent(
-        in_base_colour,
         in_layout,
-        in_state_flag_tint_array
+        in_source_token
         )
     , _orientation(in_orientation)
     , _gap(in_gap)
@@ -33,12 +31,15 @@ UIComponentStack::~UIComponentStack()
     // Nop
 }
 
-const bool UIComponentStack::SetModelOther(
+const bool UIComponentStack::Set(
+    const UILayout& in_layout,
     const UIOrientation in_orientation,
     const UICoord& in_gap
     )
 {
     bool dirty = false;
+
+    SetLayout(in_layout);
 
     if (_orientation != in_orientation)
     {
@@ -55,6 +56,7 @@ const bool UIComponentStack::SetModelOther(
     return dirty;
 }
 
+#if 0 //OLD_CODE
 const bool UIComponentStack::UpdateSize(
     DrawSystem* const in_draw_system,
     const VectorInt2& in_parent_size,
@@ -269,3 +271,4 @@ void UIComponentStack::GetStackDesiredSize(
 
     return;
 }
+#endif
