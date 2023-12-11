@@ -7,7 +7,8 @@
 
 enum class UIEffectEnum;
 class ShaderConstantBuffer;
-struct UIHierarchyNodeUpdateLayoutRenderParam;
+struct UIHierarchyNodeUpdateParam;
+struct UIManagerDrawParam;
 
 /// Initially thought effect would have multiple shader inputs, but is one enought?
 /// if we want more than one shader input, switch count based on UIEffectEnum? (or make a new class?)
@@ -47,8 +48,8 @@ public:
         );
 
     void Update(
-        const VectorInt2& in_target_size,
-        const UIHierarchyNodeUpdateLayoutRenderParam& in_param
+        const UIHierarchyNodeUpdateParam& in_param,
+        const VectorInt2& in_target_size
         );
 
     /// deal with the component being drawn to the node texture
@@ -57,6 +58,8 @@ public:
         UITexture& in_input_texture,
         const UIStateFlag in_state_flag
         );
+
+    UITexture& GetUITexture() const { return *_texture; }
 
 private:
     /// The shader constants for this effect

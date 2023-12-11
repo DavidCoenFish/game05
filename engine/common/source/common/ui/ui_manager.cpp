@@ -7,6 +7,7 @@
 #include "common/draw_system/shader/shader.h"
 #include "common/draw_system/shader/shader_resource.h"
 #include "common/draw_system/shader/shader_resource_info.h"
+#include "common/draw_system/geometry/geometry_generic.h"
 #include "common/file_system/file_system.h"
 #include "common/log/log.h"
 #include "common/text/text_manager.h"
@@ -121,12 +122,14 @@ UIManagerDrawParam::UIManagerDrawParam(
     DrawSystem* const in_draw_system,
     DrawSystemFrame* const in_frame,
     TextManager* const in_text_manager,
-    UIManager* const in_ui_manager
+    UIManager* const in_ui_manager,
+    const float in_ui_scale
     )
     : _draw_system(in_draw_system)
     , _frame(in_frame)
     , _text_manager(in_text_manager)
     , _ui_manager(in_ui_manager)
+    , _ui_scale(in_ui_scale)
 {
     // Nop
 }
@@ -190,6 +193,23 @@ public:
                 );
         }
 
+        {
+            std::vector<uint8_t> vertex_data_raw;
+            UIGeometry::BuildGeometryData(
+                vertex_data_raw,
+                VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f),
+                VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f)
+                );
+
+            _effect_geometry = in_draw_system->MakeGeometryGeneric(
+                in_command_list,
+                D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP,
+                UIGeometry::GetInputElementDescArray(),
+                vertex_data_raw,
+                4
+                );
+        }
+
         return;
     }
 
@@ -235,6 +255,8 @@ public:
             in_out_target_or_null->UpdateHierarchy(
                 update_param, 
                 in_array_child_data,
+                std::vector<std::shared_ptr<UIEffectData>>(),
+                0,
                 dirty,
                 in_render_to_texture,
                 in_always_dirty,
@@ -296,7 +318,8 @@ public:
             );
         in_root.Draw(
             in_param,
-            dirty
+            dirty,
+            UIStateFlag::TNone
             );
     }
 
@@ -305,9 +328,16 @@ public:
         return _shader_array[static_cast<size_t>(in_type)];
     }
 
+    std::shared_ptr<GeometryGeneric>& GetEffectGeometryRef()
+    {
+        return _effect_geometry;
+    }
+
 private:
     std::shared_ptr<Shader> _shader;
     std::array<std::shared_ptr<Shader>, static_cast<size_t>(UIEffectEnum::TCount)> _shader_array;
+
+    std::shared_ptr<GeometryGeneric> _effect_geometry;
 
 };
 
@@ -410,4 +440,9 @@ void UIManager::Draw(
 const std::shared_ptr<Shader>& UIManager::GetShaderRef(const UIShaderEnum in_type) const
 {
     return _implementation->GetShaderRef(in_type);
+}
+
+std::shared_ptr<GeometryGeneric>& UIManager::GetEffectGeometryRef()
+{
+    return _implementation->GetEffectGeometryRef();
 }

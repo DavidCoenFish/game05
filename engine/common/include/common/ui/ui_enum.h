@@ -27,7 +27,7 @@ enum class UIEffectEnum
     TDebug,
     TDropShadow,
     TInnerShadow,
-    TRoundCorners,
+    TRoundCorners, // Top right, top left, bottom left, bottom right
     TRoundCornersHollow,
     TGloss,
     TFill, // use tint to make chrom gradient

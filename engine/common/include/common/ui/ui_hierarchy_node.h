@@ -9,6 +9,7 @@ class DrawSystem;
 class DrawSystemFrame;
 class HeapWrapperItem;
 class UIData;
+class UIEffectData;
 class UIGeometry;
 class UIHierarchyNode;
 class UIRootInputState;
@@ -184,6 +185,8 @@ public:
     void UpdateHierarchy(
         const UIHierarchyNodeUpdateParam& in_param,
         const std::vector<std::shared_ptr<UIData>>& in_array_child_data,
+        const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
+        const int in_child_index,
         const bool in_dirty,
         const bool in_render_to_texture,
         const bool in_always_dirty,
@@ -239,10 +242,19 @@ public:
     /// return True if we needed to draw, ie, we have modified _texture. Draw children textures to our own texture
     const bool Draw(
         const UIManagerDrawParam& in_draw_param,
-        const bool in_dirty
+        const bool in_dirty,
+        const UIStateFlag in_state_flag
         );
 
-    UITexture& GetUITexture() const { return *_texture; }
+    UITexture& GetUITexture() const;// { return *_texture; }
+
+private:
+    const bool ApplyEffect(
+        const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
+        const UIHierarchyNodeUpdateParam& in_param,
+        const int in_index
+        );
+
 
 private:
     /// recursion data structure, holds a UIHierarchyNode, component, geometry...

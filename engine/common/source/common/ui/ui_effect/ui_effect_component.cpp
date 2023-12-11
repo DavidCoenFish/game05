@@ -68,7 +68,12 @@ UIEffectComponent::UIEffectComponent(
     , _coord_c(in_coord_c)
     , _coord_d(in_coord_d)
 {
-    // Nop
+    _texture = std::make_unique<UITexture>(
+        true, //const bool in_draw_to_texture = false,
+        false, //const bool in_always_dirty = false,
+        true, //const bool in_allow_clear = false,
+        VectorFloat4::s_zero //const VectorFloat4& in_clear_colour = VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f)
+        );
 }
 
 UIEffectComponent::~UIEffectComponent()
@@ -126,6 +131,72 @@ const bool UIEffectComponent::Set(
     }
 
     return dirty;
+}
+
+void UIEffectComponent::Update(
+    const UIHierarchyNodeUpdateParam& in_param,
+    const VectorInt2& in_target_size
+    )
+{
+    _texture->SetSize(in_target_size);
+    return;
+}
+
+void UIEffectComponent::Render(
+    const UIManagerDrawParam& in_draw_param,
+    UITexture& in_input_texture,
+    const UIStateFlag //in_state_flag
+    )
+{
+    _texture->SetRenderTarget(in_draw_param._draw_system, in_draw_param._frame);
+
+    const UIShaderEnum shader_type = GetShaderType(_type);
+    const auto& shader = in_draw_param._ui_manager->GetShaderRef(shader_type);
+
+    in_input_texture.SetShaderResource(
+        *shader,
+        0,
+        in_draw_param._frame
+        );
+
+    if (nullptr == _shader_constant_buffer)
+    {
+        _shader_constant_buffer = shader->MakeShaderConstantBuffer(
+            in_draw_param._draw_system
+            );
+    }
+
+    if (nullptr != _shader_constant_buffer)
+    {
+        TShaderConstantBuffer& buffer = _shader_constant_buffer->GetConstant<TShaderConstantBuffer>(0);
+        const VectorInt2 texture_size = _texture->GetSize(in_draw_param._draw_system);
+        VectorFloat2 texture_size_float(static_cast<float>(texture_size.GetX()), static_cast<float>(texture_size.GetY()));
+
+        buffer._data = VectorFloat4(
+            _coord_a.Calculate(texture_size_float, in_draw_param._ui_scale),
+            _coord_b.Calculate(texture_size_float, in_draw_param._ui_scale),
+            _coord_c.Calculate(texture_size_float, in_draw_param._ui_scale),
+            _coord_d.Calculate(texture_size_float, in_draw_param._ui_scale)
+            );
+
+        buffer._width_height_iwidth_iheight = VectorFloat4(
+            texture_size_float.GetX(),
+            texture_size_float.GetY(),
+            1.0f / texture_size_float.GetX(),
+            1.0f / texture_size_float.GetY()
+            );
+    
+        // Todo:
+        buffer._tint = VectorFloat4::s_white;
+    }
+
+    in_draw_param._frame->SetShader(shader, _shader_constant_buffer);
+
+    in_draw_param._frame->Draw(
+        in_draw_param._ui_manager->GetEffectGeometryRef()
+        );
+
+    return;
 }
 
 /*

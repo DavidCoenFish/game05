@@ -3,6 +3,8 @@
 #include "common/ui/ui_layout.h"
 #include "common/ui/ui_base_colour.h"
 #include "common/ui/ui_data/ui_data.h"
+#include "common/ui/ui_effect/ui_effect_component.h"
+#include "common/ui/ui_effect/ui_effect_data.h"
 #include "common/ui/ui_hierarchy_node.h"
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_screen_space.h"
@@ -121,124 +123,6 @@ void IUIComponent::CalculateGeometry(
     return;
 }
 
-/*
-void IUIComponent::CalculateGeometry(
-    VectorFloat4& out_geometry_pos,
-    VectorFloat4& out_geometry_uv,
-    VectorInt2& out_texture_size,
-    VectorFloat2& in_out_scroll,
-    const bool in_uv_scroll_manual_x,
-    const bool in_uv_scroll_manual_y,
-    const VectorInt2& in_parent_size,
-    const VectorInt2& in_parent_offset,
-    const VectorInt2& in_parent_window,
-    const float in_ui_scale,
-    const float in_time_delta, 
-    const VectorInt2& in_layout_size, // layout size != in_parent_window, unless layout size is 100% of the parent window...
-    const VectorInt2& in_desired_size,
-    const UILayout& in_layout 
-    )
-{
-    const VectorInt2 pivot = in_layout.GetParentWindowPivot(in_parent_window, in_parent_offset); 
-    const VectorInt2 attach = in_layout.GetLayoutAttach(in_layout_size);
-
-    // Deal pos
-    //VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f)
-    out_geometry_pos = VectorFloat4(
-        CalculatePos(pivot[0] - attach[0], in_parent_size[0]),
-        CalculatePos(pivot[1] - attach[1], in_parent_size[1]),
-        CalculatePos(pivot[0] + in_layout_size[0] - attach[0], in_parent_size[0]),
-        CalculatePos(pivot[1] + in_layout_size[1] - attach[1], in_parent_size[1])
-        );
-
-    // Deal uv
-    out_geometry_uv = VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f);
-    const VectorInt2 delta(
-        in_desired_size[0] - in_layout_size[0],
-        in_desired_size[1] - in_layout_size[1]
-        );
-    if (0 < delta[0])
-    {
-        if (false == in_uv_scroll_manual_x)
-        {
-            const float delta_f = static_cast<float>(delta[0]);
-            float new_value = in_out_scroll[0] + (s_scroll_speed * in_time_delta / delta_f);
-            new_value = fmodf(new_value + 1.0f, 2.0f) - 1.0f; // want range [-1.0 ... 1.0]
-            in_out_scroll[0] = new_value;
-        }
-
-        const float length = (static_cast<float>(in_layout_size[0]) / static_cast<float>(in_desired_size[0]));//
-        const float offset = (1.0f - length) * abs(in_out_scroll[0]);
-        out_geometry_uv[0] = offset;
-        out_geometry_uv[2] = offset + length;
-    }
-
-    if (0 < delta[1])
-    {
-        if (false == in_uv_scroll_manual_y)
-        {
-            const float delta_f = static_cast<float>(delta[1]);
-            float new_value = in_out_scroll[1] + (s_scroll_speed * in_time_delta / delta_f);
-            new_value = fmodf(new_value + 1.0f, 2.0f) - 1.0f; // want range [-1.0 ... 1.0]
-            in_out_scroll[1] = new_value;
-        }
-
-        const float length = (static_cast<float>(in_layout_size[1]) / static_cast<float>(in_desired_size[1]));//
-        const float offset = (1.0f - length) * abs(in_out_scroll[1]);
-        out_geometry_uv[1] = offset + length;
-        out_geometry_uv[3] = offset;
-    }
-
-    // Deal texture
-    out_texture_size = VectorInt2::Max(in_layout_size, in_desired_size);
-
-    return;
-}
-*/
-//
-//const bool IUIComponent::SetModel(
-//    const UIBaseColour& in_base_colour,
-//    const UILayout& in_layout,
-//    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array
-//    )
-//{
-//    bool dirty = false;
-//
-//    if (_base_colour != in_base_colour)
-//    {
-//        dirty = true;
-//        _base_colour = in_base_colour;
-//    }
-//
-//    // base (model) layout changes only count when we are not in layout override mode
-//    if (0 == (static_cast<int>(_state_flag) & static_cast<int>(UIStateFlag::TLayoutOverride)))
-//    {
-//        if (_layout != in_layout)
-//        {
-//            dirty = true;
-//            _layout == in_layout;
-//            _uv_scroll = VectorFloat2();
-//        }
-//    }
-//
-//    if (_state_flag_tint_array != in_state_flag_tint_array)
-//    {
-//        dirty = true;
-//        _state_flag_tint_array = in_state_flag_tint_array;
-//
-//        if (nullptr != _state_flag_tint_array)
-//        {
-//            SetStateFlagDirty(UIStateFlag::TTintMask);
-//        }
-//        else
-//        {
-//            SetStateFlagDirty(UIStateFlag::TNone);
-//        }
-//    }
-//
-//    return dirty;
-//}
-
 // Make sorting children easier
 void IUIComponent::SetSourceToken(void* in_source_ui_data_token)
 {
@@ -277,16 +161,46 @@ void* IUIComponent::GetSourceToken() const
 //    return;
 //}
 
+//void IUIComponent::ApplyEffect(
+//    const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
+//    const UIHierarchyNodeUpdateParam& in_param,
+//    const int in_index
+//    )
+//{
+//    bool change = false;
+//    const int size = in_array_effect_data.size();
+//    if (size != _effect_component_array.size())
+//    {
+//        change = true;
+//        _effect_component_array.resize(size);
+//    }
+//
+//    for (int index = 0; index < size; ++index)
+//    {
+//        if (true == in_array_effect_data[index]->ApplyComponent(
+//            _effect_component_array[index],
+//            in_param,
+//            in_index
+//            ))
+//        {
+//            change = true;
+//        }
+//    }
+//
+//    if (true == change)
+//    {
+//        SetStateFlagBit(UIStateFlag::TDirty, true);
+//    }
+//}
+
 const VectorInt2 IUIComponent::GetDesiredSize(
-    UIHierarchyNodeChildData& in_component_owner,
+    UIHierarchyNodeChildData&, //in_component_owner,
     const UIHierarchyNodeUpdateParam& in_layout_param,
-    const VectorInt2& in_parent_window
+    const VectorInt2& //in_parent_window
     )
 {
-    VectorInt2 max_child_size;
-
     return _layout.ApplyMargin(
-        max_child_size,
+        VectorInt2::s_zero,
         in_layout_param._ui_scale
         );
 }
@@ -660,7 +574,8 @@ const bool IUIComponent::PreDraw(
     }
     if (true == in_node.Draw(
         in_draw_param,
-        dirty
+        dirty,
+        _state_flag
         ))
     {
         dirty = true;

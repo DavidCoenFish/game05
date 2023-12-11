@@ -9,6 +9,7 @@ class DrawSystemFrame;
 class HeapWrapperItem;
 class UIData;
 class Shader;
+class UIEffectComponent;
 class UIGeometry;
 class UIHierarchyNode;
 class UILayout;
@@ -40,25 +41,9 @@ public:
         void* in_source_token = nullptr,
         const UIStateFlag in_state_flag = UIStateFlag::TNone
         );
+
     /// virtual dtor as this class is used to store derrived types
     virtual ~IUIComponent();
-
-    //static void CalculateGeometry(
-    //    VectorFloat4& out_geometry_pos,
-    //    VectorFloat4& out_geometry_uv,
-    //    VectorInt2& out_texture_size,
-    //    VectorFloat2& in_out_scroll,
-    //    const bool in_uv_scroll_manual_x,
-    //    const bool in_uv_scroll_manual_y,
-    //    const VectorInt2& in_parent_size,
-    //    const VectorInt2& in_parent_offset,
-    //    const VectorInt2& in_parent_window,
-    //    const float in_ui_scale,
-    //    const float in_time_delta, 
-    //    const VectorInt2& in_layout_size, // layout size != in_parent_window, unless layout size is 100% of the parent window...
-    //    const VectorInt2& in_desired_size,
-    //    const UILayout& in_layout 
-    //    );
 
     static void UpdateScroll(
         VectorFloat2& in_out_scroll,
@@ -111,6 +96,13 @@ public:
     //    const VectorInt2& in_parent_window
     //    );
 
+    //void ApplyEffect(
+    //    const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
+    //    const UIHierarchyNodeUpdateParam& in_param,
+    //    const int in_index
+    //    );
+
+
     /// For text, the textblock size. 
     /// Do we need an assert that text with width limit can not be child of a layout with shrink? do not want in_parent_window to change during update
     virtual const VectorInt2 GetDesiredSize(
@@ -131,8 +123,6 @@ public:
         const UIScreenSpace& in_parent_screen_space,
         const VectorInt2& in_parent_texture_size
         );
-
-    //const VectorInt2 GetTextureSize();
 
     /// prep the children of the component for draw. 
     /// for example, component string may use this to run the TextBock::Draw, setting up the components' nodes' texture for the component to be drawn to it's parent latter in the Node::Draw
@@ -178,5 +168,7 @@ private:
     //VectorInt2 _cache_layout_size;
     //VectorInt2 _cache_desired_size; 
     //VectorInt2 _cache_parent_window; 
+
+    //std::vector<std::shared_ptr<UIEffectComponent>> _effect_component_array;
 
 };

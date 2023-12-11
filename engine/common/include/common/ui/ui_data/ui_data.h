@@ -60,11 +60,11 @@ public:
         const int in_index = 0
         );
 
-    // change to use the GetArrayEffectData and just build the effect stack under node?
-    /// return true if render data has changed
-    //const bool BuildEffectStack(
-    //    std::vector<std::shared_ptr<UIEffectComponent>>& in_out_array_effect_component,
-    //    const UIHierarchyNodeApplyParam& in_param
+    /// change to use the GetArrayEffectData and just build the effect stack under node?
+    //void ApplyComponent(
+    //    //std::vector<std::shared_ptr<UIEffectComponent>>& in_out_array_effect_component,
+    //    IUIComponent& in_component,
+    //    const UIHierarchyNodeUpdateParam& in_param
     //    );
 
     ///// replacing what was done in the factory/ component

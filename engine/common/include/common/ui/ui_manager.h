@@ -7,6 +7,7 @@
 
 class DrawSystem;
 class DrawSystemFrame;
+class GeometryGeneric;
 class IUIComponent;
 class IUIModel;
 class LocaleSystem;
@@ -140,13 +141,15 @@ struct UIManagerDrawParam
         DrawSystem* const in_draw_system = nullptr,
         DrawSystemFrame* const in_frame = nullptr,
         TextManager* const in_text_manager = nullptr,
-        UIManager* const in_ui_manager = nullptr
+        UIManager* const in_ui_manager = nullptr,
+        const float in_ui_scale = 1.0f
         );
 
     DrawSystem* const _draw_system;
     DrawSystemFrame* const _frame;
     TextManager* const _text_manager;
     UIManager* const _ui_manager;
+    float _ui_scale;
 
     // Need some way of detecticting if device was reset
     //const bool in_force_total_redraw = false
@@ -210,7 +213,7 @@ public:
         );
 
     const std::shared_ptr<Shader>& GetShaderRef(const UIShaderEnum in_type) const;
-    const UIGeometry& GetEffectGeometryRef() const;
+    std::shared_ptr<GeometryGeneric>& GetEffectGeometryRef();
 
 private:
     std::unique_ptr<UIManagerImplementation> _implementation;

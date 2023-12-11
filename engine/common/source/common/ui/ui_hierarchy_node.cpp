@@ -8,6 +8,8 @@
 #include "common/ui/i_ui_input.h"
 #include "common/ui/i_ui_model.h"
 #include "common/ui/ui_component/ui_component_canvas.h"
+#include "common/ui/ui_effect/ui_effect_component.h"
+#include "common/ui/ui_effect/ui_effect_data.h"
 
 #include "common/ui/ui_coord.h"
 #include "common/ui/ui_geometry.h"
@@ -220,6 +222,8 @@ const bool UIHierarchyNode::ClearChildren()
 void UIHierarchyNode::UpdateHierarchy(
     const UIHierarchyNodeUpdateParam& in_param,
     const std::vector<std::shared_ptr<UIData>>& in_array_child_data,
+    const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
+    const int in_child_index,
     const bool in_dirty,
     const bool in_render_to_texture,
     const bool in_always_dirty,
@@ -340,10 +344,17 @@ void UIHierarchyNode::UpdateHierarchy(
                     in_param
                     );
 
+                //data->ApplyEffect(
+                //    child->_component,
+                //    in_param
+                //    );
+
                 // recurse
                 child->_node->UpdateHierarchy(
                     in_param,
                     data->GetArrayChildData(),
+                    data->GetArrayEffectData(),
+                    index,
                     in_dirty, 
                     data->GetBaseColour().GetDrawToTexture(),
                     data->GetBaseColour().GetAlwaysDirty(),
@@ -356,6 +367,14 @@ void UIHierarchyNode::UpdateHierarchy(
         }
     }
 
+    if (true == ApplyEffect(
+        in_array_effect_data,
+        in_param,
+        in_child_index
+        ))
+    {
+        dirty = true;
+    }
 
     if ((true == dirty) && (nullptr != _texture))
     {
@@ -416,12 +435,16 @@ void UIHierarchyNode::UpdateResources(
             in_parent_screen_space,
             texture_size
             );
-
-        //child->_node->UpdateResources(
-        //    in_param,
-        //    *(child->_screen_space)
-        //    );
     }
+
+    for (auto& effect : _array_effect_component)
+    {
+        effect->Update(
+            in_param,
+            texture_size
+            );
+    }
+
 }
 
 void UIHierarchyNode::MarkTextureDirty()
@@ -443,57 +466,6 @@ void UIHierarchyNode::SetTextureSize(
 {
     _texture->SetSize(in_texture_size);
 }
-
-//// todo: UpdateSize doesn't need to return, _texture marks self as needs to draw on size change
-//void UIHierarchyNode::UpdateSize(
-//    DrawSystem* const, //in_draw_system,
-//    const VectorInt2&, //in_parent_size,
-//    const VectorInt2&, //in_parent_offset,
-//    const VectorInt2&, //in_parent_window,
-//    const float, //in_ui_scale,
-//    const float, //in_time_delta,
-//    const bool, //in_mark_dirty,
-//    const UIScreenSpace& //in_parent_screen_space
-//    )
-//{
-/*
-    UpdateTextureSize(in_parent_size, in_mark_dirty);
-
-    // for each child, work out the geometry and texture size for each content
-    for (auto& child_data_ptr : _child_data_array)
-    {
-        UIHierarchyNodeChildData& child_data = *child_data_ptr;
-
-        if (nullptr == child_data._component)
-        {
-            continue;
-        }
-
-        const int state_flag = static_cast<int>(child_data._component->GetStateFlag());
-        if (0 != (state_flag & static_cast<int>(UIStateFlag::THidden)))
-        {
-            continue;
-        }
-
-        if (true == child_data._component->UpdateSize(
-            in_draw_system,
-            in_parent_size,
-            in_parent_offset,
-            in_parent_window,
-            in_ui_scale,
-            in_time_delta,
-            *(child_data._geometry.get()),
-            *(child_data._node.get()),
-            in_parent_screen_space,
-            *(child_data._screen_space.get())
-            ))
-        {
-            child_data._node->MarkTextureDirty();
-        }
-    }
-*/
-//    return;
-//}
 
 // TODO: at some point need to collect "input" elements as potential navigation targets/ resolve navigation keypress
 const bool UIHierarchyNode::DealInput(
@@ -689,7 +661,8 @@ const bool UIHierarchyNode::PreDraw(
 
 const bool UIHierarchyNode::Draw(
     const UIManagerDrawParam& in_draw_param,
-    const bool in_dirty
+    const bool in_dirty,
+    const UIStateFlag in_state_flag
     )
 {
     bool dirty = false;
@@ -754,5 +727,58 @@ const bool UIHierarchyNode::Draw(
         _texture->SetHasDrawn(true);
     }
 
+    if ((true == dirty) &&
+        (0 < _array_effect_component.size()))
+    {
+        UITexture* trace_texture = _texture.get();
+        for (auto& effect: _array_effect_component)
+        {
+            effect->Render(
+                in_draw_param,
+                *trace_texture,
+                in_state_flag
+                );
+            trace_texture = &effect->GetUITexture();
+        }
+    }
+
     return dirty;
+}
+
+UITexture& UIHierarchyNode::GetUITexture() const
+{ 
+    if (0 < _array_effect_component.size())
+    {
+        return _array_effect_component.back()->GetUITexture();
+    }
+    return *_texture; 
+}
+
+const bool UIHierarchyNode::ApplyEffect(
+    const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
+    const UIHierarchyNodeUpdateParam& in_param,
+    const int in_index
+    )
+{
+    bool change = false;
+    const int size = static_cast<int>(in_array_effect_data.size());
+    if (size != _array_effect_component.size())
+    {
+        change = true;
+        _array_effect_component.resize(size);
+    }
+
+    for (int index = 0; index < size; ++index)
+    {
+        if (true == in_array_effect_data[index]->ApplyComponent(
+            _array_effect_component[index],
+            in_param,
+            in_index
+            ))
+        {
+            change = true;
+        }
+    }
+
+    return change;
 }
