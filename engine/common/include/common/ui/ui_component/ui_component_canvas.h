@@ -13,9 +13,15 @@ class UIComponentCanvas : public IUIComponent
 public:
     UIComponentCanvas(
         const UILayout& in_layout,
+        const UITintColour& in_tint_colour,
         void* in_source_token = nullptr
         );
     virtual ~UIComponentCanvas();
+
+    const bool Set(
+        const UILayout& in_layout,
+        const UITintColour& in_tint_colour
+        );
 
 private:
     virtual const VectorInt2 GetDesiredSize(

@@ -13,6 +13,7 @@ public:
     UIDataStack(
         const UILayout& in_layout,
         const UIBaseColour& in_base_colour,
+        const UITintColour& in_tint_colour,
         const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
         const UIOrientation in_orientation = UIOrientation::TVertical,
         const UICoord& in_gap = UICoord()

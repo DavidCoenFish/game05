@@ -860,6 +860,7 @@ namespace
         auto data_main = std::make_shared<UIDataString>(
             UILayout::FactoryFull(),
             UIBaseColour::FactoryDefault(),
+            UITintColour::FactoryBlack(),
             UIData::s_empty_effect_data_array,
             "hello human",
             LocaleISO_639_1::Default,
@@ -879,10 +880,7 @@ namespace
         std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
         )
     {
-        auto data_main = std::make_shared<UIData>(
-            UILayout::FactoryFull(),
-            UIBaseColour::FactoryDefault()
-            );
+        auto data_main = std::make_shared<UIData>();
 
         auto data_text = std::make_shared<UIDataString>(
             UILayout(
@@ -895,6 +893,7 @@ namespace
                 VectorInt4(8, 8, 8, 8)
                 ),
             UIBaseColour::FactoryRedBackground(),
+            UITintColour::FactoryDefault(),
             UIData::s_empty_effect_data_array,
             "hello human",
             LocaleISO_639_1::Default,
@@ -918,10 +917,7 @@ namespace
         std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
         )
     {
-        auto data_main = std::make_shared<UIData>(
-            UILayout::FactoryFull(),
-            UIBaseColour::FactoryDefault()
-            );
+        auto data_main = std::make_shared<UIData>();
 
         auto data_margin = std::make_shared<UIData>(
             UILayout(
@@ -947,6 +943,7 @@ namespace
                 VectorInt4(8, 8, 8, 8)
                 ),
             UIBaseColour::FactoryRedBackground(),
+            UITintColour::FactoryDefault(),
             UIData::s_empty_effect_data_array,
             "hello human",
             LocaleISO_639_1::Default,
@@ -976,6 +973,7 @@ namespace
         auto data_main = std::make_shared<UIData>(
             UILayout::FactoryParentMiddleQuater(),
             UIBaseColour::FactoryRedBackground(),
+            UITintColour::FactoryDefault(),
             std::vector<std::shared_ptr<UIEffectData>>({
                 std::make_shared<UIEffectData>(
                     UIEffectEnum::TRoundCorners,
@@ -994,11 +992,88 @@ namespace
             });
     }
 
-    void BuildModelData06_Stack(
+    void BuildModelData06_Tooltip(
         std::map<std::string, std::vector<std::shared_ptr<UIData>>>& in_out_data_array_map,
         std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
         )
     {
+        auto tint_array = std::make_shared<UIData::TStateFlagTintArray>(UIData::TStateFlagTintArray({
+            VectorFloat4(0.0f, 0.0f, 0.0f, 0.5f),
+            VectorFloat4(0.0f, 0.0f, 0.0f, 0.5f),
+            VectorFloat4(0.0f, 0.0f, 0.0f, 0.5f),
+            VectorFloat4(0.0f, 0.0f, 0.0f, 0.5f),
+            VectorFloat4(0.0f, 0.0f, 0.0f, 0.5f),
+            VectorFloat4(0.0f, 0.0f, 0.0f, 0.5f),
+            VectorFloat4(0.0f, 0.0f, 0.0f, 0.5f),
+            VectorFloat4(0.0f, 0.0f, 0.0f, 0.5f)
+            }));
+
+        auto data_main = std::make_shared<UIData>(
+            UILayout::FactoryFull(),
+            UIBaseColour::FactoryDefault(),
+            UITintColour::FactoryFade(10.0f)
+            );
+
+        auto data_tooltip = std::make_shared<UIData>(
+            UILayout(
+                UICoord(UICoord::TSource::ParentX, 1.0f),
+                UICoord(UICoord::TSource::ParentY, 1.0f),
+                VectorFloat2(0.5f, 0.5f),
+                VectorFloat2(0.5f, 0.5f),
+                UILayout::TAdjustmentType::ShrinkLayoutToTexture,
+                UILayout::TAdjustmentType::ShrinkLayoutToTexture,
+                VectorInt4(8, 8, 8, 8)
+                ),
+            UIBaseColour::FactoryDefault(),
+            UITintColour::FactoryDefault(),
+            std::vector<std::shared_ptr<UIEffectData>>({
+                std::make_shared<UIEffectData>(
+                    UIEffectEnum::TDropShadow,
+                    // offset x, offset y, radius
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 2),
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 2),
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 6),
+                    UICoord(),
+                    tint_array
+                    )
+                })
+            );
+
+        auto data_text = std::make_shared<UIDataString>(
+            UILayout(
+                UICoord(UICoord::TSource::ParentX, 1.0f),
+                UICoord(UICoord::TSource::ParentY, 1.0f),
+                VectorFloat2(0.5f, 0.5f),
+                VectorFloat2(0.5f, 0.5f),
+                UILayout::TAdjustmentType::ShrinkLayoutToTexture,
+                UILayout::TAdjustmentType::ShrinkLayoutToTexture,
+                VectorInt4(8, 8, 8, 8)
+                ),
+            UIBaseColour::FactoryGreyBackground(),
+            UITintColour::FactoryDefault(),
+            UIData::s_empty_effect_data_array,
+            "hello human",
+            LocaleISO_639_1::Default,
+            false,
+            TextEnum::HorizontalLineAlignment::Middle,
+            TextEnum::VerticalBlockAlignment::Middle
+            );
+
+        data_main->AddChild(
+            data_tooltip
+            );
+        data_tooltip->AddChild(
+            data_text
+            );
+
+
+        in_out_data_map["main"] = data_main;
+        in_out_data_array_map["main"] = std::vector<std::shared_ptr<UIData>>({
+            data_main
+            });
+    }
+
+// stack
 /*
         auto data_main = std::make_shared<UIDataStack>(
             UILayout::FactoryParentMiddleQuater(),
@@ -1010,7 +1085,6 @@ namespace
             data_main
             });
 */
-    }
 };
 
 class UIModel : public IUIModel
@@ -1024,7 +1098,7 @@ public:
         //BuildModelData03_ShrunkText(_data_array_map, _data_map);
         //BuildModelData04_ShrunkTextChildMargin(_data_array_map, _data_map);
         //BuildModelData05_Effect(_data_array_map, _data_map);
-        BuildModelData06_Stack(_data_array_map, _data_map);
+        BuildModelData06_Tooltip(_data_array_map, _data_map);
 
 /*
         _data_build_version = std::make_shared<UIDataString>(

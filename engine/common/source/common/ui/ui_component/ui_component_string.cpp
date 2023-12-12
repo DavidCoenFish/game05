@@ -15,10 +15,12 @@
 UIComponentString::UIComponentString(
     std::unique_ptr<TextBlock>& in_text_block,
     const UILayout& in_layout,
+    const UITintColour& in_tint_colour,
     void* in_source_token
     )
     : IUIComponent(
         in_layout, 
+        in_tint_colour,
         in_source_token)
     , _text_block(std::move(in_text_block))
 {
@@ -44,6 +46,8 @@ const bool UIComponentString::SetText(
 }
 
 const bool UIComponentString::Set(
+    const UILayout& in_layout,
+    const UITintColour& in_tint_colour,
     TextFont& in_font, 
     const int in_font_size,
     const float in_new_line_gap_ratio,
@@ -54,6 +58,10 @@ const bool UIComponentString::Set(
     )
 {
     bool dirty = false;
+
+    SetLayout(in_layout);
+    SetTintColour(in_tint_colour);
+
     if (true == _text_block->SetFont(in_font))
     {
         dirty = true;
@@ -108,25 +116,33 @@ const VectorInt2 UIComponentString::GetDesiredSize(
 //    _text_block->SetTextContainerSize(in_size);
 //}
 
-void UIComponentString::UpdateResources(
+const bool UIComponentString::UpdateResources(
     UIHierarchyNodeChildData& in_component_owner,
     const UIHierarchyNodeUpdateParam& in_param,
     const UIScreenSpace& in_parent_screen_space,
     const VectorInt2& in_parent_texture_size
     )
 {
-    TSuper::UpdateResources(
+    bool dirty = false;
+
+    if (true == TSuper::UpdateResources(
         in_component_owner,
         in_param,
         in_parent_screen_space,
         in_parent_texture_size
-        );
+        ))
+    {
+        dirty = true;
+    }
 
-    _text_block->SetTextContainerSize(
+    if (true == _text_block->SetTextContainerSize(
         in_component_owner._node->GetTextureSize(in_param._draw_system)
-        );
+        ))
+    {
+        dirty = true;
+    }
 
-    return;
+    return dirty;
 }
 
 const bool UIComponentString::PreDraw(

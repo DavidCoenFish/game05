@@ -414,11 +414,12 @@ void UIHierarchyNode::UpdateLayout(
     return;
 }
 
-void UIHierarchyNode::UpdateResources(
+const bool UIHierarchyNode::UpdateResources(
     const UIHierarchyNodeUpdateParam& in_param,
     const UIScreenSpace& in_parent_screen_space
     )
 {
+    bool dirty = false;
     const VectorInt2 texture_size = _texture->GetSize(in_param._draw_system);
 
     for (auto& child : _child_data_array)
@@ -429,12 +430,15 @@ void UIHierarchyNode::UpdateResources(
             continue;
         }
 
-        component->UpdateResources(
+        if (true == component->UpdateResources(
             *child,
             in_param,
             in_parent_screen_space,
             texture_size
-            );
+            ))
+        {  
+            dirty = true;
+        }
     }
 
     for (auto& effect : _array_effect_component)
@@ -445,6 +449,12 @@ void UIHierarchyNode::UpdateResources(
             );
     }
 
+    if (true == dirty)
+    {
+        MarkTextureDirty();
+    }
+
+    return dirty;
 }
 
 void UIHierarchyNode::MarkTextureDirty()
@@ -712,8 +722,7 @@ const bool UIHierarchyNode::Draw(
             if (nullptr != child_data._shader_constant_buffer)
             {
                 UIManager::TShaderConstantBuffer& buffer = child_data._shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
-                //buffer._tint_colour = child_data._component->GetTintColour();
-                buffer._tint_colour = VectorFloat4(1.0f,1.0f,1.0f,1.0f);
+                buffer._tint_colour = child_data._component->CalculateTintColour();
             }
 
             in_draw_param._frame->SetShader(shader, child_data._shader_constant_buffer);

@@ -7,6 +7,7 @@
 UIDataStack::UIDataStack(
     const UILayout& in_layout,
     const UIBaseColour& in_base_colour,
+    const UITintColour& in_tint_colour,
     const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
     const UIOrientation in_orientation,
     const UICoord& in_gap
@@ -14,6 +15,7 @@ UIDataStack::UIDataStack(
     : UIData(
         in_layout,
         in_base_colour,
+        in_tint_colour,
         in_array_effect_data
         )
     , _orientation(in_orientation)
@@ -40,6 +42,7 @@ void UIDataStack::ApplyComponent(
     {
         auto new_content = std::make_unique<UIComponentStack>(
             GetLayout(),
+            GetTintColour(),
             this,
             _orientation,
             _gap
@@ -52,6 +55,7 @@ void UIDataStack::ApplyComponent(
         // we don't set the token source again, as we expect upstream to destroy the component if source token doesn't match
         content->Set(
             GetLayout(),
+            GetTintColour(),
             _orientation,
             _gap
             );

@@ -2,6 +2,7 @@
 
 #include "common\ui\ui_layout.h"
 #include "common\ui\ui_base_colour.h"
+#include "common\ui\ui_tint_colour.h"
 #include "common\ui\ui_enum.h"
 
 class IUIComponent;
@@ -25,9 +26,10 @@ public:
     typedef std::array<VectorFloat4, static_cast<int>(UIStateFlag::TTintPermutationCount)> TStateFlagTintArray;
     static const std::vector<std::shared_ptr<UIEffectData>> s_empty_effect_data_array;
 
-    UIData(
-        const UILayout& in_layout,
-        const UIBaseColour& in_base_colour,
+    explicit UIData(
+        const UILayout& in_layout = UILayout::FactoryFull(),
+        const UIBaseColour& in_base_colour = UIBaseColour::FactoryDefault(),
+        const UITintColour& in_tint_colour = UITintColour::FactoryDefault(),
         const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data = std::vector<std::shared_ptr<UIEffectData>>(),
         UIData* const in_parent_or_null = nullptr
         );
@@ -52,6 +54,7 @@ public:
 
     const UILayout& GetLayout() const { return _layout; }
     const UIBaseColour& GetBaseColour() const { return _base_colour; }
+    const UITintColour& GetTintColour() const { return _tint_colour; }
 
     /// Make component type match what the data wants, default is UIComponentCanvas
     virtual void ApplyComponent(
@@ -60,48 +63,15 @@ public:
         const int in_index = 0
         );
 
-    /// change to use the GetArrayEffectData and just build the effect stack under node?
-    //void ApplyComponent(
-    //    //std::vector<std::shared_ptr<UIEffectComponent>>& in_out_array_effect_component,
-    //    IUIComponent& in_component,
-    //    const UIHierarchyNodeUpdateParam& in_param
-    //    );
-
-    ///// replacing what was done in the factory/ component
-    ///// return true means parent  texture needs to be set dirty
-    //virtual void UpdateLayoutRender(
-    //    IUIComponent& in_component,
-    //    UIHierarchyNodeChildData& in_component_owner,
-    //    const UIHierarchyNodeUpdateLayoutRenderParam& in_param,
-    //    const VectorInt2& in_parent_size,
-    //    const VectorInt2& in_parent_offset,
-    //    const VectorInt2& in_parent_window,
-    //    const UIScreenSpace& in_parent_screen_space
-    //    );
-
-private:
-    ///// GetChild desired size? layout is now part of UIData?
-    //virtual const VectorInt2 GetContentSize(
-    //    IUIComponent& in_component,
-    //    const VectorInt2& in_target_size, 
-    //    const float in_ui_scale,
-    //    UIHierarchyNodeChildData& in_component_owner
-    //    );
-
-    ///// by default, the desired size is just the layout size. something like text block or stack may want to override
-    //virtual const VectorInt2 GetDesiredSize(
-    //    IUIComponent& in_component,
-    //    const VectorInt2& in_target_size, 
-    //    const float in_ui_scale,
-    //    UIHierarchyNodeChildData& in_component_owner
-    //    );
-
 private:
     /// don't have a copy of UILayout in the IUIComponent anymore, IUIComponent has UIGeometry though
     /// modification of layout should invalidate the Layout flag
     UILayout _layout;
-    /// modification of basecolour should invalidate the Layout flag
+    /// modification of basecolour should invalidate the Layout flag? needs to rebuild texture hierarchy?
     UIBaseColour _base_colour;
+
+    /// what flag should be changed? effects render
+    UITintColour _tint_colour;
 
     /// parent can be null if we are the root node
     UIData* _parent_or_null;

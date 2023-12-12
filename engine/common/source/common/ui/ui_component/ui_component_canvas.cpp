@@ -5,10 +5,12 @@
 
 UIComponentCanvas::UIComponentCanvas(
     const UILayout& in_layout,
+    const UITintColour& in_tint_colour,
     void* in_source_token
     )
     : IUIComponent(
         in_layout,
+        in_tint_colour,
         in_source_token
         )
 {
@@ -18,6 +20,16 @@ UIComponentCanvas::UIComponentCanvas(
 UIComponentCanvas::~UIComponentCanvas()
 {
     // Nop
+}
+
+const bool UIComponentCanvas::Set(
+    const UILayout& in_layout,
+    const UITintColour& in_tint_colour
+    )
+{
+    SetLayout(in_layout);
+    SetTintColour(in_tint_colour);
+    return false;
 }
 
 const VectorInt2 UIComponentCanvas::GetDesiredSize(

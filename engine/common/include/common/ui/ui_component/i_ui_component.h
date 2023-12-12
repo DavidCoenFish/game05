@@ -3,6 +3,7 @@
 #include "common/ui/ui_enum.h"
 #include "common/ui/ui_layout.h"
 #include "common/ui/ui_base_colour.h"
+#include "common/ui/ui_tint_colour.h"
 
 class DrawSystem;
 class DrawSystemFrame;
@@ -38,6 +39,7 @@ class IUIComponent
 public:
     IUIComponent(
         const UILayout& in_layout,
+        const UITintColour& in_tint_colour,
         void* in_source_token = nullptr,
         const UIStateFlag in_state_flag = UIStateFlag::TNone
         );
@@ -73,9 +75,13 @@ public:
     const bool SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable);
     const bool GetStateFlagBit(const UIStateFlag in_state_flag_bit) const;
 
-    /// Set layout dirty flag on change
+    /// Set layout dirty flag on change, 
+    /// WARNING, should SetLayout only be called from UIData, to move things like slider, set layout in UIData?
     void SetLayout(const UILayout& in_layout);
     const UILayout& GetLayout() const { return _layout; }
+
+    void SetTintColour(const UITintColour& in_layout);
+    const VectorFloat4 CalculateTintColour() const;
 
     /// Make sorting children easier
     void SetSourceToken(void* in_source_ui_data_token);
@@ -117,7 +123,7 @@ public:
         const VectorInt2& in_parent_window
         );
 
-    virtual void UpdateResources(
+    virtual const bool UpdateResources(
         UIHierarchyNodeChildData& in_component_owner,
         const UIHierarchyNodeUpdateParam& in_param,
         const UIScreenSpace& in_parent_screen_space,
@@ -146,6 +152,9 @@ private:
     ///  or store a lot of values like parent size, offset, window?
     /// don't need to override layout if changes for scroll ect are sent to the UIData layout via calbacks?
     UILayout _layout;
+
+    /// what flag should be changed? effects render
+    UITintColour _tint_colour;
 
     /// uv = abs(_uv_scroll), and use range [-1...1] wrapped when advancing _uv_scroll, to allow saw tooth animation
     /// this is not in layout to simplify comparison, ie, this may change, but don't want uv animation to dirty layout

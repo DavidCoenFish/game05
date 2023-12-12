@@ -12,12 +12,14 @@
 
 UIComponentStack::UIComponentStack(
     const UILayout& in_layout,
+    const UITintColour& in_tint_colour,
     void* in_source_token,
     const UIOrientation in_orientation,
     const UICoord& in_gap
     )
     : IUIComponent(
         in_layout,
+        in_tint_colour,
         in_source_token
         )
     , _orientation(in_orientation)
@@ -33,6 +35,7 @@ UIComponentStack::~UIComponentStack()
 
 const bool UIComponentStack::Set(
     const UILayout& in_layout,
+    const UITintColour& in_tint_colour,
     const UIOrientation in_orientation,
     const UICoord& in_gap
     )
@@ -40,6 +43,7 @@ const bool UIComponentStack::Set(
     bool dirty = false;
 
     SetLayout(in_layout);
+    SetTintColour(in_tint_colour);
 
     if (_orientation != in_orientation)
     {

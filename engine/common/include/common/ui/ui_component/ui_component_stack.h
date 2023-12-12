@@ -11,6 +11,7 @@ class UIComponentStack : public IUIComponent
 public:
     UIComponentStack(
         const UILayout& in_layout,
+        const UITintColour& in_tint_colour,
         void* in_source_token,
         const UIOrientation in_orientation,
         const UICoord& in_gap
@@ -19,6 +20,7 @@ public:
 
     const bool Set(
         const UILayout& in_layout,
+        const UITintColour& in_tint_colour,
         const UIOrientation in_orientation,
         const UICoord& in_gap
         );
@@ -36,7 +38,7 @@ private:
         const VectorInt2& in_parent_window
         ) override;
 
-    virtual void UpdateResources(
+    virtual const bool UpdateResources(
         UIHierarchyNodeChildData& in_component_owner,
         const UIHierarchyNodeUpdateParam& in_param,
         const UIScreenSpace& in_parent_screen_space,

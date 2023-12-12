@@ -49,6 +49,7 @@ public:
     const bool SetFontSize(
         const int in_font_size
         );
+    /// The ratio of the font size that is used to pad between newlines
     const bool SetNewLineGapRatio(
         const float in_new_line_gap_ratio // new line = in_font_size + (in_font_size * in_new_line_gap_ratio)
         );
@@ -94,16 +95,6 @@ public:
         const VectorFloat4& in_colour,
         const float in_ui_scale
         );
-
-    // GeometryGeneric* const GetGeometry(
-
-    /// Rather than a seperate Update function, that could be forgoten, have the update in the getter, results in out_geometry_dirty
-    /// Rath than return ref to smart ptr, take the DrawFrame and Shader and do the draw internally?
-    //std::shared_ptr<GeometryGeneric>& GetGeometryRef(
-    //    bool& out_geometry_dirty,
-    //    DrawSystem* const in_draw_system,
-    //    ID3D12GraphicsCommandList* const in_command_list
-    //    );
 
     void Draw(
         DrawSystem* const in_draw_system,

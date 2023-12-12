@@ -113,6 +113,7 @@
     <ClCompile Include="source\common\ui\ui_root_input_state.cpp" />
     <ClCompile Include="source\common\ui\ui_screen_space.cpp" />
     <ClCompile Include="source\common\ui\ui_texture.cpp" />
+    <ClCompile Include="source\common\ui\ui_tint_colour.cpp" />
     <ClCompile Include="source\common\util\command_line.cpp" />
     <ClCompile Include="source\common\util\hash.cpp" />
     <ClCompile Include="source\common\util\timer.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="include\common\ui\ui_layout.h" />
     <ClInclude Include="include\common\ui\ui_manager.h" />
     <ClInclude Include="include\common\ui\ui_texture.h" />
+    <ClInclude Include="include\common\ui\ui_tint_colour.h" />
     <ClInclude Include="include\common\util\command_line.h" />
     <ClInclude Include="include\common\util\enum_soft_bind.h" />
     <ClInclude Include="include\common\util\hash.h" />

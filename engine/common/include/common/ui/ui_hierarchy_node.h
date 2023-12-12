@@ -201,7 +201,7 @@ public:
         const VectorInt2& in_parent_window
         );
 
-    void UpdateResources(
+    const bool UpdateResources(
         const UIHierarchyNodeUpdateParam& in_param,
         const UIScreenSpace& in_parent_screen_space
         );

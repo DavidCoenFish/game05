@@ -7,7 +7,7 @@
 class LocaleSystem;
 struct UIHierarchyNodeUpdateParam;
 
-/// TODO: add margin
+/// String intentially doesn't have any markup like font, size, colour. to customise that see "text run"
 class UIDataString : public UIData
 {
     typedef UIData TSuper;
@@ -16,6 +16,7 @@ public:
     UIDataString(
         const UILayout& in_layout,
         const UIBaseColour& in_base_colour,
+        const UITintColour& in_tint_colour,
         const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
         const std::string& in_data = std::string(),
         const LocaleISO_639_1 in_locale = LocaleISO_639_1::Default,

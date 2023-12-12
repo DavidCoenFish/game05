@@ -52,7 +52,7 @@ public:
         const VectorInt2& in_target_size
         );
 
-    /// deal with the component being drawn to the node texture
+    /// Given the input UITexture as a shader resource input, we draw to our own texture using an effect shader
     void Render(
         const UIManagerDrawParam& in_draw_param,
         UITexture& in_input_texture,
@@ -80,10 +80,7 @@ private:
     /// optional array of tint colours selected via input state flag in Render
     std::shared_ptr<const TStateFlagTintArray> _state_flag_tint_array_or_null;
 
-    /// keep around the input target size
-    VectorInt2 _target_size;
-
-    /// Hold the render target or wrap the backbuffer as a texture
+    /// The render target we draw to and then the shader resource (texture) that others consume
     std::unique_ptr<UITexture> _texture;
 
 };

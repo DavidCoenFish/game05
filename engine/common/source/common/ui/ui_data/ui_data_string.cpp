@@ -10,6 +10,7 @@
 UIDataString::UIDataString(
     const UILayout& in_layout,
     const UIBaseColour& in_base_colour,
+    const UITintColour& in_tint_colour,
     const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
     const std::string& in_data,
     const LocaleISO_639_1 in_locale,
@@ -20,6 +21,7 @@ UIDataString::UIDataString(
     : UIData(
         in_layout,
         in_base_colour,
+        in_tint_colour,
         in_array_effect_data
         )
     , _data(in_data)
@@ -60,6 +62,9 @@ void UIDataString::ApplyComponent(
     auto font = in_param._text_manager->GetTextFont(in_param._default_text_style->_font_path);
     const TextLocale* const text_locale = in_param._text_manager->GetLocaleToken(_locale);
 
+    // the tint colour is normally used to influence rendering children shaders
+    //const VectorFloat4 colour = GetTintColour().GetTintColour(0.0f);
+
     if (nullptr == content)
     {
         auto text_block = std::make_unique<TextBlock>(
@@ -73,12 +78,16 @@ void UIDataString::ApplyComponent(
             0,
             _horizontal, 
             _vertical,
+            // or should we use VectorFloat4::s_white and use the UIBaseColour::_tint to multiply with the white?
             in_param._default_text_style->_text_colour
+            //VectorFloat4::s_white
+            //colour
             );
 
         auto new_content = std::make_unique<UIComponentString>(
             text_block,
             GetLayout(),
+            GetTintColour(),
             this
             );
         content = new_content.get();
@@ -87,6 +96,8 @@ void UIDataString::ApplyComponent(
     else
     {
         content->Set(
+            GetLayout(),
+            GetTintColour(),
             *font,
             in_param._default_text_style->_font_size,
             in_param._default_text_style->_new_line_gap_ratio,
@@ -94,6 +105,8 @@ void UIDataString::ApplyComponent(
             _horizontal, 
             _vertical,
             in_param._default_text_style->_text_colour
+            //VectorFloat4::s_white
+            //colour
             );
         content->SetText(
             _data,
@@ -108,128 +121,3 @@ void UIDataString::ApplyComponent(
 
     return;
 }
-
-///// Make component type match what the data wants, default is UIComponentCanvas
-//void UIDataString::UpdateHierarchy(
-//    std::unique_ptr<IUIComponent>& in_out_component,
-//    const UIHierarchyNodeUpdateHierarchyParam& in_param,
-//    const int //in_index
-//    )
-//{
-//    bool dirty = false;
-//    // if in_out_component is not a UIComponentCanvas, remake it as one
-//    UIComponentString* content = dynamic_cast<UIComponentString*>(in_out_component.get());
-//    auto font = in_param._text_manager->GetTextFont(in_param._default_text_style->_font_path);
-//    const TextLocale* const text_locale = in_param._text_manager->GetLocaleToken(_locale);
-//
-//    if (nullptr == content)
-//    {
-//        auto text_block = std::make_unique<TextBlock>(
-//            *font,
-//            in_param._default_text_style->_font_size,
-//            in_param._default_text_style->_new_line_gap_ratio,
-//            _data,
-//            text_locale,
-//            VectorInt2(),
-//            _width_limit_enabled,
-//            0,
-//            _horizontal, 
-//            _vertical,
-//            in_param._default_text_style->_text_colour
-//            );
-//
-//        auto new_content = std::make_unique<UIComponentString>(text_block);
-//        content = new_content.get();
-//        in_out_component = std::move(new_content);
-//
-//        dirty = true;
-//    }
-//    else
-//    {
-//        if (true == content->Set(
-//            *font,
-//            in_param._default_text_style->_font_size,
-//            in_param._default_text_style->_new_line_gap_ratio,
-//            _width_limit_enabled,
-//            _horizontal, 
-//            _vertical,
-//            in_param._default_text_style->_text_colour
-//            ))
-//        {
-//            dirty = true;
-//        }
-//        if (true == content->SetText(
-//            _data,
-//            text_locale
-//            ))
-//        {
-//            dirty = true;
-//        }
-//    }
-//
-//    if (true == dirty)
-//    {
-//        SetDirtyBit(UIDataDirty::TLayout, true);
-//    }
-//
-//    SetDirtyBit(UIDataDirty::THierarchy, false);
-//
-//    return;
-//}
-//
-//void UIDataString::UpdateLayoutRender(
-//    IUIComponent& in_component,
-//    UIHierarchyNodeChildData& in_component_owner,
-//    const UIHierarchyNodeUpdateLayoutRenderParam& in_param,
-//    const VectorInt2& in_parent_size,
-//    const VectorInt2& in_parent_offset,
-//    const VectorInt2& in_parent_window,
-//    const UIScreenSpace& in_parent_screen_space
-//    )
-//{
-//    TSuper::UpdateLayoutRender(
-//        in_component,
-//        in_component_owner,
-//        in_param,
-//        in_parent_size,
-//        in_parent_offset,
-//        in_parent_window,
-//        in_parent_screen_space
-//        );
-//
-//    UIComponentString* content = dynamic_cast<UIComponentString*>(&in_component);
-//    if (nullptr != content)
-//    {
-//        content->SetContainerSize(in_component_owner._node->GetTextureSize(
-//            in_param._draw_system
-//            ));
-//    }
-//    return;
-//}
-//
-//const VectorInt2 UIDataString::GetContentSize(
-//    IUIComponent& in_component,
-//    const VectorInt2& in_target_size, 
-//    const float in_ui_scale,
-//    UIHierarchyNodeChildData& in_component_owner
-//    )
-//{
-//    return GetDesiredSize(
-//        in_component,
-//        in_target_size, 
-//        in_ui_scale,
-//        in_component_owner
-//        );
-//}
-//
-//const VectorInt2 UIDataString::GetDesiredSize(
-//    IUIComponent& in_component,
-//    const VectorInt2& in_target_size, 
-//    const float in_ui_scale,
-//    UIHierarchyNodeChildData& //in_component_owner
-//    )
-//{
-//    UIComponentString* content = dynamic_cast<UIComponentString*>(&in_component);
-//    const VectorInt2 result = content ? content->GetDesiredSize(in_target_size, in_ui_scale) : VectorInt2();
-//    return result;
-//}

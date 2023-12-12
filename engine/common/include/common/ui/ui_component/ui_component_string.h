@@ -14,6 +14,7 @@ public:
     UIComponentString(
         std::unique_ptr<TextBlock>& in_text_block,
         const UILayout& in_layout,
+        const UITintColour& in_tint_colour,
         void* in_source_token = nullptr
         );
     ~UIComponentString();
@@ -25,6 +26,8 @@ public:
 
     // return true if modified, else false
     const bool Set(
+        const UILayout& in_layout,
+        const UITintColour& in_tint_colour,
         TextFont& in_font, 
         const int in_font_size,
         const float in_new_line_gap_ratio,
@@ -44,7 +47,7 @@ private:
         const VectorInt2& in_pre_shrink_layout_size //in_parent_window
         ) override;
 
-    virtual void UpdateResources(
+    virtual const bool UpdateResources(
         UIHierarchyNodeChildData& in_component_owner,
         const UIHierarchyNodeUpdateParam& in_param,
         const UIScreenSpace& in_parent_screen_space,

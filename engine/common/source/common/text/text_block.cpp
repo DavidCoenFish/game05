@@ -69,7 +69,8 @@ public:
                 static_cast<int>(round(_font_size * _ui_scale)),
                 _width_limit_enabled,
                 _width_limit,
-                static_cast<int>(round((_font_size + (_font_size * _new_line_gap_ratio)) * _ui_scale))
+                static_cast<int>(round((_font_size + (_font_size * _new_line_gap_ratio)) * _ui_scale)),
+                _colour
                 );
             _text_bounds = _pre_vertex_data->GetBounds(_vertical_block_alignment);
         }

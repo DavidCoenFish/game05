@@ -25,9 +25,9 @@ enum class UIEffectEnum
 {
     TNone = 0, // this seemed like a good idea to have None be the default block shader, but constant buffer is different
     TDebug,
-    TDropShadow,
+    TDropShadow, // data[offset x, offset y, radius, ]
     TInnerShadow,
-    TRoundCorners, // Top right, top left, bottom left, bottom right
+    TRoundCorners, // data[Top right, top left, bottom left, bottom right]
     TRoundCornersHollow,
     TGloss,
     TFill, // use tint to make chrom gradient
@@ -86,12 +86,13 @@ enum class UIStateFlag
     /// Warning, kind of needs to be set by a parent, as if set by its self, the code to turn it back on may never be reached, ref: UIComponentDrift
     THidden = 1 << 4,
 
-    /// A layout has changed
-    TLayoutDirty = 1 << 5,
     /// disable the automatic ppinpong of uv for x axis
     TManualScrollX = 1 << 6,
     /// disable the automatic ppinpong of uv for y axis
     TManualScrollY = 1 << 7,
+
+    /// A layout has changed
+    TLayoutDirty = 1 << 5,
 
     /// tooltip layer only has reference to a component, and needs to mark it as dirty external to Update (is in deal input)
     TDirty = 1 << 31
