@@ -140,3 +140,8 @@ when handing down plack holder layout size for desired size/ texture size calcul
 
 case C. tooltip 2, want margin around text block, then another margin with dropshadow
 
+
+
+UIData change, trigger dirty 
+once it gets to the component, always do a full visit on 
+

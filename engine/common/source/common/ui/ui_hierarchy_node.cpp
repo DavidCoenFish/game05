@@ -344,11 +344,6 @@ void UIHierarchyNode::UpdateHierarchy(
                     in_param
                     );
 
-                //data->ApplyEffect(
-                //    child->_component,
-                //    in_param
-                //    );
-
                 // recurse
                 child->_node->UpdateHierarchy(
                     in_param,

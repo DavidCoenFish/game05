@@ -94,7 +94,7 @@ ScreenSizeResources::ScreenSizeResources(
         swap_chain_desc.BufferCount = _back_buffer_count;
         swap_chain_desc.SampleDesc.Count = 1;
         swap_chain_desc.SampleDesc.Quality = 0;
-        swap_chain_desc.Scaling = DXGI_SCALING_STRETCH;
+        swap_chain_desc.Scaling = DXGI_SCALING_NONE; //DXGI_SCALING_STRETCH;
         swap_chain_desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
         swap_chain_desc.AlphaMode = DXGI_ALPHA_MODE_IGNORE;
         swap_chain_desc.Flags = _allow_tearing ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0u;
