@@ -52,3 +52,27 @@ or are succubus just naturally very sarcastic to each other
 
 overcommitment to certain modifications and exposure to certain aspects leave fetishes which end up being a debuff for "combat"?
 too much modification of reducing waist line result in subservience fettish? weakness to opponent play dominating role?
+
+
+//====
+managing stress points, actions/ talking to people cost stress. may need to change to floating point for stress
+the more modifications to self, the larger capacity for stress, modify [body, mind, skin, libido]
+plant mini game, start with little visiblity
+spend 1 stress to prune weed, 2 stress to pull weed. prune may leave node still under ground, pull gets stuck if node still under ground, and need to deal with all attached nodes
+get a certain number of 'butterflies' that give 2x result of actions for 30 sec after capturing
+get a certain number of pigeons, which serve as books, and can be used to improve [body, mind, skin, libido]
+can sprend stress to talk to humans, improve them, gain trust, to learn activities to resove some stress per day
+need to schedule nightime stress relief activities.
+remaining stress can be also used to grow horns, but that is very much a weak point to any other succubie, and somewhat to humnans. can't remove horns even when transformed
+the succubie with the bigger horns is always subservient to one with less horns
+the remaining stress at the start of a new day is the chance that you just break and kill everyone, absorbing all biomass and then get incinerated by the holy power
+amount of deomon skin clothing reduces stress cost of actions
+
+
+
+
+
+
+
+
+

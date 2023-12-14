@@ -60,6 +60,163 @@ const bool UIComponentStack::Set(
     return dirty;
 }
 
+const VectorInt2 UIComponentStack::GetDesiredSize(
+    UIHierarchyNodeChildData& in_component_owner,
+    const UIHierarchyNodeUpdateParam& in_param,
+    const VectorInt2& in_parent_window
+    )
+{
+    VectorInt2 base_layout_size = GetLayout().GetLayoutSize(in_parent_window, in_param._ui_scale);
+    std::vector<VectorInt4> child_window_offset_array;
+    const VectorInt2 base_desired_size = CalculateDesiredSize(
+        in_component_owner, 
+        in_param, 
+        base_layout_size,
+        child_window_offset_array
+        );
+
+    return base_desired_size;
+}
+
+void UIComponentStack::UpdateLayout(
+    UIHierarchyNodeChildData& in_component_owner,
+    const UIHierarchyNodeUpdateParam& in_param,
+    const VectorInt2& in_parent_window,
+    const VectorInt2& in_parent_offset
+    )
+{
+    // calculate layout size given parent window
+    VectorInt2 base_layout_size = GetLayout().GetLayoutSize(in_parent_window, in_param._ui_scale);
+
+    std::vector<VectorInt4> child_window_offset_array;
+    const VectorInt2 base_desired_size = CalculateDesiredSize(
+        in_component_owner, 
+        in_param, 
+        base_layout_size,
+        child_window_offset_array
+        );
+
+    VectorInt2 texture_size;
+
+    // finialise layout size (shrink/expand) and work out the texture size (which may include the texture margin)
+    GetLayout().Finalise(
+        _layout_size,
+        texture_size,
+        _layout_offset,
+        base_layout_size,
+        base_desired_size,
+        in_parent_offset
+        );
+
+    in_component_owner._node->SetTextureSize(texture_size);
+
+    int trace = 0;
+    auto& child_data_array = in_component_owner._node->GetChildData();
+    for (auto& child_data_ptr : child_data_array)
+    {
+        UIHierarchyNodeChildData& child_data = *child_data_ptr;
+
+        if (nullptr == child_data._component)
+        {
+            continue;
+        }
+
+        VectorInt4& child_window_offset = child_window_offset_array[trace];
+        trace += 1;
+        // invert y, 0,0 is bottom left
+        const int height = (texture_size.GetY() / 2) - (child_window_offset.GetW() + child_window_offset.GetY());
+        const VectorInt2 window(child_window_offset.GetX(), child_window_offset.GetY());
+        const VectorInt2 offset(child_window_offset.GetZ(), height);
+
+        child_data._component->UpdateLayout(
+            child_data,
+            in_param,
+            window,
+            offset
+            );
+    }
+}
+
+const VectorInt2 UIComponentStack::CalculateDesiredSize(
+    UIHierarchyNodeChildData& in_component_owner,
+    const UIHierarchyNodeUpdateParam& in_param,
+    const VectorInt2& in_base_layout_size,
+    std::vector<VectorInt4>& out_child_window_offset_array
+    )
+{
+    const int gap = _gap.Calculate(in_base_layout_size, in_param._ui_scale);
+
+    VectorInt2 max_desired_size;
+    for (auto& child_data_ptr : in_component_owner._node->GetChildData())
+    {
+        UIHierarchyNodeChildData& child_data = *child_data_ptr;
+
+        if (nullptr == child_data._component)
+        {
+            continue;
+        }
+
+        VectorInt2 child_desired = child_data._component->GetDesiredSize(
+            child_data,
+            in_param,
+            in_base_layout_size
+            );
+
+        VectorInt4 window_offset(child_desired.GetX(), child_desired.GetY(), 0, 0);
+        switch(_orientation)
+        {
+        default:
+            break;
+        case UIOrientation::TVertical:
+            if (0 != max_desired_size[1])
+            {
+                max_desired_size[1] += gap;
+            }
+            window_offset[3] = max_desired_size[1];
+            max_desired_size[0] = std::max(max_desired_size[0], child_desired[0]);
+            max_desired_size[1] += child_desired[1];
+
+            break;
+        case UIOrientation::THorizontal:
+            if (0 != max_desired_size[0])
+            {
+                max_desired_size[0] += gap;
+            }
+            window_offset[2] = max_desired_size[0];
+            max_desired_size[0] += child_desired[0];
+            max_desired_size[1] = std::max(max_desired_size[1], child_desired[1]);
+
+            break;
+        }
+
+        out_child_window_offset_array.push_back(window_offset);
+    }
+
+    for (auto& iter : out_child_window_offset_array)
+    {
+        switch(_orientation)
+        {
+        default:
+            break;
+        case UIOrientation::TVertical:
+            iter[0] = max_desired_size[0];
+            break;
+        case UIOrientation::THorizontal:
+            iter[1] = max_desired_size[1];
+            break;
+        }
+    }
+
+    max_desired_size = GetLayout().ApplyMargin(
+        max_desired_size,
+        in_param._ui_scale
+        );
+
+    return max_desired_size;
+}
+
+
+
 #if 0 //OLD_CODE
 const bool UIComponentStack::UpdateSize(
     DrawSystem* const in_draw_system,

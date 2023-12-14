@@ -35,15 +35,23 @@ private:
     virtual void UpdateLayout(
         UIHierarchyNodeChildData& in_component_owner,
         const UIHierarchyNodeUpdateParam& in_param,
-        const VectorInt2& in_parent_window
+        const VectorInt2& in_parent_window,
+        const VectorInt2& in_parent_offset
         ) override;
-
+/*
     virtual const bool UpdateResources(
         UIHierarchyNodeChildData& in_component_owner,
         const UIHierarchyNodeUpdateParam& in_param,
         const UIScreenSpace& in_parent_screen_space,
         const VectorInt2& in_parent_texture_size
         ) override;
+*/
+    const VectorInt2 CalculateDesiredSize(
+        UIHierarchyNodeChildData& in_component_owner,
+        const UIHierarchyNodeUpdateParam& in_param,
+        const VectorInt2& in_base_layout_size,
+        std::vector<VectorInt4>& out_child_window_offset_array
+        );
 
 private:
     UIOrientation _orientation;

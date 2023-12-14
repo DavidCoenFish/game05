@@ -31,6 +31,7 @@
 #include "common/ui/ui_data/ui_data_list_box.h"
 #include "common/ui/ui_data/ui_data_manual_scroll.h"
 #include "common/ui/ui_data/ui_data_scroll.h"
+#include "common/ui/ui_data/ui_data_stack.h"
 #include "common/ui/ui_data/ui_data_string.h"
 #include "common/ui/ui_data/ui_data_text_run.h"
 #include "common/ui/ui_data/ui_data_toggle.h"
@@ -1073,18 +1074,50 @@ namespace
             });
     }
 
-// stack
-/*
+    void BuildModelData07_Stack(
+        std::map<std::string, std::vector<std::shared_ptr<UIData>>>& in_out_data_array_map,
+        std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
+        )
+    {
         auto data_main = std::make_shared<UIDataStack>(
             UILayout::FactoryParentMiddleQuater(),
-            UIBaseColour::FactoryRedBackground()
+            UIBaseColour::FactoryBlueBackground(),
+            UITintColour::FactoryDefault(),
+            UIData::s_empty_effect_data_array,
+            UIOrientation::TVertical,
+            UICoord(UICoord::TSource::None, 0.0f, 4.0f)
             );
+
+        for (int index = 0; index < 3; index++)
+        {
+            auto data_text = std::make_shared<UIDataString>(
+                UILayout(
+                    UICoord(UICoord::TSource::ParentX, 1.0f),
+                    UICoord(UICoord::TSource::ParentY, 1.0f),
+                    VectorFloat2(0.5f, 0.5f),
+                    VectorFloat2(0.5f, 0.5f),
+                    UILayout::TAdjustmentType::ShrinkLayoutToTexture,
+                    UILayout::TAdjustmentType::ShrinkLayoutToTexture,
+                    VectorInt4(8, 8, 8, 8)
+                    ),
+                UIBaseColour::FactoryRedBackground(),
+                UITintColour::FactoryDefault(),
+                UIData::s_empty_effect_data_array,
+                "hello human",
+                LocaleISO_639_1::Default,
+                false,
+                TextEnum::HorizontalLineAlignment::Middle,
+                TextEnum::VerticalBlockAlignment::Middle
+                );
+
+            data_main->AddChild(data_text);
+        }
 
         in_out_data_map["main"] = data_main;
         in_out_data_array_map["main"] = std::vector<std::shared_ptr<UIData>>({
             data_main
             });
-*/
+    }
 };
 
 class UIModel : public IUIModel
@@ -1098,7 +1131,8 @@ public:
         //BuildModelData03_ShrunkText(_data_array_map, _data_map);
         //BuildModelData04_ShrunkTextChildMargin(_data_array_map, _data_map);
         //BuildModelData05_Effect(_data_array_map, _data_map);
-        BuildModelData06_Tooltip(_data_array_map, _data_map);
+        //BuildModelData06_Tooltip(_data_array_map, _data_map);
+        BuildModelData07_Stack(_data_array_map, _data_map);
 
 /*
         _data_build_version = std::make_shared<UIDataString>(

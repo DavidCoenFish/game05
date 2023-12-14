@@ -4,9 +4,9 @@ enum class UIDataDirty
 {
     TNone = 0,
     THierarchy = 1 << 0,
-    TLayout = 1 << 1,
+    TLayout = 1 << 1, // flag the related UIComponent as layout dirty
     // TAutoScroll
-    TRender = 1 << 2,
+    TRender = 1 << 2, // flag the related UIComponent as render dirty
 
     TLayoutRender = TLayout | TRender
 };
@@ -87,15 +87,15 @@ enum class UIStateFlag
     THidden = 1 << 4,
 
     /// disable the automatic ppinpong of uv for x axis
-    TManualScrollX = 1 << 6,
+    TManualScrollX = 1 << 5,
     /// disable the automatic ppinpong of uv for y axis
-    TManualScrollY = 1 << 7,
+    TManualScrollY = 1 << 6,
 
     /// A layout has changed
-    TLayoutDirty = 1 << 5,
+    TLayoutDirty = 1 << 29,
+    TResourceDirty = 1 << 30, // also if effect param change
 
-    /// tooltip layer only has reference to a component, and needs to mark it as dirty external to Update (is in deal input)
-    TDirty = 1 << 31
+    TRenderDirty = 1 << 31
 
 };
 

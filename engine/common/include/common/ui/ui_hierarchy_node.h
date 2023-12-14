@@ -198,7 +198,8 @@ public:
     /// Use case, tooltips with a dropshadow margin around text
     void UpdateLayout(
         const UIHierarchyNodeUpdateParam& in_param,
-        const VectorInt2& in_parent_window
+        const VectorInt2& in_parent_window,
+        const VectorInt2& in_parent_offset
         );
 
     const bool UpdateResources(

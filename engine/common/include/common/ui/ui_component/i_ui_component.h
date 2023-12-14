@@ -120,7 +120,8 @@ public:
     virtual void UpdateLayout(
         UIHierarchyNodeChildData& in_component_owner,
         const UIHierarchyNodeUpdateParam& in_param,
-        const VectorInt2& in_parent_window
+        const VectorInt2& in_parent_window,
+        const VectorInt2& in_parent_offset
         );
 
     virtual const bool UpdateResources(
@@ -170,14 +171,16 @@ private:
     /// still have need of hidden and disabled? plus input state [hover, touch, action]
     UIStateFlag _state_flag;
 
-    VectorInt2 _layout_size;
-    VectorInt2 _layout_offset;
-
     /// values for a layout cache, change to hash? [parent size, offse, window, content size]?
     //VectorInt2 _cache_layout_size;
     //VectorInt2 _cache_desired_size; 
     //VectorInt2 _cache_parent_window; 
 
     //std::vector<std::shared_ptr<UIEffectComponent>> _effect_component_array;
+
+protected:
+    VectorInt2 _layout_size;
+    VectorInt2 _layout_offset;
+
 
 };

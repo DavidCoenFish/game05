@@ -69,10 +69,13 @@ void UILayout::Finalise(
     VectorInt2& out_texture_size,
     VectorInt2& out_layout_offset,
     const VectorInt2& in_layout_size,
-    const VectorInt2& in_texture_size
+    const VectorInt2& in_texture_size,
+    const VectorInt2& in_parent_offset
     ) const
 {
-    out_layout_offset = VectorInt2::s_zero;
+    //out_layout_offset = VectorInt2::s_zero;
+    out_layout_offset = in_parent_offset;
+
     switch(_adjustment_type[0])
     {
     default:
@@ -105,6 +108,7 @@ void UILayout::Finalise(
         out_texture_size[1] = in_texture_size[1];
         break;
     }
+
     return;
 }
 

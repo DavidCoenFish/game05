@@ -388,7 +388,8 @@ void UIHierarchyNode::UpdateHierarchy(
 ///             finialise layout size (shrink/expand)
 void UIHierarchyNode::UpdateLayout(
     const UIHierarchyNodeUpdateParam& in_param,
-    const VectorInt2& in_parent_window
+    const VectorInt2& in_parent_window,
+    const VectorInt2& in_parent_offset
     )
 {
     for (auto& child : _child_data_array)
@@ -399,11 +400,16 @@ void UIHierarchyNode::UpdateLayout(
             continue;
         }
 
-        component->UpdateLayout(
-            *child,
-            in_param,
-            in_parent_window
-            );
+        if (true == component->GetStateFlagBit(UIStateFlag::TLayoutDirty))
+        {
+            component->UpdateLayout(
+                *child,
+                in_param,
+                in_parent_window,
+                in_parent_offset
+                );
+            component->SetStateFlagBit(UIStateFlag::TLayoutDirty, false);
+        }
     }
 
     return;
@@ -425,14 +431,18 @@ const bool UIHierarchyNode::UpdateResources(
             continue;
         }
 
-        if (true == component->UpdateResources(
-            *child,
-            in_param,
-            in_parent_screen_space,
-            texture_size
-            ))
-        {  
-            dirty = true;
+        if (true == component->GetStateFlagBit(UIStateFlag::TResourceDirty))
+        {
+            if (true == component->UpdateResources(
+                *child,
+                in_param,
+                in_parent_screen_space,
+                texture_size
+                ))
+            {  
+                dirty = true;
+            }
+            component->SetStateFlagBit(UIStateFlag::TResourceDirty, false);
         }
     }
 

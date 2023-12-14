@@ -273,7 +273,8 @@ public:
             const VectorInt2 target_size = in_out_target_or_null->GetTextureSize(in_param._draw_system);
             in_out_target_or_null->UpdateLayout(
                 update_param,
-                target_size
+                target_size,
+                VectorInt2::s_zero
                 );
 
             in_out_target_or_null->UpdateResources(

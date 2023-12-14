@@ -234,11 +234,10 @@ const VectorInt2 IUIComponent::GetDesiredSize(
 void IUIComponent::UpdateLayout(
     UIHierarchyNodeChildData& in_component_owner,
     const UIHierarchyNodeUpdateParam& in_param,
-    const VectorInt2& in_parent_window
+    const VectorInt2& in_parent_window,
+    const VectorInt2& in_parent_offset
     )
 {
-    //_layout_offset = in_parent_offset;
-
     // calculate layout size given parent window
     VectorInt2 base_layout_size = _layout.GetLayoutSize(in_parent_window, in_param._ui_scale);
 
@@ -246,7 +245,8 @@ void IUIComponent::UpdateLayout(
     in_component_owner._node->UpdateLayout(
         in_param,
         //_layout_offset,
-        base_layout_size
+        base_layout_size,
+        VectorInt2::s_zero
         );
 
     // component::desired(parent window or layout size? layout size may yet to be modified...)
@@ -260,7 +260,8 @@ void IUIComponent::UpdateLayout(
         texture_size,
         _layout_offset,
         base_layout_size,
-        base_desired_size
+        base_desired_size,
+        in_parent_offset
         );
 
     in_component_owner._node->SetTextureSize(texture_size);

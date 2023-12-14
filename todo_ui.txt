@@ -1,3 +1,11 @@
+other than UIData changes, the inputs to UIComponent are [time, ui scale, texture size]
+state may also be changed by input, ie, hover over state flag, click down
+-change of input state needs to set render dirty flag 
+
+-don't change contentent with time, what about auto scroll
+
+
+
 - pollish pass on text placement, 
     check wrap
     clean up EM align (modify "zero" row of font glyph texture?)

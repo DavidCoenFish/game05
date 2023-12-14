@@ -14,7 +14,7 @@ public:
         const UILayout& in_layout,
         const UIBaseColour& in_base_colour,
         const UITintColour& in_tint_colour,
-        const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
+        const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data = s_empty_effect_data_array,
         const UIOrientation in_orientation = UIOrientation::TVertical,
         const UICoord& in_gap = UICoord()
         );

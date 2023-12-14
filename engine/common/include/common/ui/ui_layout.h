@@ -54,7 +54,8 @@ public:
         VectorInt2& out_texture_size,
         VectorInt2& out_layout_offset,
         const VectorInt2& in_layout_size,
-        const VectorInt2& in_texture_size
+        const VectorInt2& in_texture_size,
+        const VectorInt2& in_parent_offset
         ) const;
 
     // shring the window by texture margin, also nudge the window offset
