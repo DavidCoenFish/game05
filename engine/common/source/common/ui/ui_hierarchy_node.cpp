@@ -8,147 +8,20 @@
 #include "common/ui/i_ui_input.h"
 #include "common/ui/i_ui_model.h"
 #include "common/ui/ui_component/ui_component_canvas.h"
+#include "common/ui/ui_data/ui_data.h"
 #include "common/ui/ui_effect/ui_effect_component.h"
 #include "common/ui/ui_effect/ui_effect_data.h"
-
+#include "common/ui/ui_base_colour.h"
 #include "common/ui/ui_coord.h"
+#include "common/ui/ui_enum.h"
 #include "common/ui/ui_geometry.h"
+#include "common/ui/ui_hierarchy_node_child.h"
 #include "common/ui/ui_manager.h"
+#include "common/ui/ui_root_input_state.h"
 #include "common/ui/ui_screen_space.h"
 #include "common/ui/ui_texture.h"
-#include "common/ui/ui_data/ui_data.h"
-#include "common/ui/ui_root_input_state.h"
-#include "common/ui/ui_base_colour.h"
-#include "common/ui/ui_enum.h"
 #include "common/math/vector_int2.h"
 #include "common/math/vector_float4.h"
-
-std::shared_ptr<UIHierarchyNodeChildData> UIHierarchyNodeChildData::Factory()
-{
-    auto geometry = std::make_unique<UIGeometry>();
-    std::unique_ptr<IUIComponent> component;
-    auto node = std::make_unique<UIHierarchyNode>();
-    auto screen_space = std::make_unique<UIScreenSpace>();
-    return std::make_shared<UIHierarchyNodeChildData>(
-        geometry,
-        component,
-        node,
-        screen_space
-        );
-}
-
-UIHierarchyNodeChildData::UIHierarchyNodeChildData(
-    std::unique_ptr<UIGeometry>& in_geometry,
-    std::unique_ptr<IUIComponent>& in_component,
-    std::unique_ptr<UIHierarchyNode>& in_node,
-    std::unique_ptr<UIScreenSpace>& in_screen_space
-    )
-    : _geometry(std::move(in_geometry))
-    , _component(std::move(in_component))
-    , _node(std::move(in_node))
-    , _screen_space(std::move(in_screen_space))
-{
-    // Nop
-}
-
-void UIHierarchyNodeChildData::Draw(const UIManagerDrawParam& in_draw_param)
-{
-    const auto& shader = in_draw_param._ui_manager->GetShaderRef(UIShaderEnum::TDefault);
-
-    _node->GetUITexture().SetShaderResource(
-        *shader,
-        0,
-        in_draw_param._frame
-        );
-
-    if (nullptr == _shader_constant_buffer)
-    {
-        _shader_constant_buffer = shader->MakeShaderConstantBuffer(
-            in_draw_param._draw_system
-            );
-    }
-
-    if (nullptr != _shader_constant_buffer)
-    {
-        UIManager::TShaderConstantBuffer& buffer = _shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
-        buffer._tint_colour = VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f);
-    }
-
-    in_draw_param._frame->SetShader(shader, _shader_constant_buffer);
-
-    _geometry->Draw(
-        in_draw_param._draw_system,
-        in_draw_param._frame
-        );
-
-    return;
-}
-
-const bool UIHierarchyNodeChildData::VisitComponents(const std::function<const bool(IUIComponent* const, UIHierarchyNode* const)>& in_visitor)
-{
-    bool keep_going = true;
-    auto* component = _component.get();
-    if (nullptr != component)
-    {
-        keep_going = in_visitor(component, _node.get());
-    }
-    if (true == keep_going)
-    {
-        for (auto iter : _node->GetChildData())
-        {
-            keep_going = iter->VisitComponents(in_visitor);
-            if (false == keep_going)
-            {
-                break;
-            }
-        }
-    }
-
-    return keep_going;
-}
-
-/*
-const bool UIHierarchyNodeChildData::RecurseSetStateFlagInput(UIHierarchyNodeChildData* const in_data, const UIStateFlag in_state_flag)
-{
-    bool dirty = false;
-
-    if (nullptr == in_data)
-    {
-        return dirty;
-    }
-
-    IUIComponent* const component = in_data->_component.get();
-    if (nullptr != component)
-    {
-        int state_flag = static_cast<int>(component->GetStateFlag());
-        state_flag &= ~static_cast<int>(UIStateFlag::TMaskInput);
-        state_flag |= (static_cast<int>(in_state_flag) & static_cast<int>(UIStateFlag::TMaskInput));
-        if (true == component->SetStateFlag(static_cast<UIStateFlag>(state_flag)))
-        {
-            dirty = true;
-        }
-    }
-
-    UIHierarchyNode* const node = in_data->_node.get();
-    if (nullptr != node)
-    {
-        for (auto iter : node->GetChildData())
-        {
-            if (true == RecurseSetStateFlagInput(iter.get(), in_state_flag))
-            {
-                dirty = true;
-            }
-        }
-    }
-
-    return dirty;
-}
-*/
-
-UIHierarchyNodeChildData::~UIHierarchyNodeChildData()
-{
-    // Nop
-}
 
 UIHierarchyNodeUpdateParam::UIHierarchyNodeUpdateParam(
     DrawSystem* const in_draw_system,
@@ -199,29 +72,199 @@ void UIHierarchyNode::AddChild(
     auto geometry = std::make_unique<UIGeometry>();
     auto node = std::make_unique<UIHierarchyNode>();
     auto screen_space = std::make_unique<UIScreenSpace>();
-    auto child = std::make_shared<UIHierarchyNodeChildData>(
+    auto child = std::make_shared<UIHierarchyNodeChild>(
         geometry,
         in_content,
         node,
         screen_space
         );
-    _child_data_array.push_back(child);
+    _child_array.push_back(child);
 }
 
 const bool UIHierarchyNode::ClearChildren()
 {
     bool dirty = false;
-    if (0 != _child_data_array.size())
+    if (0 != _child_array.size())
     {
         dirty = true;
-        _child_data_array.clear();
+        _child_array.clear();
     }
     return dirty;
 }
 
+#if 1
+// return true if the parent should have their texture dirtied, moved to node child state flag
+void UIHierarchyNode::UpdateHierarchy(
+    UIData& in_data,
+    UIHierarchyNodeChild* const in_parent_to_this_node_or_null,
+    const UIHierarchyNodeUpdateParam& in_param,
+    const int in_child_index
+    )
+{
+    // dirty is for if the texture needs to be redrawn. issue, we want higher fidelity of the dirty flag, ie, layout, resource updates
+    //bool dirty = false;
+
+    bool layout_dirty = false;
+    bool render_dirty = false;
+
+    // Sync texture. 
+    DSC_ASSERT(nullptr != _texture, "ui texture should be created in ctor, what happened");
+    if (true == in_data.GetDirtyBit(UIDataDirty::TTextureDirty))
+    {
+        const auto& base_colour = in_data.GetBaseColour();
+        if (true == _texture->Update(
+            base_colour.GetDrawToTexture(),
+            base_colour.GetAlwaysDirty(),
+            base_colour.GetClearBackground(),
+            base_colour.GetClearColourRef()
+            ))
+        {
+            render_dirty = true;
+        }
+        in_data.SetDirtyBit(UIDataDirty::TTextureDirty, false);
+    }
+
+    if ((nullptr != in_parent_to_this_node_or_null) &&
+       (true == in_data.GetDirtyBit(UIDataDirty::TComponentDirty)))
+    {
+        // ensure component is the correct type
+        if (true == in_parent_to_this_node_or_null->ApplyComponent(
+            in_data,
+            in_param,
+            in_child_index
+            ))
+        {
+            layout_dirty = true;
+            render_dirty = true; // layout change should propergate to render, but what if the uidata component has not changed anything layout, but something effecting render
+        }
+
+        in_data.SetDirtyBit(UIDataDirty::TComponentDirty, false);
+    }
+
+    if (true == in_data.GetDirtyBit(UIDataDirty::THierarchyDirty))
+    {
+        auto& ui_data_child_data = in_data.GetArrayChildData();
+        if (0 == ui_data_child_data.size())
+        {
+            if (0 != _child_array.size())
+            {
+                _child_array.clear();
+                render_dirty = true; // removing children could effect the render result of the parent...
+            }
+        }
+        else
+        {
+            std::map<void*, std::shared_ptr<UIHierarchyNodeChild>> map_temp_ownership;
+
+            // if there are too many items, put the remaining into the temp owership map
+            const int target_length = static_cast<int>(ui_data_child_data.size());
+            for (int index = target_length; index < static_cast<int>(_child_array.size()); ++index)
+            {
+                auto child = _child_array[index];
+                map_temp_ownership[child->GetSourceToken()] = child;
+                render_dirty = true;
+            }
+            _child_array.resize(target_length);
+
+            // Remove mismatched items in child data array
+            for (int index = 0; index < target_length; ++index)
+            {
+                const auto& data = *(ui_data_child_data[index]);
+                const auto& child = _child_array[index];
+                if (nullptr != child)
+                {
+                    void* source_child_token = child ? child->GetSourceToken() : nullptr;
+                    void* data_token = (void*)&data;
+                    if (data_token != source_child_token)
+                    {
+                        if (nullptr != source_child_token)
+                        {
+                            map_temp_ownership[source_child_token] = child;
+                        }
+                        _child_array[index].reset();
+                        render_dirty = true;
+                    }
+                }
+            }
+
+            // Find / create missing children
+            for (int index = 0; index < target_length; ++index)
+            {
+                if (nullptr != _child_array[index])
+                {
+                    continue;
+                }
+                auto& data = *(ui_data_child_data[index]);
+                void* data_token = (void*)&data;
+                auto found = map_temp_ownership.find(data_token);
+                if (found != map_temp_ownership.end())
+                {
+                    _child_array[index] = found->second;
+                    map_temp_ownership.erase(found);
+                }
+                else
+                {
+                    _child_array[index] = UIHierarchyNodeChild::Factory(in_parent_to_this_node_or_null);
+                }
+                layout_dirty = true;
+                render_dirty = true;
+            }
+        }
+
+        in_data.SetDirtyBit(UIDataDirty::THierarchyDirty, false);
+    }
+
+    if (true == in_data.GetDirtyBit(UIDataDirty::TEffectDirty))
+    {
+        if (true == ApplyEffect(
+            in_data.GetArrayEffectData(),
+            in_param,
+            in_child_index
+            ))
+        {
+            render_dirty = true; // if the effect stack data changes, that just effects the render
+        }
+
+        in_data.SetDirtyBit(UIDataDirty::TEffectDirty, false);
+    }
+
+    // update state flags
+    if (nullptr != in_parent_to_this_node_or_null)
+    {
+        if (true == layout_dirty)
+        {
+            in_parent_to_this_node_or_null->SetStateFlagBit(UIStateFlag::TLayoutDirty, true);
+        }
+        if (true == render_dirty)
+        {
+            in_parent_to_this_node_or_null->SetStateFlagBit(UIStateFlag::TRenderDirty, true);
+        }
+    }
+
+    // only recursive if decendant dirty
+    if (true == in_data.GetDirtyBit(UIDataDirty::TDecendantDirty))
+    {
+        for (int index = 0; index < in_data.GetArrayChildData().size(); ++index)
+        {
+            UIData* const child_data = in_data.GetArrayChildData()[index].get();
+            UIHierarchyNodeChild* const child = _child_array[index].get();
+            child->UpdateHierarchy(
+                *child_data,
+                in_param,
+                index
+                );
+        }
+
+        in_data.SetDirtyBit(UIDataDirty::TDecendantDirty, false);
+    }
+
+    return;
+}
+
+#else
 void UIHierarchyNode::UpdateHierarchy(
     const UIHierarchyNodeUpdateParam& in_param,
-    const std::vector<std::shared_ptr<UIData>>& in_array_child_data,
+    const std::vector<std::shared_ptr<UIData>>& ui_data_child_data,
     const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
     const int in_child_index,
     const bool in_dirty,
@@ -258,36 +301,36 @@ void UIHierarchyNode::UpdateHierarchy(
     }
 
     // Update child data array
-    if (0 == in_array_child_data.size())
+    if (0 == ui_data_child_data.size())
     {
-        if (0 != _child_data_array.size())
+        if (0 != _child_array.size())
         {
-            _child_data_array.clear();
+            _child_array.clear();
             dirty = true;
         }
     }
     else
     {
-        std::map<void*, std::shared_ptr<UIHierarchyNodeChildData>> map_temp_ownership;
+        std::map<void*, std::shared_ptr<UIHierarchyNodeChild>> map_temp_ownership;
 
         // if there are too many items, put the remaining into the temp owership map
-        const int target_length = static_cast<int>(in_array_child_data.size());
-        for (int index = target_length; index < static_cast<int>(_child_data_array.size()); ++index)
+        const int target_length = static_cast<int>(ui_data_child_data.size());
+        for (int index = target_length; index < static_cast<int>(_child_array.size()); ++index)
         {
-            auto child = _child_data_array[index];
-            map_temp_ownership[child->_component->GetSourceToken()] = child;
+            auto child = _child_array[index];
+            map_temp_ownership[child->GetSourceToken()] = child;
             dirty = true;
         }
-        _child_data_array.resize(target_length);
+        _child_array.resize(target_length);
 
         // Remove mismatched items in child data array
         for (int index = 0; index < target_length; ++index)
         {
-            const auto& data = *(in_array_child_data[index]);
-            const auto& child = _child_data_array[index];
+            const auto& data = *(ui_data_child_data[index]);
+            const auto& child = _child_array[index];
             if (nullptr != child)
             {
-                void* source_child_token = child->_component ? child->_component->GetSourceToken() : nullptr;
+                void* source_child_token = child->_component ? child->GetSourceToken() : nullptr;
                 void* data_token = (void*)&data;
                 if (data_token != source_child_token)
                 {
@@ -295,7 +338,7 @@ void UIHierarchyNode::UpdateHierarchy(
                     {
                         map_temp_ownership[source_child_token] = child;
                     }
-                    _child_data_array[index].reset();
+                    _child_array[index].reset();
                     dirty = true;
                 }
             }
@@ -304,21 +347,21 @@ void UIHierarchyNode::UpdateHierarchy(
         // Find / create missing children
         for (int index = 0; index < target_length; ++index)
         {
-            if (nullptr != _child_data_array[index])
+            if (nullptr != _child_array[index])
             {
                 continue;
             }
-            auto& data = *(in_array_child_data[index]);
+            auto& data = *(ui_data_child_data[index]);
             void* data_token = (void*)&data;
             auto found = map_temp_ownership.find(data_token);
             if (found != map_temp_ownership.end())
             {
-                _child_data_array[index] = found->second;
+                _child_array[index] = found->second;
                 map_temp_ownership.erase(found);
             }
             else
             {
-                _child_data_array[index] = UIHierarchyNodeChildData::Factory();
+                _child_array[index] = UIHierarchyNodeChild::Factory();
                 dirty = true;
                 // createing a node means it doesn't have the correct layout
                 data.SetDirtyBit(UIDataDirty::THierarchy, true);
@@ -329,14 +372,14 @@ void UIHierarchyNode::UpdateHierarchy(
         // ensure each content is created/ passed through factory
         for (int index = 0; index < target_length; ++index)
         {
-            UIData* const data = in_array_child_data[index].get();
-            UIHierarchyNodeChildData* const child = _child_data_array[index].get();
+            UIData* const data = ui_data_child_data[index].get();
+            UIHierarchyNodeChild* const child = _child_array[index].get();
 
             if (nullptr == data)
             {
                 child->_component.reset();
             }
-            else if ((true == in_dirty) || (true == data->GetDirtyBit(UIDataDirty::THierarchy)))
+            else 
             {
                 // ensure component is the correct type
                 data->ApplyComponent(
@@ -344,20 +387,22 @@ void UIHierarchyNode::UpdateHierarchy(
                     in_param
                     );
 
-                // recurse
-                child->_node->UpdateHierarchy(
-                    in_param,
-                    data->GetArrayChildData(),
-                    data->GetArrayEffectData(),
-                    index,
-                    in_dirty, 
-                    data->GetBaseColour().GetDrawToTexture(),
-                    data->GetBaseColour().GetAlwaysDirty(),
-                    data->GetBaseColour().GetClearBackground(),
-                    data->GetBaseColour().GetClearColourRef()
-                    );
-
-                data->SetDirtyBit(UIDataDirty::THierarchy, false);
+                if (true == data->GetDirtyBit(UIDataDirty::TDecendantDirty))
+                {
+                    // recurse
+                    child->_node->UpdateHierarchy(
+                        in_param,
+                        data->GetArrayChildData(),
+                        data->GetArrayEffectData(),
+                        index,
+                        in_dirty, 
+                        data->GetBaseColour().GetDrawToTexture(),
+                        data->GetBaseColour().GetAlwaysDirty(),
+                        data->GetBaseColour().GetClearBackground(),
+                        data->GetBaseColour().GetClearColourRef()
+                        );
+                    data->SetDirtyBit(UIDataDirty::TDecendantDirty, false);
+                }
             }
         }
     }
@@ -378,6 +423,7 @@ void UIHierarchyNode::UpdateHierarchy(
 
     return;
 }
+#endif
 
 /// node::update layout (in parent window)
 ///     for each child A0
@@ -392,7 +438,7 @@ void UIHierarchyNode::UpdateLayout(
     const VectorInt2& in_parent_offset
     )
 {
-    for (auto& child : _child_data_array)
+    for (auto& child : _child_array)
     {
         IUIComponent* component = child ? child->_component.get() : nullptr;
         if (nullptr == component)
@@ -400,7 +446,8 @@ void UIHierarchyNode::UpdateLayout(
             continue;
         }
 
-        if (true == component->GetStateFlagBit(UIStateFlag::TLayoutDirty))
+        //if (true == component->GetStateFlagBit(UIStateFlag::TLayoutDirty))
+        if (true == component->NeedsToUpdateLayout(in_parent_window, in_parent_offset))
         {
             component->UpdateLayout(
                 *child,
@@ -408,7 +455,9 @@ void UIHierarchyNode::UpdateLayout(
                 in_parent_window,
                 in_parent_offset
                 );
-            component->SetStateFlagBit(UIStateFlag::TLayoutDirty, false);
+            // move to under component::UpdateLayout? but that is virtual
+            //component->SetStateFlagBit(UIStateFlag::TLayoutDirty, false);
+            component->UpdateLayoutFinished();
         }
     }
 
@@ -423,35 +472,33 @@ const bool UIHierarchyNode::UpdateResources(
     bool dirty = false;
     const VectorInt2 texture_size = _texture->GetSize(in_param._draw_system);
 
-    for (auto& child : _child_data_array)
+    for (auto& child : _child_array)
     {
         IUIComponent* component = child ? child->_component.get() : nullptr;
         if (nullptr == component)
         {
             continue;
         }
-
-        if (true == component->GetStateFlagBit(UIStateFlag::TResourceDirty))
-        {
-            if (true == component->UpdateResources(
-                *child,
-                in_param,
-                in_parent_screen_space,
-                texture_size
-                ))
-            {  
-                dirty = true;
-            }
-            component->SetStateFlagBit(UIStateFlag::TResourceDirty, false);
+        if (true == component->UpdateResources(
+            *child,
+            in_param,
+            in_parent_screen_space,
+            texture_size
+            ))
+        {  
+            dirty = true;
         }
     }
 
     for (auto& effect : _array_effect_component)
     {
-        effect->Update(
+        if (true == effect->Update(
             in_param,
             texture_size
-            );
+            ))
+        {
+            dirty = true;
+        }
     }
 
     if (true == dirty)
@@ -491,9 +538,9 @@ const bool UIHierarchyNode::DealInput(
 {
     bool dirty = false;
 /*
-    for(auto& child_data_ptr : _child_data_array)
+    for(auto& child_data_ptr : _child_array)
     {
-        UIHierarchyNodeChildData& child_data = *child_data_ptr;
+        UIHierarchyNodeChild& child_data = *child_data_ptr;
 
         int local_flag = 0; //in_state_flag;
         void* source_token = nullptr;
@@ -655,7 +702,7 @@ const bool UIHierarchyNode::PreDraw(
     bool dirty = false;
 
     // Ensure that children textures are ready
-    for (auto& iter : _child_data_array)
+    for (auto& iter : _child_array)
     {
         if (nullptr == iter->_component)
         {
@@ -696,9 +743,9 @@ const bool UIHierarchyNode::Draw(
 
         dirty = true;
 
-        for (auto& iter : _child_data_array)
+        for (auto& iter : _child_array)
         {
-            UIHierarchyNodeChildData& child_data = *iter;
+            UIHierarchyNodeChild& child_data = *iter;
             if (nullptr == child_data._component)
             {
                 continue;

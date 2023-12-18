@@ -108,6 +108,7 @@
     <ClCompile Include="source\common\ui\ui_effect\ui_effect_data.cpp" />
     <ClCompile Include="source\common\ui\ui_geometry.cpp" />
     <ClCompile Include="source\common\ui\ui_hierarchy_node.cpp" />
+    <ClCompile Include="source\common\ui\ui_hierarchy_node_child.cpp" />
     <ClCompile Include="source\common\ui\ui_layout.cpp" />
     <ClCompile Include="source\common\ui\ui_manager.cpp" />
     <ClCompile Include="source\common\ui\ui_root_input_state.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="include\common\ui\ui_effect\ui_effect_data.h" />
     <ClInclude Include="include\common\ui\ui_enum.h" />
     <ClInclude Include="include\common\ui\ui_hierarchy_node.h" />
+    <ClInclude Include="include\common\ui\ui_hierarchy_node_child.h" />
     <ClInclude Include="include\common\ui\ui_layout.h" />
     <ClInclude Include="include\common\ui\ui_manager.h" />
     <ClInclude Include="include\common\ui\ui_texture.h" />

@@ -313,6 +313,9 @@
     <ClCompile Include="source\common\ui\ui_tint_colour.cpp">
       <Filter>souce\common\ui</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\ui\ui_hierarchy_node_child.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -649,6 +652,9 @@
       <Filter>include\common\ui\ui_component</Filter>
     </ClInclude>
     <ClInclude Include="include\common\ui\ui_tint_colour.h">
+      <Filter>include\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_hierarchy_node_child.h">
       <Filter>include\common\ui</Filter>
     </ClInclude>
   </ItemGroup>

@@ -36,6 +36,7 @@ private:
     VectorFloat4 _tint_colour;
     float _fade_start_seconds;
     float _fade_end_seconds;
+    // bool _fade_in; ~ how to do a fade out, another two floats? _fade_out_start,end
 
 };
 

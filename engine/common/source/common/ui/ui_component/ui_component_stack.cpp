@@ -7,21 +7,15 @@
 #include "common/ui/ui_coord.h"
 #include "common/ui/ui_screen_space.h"
 #include "common/ui/ui_hierarchy_node.h"
+#include "common/ui/ui_hierarchy_node_child.h"
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_enum.h"
 
 UIComponentStack::UIComponentStack(
-    const UILayout& in_layout,
-    const UITintColour& in_tint_colour,
-    void* in_source_token,
     const UIOrientation in_orientation,
     const UICoord& in_gap
     )
-    : IUIComponent(
-        in_layout,
-        in_tint_colour,
-        in_source_token
-        )
+    : IUIComponent()
     , _orientation(in_orientation)
     , _gap(in_gap)
 {
@@ -34,16 +28,11 @@ UIComponentStack::~UIComponentStack()
 }
 
 const bool UIComponentStack::Set(
-    const UILayout& in_layout,
-    const UITintColour& in_tint_colour,
     const UIOrientation in_orientation,
     const UICoord& in_gap
     )
 {
     bool dirty = false;
-
-    SetLayout(in_layout);
-    SetTintColour(in_tint_colour);
 
     if (_orientation != in_orientation)
     {
@@ -61,12 +50,12 @@ const bool UIComponentStack::Set(
 }
 
 const VectorInt2 UIComponentStack::GetDesiredSize(
-    UIHierarchyNodeChildData& in_component_owner,
+    UIHierarchyNodeChild& in_component_owner,
     const UIHierarchyNodeUpdateParam& in_param,
     const VectorInt2& in_parent_window
     )
 {
-    VectorInt2 base_layout_size = GetLayout().GetLayoutSize(in_parent_window, in_param._ui_scale);
+    VectorInt2 base_layout_size = in_component_owner.GetLayout().GetLayoutSize(in_parent_window, in_param._ui_scale);
     std::vector<VectorInt4> child_window_offset_array;
     const VectorInt2 base_desired_size = CalculateDesiredSize(
         in_component_owner, 
@@ -79,14 +68,14 @@ const VectorInt2 UIComponentStack::GetDesiredSize(
 }
 
 void UIComponentStack::UpdateLayout(
-    UIHierarchyNodeChildData& in_component_owner,
+    UIHierarchyNodeChild& in_component_owner,
     const UIHierarchyNodeUpdateParam& in_param,
     const VectorInt2& in_parent_window,
     const VectorInt2& in_parent_offset
     )
 {
     // calculate layout size given parent window
-    VectorInt2 base_layout_size = GetLayout().GetLayoutSize(in_parent_window, in_param._ui_scale);
+    VectorInt2 base_layout_size = in_component_owner.GetLayout().GetLayoutSize(in_parent_window, in_param._ui_scale);
 
     std::vector<VectorInt4> child_window_offset_array;
     const VectorInt2 base_desired_size = CalculateDesiredSize(
@@ -96,30 +85,18 @@ void UIComponentStack::UpdateLayout(
         child_window_offset_array
         );
 
-    VectorInt2 texture_size;
-
-    // finialise layout size (shrink/expand) and work out the texture size (which may include the texture margin)
-    GetLayout().Finalise(
-        _layout_size,
-        texture_size,
-        _layout_offset,
+    in_component_owner.Finalise(
         base_layout_size,
         base_desired_size,
         in_parent_offset
         );
 
-    in_component_owner._node->SetTextureSize(texture_size);
-
     int trace = 0;
-    auto& child_data_array = in_component_owner._node->GetChildData();
+    auto& child_data_array = in_component_owner.GetNode().GetChildData();
+    const VectorInt2 texture_size = in_component_owner.GetNode().GetTextureSize(in_param._draw_system);
     for (auto& child_data_ptr : child_data_array)
     {
-        UIHierarchyNodeChildData& child_data = *child_data_ptr;
-
-        if (nullptr == child_data._component)
-        {
-            continue;
-        }
+        UIHierarchyNodeChild& child_data = *child_data_ptr;
 
         VectorInt4& child_window_offset = child_window_offset_array[trace];
         trace += 1;
@@ -128,8 +105,7 @@ void UIComponentStack::UpdateLayout(
         const VectorInt2 window(child_window_offset.GetX(), child_window_offset.GetY());
         const VectorInt2 offset(child_window_offset.GetZ(), height);
 
-        child_data._component->UpdateLayout(
-            child_data,
+        child_data.UpdateLayout(
             in_param,
             window,
             offset
@@ -138,7 +114,7 @@ void UIComponentStack::UpdateLayout(
 }
 
 const VectorInt2 UIComponentStack::CalculateDesiredSize(
-    UIHierarchyNodeChildData& in_component_owner,
+    UIHierarchyNodeChild& in_component_owner,
     const UIHierarchyNodeUpdateParam& in_param,
     const VectorInt2& in_base_layout_size,
     std::vector<VectorInt4>& out_child_window_offset_array
@@ -147,17 +123,12 @@ const VectorInt2 UIComponentStack::CalculateDesiredSize(
     const int gap = _gap.Calculate(in_base_layout_size, in_param._ui_scale);
 
     VectorInt2 max_desired_size;
-    for (auto& child_data_ptr : in_component_owner._node->GetChildData())
+    for (auto& child_data_ptr : in_component_owner.GetNode().GetChildData())
     {
-        UIHierarchyNodeChildData& child_data = *child_data_ptr;
+        UIHierarchyNodeChild& child_data = *child_data_ptr;
 
-        if (nullptr == child_data._component)
-        {
-            continue;
-        }
-
-        VectorInt2 child_desired = child_data._component->GetDesiredSize(
-            child_data,
+        // how to skip null components?  
+        VectorInt2 child_desired = child_data.GetDesiredSize(
             in_param,
             in_base_layout_size
             );
@@ -168,7 +139,7 @@ const VectorInt2 UIComponentStack::CalculateDesiredSize(
         default:
             break;
         case UIOrientation::TVertical:
-            if (0 != max_desired_size[1])
+            if ((0 != max_desired_size[1]) && (0 != child_desired[1]))
             {
                 max_desired_size[1] += gap;
             }
@@ -178,7 +149,7 @@ const VectorInt2 UIComponentStack::CalculateDesiredSize(
 
             break;
         case UIOrientation::THorizontal:
-            if (0 != max_desired_size[0])
+            if ((0 != max_desired_size[0]) && (0 != child_desired[0]))
             {
                 max_desired_size[0] += gap;
             }
@@ -207,7 +178,7 @@ const VectorInt2 UIComponentStack::CalculateDesiredSize(
         }
     }
 
-    max_desired_size = GetLayout().ApplyMargin(
+    max_desired_size = in_component_owner.GetLayout().ApplyMargin(
         max_desired_size,
         in_param._ui_scale
         );
@@ -298,7 +269,7 @@ const bool UIComponentStack::UpdateSize(
     auto& child_data_array = in_out_node.GetChildData();
     for (auto& child_data_ptr : child_data_array)
     {
-        UIHierarchyNodeChildData& child_data = *child_data_ptr;
+        UIHierarchyNodeChild& child_data = *child_data_ptr;
 
         if (nullptr == child_data._component)
         {
@@ -366,7 +337,7 @@ void UIComponentStack::GetStackDesiredSize(
     VectorInt2 max_desired_size;
     for (auto& child_data_ptr : in_out_node.GetChildData())
     {
-        UIHierarchyNodeChildData& child_data = *child_data_ptr;
+        UIHierarchyNodeChild& child_data = *child_data_ptr;
 
         if (nullptr == child_data._component)
         {

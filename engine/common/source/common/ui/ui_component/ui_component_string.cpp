@@ -8,20 +8,15 @@
 #include "common/text/text_manager.h"
 #include "common/ui/ui_data/ui_data_string.h"
 #include "common/ui/ui_hierarchy_node.h"
+#include "common/ui/ui_hierarchy_node_child.h"
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_texture.h"
 
 
 UIComponentString::UIComponentString(
-    std::unique_ptr<TextBlock>& in_text_block,
-    const UILayout& in_layout,
-    const UITintColour& in_tint_colour,
-    void* in_source_token
+    std::unique_ptr<TextBlock>& in_text_block
     )
-    : IUIComponent(
-        in_layout, 
-        in_tint_colour,
-        in_source_token)
+    : IUIComponent()
     , _text_block(std::move(in_text_block))
 {
     return;
@@ -46,8 +41,6 @@ const bool UIComponentString::SetText(
 }
 
 const bool UIComponentString::Set(
-    const UILayout& in_layout,
-    const UITintColour& in_tint_colour,
     TextFont& in_font, 
     const int in_font_size,
     const float in_new_line_gap_ratio,
@@ -58,9 +51,6 @@ const bool UIComponentString::Set(
     )
 {
     bool dirty = false;
-
-    SetLayout(in_layout);
-    SetTintColour(in_tint_colour);
 
     if (true == _text_block->SetFont(in_font))
     {
@@ -95,7 +85,7 @@ const bool UIComponentString::Set(
 }
 
 const VectorInt2 UIComponentString::GetDesiredSize(
-    UIHierarchyNodeChildData&,
+    UIHierarchyNodeChild& in_component_owner,
     const UIHierarchyNodeUpdateParam& in_layout_param,
     const VectorInt2& in_pre_shrink_layout_size //in_parent_window
     )
@@ -107,42 +97,32 @@ const VectorInt2 UIComponentString::GetDesiredSize(
     _text_block->SetUIScale(in_layout_param._ui_scale);
 
     const VectorInt2 bounds = _text_block->GetTextBounds();
-    const VectorInt2 result = GetLayout().ApplyMargin(bounds, in_layout_param._ui_scale);
+    const VectorInt2 result = in_component_owner.GetLayout().ApplyMargin(bounds, in_layout_param._ui_scale);
     return result;
 }
 
-//void UIComponentString::SetContainerSize(const VectorInt2& in_size)
-//{
-//    _text_block->SetTextContainerSize(in_size);
-//}
-
-const bool UIComponentString::UpdateResources(
-    UIHierarchyNodeChildData& in_component_owner,
+void UIComponentString::UpdateResources(
+    UIHierarchyNodeChild& in_component_owner,
     const UIHierarchyNodeUpdateParam& in_param,
     const UIScreenSpace& in_parent_screen_space,
     const VectorInt2& in_parent_texture_size
     )
 {
-    bool dirty = false;
-
-    if (true == TSuper::UpdateResources(
+    TSuper::UpdateResources(
         in_component_owner,
         in_param,
         in_parent_screen_space,
         in_parent_texture_size
-        ))
-    {
-        dirty = true;
-    }
+        );
 
     if (true == _text_block->SetTextContainerSize(
-        in_component_owner._node->GetTextureSize(in_param._draw_system)
+        in_component_owner.GetNode().GetTextureSize(in_param._draw_system)
         ))
     {
-        dirty = true;
+        in_component_owner.SetStateFlagBit(UIStateFlag::TRenderDirty, true);
     }
 
-    return dirty;
+    return;
 }
 
 const bool UIComponentString::PreDraw(
@@ -153,9 +133,7 @@ const bool UIComponentString::PreDraw(
     bool dirty = false;
     auto& texture = in_node.GetUITexture();
 
-    if ((false == texture.GetHasDrawn()) ||
-        (true == texture.GetAlwaysDirty())
-        )
+    if (true == texture.CalculateNeedsToDraw())
     {
         if (false == texture.SetRenderTarget(
             in_draw_param._draw_system,

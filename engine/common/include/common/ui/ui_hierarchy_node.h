@@ -12,6 +12,7 @@ class UIData;
 class UIEffectData;
 class UIGeometry;
 class UIHierarchyNode;
+class UIHierarchyNodeChild;
 class UIRootInputState;
 class UITexture;
 class UILayout;
@@ -34,21 +35,21 @@ struct UIManagerUpdateLayoutParam;
 enum class UIStateFlag;
 
 /*
+//v2, 
 UIHierarchyNode // N0 
-    _texture // T0 texture or backbuffer A0 draws to
-    [_input_state] // I0 optional top level input state, which node is focused, node click started on, hover node
-    _child_node_array // A0
-    _effect_stack // E0
-        _geometry // G1 geometry to draw the texture T1 onto T0
-        _shader_constant_buffer // S1 the shader constants -> moved to component default? or needs to be with? in? geometry G1
-        _component // C1 controls size of T1 and G1. model returns an array of ui data for child array A1
-        UIHierarchyNode // N1 child node
-            _texture // T1 texture or backbuffer A1 draws to
-            _child_node_array // A1
-            _effect_stack // E1
-
-the component C1 may have special rules (ie, a virtual method) to control how child array A1 is drawn to T1
-
+    <_input state>
+    _texture // T0 the texture for N0, the children A0 draw to this using there geometry G1. size is from external, such as screen size
+    _effect_stack // E0, use T0 as input, and perform an effect step for each item in stack
+    // if we had layout here, it would be redundant for root node
+    _child_node_array // A1, UIHierarchyNodeChild
+    [
+        _component // C1, special rules for layout and rendering for each different component type
+                   // tooltip manager may want to intercept update hierarchy, else it could modify the children of the uidata is it matched with? callback, or store changes to update called?
+        _layout/other common stuff of _component to allow component to move to pure interface rather than have inherited functionality
+        _shader_constant_buffer
+        _geometry
+        _node
+    ]
 
 lets talk about layout.
 text may have desired size, ie, height needed for text after wrap, and/or some text bounds
@@ -93,50 +94,7 @@ UpdateSize then UpdateLayout? had been thinking of them paired. layout is how mu
 
 UILayout gains shrink to content?
 
-
-
 */
-
-
-/// As UIHierarchyNodeChildData keeps gaining functions, it really should be promotted to a class and moved to it's own file?
-struct UIHierarchyNodeChildData
-{
-    //can you pass    std::unique_ptr<IUIComponent>& in_content = nullptr, hmmn, wants non const but i want to use move semantics
-    static std::shared_ptr<UIHierarchyNodeChildData> Factory();
-
-    UIHierarchyNodeChildData(
-        std::unique_ptr<UIGeometry>& in_geometry,
-        std::unique_ptr<IUIComponent>& in_component,
-        std::unique_ptr<UIHierarchyNode>& in_node,
-        std::unique_ptr<UIScreenSpace>& in_screen_space
-        );
-    ~UIHierarchyNodeChildData();
-
-    //const bool RecurseSetStateFlagInput(const UIStateFlag in_state_flag);
-    //static const bool RecurseSetStateFlagInput(UIHierarchyNodeChildData* const in_data, const UIStateFlag in_state_flag);
-
-    //void UpdateHierarchy(
-    //    UIData* const in_data,
-    //    const UIHierarchyNodeUpdateHierarchyParam& in_param,
-    //    const int in_index = 0
-    //    );
-
-    void Draw(const UIManagerDrawParam& in_draw_param);
-
-    const bool VisitComponents(const std::function<const bool(IUIComponent* const, UIHierarchyNode* const)>& in_visitor);
-
-    /// Need to track if state changed, so not using GeometryGeneric
-    std::unique_ptr<UIGeometry> _geometry;
-    /// _component is out here rather than in _node to avoid top level node needing a root or do nothing content for layout
-    std::unique_ptr<IUIComponent> _component; 
-    /// recusion point
-    std::unique_ptr<UIHierarchyNode> _node;
-    /// size relative to screen for input
-    std::unique_ptr<UIScreenSpace> _screen_space;
-    /// shader constants to allow for tint, shared as it has ownership incremented by use in the render list
-    std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;
-
-};
 
 struct UIHierarchyNodeUpdateParam
 {
@@ -161,7 +119,10 @@ struct UIHierarchyNodeUpdateParam
 
 };
 
-
+/// to allow a node to be used as the top level document root, which doen't need geometry for how it draws to a parent as it is the top level
+/// UIHierarchyNode has been cut into UIHierarchyNode and UIHierarchyNodeChild. 
+/// the UIHierarchyNodeChild holds a UIHierarchyNode node, and a component, and some other data
+/// UIHierarchyNode holds an array of child UIHierarchyNodeChild, and the texture, effects on the texture, (and an optional root input state)
 class UIHierarchyNode
 {
 public:
@@ -179,19 +140,16 @@ public:
     const bool ClearChildren();
 
     /// Expose child data array to allow ui_component to specialise how hieararchy builds
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>>& GetChildData() { return _child_data_array; }
+    std::vector<std::shared_ptr<UIHierarchyNodeChild>>& GetChildData() { return _child_array; }
 
-    /// create/ destroy nodes to match model, make content match type from factory, update content?
+    /// create/ destroy nodes to match model, make component of in_parent_to_this_node_or_null match type from UIData in_data
+    /// we do this dance around updateing the component of the parent child so that the root hierarchy node doesn't have a component, but still maps to a ui data
+    /// previously we took in an array of ui data, but then also need the effect and texture param, which already had 
     void UpdateHierarchy(
+        UIData& in_data,
+        UIHierarchyNodeChild* const in_parent_to_this_node_or_null,
         const UIHierarchyNodeUpdateParam& in_param,
-        const std::vector<std::shared_ptr<UIData>>& in_array_child_data,
-        const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
-        const int in_child_index,
-        const bool in_dirty,
-        const bool in_render_to_texture,
-        const bool in_always_dirty,
-        const bool in_allow_clear,
-        const VectorFloat4& in_clear_colour
+        const int in_child_index
         );
 
     /// UpdateLayout split from UpdateResources to allow texture size to be based on child size, rather than just top down layout size
@@ -202,6 +160,8 @@ public:
         const VectorInt2& in_parent_offset
         );
 
+    /// Return true if something changed and ui texture is now marked to draw, as need to propergate this up the hierarchy, 
+    /// ie, need to mark parent nodes texture as dirty on child change
     const bool UpdateResources(
         const UIHierarchyNodeUpdateParam& in_param,
         const UIScreenSpace& in_parent_screen_space
@@ -216,17 +176,6 @@ public:
     void SetTextureSize(
         const VectorInt2& in_texture_size
         );
-
-    //void UpdateSize(
-    //    DrawSystem* const in_draw_system,
-    //    const VectorInt2& in_parent_size,
-    //    const VectorInt2& in_parent_offset,
-    //    const VectorInt2& in_parent_window,
-    //    const float in_ui_scale,
-    //    const float in_time_delta,
-    //    const bool in_mark_dirty,
-    //    const UIScreenSpace& in_parent_screen_space
-    //    );
 
     const bool DealInput(
         UIRootInputState& in_input_state,
@@ -247,27 +196,30 @@ public:
         const UIStateFlag in_state_flag
         );
 
+    /// Get the texture for the node, could be the last effect of the effect stacks texture, or the nodes own ui texture
     UITexture& GetUITexture() const;// { return *_texture; }
 
 private:
+    /// currently this is under the Hierarchy update, so on effect stack change over in the UIData, it needs to set hierarchy dirty to get change propergated
     const bool ApplyEffect(
         const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
         const UIHierarchyNodeUpdateParam& in_param,
         const int in_index
         );
 
-
 private:
     /// recursion data structure, holds a UIHierarchyNode, component, geometry...
-    std::vector<std::shared_ptr<UIHierarchyNodeChildData>> _child_data_array;
+    std::vector<std::shared_ptr<UIHierarchyNodeChild>> _child_array;
 
     /// array of effects on the node
     std::vector<std::shared_ptr<UIEffectComponent>> _array_effect_component;
 
-    /// Hold the render target or wrap the backbuffer as a texture
+    /// Hold the render target or wrap the backbuffer as a texture for this node's components to draw to
     std::unique_ptr<UITexture> _texture;
 
     /// Allow top level node to hold some state for input like the focused node, or click active node, hover node?
+    /// this could be null for any node not used as a top level input host. 
+    /// Alternative is to have the input state external to the node hierarchy, but was trying to have everything under the root node
     std::unique_ptr<UIRootInputState> _root_input_state;
 
 };

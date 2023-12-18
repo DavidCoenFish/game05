@@ -37,7 +37,7 @@ UIData* const UIData::AddChild(const std::shared_ptr<UIData>& in_data_child)
 {
     _array_child_data.push_back(in_data_child);
     in_data_child->_parent_or_null = this;
-    SetDirtyBit(UIDataDirty::THierarchy, true);
+    SetDirtyBit(UIDataDirty::THierarchyDirty, true);
     return in_data_child.get();
 }
 
@@ -49,7 +49,7 @@ UIData* const UIData::SetChild(const std::shared_ptr<UIData>& in_data_child, con
     }
     _array_child_data[in_index] = in_data_child;
     in_data_child->_parent_or_null = this;
-    SetDirtyBit(UIDataDirty::THierarchy, true);
+    SetDirtyBit(UIDataDirty::THierarchyDirty, true);
     return in_data_child.get();
 }
 
@@ -63,7 +63,7 @@ void UIData::ClearAllChildren(void)
         }
 
         _array_child_data.clear();
-        SetDirtyBit(UIDataDirty::THierarchy, true);
+        SetDirtyBit(UIDataDirty::THierarchyDirty, true);
     }
 }
 
@@ -101,6 +101,7 @@ void UIData::ApplyComponent(
     const int //in_index
     )
 {
+#if 0
     // if in_out_component is not a UIComponentCanvas, remake it as one
     UIComponentCanvas* component = dynamic_cast<UIComponentCanvas*>(in_out_component.get());
     if (nullptr == component)
@@ -117,6 +118,8 @@ void UIData::ApplyComponent(
     {
         component->Set(_layout, _tint_colour);
     }
+#endif
+    //TODO: add UIDataCanvas to make UIComponentCanvas, and have UIData make a null component
 
     return;
 }

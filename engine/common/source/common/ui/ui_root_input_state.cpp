@@ -178,7 +178,7 @@ void UIRootInputState::FinialiseTooltip()
 }
 
 void UIRootInputState::RequestComboBoxDropdown(
-    std::shared_ptr<UIHierarchyNodeChildData>& in_dropdown
+    std::shared_ptr<UIHierarchyNodeChild>& in_dropdown
     )
 {
     _combo_box_dropdown = in_dropdown;

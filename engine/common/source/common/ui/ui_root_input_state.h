@@ -9,7 +9,7 @@ class UIComponentTooltipLayer;
 class UIComponentComboBoxLayer;
 class VectorInt2;
 struct UIManagerDealInputParam;
-struct UIHierarchyNodeChildData;
+class UIHierarchyNodeChild;
 
 struct TooltipRequestData
 {
@@ -90,7 +90,7 @@ public:
     void FinialiseTooltip();
 
     void RequestComboBoxDropdown(
-        std::shared_ptr<UIHierarchyNodeChildData>& in_dropdown
+        std::shared_ptr<UIHierarchyNodeChild>& in_dropdown
         );
 
     void FinialiseComboBox();
@@ -108,7 +108,7 @@ private:
     std::vector<TooltipRequestData> _tooltip_request_data;
 
     // combo box dropdown request data
-    std::shared_ptr<UIHierarchyNodeChildData> _combo_box_dropdown;
+    std::shared_ptr<UIHierarchyNodeChild> _combo_box_dropdown;
     UIData* _combo_box_layer_source_token;
     UIComponentComboBoxLayer* _combo_box_layer;
 

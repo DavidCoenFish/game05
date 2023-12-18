@@ -12,10 +12,7 @@ class UIComponentString : public IUIComponent
     typedef IUIComponent TSuper;
 public:
     UIComponentString(
-        std::unique_ptr<TextBlock>& in_text_block,
-        const UILayout& in_layout,
-        const UITintColour& in_tint_colour,
-        void* in_source_token = nullptr
+        std::unique_ptr<TextBlock>& in_text_block
         );
     ~UIComponentString();
 
@@ -26,8 +23,6 @@ public:
 
     // return true if modified, else false
     const bool Set(
-        const UILayout& in_layout,
-        const UITintColour& in_tint_colour,
         TextFont& in_font, 
         const int in_font_size,
         const float in_new_line_gap_ratio,
@@ -37,18 +32,15 @@ public:
         const VectorFloat4& in_text_colour
         );
 
-
-    //void SetContainerSize(const VectorInt2& in_size);
-
 private:
     virtual const VectorInt2 GetDesiredSize(
-        UIHierarchyNodeChildData& in_component_owner,
+        UIHierarchyNodeChild& in_component_owner,
         const UIHierarchyNodeUpdateParam& in_layout_param,
         const VectorInt2& in_pre_shrink_layout_size //in_parent_window
         ) override;
 
-    virtual const bool UpdateResources(
-        UIHierarchyNodeChildData& in_component_owner,
+    virtual void UpdateResources(
+        UIHierarchyNodeChild& in_component_owner,
         const UIHierarchyNodeUpdateParam& in_param,
         const UIScreenSpace& in_parent_screen_space,
         const VectorInt2& in_parent_texture_size

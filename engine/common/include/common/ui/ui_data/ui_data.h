@@ -10,7 +10,7 @@ class UIEffectComponent;
 class UIEffectData;
 class UIHierarchyNode;
 class UIScreenSpace;
-struct UIHierarchyNodeChildData;
+class UIHierarchyNodeChild;
 struct UIHierarchyNodeUpdateParam;
 
 /// base ui data class ends up representing minimal data for ui hierarchy

@@ -3,12 +3,17 @@
 enum class UIDataDirty
 {
     TNone = 0,
-    THierarchy = 1 << 0,
-    TLayout = 1 << 1, // flag the related UIComponent as layout dirty
-    // TAutoScroll
-    TRender = 1 << 2, // flag the related UIComponent as render dirty
+    TDecendantDirty = 1 << 0,
 
-    TLayoutRender = TLayout | TRender
+    TTextureDirty = 1 << 1, // the destination texture, ie, what this data is drawn to, needs to be updated
+    THierarchyDirty = 1 << 2, // this node's child count has changed
+    TComponentDirty = 1 << 3, // component (and/or) layout/base colour data has changed and needs update
+    TEffectDirty = 1 << 4, // let the UIHierarchyNode know that it has to update the effect stack of the node for this UIData
+
+    //THierarchy = 1 << 0, // has the number of children changed, has this node just been added (top level case)
+    //TLayout = 1 << 1, // flag the related UIComponent as layout dirty
+    //TRender = 1 << 2, // flag the related UIComponent as render dirty
+    //TLayoutRender = TLayout | TRender
 };
 
 enum class UIOrientation
@@ -93,8 +98,8 @@ enum class UIStateFlag
 
     /// A layout has changed
     TLayoutDirty = 1 << 29,
-    TResourceDirty = 1 << 30, // also if effect param change
 
+    TResourceDirty = 1 << 30,
     TRenderDirty = 1 << 31
 
 };

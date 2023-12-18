@@ -11,21 +11,12 @@ class UIComponentCanvas : public IUIComponent
 {
     typedef IUIComponent TSuper;
 public:
-    UIComponentCanvas(
-        const UILayout& in_layout,
-        const UITintColour& in_tint_colour,
-        void* in_source_token = nullptr
-        );
+    UIComponentCanvas();
     virtual ~UIComponentCanvas();
-
-    const bool Set(
-        const UILayout& in_layout,
-        const UITintColour& in_tint_colour
-        );
 
 private:
     virtual const VectorInt2 GetDesiredSize(
-        UIHierarchyNodeChildData& in_component_owner,
+        UIHierarchyNodeChild& in_component_owner,
         const UIHierarchyNodeUpdateParam& in_layout_param,
         const VectorInt2& in_pre_shrink_layout_size //in_parent_window
         ) override;

@@ -41,7 +41,7 @@ public:
         const VectorFloat4& in_clear_colour = VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f)
         );
 
-    void SetSize(
+    const bool SetSize(
         const VectorInt2& in_size
         );
 
@@ -56,11 +56,13 @@ public:
         DrawSystemFrame* const in_draw_system_frame
         );
 
-    const bool GetHasDrawn() const { return _has_drawn; }
+    //const bool GetHasDrawn() const { return _has_drawn; }
     void SetHasDrawn(const bool in_has_drawn) { _has_drawn = in_has_drawn; return; }
 
     const bool GetAllowClear() const { return _allow_clear; }
-    const bool GetAlwaysDirty() const { return _always_dirty; }
+    //const bool GetAlwaysDirty() const { return _always_dirty; }
+
+    const bool CalculateNeedsToDraw() const;
 
 private:
     void UpdateRenderTarget(

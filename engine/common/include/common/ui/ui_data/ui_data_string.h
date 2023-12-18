@@ -47,7 +47,7 @@ private:
 
     //virtual void UpdateLayoutRender(
     //    IUIComponent& in_component,
-    //    UIHierarchyNodeChildData& in_component_owner,
+    //    UIHierarchyNodeChild& in_component_owner,
     //    const UIHierarchyNodeUpdateLayoutRenderParam& in_param,
     //    const VectorInt2& in_parent_size,
     //    const VectorInt2& in_parent_offset,
@@ -60,14 +60,14 @@ private:
     //    IUIComponent& in_component,
     //    const VectorInt2& in_target_size, 
     //    const float in_ui_scale,
-    //    UIHierarchyNodeChildData& in_component_owner
+    //    UIHierarchyNodeChild& in_component_owner
     //    ) override;
 
     //virtual const VectorInt2 GetDesiredSize(
     //    IUIComponent& in_component,
     //    const VectorInt2& in_target_size, 
     //    const float in_ui_scale,
-    //    UIHierarchyNodeChildData& in_component_owner
+    //    UIHierarchyNodeChild& in_component_owner
     //    ) override;
 
 private:

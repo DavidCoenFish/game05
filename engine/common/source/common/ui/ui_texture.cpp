@@ -27,6 +27,13 @@ UITexture::~UITexture()
     _render_target_texture.reset();
 }
 
+const bool UITexture::CalculateNeedsToDraw() const
+{
+    // if we are always dirty, or if we have not drawn
+    return _always_dirty || (false == _has_drawn);
+}
+
+
 void UITexture::UpdateRenderTarget(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list
@@ -37,7 +44,6 @@ void UITexture::UpdateRenderTarget(
         if (nullptr == _render_target_texture)
         {
             _has_drawn = false;
-            //_needs_resize = false;
 
             const std::vector<RenderTargetFormatData> target_format_data_array({
                 RenderTargetFormatData(
@@ -54,19 +60,6 @@ void UITexture::UpdateRenderTarget(
                 _size
                 );
         }
-#if 0
-        else if (true == _needs_resize)
-        {
-            _has_drawn = false;
-            _needs_resize = false;
-
-            in_draw_system->ResizeRenderTargetTexture(
-                in_command_list,
-                _render_target_texture.get(),
-                _size
-                );
-        }
-#endif
     }
     return;
 }
@@ -142,13 +135,13 @@ const bool UITexture::Update(
     return dirty;
 }
 
-void UITexture::SetSize(
+const bool UITexture::SetSize(
     const VectorInt2& in_size
     )
 {
     if (_size == in_size)
     {
-        return;
+        return false;
     }
 
     _size = in_size;
@@ -157,7 +150,7 @@ void UITexture::SetSize(
     // resizing the render target seems to be triggering a object deleted while still in use error, so reset the resource on resize
     _render_target_texture.reset();
 
-    return;
+    return true;
 }
 
 void UITexture::SetShaderResource(

@@ -6,9 +6,9 @@
 #include "common/ui/ui_effect/ui_effect_component.h"
 #include "common/ui/ui_effect/ui_effect_data.h"
 #include "common/ui/ui_hierarchy_node.h"
+#include "common/ui/ui_hierarchy_node_child.h"
 #include "common/ui/ui_geometry.h"
 #include "common/ui/ui_screen_space.h"
-
 
 namespace
 {
@@ -20,17 +20,7 @@ namespace
     constexpr float s_scroll_speed = 5.0f;
 }
 
-IUIComponent::IUIComponent(
-    const UILayout& in_layout,
-    const UITintColour& in_tint_colour,
-    void* in_source_token,
-    const UIStateFlag in_state_flag
-    )
-    : _layout(in_layout)
-    , _tint_colour(in_tint_colour)
-    , _source_token(in_source_token)
-    , _time_accumulate_seconds(0.0f)
-    , _state_flag(in_state_flag)
+IUIComponent::IUIComponent()
 {
     // Nop
 }
@@ -124,16 +114,18 @@ void IUIComponent::CalculateGeometry(
 
     return;
 }
-
-void IUIComponent::SetTintColour(const UITintColour& in_tint_colour)
+#if 0
+const bool IUIComponent::SetTintColour(const UITintColour& in_tint_colour)
 {
+    bool dirty = false;
     if (_tint_colour != in_tint_colour)
     {
         _tint_colour = in_tint_colour;
-        SetStateFlagBit(UIStateFlag::TDirty, true);
+        dirty = true;
+        //SetStateFlagBit(UIStateFlag::TRenderDirty, true);
     }
 
-    return;
+    return dirty;
 }
 
 const VectorFloat4 IUIComponent::CalculateTintColour() const
@@ -151,6 +143,8 @@ void* IUIComponent::GetSourceToken() const
 {
     return _source_token;
 }
+#endif
+
 
 //const bool IUIComponent::CheckLayoutCache(
 //    VectorInt2& out_layout_size, 
@@ -212,12 +206,12 @@ void* IUIComponent::GetSourceToken() const
 //}
 
 const VectorInt2 IUIComponent::GetDesiredSize(
-    UIHierarchyNodeChildData&, //in_component_owner,
+    UIHierarchyNodeChild& in_component_owner,
     const UIHierarchyNodeUpdateParam& in_layout_param,
     const VectorInt2& //in_parent_window
     )
 {
-    return _layout.ApplyMargin(
+    return in_component_owner.GetLayout().ApplyMargin(
         VectorInt2::s_zero,
         in_layout_param._ui_scale
         );
@@ -232,17 +226,17 @@ const VectorInt2 IUIComponent::GetDesiredSize(
 ///             component::desired(parent window or layout size? layout size may yet to be modified...)
 ///             finialise layout size (shrink/expand)
 void IUIComponent::UpdateLayout(
-    UIHierarchyNodeChildData& in_component_owner,
+    UIHierarchyNodeChild& in_component_owner,
     const UIHierarchyNodeUpdateParam& in_param,
     const VectorInt2& in_parent_window,
     const VectorInt2& in_parent_offset
     )
 {
     // calculate layout size given parent window
-    VectorInt2 base_layout_size = _layout.GetLayoutSize(in_parent_window, in_param._ui_scale);
+    VectorInt2 base_layout_size = in_component_owner.GetLayout().GetLayoutSize(in_parent_window, in_param._ui_scale);
 
     // recurse node::update layout
-    in_component_owner._node->UpdateLayout(
+    in_component_owner.GetNode().UpdateLayout(
         in_param,
         //_layout_offset,
         base_layout_size,
@@ -252,35 +246,39 @@ void IUIComponent::UpdateLayout(
     // component::desired(parent window or layout size? layout size may yet to be modified...)
     const VectorInt2 base_desired_size = GetDesiredSize(in_component_owner, in_param, base_layout_size);
 
-    VectorInt2 texture_size;
-
     // finialise layout size (shrink/expand) and work out the texture size (which may include the texture margin)
-    _layout.Finalise(
-        _layout_size,
-        texture_size,
-        _layout_offset,
+    in_component_owner.Finalise(
         base_layout_size,
         base_desired_size,
         in_parent_offset
         );
 
-    in_component_owner._node->SetTextureSize(texture_size);
+    return;
 }
 
-const bool IUIComponent::UpdateResources(
-    UIHierarchyNodeChildData& in_component_owner,
+void IUIComponent::UpdateResources(
+    UIHierarchyNodeChild& in_component_owner,
     const UIHierarchyNodeUpdateParam& in_param,
     const UIScreenSpace& in_parent_screen_space,
     const VectorInt2& in_parent_texture_size
     )
 {
-    bool dirty = false;
+    in_component_owner.Update(in_param._delta_time_seconds);
+    in_component_owner.UpdateScroll(in_param);
+    in_component_owner.UpdateGeometry(
+        in_param, 
+        in_parent_screen_space,
+        in_parent_texture_size
+        );
 
-    if (true == Update(in_param._delta_time_seconds))
-    {
-        dirty = true;
-    }
+    in_component_owner.GetNode().UpdateResources(
+        in_param,
+        in_component_owner.GetScreenSpace()
+        );
 
+    return;
+}
+#if 0
     const bool uv_scroll_manual_x = 0 != (static_cast<int>(_state_flag) & static_cast<int>(UIStateFlag::TManualScrollX));
     const bool uv_scroll_manual_y = 0 != (static_cast<int>(_state_flag) & static_cast<int>(UIStateFlag::TManualScrollY));
 
@@ -321,23 +319,10 @@ const bool IUIComponent::UpdateResources(
         geometry_pos,
         geometry_uv
         );
+#endif
 
-    if (true == in_component_owner._node->UpdateResources(
-        in_param,
-        *in_component_owner._screen_space
-        ))
-    {
-        dirty = true;
-    }
 
-    if (true == dirty)
-    {
-        SetStateFlagBit(UIStateFlag::TDirty, true);
-    }
-
-    return dirty;
-}
-
+#if 0
 void IUIComponent::SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool in_manual_horizontal, const bool in_manual_vertical)
 {
     SetStateFlagBit(UIStateFlag::TManualScrollX, in_manual_horizontal);
@@ -389,10 +374,11 @@ const bool IUIComponent::GetStateFlagBit(const UIStateFlag in_state_flag_bit) co
 }
 
 /// Set layout dirty flag on change, or is that handled by UIData~ and at the conponent level, layout only set from UIData
-void IUIComponent::SetLayout(
+const bool IUIComponent::SetLayout(
     const UILayout& in_layout
     )
 {
+    bool dirty;
     if (_layout != in_layout)
     {
         _layout == in_layout;
@@ -437,3 +423,4 @@ const bool IUIComponent::Update(
     const bool dirty = _tint_colour.GetTimeChangeDirty(prev_time, _time_accumulate_seconds);
     return dirty;
 }
+#endif

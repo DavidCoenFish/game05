@@ -144,7 +144,7 @@ const bool UIEffectComponent::Set(
     return dirty;
 }
 
-void UIEffectComponent::Update(
+const bool UIEffectComponent::Update(
     const UIHierarchyNodeUpdateParam&,// in_param,
     const VectorInt2& in_target_size
     )

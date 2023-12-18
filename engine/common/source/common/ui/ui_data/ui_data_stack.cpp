@@ -134,7 +134,7 @@ void UIDataStack::ApplyComponent(
 //
 //void UIDataStack::UpdateLayoutRender(
 //    IUIComponent& in_component,
-//    UIHierarchyNodeChildData& in_component_owner,
+//    UIHierarchyNodeChild& in_component_owner,
 //    const UIHierarchyNodeUpdateLayoutRenderParam& in_param,
 //    const VectorInt2& in_parent_size,
 //    const VectorInt2& in_parent_offset,
@@ -166,7 +166,7 @@ void UIDataStack::ApplyComponent(
 //    IUIComponent& in_component,
 //    const VectorInt2& in_target_size, 
 //    const float in_ui_scale,
-//    UIHierarchyNodeChildData& in_component_owner
+//    UIHierarchyNodeChild& in_component_owner
 //    )
 //{
 //    return GetDesiredSize(
@@ -181,7 +181,7 @@ void UIDataStack::ApplyComponent(
 //    IUIComponent& in_component,
 //    const VectorInt2& in_target_size, 
 //    const float in_ui_scale,
-//    UIHierarchyNodeChildData& //in_component_owner
+//    UIHierarchyNodeChild& //in_component_owner
 //    )
 //{
 //    UIComponentString* content = dynamic_cast<UIComponentString*>(&in_component);

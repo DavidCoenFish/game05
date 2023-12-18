@@ -1,29 +1,56 @@
-other than UIData changes, the inputs to UIComponent are [time, ui scale, texture size]
-state may also be changed by input, ie, hover over state flag, click down
--change of input state needs to set render dirty flag 
+- rebuild "update layout" logic to not run unless something changes
+    other than UIData changes, the inputs to UIComponent are [time, ui scale, texture size, <locale, but that may be upstream of UIData>]
+    state may also be changed by input, ie, hover over state flag, click down
+    -change of input state needs to set render dirty flag 
 
--don't change contentent with time, what about auto scroll
+    -don't change contentent with time, what about auto scroll
+    - is auto scroll done in UIData or UIComponent, thought it was ui component. 
+    UpdateResource is fully recursive and does the scroll tick and the fade tick, if these change render state, set needs to render up the stack
 
+    if input state changes, need to mark as needs to render, see 
 
+    so, do components need a parent link so layout changes can propergate upwards? what about resource/ render dirty
+    or, so we move layout dirty flag into node?
+
+    can we move the common properties, like layout, out of UIComponent and into node? or node child?
+    some of the point of having component and node split was so that there could be a root node at the top of the hierarchy
+    root node having geometry didn't make sense so geometry was pulled out
 
 - pollish pass on text placement, 
     check wrap
     clean up EM align (modify "zero" row of font glyph texture?)
-- rebuild "update layout" logic to not run unless something changes
 - svg
 
+//v2, 
 UIHierarchyNode // N0 
-    [_input_state] // I0 optional top level input state, which node is focused, node click started on, hover node
-    _texture // T0 texture or backbuffer contents of A0 draws to
-    _effect_stack // E0
-    _child_node_array // A0
-        _component // C1 controls size of T1 and G1. model returns an array of ui data for child array A1
-        _geometry // G1 geometry to draw the texture T1 onto T0
-        _shader_constant_buffer // S1 the shader constants -> moved to component default? or needs to be with? in? geometry G1
-        UIHierarchyNode // N1 child node
-            _texture // T1 texture or backbuffer A1 draws to
-            _effect_stack // E1
-            _child_node_array // A1
+    <_input state>
+    _texture // T0 the texture for N0, the children A0 draw to this using there geometry G1. size is from external, such as screen size
+    _effect_stack // E0, use T0 as input, and perform an effect step for each item in stack
+    // if we had layout here, it would be redundant for root node
+    _child_node_array // A1, UIHierarchyNodeChild
+    [
+        _component // C1, special rules for layout and rendering for each different component type
+                   // tooltip manager may want to intercept update hierarchy, else it could modify the children of the uidata is it matched with? callback, or store changes to update called?
+        _layout/other common stuff of _component to allow component to move to pure interface rather than have inherited functionality
+        _shader_constant_buffer
+        _geometry
+        _node
+    ]
+
+UIData gets flags [hierarchy change, layout change, render change (for param change in effect? in which case, have a effect change), and also an enum just for dirty/ dont skip in UpdateHierarchyLayout, ie, some decendent has an active flag]
+UpdateHierarchyLayout 
+    // query? mark node textures as dirty on change, ie, all we can flag in UIComponent hierarchy is mark texture dirty
+UpdateResource 
+    // no uidata at this point, use resource update to change texture size, geometry, and apply tick to fade and auto scroll (and components that want a tick?)
+    // visits every node, kind of needs to as difficult to track what nodes may have a tick for auto scroll
+    // however, we do know what when manual scroll is turned on in UpdateHierarchyLayout, have a UIComponent flag for needs tick/ decendent needs tick?
+    // -DependantDirty need to recurse to children
+    // -SizeResource ~ layout change, hierarchy created. need to update texture and geometry sizes
+    // -TickFade
+    // -TickScroll
+Draw
+    // any texture  that has not been drawn or with "always dirty" flag set get visited, needs to have been applyed up the tree
+
 
 example A
 N0 // Top level node
