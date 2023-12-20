@@ -57,7 +57,8 @@ public:
     const UITintColour& GetTintColour() const { return _tint_colour; }
 
     /// Make component type match what the data wants, default is UIComponentCanvas
-    virtual void ApplyComponent(
+    /// return true if data has changed and that we need to renderer
+    virtual const bool ApplyComponent(
         std::unique_ptr<IUIComponent>& in_out_component,
         const UIHierarchyNodeUpdateParam& in_param,
         const int in_index = 0

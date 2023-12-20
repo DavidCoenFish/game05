@@ -1,8 +1,8 @@
 #include "common/common_pch.h"
 #include "common/ui/ui_root_input_state.h"
 
-#include "common/ui/ui_component/ui_component_tooltip_layer.h"
-#include "common/ui/ui_component/ui_component_combo_box_layer.h"
+//#include "common/ui/ui_component/ui_component_tooltip_layer.h"
+//#include "common/ui/ui_component/ui_component_combo_box_layer.h"
 #include "common/ui/ui_manager.h"
 #include "common/log/log.h"
 #include "common/math/dsc_math.h"
@@ -137,6 +137,7 @@ void UIRootInputState::SubmitComponent(IUIComponent* const in_component)
     {
         return;
     }
+#if 0
     if (_tooltip_layer_source_token == in_component->GetSourceToken())
     {
         _tooltip_layer = dynamic_cast<UIComponentTooltipLayer*>(in_component);
@@ -145,7 +146,7 @@ void UIRootInputState::SubmitComponent(IUIComponent* const in_component)
     {
         _combo_box_layer = dynamic_cast<UIComponentComboBoxLayer*>(in_component);
     }
-
+#endif
     return;
 }
 

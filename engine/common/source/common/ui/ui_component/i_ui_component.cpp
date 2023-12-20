@@ -388,32 +388,17 @@ const bool IUIComponent::SetLayout(
 
     return;
 }
+#endif
 
-const bool IUIComponent::PreDraw(
-    const UIManagerDrawParam& in_draw_param,
-    UIHierarchyNode& in_node
+void IUIComponent::PreDraw(
+    const UIManagerDrawParam&, //in_draw_param,
+    UIHierarchyNode& //in_node
     )
 {
-    bool dirty = false;
-
-    if (true == in_node.PreDraw(
-        in_draw_param
-        ))
-    {
-        dirty = true;
-    }
-    if (true == in_node.Draw(
-        in_draw_param,
-        dirty,
-        _state_flag
-        ))
-    {
-        dirty = true;
-    }
-
-    return dirty;
+    return;
 }
 
+#if 0
 const bool IUIComponent::Update(
     const float in_time_delta
     )

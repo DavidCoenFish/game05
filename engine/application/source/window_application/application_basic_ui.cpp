@@ -1125,14 +1125,14 @@ class UIModel : public IUIModel
 public:
     UIModel(IWindowApplication& )//in_application)
     {
-        //BuildModelData00_OneRedQuad(_data_array_map, _data_map);
+        BuildModelData00_OneRedQuad(_data_array_map, _data_map);
         //BuildModelData01_ChildRedQuad(_data_array_map, _data_map);
         //BuildModelData02_Text(_data_array_map, _data_map);
         //BuildModelData03_ShrunkText(_data_array_map, _data_map);
         //BuildModelData04_ShrunkTextChildMargin(_data_array_map, _data_map);
         //BuildModelData05_Effect(_data_array_map, _data_map);
         //BuildModelData06_Tooltip(_data_array_map, _data_map);
-        BuildModelData07_Stack(_data_array_map, _data_map);
+        //BuildModelData07_Stack(_data_array_map, _data_map);
 
 /*
         _data_build_version = std::make_shared<UIDataString>(
@@ -2112,12 +2112,8 @@ void ApplicationBasicUI::Update()
                 );
             _draw_resource->_ui_manager->Update(
                 _draw_resource->_ui_hierarchy_node,
-                _draw_resource->_ui_model->GetDataArray("main"),
-                update_param,
-                false,
-                VectorInt2::s_zero,
-                true,
-                true
+                _draw_resource->_ui_model->GetData("main"),
+                update_param
                 );
         }
 /*

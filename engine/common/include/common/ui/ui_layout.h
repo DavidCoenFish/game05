@@ -66,6 +66,8 @@ public:
 
     // Merge Finalise and ApplyMargin? or is that up to the component to deal with, ie, stack
 
+    /// Return true if either axis adjustment modifies the layout size
+    const bool GetAdjustmentModifiesLayout() const;
 
     /// TODO: would it be better to just have accessors to set _data_attach and _data_pivot, and have SetSliderHorizontal... be helper functions?
     void SetSliderHorizontal(const float in_value);

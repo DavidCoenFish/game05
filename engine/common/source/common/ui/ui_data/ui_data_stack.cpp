@@ -29,7 +29,7 @@ UIDataStack::~UIDataStack()
     // Nop
 }
 
-void UIDataStack::ApplyComponent(
+const bool UIDataStack::ApplyComponent(
     std::unique_ptr<IUIComponent>& in_out_component,
     const UIHierarchyNodeUpdateParam&, //in_param,
     const int //in_index
@@ -38,30 +38,30 @@ void UIDataStack::ApplyComponent(
     // if in_out_component is not a UIComponentCanvas, remake it as one
     UIComponentStack* content = dynamic_cast<UIComponentStack*>(in_out_component.get());
 
+    bool dirty = false;
     if (nullptr == content)
     {
         auto new_content = std::make_unique<UIComponentStack>(
-            GetLayout(),
-            GetTintColour(),
-            this,
             _orientation,
             _gap
             );
         content = new_content.get();
         in_out_component = std::move(new_content);
+        dirty = true;
     }
     else
     {
         // we don't set the token source again, as we expect upstream to destroy the component if source token doesn't match
-        content->Set(
-            GetLayout(),
-            GetTintColour(),
+        if (true == content->Set(
             _orientation,
             _gap
-            );
+            ))
+        {
+            dirty = true;
+        }
     }
 
-    return;
+    return dirty;
 }
 
 ///// Make component type match what the data wants, default is UIComponentCanvas

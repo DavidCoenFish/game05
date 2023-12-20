@@ -119,31 +119,28 @@ void UIComponentString::UpdateResources(
         in_component_owner.GetNode().GetTextureSize(in_param._draw_system)
         ))
     {
-        in_component_owner.SetStateFlagBit(UIStateFlag::TRenderDirty, true);
+        in_component_owner.SetStateDirtyBit(UIStateDirty::TRenderDirty, true);
     }
 
     return;
 }
 
-const bool UIComponentString::PreDraw(
+void UIComponentString::PreDraw(
     const UIManagerDrawParam& in_draw_param,
     UIHierarchyNode& in_node
     ) 
 {
-    bool dirty = false;
     auto& texture = in_node.GetUITexture();
 
-    if (true == texture.CalculateNeedsToDraw())
+    //if (true == texture.CalculateNeedsToDraw())
     {
         if (false == texture.SetRenderTarget(
             in_draw_param._draw_system,
             in_draw_param._frame
             ))
         {
-            return dirty;
+            return;
         }
-
-        dirty = true;
 
         in_draw_param._text_manager->DrawText(
             in_draw_param._draw_system,
@@ -154,5 +151,5 @@ const bool UIComponentString::PreDraw(
         texture.SetHasDrawn(true);
     }
 
-    return dirty;
+    return;
 }

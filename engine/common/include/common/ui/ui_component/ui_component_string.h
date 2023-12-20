@@ -46,7 +46,7 @@ private:
         const VectorInt2& in_parent_texture_size
         ) override;
 
-    virtual const bool PreDraw(
+    virtual void PreDraw(
         const UIManagerDrawParam& in_draw_param,
         UIHierarchyNode& in_node
         ) override;

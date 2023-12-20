@@ -45,18 +45,20 @@ void UIDataString::SetString(const std::string& in_data)
         return;
     }
 
-    SetDirtyBit(UIDataDirty::TLayout, true);
+    SetDirtyBit(UIDataDirty::TComponentDirty, true);
     _data = in_data;
 
     return;
 }
 
-void UIDataString::ApplyComponent(
+const bool UIDataString::ApplyComponent(
     std::unique_ptr<IUIComponent>& in_out_component,
     const UIHierarchyNodeUpdateParam& in_param,
     const int //in_index
     )
 {
+    bool dirty = false;
+
     // if in_out_component is not a UIComponentCanvas, remake it as one
     UIComponentString* content = dynamic_cast<UIComponentString*>(in_out_component.get());
     auto font = in_param._text_manager->GetTextFont(in_param._default_text_style->_font_path);
@@ -85,19 +87,16 @@ void UIDataString::ApplyComponent(
             );
 
         auto new_content = std::make_unique<UIComponentString>(
-            text_block,
-            GetLayout(),
-            GetTintColour(),
-            this
+            text_block
             );
         content = new_content.get();
         in_out_component = std::move(new_content);
+
+        dirty = true;
     }
     else
     {
-        content->Set(
-            GetLayout(),
-            GetTintColour(),
+        if (true == content->Set(
             *font,
             in_param._default_text_style->_font_size,
             in_param._default_text_style->_new_line_gap_ratio,
@@ -105,19 +104,24 @@ void UIDataString::ApplyComponent(
             _horizontal, 
             _vertical,
             in_param._default_text_style->_text_colour
-            //VectorFloat4::s_white
-            //colour
-            );
-        content->SetText(
+            ))
+        {
+            dirty = true;
+        }
+
+        // potential problem, string component change could change layout if layout is shrink...? could workaround by dirtying layout on text change
+        // another potenial fix is to have better fedelity, or the component choose to dirty layout on content change?
+        // general solution, if layout is shrink, then component change invalidates layout
+        if (true == content->SetText(
             _data,
             text_locale
-            );
-        content->SetLayout(
-            GetLayout()
-            );
+            ))
+        {
+            dirty = true;
+        }
     }
 
     //SetDirtyBit(UIDataDirty::THierarchy, false);
 
-    return;
+    return dirty;
 }

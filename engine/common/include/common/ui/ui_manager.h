@@ -187,15 +187,8 @@ public:
     /// But want a top level UIData to be the endpoint for the [hierarchy, layout, render] flags
     void Update(
         std::shared_ptr<UIHierarchyNode>& in_out_target_or_null,
-        //UIData* const in_root_ui_data,
-        const std::vector<std::shared_ptr<UIData>>& in_array_child_data,
-        const UIManagerUpdateParam& in_param,
-
-        const bool in_render_to_texture, // if false, rather than render to texture, we render to the draw system backbuffer
-        const VectorInt2& in_render_texture_size, // if in_render_to_texture is true, 
-        const bool in_always_dirty = false, //still draw to the top level target even if nothing has changed
-        const bool in_allow_clear = false,
-        const VectorFloat4& in_clear_colour = VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f)
+        UIData* const in_data, 
+        const UIManagerUpdateParam& in_param
         );
 
     /// root node owns the input state

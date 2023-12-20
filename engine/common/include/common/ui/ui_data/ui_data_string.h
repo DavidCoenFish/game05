@@ -32,7 +32,7 @@ public:
     void SetString(const std::string& in_data);
 
 private:
-    virtual void ApplyComponent(
+    virtual const bool ApplyComponent(
         std::unique_ptr<IUIComponent>& in_out_component,
         const UIHierarchyNodeUpdateParam& in_param,
         const int in_index = 0

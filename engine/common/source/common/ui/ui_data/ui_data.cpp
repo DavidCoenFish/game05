@@ -87,15 +87,16 @@ void UIData::SetDirtyBit(const UIDataDirty in_flag, const bool in_active)
         _dirty_flag = static_cast<UIDataDirty>(static_cast<int>(_dirty_flag) & ~static_cast<int>(in_flag));
     }
 
+    // when setting a flag true, mark all the parent nodes as decendant dirty
     if ((true == in_active) && (prev != _dirty_flag) && (nullptr != _parent_or_null))
     {
-        _parent_or_null->SetDirtyBit(in_flag, true);
+        _parent_or_null->SetDirtyBit(UIDataDirty::TDecendantDirty, true);
     }
 
     return;
 }
 
-void UIData::ApplyComponent(
+const bool UIData::ApplyComponent(
     std::unique_ptr<IUIComponent>& in_out_component,
     const UIHierarchyNodeUpdateParam&, //in_param,
     const int //in_index
@@ -121,5 +122,12 @@ void UIData::ApplyComponent(
 #endif
     //TODO: add UIDataCanvas to make UIComponentCanvas, and have UIData make a null component
 
-    return;
+    bool dirty = false;
+    if (in_out_component != nullptr)
+    {
+        in_out_component = nullptr;
+        dirty = true;
+    }
+
+    return dirty;
 }

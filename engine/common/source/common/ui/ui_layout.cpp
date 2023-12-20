@@ -123,6 +123,18 @@ const VectorInt2 UILayout::ApplyMargin(
         );
 }
 
+/// Return true if either axis adjustment modifies the layout size
+const bool UILayout::GetAdjustmentModifiesLayout() const
+{
+    if ((_adjustment_type[0] == TAdjustmentType::GrowTextureToLayout) &&
+        (_adjustment_type[1] == TAdjustmentType::GrowTextureToLayout))
+    {
+        return false;
+    }
+
+    return true;
+}
+
 void UILayout::SetSliderHorizontal(const float in_value)
 {
     _parent_window_pivot_ratio[0] = in_value;

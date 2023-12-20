@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common/ui/ui_coord.h"
+#include "common/ui/ui_enum.h"
 #include "common/math/vector_float2.h"
 #include "common/math/vector_float4.h"
 #include "common/math/vector_int2.h"
@@ -31,8 +32,6 @@ struct UIDataTextRunStyle;
 struct UIHierarchyNodeUpdateHierarchyParam;
 struct UIManagerDrawParam;
 struct UIManagerUpdateLayoutParam;
-
-enum class UIStateFlag;
 
 /*
 //v2, 
@@ -134,10 +133,10 @@ public:
     /// nullptr if _bUseBackBuffer is true
     //std::shared_ptr<HeapWrapperItem> GetShaderResourceHeapWrapperItem() const;
 
-    void AddChild(
-        std::unique_ptr<IUIComponent>& in_content
-        );
-    const bool ClearChildren();
+    //void AddChild(
+    //    std::unique_ptr<IUIComponent>& in_content
+    //    );
+    //const bool ClearChildren();
 
     /// Expose child data array to allow ui_component to specialise how hieararchy builds
     std::vector<std::shared_ptr<UIHierarchyNodeChild>>& GetChildData() { return _child_array; }
@@ -162,7 +161,8 @@ public:
 
     /// Return true if something changed and ui texture is now marked to draw, as need to propergate this up the hierarchy, 
     /// ie, need to mark parent nodes texture as dirty on child change
-    const bool UpdateResources(
+    /// Moved render dirty flag into IOHierarchyNodeChild
+    void UpdateResources(
         const UIHierarchyNodeUpdateParam& in_param,
         const UIScreenSpace& in_parent_screen_space
         );
@@ -186,14 +186,13 @@ public:
 
     /// split PreDraw and Draw to allow UIComponentEffect to prep the childrent but implement it's own texture draw
     /// return True if we needed to draw, ie, we have modified children. Ask children to update there textures
-    const bool PreDraw(
+    void PreDraw(
         const UIManagerDrawParam& in_draw_param
         );
     /// return True if we needed to draw, ie, we have modified _texture. Draw children textures to our own texture
-    const bool Draw(
+    void Draw(
         const UIManagerDrawParam& in_draw_param,
-        const bool in_dirty,
-        const UIStateFlag in_state_flag
+        const UIStateFlag in_state_flag = UIStateFlag::TNone
         );
 
     /// Get the texture for the node, could be the last effect of the effect stacks texture, or the nodes own ui texture

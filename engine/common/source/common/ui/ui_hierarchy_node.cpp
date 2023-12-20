@@ -65,32 +65,35 @@ UIRootInputState& UIHierarchyNode::GetOrMakeRootInputState()
     return *_root_input_state;
 }
 
-void UIHierarchyNode::AddChild(
-    std::unique_ptr<IUIComponent>& in_content
-    )
-{
-    auto geometry = std::make_unique<UIGeometry>();
-    auto node = std::make_unique<UIHierarchyNode>();
-    auto screen_space = std::make_unique<UIScreenSpace>();
-    auto child = std::make_shared<UIHierarchyNodeChild>(
-        geometry,
-        in_content,
-        node,
-        screen_space
-        );
-    _child_array.push_back(child);
-}
-
-const bool UIHierarchyNode::ClearChildren()
-{
-    bool dirty = false;
-    if (0 != _child_array.size())
-    {
-        dirty = true;
-        _child_array.clear();
-    }
-    return dirty;
-}
+//void UIHierarchyNode::AddChild(
+//    std::unique_ptr<IUIComponent>& in_content
+//    )
+//{
+//    auto geometry = std::make_unique<UIGeometry>();
+//    auto node = std::make_unique<UIHierarchyNode>();
+//    auto screen_space = std::make_unique<UIScreenSpace>();
+//    auto child = UIHierarchyNodeChild::Factory(
+//    
+//    
+//    std::make_shared<UIHierarchyNodeChild>(
+//        geometry,
+//        in_content,
+//        node,
+//        screen_space
+//        );
+//    _child_array.push_back(child);
+//}
+//
+//const bool UIHierarchyNode::ClearChildren()
+//{
+//    bool dirty = false;
+//    if (0 != _child_array.size())
+//    {
+//        dirty = true;
+//        _child_array.clear();
+//    }
+//    return dirty;
+//}
 
 #if 1
 // return true if the parent should have their texture dirtied, moved to node child state flag
@@ -128,15 +131,11 @@ void UIHierarchyNode::UpdateHierarchy(
        (true == in_data.GetDirtyBit(UIDataDirty::TComponentDirty)))
     {
         // ensure component is the correct type
-        if (true == in_parent_to_this_node_or_null->ApplyComponent(
+        in_parent_to_this_node_or_null->ApplyComponent(
             in_data,
             in_param,
             in_child_index
-            ))
-        {
-            layout_dirty = true;
-            render_dirty = true; // layout change should propergate to render, but what if the uidata component has not changed anything layout, but something effecting render
-        }
+            );
 
         in_data.SetDirtyBit(UIDataDirty::TComponentDirty, false);
     }
@@ -184,6 +183,13 @@ void UIHierarchyNode::UpdateHierarchy(
                         _child_array[index].reset();
                         render_dirty = true;
                     }
+                    // do this in data apply component
+                    //else
+                    //{
+                    //    auto& child_ref = *child;
+                    //    child_ref.SetLayout(data.GetLayout());
+                    //    child_ref.SetTintColour(data.GetTintColour());
+                    //}
                 }
             }
 
@@ -204,7 +210,12 @@ void UIHierarchyNode::UpdateHierarchy(
                 }
                 else
                 {
-                    _child_array[index] = UIHierarchyNodeChild::Factory(in_parent_to_this_node_or_null);
+                    _child_array[index] = UIHierarchyNodeChild::Factory(
+                        in_parent_to_this_node_or_null,
+                        data.GetLayout(),
+                        data.GetTintColour(),
+                        &data
+                        );
                 }
                 layout_dirty = true;
                 render_dirty = true;
@@ -233,11 +244,11 @@ void UIHierarchyNode::UpdateHierarchy(
     {
         if (true == layout_dirty)
         {
-            in_parent_to_this_node_or_null->SetStateFlagBit(UIStateFlag::TLayoutDirty, true);
+            in_parent_to_this_node_or_null->SetStateDirtyBit(UIStateDirty::TLayoutDirty, true);
         }
         if (true == render_dirty)
         {
-            in_parent_to_this_node_or_null->SetStateFlagBit(UIStateFlag::TRenderDirty, true);
+            in_parent_to_this_node_or_null->SetStateDirtyBit(UIStateDirty::TRenderDirty, true);
         }
     }
 
@@ -440,73 +451,42 @@ void UIHierarchyNode::UpdateLayout(
 {
     for (auto& child : _child_array)
     {
-        IUIComponent* component = child ? child->_component.get() : nullptr;
-        if (nullptr == component)
-        {
-            continue;
-        }
-
-        //if (true == component->GetStateFlagBit(UIStateFlag::TLayoutDirty))
-        if (true == component->NeedsToUpdateLayout(in_parent_window, in_parent_offset))
-        {
-            component->UpdateLayout(
-                *child,
-                in_param,
-                in_parent_window,
-                in_parent_offset
-                );
-            // move to under component::UpdateLayout? but that is virtual
-            //component->SetStateFlagBit(UIStateFlag::TLayoutDirty, false);
-            component->UpdateLayoutFinished();
-        }
+        DSC_ASSERT(nullptr != child, "confirm that children can not be null");
+        child->UpdateLayout(
+            in_param,
+            in_parent_window,
+            in_parent_offset
+            );
     }
 
     return;
 }
 
-const bool UIHierarchyNode::UpdateResources(
+void UIHierarchyNode::UpdateResources(
     const UIHierarchyNodeUpdateParam& in_param,
     const UIScreenSpace& in_parent_screen_space
     )
 {
-    bool dirty = false;
     const VectorInt2 texture_size = _texture->GetSize(in_param._draw_system);
 
     for (auto& child : _child_array)
     {
-        IUIComponent* component = child ? child->_component.get() : nullptr;
-        if (nullptr == component)
-        {
-            continue;
-        }
-        if (true == component->UpdateResources(
-            *child,
+        DSC_ASSERT(nullptr != child, "confirm that children can not be null");
+        child->UpdateResources(
             in_param,
             in_parent_screen_space,
             texture_size
-            ))
-        {  
-            dirty = true;
-        }
+            );
     }
 
     for (auto& effect : _array_effect_component)
     {
-        if (true == effect->Update(
+        effect->Update(
             in_param,
             texture_size
-            ))
-        {
-            dirty = true;
-        }
+            );
     }
-
-    if (true == dirty)
-    {
-        MarkTextureDirty();
-    }
-
-    return dirty;
+    return;
 }
 
 void UIHierarchyNode::MarkTextureDirty()
@@ -695,115 +675,62 @@ const bool UIHierarchyNode::DealInput(
 }
 
 // Return True if we needed to draw, ie, the texture may have changed
-const bool UIHierarchyNode::PreDraw(
+void UIHierarchyNode::PreDraw(
     const UIManagerDrawParam& in_draw_param
     )
 {
-    bool dirty = false;
-
     // Ensure that children textures are ready
     for (auto& iter : _child_array)
     {
-        if (nullptr == iter->_component)
-        {
-            continue;
-        }
-
-        if (true == iter->_component->PreDraw(
-            in_draw_param,
-            *(iter->_node.get())
-            ))
-        {
-            dirty = true;
-        }
+        iter->PreDraw(in_draw_param);
     }
 
-    return dirty;
+    return;
 }
 
-const bool UIHierarchyNode::Draw(
-    const UIManagerDrawParam& in_draw_param,
-    const bool in_dirty,
-    const UIStateFlag in_state_flag
+void UIHierarchyNode::Draw(
+    const UIManagerDrawParam& in_draw_param//,
+    //const bool in_dirty,
+    , const UIStateFlag in_state_flag
     )
 {
-    bool dirty = false;
-    if ((true == in_dirty) ||
-        (false == _texture->GetHasDrawn()) ||
-        (true == _texture->GetAlwaysDirty())
-        )
+    if (true == _texture->CalculateNeedsToDraw())
     {
         if (false == _texture->SetRenderTarget(
             in_draw_param._draw_system,
             in_draw_param._frame
             ))
         {
-            return dirty;
+            return;
         }
-
-        dirty = true;
 
         for (auto& iter : _child_array)
         {
             UIHierarchyNodeChild& child_data = *iter;
-            if (nullptr == child_data._component)
+
+            child_data.Draw(in_draw_param);
+        }
+
+
+        if (0 < _array_effect_component.size())
+        {
+            UITexture* trace_texture = _texture.get();
+            for (auto& effect: _array_effect_component)
             {
-                continue;
-            }
-
-            if (true == child_data._component->GetStateFlagBit(UIStateFlag::THidden))
-            {
-                continue;
-            }
-
-            const auto& shader = in_draw_param._ui_manager->GetShaderRef(UIShaderEnum::TDefault);
-
-            child_data._node->GetUITexture().SetShaderResource(
-                *shader,
-                0,
-                in_draw_param._frame
-                );
-
-            if (nullptr == child_data._shader_constant_buffer)
-            {
-                child_data._shader_constant_buffer = shader->MakeShaderConstantBuffer(
-                    in_draw_param._draw_system
+                effect->Render(
+                    in_draw_param,
+                    *trace_texture,
+                    in_state_flag
                     );
+                trace_texture = &effect->GetUITexture();
             }
-
-            if (nullptr != child_data._shader_constant_buffer)
-            {
-                UIManager::TShaderConstantBuffer& buffer = child_data._shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
-                buffer._tint_colour = child_data._component->CalculateTintColour();
-            }
-
-            in_draw_param._frame->SetShader(shader, child_data._shader_constant_buffer);
-
-            child_data._geometry->Draw(
-                in_draw_param._draw_system,
-                in_draw_param._frame
-                );
         }
 
         _texture->SetHasDrawn(true);
     }
 
-    if ((true == dirty) &&
-        (0 < _array_effect_component.size()))
-    {
-        UITexture* trace_texture = _texture.get();
-        for (auto& effect: _array_effect_component)
-        {
-            effect->Render(
-                in_draw_param,
-                *trace_texture,
-                in_state_flag
-                );
-            trace_texture = &effect->GetUITexture();
-        }
-    }
 
-    return dirty;
+    return;
 }
 
 UITexture& UIHierarchyNode::GetUITexture() const

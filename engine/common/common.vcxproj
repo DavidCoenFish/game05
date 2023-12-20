@@ -101,6 +101,7 @@
     <ClCompile Include="source\common\ui\ui_component\ui_component_string.cpp" />
     <ClCompile Include="source\common\ui\ui_coord.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data.cpp" />
+    <ClCompile Include="source\common\ui\ui_data\ui_data_canvas.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_stack.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_string.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_text_run.cpp" />
@@ -189,6 +190,7 @@
     <ClInclude Include="include\common\ui\ui_component\ui_component_string.h" />
     <ClInclude Include="include\common\ui\ui_coord.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data.h" />
+    <ClInclude Include="include\common\ui\ui_data\ui_data_canvas.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_stack.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_string.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_text_run.h" />

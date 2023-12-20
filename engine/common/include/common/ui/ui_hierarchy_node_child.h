@@ -13,6 +13,7 @@ class UIHierarchyNode;
 class UIScreenSpace;
 
 struct UIHierarchyNodeUpdateParam;
+struct UIManagerDrawParam;
 
 /// To allow for the top level node not to have redundant data, UIHierarchyNode has been split
 /// UIHierarchyNodeChild and UIHierarchyNode could be one class, but a UIGeometry for the root node did not make sense
@@ -25,7 +26,8 @@ public:
         const UILayout& in_layout,
         const UITintColour& in_tint_colour,
         void* in_source_token,
-        const UIStateFlag in_state_flag = UIStateFlag::TLayoutDirty
+        const UIStateFlag in_state_flag = UIStateFlag::TNone,
+        const UIStateDirty in_state_dirty = UIStateDirty::TDefault
         );
 
     UIHierarchyNodeChild(
@@ -37,35 +39,36 @@ public:
         const UILayout& in_layout,
         const UITintColour& in_tint_colour,
         void* in_source_token = nullptr,
-        const UIStateFlag in_state_flag = UIStateFlag::TNone
+        const UIStateFlag in_state_flag = UIStateFlag::TNone,
+        const UIStateDirty in_state_dirty = UIStateDirty::TDefault
         );
     ~UIHierarchyNodeChild();
 
-    /// Make sorting children easier
-    void SetSourceToken(void* in_source_ui_data_token);
     /// allows making a map externally of source token to IUIComponent
     void* GetSourceToken() const;
 
     void SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool in_manual_horizontal, const bool in_manual_vertical);
     VectorFloat2& GetUVScrollRef(){ return _uv_scroll; }
 
-    /// return true bits changed
-    const bool SetStateFlag(const UIStateFlag in_state_flag);
-    const bool SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable);
+    void SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable);
     const bool GetStateFlagBit(const UIStateFlag in_state_flag_bit) const;
+
+    void SetStateDirtyBit(const UIStateDirty in_state_flag_bit, const bool in_enable);
+    const bool GetStateDirtyBit(const UIStateDirty in_state_flag_bit) const;
+
 
     /// Set layout dirty flag on change, 
     /// WARNING, should SetLayout only be called from UIData, to move things like slider, set layout in UIData?
-    const bool SetLayout(const UILayout& in_layout);
+    void SetLayout(const UILayout& in_layout);
     const UILayout& GetLayout() const { return _layout; }
 
-    const bool SetTintColour(const UITintColour& in_layout);
+    void SetTintColour(const UITintColour& in_layout);
     const VectorFloat4 CalculateTintColour() const;
 
     const float GetTimeAccumulateSeconds() const { return _time_accumulate_seconds; }
     void SetTimeAccumulateSeconds(const float in_time_accumulate_seconds) { _time_accumulate_seconds = in_time_accumulate_seconds; return; }
 
-    /// make sure our compoennt matches what is in the given UIData, set layout, resource, render dirty as required
+    /// make sure our component matches what is in the given UIData, set layout, resource, render dirty as required
     void ApplyComponent(
         UIData& in_data,
         const UIHierarchyNodeUpdateParam& in_param,
@@ -102,6 +105,13 @@ public:
         const VectorInt2& in_parent_window,
         const VectorInt2& in_parent_offset
         );
+
+    void UpdateResources(
+        const UIHierarchyNodeUpdateParam& in_param,
+        const UIScreenSpace& in_parent_screen_space,
+        const VectorInt2& in_parent_texture_size
+        );
+
     void Update(
         const float in_time_delta
         );
@@ -112,6 +122,16 @@ public:
         const UIHierarchyNodeUpdateParam& in_param,
         const UIScreenSpace& in_parent_screen_space,
         const VectorInt2& in_parent_texture_size
+        );
+
+    void PreDraw(
+        const UIManagerDrawParam& in_draw_param
+        );
+
+    void Draw(
+        const UIManagerDrawParam& in_draw_param//,
+        //const bool in_dirty,
+        //const UIStateFlag in_state_flag
         );
 
 private:
@@ -150,6 +170,9 @@ private:
 
     /// still have need of hidden and disabled? plus input state [hover, touch, action]
     UIStateFlag _state_flag;
+
+    /// layout and render dirty flags, propergate to parent when set active
+    UIStateDirty _state_dirty;
 
     /// have a link to our parent so changes to the state flag can be up propergated if needed
     UIHierarchyNodeChild* _parent_or_null;

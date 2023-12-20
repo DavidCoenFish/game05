@@ -217,16 +217,11 @@ public:
     void Update(
         UIManager* const in_manager,
         std::shared_ptr<UIHierarchyNode>& in_out_target_or_null,
-        const std::vector<std::shared_ptr<UIData>>& in_array_child_data,
-        const UIManagerUpdateParam& in_param,
-        const bool in_render_to_texture,
-        const VectorInt2& in_render_texture_size,
-        const bool in_always_dirty,
-        const bool in_allow_clear,
-        const VectorFloat4& in_clear_colour
+        UIData* const in_data,
+        const UIManagerUpdateParam& in_param
         )
     {
-        if (0 == in_array_child_data.size())
+        if (nullptr == in_data)
         {
             if (nullptr != in_out_target_or_null)
             {
@@ -253,22 +248,11 @@ public:
                 in_param._time_delta
                 );
             in_out_target_or_null->UpdateHierarchy(
+                *in_data,
+                nullptr,
                 update_param, 
-                in_array_child_data,
-                std::vector<std::shared_ptr<UIEffectData>>(),
-                0,
-                dirty,
-                in_render_to_texture,
-                in_always_dirty,
-                in_allow_clear,
-                in_clear_colour
+                0
                 );
-            if (true == in_render_to_texture)
-            {
-                in_out_target_or_null->SetTextureSize(
-                    in_render_texture_size
-                    );
-            }
 
             const VectorInt2 target_size = in_out_target_or_null->GetTextureSize(in_param._draw_system);
             in_out_target_or_null->UpdateLayout(
@@ -314,14 +298,9 @@ public:
         const UIManagerDrawParam& in_param
         )
     {
-        const bool dirty = in_root.PreDraw(
-            in_param
-            );
-        in_root.Draw(
-            in_param,
-            dirty,
-            UIStateFlag::TNone
-            );
+        in_root.PreDraw(in_param);
+        in_root.Draw(in_param);
+        return;
     }
 
     const std::shared_ptr<Shader>& GetShaderRef(const UIShaderEnum in_type)
@@ -384,26 +363,15 @@ void UIManager::BuildGeometryData(
 // Update layout
 void UIManager::Update(
     std::shared_ptr<UIHierarchyNode>& in_out_target_or_null,
-    const std::vector<std::shared_ptr<UIData>>& in_array_child_data,
-    const UIManagerUpdateParam& in_param,
-
-    const bool in_render_to_texture, // if false, rather than render to texture, we render to the draw system backbuffer
-    const VectorInt2& in_render_texture_size, // if in_render_to_texture is true, 
-    const bool in_always_dirty, //still draw to the top level target even if nothing has changed
-    const bool in_allow_clear,
-    const VectorFloat4& in_clear_colour
+    UIData* const in_data, 
+    const UIManagerUpdateParam& in_param
     )
 {
     _implementation->Update(
         this,
         in_out_target_or_null, 
-        in_array_child_data,
-        in_param,
-        in_render_to_texture, // if false, rather than render to texture, we render to the draw system backbuffer
-        in_render_texture_size, // if in_render_to_texture is true, 
-        in_always_dirty, //still draw to the top level target even if nothing has changed
-        in_allow_clear,
-        in_clear_colour
+        in_data,
+        in_param
         );
     return;
 }

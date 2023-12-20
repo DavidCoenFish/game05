@@ -87,7 +87,7 @@ public:
 
     /// prep the children of the component for draw. 
     /// for example, component string may use this to run the TextBock::Draw, setting up the components' nodes' texture for the component to be drawn to it's parent latter in the Node::Draw
-    virtual const bool PreDraw(
+    virtual void PreDraw(
         const UIManagerDrawParam& in_draw_param,
         UIHierarchyNode& in_node
         );
