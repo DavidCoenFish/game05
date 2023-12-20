@@ -8,6 +8,25 @@
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_screen_space.h"
 
+UIDataCanvas::UIDataCanvas(
+    const UILayout& in_layout,
+    const UIBaseColour& in_base_colour,
+    const UITintColour& in_tint_colour,
+    const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
+    UIData* const in_parent_or_null
+    )
+    : UIData(
+        in_layout,
+        in_base_colour,
+        in_tint_colour,
+        in_array_effect_data,
+        in_parent_or_null
+        )
+{
+    // Nop
+}
+
+
 const bool UIDataCanvas::ApplyComponent(
     std::unique_ptr<IUIComponent>& in_out_component,
     const UIHierarchyNodeUpdateParam&, //in_param,

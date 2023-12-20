@@ -8,6 +8,9 @@ class UIBaseColour
 public:
     /// Default is transparent clear
     static const UIBaseColour FactoryDefault();
+    /// Root node needs usually renders to backbuffer
+    static const UIBaseColour FactoryRoot(const bool in_always_dirty);
+
     static const UIBaseColour FactoryGreyBackground();
     static const UIBaseColour FactoryRedBackground();
     static const UIBaseColour FactoryGreenBackground();

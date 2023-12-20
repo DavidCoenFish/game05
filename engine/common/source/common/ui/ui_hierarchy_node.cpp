@@ -694,7 +694,18 @@ void UIHierarchyNode::Draw(
     , const UIStateFlag in_state_flag
     )
 {
-    if (true == _texture->CalculateNeedsToDraw())
+    bool child_needs_draw = false;
+    for (auto iter : _child_array)
+    {
+        if (true == iter->GetStateDirtyBit(UIStateDirty::TRenderDirty))
+        {
+            child_needs_draw = true;
+            break;
+        }
+    }
+
+    if ((true == child_needs_draw) ||
+        (true == _texture->CalculateNeedsToDraw()))
     {
         if (false == _texture->SetRenderTarget(
             in_draw_param._draw_system,
@@ -728,7 +739,6 @@ void UIHierarchyNode::Draw(
 
         _texture->SetHasDrawn(true);
     }
-
 
     return;
 }

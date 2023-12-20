@@ -24,6 +24,7 @@
 #include "common/ui/ui_component/ui_component_string.h"
 #include "common/ui/ui_data/ui_data.h"
 #include "common/ui/ui_data/ui_data_button.h"
+#include "common/ui/ui_data/ui_data_canvas.h"
 #include "common/ui/ui_data/ui_data_combo_box.h"
 #include "common/ui/ui_data/ui_data_combo_box_layer.h"
 #include "common/ui/ui_data/ui_data_disable.h"
@@ -819,8 +820,15 @@ namespace
         )
     {
         auto data_main = std::make_shared<UIData>(
-            UILayout::FactoryParentMiddleQuater(),
-            UIBaseColour::FactoryRedBackground()
+            UILayout::FactoryFull(),
+            UIBaseColour::FactoryRoot(false)
+            );
+
+        data_main->AddChild(
+            std::make_shared<UIDataCanvas>(
+                UILayout::FactoryParentMiddleQuater(),
+                UIBaseColour::FactoryRedBackground()
+                )
             );
 
         in_out_data_map["main"] = data_main;
@@ -2046,10 +2054,6 @@ ApplicationBasicUI::ApplicationBasicUI(
 
 ApplicationBasicUI::~ApplicationBasicUI()
 {
-    if (_draw_system)
-    {
-        _draw_system->WaitForGpu();
-    }
     _draw_resource.reset();
     _draw_system.reset();
     LOG_MESSAGE(
@@ -2105,10 +2109,7 @@ void ApplicationBasicUI::Update()
                 _draw_resource->_locale_system.get(),
                 _draw_resource->_text_manager.get(),
                 ui_scale, //in_ui_scale = 1.0f,
-                delta_seconds, //in_time_delta = 0.0f,
-                true, //false, //in_always_dirty = false,
-                false, //in_draw_to_texture = false, // Draw to texture or backbuffer?
-                VectorInt2(0,0) //in_texture_size = VectorInt2(0,0) // If in_draw_to_texture is true, size to use for texture
+                delta_seconds //in_time_delta = 0.0f
                 );
             _draw_resource->_ui_manager->Update(
                 _draw_resource->_ui_hierarchy_node,

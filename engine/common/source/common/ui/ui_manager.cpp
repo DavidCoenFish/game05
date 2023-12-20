@@ -59,10 +59,7 @@ UIManagerUpdateParam::UIManagerUpdateParam(
     LocaleSystem* const in_locale_system,
     TextManager* const in_text_manager,
     const float in_ui_scale,
-    const float in_time_delta,
-    const bool in_draw_every_frame, // mark top level as dirty each frame, the destination render target may have other systems drawing to it
-    const bool in_draw_to_texture, // Draw to texture or backbuffer?
-    const VectorInt2& in_texture_size // If in_draw_to_texture is true, size to use for texture
+    const float in_time_delta
     )
     : _draw_system(in_draw_system)
     , _command_list(in_command_list)
@@ -70,9 +67,6 @@ UIManagerUpdateParam::UIManagerUpdateParam(
     , _text_manager(in_text_manager)
     , _ui_scale(in_ui_scale)
     , _time_delta(in_time_delta)
-    , _draw_to_texture(in_draw_to_texture)
-    , _draw_every_frame(in_draw_every_frame)
-    , _texture_size(in_texture_size)
     , _default_text_style(in_default_text_style)
 {
     // Nop

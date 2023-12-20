@@ -22,7 +22,7 @@ UIData::UIData(
     , _tint_colour(in_tint_colour)
     , _array_effect_data(in_array_effect_data)
     , _parent_or_null(in_parent_or_null)
-    , _dirty_flag(UIDataDirty::TNone)
+    , _dirty_flag(UIDataDirty::TCtor)
 {
     // Nop
 }
@@ -37,7 +37,7 @@ UIData* const UIData::AddChild(const std::shared_ptr<UIData>& in_data_child)
 {
     _array_child_data.push_back(in_data_child);
     in_data_child->_parent_or_null = this;
-    SetDirtyBit(UIDataDirty::THierarchyDirty, true);
+    SetDirtyBit(UIDataDirty::TAdd, true);
     return in_data_child.get();
 }
 
@@ -49,7 +49,7 @@ UIData* const UIData::SetChild(const std::shared_ptr<UIData>& in_data_child, con
     }
     _array_child_data[in_index] = in_data_child;
     in_data_child->_parent_or_null = this;
-    SetDirtyBit(UIDataDirty::THierarchyDirty, true);
+    SetDirtyBit(UIDataDirty::TAdd, true);
     return in_data_child.get();
 }
 

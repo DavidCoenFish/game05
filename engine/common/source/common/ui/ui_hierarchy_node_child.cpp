@@ -328,7 +328,10 @@ void UIHierarchyNodeChild::Finalise(
         in_parent_offset
         );
 
+    DSC_ASSERT(nullptr != _node, "node should be passed into ctor, what happened");
     _node->SetTextureSize(texture_size);
+
+    return;
 }
 
 void UIHierarchyNodeChild::UpdateLayout(
@@ -337,12 +340,15 @@ void UIHierarchyNodeChild::UpdateLayout(
     const VectorInt2& in_parent_offset
     )
 {
-    _component->UpdateLayout(
-        *this,
-        in_param,
-        in_parent_window,
-        in_parent_offset
-        );
+    if (nullptr != _component)
+    {
+        _component->UpdateLayout(
+            *this,
+            in_param,
+            in_parent_window,
+            in_parent_offset
+            );
+    }
 }
 
 void UIHierarchyNodeChild::UpdateResources(
@@ -351,12 +357,15 @@ void UIHierarchyNodeChild::UpdateResources(
     const VectorInt2& in_parent_texture_size
     )
 {
-    _component->UpdateResources(
-        *this,
-        in_param,
-        in_parent_screen_space,
-        in_parent_texture_size
-        );
+    if (nullptr != _component)
+    {
+        _component->UpdateResources(
+            *this,
+            in_param,
+            in_parent_screen_space,
+            in_parent_texture_size
+            );
+    }
     return;
 }
 
@@ -381,6 +390,7 @@ void UIHierarchyNodeChild::UpdateScroll(
     const bool uv_scroll_manual_x = 0 != (static_cast<int>(_state_flag) & static_cast<int>(UIStateFlag::TManualScrollX));
     const bool uv_scroll_manual_y = 0 != (static_cast<int>(_state_flag) & static_cast<int>(UIStateFlag::TManualScrollY));
 
+    DSC_ASSERT(nullptr != _node, "node should be passed into ctor, what happened");
     const VectorInt2 texture_size = _node->GetTextureSize(in_param._draw_system);
 
     IUIComponent::UpdateScroll(
@@ -441,7 +451,10 @@ void UIHierarchyNodeChild::PreDraw(
     if (true == GetStateDirtyBit(UIStateDirty::TRenderDirty))
     {
         auto& node = GetNode();
-        _component->PreDraw(in_draw_param, node);
+        if (nullptr != _component)
+        {
+            _component->PreDraw(in_draw_param, node);
+        }
 
         node.Draw(
             in_draw_param,

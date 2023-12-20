@@ -14,6 +14,11 @@ enum class UIDataDirty
     //TLayout = 1 << 1, // flag the related UIComponent as layout dirty
     //TRender = 1 << 2, // flag the related UIComponent as render dirty
     //TLayoutRender = TLayout | TRender
+
+    /// when first created, mark fields dirty. 
+    TCtor = TTextureDirty | TComponentDirty | TEffectDirty,
+    TAdd = THierarchyDirty | TDecendantDirty
+
 };
 
 enum class UIOrientation

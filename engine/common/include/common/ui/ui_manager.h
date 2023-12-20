@@ -56,10 +56,7 @@ struct UIManagerUpdateParam
         LocaleSystem* const in_locale_system = nullptr,
         TextManager* const in_text_manager = nullptr,
         const float in_ui_scale = 1.0f,
-        const float in_time_delta = 0.0f,
-        const bool in_draw_every_frame = false, // mark top level as dirty each frame, the destination render target may have other systems drawing to it
-        const bool in_draw_to_texture = false, // Draw to texture or backbuffer?
-        const VectorInt2& in_texture_size = VectorInt2(0,0) // If in_draw_to_texture is true, size to use for texture
+        const float in_time_delta = 0.0f
         );
 
     DrawSystem* const _draw_system;
@@ -69,9 +66,6 @@ struct UIManagerUpdateParam
     TextManager* const _text_manager;
     float _ui_scale;
     float _time_delta;
-    bool _draw_to_texture;
-    bool _draw_every_frame;
-    VectorInt2 _texture_size;
 
 };
 

@@ -6,6 +6,16 @@ const UIBaseColour UIBaseColour::FactoryDefault()
     return UIBaseColour();
 }
 
+const UIBaseColour UIBaseColour::FactoryRoot(const bool in_always_dirty)
+{
+    return UIBaseColour(
+        VectorFloat4(0.0f, 0.0f, 0.0f, 0.0f),
+        true,
+        false,
+        in_always_dirty
+        );
+}
+
 const UIBaseColour UIBaseColour::FactoryGreyBackground()
 {
     return UIBaseColour(VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f));
