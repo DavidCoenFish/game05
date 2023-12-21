@@ -129,6 +129,7 @@ void UIHierarchyNode::UpdateHierarchy(
 
     if (true == in_data.GetDirtyBit(UIDataDirty::TComponentDirty))
     {
+        // parent can be null for the root node, this means we now have a weak agreement that the root UIData to just be a UIData and not derrived
         if (nullptr != in_parent_to_this_node_or_null)
         {
             // ensure component is the correct type

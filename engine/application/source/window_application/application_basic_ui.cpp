@@ -821,7 +821,7 @@ namespace
     {
         auto data_main = std::make_shared<UIData>(
             UILayout::FactoryFull(),
-            UIBaseColour::FactoryRoot(false)
+            UIBaseColour::FactoryRoot(true)
             );
 
         data_main->AddChild(
