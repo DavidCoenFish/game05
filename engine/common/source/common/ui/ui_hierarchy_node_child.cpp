@@ -65,6 +65,7 @@ UIHierarchyNodeChild::UIHierarchyNodeChild(
     , _screen_space(std::move(in_screen_space))
     , _layout(in_layout)
     , _tint_colour(in_tint_colour)
+    , _time_accumulate_seconds(0.0f)
     , _source_token(in_source_token)
     , _state_flag(in_state_flag)
     , _state_dirty(in_state_dirty)

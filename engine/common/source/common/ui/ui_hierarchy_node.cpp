@@ -127,15 +127,17 @@ void UIHierarchyNode::UpdateHierarchy(
         in_data.SetDirtyBit(UIDataDirty::TTextureDirty, false);
     }
 
-    if ((nullptr != in_parent_to_this_node_or_null) &&
-       (true == in_data.GetDirtyBit(UIDataDirty::TComponentDirty)))
+    if (true == in_data.GetDirtyBit(UIDataDirty::TComponentDirty))
     {
-        // ensure component is the correct type
-        in_parent_to_this_node_or_null->ApplyComponent(
-            in_data,
-            in_param,
-            in_child_index
-            );
+        if (nullptr != in_parent_to_this_node_or_null)
+        {
+            // ensure component is the correct type
+            in_parent_to_this_node_or_null->ApplyComponent(
+                in_data,
+                in_param,
+                in_child_index
+                );
+        }
 
         in_data.SetDirtyBit(UIDataDirty::TComponentDirty, false);
     }
