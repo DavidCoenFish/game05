@@ -832,9 +832,9 @@ namespace
             );
 
         in_out_data_map["main"] = data_main;
-        in_out_data_array_map["main"] = std::vector<std::shared_ptr<UIData>>({
-            data_main
-            });
+        //in_out_data_array_map["main"] = std::vector<std::shared_ptr<UIData>>({
+        //    data_main
+        //    });
     }
 
     void BuildModelData01_ChildRedQuad(
@@ -844,21 +844,25 @@ namespace
     {
         auto data_main = std::make_shared<UIData>(
             UILayout::FactoryFull(),
-            UIBaseColour::FactoryDefault()
+            UIBaseColour::FactoryRoot(true)
             );
-        auto data_debug_quad = std::make_shared<UIData>(
-            UILayout::FactoryParentMiddleQuater(),
-            UIBaseColour::FactoryRedBackground()
+        auto child_0 = std::make_shared<UIDataCanvas>(
+            UILayout::FactoryFull(),
+            UIBaseColour::FactoryDefault()
             );
 
         data_main->AddChild(
-            data_debug_quad
+            child_0
+            );
+
+        child_0->AddChild(
+            std::make_shared<UIDataCanvas>(
+                UILayout::FactoryParentMiddleQuater(),
+                UIBaseColour::FactoryRedBackground()
+                )
             );
 
         in_out_data_map["main"] = data_main;
-        in_out_data_array_map["main"] = std::vector<std::shared_ptr<UIData>>({
-            data_main
-            });
     }
 
     void BuildModelData02_Text(
@@ -1133,8 +1137,8 @@ class UIModel : public IUIModel
 public:
     UIModel(IWindowApplication& )//in_application)
     {
-        BuildModelData00_OneRedQuad(_data_array_map, _data_map);
-        //BuildModelData01_ChildRedQuad(_data_array_map, _data_map);
+        //BuildModelData00_OneRedQuad(_data_array_map, _data_map);
+        BuildModelData01_ChildRedQuad(_data_array_map, _data_map);
         //BuildModelData02_Text(_data_array_map, _data_map);
         //BuildModelData03_ShrunkText(_data_array_map, _data_map);
         //BuildModelData04_ShrunkTextChildMargin(_data_array_map, _data_map);
