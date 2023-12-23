@@ -215,6 +215,8 @@ public:
         const UIManagerUpdateParam& in_param
         )
     {
+        //LOG_MESSAGE_UISYSTEM("Update");
+
         if (nullptr == in_data)
         {
             if (nullptr != in_out_target_or_null)
@@ -271,6 +273,8 @@ public:
         const UIManagerDealInputParam& in_param
         )
     {
+        //LOG_MESSAGE_UISYSTEM("DealInput");
+
         const VectorInt2 texture_size = in_root.GetTextureSize(in_param._draw_system);
         UIRootInputState& input_state = in_root.GetOrMakeRootInputState();
         input_state.Update(in_param, texture_size, in_tooltip_layer, in_combo_box_layer);
@@ -292,6 +296,8 @@ public:
         const UIManagerDrawParam& in_param
         )
     {
+        //LOG_MESSAGE_UISYSTEM("Draw");
+
         in_root.PreDraw(in_param);
         in_root.Draw(in_param);
         return;

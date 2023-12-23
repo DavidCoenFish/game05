@@ -173,7 +173,7 @@ public:
         DrawSystem* const in_draw_system
         ) const;
 
-    void SetTextureSize(
+    const bool SetTextureSize(
         const VectorInt2& in_texture_size
         );
 

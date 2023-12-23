@@ -5,6 +5,7 @@
 #include "common/draw_system/draw_system_frame.h"
 #include "common/draw_system/shader/shader.h"
 #include "common/draw_system/shader/shader_constant_buffer.h"
+#include "common/log/log.h"
 #include "common/ui/i_ui_input.h"
 #include "common/ui/i_ui_model.h"
 #include "common/ui/ui_component/ui_component_canvas.h"
@@ -70,7 +71,9 @@ UIHierarchyNodeChild::UIHierarchyNodeChild(
     , _state_flag(in_state_flag)
     , _state_dirty(in_state_dirty)
 {
-    // Nop
+    DSC_ASSERT(nullptr != _geometry, "geometry should be passed into ctor, what happened");
+    DSC_ASSERT(nullptr != _node, "node should be passed into ctor, what happened");
+    DSC_ASSERT(nullptr != _screen_space, "screen_space should be passed into ctor, what happened");
 }
 
 UIHierarchyNodeChild::~UIHierarchyNodeChild()
@@ -317,6 +320,8 @@ void UIHierarchyNodeChild::Finalise(
     const VectorInt2& in_parent_offset
     )
 {
+    //LOG_MESSAGE_UISYSTEM("  UIHierarchyNodeChild::Finalise %p", _source_token);
+
     VectorInt2 texture_size;
 
     // finialise layout size (shrink/expand) and work out the texture size (which may include the texture margin)
@@ -330,7 +335,12 @@ void UIHierarchyNodeChild::Finalise(
         );
 
     DSC_ASSERT(nullptr != _node, "node should be passed into ctor, what happened");
-    _node->SetTextureSize(texture_size);
+    if (true == _node->SetTextureSize(texture_size))
+    {
+        SetStateDirtyBit(UIStateDirty::TRenderDirty, true);
+    }
+
+    //LOG_MESSAGE_UISYSTEM("      _texture_size:[%d,%d]", texture_size[0], texture_size[1]);
 
     return;
 }
@@ -341,14 +351,21 @@ void UIHierarchyNodeChild::UpdateLayout(
     const VectorInt2& in_parent_offset
     )
 {
-    if (nullptr != _component)
+    //LOG_MESSAGE_UISYSTEM("  UIHierarchyNodeChild::UpdateLayout %p", _source_token);
+
+    if (true == GetStateDirtyBit(UIStateDirty::TLayoutDirty))
     {
-        _component->UpdateLayout(
-            *this,
-            in_param,
-            in_parent_window,
-            in_parent_offset
-            );
+        if (nullptr != _component)
+        {
+            _component->UpdateLayout(
+                *this,
+                in_param,
+                in_parent_window,
+                in_parent_offset
+                );
+        }
+
+        SetStateDirtyBit(UIStateDirty::TLayoutDirty, false);
     }
 }
 
@@ -448,6 +465,8 @@ void UIHierarchyNodeChild::PreDraw(
     const UIManagerDrawParam& in_draw_param
     )
 {
+    //LOG_MESSAGE_UISYSTEM("  UIHierarchyNodeChild::PreDraw %p %d", _source_token, _state_dirty);
+
     //bool dirty = false;
     if (true == GetStateDirtyBit(UIStateDirty::TRenderDirty))
     {
@@ -456,7 +475,7 @@ void UIHierarchyNodeChild::PreDraw(
         {
             _component->PreDraw(in_draw_param, node);
         }
-
+        //node::PreDraw moved under Component, ie, that is where the recusion is and specialisation of control
         node.Draw(
             in_draw_param,
             _state_flag
@@ -479,6 +498,7 @@ void UIHierarchyNodeChild::Draw(
 
     const auto& shader = in_draw_param._ui_manager->GetShaderRef(UIShaderEnum::TDefault);
 
+    DSC_ASSERT(nullptr != _node, "node should be passed into ctor, what happened");
     _node->GetUITexture().SetShaderResource(
         *shader,
         0,
@@ -500,6 +520,7 @@ void UIHierarchyNodeChild::Draw(
 
     in_draw_param._frame->SetShader(shader, _shader_constant_buffer);
 
+    DSC_ASSERT(nullptr != _geometry, "geometry should be passed into ctor, what happened");
     _geometry->Draw(
         in_draw_param._draw_system,
         in_draw_param._frame
@@ -507,41 +528,3 @@ void UIHierarchyNodeChild::Draw(
 
     return;
 }
-
-/*
-const bool UIHierarchyNodeChild::RecurseSetStateFlagInput(UIHierarchyNodeChild* const in_data, const UIStateFlag in_state_flag)
-{
-    bool dirty = false;
-
-    if (nullptr == in_data)
-    {
-        return dirty;
-    }
-
-    IUIComponent* const component = in_data->_component.get();
-    if (nullptr != component)
-    {
-        int state_flag = static_cast<int>(component->GetStateFlag());
-        state_flag &= ~static_cast<int>(UIStateFlag::TMaskInput);
-        state_flag |= (static_cast<int>(in_state_flag) & static_cast<int>(UIStateFlag::TMaskInput));
-        if (true == component->SetStateFlag(static_cast<UIStateFlag>(state_flag)))
-        {
-            dirty = true;
-        }
-    }
-
-    UIHierarchyNode* const node = in_data->_node.get();
-    if (nullptr != node)
-    {
-        for (auto iter : node->GetChildData())
-        {
-            if (true == RecurseSetStateFlagInput(iter.get(), in_state_flag))
-            {
-                dirty = true;
-            }
-        }
-    }
-
-    return dirty;
-}
-*/

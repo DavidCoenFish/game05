@@ -815,17 +815,22 @@ namespace
 */
 
     void BuildModelData00_OneRedQuad(
-        std::map<std::string, std::vector<std::shared_ptr<UIData>>>& in_out_data_array_map,
         std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
         )
     {
         auto data_main = std::make_shared<UIData>(
+#ifdef _DEBUG
+            "Root data",
+#endif
             UILayout::FactoryFull(),
             UIBaseColour::FactoryRoot(true)
             );
 
         data_main->AddChild(
             std::make_shared<UIDataCanvas>(
+#ifdef _DEBUG
+                "child",
+#endif
                 UILayout::FactoryParentMiddleQuater(),
                 UIBaseColour::FactoryRedBackground()
                 )
@@ -838,15 +843,20 @@ namespace
     }
 
     void BuildModelData01_ChildRedQuad(
-        std::map<std::string, std::vector<std::shared_ptr<UIData>>>& in_out_data_array_map,
         std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
         )
     {
         auto data_main = std::make_shared<UIData>(
+#ifdef _DEBUG
+            "Root data",
+#endif
             UILayout::FactoryFull(),
             UIBaseColour::FactoryRoot(true)
             );
         auto child_0 = std::make_shared<UIDataCanvas>(
+#ifdef _DEBUG
+            "child full screen transparent canvas",
+#endif
             UILayout::FactoryFull(),
             UIBaseColour::FactoryDefault()
             );
@@ -857,6 +867,9 @@ namespace
 
         child_0->AddChild(
             std::make_shared<UIDataCanvas>(
+#ifdef _DEBUG
+                "child quater screen red canvas",
+#endif
                 UILayout::FactoryParentMiddleQuater(),
                 UIBaseColour::FactoryRedBackground()
                 )
@@ -864,7 +877,7 @@ namespace
 
         in_out_data_map["main"] = data_main;
     }
-
+/*
     void BuildModelData02_Text(
         std::map<std::string, std::vector<std::shared_ptr<UIData>>>& in_out_data_array_map,
         std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
@@ -1130,6 +1143,8 @@ namespace
             data_main
             });
     }
+    */
+
 };
 
 class UIModel : public IUIModel
@@ -1137,8 +1152,8 @@ class UIModel : public IUIModel
 public:
     UIModel(IWindowApplication& )//in_application)
     {
-        //BuildModelData00_OneRedQuad(_data_array_map, _data_map);
-        BuildModelData01_ChildRedQuad(_data_array_map, _data_map);
+        //BuildModelData00_OneRedQuad(_data_map);
+        BuildModelData01_ChildRedQuad(_data_map);
         //BuildModelData02_Text(_data_array_map, _data_map);
         //BuildModelData03_ShrunkText(_data_array_map, _data_map);
         //BuildModelData04_ShrunkTextChildMargin(_data_array_map, _data_map);

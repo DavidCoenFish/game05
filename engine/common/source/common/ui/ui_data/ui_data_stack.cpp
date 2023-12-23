@@ -5,6 +5,9 @@
 #include "common/ui/ui_component/ui_component_stack.h"
 
 UIDataStack::UIDataStack(
+#ifdef _DEBUG
+    const std::string& in_debug_name,
+#endif
     const UILayout& in_layout,
     const UIBaseColour& in_base_colour,
     const UITintColour& in_tint_colour,
@@ -13,6 +16,9 @@ UIDataStack::UIDataStack(
     const UICoord& in_gap
     )
     : UIData(
+#ifdef _DEBUG
+        in_debug_name,
+#endif
         in_layout,
         in_base_colour,
         in_tint_colour,

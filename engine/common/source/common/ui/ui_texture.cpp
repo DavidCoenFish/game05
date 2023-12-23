@@ -5,6 +5,7 @@
 #include "common/draw_system/draw_system_frame.h"
 #include "common/draw_system/shader/shader.h"
 #include "common/draw_system/render_target/render_target_texture.h"
+#include "common/log/log.h"
 
 UITexture::UITexture(
     const bool in_draw_to_texture,
@@ -69,6 +70,9 @@ const bool UITexture::SetRenderTarget(
     DrawSystemFrame* const in_frame
     )
 {
+    //LOG_MESSAGE_UISYSTEM("  UITexture::SetRenderTarget _draw_to_texture:%d _allow_clear:%d _always_dirty:%d _has_drawn:%d", _draw_to_texture, _allow_clear, _always_dirty, _has_drawn);
+    //LOG_MESSAGE_UISYSTEM("      _size:[%d, %d] _clear_colour[%f, %f, %f, %f]", _size[0], _size[1], _clear_colour[0], _clear_colour[1], _clear_colour[2], _clear_colour[3]);
+
     UpdateRenderTarget(in_draw_system, in_frame->GetCommandList());
 
     if (true == _draw_to_texture)

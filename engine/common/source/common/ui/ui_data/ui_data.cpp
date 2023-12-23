@@ -11,6 +11,9 @@
 const std::vector<std::shared_ptr<UIEffectData>> UIData::s_empty_effect_data_array;
 
 UIData::UIData(
+#ifdef _DEBUG
+    const std::string& in_debug_name,
+#endif
     const UILayout& in_layout,
     const UIBaseColour& in_base_colour,
     const UITintColour& in_tint_colour,
@@ -23,6 +26,10 @@ UIData::UIData(
     , _array_effect_data(in_array_effect_data)
     , _parent_or_null(in_parent_or_null)
     , _dirty_flag(UIDataDirty::TCtor)
+#ifdef _DEBUG
+    , _debug_name(in_debug_name)
+#endif
+
 {
     // Nop
 }

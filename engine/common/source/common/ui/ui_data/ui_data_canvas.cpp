@@ -9,6 +9,9 @@
 #include "common/ui/ui_screen_space.h"
 
 UIDataCanvas::UIDataCanvas(
+#ifdef _DEBUG
+    const std::string& in_debug_name,
+#endif
     const UILayout& in_layout,
     const UIBaseColour& in_base_colour,
     const UITintColour& in_tint_colour,
@@ -16,6 +19,9 @@ UIDataCanvas::UIDataCanvas(
     UIData* const in_parent_or_null
     )
     : UIData(
+#ifdef _DEBUG
+        in_debug_name,
+#endif
         in_layout,
         in_base_colour,
         in_tint_colour,

@@ -8,6 +8,9 @@
 #include "common/text/text_block.h"
 
 UIDataString::UIDataString(
+#ifdef _DEBUG
+    const std::string& in_debug_name,
+#endif
     const UILayout& in_layout,
     const UIBaseColour& in_base_colour,
     const UITintColour& in_tint_colour,
@@ -19,6 +22,9 @@ UIDataString::UIDataString(
     const TextEnum::VerticalBlockAlignment in_vertical
     )
     : UIData(
+#ifdef _DEBUG
+        in_debug_name,
+#endif
         in_layout,
         in_base_colour,
         in_tint_colour,

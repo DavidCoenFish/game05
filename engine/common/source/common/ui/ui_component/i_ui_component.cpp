@@ -391,10 +391,11 @@ const bool IUIComponent::SetLayout(
 #endif
 
 void IUIComponent::PreDraw(
-    const UIManagerDrawParam&, //in_draw_param,
-    UIHierarchyNode& //in_node
+    const UIManagerDrawParam& in_draw_param,
+    UIHierarchyNode& in_node
     )
 {
+    in_node.PreDraw(in_draw_param);
     return;
 }
 

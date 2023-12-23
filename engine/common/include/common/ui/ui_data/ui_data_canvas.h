@@ -6,6 +6,9 @@ class UIDataCanvas : public UIData
 {
 public:
     explicit UIDataCanvas(
+#ifdef _DEBUG
+        const std::string& in_debug_name,
+#endif
         const UILayout& in_layout = UILayout::FactoryFull(),
         const UIBaseColour& in_base_colour = UIBaseColour::FactoryDefault(),
         const UITintColour& in_tint_colour = UITintColour::FactoryDefault(),

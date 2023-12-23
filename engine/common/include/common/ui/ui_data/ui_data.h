@@ -27,6 +27,9 @@ public:
     static const std::vector<std::shared_ptr<UIEffectData>> s_empty_effect_data_array;
 
     explicit UIData(
+#ifdef _DEBUG
+        const std::string& in_debug_name = "ui_data_root",
+#endif
         const UILayout& in_layout = UILayout::FactoryFull(),
         const UIBaseColour& in_base_colour = UIBaseColour::FactoryDefault(),
         const UITintColour& in_tint_colour = UITintColour::FactoryDefault(),
@@ -63,6 +66,11 @@ public:
         const UIHierarchyNodeUpdateParam& in_param,
         const int in_index = 0
         );
+
+#ifdef _DEBUG
+public:
+    std::string _debug_name;
+#endif
 
 private:
     /// don't have a copy of UILayout in the IUIComponent anymore, IUIComponent has UIGeometry though

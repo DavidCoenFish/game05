@@ -11,6 +11,9 @@ class UIDataStack : public UIData
 public:
     /// let the text manager what locale hint to render text as, for harfbuz
     UIDataStack(
+#ifdef _DEBUG
+        const std::string& in_debug_name,
+#endif
         const UILayout& in_layout,
         const UIBaseColour& in_base_colour,
         const UITintColour& in_tint_colour,

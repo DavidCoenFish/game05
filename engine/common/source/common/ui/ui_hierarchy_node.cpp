@@ -20,6 +20,7 @@
 #include "common/ui/ui_root_input_state.h"
 #include "common/ui/ui_screen_space.h"
 #include "common/ui/ui_texture.h"
+#include "common/log/log.h"
 #include "common/math/vector_int2.h"
 #include "common/math/vector_float4.h"
 
@@ -65,37 +66,6 @@ UIRootInputState& UIHierarchyNode::GetOrMakeRootInputState()
     return *_root_input_state;
 }
 
-//void UIHierarchyNode::AddChild(
-//    std::unique_ptr<IUIComponent>& in_content
-//    )
-//{
-//    auto geometry = std::make_unique<UIGeometry>();
-//    auto node = std::make_unique<UIHierarchyNode>();
-//    auto screen_space = std::make_unique<UIScreenSpace>();
-//    auto child = UIHierarchyNodeChild::Factory(
-//    
-//    
-//    std::make_shared<UIHierarchyNodeChild>(
-//        geometry,
-//        in_content,
-//        node,
-//        screen_space
-//        );
-//    _child_array.push_back(child);
-//}
-//
-//const bool UIHierarchyNode::ClearChildren()
-//{
-//    bool dirty = false;
-//    if (0 != _child_array.size())
-//    {
-//        dirty = true;
-//        _child_array.clear();
-//    }
-//    return dirty;
-//}
-
-#if 1
 // return true if the parent should have their texture dirtied, moved to node child state flag
 void UIHierarchyNode::UpdateHierarchy(
     UIData& in_data,
@@ -104,8 +74,10 @@ void UIHierarchyNode::UpdateHierarchy(
     const int in_child_index
     )
 {
-    // dirty is for if the texture needs to be redrawn. issue, we want higher fidelity of the dirty flag, ie, layout, resource updates
-    //bool dirty = false;
+    //LOG_MESSAGE_UISYSTEM("  UIHierarchyNode::UpdateHierarchy in_data:%p", &in_data);
+#ifdef _DEBUG
+    //LOG_MESSAGE_UISYSTEM("    UIData _name:%s", in_data._debug_name.c_str());
+#endif
 
     bool layout_dirty = false;
     bool render_dirty = false;
@@ -186,7 +158,7 @@ void UIHierarchyNode::UpdateHierarchy(
                         _child_array[index].reset();
                         render_dirty = true;
                     }
-                    // do this in data apply component
+                    // do this in data apply component, not here
                     //else
                     //{
                     //    auto& child_ref = *child;
@@ -275,183 +247,14 @@ void UIHierarchyNode::UpdateHierarchy(
     return;
 }
 
-#else
-void UIHierarchyNode::UpdateHierarchy(
-    const UIHierarchyNodeUpdateParam& in_param,
-    const std::vector<std::shared_ptr<UIData>>& ui_data_child_data,
-    const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
-    const int in_child_index,
-    const bool in_dirty,
-    const bool in_render_to_texture,
-    const bool in_always_dirty,
-    const bool in_allow_clear,
-    const VectorFloat4& in_clear_colour
-    )
-{
-    bool dirty = in_dirty; //false;
-
-    // Update texture
-    if (nullptr == _texture)
-    {
-        _texture = std::make_unique<UITexture>(
-            in_render_to_texture,
-            in_always_dirty,
-            in_allow_clear,
-            in_clear_colour
-            );
-        dirty = true;
-    }
-    else
-    {
-        if (true == _texture->Update(
-            in_render_to_texture,
-            in_always_dirty,
-            in_allow_clear,
-            in_clear_colour
-            ))
-        {
-            dirty = true;
-        }
-    }
-
-    // Update child data array
-    if (0 == ui_data_child_data.size())
-    {
-        if (0 != _child_array.size())
-        {
-            _child_array.clear();
-            dirty = true;
-        }
-    }
-    else
-    {
-        std::map<void*, std::shared_ptr<UIHierarchyNodeChild>> map_temp_ownership;
-
-        // if there are too many items, put the remaining into the temp owership map
-        const int target_length = static_cast<int>(ui_data_child_data.size());
-        for (int index = target_length; index < static_cast<int>(_child_array.size()); ++index)
-        {
-            auto child = _child_array[index];
-            map_temp_ownership[child->GetSourceToken()] = child;
-            dirty = true;
-        }
-        _child_array.resize(target_length);
-
-        // Remove mismatched items in child data array
-        for (int index = 0; index < target_length; ++index)
-        {
-            const auto& data = *(ui_data_child_data[index]);
-            const auto& child = _child_array[index];
-            if (nullptr != child)
-            {
-                void* source_child_token = child->_component ? child->GetSourceToken() : nullptr;
-                void* data_token = (void*)&data;
-                if (data_token != source_child_token)
-                {
-                    if (nullptr != source_child_token)
-                    {
-                        map_temp_ownership[source_child_token] = child;
-                    }
-                    _child_array[index].reset();
-                    dirty = true;
-                }
-            }
-        }
-
-        // Find / create missing children
-        for (int index = 0; index < target_length; ++index)
-        {
-            if (nullptr != _child_array[index])
-            {
-                continue;
-            }
-            auto& data = *(ui_data_child_data[index]);
-            void* data_token = (void*)&data;
-            auto found = map_temp_ownership.find(data_token);
-            if (found != map_temp_ownership.end())
-            {
-                _child_array[index] = found->second;
-                map_temp_ownership.erase(found);
-            }
-            else
-            {
-                _child_array[index] = UIHierarchyNodeChild::Factory();
-                dirty = true;
-                // createing a node means it doesn't have the correct layout
-                data.SetDirtyBit(UIDataDirty::THierarchy, true);
-                data.SetDirtyBit(UIDataDirty::TLayout, true);
-            }
-        }
-
-        // ensure each content is created/ passed through factory
-        for (int index = 0; index < target_length; ++index)
-        {
-            UIData* const data = ui_data_child_data[index].get();
-            UIHierarchyNodeChild* const child = _child_array[index].get();
-
-            if (nullptr == data)
-            {
-                child->_component.reset();
-            }
-            else 
-            {
-                // ensure component is the correct type
-                data->ApplyComponent(
-                    child->_component,
-                    in_param
-                    );
-
-                if (true == data->GetDirtyBit(UIDataDirty::TDecendantDirty))
-                {
-                    // recurse
-                    child->_node->UpdateHierarchy(
-                        in_param,
-                        data->GetArrayChildData(),
-                        data->GetArrayEffectData(),
-                        index,
-                        in_dirty, 
-                        data->GetBaseColour().GetDrawToTexture(),
-                        data->GetBaseColour().GetAlwaysDirty(),
-                        data->GetBaseColour().GetClearBackground(),
-                        data->GetBaseColour().GetClearColourRef()
-                        );
-                    data->SetDirtyBit(UIDataDirty::TDecendantDirty, false);
-                }
-            }
-        }
-    }
-
-    if (true == ApplyEffect(
-        in_array_effect_data,
-        in_param,
-        in_child_index
-        ))
-    {
-        dirty = true;
-    }
-
-    if ((true == dirty) && (nullptr != _texture))
-    {
-        _texture->MarkDirty();
-    }
-
-    return;
-}
-#endif
-
-/// node::update layout (in parent window)
-///     for each child A0
-///         component::update layout
-///             calculate layout size given parent window
-///             recurse node::update layout
-///             component::desired(parent window or layout size? layout size may yet to be modified...)
-///             finialise layout size (shrink/expand)
 void UIHierarchyNode::UpdateLayout(
     const UIHierarchyNodeUpdateParam& in_param,
     const VectorInt2& in_parent_window,
     const VectorInt2& in_parent_offset
     )
 {
+    //LOG_MESSAGE_UISYSTEM("  UIHierarchyNode::UpdateLayout");
+
     for (auto& child : _child_array)
     {
         DSC_ASSERT(nullptr != child, "confirm that children can not be null");
@@ -470,6 +273,8 @@ void UIHierarchyNode::UpdateResources(
     const UIScreenSpace& in_parent_screen_space
     )
 {
+    //LOG_MESSAGE_UISYSTEM("  UIHierarchyNode::UpdateResources");
+
     const VectorInt2 texture_size = _texture->GetSize(in_param._draw_system);
 
     for (auto& child : _child_array)
@@ -489,6 +294,7 @@ void UIHierarchyNode::UpdateResources(
             texture_size
             );
     }
+
     return;
 }
 
@@ -505,11 +311,11 @@ const VectorInt2 UIHierarchyNode::GetTextureSize(
     return _texture->GetSize(in_draw_system);
 }
 
-void UIHierarchyNode::SetTextureSize(
+const bool UIHierarchyNode::SetTextureSize(
     const VectorInt2& in_texture_size
     )
 {
-    _texture->SetSize(in_texture_size);
+    return _texture->SetSize(in_texture_size);
 }
 
 // TODO: at some point need to collect "input" elements as potential navigation targets/ resolve navigation keypress
@@ -677,11 +483,12 @@ const bool UIHierarchyNode::DealInput(
     return dirty;
 }
 
-// Return True if we needed to draw, ie, the texture may have changed
 void UIHierarchyNode::PreDraw(
     const UIManagerDrawParam& in_draw_param
     )
 {
+    //LOG_MESSAGE_UISYSTEM("  UIHierarchyNode::PreDraw");
+
     // Ensure that children textures are ready
     for (auto& iter : _child_array)
     {
@@ -692,11 +499,12 @@ void UIHierarchyNode::PreDraw(
 }
 
 void UIHierarchyNode::Draw(
-    const UIManagerDrawParam& in_draw_param//,
-    //const bool in_dirty,
-    , const UIStateFlag in_state_flag
+    const UIManagerDrawParam& in_draw_param,
+    const UIStateFlag in_state_flag
     )
 {
+    //LOG_MESSAGE_UISYSTEM("  UIHierarchyNode::Draw");
+
     bool child_needs_draw = false;
     for (auto iter : _child_array)
     {

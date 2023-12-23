@@ -123,11 +123,11 @@ public:
         const UIScreenSpace& in_parent_screen_space,
         const VectorInt2& in_parent_texture_size
         );
-
+    /// Get things ready
     void PreDraw(
         const UIManagerDrawParam& in_draw_param
         );
-
+    /// Set the render target (node ui texture) and draw the child to is, using the children geometry and textures
     void Draw(
         const UIManagerDrawParam& in_draw_param//,
         //const bool in_dirty,
@@ -135,16 +135,23 @@ public:
         );
 
 private:
-    /// Need to track if state changed, so UIGeometry tracks pos and uv, rather than just GeometryGeneric
-    std::unique_ptr<UIGeometry> _geometry;
-    /// _component is out here rather than in _node to avoid top level node needing a root or do nothing content for layout
-    std::unique_ptr<IUIComponent> _component; 
     /// recusion point
     std::unique_ptr<UIHierarchyNode> _node;
-    /// size relative to screen for input
+
+    /// _component is out here rather than in _node to avoid top level node needing a root or do nothing content for layout
+    std::unique_ptr<IUIComponent> _component; 
+
+    /// Need to track if state changed, so UIGeometry tracks pos and uv, rather than just GeometryGeneric
+    /// this is the geometry that we use to paint ourself (the texture under our child node) to the texture under the parent node
+    std::unique_ptr<UIGeometry> _geometry;
+    /// size relative to screen for input, device coords, [-1,-1] ... [1,1] (lower left to upper right)
     std::unique_ptr<UIScreenSpace> _screen_space;
+
     /// shader constants to allow for tint, shared as it has ownership incremented by use in the render list
     std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;
+
+    //====================================================
+    // The following members were previouly in component
 
     /// We either need to have a copy of the layout from the UIData, 
     ///  or pass around the relevant UIData while doing the layout update
@@ -176,7 +183,6 @@ private:
 
     /// have a link to our parent so changes to the state flag can be up propergated if needed
     UIHierarchyNodeChild* _parent_or_null;
-
 
     VectorInt2 _layout_size;
     VectorInt2 _layout_offset;
