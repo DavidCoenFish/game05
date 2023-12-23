@@ -184,7 +184,13 @@ private:
     /// have a link to our parent so changes to the state flag can be up propergated if needed
     UIHierarchyNodeChild* _parent_or_null;
 
+    /// with UpdateLayout, UpdateScroll, Geometry all split up, needed to store some state. could move to param?
     VectorInt2 _layout_size;
     VectorInt2 _layout_offset;
+
+    /// cache the parent sizes so we can know if we need to recalculate on parent size change, ie, window resize. 
+    /// alternative is to do this on the top level node and broadcast? otherwise this is more generic at expence of some memory
+    VectorInt2 _cache_parent_window;
+    VectorInt2 _cache_parent_offset;
 
 };

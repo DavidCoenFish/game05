@@ -352,8 +352,10 @@ void UIHierarchyNodeChild::UpdateLayout(
     )
 {
     //LOG_MESSAGE_UISYSTEM("  UIHierarchyNodeChild::UpdateLayout %p", _source_token);
+    const bool parent_size_change = ((in_parent_window != _cache_parent_window) || (in_parent_offset != _cache_parent_offset));
 
-    if (true == GetStateDirtyBit(UIStateDirty::TLayoutDirty))
+    if ((true == parent_size_change) ||
+        (true == GetStateDirtyBit(UIStateDirty::TLayoutDirty)))
     {
         if (nullptr != _component)
         {
@@ -365,6 +367,8 @@ void UIHierarchyNodeChild::UpdateLayout(
                 );
         }
 
+        _cache_parent_window = in_parent_window;
+        _cache_parent_offset = in_parent_offset;
         SetStateDirtyBit(UIStateDirty::TLayoutDirty, false);
     }
 }
