@@ -877,13 +877,23 @@ namespace
 
         in_out_data_map["main"] = data_main;
     }
-/*
+
     void BuildModelData02_Text(
-        std::map<std::string, std::vector<std::shared_ptr<UIData>>>& in_out_data_array_map,
         std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
         )
     {
-        auto data_main = std::make_shared<UIDataString>(
+        auto data_main = std::make_shared<UIData>(
+#ifdef _DEBUG
+            "Root data",
+#endif
+            UILayout::FactoryFull(),
+            UIBaseColour::FactoryRoot(true)
+            );
+
+        auto data_string = std::make_shared<UIDataString>(
+#ifdef _DEBUG
+            "String data",
+#endif
             UILayout::FactoryFull(),
             UIBaseColour::FactoryDefault(),
             UITintColour::FactoryBlack(),
@@ -895,20 +905,28 @@ namespace
             TextEnum::VerticalBlockAlignment::Middle
             );
 
+        data_main->AddChild(data_string);
+
         in_out_data_map["main"] = data_main;
-        in_out_data_array_map["main"] = std::vector<std::shared_ptr<UIData>>({
-            data_main
-            });
     }
 
     void BuildModelData03_ShrunkText(
-        std::map<std::string, std::vector<std::shared_ptr<UIData>>>& in_out_data_array_map,
         std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
         )
     {
-        auto data_main = std::make_shared<UIData>();
+        auto data_main = std::make_shared<UIData>(
+#ifdef _DEBUG
+            "Root data",
+#endif
+            UILayout::FactoryFull(),
+            UIBaseColour::FactoryRoot(true)
+            );
+
 
         auto data_text = std::make_shared<UIDataString>(
+#ifdef _DEBUG
+            "String data",
+#endif
             UILayout(
                 UICoord(UICoord::TSource::ParentX, 1.0f),
                 UICoord(UICoord::TSource::ParentY, 1.0f),
@@ -933,19 +951,25 @@ namespace
             );
 
         in_out_data_map["main"] = data_main;
-        in_out_data_array_map["main"] = std::vector<std::shared_ptr<UIData>>({
-            data_main
-            });
     }
 
     void BuildModelData04_ShrunkTextChildMargin(
-        std::map<std::string, std::vector<std::shared_ptr<UIData>>>& in_out_data_array_map,
         std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
         )
     {
-        auto data_main = std::make_shared<UIData>();
+        auto data_main = std::make_shared<UIData>(
+#ifdef _DEBUG
+            "Root data",
+#endif
+            UILayout::FactoryFull(),
+            UIBaseColour::FactoryRoot(true)
+            );
 
-        auto data_margin = std::make_shared<UIData>(
+
+        auto data_margin = std::make_shared<UIDataCanvas>(
+#ifdef _DEBUG
+            "child canvas",
+#endif
             UILayout(
                 UICoord(UICoord::TSource::ParentX, 1.0f),
                 UICoord(UICoord::TSource::ParentY, 1.0f),
@@ -959,6 +983,9 @@ namespace
             );
 
         auto data_text = std::make_shared<UIDataString>(
+#ifdef _DEBUG
+            "child string",
+#endif
             UILayout(
                 UICoord(UICoord::TSource::ParentX, 1.0f),
                 UICoord(UICoord::TSource::ParentY, 1.0f),
@@ -986,17 +1013,24 @@ namespace
             );
 
         in_out_data_map["main"] = data_main;
-        in_out_data_array_map["main"] = std::vector<std::shared_ptr<UIData>>({
-            data_main
-            });
     }
 
     void BuildModelData05_Effect(
-        std::map<std::string, std::vector<std::shared_ptr<UIData>>>& in_out_data_array_map,
         std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
         )
     {
         auto data_main = std::make_shared<UIData>(
+#ifdef _DEBUG
+            "Root data",
+#endif
+            UILayout::FactoryFull(),
+            UIBaseColour::FactoryRoot(true)
+            );
+
+        auto data_canvas = std::make_shared<UIDataCanvas>(
+#ifdef _DEBUG
+            "canvas data",
+#endif
             UILayout::FactoryParentMiddleQuater(),
             UIBaseColour::FactoryRedBackground(),
             UITintColour::FactoryDefault(),
@@ -1004,22 +1038,19 @@ namespace
                 std::make_shared<UIEffectData>(
                     UIEffectEnum::TRoundCorners,
                     // Top right, top left, bottom left, bottom right
-                    UICoord(UICoord::TSource::ParentMin, 0.0f, 8),
-                    UICoord(UICoord::TSource::ParentMin, 0.0f, 8),
-                    UICoord(UICoord::TSource::ParentMin, 0.0f, 8),
-                    UICoord(UICoord::TSource::ParentMin, 0.0f, 8)
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 32),
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 32),
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 32),
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 32)
                     )
                 })
             );
+        data_main->AddChild(data_canvas);
 
         in_out_data_map["main"] = data_main;
-        in_out_data_array_map["main"] = std::vector<std::shared_ptr<UIData>>({
-            data_main
-            });
     }
 
     void BuildModelData06_Tooltip(
-        std::map<std::string, std::vector<std::shared_ptr<UIData>>>& in_out_data_array_map,
         std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
         )
     {
@@ -1035,12 +1066,19 @@ namespace
             }));
 
         auto data_main = std::make_shared<UIData>(
+#ifdef _DEBUG
+            "Root data",
+#endif
             UILayout::FactoryFull(),
-            UIBaseColour::FactoryDefault(),
+            UIBaseColour::FactoryRoot(true),
             UITintColour::FactoryFade(10.0f)
             );
 
-        auto data_tooltip = std::make_shared<UIData>(
+
+        auto data_tooltip = std::make_shared<UIDataCanvas>(
+#ifdef _DEBUG
+            "canvas data",
+#endif
             UILayout(
                 UICoord(UICoord::TSource::ParentX, 1.0f),
                 UICoord(UICoord::TSource::ParentY, 1.0f),
@@ -1066,6 +1104,9 @@ namespace
             );
 
         auto data_text = std::make_shared<UIDataString>(
+#ifdef _DEBUG
+            "string data",
+#endif
             UILayout(
                 UICoord(UICoord::TSource::ParentX, 1.0f),
                 UICoord(UICoord::TSource::ParentY, 1.0f),
@@ -1094,17 +1135,24 @@ namespace
 
 
         in_out_data_map["main"] = data_main;
-        in_out_data_array_map["main"] = std::vector<std::shared_ptr<UIData>>({
-            data_main
-            });
     }
 
     void BuildModelData07_Stack(
-        std::map<std::string, std::vector<std::shared_ptr<UIData>>>& in_out_data_array_map,
         std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
         )
     {
-        auto data_main = std::make_shared<UIDataStack>(
+        auto data_main = std::make_shared<UIData>(
+#ifdef _DEBUG
+            "Root data",
+#endif
+            UILayout::FactoryFull(),
+            UIBaseColour::FactoryRoot(true)
+            );
+
+        auto data_stack = std::make_shared<UIDataStack>(
+#ifdef _DEBUG
+            "stack data",
+#endif
             UILayout::FactoryParentMiddleQuater(),
             UIBaseColour::FactoryBlueBackground(),
             UITintColour::FactoryDefault(),
@@ -1116,6 +1164,9 @@ namespace
         for (int index = 0; index < 3; index++)
         {
             auto data_text = std::make_shared<UIDataString>(
+#ifdef _DEBUG
+                "string data",
+#endif
                 UILayout(
                     UICoord(UICoord::TSource::ParentX, 1.0f),
                     UICoord(UICoord::TSource::ParentY, 1.0f),
@@ -1135,16 +1186,12 @@ namespace
                 TextEnum::VerticalBlockAlignment::Middle
                 );
 
-            data_main->AddChild(data_text);
+            data_stack->AddChild(data_text);
         }
+        data_main->AddChild(data_stack);
 
         in_out_data_map["main"] = data_main;
-        in_out_data_array_map["main"] = std::vector<std::shared_ptr<UIData>>({
-            data_main
-            });
     }
-    */
-
 };
 
 class UIModel : public IUIModel
@@ -1153,13 +1200,13 @@ public:
     UIModel(IWindowApplication& )//in_application)
     {
         //BuildModelData00_OneRedQuad(_data_map);
-        BuildModelData01_ChildRedQuad(_data_map);
-        //BuildModelData02_Text(_data_array_map, _data_map);
-        //BuildModelData03_ShrunkText(_data_array_map, _data_map);
-        //BuildModelData04_ShrunkTextChildMargin(_data_array_map, _data_map);
-        //BuildModelData05_Effect(_data_array_map, _data_map);
-        //BuildModelData06_Tooltip(_data_array_map, _data_map);
-        //BuildModelData07_Stack(_data_array_map, _data_map);
+        //BuildModelData01_ChildRedQuad(_data_map);
+        //BuildModelData02_Text(_data_map);
+        //BuildModelData03_ShrunkText(_data_map);
+        //BuildModelData04_ShrunkTextChildMargin(_data_map);
+        //BuildModelData05_Effect(_data_map);
+        //BuildModelData06_Tooltip(_data_map);
+        BuildModelData07_Stack(_data_map);
 
 /*
         _data_build_version = std::make_shared<UIDataString>(
@@ -1965,19 +2012,6 @@ public:
     }
 
 private:
-    virtual const std::vector<std::shared_ptr<UIData>>& GetDataArray(
-        const std::string& in_key
-        ) const override
-    {
-        const auto found = _data_array_map.find(in_key);
-        if (found != _data_array_map.end())
-        {
-            return found->second;
-        }
-        static std::vector<std::shared_ptr<UIData>> s_dummy;
-        return s_dummy;
-    }
-
     virtual UIData* const GetData(
         const std::string& in_key
         ) const override
@@ -1992,7 +2026,7 @@ private:
     }
 
 private:
-    std::map<std::string, std::vector<std::shared_ptr<UIData>>> _data_array_map;
+    //std::map<std::string, std::vector<std::shared_ptr<UIData>>> _data_array_map;
     std::map<std::string, std::shared_ptr<UIData>> _data_map;
 
     std::shared_ptr<UIData> _data_build;
