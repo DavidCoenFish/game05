@@ -97,13 +97,23 @@ void UIComponentStack::UpdateLayout(
     for (auto& child_data_ptr : child_data_array)
     {
         UIHierarchyNodeChild& child_data = *child_data_ptr;
-
         VectorInt4& child_window_offset = child_window_offset_array[trace];
         trace += 1;
+
         // invert y, 0,0 is bottom left
+#if 0
         const int height = (texture_size.GetY() / 2) - (child_window_offset.GetW() + child_window_offset.GetY());
         const VectorInt2 window(child_window_offset.GetX(), child_window_offset.GetY());
         const VectorInt2 offset(child_window_offset.GetZ(), height);
+#else
+    //in_component_owner.GetLayout().G
+        const int height = texture_size.GetY();
+        const VectorInt2 window(child_window_offset.GetX(), child_window_offset.GetY());
+        const VectorInt2 offset(
+            child_window_offset.GetZ(),
+            height - (child_window_offset.GetY() + child_window_offset.GetW())
+            );
+#endif
 
         child_data.UpdateLayout(
             in_param,

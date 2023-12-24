@@ -1170,8 +1170,8 @@ namespace
                 UILayout(
                     UICoord(UICoord::TSource::ParentX, 1.0f),
                     UICoord(UICoord::TSource::ParentY, 1.0f),
-                    VectorFloat2(0.5f, 0.5f),
-                    VectorFloat2(0.5f, 0.5f),
+                    VectorFloat2(0.0f, 0.0f),
+                    VectorFloat2(0.0f, 0.0f),
                     UILayout::TAdjustmentType::ShrinkLayoutToTexture,
                     UILayout::TAdjustmentType::ShrinkLayoutToTexture,
                     VectorInt4(8, 8, 8, 8)
