@@ -1201,6 +1201,57 @@ namespace
 
         in_out_data_map["main"] = data_main;
     }
+
+    void BuildModelData08_Button(
+        std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
+        )
+    {
+        auto data_main = std::make_shared<UIData>(
+#ifdef _DEBUG
+            "Root data",
+#endif
+            UILayout::FactoryFull(),
+            UIBaseColour::FactoryRoot(true)
+            );
+
+        auto data_button = std::make_shared<UIDataButton>(
+#ifdef _DEBUG
+            "button data",
+#endif
+            UILayout::FactoryParentMiddleQuater(),
+            UIBaseColour::FactoryBlueBackground(),
+            UITintColour::FactoryDefault()
+            );
+
+        auto data_text = std::make_shared<UIDataString>(
+#ifdef _DEBUG
+                "string data",
+#endif
+                UILayout(
+                    UICoord(UICoord::TSource::ParentX, 1.0f),
+                    UICoord(UICoord::TSource::ParentY, 1.0f),
+                    VectorFloat2(0.5f, 0.5f),
+                    VectorFloat2(0.5f, 0.5f),
+                    UILayout::TAdjustmentType::ShrinkLayoutToTexture,
+                    UILayout::TAdjustmentType::ShrinkLayoutToTexture,
+                    VectorInt4(8, 8, 8, 8)
+                    ),
+                UIBaseColour::FactoryRedBackground(),
+                UITintColour::FactoryDefault(),
+                UIData::s_empty_effect_data_array,
+                "hello human",
+                LocaleISO_639_1::Default,
+                false,
+                TextEnum::HorizontalLineAlignment::Middle,
+                TextEnum::VerticalBlockAlignment::Middle
+            );
+
+        data_main->AddChild(data_button);
+        data_button->AddChild(data_text);
+
+        in_out_data_map["main"] = data_main;
+    }
+
 };
 
 class UIModel : public IUIModel
@@ -1215,7 +1266,8 @@ public:
         //BuildModelData04_ShrunkTextChildMargin(_data_map);
         //BuildModelData05_Effect(_data_map);
         //BuildModelData06_Tooltip(_data_map);
-        BuildModelData07_Stack(_data_map);
+        //BuildModelData07_Stack(_data_map);
+        BuildModelData08_Button(_data_map);
 
 /*
         _data_build_version = std::make_shared<UIDataString>(

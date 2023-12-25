@@ -70,8 +70,7 @@ UIRootInputState& UIHierarchyNode::GetOrMakeRootInputState()
 void UIHierarchyNode::UpdateHierarchy(
     UIData& in_data,
     UIHierarchyNodeChild* const in_parent_to_this_node_or_null,
-    const UIHierarchyNodeUpdateParam& in_param,
-    const int in_child_index
+    const UIHierarchyNodeUpdateParam& in_param
     )
 {
     //LOG_MESSAGE_UISYSTEM("  UIHierarchyNode::UpdateHierarchy in_data:%p", &in_data);
@@ -107,8 +106,7 @@ void UIHierarchyNode::UpdateHierarchy(
             // ensure component is the correct type
             in_parent_to_this_node_or_null->ApplyComponent(
                 in_data,
-                in_param,
-                in_child_index
+                in_param
                 );
         }
 
@@ -204,8 +202,7 @@ void UIHierarchyNode::UpdateHierarchy(
     {
         if (true == ApplyEffect(
             in_data.GetArrayEffectData(),
-            in_param,
-            in_child_index
+            in_param
             ))
         {
             render_dirty = true; // if the effect stack data changes, that just effects the render
@@ -236,8 +233,7 @@ void UIHierarchyNode::UpdateHierarchy(
             UIHierarchyNodeChild* const child = _child_array[index].get();
             child->UpdateHierarchy(
                 *child_data,
-                in_param,
-                index
+                in_param
                 );
         }
 
@@ -565,8 +561,7 @@ UITexture& UIHierarchyNode::GetUITexture() const
 
 const bool UIHierarchyNode::ApplyEffect(
     const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
-    const UIHierarchyNodeUpdateParam& in_param,
-    const int in_index
+    const UIHierarchyNodeUpdateParam& in_param
     )
 {
     bool change = false;
@@ -581,8 +576,7 @@ const bool UIHierarchyNode::ApplyEffect(
     {
         if (true == in_array_effect_data[index]->ApplyComponent(
             _array_effect_component[index],
-            in_param,
-            in_index
+            in_param
             ))
         {
             change = true;

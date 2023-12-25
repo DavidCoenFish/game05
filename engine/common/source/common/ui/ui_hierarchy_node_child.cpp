@@ -187,69 +187,9 @@ const VectorFloat4 UIHierarchyNodeChild::CalculateTintColour() const
     return _tint_colour.GetTintColour(_time_accumulate_seconds);
 }
 
-#if 0
-void UIHierarchyNodeChild::Draw(const UIManagerDrawParam& in_draw_param)
-{
-    const auto& shader = in_draw_param._ui_manager->GetShaderRef(UIShaderEnum::TDefault);
-
-    _node->GetUITexture().SetShaderResource(
-        *shader,
-        0,
-        in_draw_param._frame
-        );
-
-    if (nullptr == _shader_constant_buffer)
-    {
-        _shader_constant_buffer = shader->MakeShaderConstantBuffer(
-            in_draw_param._draw_system
-            );
-    }
-
-    if (nullptr != _shader_constant_buffer)
-    {
-        UIManager::TShaderConstantBuffer& buffer = _shader_constant_buffer->GetConstant<UIManager::TShaderConstantBuffer>(0);
-        buffer._tint_colour = VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f);
-    }
-
-    in_draw_param._frame->SetShader(shader, _shader_constant_buffer);
-
-    _geometry->Draw(
-        in_draw_param._draw_system,
-        in_draw_param._frame
-        );
-
-    return;
-}
-
-const bool UIHierarchyNodeChild::VisitComponents(const std::function<const bool(IUIComponent* const, UIHierarchyNode* const)>& in_visitor)
-{
-    bool keep_going = true;
-    auto* component = _component.get();
-    if (nullptr != component)
-    {
-        keep_going = in_visitor(component, _node.get());
-    }
-    if (true == keep_going)
-    {
-        for (auto iter : _node->GetChildData())
-        {
-            keep_going = iter->VisitComponents(in_visitor);
-            if (false == keep_going)
-            {
-                break;
-            }
-        }
-    }
-
-    return keep_going;
-}
-#endif
-
-
 void UIHierarchyNodeChild::ApplyComponent(
     UIData& in_data,
-    const UIHierarchyNodeUpdateParam& in_param,
-    const int in_child_index
+    const UIHierarchyNodeUpdateParam& in_param
     )
 {
     SetLayout(in_data.GetLayout());
@@ -257,8 +197,7 @@ void UIHierarchyNodeChild::ApplyComponent(
 
     if (true == in_data.ApplyComponent(
         _component,
-        in_param,
-        in_child_index
+        in_param
         ))
     {
         // if the layout is dependent on 
@@ -273,16 +212,14 @@ void UIHierarchyNodeChild::ApplyComponent(
 
 void UIHierarchyNodeChild::UpdateHierarchy(
     UIData& in_data,
-    const UIHierarchyNodeUpdateParam& in_param,
-    const int in_child_index
+    const UIHierarchyNodeUpdateParam& in_param
     )
 {
     DSC_ASSERT(nullptr != _node, "node should be passed into ctor, what happened");
     _node->UpdateHierarchy(
         in_data,
         this,
-        in_param,
-        in_child_index
+        in_param
         );
 }
 

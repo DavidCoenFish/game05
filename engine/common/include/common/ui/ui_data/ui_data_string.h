@@ -37,41 +37,8 @@ public:
 private:
     virtual const bool ApplyComponent(
         std::unique_ptr<IUIComponent>& in_out_component,
-        const UIHierarchyNodeUpdateParam& in_param,
-        const int in_index = 0
+        const UIHierarchyNodeUpdateParam& in_param
         ) override;
-
-    ///// Make component type match what the data wants, default is UIComponentCanvas
-    //virtual void UpdateHierarchy(
-    //    std::unique_ptr<IUIComponent>& in_out_component,
-    //    const UIHierarchyNodeUpdateHierarchyParam& in_param,
-    //    const int in_index = 0
-    //    ) override;
-
-    //virtual void UpdateLayoutRender(
-    //    IUIComponent& in_component,
-    //    UIHierarchyNodeChild& in_component_owner,
-    //    const UIHierarchyNodeUpdateLayoutRenderParam& in_param,
-    //    const VectorInt2& in_parent_size,
-    //    const VectorInt2& in_parent_offset,
-    //    const VectorInt2& in_parent_window,
-    //    const UIScreenSpace& in_parent_screen_space
-    //    ) override;
-
-    ///// GetChild desired size? layout is now part of UIData?
-    //virtual const VectorInt2 GetContentSize(
-    //    IUIComponent& in_component,
-    //    const VectorInt2& in_target_size, 
-    //    const float in_ui_scale,
-    //    UIHierarchyNodeChild& in_component_owner
-    //    ) override;
-
-    //virtual const VectorInt2 GetDesiredSize(
-    //    IUIComponent& in_component,
-    //    const VectorInt2& in_target_size, 
-    //    const float in_ui_scale,
-    //    UIHierarchyNodeChild& in_component_owner
-    //    ) override;
 
 private:
     std::string _data;

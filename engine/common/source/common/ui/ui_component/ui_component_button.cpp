@@ -20,18 +20,13 @@ namespace
 }
 
 UIComponentButton::UIComponentButton(
-    const UIBaseColour& in_base_colour,
-    const UILayout& in_layout,
-    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
-    const std::function<void(const VectorFloat2&)>& in_on_click,
+    const TOnClick& in_on_click,
+    const TGetTooltip& in_get_tooltip,
     const bool in_allow_repeat
     )
-    : IUIComponent(
-        in_base_colour,
-        in_layout,
-        in_state_flag_tint_array
-        )
+    : IUIComponent()
     , _on_click(in_on_click)
+    , _get_tooltip(in_get_tooltip)
     , _allow_repeat(in_allow_repeat)
 {
     // Nop
@@ -43,7 +38,7 @@ UIComponentButton::~UIComponentButton()
 }
 
 const bool UIComponentButton::Set(
-    const TOnValueChange& in_on_click,
+    const TOnClick& in_on_click,
     const TGetTooltip& in_get_tooltip,
     const bool in_allow_repeat
     )
@@ -52,51 +47,6 @@ const bool UIComponentButton::Set(
     _get_tooltip = in_get_tooltip;
     _allow_repeat = in_allow_repeat;
     return false;
-}
-
-const bool UIComponentButton::UpdateHierarchy(
-    UIData* const in_data,
-    UIHierarchyNodeChildData& in_out_child_data,
-    const UIHierarchyNodeUpdateHierarchyParam& in_param
-    )
-{
-    bool dirty = false;
-    const UIDataButton* const data = dynamic_cast<const UIDataButton*>(in_data);
-    if (nullptr != data)
-    {
-        if (true == Set(
-            data->GetOnClick(),
-            data->GetTooltip(),
-            data->GetRepeat()
-            ))
-        {
-            dirty = true;
-        }
-    }
-
-    const UIDataToggle* const data_toggle = dynamic_cast<const UIDataToggle*>(in_data);
-    if (nullptr != data_toggle)
-    {
-        if (true == Set(
-            data_toggle->GetOnClick(),
-            data_toggle->GetTooltip(),
-            false
-            ))
-        {
-            dirty = true;
-        }
-    }
-
-    if (true == TSuper::UpdateHierarchy(
-        in_data,
-        in_out_child_data, 
-        in_param
-        ))
-    {
-        dirty = true;
-    }
-
-    return dirty;
 }
 
 void UIComponentButton::OnInputClick(

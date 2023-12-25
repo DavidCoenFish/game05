@@ -32,11 +32,9 @@ UIDataCanvas::UIDataCanvas(
     // Nop
 }
 
-
 const bool UIDataCanvas::ApplyComponent(
     std::unique_ptr<IUIComponent>& in_out_component,
-    const UIHierarchyNodeUpdateParam&, //in_param,
-    const int //in_index
+    const UIHierarchyNodeUpdateParam& //in_param
     )
 {
     bool dirty = false;

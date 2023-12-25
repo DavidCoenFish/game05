@@ -71,15 +71,13 @@ public:
     /// make sure our component matches what is in the given UIData, set layout, resource, render dirty as required
     void ApplyComponent(
         UIData& in_data,
-        const UIHierarchyNodeUpdateParam& in_param,
-        const int in_child_index
+        const UIHierarchyNodeUpdateParam& in_param
         );
 
     /// support recusion by passing through to call UpdateHierarchy on our node
     void UpdateHierarchy(
         UIData& in_data,
-        const UIHierarchyNodeUpdateParam& in_param,
-        const int in_child_index
+        const UIHierarchyNodeUpdateParam& in_param
         );
 
     const VectorInt2 GetDesiredSize(

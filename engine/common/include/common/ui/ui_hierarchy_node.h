@@ -147,8 +147,7 @@ public:
     void UpdateHierarchy(
         UIData& in_data,
         UIHierarchyNodeChild* const in_parent_to_this_node_or_null,
-        const UIHierarchyNodeUpdateParam& in_param,
-        const int in_child_index
+        const UIHierarchyNodeUpdateParam& in_param
         );
 
     /// UpdateLayout split from UpdateResources to allow texture size to be based on child size, rather than just top down layout size
@@ -202,8 +201,7 @@ private:
     /// currently this is under the Hierarchy update, so on effect stack change over in the UIData, it needs to set hierarchy dirty to get change propergated
     const bool ApplyEffect(
         const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
-        const UIHierarchyNodeUpdateParam& in_param,
-        const int in_index
+        const UIHierarchyNodeUpdateParam& in_param
         );
 
 private:

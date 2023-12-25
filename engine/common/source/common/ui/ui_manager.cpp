@@ -246,8 +246,7 @@ public:
             in_out_target_or_null->UpdateHierarchy(
                 *in_data,
                 nullptr,
-                update_param, 
-                0
+                update_param
                 );
 
             const VectorInt2 target_size = in_out_target_or_null->GetTextureSize(in_param._draw_system);

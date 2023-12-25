@@ -30,8 +30,7 @@ UIEffectData::~UIEffectData()
 
 const bool UIEffectData::ApplyComponent(
     std::shared_ptr<UIEffectComponent>& in_out_component,
-    const UIHierarchyNodeUpdateParam&, // in_param,
-    const int //in_index
+    const UIHierarchyNodeUpdateParam& // in_param
     )
 {
     bool dirty = false;
