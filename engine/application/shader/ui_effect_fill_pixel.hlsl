@@ -3,6 +3,8 @@
 #include "ui_effect_common_pixel.hlsli"
 
 // Todo: rename ui_effect_chrome_pixel.hlsl
+// Warning: respects alpha from input texture, but paints over all non ampha pixels, 
+// ie, this shader "fills" the solid area of a ui element
 
 float SumQuadrantSample(
     float2 in_pivot,

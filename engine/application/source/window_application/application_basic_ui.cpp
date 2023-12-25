@@ -1219,8 +1219,31 @@ namespace
             "button data",
 #endif
             UILayout::FactoryParentMiddleQuater(),
-            UIBaseColour::FactoryBlueBackground(),
+            UIBaseColour::FactoryDefault(),
             UITintColour::FactoryDefault()
+            );
+
+        auto data_fill = std::make_shared<UIDataCanvas>(
+#ifdef _DEBUG
+            "fill data",
+#endif
+            UILayout::FactoryFull(),
+            UIBaseColour::FactoryGreyBackground(),
+            UITintColour::FactoryDefault(),
+            std::vector<std::shared_ptr<UIEffectData>>({
+                std::make_shared<UIEffectData>(
+                    UIEffectEnum::TRoundCorners,
+                    // Top right, top left, bottom left, bottom right
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 32),
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 32),
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 32),
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 32)
+                    ),
+                    std::make_shared<UIEffectData>(
+                        UIEffectEnum::TFill,
+                        UICoord(UICoord::TSource::ParentMin, 0.0f, 2)
+                        )
+                })
             );
 
         auto data_text = std::make_shared<UIDataString>(
@@ -1234,11 +1257,23 @@ namespace
                     VectorFloat2(0.5f, 0.5f),
                     UILayout::TAdjustmentType::ShrinkLayoutToTexture,
                     UILayout::TAdjustmentType::ShrinkLayoutToTexture,
-                    VectorInt4(8, 8, 8, 8)
+                    VectorInt4(8,8,8,8)
                     ),
-                UIBaseColour::FactoryRedBackground(),
+                UIBaseColour::FactoryDefault(),
                 UITintColour::FactoryDefault(),
+                //UITintColour::FactoryBlack(),
+#if 0
                 UIData::s_empty_effect_data_array,
+#else
+                std::vector<std::shared_ptr<UIEffectData>>({
+                        std::make_shared<UIEffectData>(
+                            UIEffectEnum::TDropShadow,
+                            UICoord(UICoord::TSource::ParentMin, 0.0f, 2),
+                            UICoord(UICoord::TSource::ParentMin, 0.0f, 2),
+                            UICoord(UICoord::TSource::ParentMin, 0.0f, 6)
+                            )
+                    }),
+#endif
                 "hello human",
                 LocaleISO_639_1::Default,
                 false,
@@ -1246,8 +1281,9 @@ namespace
                 TextEnum::VerticalBlockAlignment::Middle
             );
 
-        data_main->AddChild(data_button);
+        data_button->AddChild(data_fill);
         data_button->AddChild(data_text);
+        data_main->AddChild(data_button);
 
         in_out_data_map["main"] = data_main;
     }

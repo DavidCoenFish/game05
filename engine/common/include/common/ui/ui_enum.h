@@ -40,7 +40,7 @@ enum class UIEffectEnum
     TRoundCorners, // data[Top right, top left, bottom left, bottom right]
     TRoundCornersHollow,
     TGloss,
-    TFill, // use tint to make chrom gradient
+    TFill, // data[horizion thickness] use tint to make chrome gradient
     TDesaturate,
     //TTint, // just combine input with tint. this is the same was what the default shader does, but effect has _state_flag_tint_array. add _state_flag_tint_array to all?
 

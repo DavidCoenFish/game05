@@ -109,6 +109,7 @@ const bool UIDataString::ApplyComponent(
             _horizontal, 
             _vertical,
             in_param._default_text_style->_text_colour
+            //VectorFloat4::s_white
             ))
         {
             dirty = true;
