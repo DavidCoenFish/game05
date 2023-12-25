@@ -76,6 +76,7 @@ void UIComponentStack::UpdateLayout(
 {
     // calculate layout size given parent window
     VectorInt2 base_layout_size = in_component_owner.GetLayout().GetLayoutSize(in_parent_window, in_param._ui_scale);
+    const VectorInt4& texture_margin = in_component_owner.GetLayout().GetTextureMarginRef();
 
     std::vector<VectorInt4> child_window_offset_array;
     const VectorInt2 base_desired_size = CalculateDesiredSize(
@@ -100,20 +101,14 @@ void UIComponentStack::UpdateLayout(
         VectorInt4& child_window_offset = child_window_offset_array[trace];
         trace += 1;
 
-        // invert y, 0,0 is bottom left
-#if 0
-        const int height = (texture_size.GetY() / 2) - (child_window_offset.GetW() + child_window_offset.GetY());
-        const VectorInt2 window(child_window_offset.GetX(), child_window_offset.GetY());
-        const VectorInt2 offset(child_window_offset.GetZ(), height);
-#else
-    //in_component_owner.GetLayout().G
+        // invert y, 0,0 is bottom left. by default, this pushes the stack children into the top left of layout
+        // todo: the stack could have enum of alignment to left/top/bottom and ajust the offset here?
         const int height = texture_size.GetY();
         const VectorInt2 window(child_window_offset.GetX(), child_window_offset.GetY());
         const VectorInt2 offset(
-            child_window_offset.GetZ(),
-            height - (child_window_offset.GetY() + child_window_offset.GetW())
+            child_window_offset.GetZ() + texture_margin[0],
+            height - (child_window_offset.GetY() + child_window_offset.GetW() + texture_margin[1])
             );
-#endif
 
         child_data.UpdateLayout(
             in_param,

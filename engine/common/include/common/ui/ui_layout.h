@@ -32,6 +32,7 @@ public:
         const VectorInt4& in_texture_margin = VectorInt4::s_zero // left, top, right, bottom
         );
 
+    // left, top, right, bottom
     const VectorInt4& GetTextureMarginRef() const { return _texture_margin; }
 
     /// Get the size of the layout element
@@ -89,7 +90,9 @@ private:
     VectorFloat2 _parent_window_pivot_ratio;
     /// how to adjust the x,y axis of the layout size against a texture size
     TAdjustmentType _adjustment_type[2];
+
     /// amount to inflate the texture size with
+    /// left, top, right, bottom
     VectorInt4 _texture_margin;
 
 };

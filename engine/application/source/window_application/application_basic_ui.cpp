@@ -1153,7 +1153,16 @@ namespace
 #ifdef _DEBUG
             "stack data",
 #endif
-            UILayout::FactoryParentMiddleQuater(),
+            UILayout(
+                UICoord(UICoord::TSource::ParentX, 0.5f, 0.0f),
+                UICoord(UICoord::TSource::ParentY, 0.5f, 0.0f),
+                VectorFloat2(0.5f, 0.5f),
+                VectorFloat2(0.5f, 0.5f),
+                UILayout::TAdjustmentType::GrowTextureToLayout,
+                UILayout::TAdjustmentType::GrowTextureToLayout,
+                VectorInt4(8,8,8,8) // left, top, right, bottom
+                ),
+            //::FactoryParentMiddleQuater(),
             UIBaseColour::FactoryBlueBackground(),
             UITintColour::FactoryDefault(),
             UIData::s_empty_effect_data_array,
