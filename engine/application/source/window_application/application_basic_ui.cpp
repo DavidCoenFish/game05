@@ -1269,7 +1269,10 @@ namespace
                             UIEffectEnum::TDropShadow,
                             UICoord(UICoord::TSource::ParentMin, 0.0f, 2),
                             UICoord(UICoord::TSource::ParentMin, 0.0f, 2),
-                            UICoord(UICoord::TSource::ParentMin, 0.0f, 6)
+                            UICoord(UICoord::TSource::ParentMin, 0.0f, 6),
+                            UICoord(),
+                            nullptr,
+                            VectorFloat4::s_black
                             )
                     }),
 #endif

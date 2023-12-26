@@ -5,6 +5,7 @@
 
 const VectorFloat4 VectorFloat4::s_zero(0.0f, 0.0f, 0.0f, 0.0f);
 const VectorFloat4 VectorFloat4::s_white(1.0f, 1.0f, 1.0f, 1.0f);
+const VectorFloat4 VectorFloat4::s_black(0.0f, 0.0f, 0.0f, 1.0f);
 const VectorFloat4 VectorFloat4::s_render_coordinates_full(-1.0f, -1.0f, 1.0f, 1.0f);
 
 VectorFloat4::VectorFloat4(

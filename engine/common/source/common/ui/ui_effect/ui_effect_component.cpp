@@ -51,12 +51,13 @@ namespace
 
     const VectorFloat4 CalculateTintColour(
         const UIStateFlag in_state_flag, 
-        const std::array<VectorFloat4, static_cast<int>(UIStateFlag::TTintPermutationCount)>* const in_state_flag_tint_array_or_null
+        const std::array<VectorFloat4, static_cast<int>(UIStateFlag::TTintPermutationCount)>* const in_state_flag_tint_array_or_null,
+        const VectorFloat4& in_default_tint
         )
     {
         if (nullptr == in_state_flag_tint_array_or_null)
         {
-            return VectorFloat4::s_white;
+            return in_default_tint; //VectorFloat4::s_white;
         }
 
         const int index = static_cast<int>(in_state_flag) & static_cast<int>(UIStateFlag::TTintMask);
@@ -70,7 +71,8 @@ UIEffectComponent::UIEffectComponent(
     const UICoord& in_coord_b,
     const UICoord& in_coord_c,
     const UICoord& in_coord_d,
-    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null,
+    const VectorFloat4& in_default_tint
     )
     : _state_flag_tint_array_or_null(in_state_flag_tint_array_or_null)
     , _type(in_type)
@@ -78,6 +80,7 @@ UIEffectComponent::UIEffectComponent(
     , _coord_b(in_coord_b)
     , _coord_c(in_coord_c)
     , _coord_d(in_coord_d)
+    , _default_tint(in_default_tint)
 {
     _texture = std::make_unique<UITexture>(
         true, //const bool in_draw_to_texture = false,
@@ -99,7 +102,8 @@ const bool UIEffectComponent::Set(
     const UICoord& in_coord_b,
     const UICoord& in_coord_c,
     const UICoord& in_coord_d,
-    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null,
+    const VectorFloat4& in_default_tint
     )
 {
     bool dirty = false;
@@ -139,6 +143,12 @@ const bool UIEffectComponent::Set(
     {
         dirty = true;
         _state_flag_tint_array_or_null = in_state_flag_tint_array_or_null;
+    }
+
+    if (_default_tint != in_default_tint)
+    {
+        dirty = true;
+        _default_tint = in_default_tint;
     }
 
     return dirty;
@@ -197,7 +207,7 @@ void UIEffectComponent::Render(
             1.0f / texture_size_float.GetY()
             );
     
-        buffer._tint = CalculateTintColour(in_state_flag, _state_flag_tint_array_or_null.get());
+        buffer._tint = CalculateTintColour(in_state_flag, _state_flag_tint_array_or_null.get(), _default_tint);
     }
 
     in_draw_param._frame->SetShader(shader, _shader_constant_buffer);

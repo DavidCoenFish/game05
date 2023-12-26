@@ -18,7 +18,8 @@ public:
         const UICoord& in_coord_b = UICoord(),
         const UICoord& in_coord_c = UICoord(),
         const UICoord& in_coord_d = UICoord(),
-        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null = nullptr
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null = nullptr,
+        const VectorFloat4& in_default_tint = VectorFloat4::s_white
         );
     virtual ~UIEffectData();
 
@@ -42,5 +43,8 @@ private:
 
     /// array of tint colours to be selected from
     std::shared_ptr<const TStateFlagTintArray> _state_flag_tint_array_or_null;
+
+    /// tint colour to use if _state_flag_tint_array_or_null is null
+    VectorFloat4 _default_tint;
 
 };

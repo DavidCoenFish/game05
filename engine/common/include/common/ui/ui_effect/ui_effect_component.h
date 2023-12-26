@@ -32,7 +32,8 @@ public:
         const UICoord& in_coord_b,
         const UICoord& in_coord_c,
         const UICoord& in_coord_d,
-        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null = nullptr
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null = nullptr,
+        const VectorFloat4& in_default_tint = VectorFloat4::s_white
         );
     /// destructed by base type IUIComponent which has virtual dtor, so virtual here may be redundant but does provide info
     virtual ~UIEffectComponent();
@@ -44,7 +45,8 @@ public:
         const UICoord& in_coord_b,
         const UICoord& in_coord_c,
         const UICoord& in_coord_d,
-        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null = nullptr
+        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null = nullptr,
+        const VectorFloat4& in_default_tint = VectorFloat4::s_white
         );
 
     void Update(
@@ -79,6 +81,9 @@ private:
 
     /// optional array of tint colours selected via input state flag in Render
     std::shared_ptr<const TStateFlagTintArray> _state_flag_tint_array_or_null;
+
+    /// tint colour to use if _state_flag_tint_array_or_null is null
+    VectorFloat4 _default_tint;
 
     /// The render target we draw to and then the shader resource (texture) that others consume
     std::unique_ptr<UITexture> _texture;

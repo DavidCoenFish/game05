@@ -11,7 +11,8 @@ UIEffectData::UIEffectData(
     const UICoord& in_coord_b,
     const UICoord& in_coord_c,
     const UICoord& in_coord_d,
-    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null
+    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null,
+    const VectorFloat4& in_default_tint
     )
     : _type(in_type)
     , _coord_a(in_coord_a)
@@ -19,6 +20,7 @@ UIEffectData::UIEffectData(
     , _coord_c(in_coord_c)
     , _coord_d(in_coord_d)
     , _state_flag_tint_array_or_null(in_state_flag_tint_array_or_null)
+    , _default_tint(in_default_tint)
 {
     // Nop
 }
@@ -44,7 +46,8 @@ const bool UIEffectData::ApplyComponent(
             _coord_b,
             _coord_c,
             _coord_d,
-            _state_flag_tint_array_or_null
+            _state_flag_tint_array_or_null,
+            _default_tint
             );
     }
     else
@@ -55,7 +58,8 @@ const bool UIEffectData::ApplyComponent(
             _coord_b,
             _coord_c,
             _coord_d,
-            _state_flag_tint_array_or_null
+            _state_flag_tint_array_or_null,
+            _default_tint
             ))
         {
             dirty = true;
