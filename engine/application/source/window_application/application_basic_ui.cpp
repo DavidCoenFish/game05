@@ -1246,7 +1246,8 @@ namespace
                 })
             );
 
-        auto data_text = std::make_shared<UIDataString>(
+//        auto data_text = std::make_shared<UIDataString>(
+        auto data_text = std::make_shared<UIDataTextRun>(
 #ifdef _DEBUG
                 "string data",
 #endif
@@ -1276,7 +1277,7 @@ namespace
                             )
                     }),
 #endif
-                "hello human",
+                "<Colour 1.0 1.0 1.0 1.0>HELLO HUMAN",
                 LocaleISO_639_1::Default,
                 false,
                 TextEnum::HorizontalLineAlignment::Middle,
