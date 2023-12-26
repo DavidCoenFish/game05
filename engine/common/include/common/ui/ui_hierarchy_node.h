@@ -197,6 +197,9 @@ public:
     /// Get the texture for the node, could be the last effect of the effect stacks texture, or the nodes own ui texture
     UITexture& GetUITexture() const;// { return *_texture; }
 
+    /// Get the base texture for the node, the texture before 
+    UITexture& GetBaseUITexture() const { return *_texture; }
+
 private:
     /// currently this is under the Hierarchy update, so on effect stack change over in the UIData, it needs to set hierarchy dirty to get change propergated
     const bool ApplyEffect(

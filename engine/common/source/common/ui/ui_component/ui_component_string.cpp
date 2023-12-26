@@ -130,26 +130,26 @@ void UIComponentString::PreDraw(
     UIHierarchyNode& in_node
     ) 
 {
-    auto& texture = in_node.GetUITexture();
+    auto& texture = in_node.GetBaseUITexture();
 
+    // we are only in component predraw if the external node child state has allowed us to draw
     //if (true == texture.CalculateNeedsToDraw())
+    if (false == texture.SetRenderTarget(
+        in_draw_param._draw_system,
+        in_draw_param._frame
+        ))
     {
-        if (false == texture.SetRenderTarget(
-            in_draw_param._draw_system,
-            in_draw_param._frame
-            ))
-        {
-            return;
-        }
-
-        in_draw_param._text_manager->DrawText(
-            in_draw_param._draw_system,
-            in_draw_param._frame,
-            _text_block.get()
-            );
-
-        texture.SetHasDrawn(true);
+        return;
     }
+
+    in_draw_param._text_manager->DrawText(
+        in_draw_param._draw_system,
+        in_draw_param._frame,
+        _text_block.get()
+        );
+
+    // don't mark the texture as drawn to allow our owning node to still consider drawing to it, in particular for the effect stack draw
+    //texture.SetHasDrawn(true);
 
     return;
 }

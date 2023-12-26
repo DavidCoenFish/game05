@@ -1261,7 +1261,6 @@ namespace
                     ),
                 UIBaseColour::FactoryDefault(),
                 UITintColour::FactoryDefault(),
-                //UITintColour::FactoryBlack(),
 #if 0
                 UIData::s_empty_effect_data_array,
 #else

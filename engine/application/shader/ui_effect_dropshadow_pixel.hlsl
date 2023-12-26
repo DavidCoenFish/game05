@@ -104,8 +104,8 @@ Pixel main(Interpolant in_input)
     // Premultipiled alpha
     //result = foreground + (1 - foreground.alpha) * background
     result._colour = texel + ((1.0 - texel.a) * (_tint * shadow_alpha));
-    result._colour = texel;
-    result._colour = float4(1.0, 0.0, 0.0, 1.0);
+    //result._colour = texel;
+    //result._colour = float4(1.0, texel.x, texel.a, 1.0);
 
     return result;
 }
