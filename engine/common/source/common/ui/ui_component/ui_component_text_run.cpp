@@ -7,23 +7,17 @@
 #include "common/text/text_manager.h"
 #include "common/ui/ui_data/ui_data_text_run.h"
 #include "common/ui/ui_hierarchy_node.h"
+#include "common/ui/ui_hierarchy_node_child.h"
 #include "common/ui/ui_manager.h"
 #include "common/ui/ui_texture.h"
 
 
 UIComponentTextRun::UIComponentTextRun(
-    const UIBaseColour& in_base_colour,
-    const UILayout& in_layout,
-    const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array,
     std::unique_ptr<TextRun>& in_text_run
     )
-    : IUIComponent(
-        in_base_colour,
-        in_layout,
-        in_state_flag_tint_array
-        )
+    : IUIComponent()
     , _text_run(std::move(in_text_run))
-    , _change_id(0)
+    //, _change_id(0)
 {
     return;
 }
@@ -34,13 +28,19 @@ UIComponentTextRun::~UIComponentTextRun()
 }
 
 const bool UIComponentTextRun::Set(
+    const std::vector<std::shared_ptr<ITextRunData>>& in_text_run_array,
     const bool in_width_limit_enabled,
     const TextEnum::HorizontalLineAlignment in_horizontal,
     const TextEnum::VerticalBlockAlignment in_vertical,
-    const int in_em_size
+    const int in_em_size,
+    const float in_ui_scale
     )
 {
     bool dirty = false;
+    if (true == _text_run->SetTextRunArray(in_text_run_array))
+    {
+        dirty = true;
+    }
     if (true == _text_run->SetEMSize(in_em_size))
     {
         dirty = true;
@@ -57,10 +57,81 @@ const bool UIComponentTextRun::Set(
     {
         dirty = true;
     }
+    if (true == _text_run->SetUIScale(in_ui_scale))
+    {
+        dirty = true;
+    }
 
     return dirty;
 }
 
+const VectorInt2 UIComponentTextRun::GetDesiredSize(
+    UIHierarchyNodeChild& in_component_owner,
+    const UIHierarchyNodeUpdateParam& in_layout_param,
+    const VectorInt2& in_pre_shrink_layout_size //in_parent_window
+    )
+{
+    _text_run->SetWidthLimitWidth(in_pre_shrink_layout_size[0]);
+
+    const VectorInt2 bounds = _text_run->GetTextBounds();
+    const VectorInt2 result = in_component_owner.GetLayout().ApplyMargin(bounds, in_layout_param._ui_scale);
+    return result;
+}
+
+void UIComponentTextRun::UpdateResources(
+    UIHierarchyNodeChild& in_component_owner,
+    const UIHierarchyNodeUpdateParam& in_param,
+    const UIScreenSpace& in_parent_screen_space,
+    const VectorInt2& in_parent_texture_size
+    )
+{
+    TSuper::UpdateResources(
+        in_component_owner,
+        in_param,
+        in_parent_screen_space,
+        in_parent_texture_size
+        );
+
+    if (true == _text_run->SetTextContainerSize(
+        in_component_owner.GetNode().GetTextureSize(in_param._draw_system)
+        ))
+    {
+        in_component_owner.SetStateDirtyBit(UIStateDirty::TRenderDirty, true);
+    }
+
+    return;
+}
+
+void UIComponentTextRun::PreDraw(
+    const UIManagerDrawParam& in_draw_param,
+    UIHierarchyNode& in_node
+    )
+{
+    auto& texture = in_node.GetBaseUITexture();
+
+    // we are only in component predraw if the external node child state has allowed us to draw
+    //if (true == texture.CalculateNeedsToDraw())
+    if (false == texture.SetRenderTarget(
+        in_draw_param._draw_system,
+        in_draw_param._frame
+        ))
+    {
+        return;
+    }
+
+    in_draw_param._text_manager->DrawTextRun(
+        in_draw_param._draw_system,
+        in_draw_param._frame,
+        _text_run.get()
+        );
+
+    // don't mark the texture as drawn to allow our owning node to still consider drawing to it, in particular for the effect stack draw
+    //texture.SetHasDrawn(true);
+
+    return;
+}
+
+/*
 const bool UIComponentTextRun::UpdateHierarchy(
     UIData* const in_data,
     UIHierarchyNodeChildData& in_out_child_data,
@@ -195,3 +266,4 @@ const bool UIComponentTextRun::PreDraw(
 
     return dirty;
 }
+*/

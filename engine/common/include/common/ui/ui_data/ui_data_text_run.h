@@ -2,6 +2,7 @@
 
 #include "common/ui/ui_data/ui_data.h"
 #include "common/locale/locale_enum.h"
+#include "common/text/text_enum.h"
 #include "common/math/vector_float4.h"
 
 class ITextRunData;
@@ -28,14 +29,12 @@ struct UIDataTextRunStyle
     VectorFloat4 _icon_colour;
 };
 
-/*
-the ui system passes in 
 class UIDataTextRun : public UIData
 {
 public:
-    // Use < and > as markup flags, and << as escapes (don't need >> as escape if set to auto consume > at end of a mate block)
-    // Don't have xml open/ close, just a stream of markup
-    // <Locale locale_key><Icon id><Color 1.0 0.5 0.0 1.0>red<DefaultColour> raw text <Font path_to_font>other font text <DefaultFont>
+    /// Use < and > as markup flags, and << as escapes (don't need >> as escape if set to auto consume > at end of a mate block)
+    /// Don't have xml open/ close, just a stream of markup
+    /// """<Locale [locale_key]><Icon [id]><Color 1.0 0.5 0.0 1.0>red<DefaultColour> raw text <Font path_to_font>other font text <DefaultFont>back to default font"""
     static void BuildTextRunData(
         std::vector<std::shared_ptr<ITextRunData>>& out_run_data,
         const std::string& in_markup_string_utf8,
@@ -46,9 +45,19 @@ public:
         );
 
     UIDataTextRun(
+#ifdef _DEBUG
+        const std::string& in_debug_name,
+#endif
+        const UILayout& in_layout,
+        const UIBaseColour& in_base_colour,
+        const UITintColour& in_tint_colour,
+        const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
+
         const std::string& in_markupStringUtf8,
         const LocaleISO_639_1 in_locale = LocaleISO_639_1::Default,
-        const std::string& in_template_name = std::string("UIDataTextRun")
+        const bool in_width_limit_enabled = false,
+        const TextEnum::HorizontalLineAlignment in_horizontal = TextEnum::HorizontalLineAlignment::Left,
+        const TextEnum::VerticalBlockAlignment in_vertical = TextEnum::VerticalBlockAlignment::Bottom
         );
     virtual ~UIDataTextRun();
 
@@ -60,21 +69,29 @@ public:
     // Allow external to just pass in an array of text run data
     void SetData(const std::vector<std::shared_ptr<ITextRunData>>& in_data);
 
-    const bool VisitData(
+private:
+    void BuildData(
         TextManager& in_text_manager,
         LocaleSystem& in_locale_system,
-        const UIDataTextRunStyle& in_default_style,
-        const std::function<bool(const int, const std::vector<std::shared_ptr<ITextRunData>>&)>& in_visitor
+        const UIDataTextRunStyle& in_default_style
         );
+
+    virtual const bool ApplyComponent(
+        std::unique_ptr<IUIComponent>& in_out_component,
+        const UIHierarchyNodeUpdateParam& in_param
+        ) override;
 
 private:
     std::string _markup_string_utf8;
     LocaleISO_639_1 _locale;
-    int _change_id;
+    //int _change_id;
 
     bool _dirty;
-    //THashKey _hash_key;
     std::vector<std::shared_ptr<ITextRunData>> _data;
 
+    bool _width_limit_enabled;
+    TextEnum::HorizontalLineAlignment _horizontal;
+    TextEnum::VerticalBlockAlignment _vertical;
+
 };
-*/
+

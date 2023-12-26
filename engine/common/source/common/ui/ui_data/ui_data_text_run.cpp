@@ -6,6 +6,8 @@
 #include "common/text/text_manager.h"
 #include "common/text/text_run_data_icon.h"
 #include "common/text/text_run_data_string.h"
+#include "common/ui/ui_component/ui_component_text_run.h"
+#include "common/ui/ui_hierarchy_node.h"
 
 namespace
 {
@@ -388,7 +390,6 @@ UIDataTextRunStyle::UIDataTextRunStyle(
     // Nop
 }
 
-/*
 void UIDataTextRun::BuildTextRunData(
     std::vector<std::shared_ptr<ITextRunData>>& out_run_data,
     const std::string& in_markup_string_utf8,
@@ -449,18 +450,36 @@ void UIDataTextRun::BuildTextRunData(
 }
 
 UIDataTextRun::UIDataTextRun(
+#ifdef _DEBUG
+    const std::string& in_debug_name,
+#endif
+    const UILayout& in_layout,
+    const UIBaseColour& in_base_colour,
+    const UITintColour& in_tint_colour,
+    const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
+
     const std::string& in_markupStringUtf8,
     const LocaleISO_639_1 in_locale,
-    const std::string& in_template_name
+    const bool in_width_limit_enabled,
+    const TextEnum::HorizontalLineAlignment in_horizontal,
+    const TextEnum::VerticalBlockAlignment in_vertical
     )
     : UIData(
-        in_template_name
+#ifdef _DEBUG
+        in_debug_name,
+#endif
+        in_layout,
+        in_base_colour,
+        in_tint_colour,
+        in_array_effect_data
         )
     , _markup_string_utf8(in_markupStringUtf8)
     , _locale(in_locale)
-    , _change_id(1)
     , _dirty(true)
     , _data()
+    , _width_limit_enabled(in_width_limit_enabled)
+    , _horizontal(in_horizontal)
+    , _vertical(in_vertical)
 {
     // Nop
 }
@@ -475,8 +494,8 @@ void UIDataTextRun::SetMarkupStringUtf8(const std::string& in_markup_string_utf8
     if (_markup_string_utf8 != in_markup_string_utf8)
     {
         _markup_string_utf8 = in_markup_string_utf8;
-        _change_id += 1;
         _dirty = true;
+        SetDirtyBit(UIDataDirty::TComponentDirty, true);
     }
     return;
 }
@@ -486,8 +505,8 @@ void UIDataTextRun::SetLocale(const LocaleISO_639_1 in_locale)
     if (_locale != in_locale)
     {
         _locale = in_locale;
-        _change_id += 1;
         _dirty = true;
+        SetDirtyBit(UIDataDirty::TComponentDirty, true);
     }
     return;
 }
@@ -495,17 +514,16 @@ void UIDataTextRun::SetLocale(const LocaleISO_639_1 in_locale)
 // Allow external to just pass in an array of text run data
 void UIDataTextRun::SetData(const std::vector<std::shared_ptr<ITextRunData>>& in_data)
 {
+    SetDirtyBit(UIDataDirty::TComponentDirty, true);
     _data = in_data;
-    _change_id += 1;
     _dirty = false;
     return;
 }
 
-const bool UIDataTextRun::VisitData(
+void UIDataTextRun::BuildData(
     TextManager& in_text_manager,
     LocaleSystem& in_locale_system,
-    const UIDataTextRunStyle& in_default_style,
-    const std::function<bool(const int, const std::vector<std::shared_ptr<ITextRunData>>&)>& in_visitor
+    const UIDataTextRunStyle& in_default_style
     )
 {
     if (true == _dirty)
@@ -522,12 +540,68 @@ const bool UIDataTextRun::VisitData(
             );
     }
 
+    return;
+}
+
+
+const bool UIDataTextRun::ApplyComponent(
+    std::unique_ptr<IUIComponent>& in_out_component,
+    const UIHierarchyNodeUpdateParam& in_param
+    )
+{
     bool dirty = false;
-    if (nullptr != in_visitor)
+
+    // if in_out_component is not a UIComponentCanvas, remake it as one
+    UIComponentTextRun* component = dynamic_cast<UIComponentTextRun*>(in_out_component.get());
+    //auto font = in_param._text_manager->GetTextFont(in_param._default_text_style->_font_path);
+    //const TextLocale* const text_locale = in_param._text_manager->GetLocaleToken(_locale);
+
+    BuildData(
+        *in_param._text_manager,
+        *in_param._locale_system,
+        *in_param._default_text_style
+        );
+
+    // the tint colour is normally used to influence rendering children shaders
+    //const VectorFloat4 colour = GetTintColour().GetTintColour(0.0f);
+
+    if (nullptr == component)
     {
-        dirty = in_visitor(_change_id, _data);
+        auto text_run = std::make_unique<TextRun>(
+            _data,
+            VectorInt2::s_zero,
+            _width_limit_enabled,
+            0,
+            _horizontal,
+            _vertical,
+            in_param._default_text_style->_font_size,
+            in_param._ui_scale
+            );
+
+        auto new_component = std::make_unique<UIComponentTextRun>(
+            text_run
+            );
+        in_out_component = std::move(new_component);
+
+        dirty = true;
     }
+    else
+    {
+        if (true == component->Set(
+            _data,
+            _width_limit_enabled,
+            _horizontal, 
+            _vertical,
+            in_param._default_text_style->_font_size,
+            in_param._ui_scale
+            ))
+        {
+            dirty = true;
+        }
+    }
+
+    //SetDirtyBit(UIDataDirty::THierarchy, false);
 
     return dirty;
 }
-*/
+
