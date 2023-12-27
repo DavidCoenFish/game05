@@ -35,6 +35,21 @@ public:
     /// Use < and > as markup flags, and << as escapes (don't need >> as escape if set to auto consume > at end of a mate block)
     /// Don't have xml open/ close, just a stream of markup
     /// """<Locale [locale_key]><Icon [id]><Colour 1.0 0.5 0.0 1.0>red<DefaultColour> raw text <Font path_to_font>other font text <DefaultFont>back to default font"""
+    ///      Locale <string LocaleISO_639_1>
+    ///      Icon <int icon id>
+    ///      Colour <float> <float> <float> <float>
+    ///      DefaultColour
+    ///      IconTint <float> <float> <float> <float>
+    ///      DefaultIconTint ~set the icon tint back to default
+    ///      Font <string font path>
+    ///      DefaultFont
+    ///      Size <int>
+    ///      DefaultSize 
+    ///      GapRatio <float>
+    ///      DefaultGapRatio
+
+
+
     static void BuildTextRunData(
         std::vector<std::shared_ptr<ITextRunData>>& out_run_data,
         const std::string& in_markup_string_utf8,

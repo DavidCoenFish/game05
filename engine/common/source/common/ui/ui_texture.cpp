@@ -70,8 +70,8 @@ const bool UITexture::SetRenderTarget(
     DrawSystemFrame* const in_frame
     )
 {
-    //LOG_MESSAGE_UISYSTEM("  UITexture::SetRenderTarget _draw_to_texture:%d _allow_clear:%d _always_dirty:%d _has_drawn:%d", _draw_to_texture, _allow_clear, _always_dirty, _has_drawn);
-    //LOG_MESSAGE_UISYSTEM("      _size:[%d, %d] _clear_colour[%f, %f, %f, %f]", _size[0], _size[1], _clear_colour[0], _clear_colour[1], _clear_colour[2], _clear_colour[3]);
+    LOG_MESSAGE_UI_VERBOSE("  UITexture::SetRenderTarget _draw_to_texture:%d _allow_clear:%d _always_dirty:%d _has_drawn:%d", _draw_to_texture, _allow_clear, _always_dirty, _has_drawn);
+    LOG_MESSAGE_UI_VERBOSE("      _size:[%d, %d] _clear_colour[%f, %f, %f, %f]", _size[0], _size[1], _clear_colour[0], _clear_colour[1], _clear_colour[2], _clear_colour[3]);
 
     UpdateRenderTarget(in_draw_system, in_frame->GetCommandList());
 

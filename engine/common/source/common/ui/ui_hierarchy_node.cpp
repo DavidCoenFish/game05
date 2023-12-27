@@ -73,9 +73,9 @@ void UIHierarchyNode::UpdateHierarchy(
     const UIHierarchyNodeUpdateParam& in_param
     )
 {
-    //LOG_MESSAGE_UISYSTEM("  UIHierarchyNode::UpdateHierarchy in_data:%p", &in_data);
+    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNode::UpdateHierarchy in_data:%p", &in_data);
 #ifdef _DEBUG
-    //LOG_MESSAGE_UISYSTEM("    UIData _name:%s", in_data._debug_name.c_str());
+    LOG_MESSAGE_UI_VERBOSE("    UIData _name:%s", in_data._debug_name.c_str());
 #endif
 
     bool layout_dirty = false;
@@ -249,7 +249,7 @@ void UIHierarchyNode::UpdateLayout(
     const VectorInt2& in_parent_offset
     )
 {
-    //LOG_MESSAGE_UISYSTEM("  UIHierarchyNode::UpdateLayout");
+    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNode::UpdateLayout");
 
     for (auto& child : _child_array)
     {
@@ -269,7 +269,7 @@ void UIHierarchyNode::UpdateResources(
     const UIScreenSpace& in_parent_screen_space
     )
 {
-    //LOG_MESSAGE_UISYSTEM("  UIHierarchyNode::UpdateResources");
+    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNode::UpdateResources");
 
     const VectorInt2 texture_size = _texture->GetSize(in_param._draw_system);
 
@@ -479,42 +479,46 @@ const bool UIHierarchyNode::DealInput(
     return dirty;
 }
 
-void UIHierarchyNode::PreDraw(
-    const UIManagerDrawParam& in_draw_param
-    )
-{
-    //LOG_MESSAGE_UISYSTEM("  UIHierarchyNode::PreDraw");
-
-    // Ensure that children textures are ready
-    for (auto& iter : _child_array)
-    {
-        iter->PreDraw(in_draw_param);
-    }
-
-    return;
-}
+//void UIHierarchyNode::PreDraw(
+//    const UIManagerDrawParam& in_draw_param
+//    )
+//{
+//    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNode::PreDraw");
+//
+//    // Ensure that children textures are ready
+//    for (auto& iter : _child_array)
+//    {
+//        iter->PreDraw(in_draw_param);
+//    }
+//
+//    return;
+//}
 
 void UIHierarchyNode::Draw(
     const UIManagerDrawParam& in_draw_param,
-    const UIStateFlag in_state_flag
+    const UIStateFlag in_state_flag,
+    const bool in_dirty
     )
 {
-    //LOG_MESSAGE_UISYSTEM("  UIHierarchyNode::Draw");
+    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNode::Draw");
 
-    bool child_needs_draw = false;
+    UITexture& texture = *_texture;
+
     for (auto iter : _child_array)
     {
         if (true == iter->GetStateDirtyBit(UIStateDirty::TRenderDirty))
         {
-            child_needs_draw = true;
-            break;
+            UIHierarchyNodeChild& child_data = *iter;
+            child_data.PreDraw(in_draw_param);
+
+            texture.MarkDirty();
         }
     }
 
-    if ((true == child_needs_draw) ||
-        (true == _texture->CalculateNeedsToDraw()))
+    if ((true == in_dirty) ||
+        (true == texture.CalculateNeedsToDraw()))
     {
-        if (false == _texture->SetRenderTarget(
+        if (false == texture.SetRenderTarget(
             in_draw_param._draw_system,
             in_draw_param._frame
             ))
@@ -532,7 +536,7 @@ void UIHierarchyNode::Draw(
 
         if (0 < _array_effect_component.size())
         {
-            UITexture* trace_texture = _texture.get();
+            UITexture* trace_texture = &texture;
             for (auto& effect: _array_effect_component)
             {
                 effect->Render(
@@ -544,7 +548,7 @@ void UIHierarchyNode::Draw(
             }
         }
 
-        _texture->SetHasDrawn(true);
+        texture.SetHasDrawn(true);
     }
 
     return;

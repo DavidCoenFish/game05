@@ -121,15 +121,14 @@ public:
         const UIScreenSpace& in_parent_screen_space,
         const VectorInt2& in_parent_texture_size
         );
-    /// Get things ready
+    /// Get things ready, before the parent sets it's texture to be the render target. ie, use text manager to draw to our texture
+    /// also call to child node::Draw for recurion
     void PreDraw(
         const UIManagerDrawParam& in_draw_param
         );
-    /// Set the render target (node ui texture) and draw the child to is, using the children geometry and textures
+    /// Parent has set the render target (node ui texture) and we will use our geometry and child nodes' texture as shader resource to draw
     void Draw(
-        const UIManagerDrawParam& in_draw_param//,
-        //const bool in_dirty,
-        //const UIStateFlag in_state_flag
+        const UIManagerDrawParam& in_draw_param
         );
 
 private:

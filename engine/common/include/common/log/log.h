@@ -36,6 +36,7 @@ what would a FileSystem log consumer look like, how does it know the provider fi
 	#define LOG_MESSAGE_FILESYSTEM(format, ...) Log::AddMessage(LogTopic::FileSystem, format, ##__VA_ARGS__)
 	#define LOG_MESSAGE_UISYSTEM(format, ...) Log::AddMessage(LogTopic::UISystem, format, ##__VA_ARGS__)
 	#define LOG_MESSAGE_RENDER(format, ...) Log::AddMessage(LogTopic::Render, format, ##__VA_ARGS__)
+
 #else
 	#define LOG_CONSOLE(format, ...) (void)0
 
@@ -48,6 +49,13 @@ what would a FileSystem log consumer look like, how does it know the provider fi
 	#define LOG_MESSAGE_FILESYSTEM(format, ...) (void)0
 	#define LOG_MESSAGE_UISYSTEM(format, ...) (void)0
 	#define LOG_MESSAGE_RENDER(format, ...) (void)0
+
+#endif
+
+#if defined(DSC_LOG) && 0
+	#define LOG_MESSAGE_UI_VERBOSE(format, ...) Log::AddMessage(LogTopic::UIVerbose, format, ##__VA_ARGS__)
+#else
+	#define LOG_MESSAGE_UI_VERBOSE(format, ...) (void)0
 #endif
 
 class CommandLine;

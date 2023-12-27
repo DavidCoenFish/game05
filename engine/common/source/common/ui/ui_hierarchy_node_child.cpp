@@ -257,7 +257,7 @@ void UIHierarchyNodeChild::Finalise(
     const VectorInt2& in_parent_offset
     )
 {
-    //LOG_MESSAGE_UISYSTEM("  UIHierarchyNodeChild::Finalise %p", _source_token);
+    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNodeChild::Finalise %p", _source_token);
 
     VectorInt2 texture_size;
 
@@ -277,7 +277,7 @@ void UIHierarchyNodeChild::Finalise(
         SetStateDirtyBit(UIStateDirty::TRenderDirty, true);
     }
 
-    //LOG_MESSAGE_UISYSTEM("      _texture_size:[%d,%d]", texture_size[0], texture_size[1]);
+    LOG_MESSAGE_UI_VERBOSE("      _texture_size:[%d,%d]", texture_size[0], texture_size[1]);
 
     return;
 }
@@ -288,7 +288,7 @@ void UIHierarchyNodeChild::UpdateLayout(
     const VectorInt2& in_parent_offset
     )
 {
-    //LOG_MESSAGE_UISYSTEM("  UIHierarchyNodeChild::UpdateLayout %p", _source_token);
+    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNodeChild::UpdateLayout %p", _source_token);
     const bool parent_size_change = ((in_parent_window != _cache_parent_window) || (in_parent_offset != _cache_parent_offset));
 
     if ((true == parent_size_change) ||
@@ -390,7 +390,15 @@ void UIHierarchyNodeChild::UpdateGeometry(
         geometry_uv
         ))
     {
+#if 0
         SetStateDirtyBit(UIStateDirty::TRenderDirty, true);
+#else
+        // geometry is what is used to draw to parent, if it changes, ie, auto scroll, it is the parent that needs to render
+        if (nullptr != _parent_or_null)
+        {
+            _parent_or_null->SetStateDirtyBit(UIStateDirty::TRenderDirty, true);
+        }
+#endif
     }
 
     _screen_space->Update(
@@ -406,7 +414,7 @@ void UIHierarchyNodeChild::PreDraw(
     const UIManagerDrawParam& in_draw_param
     )
 {
-    //LOG_MESSAGE_UISYSTEM("  UIHierarchyNodeChild::PreDraw %p %d", _source_token, _state_dirty);
+    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNodeChild::PreDraw %p %d", _source_token, _state_dirty);
 
     //bool dirty = false;
     if (true == GetStateDirtyBit(UIStateDirty::TRenderDirty))
@@ -416,10 +424,11 @@ void UIHierarchyNodeChild::PreDraw(
         {
             _component->PreDraw(in_draw_param, node);
         }
-        //node::PreDraw moved under Component, ie, that is where the recusion is and specialisation of control
+
         node.Draw(
             in_draw_param,
-            _state_flag
+            _state_flag,
+            true
             );
 
         SetStateDirtyBit(UIStateDirty::TRenderDirty, false);
@@ -431,6 +440,8 @@ void UIHierarchyNodeChild::Draw(
     const UIManagerDrawParam& in_draw_param
     )
 {
+    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNodeChild::Draw %p %d", _source_token, _state_dirty);
+
     if ((nullptr == _component) ||
         (true == GetStateFlagBit(UIStateFlag::THidden)))
     {

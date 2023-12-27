@@ -1054,17 +1054,6 @@ namespace
         std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
         )
     {
-        auto tint_array = std::make_shared<UIData::TStateFlagTintArray>(UIData::TStateFlagTintArray({
-            VectorFloat4(0.0f, 0.0f, 0.0f, 0.5f),
-            VectorFloat4(0.0f, 0.0f, 0.0f, 0.5f),
-            VectorFloat4(0.0f, 0.0f, 0.0f, 0.5f),
-            VectorFloat4(0.0f, 0.0f, 0.0f, 0.5f),
-            VectorFloat4(0.0f, 0.0f, 0.0f, 0.5f),
-            VectorFloat4(0.0f, 0.0f, 0.0f, 0.5f),
-            VectorFloat4(0.0f, 0.0f, 0.0f, 0.5f),
-            VectorFloat4(0.0f, 0.0f, 0.0f, 0.5f)
-            }));
-
         auto data_main = std::make_shared<UIData>(
 #ifdef _DEBUG
             "Root data",
@@ -1098,7 +1087,8 @@ namespace
                     UICoord(UICoord::TSource::ParentMin, 0.0f, 2),
                     UICoord(UICoord::TSource::ParentMin, 0.0f, 6),
                     UICoord(),
-                    tint_array
+                    nullptr, //tint_array
+                    VectorFloat4::s_black
                     )
                 })
             );
@@ -1206,6 +1196,17 @@ namespace
         std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
         )
     {
+        auto tint_array = std::make_shared<UIData::TStateFlagTintArray>(UIData::TStateFlagTintArray({
+            VectorFloat4(1.0f, 0.0f, 0.0f, 1.0f),
+            VectorFloat4(0.0f, 1.0f, 0.0f, 1.0f),
+            VectorFloat4(0.0f, 0.0f, 1.0f, 1.0f),
+            VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+            VectorFloat4(0.0f, 1.0f, 1.0f, 1.0f),
+            VectorFloat4(1.0f, 0.0f, 1.0f, 1.0f),
+            VectorFloat4(1.0f, 1.0f, 0.0f, 1.0f),
+            VectorFloat4(1.0f, 1.0f, 1.0f, 1.0f)
+            }));
+
         auto data_main = std::make_shared<UIData>(
 #ifdef _DEBUG
             "Root data",
@@ -1234,15 +1235,19 @@ namespace
                 std::make_shared<UIEffectData>(
                     UIEffectEnum::TRoundCorners,
                     // Top right, top left, bottom left, bottom right
-                    UICoord(UICoord::TSource::ParentMin, 0.0f, 32),
-                    UICoord(UICoord::TSource::ParentMin, 0.0f, 32),
-                    UICoord(UICoord::TSource::ParentMin, 0.0f, 32),
-                    UICoord(UICoord::TSource::ParentMin, 0.0f, 32)
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 32.0f),
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 32.0f),
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 32.0f),
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 32.0f)
                     ),
-                    std::make_shared<UIEffectData>(
-                        UIEffectEnum::TFill,
-                        UICoord(UICoord::TSource::ParentMin, 0.0f, 2)
-                        )
+                std::make_shared<UIEffectData>(
+                    UIEffectEnum::TFill,
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 1.0f),
+                    UICoord(),
+                    UICoord(),
+                    UICoord(),
+                    tint_array
+                    )
                 })
             );
 
@@ -1277,7 +1282,7 @@ namespace
                             )
                     }),
 #endif
-                "<Colour 1.0 1.0 1.0 1.0>HELLO HUMAN",
+                "<Colour 1.0 1.0 1.0 1.0><Size 64>HELLO HUMAN",
                 LocaleISO_639_1::Default,
                 false,
                 TextEnum::HorizontalLineAlignment::Middle,

@@ -13,6 +13,7 @@ enum class LogTopic : int
    FileSystem,
    DrawSystem,
    UISystem,
+   UIVerbose,
    Render,
 
    UnitTest0,

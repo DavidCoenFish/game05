@@ -190,10 +190,10 @@ void IUIComponent::UpdateResources(
 }
 
 void IUIComponent::PreDraw(
-    const UIManagerDrawParam& in_draw_param,
-    UIHierarchyNode& in_node
+    const UIManagerDrawParam&, // in_draw_param,
+    UIHierarchyNode& //in_node
     )
 {
-    in_node.PreDraw(in_draw_param);
+    //in_node.PreDraw(in_draw_param);
     return;
 }
