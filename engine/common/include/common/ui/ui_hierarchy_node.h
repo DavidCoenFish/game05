@@ -133,10 +133,9 @@ public:
         const VectorInt2& in_texture_size
         );
 
-    const bool DealInput(
+    void DealInput(
         UIRootInputState& in_input_state,
-        const bool in_parent_inside,
-        const bool in_action = false
+        const UIStateFlag in_pass_down_input_state_flag
         );
 
 
@@ -164,12 +163,14 @@ private:
     /// currently this is under the Hierarchy update, so on effect stack change over in the UIData, it needs to set hierarchy dirty to get change propergated
     const bool ApplyEffect(
         const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
-        const UIHierarchyNodeUpdateParam& in_param
+        const UIHierarchyNodeUpdateParam& in_param,
+        bool& in_out_tint_array_in_use
         );
 
 private:
+    typedef std::vector<std::shared_ptr<UIHierarchyNodeChild>> TChildArray;
     /// recursion data structure, holds a UIHierarchyNode, component, geometry...
-    std::vector<std::shared_ptr<UIHierarchyNodeChild>> _child_array;
+    TChildArray _child_array;
 
     /// array of effects on the node
     std::vector<std::shared_ptr<UIEffectComponent>> _array_effect_component;

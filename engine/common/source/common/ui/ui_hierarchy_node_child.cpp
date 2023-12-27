@@ -62,6 +62,7 @@ UIHierarchyNodeChild::UIHierarchyNodeChild(
     : _parent_or_null(in_parent_or_null)
     , _geometry(std::move(in_geometry))
     , _component(std::move(in_component))
+    , _component_input(nullptr)
     , _node(std::move(in_node))
     , _screen_space(std::move(in_screen_space))
     , _layout(in_layout)
@@ -69,11 +70,16 @@ UIHierarchyNodeChild::UIHierarchyNodeChild(
     , _time_accumulate_seconds(0.0f)
     , _source_token(in_source_token)
     , _state_flag(in_state_flag)
+    , _mark_render_dirty_on_state_flag_input_mask_change(false)
     , _state_dirty(in_state_dirty)
 {
     DSC_ASSERT(nullptr != _geometry, "geometry should be passed into ctor, what happened");
     DSC_ASSERT(nullptr != _node, "node should be passed into ctor, what happened");
     DSC_ASSERT(nullptr != _screen_space, "screen_space should be passed into ctor, what happened");
+
+    _component_input = dynamic_cast<IUIInput*>(_component.get());
+
+    return;
 }
 
 UIHierarchyNodeChild::~UIHierarchyNodeChild()
@@ -122,6 +128,15 @@ void UIHierarchyNodeChild::SetStateFlagBit(const UIStateFlag in_state_flag_bit, 
         LOG_CONSOLE("SetStateFlag %d => %d", _state_flag, in_state_flag);
     }
     #endif
+
+    if (true == _mark_render_dirty_on_state_flag_input_mask_change)
+    {
+        if ((state_flag & static_cast<int>(UIStateFlag::TMaskInput)) !=
+            (static_cast<int>(_state_flag) & static_cast<int>(UIStateFlag::TMaskInput)))
+        {
+            SetStateDirtyBit(UIStateDirty::TRenderDirty, true);
+        }
+    }
 
     _state_flag = static_cast<UIStateFlag>(state_flag);
 
@@ -200,6 +215,8 @@ void UIHierarchyNodeChild::ApplyComponent(
         in_param
         ))
     {
+        _component_input = dynamic_cast<IUIInput*>(_component.get());
+
         // if the layout is dependent on 
         if (true == _layout.GetAdjustmentModifiesLayout())
         {
@@ -410,11 +427,80 @@ void UIHierarchyNodeChild::UpdateGeometry(
     return;
 }
 
+
+void UIHierarchyNodeChild::DealInput(
+    UIRootInputState& in_input_state,
+    const UIStateFlag in_pass_down_input_state_flag
+    )
+{
+    if ((true == GetStateFlagBit(UIStateFlag::TDisable)) ||
+        (true == GetStateFlagBit(UIStateFlag::THidden)))
+    {
+        return;
+    }
+
+    UIStateFlag pass_down_input_state_flag = UIStateFlag::TNone;
+
+    const bool parent_inside = 0 != (static_cast<int>(in_pass_down_input_state_flag) & static_cast<int>(UIStateFlag::THover));
+    bool input_inside = false;
+    if (nullptr != _component_input)
+    {
+        // update state flag for all touches
+        for (auto& touch : in_input_state.GetTouchArray())
+        {
+            const bool local_inside = _screen_space->GetClipRef().Inside(touch._touch_pos_current);
+
+            if ((true == parent_inside) && 
+                (true == local_inside))
+            {
+                input_inside = true;
+            }
+        }
+
+        if (true == input_inside)
+        {
+            pass_down_input_state_flag = static_cast<UIStateFlag>(static_cast<int>(pass_down_input_state_flag) | static_cast<int>(UIStateFlag::THover));
+        }
+    }
+    else
+    {
+        pass_down_input_state_flag = in_pass_down_input_state_flag;
+    }
+
+    // update state flag
+    if (true == _mark_render_dirty_on_state_flag_input_mask_change)
+    {
+        if (static_cast<int>(pass_down_input_state_flag) !=
+            (static_cast<int>(_state_flag) & static_cast<int>(UIStateFlag::TMaskInput)))
+        {
+            SetStateDirtyBit(UIStateDirty::TRenderDirty, true);
+        }
+    }
+    _state_flag = static_cast<UIStateFlag>(
+        (static_cast<int>(_state_flag) & ~(static_cast<int>(UIStateFlag::TMaskInput))) |
+        static_cast<int>(pass_down_input_state_flag)
+        );
+
+    _node->DealInput(
+        in_input_state,
+        pass_down_input_state_flag
+        );
+
+    return;
+}
+
+
 void UIHierarchyNodeChild::PreDraw(
     const UIManagerDrawParam& in_draw_param
     )
 {
     LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNodeChild::PreDraw %p %d", _source_token, _state_dirty);
+
+    if ((nullptr == _component) ||
+        (true == GetStateFlagBit(UIStateFlag::THidden)))
+    {
+        return;
+    }
 
     //bool dirty = false;
     if (true == GetStateDirtyBit(UIStateDirty::TRenderDirty))

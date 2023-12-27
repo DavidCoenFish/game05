@@ -63,6 +63,8 @@ public:
 
     UITexture& GetUITexture() const { return *_texture; }
 
+    const bool HasTintArray() const { return (nullptr != _state_flag_tint_array_or_null); }
+
 private:
     /// The shader constants for this effect
     std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;

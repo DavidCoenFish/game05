@@ -200,12 +200,19 @@ void UIHierarchyNode::UpdateHierarchy(
 
     if (true == in_data.GetDirtyBit(UIDataDirty::TEffectDirty))
     {
+        bool mark_render_dirty_on_state_flag_input_mask_change = false;
         if (true == ApplyEffect(
             in_data.GetArrayEffectData(),
-            in_param
+            in_param,
+            mark_render_dirty_on_state_flag_input_mask_change
             ))
         {
             render_dirty = true; // if the effect stack data changes, that just effects the render
+        }
+
+        if (nullptr != in_parent_to_this_node_or_null)
+        {
+            in_parent_to_this_node_or_null->SetMarkRenderDirtyOnStateFlagInputMaskChange(mark_render_dirty_on_state_flag_input_mask_change);
         }
 
         in_data.SetDirtyBit(UIDataDirty::TEffectDirty, false);
@@ -314,14 +321,24 @@ const bool UIHierarchyNode::SetTextureSize(
     return _texture->SetSize(in_texture_size);
 }
 
-// TODO: at some point need to collect "input" elements as potential navigation targets/ resolve navigation keypress
-const bool UIHierarchyNode::DealInput(
-    UIRootInputState&,// in_input_state,
-    const bool,// in_parent_inside,
-    const bool// in_action
+void UIHierarchyNode::DealInput(
+    UIRootInputState& in_input_state,
+    const UIStateFlag in_pass_down_input_state_flag
     )
 {
-    bool dirty = false;
+    for (TChildArray::reverse_iterator iter = _child_array.rbegin(); iter != _child_array.rend(); ++iter) 
+    {
+        DSC_ASSERT(nullptr != *iter, "confirm that children can not be null");
+        UIHierarchyNodeChild& child = **iter;
+
+        child.DealInput(
+            in_input_state,
+            in_pass_down_input_state_flag
+            );
+    }
+
+    return;
+}
 /*
     for(auto& child_data_ptr : _child_array)
     {
@@ -476,8 +493,7 @@ const bool UIHierarchyNode::DealInput(
         //}
     }
 */
-    return dirty;
-}
+
 
 //void UIHierarchyNode::PreDraw(
 //    const UIManagerDrawParam& in_draw_param
@@ -565,10 +581,12 @@ UITexture& UIHierarchyNode::GetUITexture() const
 
 const bool UIHierarchyNode::ApplyEffect(
     const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
-    const UIHierarchyNodeUpdateParam& in_param
+    const UIHierarchyNodeUpdateParam& in_param,
+    bool& in_out_tint_array_in_use
     )
 {
     bool change = false;
+    in_out_tint_array_in_use = false;
     const int size = static_cast<int>(in_array_effect_data.size());
     if (size != _array_effect_component.size())
     {
@@ -584,6 +602,11 @@ const bool UIHierarchyNode::ApplyEffect(
             ))
         {
             change = true;
+        }
+
+        if (true == _array_effect_component[index]->HasTintArray())
+        {
+            in_out_tint_array_in_use = true;
         }
     }
 

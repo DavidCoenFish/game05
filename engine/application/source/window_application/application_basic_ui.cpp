@@ -2275,7 +2275,7 @@ void ApplicationBasicUI::Update()
                 update_param
                 );
         }
-/*
+
         // Deal input
         if ((nullptr != _draw_resource->_ui_hierarchy_node) && (true == _active))
         {
@@ -2312,7 +2312,7 @@ void ApplicationBasicUI::Update()
             _scroll_key_state = 0;
             _scroll_z = 0;
         }
-*/
+
         // Draw
         #if 1
         if (nullptr != _draw_resource->_ui_hierarchy_node)

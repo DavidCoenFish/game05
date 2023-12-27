@@ -22,6 +22,7 @@ UIRootInputStateTouch::UIRootInputStateTouch(
     , _active(in_active)
     //, _start(in_start)
     , _end(in_end)
+    , _consumed(false)
 {
     // Nop
 }

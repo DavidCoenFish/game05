@@ -6,10 +6,12 @@
 #include "common/ui/ui_tint_colour.h"
 
 class IUIComponent;
+class IUIInput;
 class ShaderConstantBuffer;
 class UIData;
 class UIGeometry;
 class UIHierarchyNode;
+class UIRootInputState;
 class UIScreenSpace;
 
 struct UIHierarchyNodeUpdateParam;
@@ -121,6 +123,12 @@ public:
         const UIScreenSpace& in_parent_screen_space,
         const VectorInt2& in_parent_texture_size
         );
+
+    void DealInput(
+        UIRootInputState& in_input_state,
+        const UIStateFlag in_pass_down_input_state_flag
+        );
+
     /// Get things ready, before the parent sets it's texture to be the render target. ie, use text manager to draw to our texture
     /// also call to child node::Draw for recurion
     void PreDraw(
@@ -131,12 +139,22 @@ public:
         const UIManagerDrawParam& in_draw_param
         );
 
+    void SetMarkRenderDirtyOnStateFlagInputMaskChange(const bool in_mark_render_dirty_on_state_flag_input_mask_change) 
+    {
+        _mark_render_dirty_on_state_flag_input_mask_change = in_mark_render_dirty_on_state_flag_input_mask_change;
+        return;
+    }
+
 private:
     /// recusion point
     std::unique_ptr<UIHierarchyNode> _node;
 
     /// _component is out here rather than in _node to avoid top level node needing a root or do nothing content for layout
     std::unique_ptr<IUIComponent> _component; 
+    // is it worth caching the raw pointer to the component, what about node and geometry?
+    //IUIComponent* _component_raw;
+    /// cache a raw pointer to _component_input to save casting every single ui element every frame
+    IUIInput* _component_input;
 
     /// Need to track if state changed, so UIGeometry tracks pos and uv, rather than just GeometryGeneric
     /// this is the geometry that we use to paint ourself (the texture under our child node) to the texture under the parent node
@@ -174,6 +192,8 @@ private:
 
     /// still have need of hidden and disabled? plus input state [hover, touch, action]
     UIStateFlag _state_flag;
+
+    bool _mark_render_dirty_on_state_flag_input_mask_change;
 
     /// layout and render dirty flags, propergate to parent when set active
     UIStateDirty _state_dirty;
