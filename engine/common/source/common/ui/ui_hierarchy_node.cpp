@@ -323,7 +323,7 @@ const bool UIHierarchyNode::SetTextureSize(
 
 void UIHierarchyNode::DealInput(
     UIRootInputState& in_input_state,
-    const UIStateFlag in_pass_down_input_state_flag
+    const bool in_parent_inside
     )
 {
     for (TChildArray::reverse_iterator iter = _child_array.rbegin(); iter != _child_array.rend(); ++iter) 
@@ -333,12 +333,24 @@ void UIHierarchyNode::DealInput(
 
         child.DealInput(
             in_input_state,
-            in_pass_down_input_state_flag
+            in_parent_inside
             );
     }
 
     return;
 }
+
+void UIHierarchyNode::DealInputSetStateFlag(const UIStateFlag in_input_state_flag)
+{
+    for (auto& child : _child_array)
+    {
+        DSC_ASSERT(nullptr != child, "confirm that children can not be null");
+        child->DealInputSetStateFlag(in_input_state_flag);
+    }
+
+    return;
+}
+
 /*
     for(auto& child_data_ptr : _child_array)
     {

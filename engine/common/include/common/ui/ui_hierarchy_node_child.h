@@ -52,6 +52,7 @@ public:
     void SetUVScrollManual(const VectorFloat2& in_uv_scroll, const bool in_manual_horizontal, const bool in_manual_vertical);
     VectorFloat2& GetUVScrollRef(){ return _uv_scroll; }
 
+    void SetStateFlag(const UIStateFlag in_state_flag);
     void SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable);
     const bool GetStateFlagBit(const UIStateFlag in_state_flag_bit) const;
 
@@ -126,8 +127,11 @@ public:
 
     void DealInput(
         UIRootInputState& in_input_state,
-        const UIStateFlag in_pass_down_input_state_flag
+        const bool in_parent_inside
         );
+
+    /// recurse to children that do not implement IUIInput (_component_input)
+    void DealInputSetStateFlag(const UIStateFlag in_input_state_flag);
 
     /// Get things ready, before the parent sets it's texture to be the render target. ie, use text manager to draw to our texture
     /// also call to child node::Draw for recurion
@@ -139,11 +143,15 @@ public:
         const UIManagerDrawParam& in_draw_param
         );
 
-    void SetMarkRenderDirtyOnStateFlagInputMaskChange(const bool in_mark_render_dirty_on_state_flag_input_mask_change) 
+    void SetMarkRenderDirtyOnStateFlagInputMaskChange(const bool in_mark_render_dirty_on_state_flag_tint_mask_change) 
     {
-        _mark_render_dirty_on_state_flag_input_mask_change = in_mark_render_dirty_on_state_flag_input_mask_change;
+        _mark_render_dirty_on_state_flag_tint_mask_change = in_mark_render_dirty_on_state_flag_tint_mask_change;
         return;
     }
+
+private:
+    // for recusion, but we bail if we have a component implementing IUIInput, which is set via DealInput
+    void DealInputSetStateFlagImplement(const UIStateFlag in_input_state_flag);
 
 private:
     /// recusion point
@@ -193,7 +201,7 @@ private:
     /// still have need of hidden and disabled? plus input state [hover, touch, action]
     UIStateFlag _state_flag;
 
-    bool _mark_render_dirty_on_state_flag_input_mask_change;
+    bool _mark_render_dirty_on_state_flag_tint_mask_change;
 
     /// layout and render dirty flags, propergate to parent when set active
     UIStateDirty _state_dirty;

@@ -70,7 +70,7 @@ UIHierarchyNodeChild::UIHierarchyNodeChild(
     , _time_accumulate_seconds(0.0f)
     , _source_token(in_source_token)
     , _state_flag(in_state_flag)
-    , _mark_render_dirty_on_state_flag_input_mask_change(false)
+    , _mark_render_dirty_on_state_flag_tint_mask_change(false)
     , _state_dirty(in_state_dirty)
 {
     DSC_ASSERT(nullptr != _geometry, "geometry should be passed into ctor, what happened");
@@ -110,6 +110,20 @@ void UIHierarchyNodeChild::SetUVScrollManual(const VectorFloat2& in_uv_scroll, c
     return;
 }
 
+void UIHierarchyNodeChild::SetStateFlag(const UIStateFlag in_state_flag)
+{
+    if (true == _mark_render_dirty_on_state_flag_tint_mask_change)
+    {
+        if ((static_cast<int>(in_state_flag) & static_cast<int>(UIStateFlag::TTintMask))
+            !=
+            (static_cast<int>(_state_flag) & static_cast<int>(UIStateFlag::TTintMask)))
+        {
+            SetStateDirtyBit(UIStateDirty::TRenderDirty, true);
+        }
+    }
+    _state_flag = in_state_flag;
+}
+
 void UIHierarchyNodeChild::SetStateFlagBit(const UIStateFlag in_state_flag_bit, const bool in_enable)
 {
     int state_flag = static_cast<int>(_state_flag);
@@ -129,16 +143,7 @@ void UIHierarchyNodeChild::SetStateFlagBit(const UIStateFlag in_state_flag_bit, 
     }
     #endif
 
-    if (true == _mark_render_dirty_on_state_flag_input_mask_change)
-    {
-        if ((state_flag & static_cast<int>(UIStateFlag::TMaskInput)) !=
-            (static_cast<int>(_state_flag) & static_cast<int>(UIStateFlag::TMaskInput)))
-        {
-            SetStateDirtyBit(UIStateDirty::TRenderDirty, true);
-        }
-    }
-
-    _state_flag = static_cast<UIStateFlag>(state_flag);
+    SetStateFlag(static_cast<UIStateFlag>(state_flag));
 
     return;
 }
@@ -427,10 +432,9 @@ void UIHierarchyNodeChild::UpdateGeometry(
     return;
 }
 
-
 void UIHierarchyNodeChild::DealInput(
     UIRootInputState& in_input_state,
-    const UIStateFlag in_pass_down_input_state_flag
+    const bool in_parent_inside
     )
 {
     if ((true == GetStateFlagBit(UIStateFlag::TDisable)) ||
@@ -439,56 +443,123 @@ void UIHierarchyNodeChild::DealInput(
         return;
     }
 
-    UIStateFlag pass_down_input_state_flag = UIStateFlag::TNone;
-
-    const bool parent_inside = 0 != (static_cast<int>(in_pass_down_input_state_flag) & static_cast<int>(UIStateFlag::THover));
     bool input_inside = false;
     if (nullptr != _component_input)
     {
-        // update state flag for all touches
         for (auto& touch : in_input_state.GetTouchArray())
         {
             const bool local_inside = _screen_space->GetClipRef().Inside(touch._touch_pos_current);
 
-            if ((true == parent_inside) && 
+            if ((true == in_parent_inside) && 
                 (true == local_inside))
             {
                 input_inside = true;
             }
         }
-
-        if (true == input_inside)
-        {
-            pass_down_input_state_flag = static_cast<UIStateFlag>(static_cast<int>(pass_down_input_state_flag) | static_cast<int>(UIStateFlag::THover));
-        }
-    }
-    else
-    {
-        pass_down_input_state_flag = in_pass_down_input_state_flag;
     }
 
-    // update state flag
-    if (true == _mark_render_dirty_on_state_flag_input_mask_change)
-    {
-        if (static_cast<int>(pass_down_input_state_flag) !=
-            (static_cast<int>(_state_flag) & static_cast<int>(UIStateFlag::TMaskInput)))
-        {
-            SetStateDirtyBit(UIStateDirty::TRenderDirty, true);
-        }
-    }
-    _state_flag = static_cast<UIStateFlag>(
-        (static_cast<int>(_state_flag) & ~(static_cast<int>(UIStateFlag::TMaskInput))) |
-        static_cast<int>(pass_down_input_state_flag)
-        );
-
+    // if input_inside starts to be problamatic for being for ANY touch, then move it under the touch data? 
     _node->DealInput(
         in_input_state,
-        pass_down_input_state_flag
+        input_inside
         );
+
+    if (nullptr != _component_input)
+    {
+        bool hover_flag = false;
+        bool touch_flag = false;
+
+        for (auto& touch : in_input_state.GetTouchArray())
+        {
+            std::string tooltip;
+            const bool local_inside = _screen_space->GetClipRef().Inside(touch._touch_pos_current);
+
+            if ((true == in_parent_inside) && 
+                (true == local_inside))
+            {
+                // consume the first "active" touch, ie, mark touch for this source token
+                if ((nullptr == touch._active_source_token) &&
+                    (true == touch._active))
+                {
+                    touch._active_source_token = _source_token;
+                }
+
+                if ((nullptr == touch._active_source_token) || 
+                    (touch._active_source_token == _source_token))
+                {
+                    hover_flag = true;
+
+                    _component_input->OnHover(_screen_space->GetPosRef(), touch._touch_pos_current, tooltip);
+                }
+
+                // OnClick, needs to be over the same element as touch started on
+                if ((true == touch._end) &&
+                    (touch._active_source_token == _source_token))
+                {
+                    _component_input->OnInputClick(
+                        in_input_state,
+                        _screen_space->GetPosRef(),
+                        touch._touch_pos_current
+                        );
+                }
+            }
+
+            if ((true == touch._active) &&
+                (touch._active_source_token == _source_token) &&
+                (false == touch._end))
+            {
+                touch_flag = true;
+
+                _component_input->OnInputTouch(_screen_space->GetPosRef(), touch._touch_pos_current, tooltip);
+            }
+
+            if (false == tooltip.empty())
+            {
+                in_input_state.RequestTooltip(touch._touch_pos_current, _screen_space->GetClipRef(), tooltip, _source_token);
+            }
+        }
+
+        // set the state flag, when we are a child with a component implementing IUIInput
+        UIStateFlag pass_down_input_state_flag = UIStateFlag::TNone;
+        if (true == hover_flag)
+        {
+            pass_down_input_state_flag = static_cast<UIStateFlag>(
+                (static_cast<int>(pass_down_input_state_flag) | static_cast<int>(UIStateFlag::THover))
+                );
+        }
+        if (true == touch_flag)
+        {
+            pass_down_input_state_flag = static_cast<UIStateFlag>(
+                (static_cast<int>(pass_down_input_state_flag) | static_cast<int>(UIStateFlag::TTouch))
+                );
+        }
+
+        // update state flag, just not via DealInputSetStateFlag which filters out nodes that implement IUIInput
+        DealInputSetStateFlagImplement(pass_down_input_state_flag);
+    }
 
     return;
 }
 
+void UIHierarchyNodeChild::DealInputSetStateFlag(const UIStateFlag in_input_state_flag)
+{
+    if (nullptr != _component_input)
+    {
+        return;
+    }
+    DealInputSetStateFlagImplement(in_input_state_flag);
+}
+
+void UIHierarchyNodeChild::DealInputSetStateFlagImplement(const UIStateFlag in_input_state_flag)
+{
+    SetStateFlag(static_cast<UIStateFlag>(
+        (static_cast<int>(_state_flag) & ~(static_cast<int>(UIStateFlag::TMaskInput))) |
+        static_cast<int>(in_input_state_flag)
+        ));
+
+    auto& node = GetNode();
+    node.DealInputSetStateFlag(in_input_state_flag);
+}
 
 void UIHierarchyNodeChild::PreDraw(
     const UIManagerDrawParam& in_draw_param

@@ -280,8 +280,7 @@ public:
 
         in_root.DealInput(
             input_state,
-            UIStateFlag::THover
-            //true 
+            true 
             );
 
         input_state.FinialiseTooltip();

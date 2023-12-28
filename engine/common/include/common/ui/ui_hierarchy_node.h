@@ -76,8 +76,10 @@ struct UIHierarchyNodeUpdateParam
 ///         _geometry // G0
 ///         _node // N1, recursion point
 ///     ]
-
-
+///
+/// seem to be moving towards UIHierarchyNode implementing hierarchy step, 
+/// and UIHierarchyNodeChild implmenting common functionality,
+/// and IUIComponent implementing specialisation
 
 class UIHierarchyNode
 {
@@ -135,17 +137,11 @@ public:
 
     void DealInput(
         UIRootInputState& in_input_state,
-        const UIStateFlag in_pass_down_input_state_flag
+        const bool in_parent_inside
         );
+    /// split deal input to allow click to be on most nested not the top level
+    void DealInputSetStateFlag(const UIStateFlag in_input_state_flag);
 
-
-    /// split PreDraw and Draw to allow UIComponentEffect to prep the childrent but implement it's own texture draw
-    /// return True if we needed to draw, ie, we have modified children. Ask children to update there textures
-    //void PreDraw(
-    //    const UIManagerDrawParam& in_draw_param
-    //    );
-    /// return True if we needed to draw, ie, we have modified _texture. 
-    
     /// Draw children textures to our own texture
     void Draw(
         const UIManagerDrawParam& in_draw_param,
