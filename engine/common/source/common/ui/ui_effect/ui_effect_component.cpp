@@ -169,16 +169,25 @@ void UIEffectComponent::Render(
     const UIStateFlag in_state_flag
     )
 {
-    _texture->SetRenderTarget(in_draw_param._draw_system, in_draw_param._frame);
+    if (false == _texture->SetRenderTarget(in_draw_param._draw_system, in_draw_param._frame))
+    {
+        DSC_ASSERT_ALWAYS("why did the effect render target fail");
+        return;
+    }
 
     const UIShaderEnum shader_type = GetShaderType(_type);
     const auto& shader = in_draw_param._ui_manager->GetShaderRef(shader_type);
 
-    in_input_texture.SetShaderResource(
+    if (false == in_input_texture.SetShaderResource(
         *shader,
         0,
-        in_draw_param._frame
-        );
+        in_draw_param._frame,
+        in_draw_param._draw_system
+        ))
+    {
+        DSC_ASSERT_ALWAYS("why did the shader resource fail");
+        return;
+    }
 
     if (nullptr == _shader_constant_buffer)
     {

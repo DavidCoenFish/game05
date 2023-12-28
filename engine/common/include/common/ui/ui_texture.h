@@ -28,7 +28,9 @@ public:
         DrawSystem* const in_draw_system,
         DrawSystemFrame* const in_frame
         );
-
+    const bool CalculateSizeValid(
+        DrawSystem* const in_draw_system
+        ) const;
     const VectorInt2 GetSize(
         DrawSystem* const in_draw_system
         ) const;
@@ -50,10 +52,12 @@ public:
         _has_drawn = false;
     }
 
-    void SetShaderResource(
+    /// return false if shader resource texture is not a valid size
+    const bool SetShaderResource(
         Shader& in_shader,
         const int in_index,
-        DrawSystemFrame* const in_draw_system_frame
+        DrawSystemFrame* const in_draw_system_frame,
+        DrawSystem* const in_draw_system
         );
 
     //const bool GetHasDrawn() const { return _has_drawn; }

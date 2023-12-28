@@ -607,12 +607,17 @@ void UIHierarchyNodeChild::Draw(
 
     const auto& shader = in_draw_param._ui_manager->GetShaderRef(UIShaderEnum::TDefault);
 
+    DSC_ASSERT(nullptr != shader, "why is shader null");
     DSC_ASSERT(nullptr != _node, "node should be passed into ctor, what happened");
-    _node->GetUITexture().SetShaderResource(
+    if (false == _node->GetUITexture().SetShaderResource(
         *shader,
         0,
-        in_draw_param._frame
-        );
+        in_draw_param._frame,
+        in_draw_param._draw_system
+        ))
+    {
+        return;
+    }
 
     if (nullptr == _shader_constant_buffer)
     {

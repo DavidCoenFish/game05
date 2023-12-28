@@ -52,7 +52,7 @@ what would a FileSystem log consumer look like, how does it know the provider fi
 
 #endif
 
-#if defined(DSC_LOG) && 0
+#if defined(DSC_LOG) && 1
 	#define LOG_MESSAGE_UI_VERBOSE(format, ...) Log::AddMessage(LogTopic::UIVerbose, format, ##__VA_ARGS__)
 #else
 	#define LOG_MESSAGE_UI_VERBOSE(format, ...) (void)0

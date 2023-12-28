@@ -11,7 +11,7 @@ class ShaderConstantBuffer;
 class DrawSystemFrame
 {
 public:
-    DrawSystemFrame(DrawSystem&in_draw_system);
+    DrawSystemFrame(DrawSystem& in_draw_system);
     ~DrawSystemFrame();
     ID3D12GraphicsCommandList* GetCommandList();
 

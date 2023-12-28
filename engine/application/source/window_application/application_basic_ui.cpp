@@ -1294,8 +1294,185 @@ namespace
         data_main->AddChild(data_button);
 
         in_out_data_map["main"] = data_main;
+        return;
     }
 
+    std::shared_ptr<UIData> BuildButton(
+        const std::string& in_text,
+        std::shared_ptr<UIData::TStateFlagTintArray>& in_tint_array,
+        const UILayout& in_layout
+        )
+    {
+        auto data_button = std::make_shared<UIDataButton>(
+#ifdef _DEBUG
+            "button data",
+#endif
+            in_layout,
+            UIBaseColour::FactoryDefault(),
+            UITintColour::FactoryDefault(),
+            std::vector<std::shared_ptr<UIEffectData>>({
+                    std::make_shared<UIEffectData>(
+                        UIEffectEnum::TDropShadow,
+                        UICoord(UICoord::TSource::ParentMin, 0.0f, 2),
+                        UICoord(UICoord::TSource::ParentMin, 0.0f, 2),
+                        UICoord(UICoord::TSource::ParentMin, 0.0f, 6),
+                        UICoord(),
+                        nullptr,
+                        VectorFloat4::s_black
+                        )
+                })
+            );
+
+        auto data_fill = std::make_shared<UIDataCanvas>(
+#ifdef _DEBUG
+            "fill data",
+#endif
+            UILayout::FactoryFull(),
+            UIBaseColour::FactoryGreyBackground(),
+            UITintColour::FactoryDefault(),
+            std::vector<std::shared_ptr<UIEffectData>>({
+                std::make_shared<UIEffectData>(
+                    UIEffectEnum::TRoundCorners,
+                    // Top right, top left, bottom left, bottom right
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 8.0f),
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 8.0f),
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 8.0f),
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 8.0f)
+                    ),
+                std::make_shared<UIEffectData>(
+                    UIEffectEnum::TFill,
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 1.0f),
+                    UICoord(),
+                    UICoord(),
+                    UICoord(),
+                    in_tint_array
+                    ),
+                std::make_shared<UIEffectData>(
+                    UIEffectEnum::TGloss
+                    )
+                })
+            );
+
+//        auto data_text = std::make_shared<UIDataString>(
+        auto data_text = std::make_shared<UIDataTextRun>(
+#ifdef _DEBUG
+                "string data",
+#endif
+                UILayout(
+                    UICoord(UICoord::TSource::ParentX, 1.0f),
+                    UICoord(UICoord::TSource::ParentY, 1.0f),
+                    VectorFloat2(0.5f, 0.5f),
+                    VectorFloat2(0.5f, 0.5f),
+                    UILayout::TAdjustmentType::ShrinkLayoutToTexture,
+                    UILayout::TAdjustmentType::ShrinkLayoutToTexture,
+                    VectorInt4(8,8,8,8)
+                    ),
+                UIBaseColour::FactoryDefault(),
+                UITintColour::FactoryDefault(),
+#if 0
+                UIData::s_empty_effect_data_array,
+#else
+                std::vector<std::shared_ptr<UIEffectData>>({
+                        std::make_shared<UIEffectData>(
+                            UIEffectEnum::TDropShadow,
+                            UICoord(UICoord::TSource::ParentMin, 0.0f, 2),
+                            UICoord(UICoord::TSource::ParentMin, 0.0f, 2),
+                            UICoord(UICoord::TSource::ParentMin, 0.0f, 6),
+                            UICoord(),
+                            nullptr,
+                            VectorFloat4::s_black
+                            )
+                    }),
+#endif
+                in_text, //"<Colour 1.0 1.0 1.0 1.0><Size 64>HELLO HUMAN",
+                LocaleISO_639_1::Default,
+                false,
+                TextEnum::HorizontalLineAlignment::Middle,
+                TextEnum::VerticalBlockAlignment::Middle
+            );
+
+        data_button->AddChild(data_fill);
+        data_button->AddChild(data_text);
+
+        return data_button;
+    }
+
+    void BuildModelData09_NestedButton(
+        std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
+        )
+    {
+        auto tint_array = std::make_shared<UIData::TStateFlagTintArray>(UIData::TStateFlagTintArray({
+            VectorFloat4(0.0f, 0.0f, 1.0f, 1.0f), // TNone
+            VectorFloat4(0.2f, 0.2f, 1.0f, 1.0f), // THover
+            VectorFloat4(0.0f, 0.8f, 0.7f, 1.0f), // TTouch
+            VectorFloat4(0.0f, 0.4f, 0.9f, 1.0f), // TTouch THover
+            VectorFloat4(1.0f, 0.0f, 0.0f, 1.0f), // TSelected
+            VectorFloat4(1.0f, 0.2f, 0.2f, 1.0f), // TSelected THover
+            VectorFloat4(0.7f, 0.8f, 0.0f, 1.0f), // TSelected TTouch
+            VectorFloat4(0.9f, 0.4f, 0.0f, 1.0f) // TSelected TTouch THover
+            }));
+
+        auto data_main = std::make_shared<UIData>(
+#ifdef _DEBUG
+            "Root data",
+#endif
+            UILayout::FactoryFull(),
+            UIBaseColour::FactoryRoot(true)
+            );
+
+        auto data_stack = std::make_shared<UIDataStack>(
+#ifdef _DEBUG
+            "stack data",
+#endif
+            UILayout(
+                UICoord(UICoord::TSource::ParentX, 0.5f, 0.0f),
+                UICoord(UICoord::TSource::ParentY, 0.5f, 0.0f),
+                VectorFloat2(0.5f, 0.5f),
+                VectorFloat2(0.5f, 0.5f),
+                UILayout::TAdjustmentType::GrowTextureToLayout,
+                UILayout::TAdjustmentType::GrowTextureToLayout//,
+                //VectorInt4(8,8,8,8) // left, top, right, bottom
+                ),
+            //::FactoryParentMiddleQuater(),
+            UIBaseColour::FactoryBlueBackground(),
+            UITintColour::FactoryDefault(),
+            UIData::s_empty_effect_data_array,
+            UIOrientation::TVertical,
+            UICoord(UICoord::TSource::None, 0.0f, 4.0f)
+            );
+
+        auto data_button_0 = BuildButton(
+            "Button 0",
+            tint_array,
+            UILayout(
+                UICoord(UICoord::TSource::ParentX, 0.5f, 0.0f),
+                UICoord(UICoord::TSource::None, 0.5f, 32.0f),
+                VectorFloat2(0.5f, 0.5f),
+                VectorFloat2(0.5f, 0.5f),
+                UILayout::TAdjustmentType::GrowTextureToLayout,
+                UILayout::TAdjustmentType::GrowTextureToLayout,
+                VectorInt4(8, 8, 8, 8) //left, top, right, bottom
+            ));
+#if 0
+        data_stack->AddChild(data_button_0);
+        data_stack->AddChild(BuildButton(
+            "Button 1",
+            tint_array,
+            UILayout(
+                UICoord(UICoord::TSource::ParentX, 0.5f, 0.0f),
+                UICoord(UICoord::TSource::None, 0.5f, 32.0f),
+                VectorFloat2(0.5f, 0.5f),
+                VectorFloat2(0.5f, 0.5f)
+            )));
+
+        data_main->AddChild(data_stack);
+#else
+        data_main->AddChild(data_button_0);
+#endif
+
+        in_out_data_map["main"] = data_main;
+        return;
+    }
 };
 
 class UIModel : public IUIModel
@@ -1312,6 +1489,12 @@ public:
         //BuildModelData06_Tooltip(_data_map);
         //BuildModelData07_Stack(_data_map);
         BuildModelData08_Button(_data_map);
+        //BuildModelData09_NestedButton(_data_map);
+        //slider
+        //tooltip layer
+        //checkbox
+        //scroll
+        //combo box
 
 /*
         _data_build_version = std::make_shared<UIDataString>(

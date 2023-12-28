@@ -118,11 +118,13 @@ void IUIComponent::CalculateGeometry(
 const VectorInt2 IUIComponent::GetDesiredSize(
     UIHierarchyNodeChild& in_component_owner,
     const UIHierarchyNodeUpdateParam& in_layout_param,
-    const VectorInt2& //in_parent_window
+    const VectorInt2& in_parent_window
     )
 {
+    VectorInt2 base_layout_size = in_component_owner.GetLayout().GetLayoutSize(in_parent_window, in_layout_param._ui_scale);
+
     return in_component_owner.GetLayout().ApplyMargin(
-        VectorInt2::s_zero,
+        base_layout_size,
         in_layout_param._ui_scale
         );
 }

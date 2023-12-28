@@ -73,6 +73,11 @@ const bool UITexture::SetRenderTarget(
     LOG_MESSAGE_UI_VERBOSE("  UITexture::SetRenderTarget _draw_to_texture:%d _allow_clear:%d _always_dirty:%d _has_drawn:%d", _draw_to_texture, _allow_clear, _always_dirty, _has_drawn);
     LOG_MESSAGE_UI_VERBOSE("      _size:[%d, %d] _clear_colour[%f, %f, %f, %f]", _size[0], _size[1], _clear_colour[0], _clear_colour[1], _clear_colour[2], _clear_colour[3]);
 
+    if (false == CalculateSizeValid(in_draw_system))
+    {
+        return false;
+    }
+
     UpdateRenderTarget(in_draw_system, in_frame->GetCommandList());
 
     if (true == _draw_to_texture)
@@ -98,6 +103,20 @@ const bool UITexture::SetRenderTarget(
 
     return true;
 }
+
+const bool UITexture::CalculateSizeValid(
+    DrawSystem* const in_draw_system
+    ) const
+{
+    const VectorInt2 size = GetSize(in_draw_system);
+    if ((size[0] <= 0) || 
+        (size[1] <= 0))
+    {
+        return false;
+    }
+    return true;
+}
+
 
 const VectorInt2 UITexture::GetSize(
     DrawSystem* const in_draw_system
@@ -157,12 +176,18 @@ const bool UITexture::SetSize(
     return true;
 }
 
-void UITexture::SetShaderResource(
+const bool UITexture::SetShaderResource(
     Shader& in_shader,
     const int in_index,
-    DrawSystemFrame* const in_draw_system_frame
+    DrawSystemFrame* const in_draw_system_frame,
+    DrawSystem* const in_draw_system
     )
 {
+    if (false == CalculateSizeValid(in_draw_system))
+    {
+        return false;
+    }
+
     if ((true == _draw_to_texture) && (nullptr != _render_target_texture))
     {
         in_shader.SetShaderResourceViewHandle(
@@ -172,5 +197,5 @@ void UITexture::SetShaderResource(
         in_draw_system_frame->AddFrameResource(_render_target_texture);
     }
 
-    return;
+    return true;
 }
