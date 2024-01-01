@@ -98,6 +98,7 @@ public:
     void Finalise(
         const VectorInt2& in_base_layout_size,
         const VectorInt2& in_base_desired_size,
+        const VectorInt2& in_parent_window,
         const VectorInt2& in_parent_offset
         );
 
@@ -122,7 +123,9 @@ public:
     void UpdateGeometry(
         const UIHierarchyNodeUpdateParam& in_param,
         const UIScreenSpace& in_parent_screen_space,
-        const VectorInt2& in_parent_texture_size
+        const VectorInt2& in_parent_texture_size,
+        const VectorInt2& in_parent_window,
+        const VectorInt2& in_parent_offset
         );
 
     void DealInput(
@@ -152,6 +155,11 @@ public:
 private:
     // for recusion, but we bail if we have a component implementing IUIInput, which is set via DealInput
     void DealInputSetStateFlagImplement(const UIStateFlag in_input_state_flag);
+
+#ifdef _DEBUG
+public:
+    std::string _debug_name;
+#endif
 
 private:
     /// recusion point

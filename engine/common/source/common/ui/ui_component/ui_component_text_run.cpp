@@ -82,14 +82,20 @@ void UIComponentTextRun::UpdateResources(
     UIHierarchyNodeChild& in_component_owner,
     const UIHierarchyNodeUpdateParam& in_param,
     const UIScreenSpace& in_parent_screen_space,
-    const VectorInt2& in_parent_texture_size
+    const VectorInt2& in_parent_texture_size,
+    const VectorInt2& in_parent_window,
+    const VectorInt2& in_parent_offset,
+    const VectorInt4& in_texture_margin
     )
 {
     TSuper::UpdateResources(
         in_component_owner,
         in_param,
         in_parent_screen_space,
-        in_parent_texture_size
+        in_parent_texture_size,
+        in_parent_window,
+        in_parent_offset,
+        in_texture_margin
         );
 
     if (true == _text_run->SetTextContainerSize(

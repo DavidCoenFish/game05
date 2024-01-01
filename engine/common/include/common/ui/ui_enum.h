@@ -37,7 +37,8 @@ enum class UIEffectEnum
     TDebug,
     TDropShadow, // data[offset x, offset y, radius, ]
     TInnerShadow,
-    TRoundCorners, // data[Top right, top left, bottom left, bottom right]
+    //TRoundCorners, // data[Top right, top left, bottom left, bottom right]
+    TRoundCorners, // data[bottom left, top left, Top right, bottom right] reference, margin is [left, top, right, bottom]
     TRoundCornersHollow,
     TGloss,
     TFill, // data[horizion thickness] use tint to make chrome gradient

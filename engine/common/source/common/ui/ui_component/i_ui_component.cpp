@@ -72,23 +72,25 @@ void IUIComponent::CalculateGeometry(
     VectorFloat4& out_geometry_pos,
     VectorFloat4& out_geometry_uv,
     const VectorInt2& in_parent_size,
-    const VectorInt2& in_layout_offset,
+    const VectorInt2& in_parent_window,
+    const VectorInt2& in_parent_offset,
+    const VectorInt2&,// in_layout_offset,
     const VectorInt2& in_layout_size,
     const VectorInt2& in_texture_size,
     const VectorFloat2& in_scroll,
     const UILayout& in_layout 
     )
 {
-    const VectorInt2 pivot = in_layout.GetParentWindowPivot(in_parent_size, in_layout_offset); 
-    const VectorInt2 attach = in_layout.GetLayoutAttach(in_layout_size);
+    const VectorInt2 window_attach = in_layout.GetParentWindowAttach(in_parent_window, in_parent_offset); 
+    const VectorInt2 layout_pivot = in_layout.GetLayoutPivot(in_layout_size);
 
     // Deal pos
     //VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f)
     out_geometry_pos = VectorFloat4(
-        CalculatePos(pivot[0] - attach[0], in_parent_size[0]),
-        CalculatePos(pivot[1] - attach[1], in_parent_size[1]),
-        CalculatePos(pivot[0] + in_layout_size[0] - attach[0], in_parent_size[0]),
-        CalculatePos(pivot[1] + in_layout_size[1] - attach[1], in_parent_size[1])
+        CalculatePos(window_attach[0] - layout_pivot[0], in_parent_size[0]),
+        CalculatePos(window_attach[1] - layout_pivot[1], in_parent_size[1]),
+        CalculatePos(window_attach[0] - layout_pivot[0] + in_layout_size[0], in_parent_size[0]),
+        CalculatePos(window_attach[1] - layout_pivot[1] + in_layout_size[1], in_parent_size[1])
         );
 
     out_geometry_uv = VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f);
@@ -121,12 +123,34 @@ const VectorInt2 IUIComponent::GetDesiredSize(
     const VectorInt2& in_parent_window
     )
 {
+#if 1
     VectorInt2 base_layout_size = in_component_owner.GetLayout().GetLayoutSize(in_parent_window, in_layout_param._ui_scale);
 
     return in_component_owner.GetLayout().ApplyMargin(
         base_layout_size,
         in_layout_param._ui_scale
         );
+#else
+    VectorInt2 max_child_size;
+    // want something indicitive of size for text with width limit
+    const VectorInt2 window_size = in_component_owner.GetLayout().GetLayoutSize(in_parent_window, in_layout_param._ui_scale);
+
+    for (auto child: in_component_owner.GetNode().GetChildData())
+    {
+        max_child_size = VectorInt2::Max(
+            max_child_size,
+            child->GetDesiredSize(
+                in_layout_param,
+                window_size
+                )
+            );
+    }
+
+    return in_component_owner.GetLayout().ApplyMargin(
+        max_child_size,
+        in_layout_param._ui_scale
+        );
+#endif
 }
 
 /// default behavoiur, ie, canvas
@@ -147,10 +171,10 @@ void IUIComponent::UpdateLayout(
     // calculate layout size given parent window
     VectorInt2 base_layout_size = in_component_owner.GetLayout().GetLayoutSize(in_parent_window, in_param._ui_scale);
 
-    // recurse node::update layout
+    // recurse node::update layout. default (ie, canvas behaviour) is for children to have no offset from us
+    // to have children with different layouts, we override this method, ie, UIComponentStack
     in_component_owner.GetNode().UpdateLayout(
         in_param,
-        //_layout_offset,
         base_layout_size,
         VectorInt2::s_zero
         );
@@ -162,6 +186,7 @@ void IUIComponent::UpdateLayout(
     in_component_owner.Finalise(
         base_layout_size,
         base_desired_size,
+        in_parent_window,
         in_parent_offset
         );
 
@@ -172,7 +197,10 @@ void IUIComponent::UpdateResources(
     UIHierarchyNodeChild& in_component_owner,
     const UIHierarchyNodeUpdateParam& in_param,
     const UIScreenSpace& in_parent_screen_space,
-    const VectorInt2& in_parent_texture_size
+    const VectorInt2& in_parent_texture_size,
+    const VectorInt2& in_parent_window,
+    const VectorInt2& in_parent_offset,
+    const VectorInt4& in_texture_margin
     )
 {
     in_component_owner.Update(in_param._delta_time_seconds);
@@ -180,12 +208,15 @@ void IUIComponent::UpdateResources(
     in_component_owner.UpdateGeometry(
         in_param, 
         in_parent_screen_space,
-        in_parent_texture_size
+        in_parent_texture_size,
+        in_parent_window,
+        in_parent_offset
         );
 
     in_component_owner.GetNode().UpdateResources(
         in_param,
-        in_component_owner.GetScreenSpace()
+        in_component_owner.GetScreenSpace(),
+        in_texture_margin
         );
 
     return;

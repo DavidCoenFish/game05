@@ -89,6 +89,7 @@ void UIComponentStack::UpdateLayout(
     in_component_owner.Finalise(
         base_layout_size,
         base_desired_size,
+        in_parent_window,
         in_parent_offset
         );
 
@@ -98,7 +99,7 @@ void UIComponentStack::UpdateLayout(
     for (auto& child_data_ptr : child_data_array)
     {
         UIHierarchyNodeChild& child_data = *child_data_ptr;
-        VectorInt4& child_window_offset = child_window_offset_array[trace];
+        const VectorInt4& child_window_offset = child_window_offset_array[trace];
         trace += 1;
 
         // invert y, 0,0 is bottom left. by default, this pushes the stack children into the top left of layout

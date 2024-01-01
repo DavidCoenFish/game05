@@ -26,6 +26,7 @@ class LocaleSystem;
 class Shader;
 class ShaderConstantBuffer;
 class TextManager;
+class VectorInt4;
 
 struct UIComponentFactoryParam;
 struct UIDataTextRunStyle;
@@ -122,7 +123,8 @@ public:
     /// Moved render dirty flag into IOHierarchyNodeChild
     void UpdateResources(
         const UIHierarchyNodeUpdateParam& in_param,
-        const UIScreenSpace& in_parent_screen_space
+        const UIScreenSpace& in_parent_screen_space,
+        const VectorInt4& in_texture_margin
         );
 
     void MarkTextureDirty();

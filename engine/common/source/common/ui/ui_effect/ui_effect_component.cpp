@@ -155,11 +155,19 @@ const bool UIEffectComponent::Set(
 }
 
 void UIEffectComponent::Update(
-    const UIHierarchyNodeUpdateParam&,// in_param,
-    const VectorInt2& in_target_size
+    const UIHierarchyNodeUpdateParam& in_param,
+    const VectorInt2& in_target_size,
+    const VectorInt4& in_texture_margin
     )
 {
+    DSC_ASSERT(nullptr != _texture, "texture should be created in ctor");
     _texture->SetSize(in_target_size);
+    _margin = VectorFloat4(
+        in_texture_margin[0] * in_param._ui_scale,
+        in_texture_margin[1] * in_param._ui_scale,
+        in_texture_margin[2] * in_param._ui_scale,
+        in_texture_margin[3] * in_param._ui_scale
+        );
     return;
 }
 
@@ -217,6 +225,7 @@ void UIEffectComponent::Render(
             );
     
         buffer._tint = CalculateTintColour(in_state_flag, _state_flag_tint_array_or_null.get(), _default_tint);
+        buffer._margin = _margin;
     }
 
     in_draw_param._frame->SetShader(shader, _shader_constant_buffer);

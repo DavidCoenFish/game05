@@ -56,6 +56,8 @@ public:
         VectorFloat4& out_geometry_pos,
         VectorFloat4& out_geometry_uv,
         const VectorInt2& in_parent_texture_size,
+        const VectorInt2& in_parent_window,
+        const VectorInt2& in_parent_offset,
         const VectorInt2& in_layout_offset,
         const VectorInt2& in_layout_size,
         const VectorInt2& in_texture_size,
@@ -82,7 +84,10 @@ public:
         UIHierarchyNodeChild& in_component_owner,
         const UIHierarchyNodeUpdateParam& in_param,
         const UIScreenSpace& in_parent_screen_space,
-        const VectorInt2& in_parent_texture_size
+        const VectorInt2& in_parent_texture_size,
+        const VectorInt2& in_parent_window,
+        const VectorInt2& in_parent_offset,
+        const VectorInt4& in_texture_margin
         );
 
     /// prep the children of the component for draw. 

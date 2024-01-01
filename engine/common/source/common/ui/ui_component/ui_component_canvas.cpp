@@ -14,7 +14,7 @@ UIComponentCanvas::~UIComponentCanvas()
 {
     // Nop
 }
-
+/**/
 const VectorInt2 UIComponentCanvas::GetDesiredSize(
     UIHierarchyNodeChild& in_component_owner,
     const UIHierarchyNodeUpdateParam& in_layout_param,
@@ -41,4 +41,4 @@ const VectorInt2 UIComponentCanvas::GetDesiredSize(
         in_layout_param._ui_scale
         );
 }
-
+/**/

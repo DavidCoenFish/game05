@@ -51,6 +51,10 @@
     {
       "Id": "3bf71329-47eb-448a-a043-f1975e7a08ec",
       "Command": "log_output"
+    },
+    {
+      "Id": "c13fc16c-59ea-469e-8cde-e4440e1fa349",
+      "Command": "log_console"
     }
   ]
 }

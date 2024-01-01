@@ -212,6 +212,10 @@ void UIHierarchyNodeChild::ApplyComponent(
     const UIHierarchyNodeUpdateParam& in_param
     )
 {
+#ifdef _DEBUG
+    _debug_name = in_data._debug_name;
+#endif
+
     SetLayout(in_data.GetLayout());
     SetTintColour(in_data.GetTintColour());
 
@@ -276,10 +280,11 @@ UIScreenSpace& UIHierarchyNodeChild::GetScreenSpace() const
 void UIHierarchyNodeChild::Finalise(
     const VectorInt2& in_base_layout_size,
     const VectorInt2& in_base_desired_size,
+    const VectorInt2& in_parent_window,
     const VectorInt2& in_parent_offset
     )
 {
-    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNodeChild::Finalise %p", _source_token);
+    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNodeChild::Finalise %p %s", _source_token, _debug_name.c_str());
 
     VectorInt2 texture_size;
 
@@ -290,6 +295,7 @@ void UIHierarchyNodeChild::Finalise(
         _layout_offset,
         in_base_layout_size,
         in_base_desired_size,
+        in_parent_window,
         in_parent_offset
         );
 
@@ -310,12 +316,18 @@ void UIHierarchyNodeChild::UpdateLayout(
     const VectorInt2& in_parent_offset
     )
 {
-    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNodeChild::UpdateLayout %p", _source_token);
+    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNodeChild::UpdateLayout %p %s", _source_token, _debug_name.c_str());
     const bool parent_size_change = ((in_parent_window != _cache_parent_window) || (in_parent_offset != _cache_parent_offset));
 
     if ((true == parent_size_change) ||
         (true == GetStateDirtyBit(UIStateDirty::TLayoutDirty)))
     {
+        SetStateDirtyBit(UIStateDirty::TLayoutDirty, false);
+
+        // setting this above component::UpdateLayout, but better would be to use the param passed through rather than cached state
+        _cache_parent_window = in_parent_window;
+        _cache_parent_offset = in_parent_offset;
+
         if (nullptr != _component)
         {
             _component->UpdateLayout(
@@ -325,10 +337,6 @@ void UIHierarchyNodeChild::UpdateLayout(
                 in_parent_offset
                 );
         }
-
-        _cache_parent_window = in_parent_window;
-        _cache_parent_offset = in_parent_offset;
-        SetStateDirtyBit(UIStateDirty::TLayoutDirty, false);
     }
 }
 
@@ -344,7 +352,10 @@ void UIHierarchyNodeChild::UpdateResources(
             *this,
             in_param,
             in_parent_screen_space,
-            in_parent_texture_size
+            in_parent_texture_size,
+            _cache_parent_window,
+            _cache_parent_offset,
+            _layout.GetTextureMarginRef()
             );
     }
     return;
@@ -389,7 +400,9 @@ void UIHierarchyNodeChild::UpdateScroll(
 void UIHierarchyNodeChild::UpdateGeometry(
     const UIHierarchyNodeUpdateParam& in_param,
     const UIScreenSpace& in_parent_screen_space,
-    const VectorInt2& in_parent_texture_size
+    const VectorInt2& in_parent_texture_size,
+    const VectorInt2& in_parent_window,
+    const VectorInt2& in_parent_offset
     )
 {
     const VectorInt2 texture_size = _node->GetTextureSize(in_param._draw_system);
@@ -400,6 +413,8 @@ void UIHierarchyNodeChild::UpdateGeometry(
         geometry_pos,
         geometry_uv,
         in_parent_texture_size,
+        in_parent_window,
+        in_parent_offset,
         _layout_offset,
         _layout_size,
         texture_size,
@@ -565,7 +580,7 @@ void UIHierarchyNodeChild::PreDraw(
     const UIManagerDrawParam& in_draw_param
     )
 {
-    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNodeChild::PreDraw %p %d", _source_token, _state_dirty);
+    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNodeChild::PreDraw %p %s %d", _source_token, _debug_name.c_str(), _state_dirty);
 
     if ((nullptr == _component) ||
         (true == GetStateFlagBit(UIStateFlag::THidden)))
@@ -597,7 +612,7 @@ void UIHierarchyNodeChild::Draw(
     const UIManagerDrawParam& in_draw_param
     )
 {
-    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNodeChild::Draw %p %d", _source_token, _state_dirty);
+    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNodeChild::Draw %p %s %d", _source_token, _debug_name.c_str(), _state_dirty);
 
     if ((nullptr == _component) ||
         (true == GetStateFlagBit(UIStateFlag::THidden)))

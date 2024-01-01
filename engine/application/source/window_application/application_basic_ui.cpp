@@ -1369,9 +1369,7 @@ namespace
                     ),
                 UIBaseColour::FactoryDefault(),
                 UITintColour::FactoryDefault(),
-#if 0
-                UIData::s_empty_effect_data_array,
-#else
+
                 std::vector<std::shared_ptr<UIEffectData>>({
                         std::make_shared<UIEffectData>(
                             UIEffectEnum::TDropShadow,
@@ -1383,7 +1381,7 @@ namespace
                             VectorFloat4::s_black
                             )
                     }),
-#endif
+
                 in_text, //"<Colour 1.0 1.0 1.0 1.0><Size 64>HELLO HUMAN",
                 LocaleISO_639_1::Default,
                 false,
@@ -1430,8 +1428,8 @@ namespace
                 VectorFloat2(0.5f, 0.5f),
                 VectorFloat2(0.5f, 0.5f),
                 UILayout::TAdjustmentType::GrowTextureToLayout,
-                UILayout::TAdjustmentType::GrowTextureToLayout//,
-                //VectorInt4(8,8,8,8) // left, top, right, bottom
+                UILayout::TAdjustmentType::GrowTextureToLayout,//,
+                VectorInt4(8,8,8,8) // left, top, right, bottom
                 ),
             //::FactoryParentMiddleQuater(),
             UIBaseColour::FactoryBlueBackground(),
@@ -1449,11 +1447,11 @@ namespace
                 UICoord(UICoord::TSource::None, 0.5f, 32.0f),
                 VectorFloat2(0.5f, 0.5f),
                 VectorFloat2(0.5f, 0.5f),
-                UILayout::TAdjustmentType::GrowTextureToLayout,
-                UILayout::TAdjustmentType::GrowTextureToLayout,
+                UILayout::TAdjustmentType::ShrinkLayoutToTexture,
+                UILayout::TAdjustmentType::ShrinkLayoutToTexture,
                 VectorInt4(8, 8, 8, 8) //left, top, right, bottom
             ));
-#if 0
+#if 1
         data_stack->AddChild(data_button_0);
         data_stack->AddChild(BuildButton(
             "Button 1",
@@ -1473,6 +1471,52 @@ namespace
         in_out_data_map["main"] = data_main;
         return;
     }
+
+    void BuildModelData10_CornerMargin(
+        std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
+        )
+    {
+        auto data_main = std::make_shared<UIData>(
+#ifdef _DEBUG
+            "Root data",
+#endif
+            UILayout::FactoryFull(),
+            UIBaseColour::FactoryRoot(true)
+            );
+
+        //TRoundCorners, // data[bottom left, top left, Top right, bottom right] reference, margin is [left, top, right, bottom]
+
+        auto data_canvas = std::make_shared<UIDataCanvas>(
+#ifdef _DEBUG
+            "canvas data",
+#endif
+            UILayout(
+                UICoord(UICoord::TSource::ParentX, 1.0f),
+                UICoord(UICoord::TSource::ParentY, 1.0f),
+                VectorFloat2(0.5f, 0.5f),
+                VectorFloat2(0.5f, 0.5f),
+                UILayout::TAdjustmentType::GrowTextureToLayout,
+                UILayout::TAdjustmentType::GrowTextureToLayout,
+                VectorInt4(8,16,32,64) // left, top, right, bottom
+            ),
+            UIBaseColour::FactoryRedBackground(),
+            UITintColour::FactoryDefault(),
+            std::vector<std::shared_ptr<UIEffectData>>({
+                std::make_shared<UIEffectData>(
+                    UIEffectEnum::TRoundCorners,
+                    //TRoundCorners, // data[bottom left, top left, Top right, bottom right] reference, margin is [left, top, right, bottom]
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 64),
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 32),
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 16),
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 8)
+                    )
+                })
+            );
+        data_main->AddChild(data_canvas);
+
+        in_out_data_map["main"] = data_main;
+    }
+
 };
 
 class UIModel : public IUIModel
@@ -1488,8 +1532,9 @@ public:
         //BuildModelData05_Effect(_data_map);
         //BuildModelData06_Tooltip(_data_map);
         //BuildModelData07_Stack(_data_map);
-        BuildModelData08_Button(_data_map);
+        //BuildModelData08_Button(_data_map);
         //BuildModelData09_NestedButton(_data_map);
+        BuildModelData10_CornerMargin(_data_map);
         //slider
         //tooltip layer
         //checkbox

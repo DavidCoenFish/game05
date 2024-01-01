@@ -24,6 +24,7 @@ public:
         VectorFloat4 _width_height_iwidth_iheight;
         VectorFloat4 _data;
         VectorFloat4 _tint;
+        VectorFloat4 _margin;
     };
 
     UIEffectComponent(
@@ -51,7 +52,8 @@ public:
 
     void Update(
         const UIHierarchyNodeUpdateParam& in_param,
-        const VectorInt2& in_target_size
+        const VectorInt2& in_target_size,
+        const VectorInt4& in_texture_margin
         );
 
     /// Given the input UITexture as a shader resource input, we draw to our own texture using an effect shader
@@ -89,5 +91,7 @@ private:
 
     /// The render target we draw to and then the shader resource (texture) that others consume
     std::unique_ptr<UITexture> _texture;
+
+    VectorFloat4 _margin;
 
 };

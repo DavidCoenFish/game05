@@ -23,7 +23,7 @@ const UILayout UILayout::FactoryParentMiddleQuater()
 UILayout::UILayout(
     const UICoord& in_size_x,
     const UICoord& in_size_y,
-    const VectorFloat2& in_layout_attach_ratio,
+    const VectorFloat2& in_layout_pivot_ratio,
     const VectorFloat2& in_parent_window_pivot_ratio,
     const TAdjustmentType in_adjustment_type_x,
     const TAdjustmentType in_adjustment_type_y,
@@ -33,8 +33,8 @@ UILayout::UILayout(
 {
     _size[0] = in_size_x;
     _size[1] = in_size_y;
-    _layout_attach_ratio = in_layout_attach_ratio;
-    _parent_window_pivot_ratio = in_parent_window_pivot_ratio;
+    _layout_pivot_ratio = in_layout_pivot_ratio;
+    _parent_window_attach_ratio = in_parent_window_pivot_ratio;
     _adjustment_type[0] = in_adjustment_type_x;
     _adjustment_type[1] = in_adjustment_type_y;
     return;
@@ -48,19 +48,19 @@ const VectorInt2 UILayout::GetLayoutSize(const VectorInt2& in_parent_size, const
         );
 }
 
-const VectorInt2 UILayout::GetLayoutAttach(const VectorInt2& in_layout_size) const
+const VectorInt2 UILayout::GetLayoutPivot(const VectorInt2& in_layout_size) const
 {
     return VectorInt2(
-        static_cast<int>(round((in_layout_size[0] * _layout_attach_ratio[0]))),
-        static_cast<int>(round((in_layout_size[1] * _layout_attach_ratio[1])))
+        static_cast<int>(round((in_layout_size[0] * _layout_pivot_ratio[0]))),
+        static_cast<int>(round((in_layout_size[1] * _layout_pivot_ratio[1])))
         );
 }
 
-const VectorInt2 UILayout::GetParentWindowPivot(const VectorInt2& in_parent_window_size, const VectorInt2& in_parent_offset) const
+const VectorInt2 UILayout::GetParentWindowAttach(const VectorInt2& in_parent_window_size, const VectorInt2& in_parent_offset) const
 {
     return VectorInt2(
-        static_cast<int>(round((in_parent_window_size[0] * _parent_window_pivot_ratio[0]))),
-        static_cast<int>(round((in_parent_window_size[1] * _parent_window_pivot_ratio[1])))
+        static_cast<int>(round((in_parent_window_size[0] * _parent_window_attach_ratio[0]))),
+        static_cast<int>(round((in_parent_window_size[1] * _parent_window_attach_ratio[1])))
         ) + in_parent_offset;
 }
 
@@ -70,6 +70,7 @@ void UILayout::Finalise(
     VectorInt2& out_layout_offset,
     const VectorInt2& in_layout_size,
     const VectorInt2& in_texture_size,
+    const VectorInt2& ,//in_parent_window,
     const VectorInt2& in_parent_offset
     ) const
 {
@@ -137,37 +138,37 @@ const bool UILayout::GetAdjustmentModifiesLayout() const
 
 void UILayout::SetSliderHorizontal(const float in_value)
 {
-    _parent_window_pivot_ratio[0] = in_value;
-    _layout_attach_ratio[0] = in_value;
+    _parent_window_attach_ratio[0] = in_value;
+    _layout_pivot_ratio[0] = in_value;
     return;
 }
 
 void UILayout::SetSliderVertical(const float in_value)
 {
-    _parent_window_pivot_ratio[1] = in_value;
-    _layout_attach_ratio[1] = in_value;
+    _parent_window_attach_ratio[1] = in_value;
+    _layout_pivot_ratio[1] = in_value;
     return;
 }
 
 void UILayout::SetScrollHorizontal(const VectorFloat2& in_value)
 {
     _size[0] = UICoord(UICoord::TSource::ParentX, in_value[1] - in_value[0]);
-    _parent_window_pivot_ratio[0] = in_value[0];
-    _layout_attach_ratio[0] = 0.0f;
+    _parent_window_attach_ratio[0] = in_value[0];
+    _layout_pivot_ratio[0] = 0.0f;
 }
 
 void UILayout::SetScrollVertical(const VectorFloat2& in_value)
 {
     _size[1] = UICoord(UICoord::TSource::ParentY, in_value[1] - in_value[0]);
-    _parent_window_pivot_ratio[1] = 1.0f - in_value[0];
-    _layout_attach_ratio[1] = 1.0f;
+    _parent_window_attach_ratio[1] = 1.0f - in_value[0];
+    _layout_pivot_ratio[1] = 1.0f;
 }
 
 void UILayout::SetTooltip(const VectorFloat2& in_tooltip_pos)
 {
-    _parent_window_pivot_ratio = in_tooltip_pos;
-    _layout_attach_ratio[0] = 0.5f;
-    _layout_attach_ratio[1] = 0.0f;
+    _parent_window_attach_ratio = in_tooltip_pos;
+    _layout_pivot_ratio[0] = 0.5f;
+    _layout_pivot_ratio[1] = 0.0f;
 }
 
 void UILayout::SetComboBoxDropdown(const VectorFloat4& in_combo_box_screen_pos)
@@ -175,10 +176,10 @@ void UILayout::SetComboBoxDropdown(const VectorFloat4& in_combo_box_screen_pos)
     const float width = (in_combo_box_screen_pos[2] - in_combo_box_screen_pos[0]) * 0.5f;
     const float mid_x = (in_combo_box_screen_pos[2] + in_combo_box_screen_pos[0]) * 0.5f;
     _size[0] = UICoord(UICoord::TSource::ParentX, width);
-    _parent_window_pivot_ratio[0] = DscMath::ConvertNegativeOneOneToZeroOne(mid_x);
-    _parent_window_pivot_ratio[1] = DscMath::ConvertNegativeOneOneToZeroOne(in_combo_box_screen_pos[1]);
-    _layout_attach_ratio[0] = 0.5f;
-    _layout_attach_ratio[1] = 1.0f;
+    _parent_window_attach_ratio[0] = DscMath::ConvertNegativeOneOneToZeroOne(mid_x);
+    _parent_window_attach_ratio[1] = DscMath::ConvertNegativeOneOneToZeroOne(in_combo_box_screen_pos[1]);
+    _layout_pivot_ratio[0] = 0.5f;
+    _layout_pivot_ratio[1] = 1.0f;
 }
 
 const bool UILayout::operator==(const UILayout& in_rhs) const
@@ -192,12 +193,12 @@ const bool UILayout::operator==(const UILayout& in_rhs) const
         return false;
     }
 
-    if (_layout_attach_ratio != in_rhs._layout_attach_ratio)
+    if (_layout_pivot_ratio != in_rhs._layout_pivot_ratio)
     {
         return false;
     }
 
-    if (_parent_window_pivot_ratio != in_rhs._parent_window_pivot_ratio)
+    if (_parent_window_attach_ratio != in_rhs._parent_window_attach_ratio)
     {
         return false;
     }

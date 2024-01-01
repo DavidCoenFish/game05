@@ -258,7 +258,8 @@ public:
 
             in_out_target_or_null->UpdateResources(
                 update_param,
-                UIScreenSpace()
+                UIScreenSpace(),
+                VectorInt4::s_zero
                 );
         }
 
