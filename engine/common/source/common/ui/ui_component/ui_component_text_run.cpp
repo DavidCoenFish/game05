@@ -71,10 +71,11 @@ const VectorInt2 UIComponentTextRun::GetDesiredSize(
     const VectorInt2& in_pre_shrink_layout_size //in_parent_window
     )
 {
+    // Todo: move margin into text run
     _text_run->SetWidthLimitWidth(in_pre_shrink_layout_size[0]);
 
     const VectorInt2 bounds = _text_run->GetTextBounds();
-    const VectorInt2 result = in_component_owner.GetLayout().ApplyMargin(bounds, in_layout_param._ui_scale);
+    const VectorInt2 result = in_component_owner.GetLayout().AddMargin(bounds, in_layout_param._ui_scale);
     return result;
 }
 

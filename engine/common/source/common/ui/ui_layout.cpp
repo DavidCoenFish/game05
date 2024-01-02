@@ -42,9 +42,23 @@ UILayout::UILayout(
 
 const VectorInt2 UILayout::GetLayoutSize(const VectorInt2& in_parent_size, const float in_ui_scale) const
 {
+    /// margin [left, top, right, bottom]
     return VectorInt2(
+        //std::max(0, _size[0].Calculate(in_parent_size, in_ui_scale) - static_cast<int>(round((_texture_margin[0] + _texture_margin[2]) * in_ui_scale))),
         _size[0].Calculate(in_parent_size, in_ui_scale),
+        //std::max(0, _size[1].Calculate(in_parent_size, in_ui_scale) - static_cast<int>(round((_texture_margin[1] + _texture_margin[3]) * in_ui_scale)))
         _size[1].Calculate(in_parent_size, in_ui_scale)
+        );
+}
+
+const VectorInt2 UILayout::GetLayoutOffset(/*const VectorInt2& in_parent_offset, */const float in_ui_scale) const
+{
+    /// margin [left, top, right, bottom], coords have 0,0 in bottom left
+    return VectorInt2(
+        //in_parent_offset[0] + static_cast<int>(round(_texture_margin[0] * in_ui_scale)),
+        static_cast<int>(round(_texture_margin[0] * in_ui_scale)),
+        //in_parent_offset[1] + static_cast<int>(round(_texture_margin[3] * in_ui_scale))
+        static_cast<int>(round(_texture_margin[3] * in_ui_scale))
         );
 }
 
@@ -67,15 +81,15 @@ const VectorInt2 UILayout::GetParentWindowAttach(const VectorInt2& in_parent_win
 void UILayout::Finalise(
     VectorInt2& out_layout_size,
     VectorInt2& out_texture_size,
-    VectorInt2& out_layout_offset,
+    //VectorInt2& out_layout_offset,
     const VectorInt2& in_layout_size,
-    const VectorInt2& in_texture_size,
-    const VectorInt2& ,//in_parent_window,
-    const VectorInt2& in_parent_offset
+    const VectorInt2& in_texture_size//,
+    //const VectorInt2& ,//in_parent_window,
+    //const VectorInt2& in_parent_offset
     ) const
 {
     //out_layout_offset = VectorInt2::s_zero;
-    out_layout_offset = in_parent_offset;
+    //out_layout_offset = in_parent_offset;
 
     switch(_adjustment_type[0])
     {
@@ -88,7 +102,7 @@ void UILayout::Finalise(
         out_layout_size[0] = std::min(in_texture_size[0], in_layout_size[0]);
         out_texture_size[0] = in_texture_size[0];
         break;
-    case TAdjustmentType::ShrinkOrGrowLayoutToTexture:
+    case TAdjustmentType::MatchLayoutToTexture:
         out_layout_size[0] = in_texture_size[0];
         out_texture_size[0] = in_texture_size[0];
         break;
@@ -104,7 +118,7 @@ void UILayout::Finalise(
         out_layout_size[1] = std::min(in_texture_size[1], in_layout_size[1]);
         out_texture_size[1] = in_texture_size[1];
         break;
-    case TAdjustmentType::ShrinkOrGrowLayoutToTexture:
+    case TAdjustmentType::MatchLayoutToTexture:
         out_layout_size[1] = in_texture_size[1];
         out_texture_size[1] = in_texture_size[1];
         break;
@@ -113,7 +127,7 @@ void UILayout::Finalise(
     return;
 }
 
-const VectorInt2 UILayout::ApplyMargin(
+const VectorInt2 UILayout::AddMargin(
     const VectorInt2& in_size,
     const float in_ui_scale
     ) const
@@ -121,6 +135,17 @@ const VectorInt2 UILayout::ApplyMargin(
     return VectorInt2(
         in_size[0] + static_cast<int>(roundf((_texture_margin[0] + _texture_margin[2]) * in_ui_scale)),
         in_size[1] + static_cast<int>(roundf((_texture_margin[1] + _texture_margin[3]) * in_ui_scale))
+        );
+}
+
+const VectorInt2 UILayout::SubtractMargin(
+    const VectorInt2& in_size,
+    const float in_ui_scale
+    ) const
+{
+    return VectorInt2(
+        in_size[0] - static_cast<int>(roundf((_texture_margin[0] + _texture_margin[2]) * in_ui_scale)),
+        in_size[1] - static_cast<int>(roundf((_texture_margin[1] + _texture_margin[3]) * in_ui_scale))
         );
 }
 

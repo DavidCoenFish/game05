@@ -14,7 +14,7 @@ UIComponentCanvas::~UIComponentCanvas()
 {
     // Nop
 }
-/**/
+/*
 const VectorInt2 UIComponentCanvas::GetDesiredSize(
     UIHierarchyNodeChild& in_component_owner,
     const UIHierarchyNodeUpdateParam& in_layout_param,
@@ -23,7 +23,8 @@ const VectorInt2 UIComponentCanvas::GetDesiredSize(
 {
     VectorInt2 max_child_size;
     // want something indicitive of size for text with width limit
-    const VectorInt2 window_size = in_component_owner.GetLayout().GetLayoutSize(in_parent_window, in_layout_param._ui_scale);
+    VectorInt2 window_size = in_component_owner.GetLayout().GetLayoutSize(in_parent_window, in_layout_param._ui_scale);
+    window_size = in_component_owner.GetLayout().SubtractMargin(window_size, in_layout_param._ui_scale);
 
     for (auto child: in_component_owner.GetNode().GetChildData())
     {

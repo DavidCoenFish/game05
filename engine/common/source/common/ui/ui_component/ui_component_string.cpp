@@ -90,6 +90,7 @@ const VectorInt2 UIComponentString::GetDesiredSize(
     const VectorInt2& in_pre_shrink_layout_size //in_parent_window
     )
 {
+    // todo: move margin into text block, for now append margin to bounds.
     _text_block->SetWidthLimit(
         _text_block->GetWidthLimitEnabled(),
         in_pre_shrink_layout_size[0]
@@ -97,7 +98,7 @@ const VectorInt2 UIComponentString::GetDesiredSize(
     _text_block->SetUIScale(in_layout_param._ui_scale);
 
     const VectorInt2 bounds = _text_block->GetTextBounds();
-    const VectorInt2 result = in_component_owner.GetLayout().ApplyMargin(bounds, in_layout_param._ui_scale);
+    const VectorInt2 result = in_component_owner.GetLayout().AddMargin(bounds, in_layout_param._ui_scale);
     return result;
 }
 

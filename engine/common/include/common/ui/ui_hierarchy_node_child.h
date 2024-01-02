@@ -97,9 +97,9 @@ public:
 
     void Finalise(
         const VectorInt2& in_base_layout_size,
-        const VectorInt2& in_base_desired_size,
-        const VectorInt2& in_parent_window,
-        const VectorInt2& in_parent_offset
+        const VectorInt2& in_base_desired_size//,
+        //const VectorInt2& in_parent_window,
+        //const VectorInt2& in_parent_offset
         );
 
     void UpdateLayout(

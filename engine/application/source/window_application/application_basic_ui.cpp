@@ -878,6 +878,110 @@ namespace
         in_out_data_map["main"] = data_main;
     }
 
+    void BuildModelData010_ChildRedMargin(
+        std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
+        )
+    {
+        auto data_main = std::make_shared<UIData>(
+#ifdef _DEBUG
+            "Root data",
+#endif
+            UILayout::FactoryFull(),
+            UIBaseColour::FactoryRoot(true)
+            );
+        auto child_0 = std::make_shared<UIDataCanvas>(
+#ifdef _DEBUG
+            "child 0 blue with margin",
+#endif
+            UILayout(
+                UICoord(UICoord::TSource::ParentX, 1.0f, 0.0f),
+                UICoord(UICoord::TSource::ParentY, 1.0f, 0.0f),
+                VectorFloat2::s_zero,
+                VectorFloat2::s_zero,
+                UILayout::TAdjustmentType::GrowTextureToLayout,
+                UILayout::TAdjustmentType::GrowTextureToLayout,
+                VectorInt4(8,16,32,64) // left, top, right, bottom
+            ),
+            UIBaseColour::FactoryBlueBackground()
+            );
+
+        data_main->AddChild(
+            child_0
+            );
+
+        child_0->AddChild(
+            std::make_shared<UIDataCanvas>(
+#ifdef _DEBUG
+                "child 1 red",
+#endif
+                UILayout::FactoryFull(),
+                UIBaseColour::FactoryRedBackground()
+                )
+            );
+
+        child_0->AddChild(
+            std::make_shared<UIDataCanvas>(
+#ifdef _DEBUG
+                "child 2 green top right",
+#endif
+                UILayout(
+                    UICoord(UICoord::TSource::None, 0.0f, 32.0f),
+                    UICoord(UICoord::TSource::None, 0.0f, 32.0f),
+                    VectorFloat2(1.0f, 1.0f),
+                    VectorFloat2(1.0f, 1.0f)
+                    ),
+                UIBaseColour::FactoryGreenBackground()
+                )
+            );
+
+        child_0->AddChild(
+            std::make_shared<UIDataCanvas>(
+#ifdef _DEBUG
+                "child 3 green top left",
+#endif
+                UILayout(
+                    UICoord(UICoord::TSource::None, 0.0f, 32.0f),
+                    UICoord(UICoord::TSource::None, 0.0f, 32.0f),
+                    VectorFloat2(0.0f, 1.0f),
+                    VectorFloat2(0.0f, 1.0f)
+                    ),
+                UIBaseColour::FactoryGreenBackground()
+                )
+            );
+
+        child_0->AddChild(
+            std::make_shared<UIDataCanvas>(
+#ifdef _DEBUG
+                "child 4 green bottom right",
+#endif
+                UILayout(
+                    UICoord(UICoord::TSource::None, 0.0f, 32.0f),
+                    UICoord(UICoord::TSource::None, 0.0f, 32.0f),
+                    VectorFloat2(1.0f, 0.0f),
+                    VectorFloat2(1.0f, 0.0f)
+                    ),
+                UIBaseColour::FactoryGreenBackground()
+                )
+            );
+
+        child_0->AddChild(
+            std::make_shared<UIDataCanvas>(
+#ifdef _DEBUG
+                "child 5 green bottom left",
+#endif
+                UILayout(
+                    UICoord(UICoord::TSource::None, 0.0f, 32.0f),
+                    UICoord(UICoord::TSource::None, 0.0f, 32.0f),
+                    VectorFloat2(0.0f, 0.0f),
+                    VectorFloat2(0.0f, 0.0f)
+                    ),
+                UIBaseColour::FactoryGreenBackground()
+                )
+            );
+
+        in_out_data_map["main"] = data_main;
+    }
+
     void BuildModelData02_Text(
         std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
         )
@@ -1042,6 +1146,51 @@ namespace
                     UICoord(UICoord::TSource::ParentMin, 0.0f, 32),
                     UICoord(UICoord::TSource::ParentMin, 0.0f, 32),
                     UICoord(UICoord::TSource::ParentMin, 0.0f, 32)
+                    )
+                })
+            );
+        data_main->AddChild(data_canvas);
+
+        in_out_data_map["main"] = data_main;
+    }
+
+    void BuildModelData050_CornerMargin(
+        std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
+        )
+    {
+        auto data_main = std::make_shared<UIData>(
+#ifdef _DEBUG
+            "Root data",
+#endif
+            UILayout::FactoryFull(),
+            UIBaseColour::FactoryRoot(true)
+            );
+
+        //TRoundCorners, // data[bottom left, top left, Top right, bottom right] reference, margin is [left, top, right, bottom]
+
+        auto data_canvas = std::make_shared<UIDataCanvas>(
+#ifdef _DEBUG
+            "canvas data",
+#endif
+            UILayout(
+                UICoord(UICoord::TSource::ParentX, 1.0f),
+                UICoord(UICoord::TSource::ParentY, 1.0f),
+                VectorFloat2(0.5f, 0.5f),
+                VectorFloat2(0.5f, 0.5f),
+                UILayout::TAdjustmentType::GrowTextureToLayout,
+                UILayout::TAdjustmentType::GrowTextureToLayout,
+                VectorInt4(8,16,32,64) // left, top, right, bottom
+            ),
+            UIBaseColour::FactoryRedBackground(),
+            UITintColour::FactoryDefault(),
+            std::vector<std::shared_ptr<UIEffectData>>({
+                std::make_shared<UIEffectData>(
+                    UIEffectEnum::TRoundCorners,
+                    //TRoundCorners, // data[bottom left, top left, Top right, bottom right] reference, margin is [left, top, right, bottom]
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 64),
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 32),
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 16),
+                    UICoord(UICoord::TSource::ParentMin, 0.0f, 8)
                     )
                 })
             );
@@ -1472,51 +1621,6 @@ namespace
         return;
     }
 
-    void BuildModelData10_CornerMargin(
-        std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
-        )
-    {
-        auto data_main = std::make_shared<UIData>(
-#ifdef _DEBUG
-            "Root data",
-#endif
-            UILayout::FactoryFull(),
-            UIBaseColour::FactoryRoot(true)
-            );
-
-        //TRoundCorners, // data[bottom left, top left, Top right, bottom right] reference, margin is [left, top, right, bottom]
-
-        auto data_canvas = std::make_shared<UIDataCanvas>(
-#ifdef _DEBUG
-            "canvas data",
-#endif
-            UILayout(
-                UICoord(UICoord::TSource::ParentX, 1.0f),
-                UICoord(UICoord::TSource::ParentY, 1.0f),
-                VectorFloat2(0.5f, 0.5f),
-                VectorFloat2(0.5f, 0.5f),
-                UILayout::TAdjustmentType::GrowTextureToLayout,
-                UILayout::TAdjustmentType::GrowTextureToLayout,
-                VectorInt4(8,16,32,64) // left, top, right, bottom
-            ),
-            UIBaseColour::FactoryRedBackground(),
-            UITintColour::FactoryDefault(),
-            std::vector<std::shared_ptr<UIEffectData>>({
-                std::make_shared<UIEffectData>(
-                    UIEffectEnum::TRoundCorners,
-                    //TRoundCorners, // data[bottom left, top left, Top right, bottom right] reference, margin is [left, top, right, bottom]
-                    UICoord(UICoord::TSource::ParentMin, 0.0f, 64),
-                    UICoord(UICoord::TSource::ParentMin, 0.0f, 32),
-                    UICoord(UICoord::TSource::ParentMin, 0.0f, 16),
-                    UICoord(UICoord::TSource::ParentMin, 0.0f, 8)
-                    )
-                })
-            );
-        data_main->AddChild(data_canvas);
-
-        in_out_data_map["main"] = data_main;
-    }
-
 };
 
 class UIModel : public IUIModel
@@ -1526,15 +1630,16 @@ public:
     {
         //BuildModelData00_OneRedQuad(_data_map);
         //BuildModelData01_ChildRedQuad(_data_map);
+        BuildModelData010_ChildRedMargin(_data_map);
         //BuildModelData02_Text(_data_map);
         //BuildModelData03_ShrunkText(_data_map);
         //BuildModelData04_ShrunkTextChildMargin(_data_map);
         //BuildModelData05_Effect(_data_map);
+        //BuildModelData050_CornerMargin(_data_map);
         //BuildModelData06_Tooltip(_data_map);
         //BuildModelData07_Stack(_data_map);
         //BuildModelData08_Button(_data_map);
         //BuildModelData09_NestedButton(_data_map);
-        BuildModelData10_CornerMargin(_data_map);
         //slider
         //tooltip layer
         //checkbox

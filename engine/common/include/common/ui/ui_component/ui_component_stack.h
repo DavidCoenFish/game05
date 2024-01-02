@@ -30,8 +30,7 @@ private:
     virtual void UpdateLayout(
         UIHierarchyNodeChild& in_component_owner,
         const UIHierarchyNodeUpdateParam& in_param,
-        const VectorInt2& in_parent_window,
-        const VectorInt2& in_parent_offset
+        const VectorInt2& in_parent_window
         ) override;
 
     const VectorInt2 CalculateDesiredSize(

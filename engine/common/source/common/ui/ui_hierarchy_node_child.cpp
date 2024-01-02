@@ -279,9 +279,9 @@ UIScreenSpace& UIHierarchyNodeChild::GetScreenSpace() const
 
 void UIHierarchyNodeChild::Finalise(
     const VectorInt2& in_base_layout_size,
-    const VectorInt2& in_base_desired_size,
-    const VectorInt2& in_parent_window,
-    const VectorInt2& in_parent_offset
+    const VectorInt2& in_base_desired_size//,
+    //const VectorInt2& in_parent_window,
+    //const VectorInt2& in_parent_offset
     )
 {
     LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNodeChild::Finalise %p %s", _source_token, _debug_name.c_str());
@@ -292,11 +292,11 @@ void UIHierarchyNodeChild::Finalise(
     _layout.Finalise(
         _layout_size,
         texture_size,
-        _layout_offset,
+        //_layout_offset,
         in_base_layout_size,
-        in_base_desired_size,
-        in_parent_window,
-        in_parent_offset
+        in_base_desired_size//,
+        //in_parent_window,
+        //in_parent_offset
         );
 
     DSC_ASSERT(nullptr != _node, "node should be passed into ctor, what happened");
@@ -333,8 +333,7 @@ void UIHierarchyNodeChild::UpdateLayout(
             _component->UpdateLayout(
                 *this,
                 in_param,
-                in_parent_window,
-                in_parent_offset
+                in_parent_window
                 );
         }
     }

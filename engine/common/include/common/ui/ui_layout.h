@@ -17,9 +17,11 @@ public:
 
     enum class TAdjustmentType
     {
-        GrowTextureToLayout, // if texture is smaller than layout, inflate texture
+        GrowTextureToLayout, // if texture is smaller than layout, inflate texture. if texture is bigger, it auto scrolls around inside layout
+        //MatchTextureToLayout,
         ShrinkLayoutToTexture, //ok to reduce the layout size to match the texture size for the given axis
-        ShrinkOrGrowLayoutToTexture // ok to shrink or grow the layout size to match the desired size for the given axis
+        MatchLayoutToTexture // ok to shrink or grow the layout size to match the texture (desired) size for the given axis
+        
     };
 
     explicit UILayout(
@@ -27,8 +29,8 @@ public:
         const UICoord& in_size_y = UICoord(UICoord::TSource::ParentY),
         const VectorFloat2& in_layout_pivot_ratio = VectorFloat2::s_zero,
         const VectorFloat2& in_parent_window_pivot_ratio = VectorFloat2::s_zero,
-        const TAdjustmentType in_adjustment_type_x = TAdjustmentType::GrowTextureToLayout,
-        const TAdjustmentType in_adjustment_type_y = TAdjustmentType::GrowTextureToLayout,
+        const TAdjustmentType in_adjustment_type_x = UILayout::TAdjustmentType::GrowTextureToLayout,
+        const TAdjustmentType in_adjustment_type_y = UILayout::TAdjustmentType::GrowTextureToLayout,
         const VectorInt4& in_texture_margin = VectorInt4::s_zero // left, top, right, bottom
         );
 
@@ -37,6 +39,9 @@ public:
 
     /// Get the size of the layout element
     const VectorInt2 GetLayoutSize(const VectorInt2& in_parent_window_size, const float in_ui_scale) const;
+
+    /// add texture margin to input parent offset with ui scale
+    const VectorInt2 GetLayoutOffset(/*const VectorInt2& in_parent_offset,*/ const float in_ui_scale) const;
 
     /// Where on the layout to attached to the parent window
     const VectorInt2 GetLayoutPivot(const VectorInt2& in_layout_size) const;
@@ -52,15 +57,18 @@ public:
     void Finalise(
         VectorInt2& out_layout_size,
         VectorInt2& out_texture_size,
-        VectorInt2& out_layout_offset,
+        //VectorInt2& out_layout_offset,
         const VectorInt2& in_layout_size,
-        const VectorInt2& in_texture_size,
-        const VectorInt2& in_parent_window,
-        const VectorInt2& in_parent_offset
+        const VectorInt2& in_texture_size//,
+        //const VectorInt2& in_parent_window,
+        //const VectorInt2& in_parent_offset
         ) const;
 
-    // shring the window by texture margin, also nudge the window offset
-    const VectorInt2 ApplyMargin(
+    const VectorInt2 AddMargin(
+        const VectorInt2& in_size,
+        const float in_ui_scale
+        ) const;
+    const VectorInt2 SubtractMargin(
         const VectorInt2& in_size,
         const float in_ui_scale
         ) const;

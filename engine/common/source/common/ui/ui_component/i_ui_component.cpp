@@ -125,11 +125,11 @@ const VectorInt2 IUIComponent::GetDesiredSize(
 {
 #if 1
     VectorInt2 base_layout_size = in_component_owner.GetLayout().GetLayoutSize(in_parent_window, in_layout_param._ui_scale);
-
-    return in_component_owner.GetLayout().ApplyMargin(
-        base_layout_size,
-        in_layout_param._ui_scale
-        );
+    return base_layout_size;
+    //return in_component_owner.GetLayout().AddMargin(
+    //    base_layout_size,
+    //    in_layout_param._ui_scale
+    //    );
 #else
     VectorInt2 max_child_size;
     // want something indicitive of size for text with width limit
@@ -164,30 +164,31 @@ const VectorInt2 IUIComponent::GetDesiredSize(
 void IUIComponent::UpdateLayout(
     UIHierarchyNodeChild& in_component_owner,
     const UIHierarchyNodeUpdateParam& in_param,
-    const VectorInt2& in_parent_window,
-    const VectorInt2& in_parent_offset
+    const VectorInt2& in_parent_window
     )
 {
     // calculate layout size given parent window
-    VectorInt2 base_layout_size = in_component_owner.GetLayout().GetLayoutSize(in_parent_window, in_param._ui_scale);
+    const VectorInt2 base_layout_size = in_component_owner.GetLayout().GetLayoutSize(in_parent_window, in_param._ui_scale);
+    const VectorInt2 base_layout_minus_margin = in_component_owner.GetLayout().SubtractMargin(base_layout_size, in_param._ui_scale);
+
+    // offset for texture margin, stack needs to add
+    VectorInt2 base_offset = in_component_owner.GetLayout().GetLayoutOffset(in_param._ui_scale);
 
     // recurse node::update layout. default (ie, canvas behaviour) is for children to have no offset from us
     // to have children with different layouts, we override this method, ie, UIComponentStack
     in_component_owner.GetNode().UpdateLayout(
         in_param,
-        base_layout_size,
-        VectorInt2::s_zero
+        base_layout_minus_margin,
+        base_offset //VectorInt2::s_zero  //base_offset
         );
 
-    // component::desired(parent window or layout size? layout size may yet to be modified...)
+    // component::desired(parent window or layout size? layout size may yet to be modified...), add texture margin
     const VectorInt2 base_desired_size = GetDesiredSize(in_component_owner, in_param, base_layout_size);
 
     // finialise layout size (shrink/expand) and work out the texture size (which may include the texture margin)
     in_component_owner.Finalise(
         base_layout_size,
-        base_desired_size,
-        in_parent_window,
-        in_parent_offset
+        base_desired_size
         );
 
     return;

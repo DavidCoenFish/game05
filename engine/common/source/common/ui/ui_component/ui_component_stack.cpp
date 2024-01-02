@@ -70,8 +70,7 @@ const VectorInt2 UIComponentStack::GetDesiredSize(
 void UIComponentStack::UpdateLayout(
     UIHierarchyNodeChild& in_component_owner,
     const UIHierarchyNodeUpdateParam& in_param,
-    const VectorInt2& in_parent_window,
-    const VectorInt2& in_parent_offset
+    const VectorInt2& in_parent_window
     )
 {
     // calculate layout size given parent window
@@ -88,9 +87,9 @@ void UIComponentStack::UpdateLayout(
 
     in_component_owner.Finalise(
         base_layout_size,
-        base_desired_size,
-        in_parent_window,
-        in_parent_offset
+        base_desired_size//,
+        //in_parent_window,
+        //in_parent_offset
         );
 
     int trace = 0;
@@ -184,7 +183,7 @@ const VectorInt2 UIComponentStack::CalculateDesiredSize(
         }
     }
 
-    max_desired_size = in_component_owner.GetLayout().ApplyMargin(
+    max_desired_size = in_component_owner.GetLayout().AddMargin(
         max_desired_size,
         in_param._ui_scale
         );
