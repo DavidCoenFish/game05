@@ -55,16 +55,20 @@ const VectorInt2 UIComponentStack::GetDesiredSize(
     const VectorInt2& in_parent_window
     )
 {
-    VectorInt2 base_layout_size = in_component_owner.GetLayout().GetLayoutSize(in_parent_window, in_param._ui_scale);
+    const VectorInt2 base_layout_size = in_component_owner.GetLayout().GetLayoutSize(in_parent_window, in_param._ui_scale);
+    const VectorInt2 base_layout_minus_margin = in_component_owner.GetLayout().SubtractMargin(base_layout_size, in_param._ui_scale);
     std::vector<VectorInt4> child_window_offset_array;
-    const VectorInt2 base_desired_size = CalculateDesiredSize(
+    const VectorInt2 desired_size_with_margin = CalculateDesiredSize(
         in_component_owner, 
         in_param, 
-        base_layout_size,
+        base_layout_minus_margin,
+        VectorInt2::s_zero,
         child_window_offset_array
         );
 
-    return base_desired_size;
+    //const VectorInt2 desired_plus_margin = in_component_owner.GetLayout().AddMargin(base_desired_size, in_param._ui_scale);
+
+    return desired_size_with_margin;
 }
 
 void UIComponentStack::UpdateLayout(
@@ -74,22 +78,26 @@ void UIComponentStack::UpdateLayout(
     )
 {
     // calculate layout size given parent window
-    VectorInt2 base_layout_size = in_component_owner.GetLayout().GetLayoutSize(in_parent_window, in_param._ui_scale);
+    const VectorInt2 base_layout_size = in_component_owner.GetLayout().GetLayoutSize(in_parent_window, in_param._ui_scale);
+    const VectorInt2 base_layout_minus_margin = in_component_owner.GetLayout().SubtractMargin(base_layout_size, in_param._ui_scale);
+
+    // offset for texture margin, stack needs to add
+    VectorInt2 base_offset = in_component_owner.GetLayout().GetLayoutOffset(in_param._ui_scale);
+
     const VectorInt4& texture_margin = in_component_owner.GetLayout().GetTextureMarginRef();
 
     std::vector<VectorInt4> child_window_offset_array;
     const VectorInt2 base_desired_size = CalculateDesiredSize(
         in_component_owner, 
         in_param, 
-        base_layout_size,
+        base_layout_minus_margin,
+        base_offset,
         child_window_offset_array
         );
 
     in_component_owner.Finalise(
         base_layout_size,
-        base_desired_size//,
-        //in_parent_window,
-        //in_parent_offset
+        base_desired_size
         );
 
     int trace = 0;
@@ -101,13 +109,15 @@ void UIComponentStack::UpdateLayout(
         const VectorInt4& child_window_offset = child_window_offset_array[trace];
         trace += 1;
 
+        // Todo: deal with horizontal stack
+
         // invert y, 0,0 is bottom left. by default, this pushes the stack children into the top left of layout
         // todo: the stack could have enum of alignment to left/top/bottom and ajust the offset here?
-        const int height = texture_size.GetY();
+        const int height = texture_size.GetY() - base_desired_size[1];
         const VectorInt2 window(child_window_offset.GetX(), child_window_offset.GetY());
         const VectorInt2 offset(
-            child_window_offset.GetZ() + texture_margin[0],
-            height - (child_window_offset.GetY() + child_window_offset.GetW() + texture_margin[1])
+            child_window_offset.GetZ(), // + texture_margin[0],
+            height + child_window_offset.GetW()
             );
 
         child_data.UpdateLayout(
@@ -121,11 +131,12 @@ void UIComponentStack::UpdateLayout(
 const VectorInt2 UIComponentStack::CalculateDesiredSize(
     UIHierarchyNodeChild& in_component_owner,
     const UIHierarchyNodeUpdateParam& in_param,
-    const VectorInt2& in_base_layout_size,
+    const VectorInt2& in_base_layout_size_minus_margin,
+    const VectorInt2& in_base_offset,
     std::vector<VectorInt4>& out_child_window_offset_array
     )
 {
-    const int gap = _gap.Calculate(in_base_layout_size, in_param._ui_scale);
+    const int gap = _gap.Calculate(in_base_layout_size_minus_margin, in_param._ui_scale);
 
     VectorInt2 max_desired_size;
     for (auto& child_data_ptr : in_component_owner.GetNode().GetChildData())
@@ -135,7 +146,7 @@ const VectorInt2 UIComponentStack::CalculateDesiredSize(
         // how to skip null components?  
         VectorInt2 child_desired = child_data.GetDesiredSize(
             in_param,
-            in_base_layout_size
+            in_base_layout_size_minus_margin
             );
 
         VectorInt4 window_offset(child_desired.GetX(), child_desired.GetY(), 0, 0);
@@ -148,7 +159,8 @@ const VectorInt2 UIComponentStack::CalculateDesiredSize(
             {
                 max_desired_size[1] += gap;
             }
-            window_offset[3] = max_desired_size[1];
+            window_offset[2] = in_base_offset[0];
+            window_offset[3] = max_desired_size[1] + in_base_offset[1];
             max_desired_size[0] = std::max(max_desired_size[0], child_desired[0]);
             max_desired_size[1] += child_desired[1];
 
@@ -158,7 +170,8 @@ const VectorInt2 UIComponentStack::CalculateDesiredSize(
             {
                 max_desired_size[0] += gap;
             }
-            window_offset[2] = max_desired_size[0];
+            window_offset[2] = max_desired_size[0] + in_base_offset[0];
+            window_offset[3] = in_base_offset[1];
             max_desired_size[0] += child_desired[0];
             max_desired_size[1] = std::max(max_desired_size[1], child_desired[1]);
 

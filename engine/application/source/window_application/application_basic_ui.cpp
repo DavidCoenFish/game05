@@ -1341,6 +1341,69 @@ namespace
         in_out_data_map["main"] = data_main;
     }
 
+    void BuildModelData070_StackMargin(
+        std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
+        )
+    {
+        auto data_main = std::make_shared<UIData>(
+#ifdef _DEBUG
+            "Root data",
+#endif
+            UILayout::FactoryFull(),
+            UIBaseColour::FactoryRoot(true)
+            );
+
+        auto data_stack = std::make_shared<UIDataStack>(
+#ifdef _DEBUG
+            "stack data",
+#endif
+            UILayout(
+                UICoord(UICoord::TSource::ParentX, 1.0f, 0.0f),
+                UICoord(UICoord::TSource::ParentY, 1.0f, 0.0f),
+                VectorFloat2(0.5f, 0.0f),
+                VectorFloat2(0.5f, 0.0f),
+                UILayout::TAdjustmentType::GrowTextureToLayout,
+                UILayout::TAdjustmentType::GrowTextureToLayout,
+                VectorInt4(8,16,32,64) // left, top, right, bottom
+                ),
+            UIBaseColour::FactoryBlueBackground(),
+            UITintColour::FactoryDefault(),
+            UIData::s_empty_effect_data_array,
+            UIOrientation::TVertical,
+            UICoord(UICoord::TSource::None, 0.0f, 4.0f)
+            );
+
+        for (int index = 0; index < 3; index++)
+        {
+            auto data_text = std::make_shared<UIDataString>(
+#ifdef _DEBUG
+                "string data",
+#endif
+                UILayout(
+                    UICoord(UICoord::TSource::ParentX, 1.0f),
+                    UICoord(UICoord::TSource::ParentY, 1.0f),
+                    VectorFloat2(0.0f, 0.0f),
+                    VectorFloat2(0.0f, 0.0f),
+                    UILayout::TAdjustmentType::ShrinkLayoutToTexture,
+                    UILayout::TAdjustmentType::ShrinkLayoutToTexture
+                    ),
+                UIBaseColour::FactoryRedBackground(),
+                UITintColour::FactoryDefault(),
+                UIData::s_empty_effect_data_array,
+                "hello human",
+                LocaleISO_639_1::Default,
+                false,
+                TextEnum::HorizontalLineAlignment::Middle,
+                TextEnum::VerticalBlockAlignment::Middle
+                );
+
+            data_stack->AddChild(data_text);
+        }
+        data_main->AddChild(data_stack);
+
+        in_out_data_map["main"] = data_main;
+    }
+
     void BuildModelData08_Button(
         std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
         )
@@ -1630,7 +1693,7 @@ public:
     {
         //BuildModelData00_OneRedQuad(_data_map);
         //BuildModelData01_ChildRedQuad(_data_map);
-        BuildModelData010_ChildRedMargin(_data_map);
+        //BuildModelData010_ChildRedMargin(_data_map);
         //BuildModelData02_Text(_data_map);
         //BuildModelData03_ShrunkText(_data_map);
         //BuildModelData04_ShrunkTextChildMargin(_data_map);
@@ -1638,6 +1701,7 @@ public:
         //BuildModelData050_CornerMargin(_data_map);
         //BuildModelData06_Tooltip(_data_map);
         //BuildModelData07_Stack(_data_map);
+        BuildModelData070_StackMargin(_data_map);
         //BuildModelData08_Button(_data_map);
         //BuildModelData09_NestedButton(_data_map);
         //slider

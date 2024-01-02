@@ -36,7 +36,8 @@ private:
     const VectorInt2 CalculateDesiredSize(
         UIHierarchyNodeChild& in_component_owner,
         const UIHierarchyNodeUpdateParam& in_param,
-        const VectorInt2& in_base_layout_size,
+        const VectorInt2& in_base_layout_size_minus_margin,
+        const VectorInt2& in_base_offset,
         std::vector<VectorInt4>& out_child_window_offset_array
         );
 

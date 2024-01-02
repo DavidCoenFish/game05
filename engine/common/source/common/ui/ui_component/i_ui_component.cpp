@@ -172,7 +172,7 @@ void IUIComponent::UpdateLayout(
     const VectorInt2 base_layout_minus_margin = in_component_owner.GetLayout().SubtractMargin(base_layout_size, in_param._ui_scale);
 
     // offset for texture margin, stack needs to add
-    VectorInt2 base_offset = in_component_owner.GetLayout().GetLayoutOffset(in_param._ui_scale);
+    const VectorInt2 base_offset = in_component_owner.GetLayout().GetLayoutOffset(in_param._ui_scale);
 
     // recurse node::update layout. default (ie, canvas behaviour) is for children to have no offset from us
     // to have children with different layouts, we override this method, ie, UIComponentStack
