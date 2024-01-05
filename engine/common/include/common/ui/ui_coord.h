@@ -29,14 +29,11 @@ public:
         );
     ~UICoord();
 
-    /// expect client code to check if it needs the content size via UsesContentSize and to provide correct data if needed
     const float Calculate(
         const VectorFloat2& in_parent_size,
         const float in_ui_scale
         ) const;
 
-
-    /// expect client code to check if it needs the content size via UsesContentSize and to provide correct data if needed
     /// certain calculations, like render target size, use int
     const int Calculate(
         const VectorInt2& in_size,

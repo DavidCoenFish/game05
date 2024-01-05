@@ -55,7 +55,7 @@ const VectorInt2 UIComponentStack::GetDesiredSize(
     const VectorInt2& in_parent_window
     )
 {
-    const VectorInt2 base_layout_size = in_component_owner.GetLayout().GetLayoutSize(in_parent_window, in_param._ui_scale);
+    const VectorInt2 base_layout_size = in_component_owner.GetLayout().CalculateLayoutSize(in_parent_window, in_param._ui_scale);
     const VectorInt2 base_layout_minus_margin = in_component_owner.GetLayout().SubtractMargin(base_layout_size, in_param._ui_scale);
     std::vector<VectorInt4> child_window_offset_array;
     const VectorInt2 desired_size_with_margin = CalculateDesiredSize(
@@ -78,13 +78,13 @@ void UIComponentStack::UpdateLayout(
     )
 {
     // calculate layout size given parent window
-    const VectorInt2 base_layout_size = in_component_owner.GetLayout().GetLayoutSize(in_parent_window, in_param._ui_scale);
+    const VectorInt2 base_layout_size = in_component_owner.GetLayout().CalculateLayoutSize(in_parent_window, in_param._ui_scale);
     const VectorInt2 base_layout_minus_margin = in_component_owner.GetLayout().SubtractMargin(base_layout_size, in_param._ui_scale);
 
     // offset for texture margin, stack needs to add
-    VectorInt2 base_offset = in_component_owner.GetLayout().GetLayoutOffset(in_param._ui_scale);
+    VectorInt2 base_offset = in_component_owner.GetLayout().CalculateMarginOffset(in_param._ui_scale);
 
-    const VectorInt4& texture_margin = in_component_owner.GetLayout().GetTextureMarginRef();
+    //const VectorInt4& texture_margin = in_component_owner.GetLayout().GetTextureMarginRef();
 
     std::vector<VectorInt4> child_window_offset_array;
     const VectorInt2 base_desired_size = CalculateDesiredSize(
@@ -101,23 +101,22 @@ void UIComponentStack::UpdateLayout(
         );
 
     int trace = 0;
-    auto& child_data_array = in_component_owner.GetNode().GetChildData();
     const VectorInt2 texture_size = in_component_owner.GetNode().GetTextureSize(in_param._draw_system);
-    for (auto& child_data_ptr : child_data_array)
+    typedef std::vector<std::shared_ptr<UIHierarchyNodeChild>> TChildArray;
+    TChildArray& child_array = in_component_owner.GetNode().GetChildData();
+    for (TChildArray::reverse_iterator iter = child_array.rbegin(); iter != child_array.rend(); ++iter)
     {
-        UIHierarchyNodeChild& child_data = *child_data_ptr;
+        UIHierarchyNodeChild& child_data = **iter;
         const VectorInt4& child_window_offset = child_window_offset_array[trace];
         trace += 1;
 
         // Todo: deal with horizontal stack
 
-        // invert y, 0,0 is bottom left. by default, this pushes the stack children into the top left of layout
-        // todo: the stack could have enum of alignment to left/top/bottom and ajust the offset here?
-        const int height = texture_size.GetY() - base_desired_size[1];
         const VectorInt2 window(child_window_offset.GetX(), child_window_offset.GetY());
+        const VectorInt2& adjust_offset = in_component_owner.GetAdjustOffsetRef(); 
         const VectorInt2 offset(
-            child_window_offset.GetZ(), // + texture_margin[0],
-            height + child_window_offset.GetW()
+            child_window_offset.GetZ() + adjust_offset[0], // + texture_margin[0],
+            child_window_offset.GetW() + adjust_offset[1]
             );
 
         child_data.UpdateLayout(
@@ -139,9 +138,13 @@ const VectorInt2 UIComponentStack::CalculateDesiredSize(
     const int gap = _gap.Calculate(in_base_layout_size_minus_margin, in_param._ui_scale);
 
     VectorInt2 max_desired_size;
-    for (auto& child_data_ptr : in_component_owner.GetNode().GetChildData())
+
+    //for (auto& child_data_ptr : in_component_owner.GetNode().GetChildData())
+    typedef std::vector<std::shared_ptr<UIHierarchyNodeChild>> TChildArray;
+    TChildArray& child_array = in_component_owner.GetNode().GetChildData();
+    for (TChildArray::reverse_iterator iter = child_array.rbegin(); iter != child_array.rend(); ++iter)
     {
-        UIHierarchyNodeChild& child_data = *child_data_ptr;
+        UIHierarchyNodeChild& child_data = **iter;
 
         // how to skip null components?  
         VectorInt2 child_desired = child_data.GetDesiredSize(

@@ -74,23 +74,22 @@ void IUIComponent::CalculateGeometry(
     const VectorInt2& in_parent_size,
     const VectorInt2& in_parent_window,
     const VectorInt2& in_parent_offset,
-    const VectorInt2&,// in_layout_offset,
+    //const VectorInt2&,// in_layout_offset,
     const VectorInt2& in_layout_size,
     const VectorInt2& in_texture_size,
     const VectorFloat2& in_scroll,
     const UILayout& in_layout 
     )
 {
-    const VectorInt2 window_attach = in_layout.GetParentWindowAttach(in_parent_window, in_parent_offset); 
-    const VectorInt2 layout_pivot = in_layout.GetLayoutPivot(in_layout_size);
+    const VectorInt2 layout_offset = in_layout.CalculateLayoutOffset(in_parent_window, in_layout_size) + in_parent_offset; 
 
     // Deal pos
     //VectorFloat4(-1.0f, -1.0f, 1.0f, 1.0f)
     out_geometry_pos = VectorFloat4(
-        CalculatePos(window_attach[0] - layout_pivot[0], in_parent_size[0]),
-        CalculatePos(window_attach[1] - layout_pivot[1], in_parent_size[1]),
-        CalculatePos(window_attach[0] - layout_pivot[0] + in_layout_size[0], in_parent_size[0]),
-        CalculatePos(window_attach[1] - layout_pivot[1] + in_layout_size[1], in_parent_size[1])
+        CalculatePos(layout_offset[0], in_parent_size[0]),
+        CalculatePos(layout_offset[1], in_parent_size[1]),
+        CalculatePos(layout_offset[0] + in_layout_size[0], in_parent_size[0]),
+        CalculatePos(layout_offset[1] + in_layout_size[1], in_parent_size[1])
         );
 
     out_geometry_uv = VectorFloat4(0.0f, 1.0f, 1.0f, 0.0f);
@@ -124,7 +123,7 @@ const VectorInt2 IUIComponent::GetDesiredSize(
     )
 {
 #if 1
-    VectorInt2 base_layout_size = in_component_owner.GetLayout().GetLayoutSize(in_parent_window, in_layout_param._ui_scale);
+    VectorInt2 base_layout_size = in_component_owner.GetLayout().CalculateLayoutSize(in_parent_window, in_layout_param._ui_scale);
     return base_layout_size;
     //return in_component_owner.GetLayout().AddMargin(
     //    base_layout_size,
@@ -168,11 +167,11 @@ void IUIComponent::UpdateLayout(
     )
 {
     // calculate layout size given parent window
-    const VectorInt2 base_layout_size = in_component_owner.GetLayout().GetLayoutSize(in_parent_window, in_param._ui_scale);
+    const VectorInt2 base_layout_size = in_component_owner.GetLayout().CalculateLayoutSize(in_parent_window, in_param._ui_scale);
     const VectorInt2 base_layout_minus_margin = in_component_owner.GetLayout().SubtractMargin(base_layout_size, in_param._ui_scale);
 
     // offset for texture margin, stack needs to add
-    const VectorInt2 base_offset = in_component_owner.GetLayout().GetLayoutOffset(in_param._ui_scale);
+    const VectorInt2 base_offset = in_component_owner.GetLayout().CalculateMarginOffset(in_param._ui_scale);
 
     // recurse node::update layout. default (ie, canvas behaviour) is for children to have no offset from us
     // to have children with different layouts, we override this method, ie, UIComponentStack
@@ -201,7 +200,8 @@ void IUIComponent::UpdateResources(
     const VectorInt2& in_parent_texture_size,
     const VectorInt2& in_parent_window,
     const VectorInt2& in_parent_offset,
-    const VectorInt4& in_texture_margin
+    const VectorInt4& in_texture_margin,
+    const VectorInt2& in_parent_adjust_offset
     )
 {
     in_component_owner.Update(in_param._delta_time_seconds);
@@ -211,13 +211,14 @@ void IUIComponent::UpdateResources(
         in_parent_screen_space,
         in_parent_texture_size,
         in_parent_window,
-        in_parent_offset
+        in_parent_offset// + in_parent_adjust_offset
         );
 
     in_component_owner.GetNode().UpdateResources(
         in_param,
         in_component_owner.GetScreenSpace(),
-        in_texture_margin
+        in_texture_margin,
+        in_component_owner.GetAdjustOffsetRef()
         );
 
     return;

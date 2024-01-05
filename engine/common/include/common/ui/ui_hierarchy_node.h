@@ -124,7 +124,8 @@ public:
     void UpdateResources(
         const UIHierarchyNodeUpdateParam& in_param,
         const UIScreenSpace& in_parent_screen_space,
-        const VectorInt4& in_texture_margin
+        const VectorInt4& in_texture_margin,
+        const VectorInt2& in_adjust_offset
         );
 
     void MarkTextureDirty();

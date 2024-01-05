@@ -292,7 +292,7 @@ void UIHierarchyNodeChild::Finalise(
     _layout.Finalise(
         _layout_size,
         texture_size,
-        //_layout_offset,
+        _adjust_offset,
         in_base_layout_size,
         in_base_desired_size//,
         //in_parent_window,
@@ -342,7 +342,8 @@ void UIHierarchyNodeChild::UpdateLayout(
 void UIHierarchyNodeChild::UpdateResources(
     const UIHierarchyNodeUpdateParam& in_param,
     const UIScreenSpace& in_parent_screen_space,
-    const VectorInt2& in_parent_texture_size
+    const VectorInt2& in_parent_texture_size,
+    const VectorInt2& in_parent_adjust_offset
     )
 {
     if (nullptr != _component)
@@ -353,8 +354,9 @@ void UIHierarchyNodeChild::UpdateResources(
             in_parent_screen_space,
             in_parent_texture_size,
             _cache_parent_window,
-            _cache_parent_offset,
-            _layout.GetTextureMarginRef()
+            _cache_parent_offset,// + in_parent_adjust_offset,
+            _layout.GetTextureMarginRef(),
+            in_parent_adjust_offset
             );
     }
     return;
@@ -414,7 +416,7 @@ void UIHierarchyNodeChild::UpdateGeometry(
         in_parent_texture_size,
         in_parent_window,
         in_parent_offset,
-        _layout_offset,
+        //_adjust_offset,
         _layout_size,
         texture_size,
         _uv_scroll,

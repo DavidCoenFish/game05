@@ -49,12 +49,22 @@
       ]
     },
     {
-      "Id": "3bf71329-47eb-448a-a043-f1975e7a08ec",
-      "Command": "log_output"
-    },
-    {
-      "Id": "c13fc16c-59ea-469e-8cde-e4440e1fa349",
-      "Command": "log_console"
+      "Id": "4eb38bf5-0734-4b6f-9d46-f7b0bafb9244",
+      "Command": "",
+      "Items": [
+        {
+          "Id": "3bf71329-47eb-448a-a043-f1975e7a08ec",
+          "Command": "log_output"
+        },
+        {
+          "Id": "c13fc16c-59ea-469e-8cde-e4440e1fa349",
+          "Command": "log_console"
+        },
+        {
+          "Id": "bb1d5953-87c7-47ca-8e86-7ced7eefc237",
+          "Command": "log_output"
+        }
+      ]
     }
   ]
 }

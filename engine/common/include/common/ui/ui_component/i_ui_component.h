@@ -58,7 +58,7 @@ public:
         const VectorInt2& in_parent_texture_size,
         const VectorInt2& in_parent_window,
         const VectorInt2& in_parent_offset,
-        const VectorInt2& in_layout_offset,
+        //const VectorInt2& in_layout_offset,
         const VectorInt2& in_layout_size,
         const VectorInt2& in_texture_size,
         const VectorFloat2& in_scroll,
@@ -86,7 +86,8 @@ public:
         const VectorInt2& in_parent_texture_size,
         const VectorInt2& in_parent_window,
         const VectorInt2& in_parent_offset,
-        const VectorInt4& in_texture_margin
+        const VectorInt4& in_texture_margin,
+        const VectorInt2& in_parent_adjust_offset
         );
 
     /// prep the children of the component for draw. 

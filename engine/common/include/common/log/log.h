@@ -53,8 +53,9 @@ what would a FileSystem log consumer look like, how does it know the provider fi
 #endif
 
 #if defined(DSC_LOG) && 1
-	//#define LOG_MESSAGE_UI_VERBOSE(format, ...) Log::AddMessage(LogTopic::UIVerbose, format, ##__VA_ARGS__)
-	#define LOG_MESSAGE_UI_VERBOSE(format, ...) Log::AddConsole(format, ##__VA_ARGS__)
+    // note: cmd line "log_output" will send log messages to visual studio output
+	#define LOG_MESSAGE_UI_VERBOSE(format, ...) Log::AddMessage(LogTopic::UIVerbose, format, ##__VA_ARGS__)
+	//#define LOG_MESSAGE_UI_VERBOSE(format, ...) Log::AddConsole(format, ##__VA_ARGS__)
 #else
 	#define LOG_MESSAGE_UI_VERBOSE(format, ...) (void)0
 #endif

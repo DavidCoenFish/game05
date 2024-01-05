@@ -95,6 +95,8 @@ public:
     UIHierarchyNode& GetNode() const;
     UIScreenSpace& GetScreenSpace() const;
 
+    const VectorInt2& GetAdjustOffsetRef() const { return _adjust_offset; }
+
     void Finalise(
         const VectorInt2& in_base_layout_size,
         const VectorInt2& in_base_desired_size//,
@@ -111,7 +113,8 @@ public:
     void UpdateResources(
         const UIHierarchyNodeUpdateParam& in_param,
         const UIScreenSpace& in_parent_screen_space,
-        const VectorInt2& in_parent_texture_size
+        const VectorInt2& in_parent_texture_size,
+        const VectorInt2& in_parent_adjust_offset
         );
 
     void Update(
@@ -219,7 +222,7 @@ private:
 
     /// with UpdateLayout, UpdateScroll, Geometry all split up, needed to store some state. could move to param?
     VectorInt2 _layout_size;
-    VectorInt2 _layout_offset;
+    VectorInt2 _adjust_offset;
 
     /// cache the parent sizes so we can know if we need to recalculate on parent size change, ie, window resize. 
     /// alternative is to do this on the top level node and broadcast? otherwise this is more generic at expence of some memory

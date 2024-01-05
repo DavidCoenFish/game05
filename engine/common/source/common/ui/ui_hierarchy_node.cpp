@@ -274,7 +274,8 @@ void UIHierarchyNode::UpdateLayout(
 void UIHierarchyNode::UpdateResources(
     const UIHierarchyNodeUpdateParam& in_param,
     const UIScreenSpace& in_parent_screen_space,
-    const VectorInt4& in_texture_margin
+    const VectorInt4& in_texture_margin,
+    const VectorInt2& in_adjust_offset
     )
 {
     LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNode::UpdateResources");
@@ -287,7 +288,8 @@ void UIHierarchyNode::UpdateResources(
         child->UpdateResources(
             in_param,
             in_parent_screen_space,
-            texture_size
+            texture_size,
+            in_adjust_offset
             );
     }
 

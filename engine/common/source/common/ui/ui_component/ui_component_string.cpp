@@ -109,7 +109,8 @@ void UIComponentString::UpdateResources(
     const VectorInt2& in_parent_texture_size,
     const VectorInt2& in_parent_window,
     const VectorInt2& in_parent_offset,
-    const VectorInt4& in_texture_margin
+    const VectorInt4& in_texture_margin,
+    const VectorInt2& in_parent_adjust_offset
     )
 {
     TSuper::UpdateResources(
@@ -119,11 +120,13 @@ void UIComponentString::UpdateResources(
         in_parent_texture_size,
         in_parent_window,
         in_parent_offset,
-        in_texture_margin
+        in_texture_margin,
+        in_parent_adjust_offset
         );
 
     if (true == _text_block->SetTextContainerSize(
-        in_component_owner.GetNode().GetTextureSize(in_param._draw_system)
+        in_component_owner.GetNode().GetTextureSize(in_param._draw_system)//,
+        //in_parent_adjust_offset
         ))
     {
         in_component_owner.SetStateDirtyBit(UIStateDirty::TRenderDirty, true);

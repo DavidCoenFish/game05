@@ -897,7 +897,6 @@ namespace
                 UICoord(UICoord::TSource::ParentX, 1.0f, 0.0f),
                 UICoord(UICoord::TSource::ParentY, 1.0f, 0.0f),
                 VectorFloat2::s_zero,
-                VectorFloat2::s_zero,
                 UILayout::TAdjustmentType::GrowTextureToLayout,
                 UILayout::TAdjustmentType::GrowTextureToLayout,
                 VectorInt4(8,16,32,64) // left, top, right, bottom
@@ -927,7 +926,6 @@ namespace
                 UILayout(
                     UICoord(UICoord::TSource::None, 0.0f, 32.0f),
                     UICoord(UICoord::TSource::None, 0.0f, 32.0f),
-                    VectorFloat2(1.0f, 1.0f),
                     VectorFloat2(1.0f, 1.0f)
                     ),
                 UIBaseColour::FactoryGreenBackground()
@@ -942,7 +940,6 @@ namespace
                 UILayout(
                     UICoord(UICoord::TSource::None, 0.0f, 32.0f),
                     UICoord(UICoord::TSource::None, 0.0f, 32.0f),
-                    VectorFloat2(0.0f, 1.0f),
                     VectorFloat2(0.0f, 1.0f)
                     ),
                 UIBaseColour::FactoryGreenBackground()
@@ -957,7 +954,6 @@ namespace
                 UILayout(
                     UICoord(UICoord::TSource::None, 0.0f, 32.0f),
                     UICoord(UICoord::TSource::None, 0.0f, 32.0f),
-                    VectorFloat2(1.0f, 0.0f),
                     VectorFloat2(1.0f, 0.0f)
                     ),
                 UIBaseColour::FactoryGreenBackground()
@@ -972,7 +968,6 @@ namespace
                 UILayout(
                     UICoord(UICoord::TSource::None, 0.0f, 32.0f),
                     UICoord(UICoord::TSource::None, 0.0f, 32.0f),
-                    VectorFloat2(0.0f, 0.0f),
                     VectorFloat2(0.0f, 0.0f)
                     ),
                 UIBaseColour::FactoryGreenBackground()
@@ -1035,7 +1030,6 @@ namespace
                 UICoord(UICoord::TSource::ParentX, 1.0f),
                 UICoord(UICoord::TSource::ParentY, 1.0f),
                 VectorFloat2(0.5f, 0.5f),
-                VectorFloat2(0.5f, 0.5f),
                 UILayout::TAdjustmentType::ShrinkLayoutToTexture,
                 UILayout::TAdjustmentType::ShrinkLayoutToTexture,
                 VectorInt4(8, 8, 8, 8)
@@ -1078,7 +1072,6 @@ namespace
                 UICoord(UICoord::TSource::ParentX, 1.0f),
                 UICoord(UICoord::TSource::ParentY, 1.0f),
                 VectorFloat2(0.5f, 0.5f),
-                VectorFloat2(0.5f, 0.5f),
                 UILayout::TAdjustmentType::ShrinkLayoutToTexture,
                 UILayout::TAdjustmentType::ShrinkLayoutToTexture,
                 VectorInt4(8, 8, 8, 8)
@@ -1093,7 +1086,6 @@ namespace
             UILayout(
                 UICoord(UICoord::TSource::ParentX, 1.0f),
                 UICoord(UICoord::TSource::ParentY, 1.0f),
-                VectorFloat2(0.5f, 0.5f),
                 VectorFloat2(0.5f, 0.5f),
                 UILayout::TAdjustmentType::ShrinkLayoutToTexture,
                 UILayout::TAdjustmentType::ShrinkLayoutToTexture,
@@ -1176,7 +1168,6 @@ namespace
                 UICoord(UICoord::TSource::ParentX, 1.0f),
                 UICoord(UICoord::TSource::ParentY, 1.0f),
                 VectorFloat2(0.5f, 0.5f),
-                VectorFloat2(0.5f, 0.5f),
                 UILayout::TAdjustmentType::GrowTextureToLayout,
                 UILayout::TAdjustmentType::GrowTextureToLayout,
                 VectorInt4(8,16,32,64) // left, top, right, bottom
@@ -1221,7 +1212,6 @@ namespace
                 UICoord(UICoord::TSource::ParentX, 1.0f),
                 UICoord(UICoord::TSource::ParentY, 1.0f),
                 VectorFloat2(0.5f, 0.0f),
-                VectorFloat2(0.25f, 0.75f),
                 UILayout::TAdjustmentType::ShrinkLayoutToTexture,
                 UILayout::TAdjustmentType::ShrinkLayoutToTexture,
                 VectorInt4(8, 8, 8, 8)
@@ -1249,7 +1239,6 @@ namespace
             UILayout(
                 UICoord(UICoord::TSource::ParentX, 1.0f),
                 UICoord(UICoord::TSource::ParentY, 1.0f),
-                VectorFloat2(0.5f, 0.5f),
                 VectorFloat2(0.5f, 0.5f),
                 UILayout::TAdjustmentType::ShrinkLayoutToTexture,
                 UILayout::TAdjustmentType::ShrinkLayoutToTexture,
@@ -1296,7 +1285,6 @@ namespace
                 UICoord(UICoord::TSource::ParentX, 0.5f, 0.0f),
                 UICoord(UICoord::TSource::ParentY, 0.5f, 0.0f),
                 VectorFloat2(0.5f, 0.5f),
-                VectorFloat2(0.5f, 0.5f),
                 UILayout::TAdjustmentType::GrowTextureToLayout,
                 UILayout::TAdjustmentType::GrowTextureToLayout,
                 VectorInt4(8,8,8,8) // left, top, right, bottom
@@ -1318,7 +1306,6 @@ namespace
                 UILayout(
                     UICoord(UICoord::TSource::ParentX, 1.0f),
                     UICoord(UICoord::TSource::ParentY, 1.0f),
-                    VectorFloat2(0.0f, 0.0f),
                     VectorFloat2(0.0f, 0.0f),
                     UILayout::TAdjustmentType::ShrinkLayoutToTexture,
                     UILayout::TAdjustmentType::ShrinkLayoutToTexture,
@@ -1360,11 +1347,11 @@ namespace
             UILayout(
                 UICoord(UICoord::TSource::ParentX, 1.0f, 0.0f),
                 UICoord(UICoord::TSource::ParentY, 1.0f, 0.0f),
-                VectorFloat2(0.5f, 0.0f),
-                VectorFloat2(0.5f, 0.0f),
+                VectorFloat2(0.0f, 0.0f),
                 UILayout::TAdjustmentType::GrowTextureToLayout,
                 UILayout::TAdjustmentType::GrowTextureToLayout,
-                VectorInt4(8,16,32,64) // left, top, right, bottom
+                VectorInt4(8,16,32,64), // left, top, right, bottom
+                VectorFloat2(0.5f, 0.5f)
                 ),
             UIBaseColour::FactoryBlueBackground(),
             UITintColour::FactoryDefault(),
@@ -1373,6 +1360,7 @@ namespace
             UICoord(UICoord::TSource::None, 0.0f, 4.0f)
             );
 
+        const char* text_data[] = {"0 short", "1 medium message", "2 a very long text string that goes on and on"};
         for (int index = 0; index < 3; index++)
         {
             auto data_text = std::make_shared<UIDataString>(
@@ -1382,19 +1370,18 @@ namespace
                 UILayout(
                     UICoord(UICoord::TSource::ParentX, 1.0f),
                     UICoord(UICoord::TSource::ParentY, 1.0f),
-                    VectorFloat2(0.0f, 0.0f),
-                    VectorFloat2(0.0f, 0.0f),
+                    VectorFloat2(0.5f, 0.0f),
                     UILayout::TAdjustmentType::ShrinkLayoutToTexture,
                     UILayout::TAdjustmentType::ShrinkLayoutToTexture
                     ),
                 UIBaseColour::FactoryRedBackground(),
                 UITintColour::FactoryDefault(),
                 UIData::s_empty_effect_data_array,
-                "hello human",
+                text_data[index],
                 LocaleISO_639_1::Default,
                 false,
                 TextEnum::HorizontalLineAlignment::Middle,
-                TextEnum::VerticalBlockAlignment::Middle
+                TextEnum::VerticalBlockAlignment::Top
                 );
 
             data_stack->AddChild(data_text);
@@ -1471,7 +1458,6 @@ namespace
                 UILayout(
                     UICoord(UICoord::TSource::ParentX, 1.0f),
                     UICoord(UICoord::TSource::ParentY, 1.0f),
-                    VectorFloat2(0.5f, 0.5f),
                     VectorFloat2(0.5f, 0.5f),
                     UILayout::TAdjustmentType::ShrinkLayoutToTexture,
                     UILayout::TAdjustmentType::ShrinkLayoutToTexture,
@@ -1574,7 +1560,6 @@ namespace
                     UICoord(UICoord::TSource::ParentX, 1.0f),
                     UICoord(UICoord::TSource::ParentY, 1.0f),
                     VectorFloat2(0.5f, 0.5f),
-                    VectorFloat2(0.5f, 0.5f),
                     UILayout::TAdjustmentType::ShrinkLayoutToTexture,
                     UILayout::TAdjustmentType::ShrinkLayoutToTexture,
                     VectorInt4(8,8,8,8)
@@ -1638,7 +1623,6 @@ namespace
                 UICoord(UICoord::TSource::ParentX, 0.5f, 0.0f),
                 UICoord(UICoord::TSource::ParentY, 0.5f, 0.0f),
                 VectorFloat2(0.5f, 0.5f),
-                VectorFloat2(0.5f, 0.5f),
                 UILayout::TAdjustmentType::GrowTextureToLayout,
                 UILayout::TAdjustmentType::GrowTextureToLayout,//,
                 VectorInt4(8,8,8,8) // left, top, right, bottom
@@ -1658,7 +1642,6 @@ namespace
                 UICoord(UICoord::TSource::ParentX, 0.5f, 0.0f),
                 UICoord(UICoord::TSource::None, 0.5f, 32.0f),
                 VectorFloat2(0.5f, 0.5f),
-                VectorFloat2(0.5f, 0.5f),
                 UILayout::TAdjustmentType::ShrinkLayoutToTexture,
                 UILayout::TAdjustmentType::ShrinkLayoutToTexture,
                 VectorInt4(8, 8, 8, 8) //left, top, right, bottom
@@ -1671,7 +1654,6 @@ namespace
             UILayout(
                 UICoord(UICoord::TSource::ParentX, 0.5f, 0.0f),
                 UICoord(UICoord::TSource::None, 0.5f, 32.0f),
-                VectorFloat2(0.5f, 0.5f),
                 VectorFloat2(0.5f, 0.5f)
             )));
 

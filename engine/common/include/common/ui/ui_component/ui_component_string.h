@@ -46,7 +46,8 @@ private:
         const VectorInt2& in_parent_texture_size,
         const VectorInt2& in_parent_window,
         const VectorInt2& in_parent_offset,
-        const VectorInt4& in_texture_margin
+        const VectorInt4& in_texture_margin,
+        const VectorInt2& in_parent_adjust_offset
         ) override;
 
     virtual void PreDraw(
