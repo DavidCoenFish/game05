@@ -1041,6 +1041,10 @@ namespace
             { "g bottom left", { 0.0, 0.0 }, TextEnum::HorizontalLineAlignment::Left, TextEnum::VerticalBlockAlignment::Bottom },
             { "g bottom middle", { 0.5, 0.0 }, TextEnum::HorizontalLineAlignment::Middle, TextEnum::VerticalBlockAlignment::Bottom },
             { "g bottom right", { 1.0, 0.0 }, TextEnum::HorizontalLineAlignment::Right, TextEnum::VerticalBlockAlignment::Bottom },
+
+            { "g em top", { 0.25, 1.0 }, TextEnum::HorizontalLineAlignment::Middle, TextEnum::VerticalBlockAlignment::TopEM },
+            { "g em middle", { 0.25, 0.5 }, TextEnum::HorizontalLineAlignment::Middle, TextEnum::VerticalBlockAlignment::MiddleEM },
+            { "g em bottom", { 0.25, 0.0 }, TextEnum::HorizontalLineAlignment::Middle, TextEnum::VerticalBlockAlignment::BottomEM },
         };
         const int data_array_count = ARRAY_LITERAL_SIZE(data_array);
 

@@ -217,9 +217,11 @@ void TextPreVertex::BuildVertexData(
     default:
         break;
     case TextEnum::VerticalBlockAlignment::Bottom:
+        // glphys that decend under base line, can result in _vertical_bounds being less than zero
         vertical_delta = -(_vertical_bounds[0]);
         break;
     case TextEnum::VerticalBlockAlignment::BottomEM:
+        vertical_delta = in_em_size / 2;
         break;
     case TextEnum::VerticalBlockAlignment::Middle:
         vertical_delta = (((in_containter_size[1]) - (_vertical_bounds[1] - _vertical_bounds[0])) / 2) - _vertical_bounds[0];
