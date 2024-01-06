@@ -1009,6 +1009,92 @@ namespace
         in_out_data_map["main"] = data_main;
     }
 
+    void BuildModelData020_TextAlignment(
+        std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
+        )
+    {
+        auto data_main = std::make_shared<UIData>(
+#ifdef _DEBUG
+            "Root data",
+#endif
+            UILayout::FactoryFull(),
+            UIBaseColour::FactoryRoot(true)
+            );
+
+        struct ChildData
+        {
+            const char* const _text;
+            const float _attach[2];
+            const TextEnum::HorizontalLineAlignment _horizontal;// = TextEnum::HorizontalLineAlignment::Left,
+            const TextEnum::VerticalBlockAlignment _vertical;// = TextEnum::VerticalBlockAlignment::Bottom
+
+        };
+        const ChildData data_array[] = {
+            { "g top left", { 0.0, 1.0 }, TextEnum::HorizontalLineAlignment::Left, TextEnum::VerticalBlockAlignment::Top },
+            { "g top middle", { 0.5, 1.0 }, TextEnum::HorizontalLineAlignment::Middle, TextEnum::VerticalBlockAlignment::Top },
+            { "g top right", { 1.0, 1.0 }, TextEnum::HorizontalLineAlignment::Right, TextEnum::VerticalBlockAlignment::Top },
+
+            { "g middle left", { 0.0, 0.5 }, TextEnum::HorizontalLineAlignment::Left, TextEnum::VerticalBlockAlignment::Middle },
+            { "g middle middle", { 0.5, 0.5 }, TextEnum::HorizontalLineAlignment::Middle, TextEnum::VerticalBlockAlignment::Middle },
+            { "g middle right", { 1.0, 0.5 }, TextEnum::HorizontalLineAlignment::Right, TextEnum::VerticalBlockAlignment::Middle },
+
+            { "g bottom left", { 0.0, 0.0 }, TextEnum::HorizontalLineAlignment::Left, TextEnum::VerticalBlockAlignment::Bottom },
+            { "g bottom middle", { 0.5, 0.0 }, TextEnum::HorizontalLineAlignment::Middle, TextEnum::VerticalBlockAlignment::Bottom },
+            { "g bottom right", { 1.0, 0.0 }, TextEnum::HorizontalLineAlignment::Right, TextEnum::VerticalBlockAlignment::Bottom },
+        };
+        const int data_array_count = ARRAY_LITERAL_SIZE(data_array);
+
+        for (int index = 0; index < data_array_count; ++index)
+        {
+            auto data_child = std::make_shared<UIDataCanvas>(
+#ifdef _DEBUG
+                std::string("child_") + std::to_string(index),
+#endif
+                UILayout(
+                    UICoord(UICoord::TSource::None, 0.0f, 192.0f),
+                    UICoord(UICoord::TSource::None, 0.0f, 64.0f),
+                    VectorFloat2(data_array[index]._attach[0], data_array[index]._attach[1])
+                    ),
+                UIBaseColour::FactoryDefault()
+                );
+
+            data_child->AddChild(
+                std::make_shared<UIDataCanvas>(
+#ifdef _DEBUG
+                    std::string("grand_child_") + std::to_string(index),
+#endif
+                    UILayout::FactoryFull(),
+                    UIBaseColour::FactoryDefault(),
+                    UITintColour::FactoryDefault(),
+                    std::vector<std::shared_ptr<UIEffectData>>({
+                        std::make_shared<UIEffectData>(
+                            UIEffectEnum::TDebugGrid
+                            )
+                        })
+                    )
+                );
+
+            data_child->AddChild(std::make_shared<UIDataString>(
+#ifdef _DEBUG
+                std::string("string_") + std::to_string(index),
+#endif
+                UILayout::FactoryFull(),
+                UIBaseColour::FactoryDefault(),
+                UITintColour::FactoryBlack(),
+                UIData::s_empty_effect_data_array,
+                data_array[index]._text,
+                LocaleISO_639_1::Default,
+                false,
+                data_array[index]._horizontal,
+                data_array[index]._vertical
+                ));
+
+            data_main->AddChild(data_child);
+        }
+
+        in_out_data_map["main"] = data_main;
+    }
+
     void BuildModelData03_ShrunkText(
         std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
         )
@@ -1677,13 +1763,14 @@ public:
         //BuildModelData01_ChildRedQuad(_data_map);
         //BuildModelData010_ChildRedMargin(_data_map);
         //BuildModelData02_Text(_data_map);
+        BuildModelData020_TextAlignment(_data_map);
         //BuildModelData03_ShrunkText(_data_map);
         //BuildModelData04_ShrunkTextChildMargin(_data_map);
         //BuildModelData05_Effect(_data_map);
         //BuildModelData050_CornerMargin(_data_map);
         //BuildModelData06_Tooltip(_data_map);
         //BuildModelData07_Stack(_data_map);
-        BuildModelData070_StackMargin(_data_map);
+        //BuildModelData070_StackMargin(_data_map);
         //BuildModelData08_Button(_data_map);
         //BuildModelData09_NestedButton(_data_map);
         //slider

@@ -28,6 +28,7 @@ namespace
     static const char* const s_array_shader_path[static_cast<int>(UIShaderEnum::TCount)] = {
         "ui_default_pixel.cso",
         "ui_effect_debug_pixel.cso",
+        "ui_effect_debug_grid_pixel.cso",
         "ui_effect_dropshadow_pixel.cso",
         "ui_effect_innershadow_pixel.cso",
         "ui_effect_corner_pixel.cso",

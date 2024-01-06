@@ -26,6 +26,9 @@ namespace
         case UIEffectEnum::TDebug:
             result = UIShaderEnum::TEffectDebug;
             break;
+        case UIEffectEnum::TDebugGrid:
+            result = UIShaderEnum::TEffectDebugGrid;
+            break;
         case UIEffectEnum::TDropShadow:
             result = UIShaderEnum::TEffectDropShadow;
             break;

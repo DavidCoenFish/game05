@@ -124,9 +124,8 @@ private:
         return;
     }
 
-    TextCell* FindOrMakeCell(
+    TextCell* FindCell(
         hb_codepoint_t in_codepoint,
-        FT_GlyphSlot in_slot,
         TMapGlyphCell& in_out_map_glyph_cell
         )
     {
@@ -135,7 +134,15 @@ private:
         {
             return found->second.get();
         }
+        return nullptr;
+    }
 
+    TextCell* MakeCell(
+        hb_codepoint_t in_codepoint,
+        FT_GlyphSlot in_slot,
+        TMapGlyphCell& in_out_map_glyph_cell
+        )
+    {
         auto cell = _text_texture->MakeCell(
             in_slot->bitmap.buffer,
             in_slot->bitmap.width,
@@ -274,10 +281,17 @@ private:
 
             FT_Error error = FT_Load_Glyph(_face, codepoint, FT_LOAD_DEFAULT);
             error;
-            FT_GlyphSlot slot = _face->glyph;
-            FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL);
 
-            auto cell = FindOrMakeCell(codepoint, slot, in_out_map_glyph_cell);
+            FT_GlyphSlot slot = _face->glyph;
+            auto cell = FindCell(codepoint, in_out_map_glyph_cell);
+            if (nullptr == cell)
+            {
+                // only ask to render the glyph to the slot->bitmap if we didn't find the cell, ie, don't have cell to re-use
+                FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL);
+
+                cell = MakeCell(codepoint, slot, in_out_map_glyph_cell);
+            }
+
             if (nullptr != cell)
             {
                 in_out_text_pre_vertex.AddPreVertex(

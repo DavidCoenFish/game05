@@ -201,7 +201,7 @@ void IUIComponent::UpdateResources(
     const VectorInt2& in_parent_window,
     const VectorInt2& in_parent_offset,
     const VectorInt4& in_texture_margin,
-    const VectorInt2& in_parent_adjust_offset
+    const VectorInt2& //in_parent_adjust_offset
     )
 {
     in_component_owner.Update(in_param._delta_time_seconds);

@@ -35,6 +35,7 @@ enum class UIEffectEnum
 {
     TNone = 0, // this seemed like a good idea to have None be the default block shader, but constant buffer is different
     TDebug,
+    TDebugGrid,
     TDropShadow, // data[offset x, offset y, radius, ]
     TInnerShadow,
     //TRoundCorners, // data[Top right, top left, bottom left, bottom right]
@@ -61,6 +62,7 @@ enum class UIShaderEnum
     TDefault = 0,
 
     TEffectDebug,
+    TEffectDebugGrid,
     TEffectDropShadow,
     TEffectInnerShadow,
     TEffectRoundCorners,

@@ -217,11 +217,12 @@ void TextPreVertex::BuildVertexData(
     default:
         break;
     case TextEnum::VerticalBlockAlignment::Bottom:
+        vertical_delta = -(_vertical_bounds[0]);
         break;
     case TextEnum::VerticalBlockAlignment::BottomEM:
         break;
     case TextEnum::VerticalBlockAlignment::Middle:
-        vertical_delta = ((in_containter_size[1]) - (_vertical_bounds[1] - _vertical_bounds[0])) / 2;
+        vertical_delta = (((in_containter_size[1]) - (_vertical_bounds[1] - _vertical_bounds[0])) / 2) - _vertical_bounds[0];
         break;
     case TextEnum::VerticalBlockAlignment::MiddleEM:
         vertical_delta = ((in_containter_size[1] - in_em_size) / 2);
