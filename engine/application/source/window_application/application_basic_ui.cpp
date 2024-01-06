@@ -1596,7 +1596,7 @@ namespace
             "button data",
 #endif
             in_layout,
-            UIBaseColour::FactoryDefault(),
+            UIBaseColour::FactoryDefault(), //FactoryGreenBackground(),//  //FactoryDefault(),
             UITintColour::FactoryDefault(),
             std::vector<std::shared_ptr<UIEffectData>>({
                     std::make_shared<UIEffectData>(
@@ -1715,9 +1715,9 @@ namespace
                 VectorFloat2(0.5f, 0.5f),
                 UILayout::TAdjustmentType::GrowTextureToLayout,
                 UILayout::TAdjustmentType::GrowTextureToLayout,//,
-                VectorInt4(8,8,8,8) // left, top, right, bottom
+                VectorInt4(8,8,8,8), // left, top, right, bottom
+                VectorFloat2(0.5f, 0.5f)
                 ),
-            //::FactoryParentMiddleQuater(),
             UIBaseColour::FactoryBlueBackground(),
             UITintColour::FactoryDefault(),
             UIData::s_empty_effect_data_array,
@@ -1725,32 +1725,30 @@ namespace
             UICoord(UICoord::TSource::None, 0.0f, 4.0f)
             );
 
-        auto data_button_0 = BuildButton(
+        data_stack->AddChild(BuildButton(
             "Button 0",
             tint_array,
             UILayout(
-                UICoord(UICoord::TSource::ParentX, 0.5f, 0.0f),
-                UICoord(UICoord::TSource::None, 0.5f, 32.0f),
+                UICoord(UICoord::TSource::ParentX, 1.0f, 0.0f),
+                UICoord(UICoord::TSource::None, 0.0f, 48.0f),
                 VectorFloat2(0.5f, 0.5f),
-                UILayout::TAdjustmentType::ShrinkLayoutToTexture,
-                UILayout::TAdjustmentType::ShrinkLayoutToTexture,
+                UILayout::TAdjustmentType::GrowTextureToLayout,
+                UILayout::TAdjustmentType::GrowTextureToLayout,
                 VectorInt4(8, 8, 8, 8) //left, top, right, bottom
-            ));
-#if 1
-        data_stack->AddChild(data_button_0);
+            )));
         data_stack->AddChild(BuildButton(
             "Button 1",
             tint_array,
             UILayout(
-                UICoord(UICoord::TSource::ParentX, 0.5f, 0.0f),
-                UICoord(UICoord::TSource::None, 0.5f, 32.0f),
-                VectorFloat2(0.5f, 0.5f)
+                UICoord(UICoord::TSource::ParentX, 1.0f, 0.0f),
+                UICoord(UICoord::TSource::None, 0.0f, 48.0f),
+                VectorFloat2(0.5f, 0.5f),
+                UILayout::TAdjustmentType::GrowTextureToLayout,
+                UILayout::TAdjustmentType::GrowTextureToLayout,
+                VectorInt4(8, 8, 8, 8) //left, top, right, bottom
             )));
 
         data_main->AddChild(data_stack);
-#else
-        data_main->AddChild(data_button_0);
-#endif
 
         in_out_data_map["main"] = data_main;
         return;
@@ -1767,7 +1765,7 @@ public:
         //BuildModelData01_ChildRedQuad(_data_map);
         //BuildModelData010_ChildRedMargin(_data_map);
         //BuildModelData02_Text(_data_map);
-        BuildModelData020_TextAlignment(_data_map);
+        //BuildModelData020_TextAlignment(_data_map);
         //BuildModelData03_ShrunkText(_data_map);
         //BuildModelData04_ShrunkTextChildMargin(_data_map);
         //BuildModelData05_Effect(_data_map);
@@ -1776,7 +1774,7 @@ public:
         //BuildModelData07_Stack(_data_map);
         //BuildModelData070_StackMargin(_data_map);
         //BuildModelData08_Button(_data_map);
-        //BuildModelData09_NestedButton(_data_map);
+        BuildModelData09_NestedButton(_data_map);
         //slider
         //tooltip layer
         //checkbox

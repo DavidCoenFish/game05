@@ -473,6 +473,10 @@ void UIHierarchyNodeChild::DealInput(
             }
         }
     }
+    else
+    {
+        input_inside = in_parent_inside;
+    }
 
     // if input_inside starts to be problamatic for being for ANY touch, then move it under the touch data? 
     _node->DealInput(
