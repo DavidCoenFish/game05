@@ -77,6 +77,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include=".gitignore" />
+    <CopyFileToFolders Include="data\example.svg">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
     <None Include="props\application.props" />
     <None Include="resources\application.rc.template" />
     <None Include="script\prebuild.cmd" />
@@ -130,6 +133,9 @@
     <CopyFileToFolders Include="task\test_text_run\application.json">
       <FileType>Document</FileType>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="task\test_svg\application.json">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\application.rc" />
@@ -152,6 +158,7 @@
     <ClCompile Include="source\window_application\application_test_compute.cpp" />
     <ClCompile Include="source\window_application\application_test_coord.cpp" />
     <ClCompile Include="source\window_application\application_test_line.cpp" />
+    <ClCompile Include="source\window_application\application_test_svg.cpp" />
     <ClCompile Include="source\window_application\application_test_text.cpp" />
     <ClCompile Include="source\window_application\application_test_text_run.cpp" />
     <ClCompile Include="source\window_application\application_test_triangle.cpp" />
@@ -172,6 +179,7 @@
     <ClInclude Include="source\window_application\application_test_compute.h" />
     <ClInclude Include="source\window_application\application_test_coord.h" />
     <ClInclude Include="source\window_application\application_test_line.h" />
+    <ClInclude Include="source\window_application\application_test_svg.h" />
     <ClInclude Include="source\window_application\application_test_text.h" />
     <ClInclude Include="source\window_application\application_test_text_run.h" />
     <ClInclude Include="source\window_application\application_test_triangle.h" />
@@ -208,6 +216,10 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="shader\screen_quad_pixel_texture.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="shader\screen_quad_vertex.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>

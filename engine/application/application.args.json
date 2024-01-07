@@ -7,6 +7,10 @@
       "Command": "",
       "Items": [
         {
+          "Id": "7ea8109f-3900-4691-849d-d5113705f160",
+          "Command": "test_svg"
+        },
+        {
           "Id": "f1bb660d-a8d8-47e0-bec6-ba0fcdf098f1",
           "Command": "test_text_run"
         },

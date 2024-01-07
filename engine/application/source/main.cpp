@@ -15,6 +15,7 @@
 #include "window_application/application_test_compute.h"
 #include "window_application/application_test_coord.h"
 #include "window_application/application_test_line.h"
+#include "window_application/application_test_svg.h"
 #include "window_application/application_test_text.h"
 #include "window_application/application_test_text_run.h"
 #include "window_application/application_test_triangle.h"
@@ -51,6 +52,7 @@ static std::map< std::string, TWindowApplicationFactory >& GetWindowApplicationF
             {"TestCompute", ApplicationTestCompute::Factory},
             {"TestCoord", ApplicationTestCoord::Factory},
             {"TestLine", ApplicationTestLine::Factory},
+            {"TestSvg", ApplicationTestSvg::Factory},
             {"TestText", ApplicationTestText::Factory},
             {"TestTextRun", ApplicationTestTextRun::Factory},
             {"TestTriangle", ApplicationTestTriangle::Factory}

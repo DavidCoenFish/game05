@@ -4,13 +4,15 @@
             "_factory": "Window",
             "_data": [
                 {
-                    "_name": "Test Text",
+                    "_name": "Test Svg",
                     "_fullScreen": false,
                     "_width": 800,
                     "_height": 600,
-                    "_factory": "TestText"
+                    "_factory": "TestSvg"
                 }
             ]
         }
     ]
 }
+
+

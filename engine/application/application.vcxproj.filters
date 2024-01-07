@@ -58,6 +58,9 @@
     <Filter Include="task\test_text_run">
       <UniqueIdentifier>{134758ff-3b36-40a8-ba07-36561565daa8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="task\test_svg">
+      <UniqueIdentifier>{248d6cb5-2b7f-4bbc-83f4-ddd6dccee40b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Script\util_make_host_define.cmd">
@@ -183,6 +186,9 @@
     <ClCompile Include="source\window_application\application_test_text_run.cpp">
       <Filter>source\window_application</Filter>
     </ClCompile>
+    <ClCompile Include="source\window_application\application_test_svg.cpp">
+      <Filter>source\window_application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Build.h">
@@ -239,6 +245,9 @@
     <ClInclude Include="source\window_application\application_test_text_run.h">
       <Filter>source\window_application</Filter>
     </ClInclude>
+    <ClInclude Include="source\window_application\application_test_svg.h">
+      <Filter>source\window_application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\cut.ico">
@@ -285,6 +294,12 @@
       <Filter>task\test_text_run</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="data\mono_spatial.ttf">
+      <Filter>data</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="task\test_svg\application.json">
+      <Filter>task\test_svg</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="data\example.svg">
       <Filter>data</Filter>
     </CopyFileToFolders>
   </ItemGroup>
@@ -410,6 +425,9 @@
       <Filter>shader</Filter>
     </FxCompile>
     <FxCompile Include="shader\ui_effect_debug_grid_pixel.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\screen_quad_pixel_texture.hlsl">
       <Filter>shader</Filter>
     </FxCompile>
   </ItemGroup>
