@@ -216,7 +216,7 @@ public:
         const UIManagerUpdateParam& in_param
         )
     {
-        LOG_MESSAGE_UI_VERBOSE("Update");
+        //LOG_MESSAGE_UI_VERBOSE("Update");
 
         if (nullptr == in_data)
         {
@@ -275,7 +275,7 @@ public:
         const UIManagerDealInputParam& in_param
         )
     {
-        LOG_MESSAGE_UI_VERBOSE("DealInput");
+        //LOG_MESSAGE_UI_VERBOSE("DealInput");
 
         const VectorInt2 texture_size = in_root.GetTextureSize(in_param._draw_system);
         UIRootInputState& input_state = in_root.GetOrMakeRootInputState();
@@ -298,7 +298,7 @@ public:
         const UIManagerDrawParam& in_param
         )
     {
-        LOG_MESSAGE_UI_VERBOSE("Draw");
+        //LOG_MESSAGE_UI_VERBOSE("Draw");
 
         in_root.Draw(in_param);
         return;

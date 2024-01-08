@@ -73,9 +73,9 @@ void UIHierarchyNode::UpdateHierarchy(
     const UIHierarchyNodeUpdateParam& in_param
     )
 {
-    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNode::UpdateHierarchy in_data:%p", &in_data);
+    //LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNode::UpdateHierarchy in_data:%p", &in_data);
 #ifdef _DEBUG
-    LOG_MESSAGE_UI_VERBOSE("    UIData _name:%s", in_data._debug_name.c_str());
+    //LOG_MESSAGE_UI_VERBOSE("    UIData _name:%s", in_data._debug_name.c_str());
 #endif
 
     bool layout_dirty = false;
@@ -256,7 +256,7 @@ void UIHierarchyNode::UpdateLayout(
     const VectorInt2& in_parent_offset
     )
 {
-    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNode::UpdateLayout");
+    //LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNode::UpdateLayout");
 
     for (auto& child : _child_array)
     {
@@ -278,7 +278,7 @@ void UIHierarchyNode::UpdateResources(
     const VectorInt2& in_adjust_offset
     )
 {
-    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNode::UpdateResources");
+    //LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNode::UpdateResources");
 
     const VectorInt2 texture_size = _texture->GetSize(in_param._draw_system);
 
@@ -532,7 +532,7 @@ void UIHierarchyNode::Draw(
     const bool in_dirty
     )
 {
-    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNode::Draw");
+    //LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNode::Draw");
 
     UITexture& texture = *_texture;
 

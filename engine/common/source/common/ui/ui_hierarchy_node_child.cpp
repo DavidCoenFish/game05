@@ -284,7 +284,7 @@ void UIHierarchyNodeChild::Finalise(
     //const VectorInt2& in_parent_offset
     )
 {
-    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNodeChild::Finalise %p %s", _source_token, _debug_name.c_str());
+    //LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNodeChild::Finalise %p %s", _source_token, _debug_name.c_str());
 
     VectorInt2 texture_size;
 
@@ -305,7 +305,7 @@ void UIHierarchyNodeChild::Finalise(
         SetStateDirtyBit(UIStateDirty::TRenderDirty, true);
     }
 
-    LOG_MESSAGE_UI_VERBOSE("      _texture_size:[%d,%d]", texture_size[0], texture_size[1]);
+    //LOG_MESSAGE_UI_VERBOSE("      _texture_size:[%d,%d]", texture_size[0], texture_size[1]);
 
     return;
 }
@@ -316,7 +316,7 @@ void UIHierarchyNodeChild::UpdateLayout(
     const VectorInt2& in_parent_offset
     )
 {
-    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNodeChild::UpdateLayout %p %s", _source_token, _debug_name.c_str());
+    //LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNodeChild::UpdateLayout %p %s", _source_token, _debug_name.c_str());
     const bool parent_size_change = ((in_parent_window != _cache_parent_window) || (in_parent_offset != _cache_parent_offset));
 
     if ((true == parent_size_change) ||
@@ -585,7 +585,7 @@ void UIHierarchyNodeChild::PreDraw(
     const UIManagerDrawParam& in_draw_param
     )
 {
-    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNodeChild::PreDraw %p %s %d", _source_token, _debug_name.c_str(), _state_dirty);
+    //LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNodeChild::PreDraw %p %s %d", _source_token, _debug_name.c_str(), _state_dirty);
 
     if ((nullptr == _component) ||
         (true == GetStateFlagBit(UIStateFlag::THidden)))
@@ -617,7 +617,7 @@ void UIHierarchyNodeChild::Draw(
     const UIManagerDrawParam& in_draw_param
     )
 {
-    LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNodeChild::Draw %p %s %d", _source_token, _debug_name.c_str(), _state_dirty);
+    //LOG_MESSAGE_UI_VERBOSE("  UIHierarchyNodeChild::Draw %p %s %d", _source_token, _debug_name.c_str(), _state_dirty);
 
     if ((nullptr == _component) ||
         (true == GetStateFlagBit(UIStateFlag::THidden)))

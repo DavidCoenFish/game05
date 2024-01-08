@@ -15,6 +15,6 @@ Interpolant main(Vertex in_input)
         0.0f, 
         1.0f
         );
-    result._uv = float2(in_input._position.x, in_input._position.y);
+    result._uv = float2(in_input._position.x, 1.0 - in_input._position.y);
     return result;
 }

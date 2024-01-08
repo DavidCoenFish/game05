@@ -1608,7 +1608,11 @@ namespace
                         nullptr,
                         VectorFloat4::s_black
                         )
-                })
+                }),
+            nullptr,
+            [in_text](const VectorFloat2&){
+                LOG_MESSAGE_UI_VERBOSE("  on click:%s", in_text.c_str());
+            }
             );
 
         auto data_fill = std::make_shared<UIDataCanvas>(
@@ -1669,7 +1673,7 @@ namespace
                             )
                     }),
 
-                in_text, //"<Colour 1.0 1.0 1.0 1.0><Size 64>HELLO HUMAN",
+                std::string("<Colour 1.0 1.0 1.0 1.0>") + in_text, //"<Colour 1.0 1.0 1.0 1.0><Size 64>HELLO HUMAN",
                 LocaleISO_639_1::Default,
                 false,
                 TextEnum::HorizontalLineAlignment::Middle,
@@ -1747,6 +1751,32 @@ namespace
                 UILayout::TAdjustmentType::GrowTextureToLayout,
                 VectorInt4(8, 8, 8, 8) //left, top, right, bottom
             )));
+
+        auto big_button = BuildButton(
+            "Button Big",
+            tint_array,
+            UILayout(
+                UICoord(UICoord::TSource::ParentX, 1.0f, 0.0f),
+                UICoord(UICoord::TSource::None, 0.0f, 128.0f),
+                VectorFloat2(0.5f, 0.5f),
+                UILayout::TAdjustmentType::GrowTextureToLayout,
+                UILayout::TAdjustmentType::GrowTextureToLayout,
+                VectorInt4(8, 8, 8, 8) //left, top, right, bottom
+            ));
+
+        big_button->AddChild(BuildButton(
+            "Button nested",
+            tint_array,
+            UILayout(
+                UICoord(UICoord::TSource::ParentX, 1.0f, 0.0f),
+                UICoord(UICoord::TSource::None, 0.0f, 48.0f),
+                VectorFloat2(0.5f, 0.5f),
+                UILayout::TAdjustmentType::GrowTextureToLayout,
+                UILayout::TAdjustmentType::GrowTextureToLayout,
+                VectorInt4(8, 8, 8, 8) //left, top, right, bottom
+            )));
+
+        data_stack->AddChild(big_button);
 
         data_main->AddChild(data_stack);
 
