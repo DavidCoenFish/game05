@@ -19,7 +19,6 @@ public:
         const UIBaseColour& in_base_colour = UIBaseColour::FactoryDefault(),
         const UITintColour& in_tint_colour = UITintColour::FactoryDefault(),
         const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data = s_empty_effect_data_array,
-        UIData* const in_parent_or_null = nullptr,
         const TOnClick& in_on_click = nullptr,
         const TGetTooltip& in_get_tooltip = nullptr,
         const bool in_repeat = false

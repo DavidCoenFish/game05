@@ -136,6 +136,10 @@
     <CopyFileToFolders Include="task\test_svg\application.json">
       <FileType>Document</FileType>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="task\test_scroll_work\application.json">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+    <None Include="task\test_scroll_work\interpolant.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\application.rc" />
@@ -158,6 +162,7 @@
     <ClCompile Include="source\window_application\application_test_compute.cpp" />
     <ClCompile Include="source\window_application\application_test_coord.cpp" />
     <ClCompile Include="source\window_application\application_test_line.cpp" />
+    <ClCompile Include="source\window_application\application_test_scroll_work.cpp" />
     <ClCompile Include="source\window_application\application_test_svg.cpp" />
     <ClCompile Include="source\window_application\application_test_text.cpp" />
     <ClCompile Include="source\window_application\application_test_text_run.cpp" />
@@ -179,6 +184,7 @@
     <ClInclude Include="source\window_application\application_test_compute.h" />
     <ClInclude Include="source\window_application\application_test_coord.h" />
     <ClInclude Include="source\window_application\application_test_line.h" />
+    <ClInclude Include="source\window_application\application_test_scroll_work.h" />
     <ClInclude Include="source\window_application\application_test_svg.h" />
     <ClInclude Include="source\window_application\application_test_text.h" />
     <ClInclude Include="source\window_application\application_test_text_run.h" />
@@ -378,6 +384,14 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="task\test_scroll_work\pixel_shader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="task\test_scroll_work\vertex_shader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="task\test_text\background_pixel.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>

@@ -1609,7 +1609,6 @@ namespace
                         VectorFloat4::s_black
                         )
                 }),
-            nullptr,
             [in_text](const VectorFloat2&){
                 LOG_MESSAGE_UI_VERBOSE("  on click:%s", in_text.c_str());
             }
@@ -1784,6 +1783,39 @@ namespace
         return;
     }
 
+    void BuildModelData10_Checkbox(
+        std::map<std::string, std::shared_ptr<UIData>>& in_out_data_map
+        )
+    {
+        auto tint_array = std::make_shared<UIData::TStateFlagTintArray>(UIData::TStateFlagTintArray({
+            VectorFloat4(0.0f, 0.0f, 1.0f, 1.0f), // TNone
+            VectorFloat4(0.2f, 0.2f, 1.0f, 1.0f), // THover
+            VectorFloat4(0.0f, 0.8f, 0.7f, 1.0f), // TTouch
+            VectorFloat4(0.0f, 0.4f, 0.9f, 1.0f), // TTouch THover
+            VectorFloat4(1.0f, 0.0f, 0.0f, 1.0f), // TSelected
+            VectorFloat4(1.0f, 0.2f, 0.2f, 1.0f), // TSelected THover
+            VectorFloat4(0.7f, 0.8f, 0.0f, 1.0f), // TSelected TTouch
+            VectorFloat4(0.9f, 0.4f, 0.0f, 1.0f) // TSelected TTouch THover
+            }));
+
+        auto data_main = std::make_shared<UIData>(
+#ifdef _DEBUG
+            "Root data",
+#endif
+            UILayout::FactoryFull(),
+            UIBaseColour::FactoryRoot(true)
+            );
+
+        //auto data_checkbox = std::make_shared<UIDataToggle>(
+        //    );
+
+        //data_main->AddChild(data_checkbox);
+
+        in_out_data_map["main"] = data_main;
+        return;
+    }
+
+
 };
 
 class UIModel : public IUIModel
@@ -1804,7 +1836,8 @@ public:
         //BuildModelData07_Stack(_data_map);
         //BuildModelData070_StackMargin(_data_map);
         //BuildModelData08_Button(_data_map);
-        BuildModelData09_NestedButton(_data_map);
+        //BuildModelData09_NestedButton(_data_map);
+        BuildModelData10_Checkbox(_data_map);
         //slider
         //tooltip layer
         //checkbox

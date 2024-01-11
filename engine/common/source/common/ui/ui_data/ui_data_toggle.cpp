@@ -2,16 +2,28 @@
 #include "common/ui/ui_data/ui_data_toggle.h"
 
 UIDataToggle::UIDataToggle(
-    const bool in_value,
-    const TOnValueChange& in_on_click,
-    const TGetTooltip& in_get_tooltip,
-    const std::string& in_template_name,
-    const std::vector<std::shared_ptr<UIData>>& in_array_child_data_true,
-    const std::vector<std::shared_ptr<UIData>>& in_array_child_data_false
+#ifdef _DEBUG
+        const std::string& in_debug_name,
+#endif
+        const UILayout& in_layout,
+        const UIBaseColour& in_base_colour,
+        const UITintColour& in_tint_colour,
+        const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
+
+        const bool in_value,
+        const TOnValueChange& in_on_click,
+        const TGetTooltip& in_get_tooltip,
+        const std::vector<std::shared_ptr<UIData>>& in_array_child_data_true,
+        const std::vector<std::shared_ptr<UIData>>& in_array_child_data_false
     )
     : UIData(
-        in_template_name,
-        in_value ? in_array_child_data_true : in_array_child_data_false
+#ifdef _DEBUG
+        in_debug_name,
+#endif
+        in_layout,
+        in_base_colour,
+        in_tint_colour,
+        in_array_effect_data
         )
     , _on_click(in_on_click)
     , _get_tooltip(in_get_tooltip)
@@ -24,21 +36,4 @@ UIDataToggle::UIDataToggle(
 UIDataToggle::~UIDataToggle()
 {
     // Nop
-}
-
-void UIDataToggle::SetValue(const bool in_value)
-{
-    if (_value == in_value)
-    {
-        return;
-    }
-    _value = in_value;
-    ModifyData() = _array_child_data[static_cast<int>(_value)];
-    return;
-}
-
-void UIDataToggle::ToggleValue()
-{
-    SetValue(!_value);
-    return;
 }

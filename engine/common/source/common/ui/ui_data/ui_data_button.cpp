@@ -11,7 +11,6 @@ UIDataButton::UIDataButton(
     const UIBaseColour& in_base_colour,
     const UITintColour& in_tint_colour,
     const std::vector<std::shared_ptr<UIEffectData>>& in_array_effect_data,
-    UIData* const in_parent_or_null,
     const TOnClick& in_on_click,
     const TGetTooltip& in_get_tooltip,
     const bool in_repeat
@@ -23,8 +22,7 @@ UIDataButton::UIDataButton(
         in_layout,
         in_base_colour,
         in_tint_colour,
-        in_array_effect_data,
-        in_parent_or_null
+        in_array_effect_data
         )
     , _on_click(in_on_click)
     , _get_tooltip(in_get_tooltip)

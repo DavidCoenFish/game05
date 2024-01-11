@@ -108,6 +108,7 @@
     <ClCompile Include="source\common\ui\ui_data\ui_data_stack.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_string.cpp" />
     <ClCompile Include="source\common\ui\ui_data\ui_data_text_run.cpp" />
+    <ClCompile Include="source\common\ui\ui_data\ui_data_toggle.cpp" />
     <ClCompile Include="source\common\ui\ui_effect\ui_effect_component.cpp" />
     <ClCompile Include="source\common\ui\ui_effect\ui_effect_data.cpp" />
     <ClCompile Include="source\common\ui\ui_geometry.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="include\common\ui\ui_data\ui_data_stack.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_string.h" />
     <ClInclude Include="include\common\ui\ui_data\ui_data_text_run.h" />
+    <ClInclude Include="include\common\ui\ui_data\ui_data_toggle.h" />
     <ClInclude Include="include\common\ui\ui_effect\ui_effect_component.h" />
     <ClInclude Include="include\common\ui\ui_effect\ui_effect_data.h" />
     <ClInclude Include="include\common\ui\ui_enum.h" />

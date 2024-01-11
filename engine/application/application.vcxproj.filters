@@ -61,6 +61,9 @@
     <Filter Include="task\test_svg">
       <UniqueIdentifier>{248d6cb5-2b7f-4bbc-83f4-ddd6dccee40b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="task\test_scroll_work">
+      <UniqueIdentifier>{f34976d2-84b6-42a9-abea-3ab101134758}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Script\util_make_host_define.cmd">
@@ -133,6 +136,9 @@
     <None Include="shader\ui_interpolant.hlsli">
       <Filter>shader</Filter>
     </None>
+    <None Include="task\test_scroll_work\interpolant.hlsli">
+      <Filter>task\test_scroll_work</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Build.cpp">
@@ -187,6 +193,9 @@
       <Filter>source\window_application</Filter>
     </ClCompile>
     <ClCompile Include="source\window_application\application_test_svg.cpp">
+      <Filter>source\window_application</Filter>
+    </ClCompile>
+    <ClCompile Include="source\window_application\application_test_scroll_work.cpp">
       <Filter>source\window_application</Filter>
     </ClCompile>
   </ItemGroup>
@@ -248,6 +257,9 @@
     <ClInclude Include="source\window_application\application_test_svg.h">
       <Filter>source\window_application</Filter>
     </ClInclude>
+    <ClInclude Include="source\window_application\application_test_scroll_work.h">
+      <Filter>source\window_application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\cut.ico">
@@ -301,6 +313,9 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="data\example.svg">
       <Filter>data</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="task\test_scroll_work\application.json">
+      <Filter>task\test_scroll_work</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
@@ -429,6 +444,12 @@
     </FxCompile>
     <FxCompile Include="shader\screen_quad_pixel_texture.hlsl">
       <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="task\test_scroll_work\pixel_shader.hlsl">
+      <Filter>task\test_scroll_work</Filter>
+    </FxCompile>
+    <FxCompile Include="task\test_scroll_work\vertex_shader.hlsl">
+      <Filter>task\test_scroll_work</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
