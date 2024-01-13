@@ -61,7 +61,7 @@
     <Filter Include="task\test_svg">
       <UniqueIdentifier>{248d6cb5-2b7f-4bbc-83f4-ddd6dccee40b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="task\test_scroll_work">
+    <Filter Include="task\test_bezier">
       <UniqueIdentifier>{f34976d2-84b6-42a9-abea-3ab101134758}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -136,8 +136,8 @@
     <None Include="shader\ui_interpolant.hlsli">
       <Filter>shader</Filter>
     </None>
-    <None Include="task\test_scroll_work\interpolant.hlsli">
-      <Filter>task\test_scroll_work</Filter>
+    <None Include="task\test_bezier\interpolant.hlsli">
+      <Filter>task\test_bezier</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -195,7 +195,7 @@
     <ClCompile Include="source\window_application\application_test_svg.cpp">
       <Filter>source\window_application</Filter>
     </ClCompile>
-    <ClCompile Include="source\window_application\application_test_scroll_work.cpp">
+    <ClCompile Include="source\window_application\application_test_bezier.cpp">
       <Filter>source\window_application</Filter>
     </ClCompile>
   </ItemGroup>
@@ -257,7 +257,7 @@
     <ClInclude Include="source\window_application\application_test_svg.h">
       <Filter>source\window_application</Filter>
     </ClInclude>
-    <ClInclude Include="source\window_application\application_test_scroll_work.h">
+    <ClInclude Include="source\window_application\application_test_bezier.h">
       <Filter>source\window_application</Filter>
     </ClInclude>
   </ItemGroup>
@@ -314,8 +314,8 @@
     <CopyFileToFolders Include="data\example.svg">
       <Filter>data</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="task\test_scroll_work\application.json">
-      <Filter>task\test_scroll_work</Filter>
+    <CopyFileToFolders Include="task\test_bezier\application.json">
+      <Filter>task\test_bezier</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
@@ -445,11 +445,11 @@
     <FxCompile Include="shader\screen_quad_pixel_texture.hlsl">
       <Filter>shader</Filter>
     </FxCompile>
-    <FxCompile Include="task\test_scroll_work\pixel_shader.hlsl">
-      <Filter>task\test_scroll_work</Filter>
+    <FxCompile Include="task\test_bezier\pixel_shader.hlsl">
+      <Filter>task\test_bezier</Filter>
     </FxCompile>
-    <FxCompile Include="task\test_scroll_work\vertex_shader.hlsl">
-      <Filter>task\test_scroll_work</Filter>
+    <FxCompile Include="task\test_bezier\vertex_shader.hlsl">
+      <Filter>task\test_bezier</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

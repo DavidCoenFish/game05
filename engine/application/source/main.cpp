@@ -12,10 +12,10 @@
 #include "window_application/application_basic_ui.h"
 #include "window_application/application_multi_line.h"
 #include "window_application/application_multi_line_compute.h"
+#include "window_application/application_test_bezier.h"
 #include "window_application/application_test_compute.h"
 #include "window_application/application_test_coord.h"
 #include "window_application/application_test_line.h"
-#include "window_application/application_test_scroll_work.h"
 #include "window_application/application_test_svg.h"
 #include "window_application/application_test_text.h"
 #include "window_application/application_test_text_run.h"
@@ -50,10 +50,10 @@ static std::map< std::string, TWindowApplicationFactory >& GetWindowApplicationF
             {"BasicUI", ApplicationBasicUI::Factory},
             {"MultiLine", ApplicationMultiLine::Factory},
             {"MultiLineCompute", ApplicationMultiLineCompute::Factory},
+            {"TestBezier", ApplicationTestBezier::Factory},
             {"TestCompute", ApplicationTestCompute::Factory},
             {"TestCoord", ApplicationTestCoord::Factory},
             {"TestLine", ApplicationTestLine::Factory},
-            {"TestScrollWork", ApplicationTestScrollWork::Factory},
             {"TestSvg", ApplicationTestSvg::Factory},
             {"TestText", ApplicationTestText::Factory},
             {"TestTextRun", ApplicationTestTextRun::Factory},

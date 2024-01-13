@@ -1,6 +1,6 @@
 #include "application_pch.h"
 
-#include "window_application/application_test_scroll_work.h"
+#include "window_application/application_test_bezier.h"
 
 #include "common/draw_system/custom_command_list.h"
 #include "common/draw_system/draw_system.h"
@@ -24,21 +24,21 @@
 
 struct ConstantBufferB0
 {
-    VectorFloat2 _width_height; // pixels
+    VectorFloat3 _width_height_thickness; // pixels
 };
 
-IWindowApplication* const ApplicationTestScrollWork::Factory(
+IWindowApplication* const ApplicationTestBezier::Factory(
     const HWND in_hwnd,
     const WindowApplicationParam&in_application_param
     )
 {
-    return new ApplicationTestScrollWork(
+    return new ApplicationTestBezier(
         in_hwnd,
         in_application_param
         );
 }
 
-ApplicationTestScrollWork::ApplicationTestScrollWork(
+ApplicationTestBezier::ApplicationTestBezier(
     const HWND in_hwnd,
     const WindowApplicationParam& in_application_param
     ) 
@@ -48,7 +48,7 @@ ApplicationTestScrollWork::ApplicationTestScrollWork(
         )
 {
     LOG_MESSAGE(
-        "ApplicationTestScrollWork  ctor %p",
+        "ApplicationTestBezier  ctor %p",
         this
         );
     RenderTargetFormatData render_target_format_data(
@@ -146,7 +146,7 @@ ApplicationTestScrollWork::ApplicationTestScrollWork(
     }
 }
 
-ApplicationTestScrollWork::~ApplicationTestScrollWork()
+ApplicationTestBezier::~ApplicationTestBezier()
 {
     if (_draw_system)
     {
@@ -157,12 +157,12 @@ ApplicationTestScrollWork::~ApplicationTestScrollWork()
     _geometry.reset();
     _draw_system.reset();
     LOG_MESSAGE(
-        "ApplicationTestScrollWork  dtor %p",
+        "ApplicationTestBezier  dtor %p",
         this
         );
 }
 
-void ApplicationTestScrollWork::Update()
+void ApplicationTestBezier::Update()
 {
     BaseType::Update();
 
@@ -174,15 +174,16 @@ void ApplicationTestScrollWork::Update()
         // Draw
         const VectorInt2 backbufferSize = _draw_system->GetRenderTargetBackBuffer()->GetSize();
         auto& buffer0 = _shader_constant_buffer->GetConstant<ConstantBufferB0>(0);
-        buffer0._width_height[0] = static_cast<float>(backbufferSize[0]);
-        buffer0._width_height[1] = static_cast<float>(backbufferSize[1]);
+        buffer0._width_height_thickness[0] = static_cast<float>(backbufferSize[0]);
+        buffer0._width_height_thickness[1] = static_cast<float>(backbufferSize[1]);
+        buffer0._width_height_thickness[2] = 1.0f; //0.5f;
 
         frame->SetShader(_shader, _shader_constant_buffer);
         frame->Draw(_geometry);
     }
 }
 
-void ApplicationTestScrollWork::OnWindowSizeChanged(
+void ApplicationTestBezier::OnWindowSizeChanged(
     const int in_width,
     const int in_height
     )
@@ -200,7 +201,7 @@ void ApplicationTestScrollWork::OnWindowSizeChanged(
     return;
 }
 
-void ApplicationTestScrollWork::OnKey(
+void ApplicationTestBezier::OnKey(
     const int in_vk_code,
     const int in_scan_code,
     const bool in_repeat_flag,

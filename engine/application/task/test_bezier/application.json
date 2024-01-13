@@ -4,11 +4,11 @@
          "_factory": "Window",
          "_data": [
             {
-                "_name": "Test Scroll Work",
+                "_name": "Test Bezier",
                 "_fullScreen": false,
                 "_width": 800,
                 "_height": 600,
-                "_factory": "TestScrollWork"
+                "_factory": "TestBezier"
             }
          ]
       }

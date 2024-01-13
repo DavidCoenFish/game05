@@ -2,7 +2,7 @@
 
 cbuffer ConstantBuffer0 : register(b0)
 {
-    float2 _width_height; // pixels
+    float3 _width_height_thickness; // pixels, thinkness is for line width
 };
 
 /*
@@ -43,13 +43,14 @@ struct Pixel
     float4 _color : SV_TARGET0;
 };
 
-float distanceFunction(float inputT, float2 p0, float2 p1, float2 p2, float2 samplePoint) {
-	float t = clamp(inputT, 0.0, 1.0);
+float distanceFunction(float input_t, float2 p0, float2 p1, float2 p2, float2 sample_point, float2 dim_scale) 
+{
+	float t = clamp(input_t, 0.0, 1.0);
 	float a = (1.0 - t) * (1.0 - t);
 	float b = 2.0 * t * (1.0 - t);
 	float c = t * t;
 	float2 p = (a * p0) + (b * p1) + (c * p2);
-	float2 offset = (p - samplePoint) * _width_height;
+	float2 offset = (p - sample_point) * dim_scale;
 	float distance = length(offset);
 	return distance;
 }
@@ -58,7 +59,8 @@ static const float PI = 3.1415926535897932384626433832795;
 
 // based on Olivier Besson (http://www.gludion.com)
 static const float zeroMax = 0.0; //0.0000001;
-float thirdDegreeEquationMin(float a, float b, float c, float d, float2 p0, float2 p1, float2 p2, float2 samplePoint) {
+float thirdDegreeEquationMin(float a, float b, float c, float d, float2 p0, float2 p1, float2 p2, float2 sample_point, float2 dim_scale) 
+{
 	if (zeroMax < abs(a))
 	{
 		// let's adopt form: x3 + ax2 + bx + d = 0
@@ -78,19 +80,23 @@ float thirdDegreeEquationMin(float a, float b, float c, float d, float2 p0, floa
 			z = sqrt(D);
 			float u = (-q + z) / 2.0;
 			float v = (-q - z) / 2.0;
-			if (0.0 <= u) {
+			if (0.0 <= u) 
+            {
 				u = pow(u, 1.0 / 3.0);
 			}
-			else {
+			else 
+            {
 				u = -pow(-u, 1.0 / 3.0);
 			}
-			if (0.0 <= v) {
+			if (0.0 <= v) 
+            {
 				v = pow(v, 1.0 / 3.0);
 			}
-			else {
+			else 
+            {
 				v = -pow(-v, 1.0 / 3.0);
 			}
-			float result = distanceFunction(u + v + offset, p0, p1, p2, samplePoint);
+			float result = distanceFunction(u + v + offset, p0, p1, p2, sample_point, dim_scale);
 			return result;
 		}
 		else if (D < -zeroMax)
@@ -98,9 +104,9 @@ float thirdDegreeEquationMin(float a, float b, float c, float d, float2 p0, floa
 			// D negative
 			float u = 2.0 * sqrt(-p / 3.0);
 			float v = acos(-sqrt(-27.0 / p3) * q / 2.0) / 3.0;
-			float result1 = distanceFunction(u * cos(v) + offset, p0, p1, p2, samplePoint);
-			float result2 = distanceFunction(u * cos(v + 2.0 * PI / 3.0) + offset, p0, p1, p2, samplePoint);
-			float result3 = distanceFunction(u * cos(v + 4.0 * PI / 3.0) + offset, p0, p1, p2, samplePoint);
+			float result1 = distanceFunction(u * cos(v) + offset, p0, p1, p2, sample_point, dim_scale);
+			float result2 = distanceFunction(u * cos(v + 2.0 * PI / 3.0) + offset, p0, p1, p2, sample_point, dim_scale);
+			float result3 = distanceFunction(u * cos(v + 4.0 * PI / 3.0) + offset, p0, p1, p2, sample_point, dim_scale);
 			float result = max(result1, max(result2, result3));
 			return result;
 		}
@@ -108,14 +114,16 @@ float thirdDegreeEquationMin(float a, float b, float c, float d, float2 p0, floa
 		{
 			// D zero
 			float u = 0.0;
-			if (q < 0.0) {
+			if (q < 0.0) 
+            {
 				u = pow(-q / 2.0, 1.0 / 3.0);
 			}
-			else {
+			else 
+            {
 				u = -pow(q / 2.0, 1.0 / 3.0);
 			}
-			float result1 = distanceFunction((2.0 * u) + offset, p0, p1, p2, samplePoint);
-			float result2 = distanceFunction(-u + offset, p0, p1, p2, samplePoint);
+			float result1 = distanceFunction((2.0 * u) + offset, p0, p1, p2, sample_point, dim_scale);
+			float result2 = distanceFunction(-u + offset, p0, p1, p2, sample_point, dim_scale);
 			float result = max(result1, result2);
 			return result;
 		}
@@ -134,7 +142,7 @@ float thirdDegreeEquationMin(float a, float b, float c, float d, float2 p0, floa
 	//		}
 	//		else
 	//		{
-	//			float result = distanceFunction(-c / b, p0, p1, p2, samplePoint);
+	//			float result = distanceFunction(-c / b, p0, p1, p2, sample_point, dim_scale);
 	//			return result;
 	//		}
 	//	}
@@ -145,8 +153,8 @@ float thirdDegreeEquationMin(float a, float b, float c, float d, float2 p0, floa
 	//	if (zeroMax < D) {
 	//		// D positive
 	//		D = sqrt(D);
-	//		float result1 = distanceFunction((-b - D) / (2.0 * a), p0, p1, p2, samplePoint);
-	//		float result2 = distanceFunction((-b + D) / (2.0 * a), p0, p1, p2, samplePoint);
+	//		float result1 = distanceFunction((-b - D) / (2.0 * a), p0, p1, p2, sample_point, dim_scale);
+	//		float result2 = distanceFunction((-b + D) / (2.0 * a), p0, p1, p2, sample_point, dim_scale);
 	//		float result = max(result1, result2);
 	//		return result;
 	//	}
@@ -156,45 +164,33 @@ float thirdDegreeEquationMin(float a, float b, float c, float d, float2 p0, floa
 	//	}
 	//	else {
 	//		// D zero
-	//		float result = distanceFunction(-b / (2.0 * a), p0, p1, p2, samplePoint);
+	//		float result = distanceFunction(-b / (2.0 * a), p0, p1, p2, sample_point, dim_scale);
 	//		return result;
 	//	}
 	//}
 	return 0.0;
 }
 
-//float sdCircle(float2 samplePoint, float2 p0, float2 r)
-//{
-//	float2 offset = samplePoint - p0;
-//	float distance = length(offset);
-//	return distance;
-//}
-
 // based on Olivier Besson (http://www.gludion.com)
-float sdBezier(float2 samplePoint, float2 p0, float2 p1, float2 p2) 
+float sdBezier(float2 sample_point, float2 p0, float2 p1, float2 p2, float2 dim_scale) 
 {
 	float2 A = p1 - p0;
 	float2 B = p0 - (2.0 * p1) + p2;
 
-	float2 sampleRelative = p0 - samplePoint;
+	float2 sampleRelative = p0 - sample_point;
 
 	float a = (B.x * B.x) + (B.y * B.y);
 	float b = 3.0 * ((A.x * B.x) + (A.y * B.y));
 	float c = 2.0 * ((A.x * A.x) + (A.y * A.y)) + (sampleRelative.x * B.x) + (sampleRelative.y * B.y);
 	float d = (sampleRelative.x * A.x) + (sampleRelative.y * A.y);
-	float result = thirdDegreeEquationMin(a, b, c, d, p0, p1, p2, samplePoint);
+	float result = thirdDegreeEquationMin(a, b, c, d, p0, p1, p2, sample_point, dim_scale);
 
 	return result;
 }
 
-float sdFunction(float2 samplePoint, float2 p0, float2 p1, float2 p2)
+float sdFunction(float2 sample_point, float2 p0, float2 p1, float2 p2, float2 dim_scale)
 {
-	//ensure we don't miss the endpoints
-	//float result0 = sdCircle(samplePoint, p0, _PointA.z);
-	//float result1 = sdCircle(samplePoint, p2, _PointC.z);
-	//float result2 = sdBezier(samplePoint, p0, p1, p2);
-	//return max(max(result0, result1), result2);
-	float result = sdBezier(samplePoint, p0, p1, p2);
+	float result = sdBezier(sample_point, p0, p1, p2, dim_scale);
     return result;
 }
 
@@ -203,15 +199,10 @@ Pixel main( Interpolant in_input )
 {
     Pixel result;
 
-    float sd = sdFunction(in_input._uv, in_input._p0, in_input._p1, in_input._p2);
-    float coverage = 1.0 - saturate(1.0 - sd);
+    float sd = sdFunction(in_input._uv, in_input._p0, in_input._p1, in_input._p2, _width_height_thickness.xy);
+    float coverage = 1.0 - saturate(_width_height_thickness.z - sd);
     result._color = float4(coverage, coverage, coverage, 1.0);
-    //result._color = float4(in_input._uv.x, in_input._uv.y, sd, 1.0);
-
-    //result._color = float4(in_input._uv.x, in_input._uv.y, 0.0, 1.0);
-    //result._color = float4(in_input._p0.x, in_input._p0.y, 0.0, 1.0);
-    //result._color = float4(in_input._p1.x, in_input._p1.y, 0.0, 1.0);
-    //result._color = float4(in_input._p2.x, in_input._p2.y, 0.0, 1.0);
+    //result._color = float4(0.0, 0.0, 0.0, coverage);
 
     return result;
 }

@@ -8,7 +8,7 @@
       "Items": [
         {
           "Id": "61c5225c-526e-4467-bb05-a44eed2a6368",
-          "Command": "test_scroll_work"
+          "Command": "test_bezier"
         },
         {
           "Id": "7ea8109f-3900-4691-849d-d5113705f160",

@@ -8,18 +8,18 @@ class ShaderConstantBuffer;
 class GeometryGeneric;
 class Timer;
 
-class ApplicationTestScrollWork : public IWindowApplication
+class ApplicationTestBezier : public IWindowApplication
 {
 public:
     static IWindowApplication* const Factory(
         const HWND in_hwnd,
         const WindowApplicationParam& in_application_param
         );
-    ApplicationTestScrollWork(
+    ApplicationTestBezier(
         const HWND in_hwnd,
         const WindowApplicationParam& in_application_param
         );
-    virtual ~ApplicationTestScrollWork();
+    virtual ~ApplicationTestBezier();
 
 private:
     virtual void Update() override;
