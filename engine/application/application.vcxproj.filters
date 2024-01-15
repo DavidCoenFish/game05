@@ -139,6 +139,9 @@
     <None Include="task\test_bezier\interpolant.hlsli">
       <Filter>task\test_bezier</Filter>
     </None>
+    <None Include="shader\bezier_interpolant.hlsli">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Build.cpp">
@@ -450,6 +453,12 @@
     </FxCompile>
     <FxCompile Include="task\test_bezier\vertex_shader.hlsl">
       <Filter>task\test_bezier</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\bezier_pixel.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\bezier_vertex.hlsl">
+      <Filter>shader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

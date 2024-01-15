@@ -99,6 +99,7 @@
     <CopyFileToFolders Include="task\multi_line\application.json">
       <FileType>Document</FileType>
     </CopyFileToFolders>
+    <None Include="shader\bezier_interpolant.hlsli" />
     <None Include="shader\polar.hlsli" />
     <None Include="shader\polar_util.hlsli" />
     <None Include="shader\ray_ray.hlsli" />
@@ -205,6 +206,14 @@
     <Image Include="resources\cut.ico" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="shader\bezier_pixel.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shader\bezier_vertex.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
     <FxCompile Include="shader\screen_quad_pixel_background.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>

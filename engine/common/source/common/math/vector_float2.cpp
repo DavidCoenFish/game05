@@ -4,6 +4,8 @@
 #include "common/math/vector_math.h"
 
 const VectorFloat2 VectorFloat2::s_zero(0.0f, 0.0f);
+const VectorFloat2 VectorFloat2::s_min(-std::numeric_limits<float>::max(), -std::numeric_limits<float>::max());
+const VectorFloat2 VectorFloat2::s_max(std::numeric_limits<float>::max(), std::numeric_limits<float>::max())
 
 VectorFloat2::VectorFloat2(
     const float in_x,
@@ -83,3 +85,14 @@ const bool VectorFloat2::operator!=(const VectorFloat2& in_rhs) const
     return !operator==(in_rhs);
 }
 
+const VectorFloat2 VectorFloat2::Min(const VectorFloat2& in_lhs, const VectorFloat2& in_rhs)
+{
+    return VectorFloat2(std::min(in_lhs.GetX(), in_rhs.GetX()),
+        std::min(in_lhs.GetY(), in_rhs.GetY()));
+}
+
+const VectorFloat2 VectorFloat2::Max(const VectorFloat2& in_lhs, const VectorFloat2& in_rhs)
+{
+    return VectorFloat2(std::max(in_lhs.GetX(), in_rhs.GetX()),
+        std::max(in_lhs.GetY(), in_rhs.GetY()));
+}

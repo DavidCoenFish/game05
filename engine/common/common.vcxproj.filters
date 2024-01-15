@@ -331,6 +331,12 @@
     <ClCompile Include="source\common\ui\ui_data\ui_data_toggle.cpp">
       <Filter>souce\common\ui\ui_data</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\bezier\bezier_curves.cpp">
+      <Filter>souce\common\bezier</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\bezier\bezier_manager.cpp">
+      <Filter>souce\common\bezier</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -687,6 +693,12 @@
     <ClInclude Include="include\common\ui\ui_data\ui_data_toggle.h">
       <Filter>include\common\ui\ui_data</Filter>
     </ClInclude>
+    <ClInclude Include="include\common\bezier\bezier_manager.h">
+      <Filter>include\common\bezier</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\bezier\bezier_curves.h">
+      <Filter>include\common\bezier</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="souce">
@@ -820,6 +832,12 @@
     </Filter>
     <Filter Include="souce\common\ui\ui_effect">
       <UniqueIdentifier>{7ede6d3a-bc6c-4d31-af5f-1789eed6030a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\bezier">
+      <UniqueIdentifier>{8db5f355-b025-4706-a3e9-b0a58def9955}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\bezier">
+      <UniqueIdentifier>{e1f6da53-9f7a-4055-aa55-a6445b6710c8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

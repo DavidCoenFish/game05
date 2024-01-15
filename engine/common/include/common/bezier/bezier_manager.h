@@ -1,0 +1,33 @@
+#pragma once
+
+#include "common/math/vector_float2.h"
+
+class DrawSystem;
+class DrawSystemFrame;
+class Shader;
+class BezierCurves;
+
+/// these are helper classes to draw bezier curves with the draw system, lext text, it could be under the draw system
+/// this is not a generic bezier curve class
+class BezierManager
+{
+public:
+    static const std::vector<D3D12_INPUT_ELEMENT_DESC>& GetInputElementDesc();
+
+    BezierManager(
+        DrawSystem* const in_draw_system,
+        ID3D12GraphicsCommandList* const in_command_list,
+        const std::filesystem::path& in_root_path
+        );
+    ~BezierManager();
+
+    void DrawBezierCurves(
+        DrawSystem* const in_draw_system,
+        DrawSystemFrame* const in_draw_system_frame,
+        BezierCurves* const in_bezier_curves
+        );
+
+private:
+    std::unique_ptr<BezierManagerImplementation> _implementation;
+
+};
