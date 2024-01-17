@@ -24,7 +24,7 @@ class TextRunImplementation
 public:
     TextRunImplementation(
         const std::vector<std::shared_ptr<ITextRunData>>& in_text_run_array,
-        const VectorInt2& in_containter_size,
+        const VectorInt2& in_container_size,
         const bool in_width_limit_enabled,
         const int in_width_limit,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
@@ -36,7 +36,7 @@ public:
         , _geometry_dirty(true)
         , _geometry()
         , _text_run_array(in_text_run_array)
-        , _container_size(in_containter_size)
+        , _container_size(in_container_size)
         , _width_limit_enabled(in_width_limit_enabled)
         , _width_limit(in_width_limit)
         , _horizontal_line_alignment(in_horizontal_line_alignment)
@@ -399,7 +399,7 @@ std::shared_ptr<ITextRunData> TextRun::MakeTextRunDataIcon(
 
 TextRun::TextRun(
     const std::vector<std::shared_ptr<ITextRunData>>& in_text_run_array,
-    const VectorInt2& in_containter_size,
+    const VectorInt2& in_container_size,
     const bool in_width_limit_enabled,
     const int in_width_limit,
     const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
@@ -410,7 +410,7 @@ TextRun::TextRun(
 {
     _implementation = std::make_unique<TextRunImplementation>(
         in_text_run_array,
-        in_containter_size,
+        in_container_size,
         in_width_limit_enabled,
         in_width_limit,
         in_horizontal_line_alignment,

@@ -184,7 +184,7 @@ const VectorInt2 TextPreVertex::GetBounds( const TextEnum::VerticalBlockAlignmen
 
 void TextPreVertex::BuildVertexData(
     std::vector<uint8_t>& out_vertex_raw_data,
-    const VectorInt2& in_containter_size,
+    const VectorInt2& in_container_size,
     const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
     const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
     const int in_em_size // Used for alignments MiddleEM, TopEM, BottomEM
@@ -205,10 +205,10 @@ void TextPreVertex::BuildVertexData(
         case TextEnum::HorizontalLineAlignment::Left:
             break;
         case TextEnum::HorizontalLineAlignment::Middle:
-            horizontal_line_delta[index] = ((in_containter_size[0] - width) / 2) - _horizontal_bounds[index][0];
+            horizontal_line_delta[index] = ((in_container_size[0] - width) / 2) - _horizontal_bounds[index][0];
             break;
         case TextEnum::HorizontalLineAlignment::Right:
-            horizontal_line_delta[index] = (in_containter_size[0] - _horizontal_bounds[index][1]);
+            horizontal_line_delta[index] = (in_container_size[0] - _horizontal_bounds[index][1]);
             break;
         }
     }
@@ -224,16 +224,16 @@ void TextPreVertex::BuildVertexData(
         vertical_delta = in_em_size / 2;
         break;
     case TextEnum::VerticalBlockAlignment::Middle:
-        vertical_delta = (((in_containter_size[1]) - (_vertical_bounds[1] - _vertical_bounds[0])) / 2) - _vertical_bounds[0];
+        vertical_delta = (((in_container_size[1]) - (_vertical_bounds[1] - _vertical_bounds[0])) / 2) - _vertical_bounds[0];
         break;
     case TextEnum::VerticalBlockAlignment::MiddleEM:
-        vertical_delta = ((in_containter_size[1] - in_em_size) / 2);
+        vertical_delta = ((in_container_size[1] - in_em_size) / 2);
         break;
     case TextEnum::VerticalBlockAlignment::Top:
-        vertical_delta = in_containter_size[1] - _vertical_bounds[1];
+        vertical_delta = in_container_size[1] - _vertical_bounds[1];
         break;
     case TextEnum::VerticalBlockAlignment::TopEM:
-        vertical_delta = in_containter_size[1] - in_em_size;
+        vertical_delta = in_container_size[1] - in_em_size;
         break;
     }
 
@@ -241,10 +241,10 @@ void TextPreVertex::BuildVertexData(
     {
         const int horizontal_delta = horizontal_line_delta[item._line_index];
         const VectorFloat4 pos = VectorFloat4(
-            (((item._pos_low_high[0] + horizontal_delta) / static_cast<float>(in_containter_size.GetX())) * 2.0f) - 1.0f,
-            (((item._pos_low_high[1] + vertical_delta) / static_cast<float>(in_containter_size.GetY())) * 2.0f) - 1.0f,
-            (((item._pos_low_high[2] + horizontal_delta) / static_cast<float>(in_containter_size.GetX())) * 2.0f) - 1.0f,
-            (((item._pos_low_high[3] + vertical_delta) / static_cast<float>(in_containter_size.GetY())) * 2.0f) - 1.0f
+            (((item._pos_low_high[0] + horizontal_delta) / static_cast<float>(in_container_size.GetX())) * 2.0f) - 1.0f,
+            (((item._pos_low_high[1] + vertical_delta) / static_cast<float>(in_container_size.GetY())) * 2.0f) - 1.0f,
+            (((item._pos_low_high[2] + horizontal_delta) / static_cast<float>(in_container_size.GetX())) * 2.0f) - 1.0f,
+            (((item._pos_low_high[3] + vertical_delta) / static_cast<float>(in_container_size.GetY())) * 2.0f) - 1.0f
             );
 
         //0.0f, 0.0f,

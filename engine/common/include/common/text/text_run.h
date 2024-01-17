@@ -37,7 +37,7 @@ public:
     // Do we keep the defaults, and each run has the settings? or simplify so we just have global settings at top, and data for each run
     TextRun(
         const std::vector<std::shared_ptr<ITextRunData>>& in_text_run_array,
-        const VectorInt2& in_containter_size,
+        const VectorInt2& in_container_size,
         const bool in_width_limit_enabled = false,
         const int in_width_limit = 0,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment = TextEnum::HorizontalLineAlignment::Left,

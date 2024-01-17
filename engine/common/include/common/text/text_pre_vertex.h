@@ -75,7 +75,7 @@ public:
 
     void BuildVertexData(
         std::vector<uint8_t>& out_vertex_raw_data,
-        const VectorInt2& in_containter_size,
+        const VectorInt2& in_container_size,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
         const TextEnum::VerticalBlockAlignment in_vertical_block_alignment,
         const int in_em_size // Used for alignments MiddleEM, TopEM, BottomEM

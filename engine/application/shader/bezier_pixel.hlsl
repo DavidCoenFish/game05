@@ -1,4 +1,4 @@
-#include "interpolant.hlsli"
+#include "bezier_interpolant.hlsli"
 
 /*
 C:\development\prototype\unity\test00\Assets\Resources\material
@@ -49,8 +49,8 @@ float distanceFunction(float input_t, float2 p0, float2 p1, float2 p2, float2 sa
     float distance = length(offset);
 
     //float coverage = 1.0 - saturate(_width_height_thickness.z - sd);
-    float thickness = ((1.0 - t) * thickness.x) + (t * thickness.y);
-    float coverage = saturate(thickness - distance)
+    float current_thickness = ((1.0 - t) * thickness.x) + (t * thickness.y);
+    float coverage = saturate(current_thickness - distance);
 
     return distance;
 }
@@ -190,7 +190,7 @@ float sdBezier(float2 sample_point, float2 p0, float2 p1, float2 p2, float2 dim_
 
 float sdFunction(float2 sample_point, float2 p0, float2 p1, float2 p2, float2 dim_scale, float2 thickness)
 {
-    float result = sdBezier(sample_point, p0, p1, p2dim_scale, thickness);
+    float result = sdBezier(sample_point, p0, p1, p2, dim_scale, thickness);
     return result;
 }
 

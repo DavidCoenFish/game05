@@ -6,9 +6,10 @@ class DrawSystem;
 class DrawSystemFrame;
 class Shader;
 class BezierCurves;
+class BezierManagerImplementation;
 
-/// these are helper classes to draw bezier curves with the draw system, lext text, it could be under the draw system
-/// this is not a generic bezier curve class
+/// these are helper classes to draw bezier curves with the draw system (like text). It could be under the draw system?
+/// this is not a generic bezier curve class, this is data to draw bezier with the draw system
 class BezierManager
 {
 public:

@@ -7,10 +7,12 @@
 #include "common/draw_system/geometry/geometry_generic.h"
 #include "common/draw_system/render_target/render_target_texture.h"
 #include "common/draw_system/shader/shader.h"
+#include "common/math/dsc_math.h"
 #include "common/math/vector_int2.h"
 #include "common/math/vector_int4.h"
 #include "common/math/vector_float2.h"
 #include "common/math/vector_float4.h"
+#include "common/util/vector_helper.h"
 
 namespace
 {
@@ -20,27 +22,60 @@ namespace
         const BezierCurves::BezierSegment& in_data
         )
     {
-        VectorFloat2 low(in_data._p0.GetX() - in_data._line_thickness_p0, in_data._p0.GetY() - in_data._line_thickness_p0);
-        VectorFloat2 high(in_data._p0.GetX() + in_data._line_thickness_p0, in_data._p0.GetY() + in_data._line_thickness_p0);
+        out_min = VectorFloat2(in_data._p0.GetX() - in_data._line_thickness_p0, in_data._p0.GetY() - in_data._line_thickness_p0);
+        out_max = VectorFloat2(in_data._p0.GetX() + in_data._line_thickness_p0, in_data._p0.GetY() + in_data._line_thickness_p0);
 
         const float min_thickness = 0.5f * (in_data._line_thickness_p0 + in_data._line_thickness_p2);
-        low = VectorFloat2::Min(low, 
+        out_min = VectorFloat2::Min(out_min, 
             VectorFloat2(in_data._p1.GetX() - min_thickness, in_data._p1.GetY() - min_thickness));
-        high = VectorFloat2::Max(high, 
+        out_max = VectorFloat2::Max(out_max, 
             VectorFloat2(in_data._p1.GetX() + min_thickness, in_data._p1.GetY() + min_thickness));
 
-        low = VectorFloat2::Min(low, 
+        out_min = VectorFloat2::Min(out_min, 
             VectorFloat2(in_data._p2.GetX() - in_data._line_thickness_p2, in_data._p2.GetY() - in_data._line_thickness_p2));
-        high = VectorFloat2::Max(high, 
+        out_max = VectorFloat2::Max(out_max, 
             VectorFloat2(in_data._p2.GetX() + in_data._line_thickness_p2, in_data._p2.GetY() + in_data._line_thickness_p2));
 
         return;
     }
 
+    void AddVertexData(
+        std::vector<uint8_t>& out_vertex_raw_data,
+        const float in_uv0,
+        const float in_uv1,
+        const float in_pos0,
+        const float in_pos1,
+        const VectorFloat2& in_p0,
+        const VectorFloat2& in_p1,
+        const VectorFloat2& in_p2,
+        const float in_thickness0,
+        const float in_thickness2,
+        const VectorFloat2& in_width_height
+        )
+    {
+        //pos
+        VectorHelper::AppendValue(out_vertex_raw_data, in_pos0);
+        VectorHelper::AppendValue(out_vertex_raw_data, in_pos1);
+        //p0 the start
+        VectorHelper::AppendValue(out_vertex_raw_data, in_p0);
+        //p1 a combined gradient target for both p0 and p1
+        VectorHelper::AppendValue(out_vertex_raw_data, in_p1);
+        //p2 the end
+        VectorHelper::AppendValue(out_vertex_raw_data, in_p2);
+        // thickness at p0, p1
+        VectorHelper::AppendValue(out_vertex_raw_data, in_thickness0);
+        VectorHelper::AppendValue(out_vertex_raw_data, in_thickness2);
+        // dim, the pixel width/height that the quad is drawing to
+        VectorHelper::AppendValue(out_vertex_raw_data, in_width_height);
+        // uv, the uv in the quad to work out the sample point. position can be rahter arbitary so can not base uv on pos
+        VectorHelper::AppendValue(out_vertex_raw_data, in_uv0);
+        VectorHelper::AppendValue(out_vertex_raw_data, in_uv1);
+    }
+
     void GenerateGeometry(
         std::vector<uint8_t>& out_vertex_raw_data,
-        const VectorInt2& in_containter_size,
-        const VectorInt2& in_containter_offset,
+        const VectorInt2& in_container_size,
+        const VectorInt2& in_container_offset,
         const std::vector<BezierCurves::BezierSegment>& in_data
         )
     {
@@ -60,31 +95,91 @@ namespace
                 continue;
             }
 
+            const VectorFloat2 width_height(
+                temp_max.GetX() - temp_min.GetX(), 
+                temp_max.GetY() - temp_min.GetY()
+                );
+
+            const VectorFloat4 pos = VectorFloat4(
+                DscMath::ConvertZeroOneToNegativeOneOne((static_cast<float>(in_container_offset.GetX()) + temp_min.GetX()) / static_cast<float>(in_container_size.GetX())),
+                DscMath::ConvertZeroOneToNegativeOneOne((static_cast<float>(in_container_offset.GetY()) + temp_min.GetY()) / static_cast<float>(in_container_size.GetY())),
+                DscMath::ConvertZeroOneToNegativeOneOne((static_cast<float>(in_container_offset.GetX()) + temp_max.GetX()) / static_cast<float>(in_container_size.GetX())),
+                DscMath::ConvertZeroOneToNegativeOneOne((static_cast<float>(in_container_offset.GetY()) + temp_max.GetY()) / static_cast<float>(in_container_size.GetY()))
+                );
+
+            //0.0f, 0.0f,
+            AddVertexData(out_vertex_raw_data, 0.0f, 0.0f, pos[0], pos[1], iter._p0, iter._p1, iter._p2, iter._line_thickness_p0, iter._line_thickness_p2, width_height); 
+
+            //0.0f, 1.0f,
+            AddVertexData(out_vertex_raw_data, 0.0f, 1.0f, pos[0], pos[3], iter._p0, iter._p1, iter._p2, iter._line_thickness_p0, iter._line_thickness_p2, width_height); 
+
+            //1.0f, 0.0f,
+            AddVertexData(out_vertex_raw_data, 1.0f, 0.0f, pos[2], pos[1], iter._p0, iter._p1, iter._p2, iter._line_thickness_p0, iter._line_thickness_p2, width_height); 
+
+            //1.0f, 0.0f,
+            AddVertexData(out_vertex_raw_data, 1.0f, 0.0f, pos[2], pos[1], iter._p0, iter._p1, iter._p2, iter._line_thickness_p0, iter._line_thickness_p2, width_height); 
+
+            //0.0f, 1.0f,
+            AddVertexData(out_vertex_raw_data, 0.0f, 1.0f, pos[0], pos[3], iter._p0, iter._p1, iter._p2, iter._line_thickness_p0, iter._line_thickness_p2, width_height); 
+
+            //1.0f, 1.0f,
+            AddVertexData(out_vertex_raw_data, 1.0f, 1.0f, pos[2], pos[3], iter._p0, iter._p1, iter._p2, iter._line_thickness_p0, iter._line_thickness_p2, width_height); 
 
         }
     }
 };
+
+const bool BezierCurves::BezierSegment::operator== (const BezierSegment& in_rhs) const
+{
+    if (_p0 != in_rhs._p0)
+    {
+        return false;
+    }
+    if (_p1 != in_rhs._p1)
+    {
+        return false;
+    }
+    if (_p2 != in_rhs._p2)
+    {
+        return false;
+    }
+    if (_line_thickness_p0 != in_rhs._line_thickness_p0)
+    {
+        return false;
+    }
+    if (_line_thickness_p2 != in_rhs._line_thickness_p2)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+const bool BezierCurves::BezierSegment::operator!= (const BezierSegment& in_rhs) const
+{
+    return !(operator==(in_rhs));
+}
 
 class BezierCurvesImplementation
 {
 public:
     BezierCurvesImplementation(
         const std::vector<BezierCurves::BezierSegment>& in_data,
-        const VectorInt2& in_containter_size,
-        const VectorInt2& in_containter_offset
+        const VectorInt2& in_container_size,
+        const VectorInt2& in_container_offset
         )
         : _calculate_dirty(true)
         , _geometry_dirty(true)
         , _geometry()
-        , _container_size(in_containter_size)
-        , _containter_offset(in_containter_offset)
+        , _container_size(in_container_size)
+        , _container_offset(in_container_offset)
         , _data(in_data)
     {
         // Nop
     }
 
-    // Get the natural size required by the text using current width limit if enabled
-    VectorInt2 GetBounds()
+    // Get the natural bounds required by the bezier curve
+    VectorInt2 GetCurveBounds()
     {
         if (true == _calculate_dirty)
         {
@@ -127,13 +222,64 @@ public:
         return _bounds;
     }
 
+    const bool SetContainerSize(
+        const VectorInt2& in_container_size = VectorInt2::s_zero,
+        const VectorInt2& in_container_offset = VectorInt2::s_zero
+        )
+    {
+        bool dirty = false;
+        if ((_container_size != in_container_size) ||
+            (_container_offset != in_container_offset))
+        {
+            dirty = true;
+            _geometry_dirty = true;
+            _container_size = in_container_size;
+            _container_offset = in_container_offset;
+        }
+        return dirty;
+    }
+
+    const bool SetData(
+        const std::vector<BezierCurves::BezierSegment>& in_data
+        )
+    {
+        bool dirty = false;
+        if (_data != in_data)
+        {
+            dirty = true;
+            _calculate_dirty = true;
+            _geometry_dirty = true;
+        }
+        return dirty;
+    }
+
+    const bool ModifyData(
+        const BezierCurves::BezierSegment& in_data,
+        const int in_index
+        )
+    {
+        bool dirty = false;
+        if ((0 <= in_index) && (in_index < static_cast<int>(_data.size())))
+        {
+            BezierCurves::BezierSegment& segment = _data[in_index];
+            if (segment != in_data)
+            {
+                segment = in_data;
+                dirty = true;
+                _calculate_dirty = true;
+                _geometry_dirty = true;
+            }
+        }
+        return dirty;
+    }
+
     void Draw(
         DrawSystem* const in_draw_system,
         DrawSystemFrame* const in_draw_system_frame,
         std::shared_ptr<Shader>& in_shader
         )
     {
-        GetBounds();
+        GetCurveBounds();
 
         if (true == _geometry_dirty)
         {
@@ -187,21 +333,21 @@ private:
     /// the rounded up max width and height of the bezier point, just using the point position, don't include origin (0,0)
     VectorInt2 _bounds;
     VectorInt2 _container_size;
-    VectorInt2 _containter_offset;
+    VectorInt2 _container_offset;
     std::vector<BezierCurves::BezierSegment> _data;
 
 };
 
 BezierCurves::BezierCurves(
     const std::vector<BezierSegment>& in_data,
-    const VectorInt2& in_containter_size,
-    const VectorInt2& in_containter_offset
+    const VectorInt2& in_container_size,
+    const VectorInt2& in_container_offset
     )
 {
     _implementation = std::make_unique<BezierCurvesImplementation>(
         in_data,
-        in_containter_size,
-        in_containter_offset
+        in_container_size,
+        in_container_offset
         );
 }
 
@@ -217,13 +363,13 @@ VectorInt2 BezierCurves::GetCurveBounds()
 }
 
 const bool BezierCurves::SetContainerSize(
-    const VectorInt2& in_containter_size,
-    const VectorInt2& in_containter_offset
+    const VectorInt2& in_container_size,
+    const VectorInt2& in_container_offset
     )
 {
     return _implementation->SetContainerSize(
-        in_containter_size,
-        in_containter_offset
+        in_container_size,
+        in_container_offset
         );
 }
 

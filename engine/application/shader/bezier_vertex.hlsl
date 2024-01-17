@@ -1,4 +1,4 @@
-#include "interpolant.hlsli"
+#include "bezier_interpolant.hlsli"
 
 struct Vertex
 {

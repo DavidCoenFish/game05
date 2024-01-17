@@ -5,13 +5,12 @@
 
 const VectorFloat2 VectorFloat2::s_zero(0.0f, 0.0f);
 const VectorFloat2 VectorFloat2::s_min(-std::numeric_limits<float>::max(), -std::numeric_limits<float>::max());
-const VectorFloat2 VectorFloat2::s_max(std::numeric_limits<float>::max(), std::numeric_limits<float>::max())
+const VectorFloat2 VectorFloat2::s_max(std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
 
 VectorFloat2::VectorFloat2(
     const float in_x,
     const float in_y
     ) : _data{ in_x, in_y}
-
 {
     return;
 }

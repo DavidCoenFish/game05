@@ -28,7 +28,7 @@ public:
         const float in_new_line_gap_ratio, // new line = in_font_size + (in_font_size * in_new_line_gap_ratio)
         const std::string& in_string_utf8,
         const TextLocale* const in_locale_token,
-        const VectorInt2& in_containter_size,
+        const VectorInt2& in_container_size,
         const bool in_width_limit_enabled = false,
         const int in_width_limit = 0,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment = TextEnum::HorizontalLineAlignment::Left,

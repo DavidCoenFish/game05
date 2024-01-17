@@ -25,7 +25,7 @@ public:
         const float in_new_line_gap_ratio,
         const std::string& in_string_utf8,
         const TextLocale* const in_locale_token,
-        const VectorInt2& in_containter_size,
+        const VectorInt2& in_container_size,
         const bool in_width_limit_enabled,
         const int in_width_limit,
         const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
@@ -41,7 +41,7 @@ public:
         , _new_line_gap_ratio(in_new_line_gap_ratio)
         , _string_utf8(in_string_utf8)
         , _locale_token(in_locale_token)
-        , _container_size(in_containter_size)
+        , _container_size(in_container_size)
         , _width_limit_enabled(in_width_limit_enabled)
         , _width_limit(in_width_limit)
         , _horizontal_line_alignment(in_horizontal_line_alignment)
@@ -436,7 +436,7 @@ TextBlock::TextBlock(
     const float in_new_line_gap_ratio, // new line = in_font_size + (in_font_size * in_new_line_gap_ratio)
     const std::string& in_string_utf8,
     const TextLocale* const in_locale_token,
-    const VectorInt2& in_containter_size,
+    const VectorInt2& in_container_size,
     const bool in_width_limit_enabled,
     const int in_width_limit,
     const TextEnum::HorizontalLineAlignment in_horizontal_line_alignment,
@@ -451,7 +451,7 @@ TextBlock::TextBlock(
         in_new_line_gap_ratio,
         in_string_utf8,
         in_locale_token,
-        in_containter_size,
+        in_container_size,
         in_width_limit_enabled,
         in_width_limit,
         in_horizontal_line_alignment,

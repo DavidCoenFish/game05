@@ -30,12 +30,15 @@ public:
         float _line_thickness_p0;
         //float _line_thickness_p1;
         float _line_thickness_p2;
+
+        const bool operator== (const BezierSegment& in_rhs) const;
+        const bool operator!= (const BezierSegment& in_rhs) const;
     };
 
     BezierCurves(
         const std::vector<BezierSegment>& in_data = std::vector<BezierSegment>(),
-        const VectorInt2& in_containter_size = VectorInt2::s_zero,
-        const VectorInt2& in_containter_offset = VectorInt2::s_zero
+        const VectorInt2& in_container_size = VectorInt2::s_zero,
+        const VectorInt2& in_container_offset = VectorInt2::s_zero
         );
 
     ~BezierCurves();
@@ -44,8 +47,8 @@ public:
     VectorInt2 GetCurveBounds();
 
     const bool SetContainerSize(
-        const VectorInt2& in_containter_size = VectorInt2::s_zero,
-        const VectorInt2& in_containter_offset = VectorInt2::s_zero
+        const VectorInt2& in_container_size = VectorInt2::s_zero,
+        const VectorInt2& in_container_offset = VectorInt2::s_zero
         );
 
     const bool SetData(
