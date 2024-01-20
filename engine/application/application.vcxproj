@@ -125,6 +125,9 @@
       <FileType>Document</FileType>
     </CopyFileToFolders>
     <None Include="task\test_bezier\interpolant.hlsli" />
+    <CopyFileToFolders Include="task\test_bezier_curve\application.json">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
     <None Include="task\test_compute\present_interpolant.hlsli" />
     <CopyFileToFolders Include="task\test_coord\application.json">
       <FileType>Document</FileType>
@@ -160,6 +163,7 @@
     <ClCompile Include="source\window_application\application_basic_ui.cpp" />
     <ClCompile Include="source\window_application\application_multi_line.cpp" />
     <ClCompile Include="source\window_application\application_multi_line_compute.cpp" />
+    <ClCompile Include="source\window_application\application_test_bezier_curve.cpp" />
     <ClCompile Include="source\window_application\application_test_compute.cpp" />
     <ClCompile Include="source\window_application\application_test_coord.cpp" />
     <ClCompile Include="source\window_application\application_test_line.cpp" />
@@ -182,6 +186,7 @@
     <ClInclude Include="source\window_application\application_basic_ui.h" />
     <ClInclude Include="source\window_application\application_multi_line.h" />
     <ClInclude Include="source\window_application\application_multi_line_compute.h" />
+    <ClInclude Include="source\window_application\application_test_bezier_curve.h" />
     <ClInclude Include="source\window_application\application_test_compute.h" />
     <ClInclude Include="source\window_application\application_test_coord.h" />
     <ClInclude Include="source\window_application\application_test_line.h" />

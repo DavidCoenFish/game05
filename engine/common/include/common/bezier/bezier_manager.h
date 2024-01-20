@@ -5,7 +5,7 @@
 class DrawSystem;
 class DrawSystemFrame;
 class Shader;
-class BezierCurves;
+class BezierCurve;
 class BezierManagerImplementation;
 
 /// these are helper classes to draw bezier curves with the draw system (like text). It could be under the draw system?
@@ -22,10 +22,10 @@ public:
         );
     ~BezierManager();
 
-    void DrawBezierCurves(
+    void DrawBezierCurve(
         DrawSystem* const in_draw_system,
         DrawSystemFrame* const in_draw_system_frame,
-        BezierCurves* const in_bezier_curves
+        BezierCurve* const in_bezier_curve
         );
 
 private:

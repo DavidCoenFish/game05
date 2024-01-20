@@ -1,7 +1,7 @@
 #include "common/common_pch.h"
 #include "common/bezier/bezier_manager.h"
 
-#include "common/bezier/bezier_curves.h"
+#include "common/bezier/bezier_curve.h"
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/draw_system_frame.h"
 #include "common/draw_system/shader/shader.h"
@@ -44,7 +44,7 @@ namespace
         // dim, the pixel width/height that the quad is drawing to
         D3D12_INPUT_ELEMENT_DESC
         {
-            "COLOR", 3, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, \
+            "COLOR", 4, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, \
                 D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 // UINT InstanceDataStepRate;
         },
         // uv, the uv in the quad to work out the sample point. position can be rahter arbitary so can not base uv on pos
@@ -99,13 +99,13 @@ public:
         // nop
     }
 
-    void DrawBezierCurves(
+    void DrawBezierCurve(
         DrawSystem* const in_draw_system,
         DrawSystemFrame* const in_draw_system_frame,
-        BezierCurves* const in_bezier_curves
+        BezierCurve* const in_bezier_curve
         )
     {
-        in_bezier_curves->Draw(
+        in_bezier_curve->Draw(
             in_draw_system,
             in_draw_system_frame,
             _shader
@@ -140,16 +140,16 @@ BezierManager::~BezierManager()
     // Nop
 }
 
-void BezierManager::DrawBezierCurves(
+void BezierManager::DrawBezierCurve(
     DrawSystem* const in_draw_system,
     DrawSystemFrame* const in_draw_system_frame,
-    BezierCurves* const in_bezier_curves
+    BezierCurve* const in_bezier_curve
     )
 {
-    _implementation->DrawBezierCurves(
+    _implementation->DrawBezierCurve(
         in_draw_system,
         in_draw_system_frame,
-        in_bezier_curves
+        in_bezier_curve
         );
 }
 

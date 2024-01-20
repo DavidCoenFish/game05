@@ -8,6 +8,10 @@
       "Items": [
         {
           "Id": "61c5225c-526e-4467-bb05-a44eed2a6368",
+          "Command": "test_bezier_curve"
+        },
+        {
+          "Id": "6f33058c-93e1-4640-8f43-e850d52f78cf",
           "Command": "test_bezier"
         },
         {

@@ -64,6 +64,9 @@
     <Filter Include="task\test_bezier">
       <UniqueIdentifier>{f34976d2-84b6-42a9-abea-3ab101134758}</UniqueIdentifier>
     </Filter>
+    <Filter Include="task\test_bezier_curve">
+      <UniqueIdentifier>{655f1cb2-b570-48b8-86cb-6af4636fb425}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Script\util_make_host_define.cmd">
@@ -201,6 +204,9 @@
     <ClCompile Include="source\window_application\application_test_bezier.cpp">
       <Filter>source\window_application</Filter>
     </ClCompile>
+    <ClCompile Include="source\window_application\application_test_bezier_curve.cpp">
+      <Filter>source\window_application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Build.h">
@@ -263,6 +269,9 @@
     <ClInclude Include="source\window_application\application_test_bezier.h">
       <Filter>source\window_application</Filter>
     </ClInclude>
+    <ClInclude Include="source\window_application\application_test_bezier_curve.h">
+      <Filter>source\window_application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\cut.ico">
@@ -319,6 +328,9 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="task\test_bezier\application.json">
       <Filter>task\test_bezier</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="task\test_bezier_curve\application.json">
+      <Filter>task\test_bezier_curve</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>

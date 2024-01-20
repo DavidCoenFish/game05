@@ -13,7 +13,7 @@ class VectorInt2;
 
 /// multiple bezier line segments
 /// rather than have the thickness in the shader constants, add the start end thickness to the vertex data
-class BezierCurves
+class BezierCurve
 {
 public:
     struct BezierSegment
@@ -35,13 +35,13 @@ public:
         const bool operator!= (const BezierSegment& in_rhs) const;
     };
 
-    BezierCurves(
+    BezierCurve(
         const std::vector<BezierSegment>& in_data = std::vector<BezierSegment>(),
         const VectorInt2& in_container_size = VectorInt2::s_zero,
         const VectorInt2& in_container_offset = VectorInt2::s_zero
         );
 
-    ~BezierCurves();
+    ~BezierCurve();
 
     /// Get the natural size required by the text, if width limit is enabled, when uses width limit
     VectorInt2 GetCurveBounds();

@@ -15,7 +15,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\common\bezier\bezier_curves.cpp" />
+    <ClCompile Include="source\common\bezier\bezier_curve.cpp" />
     <ClCompile Include="source\common\bezier\bezier_manager.cpp" />
     <ClCompile Include="source\common\common_pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -133,7 +133,7 @@
     <ClCompile Include="source\common\worker\worker_task.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\common\bezier\bezier_curves.h" />
+    <ClInclude Include="include\common\bezier\bezier_curve.h" />
     <ClInclude Include="include\common\bezier\bezier_manager.h" />
     <ClInclude Include="include\common\common.h" />
     <ClInclude Include="include\common\dag_threaded\dag_threaded.h" />

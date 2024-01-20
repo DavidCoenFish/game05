@@ -331,7 +331,7 @@
     <ClCompile Include="source\common\ui\ui_data\ui_data_toggle.cpp">
       <Filter>souce\common\ui\ui_data</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\bezier\bezier_curves.cpp">
+    <ClCompile Include="source\common\bezier\bezier_curve.cpp">
       <Filter>souce\common\bezier</Filter>
     </ClCompile>
     <ClCompile Include="source\common\bezier\bezier_manager.cpp">
@@ -696,7 +696,7 @@
     <ClInclude Include="include\common\bezier\bezier_manager.h">
       <Filter>include\common\bezier</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\bezier\bezier_curves.h">
+    <ClInclude Include="include\common\bezier\bezier_curve.h">
       <Filter>include\common\bezier</Filter>
     </ClInclude>
   </ItemGroup>

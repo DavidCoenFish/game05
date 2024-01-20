@@ -52,7 +52,7 @@ float distanceFunction(float input_t, float2 p0, float2 p1, float2 p2, float2 sa
     float current_thickness = ((1.0 - t) * thickness.x) + (t * thickness.y);
     float coverage = saturate(current_thickness - distance);
 
-    return distance;
+    return coverage;
 }
 
 static const float PI = 3.1415926535897932384626433832795;
@@ -198,11 +198,8 @@ Pixel main( Interpolant in_input )
 {
     Pixel result;
 
-    float sd = sdFunction(in_input._uv, in_input._p0, in_input._p1, in_input._p2, in_input._dim, in_input._thickness);
-    //float coverage = 1.0 - saturate(_width_height_thickness.z - sd);
-    float coverage = 1.0 - sd;
-    result._color = float4(coverage, coverage, coverage, 1.0);
-    //result._color = float4(0.0, 0.0, 0.0, coverage);
+    float coverage = sdFunction(in_input._uv, in_input._p0, in_input._p1, in_input._p2, in_input._dim, in_input._thickness);
+    result._color = float4(0.0, 0.0, 0.0, coverage);
 
     return result;
 }
