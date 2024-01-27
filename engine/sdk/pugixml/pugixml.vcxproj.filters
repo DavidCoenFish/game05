@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="src\pugixml.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\pugiconfig.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{0fb58dbe-e72f-47eb-ad2f-0c610a65433a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="props">
+      <UniqueIdentifier>{1efae7c9-db94-463a-9552-595afe53f04f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\pugixml.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="props\pugixml.props">
+      <Filter>props</Filter>
+    </None>
+  </ItemGroup>
+</Project>

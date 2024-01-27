@@ -7,7 +7,7 @@ see OverlayFileSystem for the intergration of overlays and async functions
 */
 namespace FileSystem
 {
-   typedef std::shared_ptr< std::vector< uint8_t > > TFileData;
+   typedef std::shared_ptr<std::vector<uint8_t>> TFileData;
 
    const std::filesystem::path GetModualDir(HINSTANCE in_instance);
    const std::filesystem::path GetTempDir();

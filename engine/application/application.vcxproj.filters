@@ -332,6 +332,9 @@
     <CopyFileToFolders Include="task\test_bezier_curve\application.json">
       <Filter>task\test_bezier_curve</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="task\test_bezier_curve\leaf_00_e.svg">
+      <Filter>task\test_bezier_curve</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="task\test_triangle\pixel_shader.hlsl">

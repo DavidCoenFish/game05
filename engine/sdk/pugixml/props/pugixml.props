@@ -3,7 +3,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
     <DscBuildDir>$(SolutionDir)..\build\$(SolutionName)\$(ProjectName)\$(Platform)\$(Configuration)\</DscBuildDir>
-    <DscIncludeDir>$(SolutionDir)sdk\;$(SolutionDir)sdk\free_type\Include\;$(SolutionDir)sdk\harf_buzz\Include\;$(SolutionDir)sdk\pugixml\src\;$(projectDir)source\;$(projectDir)include\</DscIncludeDir>
+    <DscIncludeDir>$(SolutionDir)sdk\;$(projectDir)src\</DscIncludeDir>
   </PropertyGroup>
   <PropertyGroup>
     <OutDir>$(DscBuildDir)output\</OutDir>
@@ -11,9 +11,6 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(DscIncludeDir);$(IncludePath)</AdditionalIncludeDirectories>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>common\common_pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>

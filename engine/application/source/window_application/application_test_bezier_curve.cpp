@@ -68,14 +68,17 @@ ApplicationTestBezierCurve::ApplicationTestBezierCurve(
         command_list->GetCommandList(),
         in_application_param._root_path
         );
-
+#if 0
      std::vector<BezierCurve::BezierSegment> segment_data({
         { VectorFloat2(-100.0f, 0.0f), VectorFloat2(-100.0f, 100.0f), VectorFloat2(0.0f, 100.0f), 1.0f, 1.0f},
         { VectorFloat2(0.0f, 100.0f), VectorFloat2(100.0f, 100.0f), VectorFloat2(100.0f, 0.0f), 1.0f, 10.0f},
         { VectorFloat2(100.0f, 0.0f), VectorFloat2(100.0f, -100.0f), VectorFloat2(0.0f, -100.0f), 10.0f, 1.0f},
         { VectorFloat2(0.0f, -100.0f), VectorFloat2(-100.0f, -100.0f), VectorFloat2(-100.0f, 0.0f), 1.0f, 1.0f}
      });
-
+#else
+    std::vector<BezierCurve::BezierSegment> segment_data;
+    BezierFileHelper::SegmentDataFromSvg(segment_data, in_application_param._data_path / "leaf_00_e.svg");
+#endif
     _bezier_curve = std::make_unique<BezierCurve>(
         segment_data
         );

@@ -70,7 +70,16 @@ amount of deomon skin clothing reduces stress cost of actions
 
 
 
-
+//===
+is the gameplay a turnbased mix of "planet masters" and whatever that potion alkemy game was where you find ingredents and mixing them for a potion moves a cursor around a map,
+and the closer to the target you get, the better quality potion.
+for the succubus, mixing the potion is equivalent to self pleasure, the ingredents are ideas you get from talking to people during the day
+locations on map are the people you know, and landing near them is the quality of the dream they have about you?
+from planet master, there are powerup creatures moving around the map (if you cross there path, get a x2? lasting 10 moves)
+from planet master, selecting self allows release, which for 30? days gives 1.25x on dream trust points gained, but 0.75x dream movement
+on dream map, you continue from where you left, but can only visit each person other than yourself once
+- how to deal with consecutive self release- it gains no trust points
+trust points get changed to physical affection, which fules self modification/ ex gain
 
 
 

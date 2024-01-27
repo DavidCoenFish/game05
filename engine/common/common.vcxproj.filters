@@ -337,6 +337,9 @@
     <ClCompile Include="source\common\bezier\bezier_manager.cpp">
       <Filter>souce\common\bezier</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\bezier\bezier_file_helper.cpp">
+      <Filter>souce\common\bezier</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -697,6 +700,9 @@
       <Filter>include\common\bezier</Filter>
     </ClInclude>
     <ClInclude Include="include\common\bezier\bezier_curve.h">
+      <Filter>include\common\bezier</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\bezier\bezier_file_helper.h">
       <Filter>include\common\bezier</Filter>
     </ClInclude>
   </ItemGroup>

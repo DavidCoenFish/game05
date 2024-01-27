@@ -128,6 +128,9 @@
     <CopyFileToFolders Include="task\test_bezier_curve\application.json">
       <FileType>Document</FileType>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="task\test_bezier_curve\leaf_00_e.svg">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
     <None Include="task\test_compute\present_interpolant.hlsli" />
     <CopyFileToFolders Include="task\test_coord\application.json">
       <FileType>Document</FileType>
@@ -205,6 +208,9 @@
     </ProjectReference>
     <ProjectReference Include="..\sdk\harf_buzz\harf_buzz.vcxproj">
       <Project>{92518a37-172c-4526-920f-ab1fa10f9f07}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\sdk\pugixml\pugixml.vcxproj">
+      <Project>{f70c6482-934d-407b-be6e-a741780de086}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
