@@ -3,12 +3,195 @@
 
 #include "common/bezier/bezier_curve.h"
 #include "common/file_system/file_system.h"
+#include "common/log/log.h"
 
 #include "pugixml.hpp"
 
-/*
 namespace
 {
+    const VectorFloat2 ConsumeVector(int& out_index, const std::vector<std::string>& in_token_array)
+    {
+        VectorFloat2 result;
+        if (out_index + 1 < in_token_array.size())
+        {
+            result[0] = std::stof(in_token_array[out_index + 0]);
+            result[1] = std::stof(in_token_array[out_index + 1]);
+        }
+        out_index += 2;
+        return result;
+    }
+    void ConsumeCurveTo(
+        int& out_index, 
+        const std::vector<std::string>& in_token_array, 
+        VectorFloat2& out_last_pos, 
+        std::vector<BezierCurve::BezierSegment>& out_segment_data,
+        const bool in_absolute
+        )
+    {
+        bool absolute = in_absolute;
+        while (out_index + 5 < in_token_array.size())
+        {
+            BezierCurve::BezierSegment segment;
+            segment._p0 = out_last_pos;
+            const VectorFloat2 v1 = ConsumeVector(out_index, in_token_array);
+            segment._p1 = in_absolute ? v1 : out_last_pos + v1; 
+            // todo: should be v2 == to v1
+            const VectorFloat2 v2 = ConsumeVector(out_index, in_token_array);
+            const VectorFloat2 v3 = ConsumeVector(out_index, in_token_array);
+            segment._p2 = in_absolute ? v3 : out_last_pos + v3;
+            segment._line_thickness_p0 = 1.0f;
+            segment._line_thickness_p2 = 1.0f;
+            out_segment_data.push_back(segment);
+
+            out_last_pos = segment._p2;
+
+            if (out_index < in_token_array.size())
+            {
+                const std::string peek_next = in_token_array[out_index];
+                if ((peek_next == "m") || (peek_next == "M"))
+                {
+                    return;
+                }
+                if (peek_next == "c")
+                {
+                    out_index += 1;
+                    absolute = false;
+                }
+                if (peek_next == "C")
+                {
+                    out_index += 1;
+                    absolute = true;
+                }
+            }
+        }
+
+    }
+
+    class Tokeniser
+    {
+    public:
+        Tokeniser(std::vector<std::string>& out_string_array)
+        : _string_array(out_string_array)
+        {
+            // nop
+        }
+        ~Tokeniser()
+        {
+            if (false == _current.empty())
+            {
+                _string_array.push_back(_current);
+                _current = std::string();
+            }
+        }
+
+        void AddCharacter(const char in_character)
+        {
+            if ((',' == in_character) || (0 != std::isspace(in_character)))
+            {
+                if (false == _current.empty())
+                {
+                    _string_array.push_back(_current);
+                    _current = std::string();
+                }
+            }
+            else
+            {
+                _current += in_character;
+            }
+        }
+
+    private:
+        std::string _current;
+        std::vector<std::string>& _string_array;
+    };
+
+    class SimpleWalker: public pugi::xml_tree_walker
+    {
+    public:
+        SimpleWalker(std::vector<BezierCurve::BezierSegment>& out_segment_data)
+            : _segment_data(out_segment_data)
+        {
+            // nop
+        }
+
+        void AppendPath(const pugi::char_t* const in_value)
+        {
+            if (nullptr == in_value)
+            {
+                return;
+            }
+
+            std::vector<std::string> token_array;
+            {
+                Tokeniser tokeniser(token_array);
+                for (const auto character : std::string(in_value))
+                {
+                    tokeniser.AddCharacter(character);
+                }
+            }
+
+            //example "m 115.41665,140.47261 c 8,-12 4,-16 0,-16 -4,0 -3.57791,2.66042 -3.57791,2.66042"
+            //"m 100,99.999997 c 100,0 100,0 100,100.000003 0,100 0,99.99999 -100,100.16393"
+            //"M 0,0 C 98.999999,0 100,0 100,99.999997"
+            int index = 0;
+            while (index < token_array.size())
+            {
+                const std::string& token = token_array[index];
+                if (token == "m")
+                {
+                    index += 1;
+                    _last_pos = _last_pos + ConsumeVector(index, token_array);
+                }
+                else if (token == "M")
+                {
+                    index += 1;
+                    _last_pos = ConsumeVector(index, token_array);
+                }
+                else if (token == "c")
+                {
+                    index += 1;
+                    ConsumeCurveTo(index, token_array, _last_pos, _segment_data, false);
+                }
+                else if (token == "C")
+                {
+                    index += 1;
+                    ConsumeCurveTo(index, token_array, _last_pos, _segment_data, true);
+                }
+                else if (token == "Z")
+                {
+                    index += 1;
+                    return;
+                }
+                else if (token == "z")
+                {
+                    index += 1;
+                    return;
+                }
+                else
+                {
+                    LOG_MESSAGE_WARNING("parse bezier svg path, unknown token [%s]", token_array[index].c_str());
+                    index += 1;
+                }
+            }
+        }
+
+        virtual bool for_each(pugi::xml_node& node)
+        {
+            if (0 == strcmp("path", node.name()))
+            {
+                pugi::xml_attribute attribute = node.attribute("d");
+                AppendPath(attribute.value());
+            }
+
+            return true; // continue traversal
+        }
+    private:
+        std::vector<BezierCurve::BezierSegment>& _segment_data;
+        VectorFloat2 _last_pos;
+
+    };
+
+/*
     class Tokenizer;
 
     struct XmlEscapeValues
@@ -246,12 +429,14 @@ namespace
     };
 }
 */
+}
 
 const bool BezierFileHelper::SegmentDataFromSvg(
     std::vector<BezierCurve::BezierSegment>& out_segment_data, 
     const std::filesystem::path& in_file_path
     )
 {
+#if 0
     auto file_data = FileSystem::SyncReadFile(in_file_path);
     if ((nullptr == file_data) || (0 == file_data->size()))
     {
@@ -260,9 +445,29 @@ const bool BezierFileHelper::SegmentDataFromSvg(
     const std::string file_string = FileSystem::DataToString(file_data);
 
     Tokenizer tokenizer(file_string);
+#else
+    pugi::xml_document doc;
+
+    pugi::xml_parse_result result = doc.load_file(in_file_path.wstring().c_str());
+
+    if (pugi::status_ok != result.status)
+    {
+        LOG_MESSAGE_ERROR("error loading %s [%s]", in_file_path.string().c_str(), result.description());
+        return false;
+    }
+
+    SimpleWalker simple_walker(out_segment_data);
+    doc.traverse(simple_walker);
+
+    //for (pugi::xml_node_iterator it = doc.begin(); it != doc.end(); ++it)
+    //{
+    //    LOG_CONSOLE(" xml:%s %d", it->name(), static_cast<int>(it->type()));
+    //}
+
+    //std::cout << "Load result: " << result.description() << ", mesh name: " << doc.child("mesh").attribute("name").value() << std::endl;
 
 
-
+#endif
     return true;
 }
 

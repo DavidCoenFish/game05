@@ -34,3 +34,6 @@ private:
 private:
     float _data[Index::Count];
 };
+
+const VectorFloat2 operator+(const VectorFloat2& in_lhs, const VectorFloat2& in_rhs);
+

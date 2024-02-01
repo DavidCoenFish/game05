@@ -95,3 +95,9 @@ const VectorFloat2 VectorFloat2::Max(const VectorFloat2& in_lhs, const VectorFlo
     return VectorFloat2(std::max(in_lhs.GetX(), in_rhs.GetX()),
         std::max(in_lhs.GetY(), in_rhs.GetY()));
 }
+
+const VectorFloat2 operator+(const VectorFloat2& in_lhs, const VectorFloat2& in_rhs)
+{
+    return VectorFloat2(in_lhs.GetX() + in_rhs.GetX(), in_lhs.GetY() + in_rhs.GetY());
+}
+

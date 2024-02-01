@@ -2,8 +2,9 @@
 
 #include "window_application/application_test_bezier_curve.h"
 
-#include "common/bezier/bezier_manager.h"
 #include "common/bezier/bezier_curve.h"
+#include "common/bezier/bezier_file_helper.h"
+#include "common/bezier/bezier_manager.h"
 #include "common/draw_system/custom_command_list.h"
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/draw_system_frame.h"
