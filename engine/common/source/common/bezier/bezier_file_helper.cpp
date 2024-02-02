@@ -23,7 +23,7 @@ namespace
     void ConsumeCurveTo(
         int& out_index, 
         const std::vector<std::string>& in_token_array, 
-        VectorFloat2& out_last_pos, 
+        const VectorFloat2& cursor, 
         std::vector<BezierCurve::BezierSegment>& out_segment_data,
         const bool in_absolute
         )
@@ -32,18 +32,18 @@ namespace
         while (out_index + 5 < in_token_array.size())
         {
             BezierCurve::BezierSegment segment;
-            segment._p0 = out_last_pos;
+            const VectorFloat2 v0 = ConsumeVector(out_index, in_token_array);
             const VectorFloat2 v1 = ConsumeVector(out_index, in_token_array);
-            segment._p1 = in_absolute ? v1 : out_last_pos + v1; 
-            // todo: should be v2 == to v1
             const VectorFloat2 v2 = ConsumeVector(out_index, in_token_array);
-            const VectorFloat2 v3 = ConsumeVector(out_index, in_token_array);
-            segment._p2 = in_absolute ? v3 : out_last_pos + v3;
+
+            segment._p0 = cursor; 
+            segment._p1 = (true == in_absolute) ? v0 : cursor + v0;
+            // our shader assumes v0 == v1
+            segment._p2 = (true == in_absolute) ? v2 : cursor + v2; 
+
             segment._line_thickness_p0 = 1.0f;
             segment._line_thickness_p2 = 1.0f;
             out_segment_data.push_back(segment);
-
-            out_last_pos = segment._p2;
 
             if (out_index < in_token_array.size())
             {
@@ -133,6 +133,7 @@ namespace
             //example "m 115.41665,140.47261 c 8,-12 4,-16 0,-16 -4,0 -3.57791,2.66042 -3.57791,2.66042"
             //"m 100,99.999997 c 100,0 100,0 100,100.000003 0,100 0,99.99999 -100,100.16393"
             //"M 0,0 C 98.999999,0 100,0 100,99.999997"
+            VectorFloat2 cursor = _last_move;
             int index = 0;
             while (index < token_array.size())
             {
@@ -140,22 +141,23 @@ namespace
                 if (token == "m")
                 {
                     index += 1;
-                    _last_pos = _last_pos + ConsumeVector(index, token_array);
+                    cursor = _last_move + ConsumeVector(index, token_array);
                 }
                 else if (token == "M")
                 {
                     index += 1;
-                    _last_pos = ConsumeVector(index, token_array);
+                    _last_move = ConsumeVector(index, token_array);
+                    cursor = _last_move;
                 }
                 else if (token == "c")
                 {
                     index += 1;
-                    ConsumeCurveTo(index, token_array, _last_pos, _segment_data, false);
+                    ConsumeCurveTo(index, token_array, cursor, _segment_data, false);
                 }
                 else if (token == "C")
                 {
                     index += 1;
-                    ConsumeCurveTo(index, token_array, _last_pos, _segment_data, true);
+                    ConsumeCurveTo(index, token_array, cursor, _segment_data, true);
                 }
                 else if (token == "Z")
                 {
@@ -187,7 +189,7 @@ namespace
         }
     private:
         std::vector<BezierCurve::BezierSegment>& _segment_data;
-        VectorFloat2 _last_pos;
+        VectorFloat2 _last_move;
 
     };
 

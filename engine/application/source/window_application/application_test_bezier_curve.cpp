@@ -113,7 +113,7 @@ void ApplicationTestBezierCurve::Update()
         {
             _bezier_curve->SetContainerSize(
                 _draw_system->GetRenderTargetBackBuffer()->GetSize(),
-                VectorInt2(110, 110)
+                VectorInt2(0, 0)
                 );
             
             // Draw
