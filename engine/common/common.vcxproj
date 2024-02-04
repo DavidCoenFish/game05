@@ -15,9 +15,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\common\bezier\bezier_border_helper.cpp" />
     <ClCompile Include="source\common\bezier\bezier_curve.cpp" />
     <ClCompile Include="source\common\bezier\bezier_file_helper.cpp" />
     <ClCompile Include="source\common\bezier\bezier_manager.cpp" />
+    <ClCompile Include="source\common\bezier\bezier_simulate.cpp" />
     <ClCompile Include="source\common\common_pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -134,9 +136,11 @@
     <ClCompile Include="source\common\worker\worker_task.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\common\bezier\bezier_border_helper.h" />
     <ClInclude Include="include\common\bezier\bezier_curve.h" />
     <ClInclude Include="include\common\bezier\bezier_file_helper.h" />
     <ClInclude Include="include\common\bezier\bezier_manager.h" />
+    <ClInclude Include="include\common\bezier\bezier_simulate.h" />
     <ClInclude Include="include\common\common.h" />
     <ClInclude Include="include\common\dag_threaded\dag_threaded.h" />
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h" />
