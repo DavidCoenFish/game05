@@ -33,7 +33,7 @@ namespace
     {
     public:
         NineSliceQuadrant Quadrant;
-        float Y;
+        float X;
         float Y;
     };
 
@@ -122,13 +122,40 @@ namespace
     static const int s_border0_count = ARRAY_LITERAL_SIZE(s_border0);
 
     const float CalculateNineSliceX(
-        const NineSliceQuadrant in_quadrant, const float in_value,
+        const NineSliceQuadrant in_quadrant, 
+        const float in_value,
         const float in_stop_1,
         const float in_stop_2,
         const float in_stop_3
         )
     {
-        return 0.0f;
+        float low = 0.0f;
+        float high = 0.0f;
+        switch(in_quadrant)
+        {
+        case NineSliceQuadrant::TBottomLeft:
+        case NineSliceQuadrant::TMiddleLeft:
+        case NineSliceQuadrant::TTopLeft:
+            high = in_stop_1;
+            break;
+        case NineSliceQuadrant::TBottomCenter:
+        case NineSliceQuadrant::TMiddleCenter:
+        case NineSliceQuadrant::TTopCenter:
+            low = in_stop_1;
+            high = in_stop_2;
+            break;
+        case NineSliceQuadrant::TBottomRight:
+        case NineSliceQuadrant::TMiddleRight:
+        case NineSliceQuadrant::TTopRight:
+            low = in_stop_2;
+            high = in_stop_3;
+            break;
+        default:
+            break;
+        }
+
+        const float result = (low * (1.0f - in_value)) + (high * in_value);
+        return result;
     }
     const float CalculateNineSliceXMirror(
         const NineSliceQuadrant in_quadrant, const float in_value,
@@ -137,7 +164,33 @@ namespace
         const float in_stop_3
         )
     {
-        return 0.0f;
+        float low = 0.0f;
+        float high = 0.0f;
+        switch(in_quadrant)
+        {
+        case NineSliceQuadrant::TBottomRight:
+        case NineSliceQuadrant::TMiddleRight:
+        case NineSliceQuadrant::TTopRight:
+            high = in_stop_1;
+            break;
+        case NineSliceQuadrant::TBottomCenter:
+        case NineSliceQuadrant::TMiddleCenter:
+        case NineSliceQuadrant::TTopCenter:
+            low = in_stop_1;
+            high = in_stop_2;
+            break;
+        case NineSliceQuadrant::TBottomLeft:
+        case NineSliceQuadrant::TMiddleLeft:
+        case NineSliceQuadrant::TTopLeft:
+            low = in_stop_2;
+            high = in_stop_3;
+            break;
+        default:
+            break;
+        }
+
+        const float result = (low * in_value) + (high * (1.0f - in_value));
+        return result;
     }
 
     const float CalculateNineSliceY(
@@ -147,7 +200,34 @@ namespace
         const float in_stop_3
         )
     {
-        return 0.0f;
+        float low = 0.0f;
+        float high = 0.0f;
+        switch(in_quadrant)
+        {
+        case NineSliceQuadrant::TTopLeft:
+        case NineSliceQuadrant::TTopCenter:
+        case NineSliceQuadrant::TTopRight:
+            high = in_stop_1;
+            break;
+        case NineSliceQuadrant::TMiddleLeft:
+        case NineSliceQuadrant::TMiddleCenter:
+        case NineSliceQuadrant::TMiddleRight:
+            low = in_stop_1;
+            high = in_stop_2;
+            break;
+
+        case NineSliceQuadrant::TBottomLeft:
+        case NineSliceQuadrant::TBottomCenter:
+        case NineSliceQuadrant::TBottomRight:
+            low = in_stop_2;
+            high = in_stop_3;
+            break;
+        default:
+            break;
+        }
+
+        const float result = (low * (1.0f - in_value)) + (high * in_value);
+        return result;
     }
 
     void AppendSegment(
@@ -163,6 +243,87 @@ namespace
         const float in_y_stop_3
         )
     {
+        const float x_left_0 = CalculateNineSliceX(
+            in_segment.Data[0].Quadrant,
+            in_segment.Data[0].X,
+            in_x_stop_1,
+            in_x_stop_2,
+            in_x_stop_3
+            );
+        const float x_right_0 = CalculateNineSliceXMirror(
+            in_segment.Data[0].Quadrant,
+            in_segment.Data[0].X,
+            in_x_stop_1,
+            in_x_stop_2,
+            in_x_stop_3
+            );
+        const float y_0 = CalculateNineSliceY(
+            in_segment.Data[0].Quadrant,
+            in_segment.Data[0].Y,
+            in_y_stop_1,
+            in_y_stop_2,
+            in_y_stop_3
+            );
+
+        const float x_left_1 = CalculateNineSliceX(
+            in_segment.Data[1].Quadrant,
+            in_segment.Data[1].X,
+            in_x_stop_1,
+            in_x_stop_2,
+            in_x_stop_3
+            );
+        const float x_right_1 = CalculateNineSliceXMirror(
+            in_segment.Data[1].Quadrant,
+            in_segment.Data[1].X,
+            in_x_stop_1,
+            in_x_stop_2,
+            in_x_stop_3
+            );
+        const float y_1 = CalculateNineSliceY(
+            in_segment.Data[1].Quadrant,
+            in_segment.Data[1].Y,
+            in_y_stop_1,
+            in_y_stop_2,
+            in_y_stop_3
+            );
+
+        const float x_left_2 = CalculateNineSliceX(
+            in_segment.Data[2].Quadrant,
+            in_segment.Data[2].X,
+            in_x_stop_1,
+            in_x_stop_2,
+            in_x_stop_3
+            );
+        const float x_right_2 = CalculateNineSliceXMirror(
+            in_segment.Data[2].Quadrant,
+            in_segment.Data[2].X,
+            in_x_stop_1,
+            in_x_stop_2,
+            in_x_stop_3
+            );
+        const float y_2 = CalculateNineSliceY(
+            in_segment.Data[2].Quadrant,
+            in_segment.Data[2].Y,
+            in_y_stop_1,
+            in_y_stop_2,
+            in_y_stop_3
+            );
+
+        out_segment_data.push_back(BezierCurve::BezierSegment({
+            VectorFloat2(x_left_0, y_0),
+            VectorFloat2(x_left_1, y_1),
+            VectorFloat2(x_left_2, y_2),
+            in_thick_0,
+            in_thick_1
+        }));
+
+        out_segment_data.push_back(BezierCurve::BezierSegment({
+            VectorFloat2(x_right_0, y_0),
+            VectorFloat2(x_right_1, y_1),
+            VectorFloat2(x_right_2, y_2),
+            in_thick_0,
+            in_thick_1
+        }));
     }
 
 }
@@ -197,11 +358,11 @@ void BezierBorderHelper::GenerateSegmentBorder0(
         // after the first segment (the stem) the rest of the branch slowly taper off back down to min
         if (0 < index)
         {
-            const float ratio_0 = (index - 1.0f) / static_cast<float>(s_border0_count - 2.0f);
-            const float ratio_1 = (index) / static_cast<float>(s_border0_count - 2.0f);
+            const float ratio_0 = (index - 1.0f) / static_cast<float>(s_border0_count - 1.0f);
+            const float ratio_1 = (index) / static_cast<float>(s_border0_count - 1.0f);
 
-            thick_0 = (in_thickness_min * (1.0f - ratio_0)) + (in_thickness_max * ratio_0);
-            thick_1 = (in_thickness_min * (1.0f - ratio_1)) + (in_thickness_max * ratio_1);
+            thick_0 = (in_thickness_min * ratio_0) + (in_thickness_max * (1.0f - ratio_0));
+            thick_1 = (in_thickness_min * ratio_1) + (in_thickness_max * (1.0f - ratio_1));
         }
 
         AppendSegment(
