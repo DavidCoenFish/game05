@@ -240,7 +240,8 @@ namespace
         const float in_x_stop_3,
         const float in_y_stop_1,
         const float in_y_stop_2,
-        const float in_y_stop_3
+        const float in_y_stop_3,
+        const VectorFloat2& in_offset
         )
     {
         const float x_left_0 = CalculateNineSliceX(
@@ -249,21 +250,21 @@ namespace
             in_x_stop_1,
             in_x_stop_2,
             in_x_stop_3
-            );
+            ) + in_offset.GetX();
         const float x_right_0 = CalculateNineSliceXMirror(
             in_segment.Data[0].Quadrant,
             in_segment.Data[0].X,
             in_x_stop_1,
             in_x_stop_2,
             in_x_stop_3
-            );
+            ) + in_offset.GetX();
         const float y_0 = CalculateNineSliceY(
             in_segment.Data[0].Quadrant,
             in_segment.Data[0].Y,
             in_y_stop_1,
             in_y_stop_2,
             in_y_stop_3
-            );
+            ) + in_offset.GetY();
 
         const float x_left_1 = CalculateNineSliceX(
             in_segment.Data[1].Quadrant,
@@ -271,21 +272,21 @@ namespace
             in_x_stop_1,
             in_x_stop_2,
             in_x_stop_3
-            );
+            ) + in_offset.GetX();
         const float x_right_1 = CalculateNineSliceXMirror(
             in_segment.Data[1].Quadrant,
             in_segment.Data[1].X,
             in_x_stop_1,
             in_x_stop_2,
             in_x_stop_3
-            );
+            ) + in_offset.GetX();
         const float y_1 = CalculateNineSliceY(
             in_segment.Data[1].Quadrant,
             in_segment.Data[1].Y,
             in_y_stop_1,
             in_y_stop_2,
             in_y_stop_3
-            );
+            ) + in_offset.GetY();
 
         const float x_left_2 = CalculateNineSliceX(
             in_segment.Data[2].Quadrant,
@@ -293,21 +294,21 @@ namespace
             in_x_stop_1,
             in_x_stop_2,
             in_x_stop_3
-            );
+            ) + in_offset.GetX();
         const float x_right_2 = CalculateNineSliceXMirror(
             in_segment.Data[2].Quadrant,
             in_segment.Data[2].X,
             in_x_stop_1,
             in_x_stop_2,
             in_x_stop_3
-            );
+            ) + in_offset.GetX();
         const float y_2 = CalculateNineSliceY(
             in_segment.Data[2].Quadrant,
             in_segment.Data[2].Y,
             in_y_stop_1,
             in_y_stop_2,
             in_y_stop_3
-            );
+            ) + in_offset.GetY();
 
         out_segment_data.push_back(BezierCurve::BezierSegment({
             VectorFloat2(x_left_0, y_0),
@@ -330,14 +331,14 @@ namespace
 
 void BezierBorderHelper::GenerateSegmentBorder0(
     std::vector<BezierCurve::BezierSegment>& out_segment_data, 
-    const VectorInt2& in_inner_size,
-    const int in_border_left,
-    const int in_border_top,
-    const int in_border_right,
-    const int in_border_bottom,
-    const int in_thickness_min,
-    const int in_thickness_max,
-    const VectorInt2& in_offset
+    const VectorFloat2& in_inner_size,
+    const float in_border_left,
+    const float in_border_top,
+    const float in_border_right,
+    const float in_border_bottom,
+    const float in_thickness_min,
+    const float in_thickness_max,
+    const VectorFloat2& in_offset
     )
 {
     out_segment_data.clear();
@@ -375,7 +376,8 @@ void BezierBorderHelper::GenerateSegmentBorder0(
             x_stop_3,
             y_stop_1,
             y_stop_2,
-            y_stop_3
+            y_stop_3,
+            in_offset
             );
     }
 }

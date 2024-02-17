@@ -5,6 +5,8 @@
 class DrawSystem;
 class BezierManager;
 class BezierCurve;
+class BezierSimulate;
+class Timer;
 
 class ApplicationTestBezierCurve : public IWindowApplication
 {
@@ -31,5 +33,7 @@ private:
     std::unique_ptr<DrawSystem> _draw_system;
     std::unique_ptr<BezierManager> _bezier_manager;
     std::unique_ptr<BezierCurve> _bezier_curve;
+    std::unique_ptr<BezierSimulate> _bezier_simulate;
+    std::unique_ptr<Timer> _timer;
 
 };

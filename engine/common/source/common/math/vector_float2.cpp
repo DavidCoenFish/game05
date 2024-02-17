@@ -101,3 +101,12 @@ const VectorFloat2 operator+(const VectorFloat2& in_lhs, const VectorFloat2& in_
     return VectorFloat2(in_lhs.GetX() + in_rhs.GetX(), in_lhs.GetY() + in_rhs.GetY());
 }
 
+const VectorFloat2 operator-(const VectorFloat2& in_lhs, const VectorFloat2& in_rhs)
+{
+    return VectorFloat2(in_lhs.GetX() - in_rhs.GetX(), in_lhs.GetY() - in_rhs.GetY());
+}
+
+const VectorFloat2 operator*(const VectorFloat2& in_lhs, const float in_rhs)
+{
+    return VectorFloat2(in_lhs.GetX() + in_rhs, in_lhs.GetY() + in_rhs);
+}

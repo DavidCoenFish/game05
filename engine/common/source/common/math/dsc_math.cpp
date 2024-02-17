@@ -4,6 +4,24 @@
 #include "common/math/vector_float4.h"
 #include "common/macro.h"
 
+const bool DscMath::AlmostEqual(const float in_lhs, const float in_rhs, const float in_epsilon)
+{
+    return (abs(in_lhs - in_rhs) <= in_epsilon);
+}
+
+// https://en.wikibooks.org/wiki/Algorithms/Distance_approximations
+const float DscMath::ApproximateDistance(const float in_dx, const float in_dy)
+{
+    const float dx = abs(in_dx);
+    const float dy = abs(in_dy);
+    if (dx < dy)
+    {
+        return (0.41f * dx) + (0.941246f * dy);
+    }
+
+    return (0.41f * dy) + (0.941246f * dx);
+}
+
 const int DscMath::ScaleInt(const int in_value, const float in_scale)
 {
     return static_cast<int>(round(in_value * in_scale));

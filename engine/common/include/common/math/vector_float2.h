@@ -36,4 +36,6 @@ private:
 };
 
 const VectorFloat2 operator+(const VectorFloat2& in_lhs, const VectorFloat2& in_rhs);
+const VectorFloat2 operator-(const VectorFloat2& in_lhs, const VectorFloat2& in_rhs);
+const VectorFloat2 operator*(const VectorFloat2& in_lhs, const float in_rhs);
 

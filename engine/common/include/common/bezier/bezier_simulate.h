@@ -1,26 +1,17 @@
 #pragma once
 
-#include "common/math/vector_int2.h"
-#include "common/math/vector_float2.h"
 #include "common/bezier/bezier_curve.h"
 
-class BezierCurvesImplementation;
-class DrawSystem;
-class DrawSystemFrame;
-class GeometryGeneric;
-class HeapWrapperItem;
-class Shader;
-class VectorInt2;
+class BezierSimulateImplementation;
 
-/// multiple bezier line segments
-/// rather than have the thickness in the shader constants, add the start end thickness to the vertex data
+/// make a 2d "spring" system based on a set of bezier segments. able to set target, advance time, and extract simulation data as bezier segment data
 class BezierSimulate
 {
 public:
-    /// could split out input segment data into a SetTargetHard call, but trying to construct ready to use
+    /// could split out input segment data into a SetTargetHard call, but trying to construct  "ready to use" object
     BezierSimulate(
         const std::vector<BezierCurve::BezierSegment>& in_segment_data = {},
-        const float in_sprint_force = 1.0f,
+        const float in_spring_force = 1.0f,
         const float in_dampen = 0.1f
         );
 
@@ -33,11 +24,14 @@ public:
         const std::vector<BezierCurve::BezierSegment>& in_segment_data
         );
 
-    void Tick(const float in_time_delta);
+    void Update(const float in_time_delta);
 
     void GatherData(
         std::vector<BezierCurve::BezierSegment>& out_segment_data
-        );
+        ) const;
 
-}
+private:
+    std::unique_ptr<BezierSimulateImplementation> _implementation;
+
+};
 

@@ -2,9 +2,11 @@
 
 #include "window_application/application_test_bezier_curve.h"
 
+#include "common/bezier/bezier_border_helper.h"
 #include "common/bezier/bezier_curve.h"
 #include "common/bezier/bezier_file_helper.h"
 #include "common/bezier/bezier_manager.h"
+#include "common/bezier/bezier_simulate.h"
 #include "common/draw_system/custom_command_list.h"
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/draw_system_frame.h"
@@ -76,9 +78,42 @@ ApplicationTestBezierCurve::ApplicationTestBezierCurve(
         { VectorFloat2(100.0f, 0.0f), VectorFloat2(100.0f, -100.0f), VectorFloat2(0.0f, -100.0f), 10.0f, 1.0f},
         { VectorFloat2(0.0f, -100.0f), VectorFloat2(-100.0f, -100.0f), VectorFloat2(-100.0f, 0.0f), 1.0f, 1.0f}
      });
-#else
+#elif 0
     std::vector<BezierCurve::BezierSegment> segment_data;
     BezierFileHelper::SegmentDataFromSvg(segment_data, in_application_param._data_path / "leaf_00_e.svg");
+#elif 0
+    std::vector<BezierCurve::BezierSegment> segment_data;
+    BezierBorderHelper::GenerateSegmentBorder0(
+        segment_data,
+        VectorFloat2(200.0f, 50.0f),
+        64.0f,
+        32.0f,
+        64.0f,
+        32.0f,
+        1.0f,
+        2.0f,
+        VectorFloat2(128.0f, 64.0f)
+        );
+#else
+    std::vector<BezierCurve::BezierSegment> segment_data;
+    BezierBorderHelper::GenerateSegmentBorder0(
+        segment_data,
+        VectorFloat2(200.0f, 50.0f),
+        64.0f,
+        32.0f,
+        64.0f,
+        32.0f,
+        1.0f,
+        2.0f,
+        VectorFloat2(128.0f, 64.0f)
+        );
+    _bezier_simulate = std::make_unique<BezierSimulate>(
+        segment_data
+        );
+
+    _bezier_simulate->GatherData(segment_data);
+    _timer = std::make_unique<Timer>();
+
 #endif
     _bezier_curve = std::make_unique<BezierCurve>(
         segment_data
@@ -91,6 +126,8 @@ ApplicationTestBezierCurve::~ApplicationTestBezierCurve()
     {
         _draw_system->WaitForGpu();
     }
+    _timer.reset();
+    _bezier_simulate.reset();
     _bezier_curve.reset();
     _bezier_manager.reset();
     _draw_system.reset();
@@ -106,6 +143,19 @@ void ApplicationTestBezierCurve::Update()
 
     if (_draw_system)
     {
+        const float delta_seconds = _timer ? _timer->GetDeltaSeconds() : 0.0f;
+        auto simulate = _bezier_simulate.get();
+        if (nullptr != simulate)
+        {
+            simulate->Update(delta_seconds);
+            std::vector<BezierCurve::BezierSegment> segment_data;
+            simulate->GatherData(segment_data);
+            if (nullptr != _bezier_curve)
+            {
+                _bezier_curve->SetData(segment_data);
+            }
+        }
+
         auto frame = _draw_system->CreateNewFrame();
         frame->SetRenderTarget(_draw_system->GetRenderTargetBackBuffer());
 

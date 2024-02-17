@@ -4,6 +4,10 @@ class VectorFloat4;
 
 namespace DscMath
 {
+    const bool AlmostEqual(const float in_lhs, const float in_rhs, const float in_epsilon = std::numeric_limits<float>::min());
+
+    const float ApproximateDistance(const float in_dx, const float in_dy);
+
     const int ScaleInt(const int in_value, const float in_scale);
     //constexpr int ScaleInt(constexpr int in_value, constexpr float in_scale);
 
