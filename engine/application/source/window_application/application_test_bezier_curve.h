@@ -36,4 +36,7 @@ private:
     std::unique_ptr<BezierSimulate> _bezier_simulate;
     std::unique_ptr<Timer> _timer;
 
+    float _time_accumulate;
+    int _counter;
+
 };

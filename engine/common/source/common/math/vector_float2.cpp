@@ -108,5 +108,5 @@ const VectorFloat2 operator-(const VectorFloat2& in_lhs, const VectorFloat2& in_
 
 const VectorFloat2 operator*(const VectorFloat2& in_lhs, const float in_rhs)
 {
-    return VectorFloat2(in_lhs.GetX() + in_rhs, in_lhs.GetY() + in_rhs);
+    return VectorFloat2(in_lhs.GetX() * in_rhs, in_lhs.GetY() * in_rhs);
 }

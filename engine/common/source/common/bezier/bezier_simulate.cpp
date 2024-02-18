@@ -15,8 +15,8 @@ namespace
     struct OtherPointsSpring
     {
     public:
-        int _point_index;
-        float _target_distance;
+        int _point_index = 0;
+        float _target_distance = 0.0f;
     };
 
     struct Point
@@ -24,14 +24,18 @@ namespace
     public:
         VectorFloat2 _position;
         VectorFloat2 _velocity;
-        /// 
-        int _segment_index;
-        SegmentData _segment_data;
-
-        float _thickness;
-
         VectorFloat2 _target;
         std::vector<OtherPointsSpring> _other_point_springs;
+    };
+
+    struct SegmentMapping
+    {
+    public:
+        int _point_index_0 = 0;
+        int _point_index_1 = 0;
+        int _point_index_2 = 0;
+        float _thickness_0 = 0.0f;
+        float _thickness_2 = 0.0f;
     };
 
     /// ref google: The spring force formula is expressed through the equation: F = – kx 
@@ -54,9 +58,74 @@ namespace
         return;
     }
 
-    void BuildPoints(std::vector<Point>& out_point_array, const std::vector<BezierCurve::BezierSegment>& in_segment_data)
+    // TODO: replace with hash? else this is an almost O=n^2 operation
+    const int FindOrAddPoint(
+        std::vector<Point>& out_point_array, 
+        const VectorFloat2& in_position
+        )
     {
-        
+        const int count = static_cast<int>(out_point_array.size());
+        for (int index = 0; index < count; ++index)
+        {
+            const auto& point = out_point_array[index];
+            if ((true == DscMath::AlmostEqual(in_position.GetX(), point._position.GetX())) &&
+                (true == DscMath::AlmostEqual(in_position.GetY(), point._position.GetY())))
+            {
+                return index;
+            }
+        }
+
+        Point add_point;
+        add_point._position = in_position;
+        add_point._target = in_position;
+        out_point_array.push_back(add_point);
+        return count;
+    }
+
+    void AddSpring(
+        std::vector<Point>& in_out_point_array, 
+        const int in_p0,
+        const int in_p1
+        )
+    {
+        auto& point_0 = in_out_point_array[in_p0];
+        auto& point_1 = in_out_point_array[in_p1];
+        const auto delta = point_0._position - point_1._position;
+        const float distance = DscMath::ApproximateDistance(delta.GetX(), delta.GetY());
+        point_0._other_point_springs.push_back(
+            OtherPointsSpring({in_p1, distance})
+            );
+        point_1._other_point_springs.push_back(
+            OtherPointsSpring({in_p0, distance})
+            );
+
+        return;
+    }
+    
+    void BuildPoints(
+        std::vector<Point>& out_point_array, 
+        std::vector<SegmentMapping>& out_segment_mapping_array,
+        const std::vector<BezierCurve::BezierSegment>& in_segment_data
+        )
+    {
+        out_point_array.resize(0);
+        const int count = static_cast<int>(in_segment_data.size());
+        out_segment_mapping_array.resize(count);
+        for (int index = 0; index < count; ++index)
+        {
+            const auto& segment = in_segment_data[index];
+            auto& segment_mapping = out_segment_mapping_array[index];
+            segment_mapping._point_index_0 = FindOrAddPoint(out_point_array, segment._p0);
+            segment_mapping._point_index_1 = FindOrAddPoint(out_point_array, segment._p1);
+            segment_mapping._point_index_2 = FindOrAddPoint(out_point_array, segment._p2);
+            segment_mapping._thickness_0 = segment._line_thickness_p0;
+            segment_mapping._thickness_2 = segment._line_thickness_p2;
+
+            AddSpring(out_point_array, segment_mapping._point_index_0, segment_mapping._point_index_1);
+            AddSpring(out_point_array, segment_mapping._point_index_0, segment_mapping._point_index_2);
+            AddSpring(out_point_array, segment_mapping._point_index_1, segment_mapping._point_index_2);
+        }
+        return;
     }
 };
 
@@ -78,12 +147,11 @@ public:
         const std::vector<BezierCurve::BezierSegment>& in_segment_data
         )
     {
-        _segment_data_size = static_cast<int>(in_segment_data.size());
         const auto copy_points = _point_array;
-        BuildPoints(_point_array, in_segment_data);
+        BuildPoints(_point_array, _segment_mapping_array, in_segment_data);
 
         // copy the point position and velocity, this is a bit approx if the soft target has a different number of segments
-        const int count = std::min(_point_array.size(), copy_points.size());
+        const int count = std::min(static_cast<int>(_point_array.size()), static_cast<int>(copy_points.size()));
         for (int index = 0; index < count; ++index)
         {
             auto& dest_point = _point_array[index];
@@ -99,8 +167,7 @@ public:
         const std::vector<BezierCurve::BezierSegment>& in_segment_data
         )
     {
-        _segment_data_size = static_cast<int>(in_segment_data.size());
-        BuildPoints(_point_array, in_segment_data);
+        BuildPoints(_point_array, _segment_mapping_array, in_segment_data);
     }
 
     void Update(const float in_time_delta)
@@ -134,27 +201,20 @@ public:
         std::vector<BezierCurve::BezierSegment>& out_segment_data
         ) const
     {
-        out_segment_data.resize(_segment_data_size);
-        for (const auto& point : _point_array)
+        out_segment_data.resize(_segment_mapping_array.size());
+        int trace = 0;
+        for (const auto& segment_mapping : _segment_mapping_array)
         {
-            auto& segment = out_segment_data[point._segment_index];
-            switch (point._segment_data)
-            {
-            default:
-                DSC_ASSERT_ALWAYS("missing case");
-                break;
-            case SegmentData::P0:
-                segment._p0 = point._position;
-                segment._line_thickness_p0 = point._thickness;
-                break;
-            case SegmentData::P1:
-                segment._p1 = point._position;
-                break;
-            case SegmentData::P2:
-                segment._p2 = point._position;
-                segment._line_thickness_p2 = point._thickness;
-                break;
-            }
+            const auto& point_0 = _point_array[segment_mapping._point_index_0];
+            const auto& point_1 = _point_array[segment_mapping._point_index_1];
+            const auto& point_2 = _point_array[segment_mapping._point_index_2];
+            auto& segment = out_segment_data[trace];
+            trace += 1;
+            segment._p0 = point_0._position;
+            segment._line_thickness_p0 = segment_mapping._thickness_0;
+            segment._p1 = point_1._position;
+            segment._p2 = point_2._position;
+            segment._line_thickness_p2 = segment_mapping._thickness_2;
         }
 
         return;
@@ -164,8 +224,7 @@ private:
     const float _spring_force;
     const float _dampen;
     std::vector<Point> _point_array;
-    /// the size of the input, and the size we will use for the output segment_data
-    int _segment_data_size;
+    std::vector<SegmentMapping> _segment_mapping_array;
 
 };
 
@@ -177,6 +236,12 @@ BezierSimulate::BezierSimulate(
     )
 {
     _implementation = std::make_unique<BezierSimulateImplementation>(in_segment_data, in_spring_force, in_dampen);
+    return;
+}
+
+BezierSimulate::~BezierSimulate()
+{
+    _implementation.reset();
     return;
 }
 

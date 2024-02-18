@@ -46,6 +46,8 @@ ApplicationTestBezierCurve::ApplicationTestBezierCurve(
         in_hwnd,
         in_application_param
         )
+    , _time_accumulate(0.0f)
+    , _counter(0)
 {
     LOG_MESSAGE(
         "ApplicationTestBezierCurve  ctor %p",
@@ -144,15 +146,40 @@ void ApplicationTestBezierCurve::Update()
     if (_draw_system)
     {
         const float delta_seconds = _timer ? _timer->GetDeltaSeconds() : 0.0f;
+
+        _time_accumulate += delta_seconds;
+
         auto simulate = _bezier_simulate.get();
         if (nullptr != simulate)
         {
-            simulate->Update(delta_seconds);
-            std::vector<BezierCurve::BezierSegment> segment_data;
-            simulate->GatherData(segment_data);
-            if (nullptr != _bezier_curve)
+            if (4.0f < _time_accumulate)
             {
-                _bezier_curve->SetData(segment_data);
+                _time_accumulate -= 4.0f;
+                if (_counter == 0)
+                {
+                    _counter = 1;
+                    std::vector<BezierCurve::BezierSegment> segment_data;
+                    BezierBorderHelper::GenerateSegmentBorder0(segment_data, VectorFloat2(100.0f, 100.0f), 64.0f, 32.0f, 64.0f, 32.0f, 1.5f, 3.0f, VectorFloat2(178.0f, 32.0f));
+                    simulate->SetTargetSoft(segment_data);
+                }
+                else
+                {
+                    _counter = 0;
+                    std::vector<BezierCurve::BezierSegment> segment_data;
+                    BezierBorderHelper::GenerateSegmentBorder0(segment_data, VectorFloat2(200.0f, 100.0f), 64.0f, 32.0f, 64.0f, 32.0f, 1.5f, 3.0f, VectorFloat2(128.0f, 64.0f));
+                    simulate->SetTargetSoft(segment_data);
+                }
+            }
+
+            simulate->Update(delta_seconds);
+
+            {
+                std::vector<BezierCurve::BezierSegment> segment_data;
+                simulate->GatherData(segment_data);
+                if (nullptr != _bezier_curve)
+                {
+                    _bezier_curve->SetData(segment_data);
+                }
             }
         }
 

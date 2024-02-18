@@ -258,6 +258,7 @@ public:
         if (_data != in_data)
         {
             dirty = true;
+            _data = in_data;
             _calculate_dirty = true;
             _geometry_dirty = true;
         }
