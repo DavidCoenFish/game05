@@ -27,7 +27,6 @@ ShaderConstantBuffer::~ShaderConstantBuffer()
 
 void ShaderConstantBuffer::SetActive(
     ID3D12GraphicsCommandList* const in_command_list,
-    const int in_frame_index,
     int& in_out_root_paramter_index
     )
 {
@@ -36,8 +35,7 @@ void ShaderConstantBuffer::SetActive(
     {
         iter->Activate(
             in_command_list,
-            in_out_root_paramter_index,
-            in_frame_index
+            in_out_root_paramter_index
             );
         in_out_root_paramter_index += 1;
     }
@@ -47,7 +45,7 @@ void ShaderConstantBuffer::SetActive(
 
 void ShaderConstantBuffer::SetConstantBufferData(
     const int in_index,
-    const std::vector < float >&in_data
+    const std::vector<float>& in_data
     )
 {
     if ((0 <= in_index) && (in_index < (int) _array_constant_buffer.size()))
@@ -56,7 +54,7 @@ void ShaderConstantBuffer::SetConstantBufferData(
         const void* const data = &in_data[0];
         constant_buffer.UpdateData(
             data,
-            sizeof (float) * in_data.size()
+            sizeof(float) * in_data.size()
             );
     }
     return;

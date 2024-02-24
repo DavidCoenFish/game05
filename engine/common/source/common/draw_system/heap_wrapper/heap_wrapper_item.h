@@ -17,7 +17,7 @@ public:
         );
     ~HeapWrapperItem();
     D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandle();
-    D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandleFrame(const int in_frame_index);
+    D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandleFrame();
     D3D12_GPU_DESCRIPTOR_HANDLE GetGPUHandle();
     ID3D12DescriptorHeap* const GetHeap();
     const int GetLength() const

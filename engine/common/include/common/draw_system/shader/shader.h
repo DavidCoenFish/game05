@@ -33,8 +33,7 @@ public:
     void SetDebugName(const std::string&in_name);
     void SetActive(
         ID3D12GraphicsCommandList* const in_command_list,
-        ShaderConstantBuffer* const in_shader_constant_buffer,
-        const int in_frame_index
+        ShaderConstantBuffer* const in_shader_constant_buffer
         );
     void SetShaderResourceViewHandle(
         const int in_index,

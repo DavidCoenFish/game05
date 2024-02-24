@@ -18,14 +18,12 @@ public:
     HeapWrapper(
         DrawSystem* const in_draw_system,
         const D3D12_DESCRIPTOR_HEAP_TYPE in_type,
-        const int in_frame_count = 1,
         const bool in_shader_visible = false,
         const UINT in_num_descriptors = 256
         );
     D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandle(const int in_index);
     D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandleFrame(
-        const int in_index,
-        const int in_frame_index
+        const int in_index
         );
     D3D12_GPU_DESCRIPTOR_HANDLE GetGPUHandle(const int in_index);
     ID3D12DescriptorHeap* const GetHeap(const int in_index);
@@ -46,7 +44,6 @@ private:
         ) override;
 
 private:
-    int _frame_count;
     std::vector < std::shared_ptr < HeapWrapperPage > > _array_page;
     D3D12_DESCRIPTOR_HEAP_DESC _desc;
 };

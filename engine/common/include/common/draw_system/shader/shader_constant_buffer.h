@@ -15,7 +15,6 @@ public:
 
     void SetActive(
         ID3D12GraphicsCommandList* const in_command_list,
-        const int in_frame_index,
         int& in_out_root_paramter_index
         );
 

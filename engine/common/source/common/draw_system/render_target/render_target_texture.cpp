@@ -199,15 +199,11 @@ void RenderTargetTexture::OnDeviceRestored(
             nullptr,
             render_target_view_descriptor
             );
-        const int frame_count = _draw_system->GetBackBufferCount();
-        for (int index = 0; index < frame_count;++ index)
-        {
-            in_device->CreateShaderResourceView(
-                iter->_render_target.Get(),
-                nullptr,
-                iter->_shader_resource_view_descriptor->GetCPUHandleFrame(index)
-                );
-        }
+        in_device->CreateShaderResourceView(
+            iter->_render_target.Get(),
+            nullptr,
+            iter->_shader_resource_view_descriptor->GetCPUHandleFrame()
+            );
     }
     _current_state_depth_resource = D3D12_RESOURCE_STATE_DEPTH_WRITE;
     if (nullptr != _depth_resource)
@@ -251,15 +247,11 @@ void RenderTargetTexture::OnDeviceRestored(
             srv_desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
             srv_desc.Texture2D.MipLevels = 1;
             srv_desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-            const int frame_count = _draw_system->GetBackBufferCount();
-            for (int index = 0; index < frame_count;++ index)
-            {
-                in_device->CreateShaderResourceView(
-                    _depth_resource->_render_target.Get(),
-                    &srv_desc,
-                    _depth_resource->_shader_resource_view_descriptor->GetCPUHandleFrame(index)
-                    );
-            }
+            in_device->CreateShaderResourceView(
+                _depth_resource->_render_target.Get(),
+                &srv_desc,
+                _depth_resource->_shader_resource_view_descriptor->GetCPUHandleFrame()
+                );
         }
     }
     return;

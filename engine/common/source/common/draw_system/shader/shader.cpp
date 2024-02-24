@@ -19,9 +19,7 @@ std::shared_ptr<ConstantBuffer> MakeConstantBuffer(
         return nullptr;
     }
     const D3D12_SHADER_VISIBILITY visiblity = in_constant_buffer_info->GetVisiblity();
-    const int frame_count = in_draw_system->GetBackBufferCount();
     auto constant_buffer = std::make_shared < ConstantBuffer > (
-        frame_count,
         in_draw_system->MakeHeapWrapperCbvSrvUav(),
         in_constant_buffer_info->_data,
         visiblity
@@ -365,8 +363,7 @@ void Shader::SetDebugName(const std::string& in_name)
 
 void Shader::SetActive(
     ID3D12GraphicsCommandList* const in_command_list,
-    ShaderConstantBuffer* const in_shader_constant_buffer,
-    const int in_frame_index
+    ShaderConstantBuffer* const in_shader_constant_buffer
     )
 {
     if (false == _pipeline_state_data._compute_shader)
@@ -384,7 +381,6 @@ void Shader::SetActive(
     {
         in_shader_constant_buffer->SetActive(
             in_command_list,
-            in_frame_index,
             root_paramter_index
             );
     }

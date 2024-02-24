@@ -96,8 +96,7 @@ void DrawSystemFrame::SetShader(
 {
     in_shader->SetActive(
         _command_list,
-        in_shader_constant_buffer.get(),
-        _draw_system.GetBackBufferIndex()
+        in_shader_constant_buffer.get()
         );
     _resource_list->AddResource(in_shader);
     _resource_list->AddResource(in_shader_constant_buffer);

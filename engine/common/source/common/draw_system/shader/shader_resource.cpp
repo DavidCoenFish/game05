@@ -136,15 +136,11 @@ void ShaderResource::OnDeviceRestored(
             D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE
             );
 
-        const int frame_count = _draw_system->GetBackBufferCount();
-        for (int index = 0; index < frame_count; ++index)
-        {
-            in_device->CreateShaderResourceView(
-                _resource.Get(),
-                &_shader_resource_view_desc,
-                _shader_resource->GetCPUHandleFrame(index)
-            );
-        }
+        in_device->CreateShaderResourceView(
+            _resource.Get(),
+            &_shader_resource_view_desc,
+            _shader_resource->GetCPUHandleFrame()
+        );
         return;
     }
 

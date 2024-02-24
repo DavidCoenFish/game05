@@ -53,13 +53,12 @@ D3D12_CPU_DESCRIPTOR_HANDLE HeapWrapperItem::GetCPUHandle()
     return D3D12_CPU_DESCRIPTOR_HANDLE();
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE HeapWrapperItem::GetCPUHandleFrame(const int in_frame_index)
+D3D12_CPU_DESCRIPTOR_HANDLE HeapWrapperItem::GetCPUHandleFrame()
 {
     if (_heap_wrapper)
     {
         return _heap_wrapper->GetCPUHandleFrame(
-            _index,
-            in_frame_index
+            _index
             );
     }
     return D3D12_CPU_DESCRIPTOR_HANDLE();

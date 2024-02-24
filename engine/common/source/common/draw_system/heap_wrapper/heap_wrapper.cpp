@@ -7,12 +7,10 @@
 HeapWrapper::HeapWrapper(
     DrawSystem* const in_draw_system,
     const D3D12_DESCRIPTOR_HEAP_TYPE in_type,
-    const int in_frame_count,
     const bool in_shader_visible,
     const UINT in_num_descriptors
     ) 
     : IResource(in_draw_system)
-    , _frame_count(in_frame_count)
     , _desc()
 {
     _desc.Type = in_type;
@@ -25,23 +23,20 @@ D3D12_CPU_DESCRIPTOR_HANDLE HeapWrapper::GetCPUHandle(const int in_index)
 {
     const int frame_index = _draw_system ? _draw_system->GetBackBufferIndex() : 0;
     return GetCPUHandleFrame(
-        in_index,
-        frame_index
+        in_index
         );
 }
 
 D3D12_CPU_DESCRIPTOR_HANDLE HeapWrapper::GetCPUHandleFrame(
-    const int in_index,
-    const int in_frame_index
+    const int in_index
     )
 {
     const int page_index = in_index / _desc.NumDescriptors;
     if ((0 <= page_index) && (page_index < (int) _array_page.size()))
     {
-        const int local_index = in_index - (_desc.NumDescriptors* page_index);
+        const int local_index = in_index - (_desc.NumDescriptors * page_index);
         return _array_page[page_index]->GetCPUHandle(
-            local_index,
-            in_frame_index
+            local_index
             );
     }
     return D3D12_CPU_DESCRIPTOR_HANDLE();
@@ -50,14 +45,12 @@ D3D12_CPU_DESCRIPTOR_HANDLE HeapWrapper::GetCPUHandleFrame(
 D3D12_GPU_DESCRIPTOR_HANDLE HeapWrapper::GetGPUHandle(const int in_index)
 {
     assert(_desc.Flags&D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE);
-    const int frame_index = _draw_system ? _draw_system->GetBackBufferIndex() : 0;
     const int page_index = in_index / _desc.NumDescriptors;
     if ((0 <= page_index) && (page_index < (int) _array_page.size()))
     {
         const int local_index = in_index - (_desc.NumDescriptors* page_index);
         return _array_page[page_index]->GetGPUHandle(
-            local_index,
-            frame_index
+            local_index
             );
     }
     return D3D12_GPU_DESCRIPTOR_HANDLE();
@@ -65,11 +58,10 @@ D3D12_GPU_DESCRIPTOR_HANDLE HeapWrapper::GetGPUHandle(const int in_index)
 
 ID3D12DescriptorHeap* const HeapWrapper::GetHeap(const int in_index)
 {
-    const int frame_index = _draw_system ? _draw_system->GetBackBufferIndex() : 0;
     const int page_index = in_index / _desc.NumDescriptors;
     if ((0 <= page_index) && (page_index < (int) _array_page.size()))
     {
-        return _array_page[page_index]->GetHeap(frame_index);
+        return _array_page[page_index]->GetHeap();
     }
     return nullptr;
 }
@@ -92,7 +84,6 @@ const int HeapWrapper::GetFreeIndex(
 
     {
         auto page = HeapWrapperPage::Factory(
-            _frame_count,
             _desc,
             in_device
             );

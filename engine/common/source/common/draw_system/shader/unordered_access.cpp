@@ -77,18 +77,14 @@ void UnorderedAccess::OnDeviceRestored(
         _resource.Get(),
         nullptr,
         &_unordered_access_view_desc,
-        _heap_wrapper_item->GetCPUHandleFrame(0)
+        _heap_wrapper_item->GetCPUHandleFrame()
         );
 
-    const int frame_count = _draw_system->GetBackBufferCount();
-    for (int index = 0; index < frame_count; ++index)
-    {
-        in_device->CreateShaderResourceView(
-            _resource.Get(),
-            nullptr,
-            _shader_view_heap_wrapper_item->GetCPUHandleFrame(index)
+    in_device->CreateShaderResourceView(
+        _resource.Get(),
+        nullptr,
+        _shader_view_heap_wrapper_item->GetCPUHandleFrame()
         );
-    }
 
     return;
 }
