@@ -89,7 +89,7 @@ ApplicationTestTextRun::ApplicationTestTextRun(
     // Background Shader 
     {
         auto vertex_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "shader" / "screen_quad_vertex.cso");
-        auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._data_path / "background_pixel.cso");
+        auto pixel_shader_data = FileSystem::SyncReadFile(in_application_param._data_path / "pixel.cso");
         std::vector<DXGI_FORMAT> render_target_format;
         render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
         ShaderPipelineStateData shader_pipeline_state_data(

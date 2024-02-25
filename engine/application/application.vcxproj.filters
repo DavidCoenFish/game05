@@ -67,6 +67,9 @@
     <Filter Include="task\test_bezier_curve">
       <UniqueIdentifier>{655f1cb2-b570-48b8-86cb-6af4636fb425}</UniqueIdentifier>
     </Filter>
+    <Filter Include="task\task_descriptor">
+      <UniqueIdentifier>{dc423198-e1a5-47ec-b41a-58c72aad1b3b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Script\util_make_host_define.cmd">
@@ -207,6 +210,9 @@
     <ClCompile Include="source\window_application\application_test_bezier_curve.cpp">
       <Filter>source\window_application</Filter>
     </ClCompile>
+    <ClCompile Include="source\window_application\application_test_descriptor.cpp">
+      <Filter>source\window_application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Build.h">
@@ -272,6 +278,9 @@
     <ClInclude Include="source\window_application\application_test_bezier_curve.h">
       <Filter>source\window_application</Filter>
     </ClInclude>
+    <ClInclude Include="source\window_application\application_test_descriptor.h">
+      <Filter>source\window_application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\cut.ico">
@@ -334,6 +343,9 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="task\test_bezier_curve\leaf_00_e.svg">
       <Filter>task\test_bezier_curve</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="task\test_descriptor\application.json">
+      <Filter>task\task_descriptor</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
@@ -474,6 +486,9 @@
     </FxCompile>
     <FxCompile Include="shader\bezier_vertex.hlsl">
       <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="task\test_descriptor\pixel_shader.hlsl">
+      <Filter>task\task_descriptor</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

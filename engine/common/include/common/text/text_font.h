@@ -35,6 +35,16 @@ public:
         const VectorFloat4& in_colour = VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f)
         );
 
+    /// Draw a glyph to a pixel blob, made to match the target size
+    void DrawToPixels(
+        std::vector<uint8_t>& out_data,
+        const int in_target_width,
+        const int in_target_height,
+        const std::string& in_string_utf8,
+        const TextLocale* const in_locale_token,
+        const int in_font_size
+        );
+
     void RestGlyphUsage();
 
 private:

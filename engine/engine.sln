@@ -72,6 +72,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "hunts_goblins", "hunts_gobl
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pugixml", "sdk\pugixml\pugixml.vcxproj", "{F70C6482-934D-407B-BE6E-A741780DE086}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "trailer_bridge_archer", "trailer_bridge_archer", "{74D82A01-C75C-4B08-A693-30328B39A779}"
+	ProjectSection(SolutionItems) = preProject
+		..\script\trailer_bridge_archer\draft00.txt = ..\script\trailer_bridge_archer\draft00.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "trailer_explorer_loop", "trailer_explorer_loop", "{BD9763DB-54AE-40E7-9EE7-EDABB7F5B7AE}"
+	ProjectSection(SolutionItems) = preProject
+		..\script\trailer_explorer_loop\draft00.txt = ..\script\trailer_explorer_loop\draft00.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -178,6 +188,8 @@ Global
 		{2C0B0486-D021-4003-A738-299429143C78} = {3E632E09-36A9-4D11-ABDD-6C628C632CE6}
 		{F733BE00-72EC-45C3-9948-8D6E112ED327} = {3E632E09-36A9-4D11-ABDD-6C628C632CE6}
 		{B4CBFE22-FB5E-4E18-A875-A9104C527B57} = {F733BE00-72EC-45C3-9948-8D6E112ED327}
+		{74D82A01-C75C-4B08-A693-30328B39A779} = {F733BE00-72EC-45C3-9948-8D6E112ED327}
+		{BD9763DB-54AE-40E7-9EE7-EDABB7F5B7AE} = {F733BE00-72EC-45C3-9948-8D6E112ED327}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {01849243-7DF1-40D0-80A9-36CDCC951EE5}

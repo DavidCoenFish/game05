@@ -7,6 +7,10 @@
       "Command": "",
       "Items": [
         {
+          "Id": "5f84628c-4b36-48c9-a337-6231520d0191",
+          "Command": "test_descriptor"
+        },
+        {
           "Id": "61c5225c-526e-4467-bb05-a44eed2a6368",
           "Command": "test_bezier_curve"
         },

@@ -92,6 +92,54 @@ public:
         hb_buffer_destroy(buffer);
     }
 
+    void DrawToPixels(
+        std::vector<uint8_t>& out_data,
+        const int in_target_width,
+        const int in_target_height,
+        const std::string& in_string_utf8,
+        const TextLocale* const in_locale_token,
+        const int in_font_size
+        )
+    {
+        out_data.resize(in_target_width * in_target_height * 4, 0);
+
+        SetScale(in_font_size);
+        hb_buffer_t* const buffer = MakeBuffer(
+            in_string_utf8,
+            in_locale_token
+            );
+
+        hb_shape(_harf_buzz_font, buffer, NULL, 0);
+
+        unsigned int glyph_count = 0;
+        hb_glyph_info_t* glyph_info = hb_buffer_get_glyph_infos(buffer, &glyph_count);
+        //hb_glyph_position_t* glyph_pos = hb_buffer_get_glyph_positions(buffer, &glyph_count);
+
+        if (0 < glyph_count)
+        {
+            hb_codepoint_t codepoint = glyph_info[0].codepoint;
+
+            FT_Error error = FT_Load_Glyph(_face, codepoint, FT_LOAD_DEFAULT);
+            error;
+
+            FT_GlyphSlot slot = _face->glyph;
+            FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL);
+
+            for (uint32_t y = 0; y < slot->bitmap.rows; ++y)
+            {
+                for (uint32_t x = 0; x < slot->bitmap.width; ++x)
+                {
+                    //const int dest_data_index = ((((found_row->GetTexturePosY() + y) * _texture_dimention) + (found_row->GetTextureHighestX() + x)) * 4) + found_row->GetMaskIndex();
+                    const int dest_data_index = ((y * in_target_width) + x) * 4;
+                    const int buffer_index = ((y * slot->bitmap.width) + x);
+                    out_data[dest_data_index + 3] = slot->bitmap.buffer[buffer_index];
+                }
+            }
+        }
+
+        hb_buffer_destroy(buffer);
+    }
+
     void RestGlyphUsage()
     {
         _map_size_glyph_cell.clear();
@@ -190,7 +238,7 @@ private:
         const int in_width_limit_new_line_height,
         const VectorFloat4& in_colour
         )
-    {    
+    {
         hb_shape(_harf_buzz_font, in_buffer, NULL, 0);
 
         unsigned int glyph_count = 0;
@@ -371,6 +419,27 @@ void TextFont::BuildPreVertexData(
         );
     return;
 }
+
+void TextFont::DrawToPixels(
+    std::vector<uint8_t>& out_data,
+    const int in_target_width,
+    const int in_target_height,
+    const std::string& in_string_utf8,
+    const TextLocale* const in_locale_token,
+    const int in_font_size
+    )
+{
+    _implementation->DrawToPixels(
+        out_data,
+        in_target_width,
+        in_target_height,
+        in_string_utf8,
+        in_locale_token,
+        in_font_size
+        );
+    return;
+}
+
 
 void TextFont::RestGlyphUsage()
 {

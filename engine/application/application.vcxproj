@@ -137,6 +137,9 @@
     </CopyFileToFolders>
     <None Include="task\test_coord\present_interpolant.hlsli" />
     <None Include="task\test_coord\triangle_interpolant.hlsli" />
+    <CopyFileToFolders Include="task\test_descriptor\application.json">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
     <None Include="task\test_line\polar.hlsli" />
     <CopyFileToFolders Include="task\test_text\application.json">
       <FileType>Document</FileType>
@@ -169,6 +172,7 @@
     <ClCompile Include="source\window_application\application_test_bezier_curve.cpp" />
     <ClCompile Include="source\window_application\application_test_compute.cpp" />
     <ClCompile Include="source\window_application\application_test_coord.cpp" />
+    <ClCompile Include="source\window_application\application_test_descriptor.cpp" />
     <ClCompile Include="source\window_application\application_test_line.cpp" />
     <ClCompile Include="source\window_application\application_test_bezier.cpp" />
     <ClCompile Include="source\window_application\application_test_svg.cpp" />
@@ -192,6 +196,7 @@
     <ClInclude Include="source\window_application\application_test_bezier_curve.h" />
     <ClInclude Include="source\window_application\application_test_compute.h" />
     <ClInclude Include="source\window_application\application_test_coord.h" />
+    <ClInclude Include="source\window_application\application_test_descriptor.h" />
     <ClInclude Include="source\window_application\application_test_line.h" />
     <ClInclude Include="source\window_application\application_test_bezier.h" />
     <ClInclude Include="source\window_application\application_test_svg.h" />
@@ -386,6 +391,10 @@
     <FxCompile Include="task\test_coord\triangle_vertex.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="task\test_descriptor\pixel_shader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="task\test_line\pixel_shader_axis.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>

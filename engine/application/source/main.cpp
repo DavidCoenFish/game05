@@ -16,6 +16,7 @@
 #include "window_application/application_test_bezier.h"
 #include "window_application/application_test_compute.h"
 #include "window_application/application_test_coord.h"
+#include "window_application/application_test_descriptor.h"
 #include "window_application/application_test_line.h"
 #include "window_application/application_test_svg.h"
 #include "window_application/application_test_text.h"
@@ -55,6 +56,7 @@ static std::map< std::string, TWindowApplicationFactory >& GetWindowApplicationF
             {"TestBezier", ApplicationTestBezier::Factory},
             {"TestCompute", ApplicationTestCompute::Factory},
             {"TestCoord", ApplicationTestCoord::Factory},
+            {"TestDescriptor", ApplicationTestDescriptor::Factory},
             {"TestLine", ApplicationTestLine::Factory},
             {"TestSvg", ApplicationTestSvg::Factory},
             {"TestText", ApplicationTestText::Factory},
