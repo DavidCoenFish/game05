@@ -15,6 +15,7 @@ public:
         : _back_buffer_count(2)
         , _d3d_feature_level(D3D_FEATURE_LEVEL_11_0)
         , _options(0)
+        , _num_descriptors(256)
     {
         // Nop
     }
@@ -25,6 +26,7 @@ public:
     unsigned int _options;
     RenderTargetFormatData _target_format_data;
     RenderTargetDepthData _target_depth_data;
+    UINT _num_descriptors;
 };
 
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
@@ -33,5 +35,6 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
     _d3d_feature_level,
     _options,
     _target_format_data,
-    _target_depth_data
+    _target_depth_data,
+    _num_descriptors
     );

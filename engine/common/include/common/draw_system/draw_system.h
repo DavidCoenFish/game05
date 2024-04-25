@@ -42,7 +42,8 @@ public:
         const D3D_FEATURE_LEVEL in_d3d_feature_level = D3D_FEATURE_LEVEL_11_0,
         const unsigned int in_options = 0,
         const RenderTargetFormatData& in_target_format_data = RenderTargetFormatData(DXGI_FORMAT_B8G8R8A8_UNORM),
-        const RenderTargetDepthData& in_target_depth_data = RenderTargetDepthData()
+        const RenderTargetDepthData& in_target_depth_data = RenderTargetDepthData(),
+        const int in_heap_num_descriptors_per_page = 256
         );
     ~DrawSystem();
 

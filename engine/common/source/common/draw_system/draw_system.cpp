@@ -27,7 +27,8 @@ std::unique_ptr<DrawSystem> DrawSystem::Factory(
         in_json._d3d_feature_level,
         in_json._options,
         in_json._target_format_data,
-        in_json._target_depth_data
+        in_json._target_depth_data,
+        in_json._num_descriptors
         );
 }
 
@@ -37,7 +38,8 @@ DrawSystem::DrawSystem(
     const D3D_FEATURE_LEVEL in_d3d_feature_level,
     const unsigned int in_options,
     const RenderTargetFormatData& in_target_format_data,
-    const RenderTargetDepthData& in_target_depth_data
+    const RenderTargetDepthData& in_target_depth_data,
+    const int in_num_descriptors
     ) 
     : _hwnd(in_hwnd)
     , _back_buffer_count(in_back_buffer_count)
@@ -49,20 +51,26 @@ DrawSystem::DrawSystem(
     _heap_wrapper_cbv_srv_uav = std::make_shared < HeapWrapper > (
         this,
         D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
-        in_back_buffer_count,
-        true
+        true,
+        in_num_descriptors
         );
     _heap_wrapper_sampler = std::make_shared < HeapWrapper > (
         this,
-        D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER
+        D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER,
+        false,
+        in_num_descriptors
         );
     _heap_wrapper_render_target_view = std::make_shared < HeapWrapper > (
         this,
-        D3D12_DESCRIPTOR_HEAP_TYPE_RTV
+        D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
+        false,
+        in_num_descriptors
         );
     _heap_wrapper_depth_stencil_view = std::make_shared < HeapWrapper > (
         this,
-        D3D12_DESCRIPTOR_HEAP_TYPE_DSV
+        D3D12_DESCRIPTOR_HEAP_TYPE_DSV,
+        false,
+        in_num_descriptors
         );
     CreateDeviceResources();
 }

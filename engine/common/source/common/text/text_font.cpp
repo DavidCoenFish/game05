@@ -98,7 +98,9 @@ public:
         const int in_target_height,
         const std::string& in_string_utf8,
         const TextLocale* const in_locale_token,
-        const int in_font_size
+        const int in_font_size,
+        const int in_offset_x,
+        const int in_offset_y
         )
     {
         out_data.resize(in_target_width * in_target_height * 4, 0);
@@ -125,12 +127,34 @@ public:
             FT_GlyphSlot slot = _face->glyph;
             FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL);
 
-            for (uint32_t y = 0; y < slot->bitmap.rows; ++y)
+            const int height = std::min<int>(slot->bitmap.rows, in_target_height);
+            for (int y = 0; y < height; ++y)
             {
-                for (uint32_t x = 0; x < slot->bitmap.width; ++x)
+                const int y_offset = y + in_offset_y;
+                if (y_offset < 0)
                 {
+                    continue;
+                }
+                if (in_target_height <= y_offset)
+                {
+                    break;
+                }
+
+                const int width = std::min<int>(slot->bitmap.width, in_target_width);
+                for (int x = 0; x < width; ++x)
+                {
+                    const int x_offset = x + in_offset_x;
+                    if (x_offset < 0)
+                    {
+                        continue;
+                    }
+                    if (in_target_width <= x_offset)
+                    {
+                        break;
+                    }
+
                     //const int dest_data_index = ((((found_row->GetTexturePosY() + y) * _texture_dimention) + (found_row->GetTextureHighestX() + x)) * 4) + found_row->GetMaskIndex();
-                    const int dest_data_index = ((y * in_target_width) + x) * 4;
+                    const int dest_data_index = ((y_offset * in_target_width) + x_offset) * 4;
                     const int buffer_index = ((y * slot->bitmap.width) + x);
                     out_data[dest_data_index + 3] = slot->bitmap.buffer[buffer_index];
                 }
@@ -426,7 +450,9 @@ void TextFont::DrawToPixels(
     const int in_target_height,
     const std::string& in_string_utf8,
     const TextLocale* const in_locale_token,
-    const int in_font_size
+    const int in_font_size,
+    const int in_offset_x,
+    const int in_offset_y
     )
 {
     _implementation->DrawToPixels(
@@ -435,7 +461,9 @@ void TextFont::DrawToPixels(
         in_target_height,
         in_string_utf8,
         in_locale_token,
-        in_font_size
+        in_font_size,
+        in_offset_x,
+        in_offset_y
         );
     return;
 }

@@ -9,13 +9,13 @@ std::shared_ptr < HeapWrapperItem > HeapWrapperItem::Factory(
     const int in_length
     )
 {
-    const int in_index = in_heap_wrapper->GetFreeIndex(
+    const int index = in_heap_wrapper->GetFreeIndex(
         in_device,
         in_length
         );
-    return std::make_shared < HeapWrapperItem > (
+    return std::make_shared<HeapWrapperItem>(
         in_heap_wrapper,
-        in_index,
+        index,
         in_length
         );
 }

@@ -42,7 +42,9 @@ public:
         const int in_target_height,
         const std::string& in_string_utf8,
         const TextLocale* const in_locale_token,
-        const int in_font_size
+        const int in_font_size,
+        const int in_offset_x = 0,
+        const int in_offset_y = 0
         );
 
     void RestGlyphUsage();

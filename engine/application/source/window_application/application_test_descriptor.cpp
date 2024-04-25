@@ -34,6 +34,44 @@
 #include "common/util/vector_helper.h"
 #include "common/window/window_application_param.h"
 
+namespace
+{
+    const std::shared_ptr<ShaderResource> MakeTexture(
+        CustomCommandList& in_command_list,
+        const std::string& in_text,
+        const D3D12_RESOURCE_DESC& in_desc,
+        const D3D12_SHADER_RESOURCE_VIEW_DESC& in_view_desc,
+        DrawSystem& in_draw_system,
+        const TextLocale* const in_text_locale,
+        TextFont* const in_text_font,
+        const int in_offset_x,
+        const int in_offset_y
+        )
+    {
+        auto heap_wrapper_texture = in_draw_system.MakeHeapWrapperCbvSrvUav();
+        std::vector<uint8_t> data;
+        in_text_font->DrawToPixels(
+            data,
+            static_cast<int>(in_desc.Width),
+            static_cast<int>(in_desc.Height),
+            in_text,
+            in_text_locale,
+            40,
+            in_offset_x,
+            in_offset_y
+            );
+
+        auto texture = in_draw_system.MakeShaderResource(
+            in_command_list.GetCommandList(),
+            heap_wrapper_texture,
+            in_desc,
+            in_view_desc,
+            data);
+        return texture;
+    }
+
+};
+
 IWindowApplication* const ApplicationTestDescriptor::Factory(
     const HWND in_hwnd,
     const WindowApplicationParam&in_application_param
@@ -55,7 +93,7 @@ ApplicationTestDescriptor::ApplicationTestDescriptor(
         )
 {
     LOG_MESSAGE(
-        "ApplicationTestDescriptor  ctor %p",
+        "ApplicationTestDescriptor ctor %p",
         this
         );
     RenderTargetFormatData render_target_format_data(
@@ -63,12 +101,14 @@ ApplicationTestDescriptor::ApplicationTestDescriptor(
         true,
         VectorFloat4(0.5f, 0.5f, 0.5f, 1.0f)
         );
-    _draw_system = std::make_unique < DrawSystem > (
+    _draw_system = std::make_unique<DrawSystem>(
         in_hwnd, 
         2, //in_back_buffer_count
         D3D_FEATURE_LEVEL_11_0, 
         0, //in_options
-        render_target_format_data
+        render_target_format_data,
+        RenderTargetDepthData(),
+        8 //256 // heap descripters per page
         );
 
     auto command_list = _draw_system->CreateCustomCommandList();
@@ -96,7 +136,7 @@ ApplicationTestDescriptor::ApplicationTestDescriptor(
         64, //UINT Height;
         1, //UINT16 DepthOrArraySize;
         1, //UINT16 MipLevels;
-        DXGI_FORMAT_R8G8B8A8_SNORM, //DXGI_FORMAT Format;
+        DXGI_FORMAT_R8G8B8A8_UNORM, //DXGI_FORMAT Format;
         DXGI_SAMPLE_DESC{ 1, 0 }, //DXGI_SAMPLE_DESC SampleDesc;
         D3D12_TEXTURE_LAYOUT_UNKNOWN, //D3D12_TEXTURE_LAYOUT Layout;
         D3D12_RESOURCE_FLAG_NONE //D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE //D3D12_RESOURCE_FLAGS Flags;
@@ -107,107 +147,14 @@ ApplicationTestDescriptor::ApplicationTestDescriptor(
     view_desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
     view_desc.Texture2D.MipLevels = 1;
 
-    auto heap_wrapper_texture_0 = _draw_system->MakeHeapWrapperCbvSrvUav();
+    const TextLocale* const text_locale = _draw_resource->_text_manager->GetLocaleToken(LocaleISO_639_1::English);
+    const std::string char_data[Var::TTextureCount] = {"a", "b", "c", "d", "e", "f", "g", "h", "i"};
+    const int offset_x[Var::TTextureCount] = {0, 20, 40, 0, 20, 40, 0, 20, 40};
+    const int offset_y[Var::TTextureCount] = {0, 0, 0, 20, 20, 20, 40, 40, 40};
+    for (int index = 0; index < Var::TTextureCount; ++index)
     {
-        std::vector<uint8_t> data;
-        text_font->DrawToPixels(
-            data,
-            64,
-            64,
-            "a",
-            _draw_resource->_text_manager->GetLocaleToken(LocaleISO_639_1::English),
-            32
-            );
-
-        _draw_resource->_texture_0 = _draw_system->MakeShaderResource(
-            command_list->GetCommandList(),
-            heap_wrapper_texture_0,
-            desc,
-            view_desc,
-            data);
+        _draw_resource->_texture[index] = MakeTexture(*command_list, char_data[index], desc, view_desc, *_draw_system, text_locale, text_font, offset_x[index], offset_y[index]);
     }
-
-#if 0
-    auto heap_wrapper_texture_1 = _draw_system->MakeHeapWrapperCbvSrvUav();
-    {
-        std::vector<uint8_t> data;
-        text_font->DrawToPixels(
-            data,
-            64,
-            64,
-            "b",
-            _text_manager->GetLocaleToken(LocaleISO_639_1::English),
-            32
-            );
-
-        _draw_resource->_texture_1 = _draw_system->MakeShaderResource(
-            command_list->GetCommandList(),
-            heap_wrapper_texture_1,
-            desc,
-            view_desc,
-            data);
-    }
-
-    auto heap_wrapper_texture_2 = _draw_system->MakeHeapWrapperCbvSrvUav();
-    {
-        std::vector<uint8_t> data;
-        text_font->DrawToPixels(
-            data,
-            64,
-            64,
-            "c",
-            _text_manager->GetLocaleToken(LocaleISO_639_1::English),
-            32
-            );
-
-        _draw_resource->_texture_2 = _draw_system->MakeShaderResource(
-            command_list->GetCommandList(),
-            heap_wrapper_texture_2,
-            desc,
-            view_desc,
-            data);
-    }
-
-    auto heap_wrapper_texture_3 = _draw_system->MakeHeapWrapperCbvSrvUav();
-    {
-        std::vector<uint8_t> data;
-        text_font->DrawToPixels(
-            data,
-            64,
-            64,
-            "d",
-            _text_manager->GetLocaleToken(LocaleISO_639_1::English),
-            32
-            );
-
-        _draw_resource->_texture_3 = _draw_system->MakeShaderResource(
-            command_list->GetCommandList(),
-            heap_wrapper_texture_3,
-            desc,
-            view_desc,
-            data);
-    }
-
-    auto heap_wrapper_texture_4 = _draw_system->MakeHeapWrapperCbvSrvUav();
-    {
-        std::vector<uint8_t> data;
-        text_font->DrawToPixels(
-            data,
-            64,
-            64,
-            "e",
-            _text_manager->GetLocaleToken(LocaleISO_639_1::English),
-            32
-            );
-
-        _draw_resource->_texture_4 = _draw_system->MakeShaderResource(
-            command_list->GetCommandList(),
-            heap_wrapper_texture_4,
-            desc,
-            view_desc,
-            data);
-    }
-#endif //#if 0
 
     {
         auto vertex_shader_data = FileSystem::SyncReadFile(in_application_param._root_path / "shader" / "screen_quad_vertex.cso");
@@ -225,29 +172,13 @@ ApplicationTestDescriptor::ApplicationTestDescriptor(
             CD3DX12_DEPTH_STENCIL_DESC()
             );
         std::vector<std::shared_ptr<ShaderResourceInfo>> array_shader_resource_info;
-
-        array_shader_resource_info.push_back(ShaderResourceInfo::FactorySampler(
-            _draw_resource->_texture_0->GetHeapWrapperItem(),
-            D3D12_SHADER_VISIBILITY_PIXEL
-            ));
-#if 0
-        array_shader_resource_info.push_back(ShaderResourceInfo::FactoryNoSampler(
-            heap_wrapper_texture_1,
-            D3D12_SHADER_VISIBILITY_PIXEL
-            ));
-        array_shader_resource_info.push_back(ShaderResourceInfo::FactoryNoSampler(
-            heap_wrapper_texture_2,
-            D3D12_SHADER_VISIBILITY_PIXEL
-            ));
-        array_shader_resource_info.push_back(ShaderResourceInfo::FactoryNoSampler(
-            heap_wrapper_texture_3,
-            D3D12_SHADER_VISIBILITY_PIXEL
-            ));
-        array_shader_resource_info.push_back(ShaderResourceInfo::FactoryNoSampler(
-            heap_wrapper_texture_4,
-            D3D12_SHADER_VISIBILITY_PIXEL
-            ));
-#endif //#if 0
+        for (int index = 0; index < Var::TTextureCount; ++index)
+        {
+            array_shader_resource_info.push_back(ShaderResourceInfo::FactoryDataSampler(
+                _draw_resource->_texture[index]->GetHeapWrapperItem(),
+                D3D12_SHADER_VISIBILITY_PIXEL
+                ));
+        }
 
         _draw_resource->_shader = _draw_system->MakeShader(
             command_list->GetCommandList(),

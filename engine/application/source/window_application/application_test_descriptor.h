@@ -32,16 +32,17 @@ private:
     typedef IWindowApplication BaseType;
     std::unique_ptr<DrawSystem> _draw_system;
 
+    enum Var
+    {
+        TTextureCount = 9
+    };
+
     struct DrawResource
     {
         std::shared_ptr<SceneComponentScreenQuad> _screen_quad;
 
         std::shared_ptr<Shader> _shader;
-        std::shared_ptr<ShaderResource> _texture_0;
-        std::shared_ptr<ShaderResource> _texture_1;
-        std::shared_ptr<ShaderResource> _texture_2;
-        std::shared_ptr<ShaderResource> _texture_3;
-        std::shared_ptr<ShaderResource> _texture_4;
+        std::shared_ptr<ShaderResource> _texture[Var::TTextureCount];
 
         std::unique_ptr<TextManager> _text_manager;
     };

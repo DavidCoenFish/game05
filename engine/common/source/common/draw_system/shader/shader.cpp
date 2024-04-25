@@ -200,6 +200,7 @@ Microsoft::WRL::ComPtr<ID3D12RootSignature> MakeRootSignature(
     // S0,s1,s2,...
     if (0 < in_shader_texture_info_array.size())
     {
+            int trace = 0;
             for (const auto&iter : in_shader_texture_info_array)
             {
                 if (false == iter->GetUseSampler())
@@ -207,6 +208,8 @@ Microsoft::WRL::ComPtr<ID3D12RootSignature> MakeRootSignature(
                     continue;
                 }
                 static_sampler_desc_array.push_back(iter->GetStaticSamplerDesc());
+                static_sampler_desc_array.back().ShaderRegister = trace;
+                trace += 1;
             }
     }
     CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC root_signature_desc(

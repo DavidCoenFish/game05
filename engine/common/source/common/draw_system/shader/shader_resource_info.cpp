@@ -71,16 +71,16 @@ std::shared_ptr<ShaderResourceInfo> ShaderResourceInfo::FactoryDataSampler(
         D3D12_TEXTURE_ADDRESS_MODE_WRAP, // D3D12_TEXTURE_ADDRESS_MODE AddressV;
         D3D12_TEXTURE_ADDRESS_MODE_WRAP, // D3D12_TEXTURE_ADDRESS_MODE AddressW;
         0, // FLOAT MipLODBias;
-        16, // UINT MaxAnisotropy;
-        D3D12_COMPARISON_FUNC_LESS_EQUAL, // D3D12_COMPARISON_FUNC ComparisonFunc;
-        D3D12_STATIC_BORDER_COLOR_OPAQUE_WHITE, // D3D12_STATIC_BORDER_COLOR BorderColor;
+        0, //16, // UINT MaxAnisotropy;
+        D3D12_COMPARISON_FUNC_NEVER, // D3D12_COMPARISON_FUNC ComparisonFunc;
+        D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK, // D3D12_STATIC_BORDER_COLOR BorderColor;
         0, // FLOAT MinLOD;
         0, // FLOAT MaxLOD;
         0, // UINT ShaderRegister;
         0, // UINT RegisterSpace;
         in_visiblity // D3D12_SHADER_VISIBILITY_PIXEL //D3D12_SHADER_VISIBILITY ShaderVisibility;
-    }
-    ; return std::make_shared<ShaderResourceInfo>(
+    }; 
+    return std::make_shared<ShaderResourceInfo>(
         in_shader_resource_view_handle,
         static_sampler_desc
         );
@@ -91,12 +91,25 @@ std::shared_ptr<ShaderResourceInfo> ShaderResourceInfo::FactoryNoSampler(
     const D3D12_SHADER_VISIBILITY in_visiblity
     )
 {
-    D3D12_STATIC_SAMPLER_DESC static_sampler_desc {};
-    static_sampler_desc.ShaderVisibility = in_visiblity;
+    D3D12_STATIC_SAMPLER_DESC static_sampler_desc
+    {
+        D3D12_FILTER_MIN_MAG_MIP_POINT, // D3D12_FILTER Filter;
+        D3D12_TEXTURE_ADDRESS_MODE_WRAP, // D3D12_TEXTURE_ADDRESS_MODE AddressU;
+        D3D12_TEXTURE_ADDRESS_MODE_WRAP, // D3D12_TEXTURE_ADDRESS_MODE AddressV;
+        D3D12_TEXTURE_ADDRESS_MODE_WRAP, // D3D12_TEXTURE_ADDRESS_MODE AddressW;
+        0, // FLOAT MipLODBias;
+        16, // UINT MaxAnisotropy;
+        D3D12_COMPARISON_FUNC_LESS_EQUAL, // D3D12_COMPARISON_FUNC ComparisonFunc;
+        D3D12_STATIC_BORDER_COLOR_OPAQUE_WHITE, // D3D12_STATIC_BORDER_COLOR BorderColor;
+        0, // FLOAT MinLOD;
+        0, // FLOAT MaxLOD;
+        0, // UINT ShaderRegister;
+        0, // UINT RegisterSpace;
+        in_visiblity // D3D12_SHADER_VISIBILITY_PIXEL //D3D12_SHADER_VISIBILITY ShaderVisibility;
+    }; 
     return std::make_shared<ShaderResourceInfo>(
         in_shader_resource_view_handle,
-        static_sampler_desc,
-        false
+        static_sampler_desc
         );
 }
 
