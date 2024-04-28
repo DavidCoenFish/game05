@@ -1,0 +1,22 @@
+{
+  "FileVersion": 2,
+  "Id": "9fea1087-ec55-4ce7-a1cf-4ee679aa2f58",
+  "Items": [
+    {
+      "Id": "cc9d3083-1a42-480a-80bd-3f132434a7aa",
+      "Command": "-h"
+    },
+    {
+      "Id": "48d03143-e288-4618-9931-a1335f579845",
+      "Command": "-i \"C:\\development\\game05\\tools\\cpp\\html_to_json\\input\\character_only.html\""
+    },
+    {
+      "Id": "c8e34148-6aeb-4c9b-8f4e-ff1b2bf0e734",
+      "Command": "-o \"C:\\development\\game05\\tools\\cpp\\html_to_json\\output\\character.json\""
+    },
+    {
+      "Id": "eaf80188-422f-4d27-af7e-bd7e0dc6ad42",
+      "Command": "--sheet3rd toc"
+    }
+  ]
+}

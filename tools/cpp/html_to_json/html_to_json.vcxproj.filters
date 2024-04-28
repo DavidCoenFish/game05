@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{06eb1832-c1bd-4aad-8d10-b5e807048122}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="props">
+      <UniqueIdentifier>{5a8a26bd-5112-4228-a68b-275ba4c41b26}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="props\html_to_json.props">
+      <Filter>props</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\main.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\state.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\worksheet.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cursor.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\main.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\state.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\worksheet.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\cursor.h">
+      <Filter>source</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
