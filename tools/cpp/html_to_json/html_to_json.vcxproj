@@ -86,13 +86,20 @@
     <ClCompile Include="source\cursor.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\state.cpp" />
+    <ClCompile Include="source\string_to_worksheet.cpp" />
     <ClCompile Include="source\worksheet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\cursor.h" />
     <ClInclude Include="source\main.h" />
     <ClInclude Include="source\state.h" />
+    <ClInclude Include="source\string_to_worksheet.h" />
     <ClInclude Include="source\worksheet.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\engine\sdk\pugixml\pugixml.vcxproj">
+      <Project>{f70c6482-934d-407b-be6e-a741780de086}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

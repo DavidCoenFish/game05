@@ -3370,6 +3370,13 @@ PUGI_IMPL_NS_BEGIN
 								{
 									++s;
 
+                                    //DCOEN: document from google sheets publish, has <link>,<meta> nodes WITHOUT A TERMINATOR
+                                    if ((strequal(cursor->name, "link")) ||
+                                        (strequal(cursor->name, "meta")))
+                                    {
+                                        PUGI_IMPL_POPNODE();
+                                    }
+
 									break;
 								}
 								else if (*s == 0 && endch == '>')
@@ -3405,17 +3412,26 @@ PUGI_IMPL_NS_BEGIN
 						mark = s;
 
 						char_t* name = cursor->name;
-						if (!name) PUGI_IMPL_THROW_ERROR(status_end_element_mismatch, mark);
+						if (!name)
+                        {
+                            PUGI_IMPL_THROW_ERROR(status_end_element_mismatch, mark);
+                        }
 
 						while (PUGI_IMPL_IS_CHARTYPE(*s, ct_symbol))
 						{
-							if (*s++ != *name++) PUGI_IMPL_THROW_ERROR(status_end_element_mismatch, mark);
+							if (*s++ != *name++)
+                            {
+                                PUGI_IMPL_THROW_ERROR(status_end_element_mismatch, mark);
+                            }
 						}
 
 						if (*name)
 						{
 							if (*s == 0 && name[0] == endch && name[1] == 0) PUGI_IMPL_THROW_ERROR(status_bad_end_element, s);
-							else PUGI_IMPL_THROW_ERROR(status_end_element_mismatch, mark);
+							else 
+                            {
+                                PUGI_IMPL_THROW_ERROR(status_end_element_mismatch, mark);
+                            }
 						}
 
 						PUGI_IMPL_POPNODE(); // Pop.
@@ -3522,7 +3538,10 @@ PUGI_IMPL_NS_BEGIN
 			}
 
 			// check that last tag is closed
-			if (cursor != root) PUGI_IMPL_THROW_ERROR(status_end_element_mismatch, s);
+			if (cursor != root)
+            {
+                PUGI_IMPL_THROW_ERROR(status_end_element_mismatch, s);
+            }
 
 			return s;
 		}

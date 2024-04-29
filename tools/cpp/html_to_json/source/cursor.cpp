@@ -42,8 +42,8 @@ namespace
                         in_parent = nlohmann::json::array();
                     }
 
-                    const int max_size = std::max<int>(in_parent.size(), item.array_index + 1);
-                    for (int index = in_parent.size(); index < max_size; ++index)
+                    const int max_size = std::max<int>(static_cast<int>(in_parent.size()), item.array_index + 1);
+                    for (int index = static_cast<int>(in_parent.size()); index < max_size; ++index)
                     {
                         in_parent.push_back(0);
                     }
@@ -117,7 +117,7 @@ Cursor Cursor::Clone() const
 //nlohmann::json SetValueFloat(const float in_value, nlohmann::json& in_base_object);
 //nlohmann::json SetValueString(const std::string& in_value, nlohmann::json& in_base_object);
 
-nlohmann::json Cursor::SetValue(const nlohmann::json& in_value, nlohmann::json& in_base_object)
+void Cursor::SetValue(nlohmann::json& in_out_base_object, const nlohmann::json& in_value)
 {
     if (0 < _stack.size())
     {
@@ -131,39 +131,39 @@ nlohmann::json Cursor::SetValue(const nlohmann::json& in_value, nlohmann::json& 
         case Type::TMember:
             {
                 nlohmann::json trace;
-                if (false == in_base_object.is_object())
+                if (false == in_out_base_object.is_object())
                 {
-                    in_base_object = nlohmann::json::object();
+                    in_out_base_object = nlohmann::json::object();
                 }
 
-                auto found = in_base_object.find(item.member_key);
-                if (found != in_base_object.end())
+                auto found = in_out_base_object.find(item.member_key);
+                if (found != in_out_base_object.end())
                 {
                     trace = *found;
                 }
-                in_base_object[item.member_key] = MakePath(_stack, 1, in_value, trace);
+                in_out_base_object[item.member_key] = MakePath(_stack, 1, in_value, trace);
             }
             break;
         case Type::TArray:
             {
                 nlohmann::json trace;
-                if (false == in_base_object.is_array())
+                if (false == in_out_base_object.is_array())
                 {
-                    in_base_object = nlohmann::json::array();
+                    in_out_base_object = nlohmann::json::array();
                 }
-                const int max_size = std::max<int>(in_base_object.size(), item.array_index + 1);
-                for (int index = in_base_object.size(); index < max_size; ++index)
+                const int max_size = std::max<int>(static_cast<int>(in_out_base_object.size()), item.array_index + 1);
+                for (int index = static_cast<int>(in_out_base_object.size()); index < max_size; ++index)
                 {
-                    in_base_object.push_back(0);
+                    in_out_base_object.push_back(0);
                 }
-                trace = in_base_object[item.array_index];
+                trace = in_out_base_object[item.array_index];
 
-                in_base_object[item.array_index] = MakePath(_stack, 1, in_value, trace);
+                in_out_base_object[item.array_index] = MakePath(_stack, 1, in_value, trace);
             }
             break;
         }
 
     }
 
-    return in_base_object;
+    return;
 }

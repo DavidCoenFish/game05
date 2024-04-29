@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+/// Cursor is a construction aid form making a json document, it tracks a location in a json hierarchy and allows you to
+/// set a value at a given location, under n x [dictionary member, array index]
 class Cursor
 {
 public:
@@ -33,17 +35,8 @@ public:
 
     Cursor Clone() const;
 
-    //template<typename TYPE>
-    //nlohmann::json SetValue(TYPE in_value, nlohmann::json& in_base_object)
-    
-    //nlohmann::json SetValueBool(const bool in_value, nlohmann::json& in_base_object);
-    //nlohmann::json SetValueInt(const int in_value, nlohmann::json& in_base_object);
-    //nlohmann::json SetValueFloat(const float in_value, nlohmann::json& in_base_object);
-    //nlohmann::json SetValueString(const std::string& in_value, nlohmann::json& in_base_object);
-
-    nlohmann::json SetValue(const nlohmann::json& in_value, nlohmann::json& in_base_object);
-
-    //const int GetArrayLength(nlohmann::json& in_base_object);
+    /// invalue should just be a json plan old data, objects and arrays should be appended to cursor stack not a value
+    void SetValue(nlohmann::json& in_out_base_object, const nlohmann::json& in_value);
 
 private:
     std::set<std::string> _data_set;

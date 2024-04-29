@@ -4,17 +4,31 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.34601.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "html_to_json", "html_to_json.vcxproj", "{9FEA1087-EC55-4CE7-A1CF-4EE679AA2F58}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F70C6482-934D-407B-BE6E-A741780DE086} = {F70C6482-934D-407B-BE6E-A741780DE086}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pugixml", "..\..\..\engine\sdk\pugixml\pugixml.vcxproj", "{F70C6482-934D-407B-BE6E-A741780DE086}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
+		Profile|x64 = Profile|x64
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9FEA1087-EC55-4CE7-A1CF-4EE679AA2F58}.Debug|x64.ActiveCfg = Debug|x64
 		{9FEA1087-EC55-4CE7-A1CF-4EE679AA2F58}.Debug|x64.Build.0 = Debug|x64
+		{9FEA1087-EC55-4CE7-A1CF-4EE679AA2F58}.Profile|x64.ActiveCfg = Release|x64
+		{9FEA1087-EC55-4CE7-A1CF-4EE679AA2F58}.Profile|x64.Build.0 = Release|x64
 		{9FEA1087-EC55-4CE7-A1CF-4EE679AA2F58}.Release|x64.ActiveCfg = Release|x64
 		{9FEA1087-EC55-4CE7-A1CF-4EE679AA2F58}.Release|x64.Build.0 = Release|x64
+		{F70C6482-934D-407B-BE6E-A741780DE086}.Debug|x64.ActiveCfg = Debug|x64
+		{F70C6482-934D-407B-BE6E-A741780DE086}.Debug|x64.Build.0 = Debug|x64
+		{F70C6482-934D-407B-BE6E-A741780DE086}.Profile|x64.ActiveCfg = Profile|x64
+		{F70C6482-934D-407B-BE6E-A741780DE086}.Profile|x64.Build.0 = Profile|x64
+		{F70C6482-934D-407B-BE6E-A741780DE086}.Release|x64.ActiveCfg = Release|x64
+		{F70C6482-934D-407B-BE6E-A741780DE086}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

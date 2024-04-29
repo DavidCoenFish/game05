@@ -26,6 +26,9 @@
     <ClCompile Include="source\cursor.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="source\string_to_worksheet.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\main.h">
@@ -38,6 +41,9 @@
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="source\cursor.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\string_to_worksheet.h">
       <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>

@@ -3,7 +3,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
     <DscBuildDir>$(SolutionDir)..\..\..\build\tools\cpp\$(ProjectName)\$(Platform)\$(Configuration)\</DscBuildDir>
-    <DscIncludeDir>$(SolutionDir)..\..\..\engine\sdk\;$(projectDir)source\</DscIncludeDir>
+    <DscIncludeDir>$(SolutionDir)..\..\..\engine\sdk\;$(SolutionDir)..\..\..\engine\sdk\pugixml\src\;$(projectDir)source\</DscIncludeDir>
   </PropertyGroup>
   <PropertyGroup>
     <OutDir>$(DscBuildDir)output\</OutDir>

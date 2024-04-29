@@ -1,7 +1,13 @@
 #include "main.h"
 #include "state.h"
+#include "string_to_worksheet.h"
+
 #include <fstream>
+#include <sstream>
 #include <stdio.h>
+#include <locale>
+#include <codecvt>
+#include <string>
 
 namespace
 {
@@ -13,6 +19,8 @@ namespace
         TOutputFileWriteFailed = -4,
         TInputFileFail = -8,
         TInputURLFail = -16,
+        TUnimplemented = -32,
+        TParseSource = -64
     };
 
     void Help()
@@ -47,13 +55,45 @@ options:
     {
         printf("Input file:%s\n", in_input_file_path.c_str());
 
-        return ApplicationExitCode::TInputFileFail;
+        //get the source string
+        //https://stackoverflow.com/questions/20902945/reading-a-string-from-file-c
+        std::string source_data;
+        {
+            const std::ifstream input_stream(in_input_file_path, std::ios_base::binary);
+
+            if (input_stream.fail()) 
+            {
+                return ApplicationExitCode::TInputFileFail;
+            }
+
+            std::stringstream buffer;
+            buffer << input_stream.rdbuf();
+
+            source_data = buffer.str();
+        }
+
+        //convert source string to Worksheets
+        if (false == StringToWorksheet::DealSourceData(out_source_data, source_data))
+        {
+            return ApplicationExitCode::TParseSource;
+        }
+
+        return ApplicationExitCode::TNone;
     }
 
     const int DealInputUrl(std::map<std::string, std::shared_ptr<Worksheet>>& out_source_data, const std::string& in_input_url)
     {
         printf("Input url:%s\n", in_input_url.c_str());
+        //get the source string
+        std::string source_data;
 
+        //convert source string to Worksheets
+        if (false == StringToWorksheet::DealSourceData(out_source_data, source_data))
+        {
+            return ApplicationExitCode::TParseSource;
+        }
+
+        //return ApplicationExitCode::TNone;
         return ApplicationExitCode::TInputURLFail;
     }
 

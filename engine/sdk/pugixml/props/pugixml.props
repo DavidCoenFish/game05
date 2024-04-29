@@ -2,8 +2,8 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <DscBuildDir>$(SolutionDir)..\build\$(SolutionName)\$(ProjectName)\$(Platform)\$(Configuration)\</DscBuildDir>
-    <DscIncludeDir>$(SolutionDir)sdk\;$(projectDir)src\</DscIncludeDir>
+    <DscBuildDir>$(projectDir)..\..\..\build\engine\$(ProjectName)\$(Platform)\$(Configuration)\</DscBuildDir>
+    <DscIncludeDir>$(projectDir)src\</DscIncludeDir>
   </PropertyGroup>
   <PropertyGroup>
     <OutDir>$(DscBuildDir)output\</OutDir>
