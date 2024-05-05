@@ -80,6 +80,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="input\character_only.html" />
     <None Include="props\html_to_json.props" />
   </ItemGroup>
   <ItemGroup>
@@ -88,6 +89,7 @@
     <ClCompile Include="source\state.cpp" />
     <ClCompile Include="source\string_to_worksheet.cpp" />
     <ClCompile Include="source\worksheet.cpp" />
+    <ClCompile Include="source\worksheet_to_json.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\cursor.h" />
@@ -95,6 +97,7 @@
     <ClInclude Include="source\state.h" />
     <ClInclude Include="source\string_to_worksheet.h" />
     <ClInclude Include="source\worksheet.h" />
+    <ClInclude Include="source\worksheet_to_json.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\engine\sdk\pugixml\pugixml.vcxproj">

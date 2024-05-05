@@ -1,1 +1,7444 @@
-{}
+{
+	"calculate": {
+		"character": {
+			"active_class_base_count": {
+				"_id": "active_class_base_count",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "active_classes_base"
+					},
+					{
+						"op": "f1",
+						"value": "length"
+					}
+				],
+				"type": "int"
+			},
+			"active_classes": {
+				"_id": "active_classes",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "active_classes_base"
+					},
+					{
+						"op": "getnode",
+						"value": "attribute_mc"
+					},
+					{
+						"op": "f2",
+						"value": "arrayfilterlength"
+					}
+				],
+				"type": "documentarray"
+			},
+			"active_classes_base": {
+				"_id": "active_classes_base",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": true
+					},
+					{
+						"op": "getnode",
+						"value": "class_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "active"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermemberequal"
+					}
+				],
+				"type": "documentarray"
+			},
+			"armor_name": {
+				"_id": "armor_name",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "loadout_active"
+					},
+					{
+						"op": "pushconst",
+						"value": "armor"
+					},
+					{
+						"op": "f2",
+						"value": "arraydocumentfiltertype"
+					},
+					{
+						"op": "arraytostack"
+					},
+					{
+						"op": "pushconst",
+						"value": "name"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": "none"
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"islocale": true,
+				"type": "string"
+			},
+			"attack_bonus_left_equipment": {
+				"_id": "attack_bonus_left_equipment",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "left_equipment"
+					},
+					{
+						"op": "pushconst",
+						"value": "attack_bonus"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"attack_bonus_left_right_equipment": {
+				"_id": "attack_bonus_left_right_equipment",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "left_right_equipment"
+					},
+					{
+						"op": "pushconst",
+						"value": "attack_bonus"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"attack_bonus_right_equipment": {
+				"_id": "attack_bonus_right_equipment",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "right_equipment"
+					},
+					{
+						"op": "pushconst",
+						"value": "attack_bonus"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_ag": {
+				"_id": "attribute_ag",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_delta_ag"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_ag"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_br": {
+				"_id": "attribute_br",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_delta_br"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_br"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_cd": {
+				"_id": "attribute_cd",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_delta_cd"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_cd"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_ch": {
+				"_id": "attribute_ch",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_delta_ch"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_ch"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_delta": {
+				"_id": "attribute_delta",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "racialminpath"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "int"
+			},
+			"attribute_delta_ag": {
+				"_id": "attribute_delta_ag",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_enchantments_ag"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_delta_br": {
+				"_id": "attribute_delta_br",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_enchantments_br"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_delta_cd": {
+				"_id": "attribute_delta_cd",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_enchantments_cd"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_delta_ch": {
+				"_id": "attribute_delta_ch",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_enchantments_ch"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_delta_df": {
+				"_id": "attribute_delta_df",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_enchantments_df"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_delta_dhr": {
+				"_id": "attribute_delta_dhr",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_enchantments_dhr"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_delta_dt": {
+				"_id": "attribute_delta_dt",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_enchantments_dt"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_delta_fa": {
+				"_id": "attribute_delta_fa",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_enchantments_fa"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_delta_he": {
+				"_id": "attribute_delta_he",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_enchantments_he"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_delta_in": {
+				"_id": "attribute_delta_in",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_enchantments_in"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_delta_mc": {
+				"_id": "attribute_delta_mc",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_enchantments_mc"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_delta_md": {
+				"_id": "attribute_delta_md",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_enchantments_md"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_delta_mg": {
+				"_id": "attribute_delta_mg",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_enchantments_mg"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_delta_pc": {
+				"_id": "attribute_delta_pc",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_enchantments_pc"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_delta_ps": {
+				"_id": "attribute_delta_ps",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_enchantments_ps"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_delta_rd": {
+				"_id": "attribute_delta_rd",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_enchantments_rd"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_delta_sp": {
+				"_id": "attribute_delta_sp",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_enchantments_sp"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"dimension": "velocity",
+				"type": "float"
+			},
+			"attribute_delta_st": {
+				"_id": "attribute_delta_st",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_enchantments_st"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_delta_td": {
+				"_id": "attribute_delta_td",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_enchantments_td"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_delta_tem": {
+				"_id": "attribute_delta_tem",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_enchantments_tem"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"dimension": "mass",
+				"type": "float"
+			},
+			"attribute_delta_ten": {
+				"_id": "attribute_delta_ten",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_enchantments_ten"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"dimension": "mass",
+				"type": "float"
+			},
+			"attribute_delta_tu": {
+				"_id": "attribute_delta_tu",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_enchantments_tu"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_delta_vg": {
+				"_id": "attribute_delta_vg",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_enchantments_vg"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_delta_wp": {
+				"_id": "attribute_delta_wp",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_enchantments_wp"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_df": {
+				"_id": "attribute_df",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_delta_df"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_df"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_dhr": {
+				"_id": "attribute_dhr",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_delta_dhr"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_dhr"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_dt": {
+				"_id": "attribute_dt",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_delta_dt"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_dt"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_enchantments_ag": {
+				"_id": "attribute_enchantments_ag",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "attribute_ag"
+					},
+					{
+						"op": "pushconst",
+						"value": "proppergate_ag"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"attribute_enchantments_br": {
+				"_id": "attribute_enchantments_br",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "attribute_br"
+					},
+					{
+						"op": "pushconst",
+						"value": "proppergate_br"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"attribute_enchantments_cd": {
+				"_id": "attribute_enchantments_cd",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "attribute_cd"
+					},
+					{
+						"op": "pushconst",
+						"value": "proppergate_cd"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"attribute_enchantments_ch": {
+				"_id": "attribute_enchantments_ch",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "attribute_ch"
+					},
+					{
+						"op": "pushconst",
+						"value": "proppergate_ch"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"attribute_enchantments_df": {
+				"_id": "attribute_enchantments_df",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "attribute_df"
+					},
+					{
+						"op": "pushconst",
+						"value": "proppergate_df"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"attribute_enchantments_dhr": {
+				"_id": "attribute_enchantments_dhr",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "attribute_dhr"
+					},
+					{
+						"op": "pushconst",
+						"value": "proppergate_dhr"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"attribute_enchantments_dt": {
+				"_id": "attribute_enchantments_dt",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "attribute_dt"
+					},
+					{
+						"op": "pushconst",
+						"value": "proppergate_dt"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"attribute_enchantments_fa": {
+				"_id": "attribute_enchantments_fa",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "attribute_fa"
+					},
+					{
+						"op": "pushconst",
+						"value": "proppergate_fa"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"attribute_enchantments_he": {
+				"_id": "attribute_enchantments_he",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "attribute_he"
+					},
+					{
+						"op": "pushconst",
+						"value": "proppergate_he"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"attribute_enchantments_in": {
+				"_id": "attribute_enchantments_in",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "attribute_in"
+					},
+					{
+						"op": "pushconst",
+						"value": "proppergate_in"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"attribute_enchantments_mc": {
+				"_id": "attribute_enchantments_mc",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "attribute_mc"
+					},
+					{
+						"op": "pushconst",
+						"value": "proppergate_mc"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"attribute_enchantments_md": {
+				"_id": "attribute_enchantments_md",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "attribute_md"
+					},
+					{
+						"op": "pushconst",
+						"value": "proppergate_md"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"attribute_enchantments_mg": {
+				"_id": "attribute_enchantments_mg",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "attribute_mg"
+					},
+					{
+						"op": "pushconst",
+						"value": "proppergate_mg"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"attribute_enchantments_pc": {
+				"_id": "attribute_enchantments_pc",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "attribute_pc"
+					},
+					{
+						"op": "pushconst",
+						"value": "proppergate_pc"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"attribute_enchantments_ps": {
+				"_id": "attribute_enchantments_ps",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "attribute_ps"
+					},
+					{
+						"op": "pushconst",
+						"value": "proppergate_ps"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"attribute_enchantments_rd": {
+				"_id": "attribute_enchantments_rd",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "attribute_rd"
+					},
+					{
+						"op": "pushconst",
+						"value": "proppergate_rd"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"attribute_enchantments_sp": {
+				"_id": "attribute_enchantments_sp",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "attribute_sp"
+					},
+					{
+						"op": "pushconst",
+						"value": "proppergate_sp"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"attribute_enchantments_st": {
+				"_id": "attribute_enchantments_st",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "attribute_st"
+					},
+					{
+						"op": "pushconst",
+						"value": "proppergate_st"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"attribute_enchantments_td": {
+				"_id": "attribute_enchantments_td",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "attribute_td"
+					},
+					{
+						"op": "pushconst",
+						"value": "proppergate_td"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"attribute_enchantments_tem": {
+				"_id": "attribute_enchantments_tem",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "attribute_tem"
+					},
+					{
+						"op": "pushconst",
+						"value": "proppergate_tem"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"attribute_enchantments_ten": {
+				"_id": "attribute_enchantments_ten",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "attribute_ten"
+					},
+					{
+						"op": "pushconst",
+						"value": "proppergate_ten"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"attribute_enchantments_tu": {
+				"_id": "attribute_enchantments_tu",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "attribute_tu"
+					},
+					{
+						"op": "pushconst",
+						"value": "proppergate_tu"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"attribute_enchantments_vg": {
+				"_id": "attribute_enchantments_vg",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "attribute_vg"
+					},
+					{
+						"op": "pushconst",
+						"value": "proppergate_vg"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"attribute_enchantments_wp": {
+				"_id": "attribute_enchantments_wp",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "attribute_wp"
+					},
+					{
+						"op": "pushconst",
+						"value": "proppergate_wp"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"attribute_fa": {
+				"_id": "attribute_fa",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_delta_fa"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_fa"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_he": {
+				"_id": "attribute_he",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_delta_he"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_he"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_in": {
+				"_id": "attribute_in",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_delta_in"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_in"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_mc": {
+				"_id": "attribute_mc",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_delta_mc"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_mc"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_md": {
+				"_id": "attribute_md",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_delta_md"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_md"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_mg": {
+				"_id": "attribute_mg",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_delta_mg"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_mg"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					},
+					{
+						"op": "f1",
+						"value": "floor"
+					}
+				],
+				"type": "int"
+			},
+			"attribute_object": {
+				"_id": "attribute_object",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_ps"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute_ps"
+					},
+					{
+						"op": "getnode",
+						"value": "attribute_st"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute_st"
+					},
+					{
+						"op": "getnode",
+						"value": "attribute_ag"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute_ag"
+					},
+					{
+						"op": "getnode",
+						"value": "attribute_md"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute_md"
+					},
+					{
+						"op": "getnode",
+						"value": "attribute_pc"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute_pc"
+					},
+					{
+						"op": "getnode",
+						"value": "attribute_wp"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute_wp"
+					},
+					{
+						"op": "getnode",
+						"value": "attribute_fa"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute_fa"
+					},
+					{
+						"op": "stacktoobject"
+					}
+				],
+				"type": "object"
+			},
+			"attribute_pc": {
+				"_id": "attribute_pc",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_delta_pc"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_pc"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_points": {
+				"_id": "attribute_points",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "level"
+					},
+					{
+						"op": "pushconst",
+						"value": 20
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					},
+					{
+						"op": "getnode",
+						"value": "attribute_delta"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "int"
+			},
+			"attribute_ps": {
+				"_id": "attribute_ps",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_delta_ps"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_ps"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_rd": {
+				"_id": "attribute_rd",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_delta_rd"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_rd"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_sp": {
+				"_id": "attribute_sp",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_delta_sp"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_sp"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"dimension": "velocity",
+				"type": "float"
+			},
+			"attribute_st": {
+				"_id": "attribute_st",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_delta_st"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_st"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_td": {
+				"_id": "attribute_td",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_delta_td"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_td"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_tem": {
+				"_id": "attribute_tem",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_delta_tem"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_tem"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "f2",
+						"value": "max"
+					}
+				],
+				"dimension": "mass",
+				"type": "float"
+			},
+			"attribute_ten": {
+				"_id": "attribute_ten",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_delta_ten"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_ten"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "f2",
+						"value": "max"
+					}
+				],
+				"dimension": "mass",
+				"type": "float"
+			},
+			"attribute_tu": {
+				"_id": "attribute_tu",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_delta_tu"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_tu"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_vg": {
+				"_id": "attribute_vg",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_delta_vg"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_vg"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"attribute_wp": {
+				"_id": "attribute_wp",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attribute_delta_wp"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_wp"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"carried_defence_penalty": {
+				"_id": "carried_defence_penalty",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": 6.803880214691162
+					},
+					{
+						"op": "getnode",
+						"value": "mass_carried"
+					},
+					{
+						"op": "f2",
+						"value": "div"
+					},
+					{
+						"op": "f1",
+						"value": "floor"
+					}
+				],
+				"type": "int"
+			},
+			"carried_speed_penalty": {
+				"_id": "carried_speed_penalty",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": 68.03880310058594
+					},
+					{
+						"op": "getnode",
+						"value": "mass_carried"
+					},
+					{
+						"op": "f2",
+						"value": "div"
+					},
+					{
+						"op": "pushconst",
+						"value": 4
+					},
+					{
+						"op": "f2",
+						"value": "mul"
+					},
+					{
+						"op": "f1",
+						"value": "floor"
+					}
+				],
+				"type": "int"
+			},
+			"combat_level": {
+				"_id": "combat_level",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": 2
+					},
+					{
+						"op": "getnode",
+						"value": "level"
+					},
+					{
+						"op": "getnode",
+						"value": "weapon_level"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					},
+					{
+						"op": "f2",
+						"value": "div"
+					},
+					{
+						"op": "f1",
+						"value": "ceil"
+					}
+				],
+				"type": "int"
+			},
+			"current_dt": {
+				"_id": "current_dt",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "physical_damage"
+					},
+					{
+						"op": "getnode",
+						"value": "fatigue"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					},
+					{
+						"op": "getnode",
+						"value": "illusion_damage"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					},
+					{
+						"op": "getnode",
+						"value": "attribute_dt"
+					},
+					{
+						"op": "f2",
+						"value": "minus"
+					}
+				],
+				"type": "float"
+			},
+			"handedness_data": {
+				"_id": "handedness_data",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "handedness"
+					},
+					{
+						"op": "pushconst",
+						"value": "handedness"
+					},
+					{
+						"op": "pushconst",
+						"value": "character"
+					},
+					{
+						"op": "pushconst",
+						"value": "data"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getstaticdataobject"
+					}
+				],
+				"type": "object"
+			},
+			"is_ambidextrous": {
+				"_id": "is_ambidextrous",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "is_left_hand_major"
+					},
+					{
+						"op": "getnode",
+						"value": "is_right_hand_major"
+					},
+					{
+						"op": "and"
+					}
+				],
+				"type": "bool"
+			},
+			"is_deity_celtic": {
+				"_id": "is_deity_celtic",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "deity_calculate"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_deity_celtic"
+					},
+					{
+						"op": "getdocumentvalue"
+					}
+				],
+				"type": "bool"
+			},
+			"is_deity_female": {
+				"_id": "is_deity_female",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "deity_calculate"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_deity_female"
+					},
+					{
+						"op": "getdocumentvalue"
+					}
+				],
+				"type": "bool"
+			},
+			"is_deity_followed": {
+				"_id": "is_deity_followed",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "deity_calculate"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_deity_followed"
+					},
+					{
+						"op": "getdocumentvalue"
+					}
+				],
+				"type": "bool"
+			},
+			"is_deity_greek": {
+				"_id": "is_deity_greek",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "deity_calculate"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_deity_greek"
+					},
+					{
+						"op": "getdocumentvalue"
+					}
+				],
+				"type": "bool"
+			},
+			"is_deity_male": {
+				"_id": "is_deity_male",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "deity_calculate"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_deity_male"
+					},
+					{
+						"op": "getdocumentvalue"
+					}
+				],
+				"type": "bool"
+			},
+			"is_deity_match_alignment": {
+				"_id": "is_deity_match_alignment",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "deity_calculate"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_deity_match_alignment"
+					},
+					{
+						"op": "getdocumentvalue"
+					}
+				],
+				"type": "bool"
+			},
+			"is_deity_norse": {
+				"_id": "is_deity_norse",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "deity_calculate"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_deity_norse"
+					},
+					{
+						"op": "getdocumentvalue"
+					}
+				],
+				"type": "bool"
+			},
+			"is_female": {
+				"_id": "is_female",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "gender"
+					},
+					{
+						"op": "pushconst",
+						"value": "gender"
+					},
+					{
+						"op": "pushconst",
+						"value": "character"
+					},
+					{
+						"op": "pushconst",
+						"value": "data"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "female"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "bool"
+			},
+			"is_florentine": {
+				"_id": "is_florentine",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "skill_map"
+					},
+					{
+						"op": "pushconst",
+						"value": "florentine"
+					},
+					{
+						"op": "objecthaskey"
+					}
+				],
+				"type": "bool"
+			},
+			"is_law_lawful": {
+				"_id": "is_law_lawful",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "alignment_law"
+					},
+					{
+						"op": "pushconst",
+						"value": "alignment_law"
+					},
+					{
+						"op": "pushconst",
+						"value": "data"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "lawful"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "bool"
+			},
+			"is_law_neutral": {
+				"_id": "is_law_neutral",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "alignment_law"
+					},
+					{
+						"op": "pushconst",
+						"value": "alignment_law"
+					},
+					{
+						"op": "pushconst",
+						"value": "data"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "neutral"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "bool"
+			},
+			"is_law_unlawful": {
+				"_id": "is_law_unlawful",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "alignment_law"
+					},
+					{
+						"op": "pushconst",
+						"value": "alignment_law"
+					},
+					{
+						"op": "pushconst",
+						"value": "data"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "unlawful"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "bool"
+			},
+			"is_left_equipment": {
+				"_id": "is_left_equipment",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "left_equipment"
+					},
+					{
+						"op": "testundefined"
+					},
+					{
+						"op": "not"
+					}
+				],
+				"type": "bool"
+			},
+			"is_left_hand_major": {
+				"_id": "is_left_hand_major",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "handedness_data"
+					},
+					{
+						"op": "pushconst",
+						"value": "left"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "bool"
+			},
+			"is_left_right_equipment": {
+				"_id": "is_left_right_equipment",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "left_right_equipment"
+					},
+					{
+						"op": "testundefined"
+					},
+					{
+						"op": "not"
+					}
+				],
+				"type": "bool"
+			},
+			"is_left_right_weapon": {
+				"_id": "is_left_right_weapon",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "left_right_weapon"
+					},
+					{
+						"op": "testundefined"
+					},
+					{
+						"op": "not"
+					}
+				],
+				"type": "bool"
+			},
+			"is_left_weapon": {
+				"_id": "is_left_weapon",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "left_weapon"
+					},
+					{
+						"op": "testundefined"
+					},
+					{
+						"op": "not"
+					}
+				],
+				"type": "bool"
+			},
+			"is_male": {
+				"_id": "is_male",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "gender"
+					},
+					{
+						"op": "pushconst",
+						"value": "gender"
+					},
+					{
+						"op": "pushconst",
+						"value": "character"
+					},
+					{
+						"op": "pushconst",
+						"value": "data"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "male"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "bool"
+			},
+			"is_moral_evil": {
+				"_id": "is_moral_evil",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "alignment_moral"
+					},
+					{
+						"op": "pushconst",
+						"value": "alignment_moral"
+					},
+					{
+						"op": "pushconst",
+						"value": "data"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "evil"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "bool"
+			},
+			"is_moral_good": {
+				"_id": "is_moral_good",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "alignment_moral"
+					},
+					{
+						"op": "pushconst",
+						"value": "alignment_moral"
+					},
+					{
+						"op": "pushconst",
+						"value": "data"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "good"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "bool"
+			},
+			"is_moral_neutral": {
+				"_id": "is_moral_neutral",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "alignment_moral"
+					},
+					{
+						"op": "pushconst",
+						"value": "alignment_moral"
+					},
+					{
+						"op": "pushconst",
+						"value": "data"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "neutral"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "bool"
+			},
+			"is_object": {
+				"_id": "is_object",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "is_female"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_female"
+					},
+					{
+						"op": "getnode",
+						"value": "is_male"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_male"
+					},
+					{
+						"op": "getnode",
+						"value": "is_social_social"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_social_social"
+					},
+					{
+						"op": "getnode",
+						"value": "is_social_neutral"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_social_neutral"
+					},
+					{
+						"op": "getnode",
+						"value": "is_social_antisocial"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_social_antisocial"
+					},
+					{
+						"op": "getnode",
+						"value": "is_moral_evil"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_moral_evil"
+					},
+					{
+						"op": "getnode",
+						"value": "is_moral_neutral"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_moral_neutral"
+					},
+					{
+						"op": "getnode",
+						"value": "is_moral_good"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_moral_good"
+					},
+					{
+						"op": "getnode",
+						"value": "is_law_lawful"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_law_lawful"
+					},
+					{
+						"op": "getnode",
+						"value": "is_law_neutral"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_law_neutral"
+					},
+					{
+						"op": "getnode",
+						"value": "is_law_unlawful"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_law_unlawful"
+					},
+					{
+						"op": "getnode",
+						"value": "is_deity_followed"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_deity_followed"
+					},
+					{
+						"op": "getnode",
+						"value": "is_deity_celtic"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_deity_celtic"
+					},
+					{
+						"op": "getnode",
+						"value": "is_deity_greek"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_deity_greek"
+					},
+					{
+						"op": "getnode",
+						"value": "is_deity_norse"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_deity_norse"
+					},
+					{
+						"op": "getnode",
+						"value": "is_deity_male"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_deity_male"
+					},
+					{
+						"op": "getnode",
+						"value": "is_deity_female"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_deity_female"
+					},
+					{
+						"op": "getnode",
+						"value": "is_deity_match_alignment"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_deity_match_alignment"
+					},
+					{
+						"op": "stacktoobject"
+					}
+				],
+				"type": "object"
+			},
+			"is_right_equipment": {
+				"_id": "is_right_equipment",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "right_equipment"
+					},
+					{
+						"op": "testundefined"
+					},
+					{
+						"op": "not"
+					}
+				],
+				"type": "bool"
+			},
+			"is_right_hand_major": {
+				"_id": "is_right_hand_major",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "handedness_data"
+					},
+					{
+						"op": "pushconst",
+						"value": "right"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "bool"
+			},
+			"is_right_weapon": {
+				"_id": "is_right_weapon",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "right_weapon"
+					},
+					{
+						"op": "testundefined"
+					},
+					{
+						"op": "not"
+					}
+				],
+				"type": "bool"
+			},
+			"is_social_antisocial": {
+				"_id": "is_social_antisocial",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "alignment_social"
+					},
+					{
+						"op": "pushconst",
+						"value": "alignment_social"
+					},
+					{
+						"op": "pushconst",
+						"value": "data"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "antisocial"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "bool"
+			},
+			"is_social_neutral": {
+				"_id": "is_social_neutral",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "alignment_social"
+					},
+					{
+						"op": "pushconst",
+						"value": "alignment_social"
+					},
+					{
+						"op": "pushconst",
+						"value": "data"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "neutral"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "bool"
+			},
+			"is_social_social": {
+				"_id": "is_social_social",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "alignment_social"
+					},
+					{
+						"op": "pushconst",
+						"value": "alignment_social"
+					},
+					{
+						"op": "pushconst",
+						"value": "data"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "social"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "bool"
+			},
+			"left_equipment": {
+				"_id": "left_equipment",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "loadout_left_hand_equipment"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "getarrayvalue"
+					}
+				],
+				"type": "document"
+			},
+			"left_hand_attack_bonus": {
+				"_id": "left_hand_attack_bonus",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attack_bonus_left_equipment"
+					},
+					{
+						"op": "pushconst"
+					},
+					{
+						"op": "getnode",
+						"value": "is_left_right_equipment"
+					},
+					{
+						"op": "if"
+					}
+				],
+				"type": "float"
+			},
+			"left_hand_equipment_name": {
+				"_id": "left_hand_equipment_name",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "left_equipment"
+					},
+					{
+						"op": "pushconst",
+						"value": "name"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "getnode",
+						"value": "left_right_equipment"
+					},
+					{
+						"op": "pushconst",
+						"value": "name"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "getnode",
+						"value": "is_left_right_weapon"
+					},
+					{
+						"op": "if"
+					},
+					{
+						"op": "pushconst",
+						"value": "none"
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"islocale": true,
+				"type": "string"
+			},
+			"left_right_equipment": {
+				"_id": "left_right_equipment",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "loadout_left_right_hand_equipment"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "getarrayvalue"
+					}
+				],
+				"type": "document"
+			},
+			"left_right_weapon": {
+				"_id": "left_right_weapon",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "left_right_equipment"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "pushconst",
+						"value": "weapon"
+					},
+					{
+						"op": "f2",
+						"value": "arraydocumentfiltertype"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "getarrayvalue"
+					}
+				],
+				"type": "document"
+			},
+			"left_weapon": {
+				"_id": "left_weapon",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "left_equipment"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "pushconst",
+						"value": "weapon"
+					},
+					{
+						"op": "f2",
+						"value": "arraydocumentfiltertype"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "getarrayvalue"
+					}
+				],
+				"type": "document"
+			},
+			"level": {
+				"_id": "level",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": 25
+					},
+					{
+						"op": "getnode",
+						"value": "experence_points"
+					},
+					{
+						"op": "f2",
+						"value": "div"
+					},
+					{
+						"op": "f1",
+						"value": "floor"
+					},
+					{
+						"op": "pushconst",
+						"value": 1
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					},
+					{
+						"op": "f1",
+						"value": "log2"
+					},
+					{
+						"op": "f1",
+						"value": "ceil"
+					},
+					{
+						"op": "pushconst",
+						"value": 1
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "int"
+			},
+			"loadout_absorption": {
+				"_id": "loadout_absorption",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "loadout_active"
+					},
+					{
+						"op": "pushconst",
+						"value": "absorption"
+					},
+					{
+						"op": "getdocumentarrayvalue"
+					},
+					{
+						"op": "f1",
+						"value": "sumarray"
+					}
+				],
+				"type": "int"
+			},
+			"loadout_active": {
+				"_id": "loadout_active",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": true
+					},
+					{
+						"op": "getnode",
+						"value": "loadout_equipment_all"
+					},
+					{
+						"op": "pushconst",
+						"value": "active"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermemberequal"
+					}
+				],
+				"type": "documentarray"
+			},
+			"loadout_defence_bonus": {
+				"_id": "loadout_defence_bonus",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "loadout_active"
+					},
+					{
+						"op": "pushconst",
+						"value": "defence_bonus"
+					},
+					{
+						"op": "getdocumentarrayvalue"
+					},
+					{
+						"op": "f1",
+						"value": "sumarray"
+					}
+				],
+				"type": "int"
+			},
+			"loadout_defence_penalty": {
+				"_id": "loadout_defence_penalty",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "loadout_active"
+					},
+					{
+						"op": "pushconst",
+						"value": "defence_penalty"
+					},
+					{
+						"op": "getdocumentarrayvalue"
+					},
+					{
+						"op": "f1",
+						"value": "sumarray"
+					}
+				],
+				"type": "int"
+			},
+			"loadout_equipment": {
+				"_id": "loadout_equipment",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "current_loadout"
+					},
+					{
+						"op": "getnode",
+						"value": "equipment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "loadout"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermembermap"
+					}
+				],
+				"type": "documentarray"
+			},
+			"loadout_equipment_all": {
+				"_id": "loadout_equipment_all",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "loadout_left_hand_equipment"
+					},
+					{
+						"op": "arraytostack"
+					},
+					{
+						"op": "getnode",
+						"value": "loadout_right_hand_equipment"
+					},
+					{
+						"op": "arraytostack"
+					},
+					{
+						"op": "getnode",
+						"value": "loadout_left_right_hand_equipment"
+					},
+					{
+						"op": "arraytostack"
+					},
+					{
+						"op": "getnode",
+						"value": "loadout_equipment"
+					},
+					{
+						"op": "arraytostack"
+					},
+					{
+						"op": "stacktoarray"
+					}
+				],
+				"type": "documentarray"
+			},
+			"loadout_left_hand_equipment": {
+				"_id": "loadout_left_hand_equipment",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "current_loadout"
+					},
+					{
+						"op": "getnode",
+						"value": "equipment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "loadout_left_hand"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermembermap"
+					},
+					{
+						"op": "pushconst",
+						"value": 1
+					},
+					{
+						"op": "f2",
+						"value": "arrayfilterlength"
+					}
+				],
+				"type": "documentarray"
+			},
+			"loadout_left_right_hand_equipment": {
+				"_id": "loadout_left_right_hand_equipment",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "current_loadout"
+					},
+					{
+						"op": "getnode",
+						"value": "equipment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "loadout_left_right_hand"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermembermap"
+					},
+					{
+						"op": "pushconst",
+						"value": 1
+					},
+					{
+						"op": "f2",
+						"value": "arrayfilterlength"
+					}
+				],
+				"type": "documentarray"
+			},
+			"loadout_magic_count": {
+				"_id": "loadout_magic_count",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "loadout_active"
+					},
+					{
+						"op": "pushconst",
+						"value": "magic_count"
+					},
+					{
+						"op": "getdocumentarrayvalue"
+					},
+					{
+						"op": "f1",
+						"value": "sumarray"
+					}
+				],
+				"type": "int"
+			},
+			"loadout_right_hand_equipment": {
+				"_id": "loadout_right_hand_equipment",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "current_loadout"
+					},
+					{
+						"op": "getnode",
+						"value": "equipment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "loadout_right_hand"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermembermap"
+					},
+					{
+						"op": "pushconst",
+						"value": 1
+					},
+					{
+						"op": "f2",
+						"value": "arrayfilterlength"
+					}
+				],
+				"type": "documentarray"
+			},
+			"mass_carried": {
+				"_id": "mass_carried",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "mass_coins"
+					},
+					{
+						"op": "getnode",
+						"value": "mass_equipment"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "f2",
+						"value": "max"
+					}
+				],
+				"dimension": "mass",
+				"type": "float"
+			},
+			"mass_coins": {
+				"_id": "mass_coins",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "copper_coins"
+					},
+					{
+						"op": "getnode",
+						"value": "latten_coins"
+					},
+					{
+						"op": "getnode",
+						"value": "silver_coins"
+					},
+					{
+						"op": "getnode",
+						"value": "electrum_coins"
+					},
+					{
+						"op": "getnode",
+						"value": "gold_coins"
+					},
+					{
+						"op": "getnode",
+						"value": "platinum_coins"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "f1",
+						"value": "sumarray"
+					},
+					{
+						"op": "pushconst",
+						"value": 0.009999999776482582
+					},
+					{
+						"op": "f2",
+						"value": "mul"
+					}
+				],
+				"dimension": "mass",
+				"type": "float"
+			},
+			"mass_equipment": {
+				"_id": "mass_equipment",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "equipment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "mass"
+					},
+					{
+						"op": "getdocumentarrayvalue"
+					},
+					{
+						"op": "f1",
+						"value": "sumarray"
+					}
+				],
+				"dimension": "mass",
+				"type": "float"
+			},
+			"max_speed": {
+				"_id": "max_speed",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "carried_speed_penalty"
+					},
+					{
+						"op": "getnode",
+						"value": "attribute_sp"
+					},
+					{
+						"op": "f2",
+						"value": "minus"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "f2",
+						"value": "max"
+					}
+				],
+				"dimension": "velocity",
+				"type": "int"
+			},
+			"parry": {
+				"_id": "parry",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "parry_left_and_or_right"
+					},
+					{
+						"op": "getnode",
+						"value": "parry_left_right_equipment"
+					},
+					{
+						"op": "getnode",
+						"value": "is_left_right_equipment"
+					},
+					{
+						"op": "if"
+					}
+				],
+				"type": "float"
+			},
+			"parry_left_and_or_right": {
+				"_id": "parry_left_and_or_right",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "parry_left_equipment"
+					},
+					{
+						"op": "getnode",
+						"value": "parry_right_equipment"
+					},
+					{
+						"op": "f2",
+						"value": "max"
+					},
+					{
+						"op": "getnode",
+						"value": "parry_two_weapon_bonus"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"parry_left_equipment": {
+				"_id": "parry_left_equipment",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "left_equipment"
+					},
+					{
+						"op": "pushconst",
+						"value": "parry"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"parry_left_right_equipment": {
+				"_id": "parry_left_right_equipment",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "left_right_equipment"
+					},
+					{
+						"op": "pushconst",
+						"value": "parry"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"parry_right_equipment": {
+				"_id": "parry_right_equipment",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "right_equipment"
+					},
+					{
+						"op": "pushconst",
+						"value": "parry"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"parry_two_weapon_bonus": {
+				"_id": "parry_two_weapon_bonus",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "pushconst",
+						"value": 1
+					},
+					{
+						"op": "getnode",
+						"value": "using_two_weapons"
+					},
+					{
+						"op": "getnode",
+						"value": "is_florentine"
+					},
+					{
+						"op": "and"
+					},
+					{
+						"op": "if"
+					}
+				],
+				"type": "int"
+			},
+			"proppergate_ag": {
+				"_id": "proppergate_ag",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_delta_ag"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_ag"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_br": {
+				"_id": "proppergate_br",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_delta_br"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_br"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_cd": {
+				"_id": "proppergate_cd",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_delta_cd"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_cd"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_ch": {
+				"_id": "proppergate_ch",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_delta_ch"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_ch"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_delta_ag": {
+				"_id": "proppergate_delta_ag",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_enchantments_ag"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_delta_br": {
+				"_id": "proppergate_delta_br",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_enchantments_br"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_delta_cd": {
+				"_id": "proppergate_delta_cd",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_enchantments_cd"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_delta_ch": {
+				"_id": "proppergate_delta_ch",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_enchantments_ch"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_delta_fa": {
+				"_id": "proppergate_delta_fa",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_enchantments_fa"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_delta_he": {
+				"_id": "proppergate_delta_he",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_enchantments_he"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_delta_in": {
+				"_id": "proppergate_delta_in",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_enchantments_in"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_delta_md": {
+				"_id": "proppergate_delta_md",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_enchantments_md"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_delta_pc": {
+				"_id": "proppergate_delta_pc",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_enchantments_pc"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_delta_ps": {
+				"_id": "proppergate_delta_ps",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_enchantments_ps"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_delta_st": {
+				"_id": "proppergate_delta_st",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_enchantments_st"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_delta_vg": {
+				"_id": "proppergate_delta_vg",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_enchantments_vg"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_delta_wp": {
+				"_id": "proppergate_delta_wp",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_enchantments_wp"
+					},
+					{
+						"op": "f1",
+						"value": "selecthighestlevel"
+					},
+					{
+						"op": "pushconst",
+						"value": "delta"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_enchantments_ag": {
+				"_id": "proppergate_enchantments_ag",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "proppergate_ag"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"proppergate_enchantments_br": {
+				"_id": "proppergate_enchantments_br",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "proppergate_br"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"proppergate_enchantments_cd": {
+				"_id": "proppergate_enchantments_cd",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "proppergate_cd"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"proppergate_enchantments_ch": {
+				"_id": "proppergate_enchantments_ch",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "proppergate_ch"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"proppergate_enchantments_fa": {
+				"_id": "proppergate_enchantments_fa",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "proppergate_fa"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"proppergate_enchantments_he": {
+				"_id": "proppergate_enchantments_he",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "proppergate_he"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"proppergate_enchantments_in": {
+				"_id": "proppergate_enchantments_in",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "proppergate_in"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"proppergate_enchantments_md": {
+				"_id": "proppergate_enchantments_md",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "proppergate_md"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"proppergate_enchantments_pc": {
+				"_id": "proppergate_enchantments_pc",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "proppergate_pc"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"proppergate_enchantments_ps": {
+				"_id": "proppergate_enchantments_ps",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "proppergate_ps"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"proppergate_enchantments_st": {
+				"_id": "proppergate_enchantments_st",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "proppergate_st"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"proppergate_enchantments_vg": {
+				"_id": "proppergate_enchantments_vg",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "proppergate_vg"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"proppergate_enchantments_wp": {
+				"_id": "proppergate_enchantments_wp",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "proppergate_wp"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getnode",
+						"value": "enchantment_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "attribute"
+					},
+					{
+						"op": "f3",
+						"value": "arraydocumentfiltermember"
+					}
+				],
+				"type": "documentarray"
+			},
+			"proppergate_fa": {
+				"_id": "proppergate_fa",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_delta_fa"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_fa"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_he": {
+				"_id": "proppergate_he",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_delta_he"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_he"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_in": {
+				"_id": "proppergate_in",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_delta_in"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_in"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_md": {
+				"_id": "proppergate_md",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_delta_md"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_md"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_pc": {
+				"_id": "proppergate_pc",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_delta_pc"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_pc"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_ps": {
+				"_id": "proppergate_ps",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_delta_ps"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_ps"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_st": {
+				"_id": "proppergate_st",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_delta_st"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_st"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_vg": {
+				"_id": "proppergate_vg",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_delta_vg"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_vg"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"proppergate_wp": {
+				"_id": "proppergate_wp",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_delta_wp"
+					},
+					{
+						"op": "getnode",
+						"value": "rawattribute_wp"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"racialmax_ag": {
+				"_id": "racialmax_ag",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "racialmaxpath"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "ag"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "int"
+			},
+			"racialmax_fa": {
+				"_id": "racialmax_fa",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "racialmaxpath"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "fa"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "int"
+			},
+			"racialmax_md": {
+				"_id": "racialmax_md",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "racialmaxpath"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "md"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "int"
+			},
+			"racialmax_pc": {
+				"_id": "racialmax_pc",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "racialmaxpath"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "pc"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "int"
+			},
+			"racialmax_ps": {
+				"_id": "racialmax_ps",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "racialmaxpath"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "ps"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "int"
+			},
+			"racialmax_st": {
+				"_id": "racialmax_st",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "racialmaxpath"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "st"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "int"
+			},
+			"racialmax_wp": {
+				"_id": "racialmax_wp",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "racialmaxpath"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "wp"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "int"
+			},
+			"racialmaxpath": {
+				"_id": "racialmaxpath",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "gender"
+					},
+					{
+						"op": "getnode",
+						"value": "race"
+					},
+					{
+						"op": "f2",
+						"value": "dotcat"
+					},
+					{
+						"op": "pushconst",
+						"value": "base_attribute"
+					},
+					{
+						"op": "pushconst",
+						"value": "character"
+					},
+					{
+						"op": "pushconst",
+						"value": "data"
+					},
+					{
+						"op": "stacktoarray"
+					}
+				],
+				"tooltipstop": true,
+				"type": "stringarray"
+			},
+			"racialmin_ag": {
+				"_id": "racialmin_ag",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "racialminpath"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "ag"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "int"
+			},
+			"racialmin_fa": {
+				"_id": "racialmin_fa",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "racialminpath"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "fa"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "int"
+			},
+			"racialmin_md": {
+				"_id": "racialmin_md",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "racialminpath"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "md"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "int"
+			},
+			"racialmin_pc": {
+				"_id": "racialmin_pc",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "racialminpath"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "pc"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "int"
+			},
+			"racialmin_ps": {
+				"_id": "racialmin_ps",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "racialminpath"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "ps"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "int"
+			},
+			"racialmin_st": {
+				"_id": "racialmin_st",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "racialminpath"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "st"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "int"
+			},
+			"racialmin_wp": {
+				"_id": "racialmin_wp",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "racialminpath"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "wp"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "int"
+			},
+			"racialminpath": {
+				"_id": "racialminpath",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "race"
+					},
+					{
+						"op": "pushconst",
+						"value": "minimum_attribute"
+					},
+					{
+						"op": "pushconst",
+						"value": "character"
+					},
+					{
+						"op": "pushconst",
+						"value": "data"
+					},
+					{
+						"op": "stacktoarray"
+					}
+				],
+				"tooltipstop": true,
+				"type": "stringarray"
+			},
+			"rawattribute_ag": {
+				"_id": "rawattribute_ag",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "racialmin_ag"
+					},
+					{
+						"op": "getnode",
+						"value": "racialmax_ag"
+					},
+					{
+						"op": "getnode",
+						"value": "spent_ag"
+					},
+					{
+						"op": "f3",
+						"value": "rawattribute"
+					}
+				],
+				"type": "float"
+			},
+			"rawattribute_br": {
+				"_id": "rawattribute_br",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_ps"
+					},
+					{
+						"op": "getnode",
+						"value": "proppergate_st"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"rawattribute_cd": {
+				"_id": "rawattribute_cd",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_ag"
+					},
+					{
+						"op": "getnode",
+						"value": "proppergate_md"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"rawattribute_ch": {
+				"_id": "rawattribute_ch",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_fa"
+					},
+					{
+						"op": "getnode",
+						"value": "proppergate_wp"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"rawattribute_df": {
+				"_id": "rawattribute_df",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "carried_defence_penalty"
+					},
+					{
+						"op": "getnode",
+						"value": "loadout_defence_penalty"
+					},
+					{
+						"op": "getnode",
+						"value": "level"
+					},
+					{
+						"op": "getnode",
+						"value": "parry"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					},
+					{
+						"op": "getnode",
+						"value": "attribute_rd"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					},
+					{
+						"op": "f2",
+						"value": "minus"
+					},
+					{
+						"op": "getnode",
+						"value": "loadout_defence_bonus"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					},
+					{
+						"op": "f2",
+						"value": "minus"
+					}
+				],
+				"type": "float"
+			},
+			"rawattribute_dhr": {
+				"_id": "rawattribute_dhr",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_st"
+					},
+					{
+						"op": "pushconst",
+						"value": 10
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"rawattribute_dt": {
+				"_id": "rawattribute_dt",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_br"
+					},
+					{
+						"op": "pushconst",
+						"value": 4
+					},
+					{
+						"op": "f2",
+						"value": "mul"
+					},
+					{
+						"op": "pushconst",
+						"value": 32
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"rawattribute_fa": {
+				"_id": "rawattribute_fa",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "racialmin_fa"
+					},
+					{
+						"op": "getnode",
+						"value": "racialmax_fa"
+					},
+					{
+						"op": "getnode",
+						"value": "spent_fa"
+					},
+					{
+						"op": "f3",
+						"value": "rawattribute"
+					}
+				],
+				"type": "float"
+			},
+			"rawattribute_he": {
+				"_id": "rawattribute_he",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_md"
+					},
+					{
+						"op": "getnode",
+						"value": "proppergate_pc"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"rawattribute_in": {
+				"_id": "rawattribute_in",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_pc"
+					},
+					{
+						"op": "getnode",
+						"value": "proppergate_wp"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"rawattribute_mc": {
+				"_id": "rawattribute_mc",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": 2
+					},
+					{
+						"op": "getnode",
+						"value": "proppergate_in"
+					},
+					{
+						"op": "f2",
+						"value": "div"
+					},
+					{
+						"op": "pushconst",
+						"value": 3
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					},
+					{
+						"op": "f1",
+						"value": "floor"
+					}
+				],
+				"type": "float"
+			},
+			"rawattribute_md": {
+				"_id": "rawattribute_md",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "racialmin_md"
+					},
+					{
+						"op": "getnode",
+						"value": "racialmax_md"
+					},
+					{
+						"op": "getnode",
+						"value": "spent_md"
+					},
+					{
+						"op": "f3",
+						"value": "rawattribute"
+					}
+				],
+				"type": "float"
+			},
+			"rawattribute_mg": {
+				"_id": "rawattribute_mg",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_wp"
+					},
+					{
+						"op": "pushconst",
+						"value": 4
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"rawattribute_pc": {
+				"_id": "rawattribute_pc",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "racialmin_pc"
+					},
+					{
+						"op": "getnode",
+						"value": "racialmax_pc"
+					},
+					{
+						"op": "getnode",
+						"value": "spent_pc"
+					},
+					{
+						"op": "f3",
+						"value": "rawattribute"
+					}
+				],
+				"type": "float"
+			},
+			"rawattribute_ps": {
+				"_id": "rawattribute_ps",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "racialmin_ps"
+					},
+					{
+						"op": "getnode",
+						"value": "racialmax_ps"
+					},
+					{
+						"op": "getnode",
+						"value": "spent_ps"
+					},
+					{
+						"op": "f3",
+						"value": "rawattribute"
+					}
+				],
+				"type": "float"
+			},
+			"rawattribute_rd": {
+				"_id": "rawattribute_rd",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_ag"
+					},
+					{
+						"op": "pushconst",
+						"value": 15
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"rawattribute_sp": {
+				"_id": "rawattribute_sp",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_vg"
+					},
+					{
+						"op": "getnode",
+						"value": "proppergate_pc"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					},
+					{
+						"op": "pushconst",
+						"value": 0.5
+					},
+					{
+						"op": "f2",
+						"value": "mul"
+					},
+					{
+						"op": "pushconst",
+						"value": 4.0
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"dimension": "velocity",
+				"type": "float"
+			},
+			"rawattribute_st": {
+				"_id": "rawattribute_st",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "racialmin_st"
+					},
+					{
+						"op": "getnode",
+						"value": "racialmax_st"
+					},
+					{
+						"op": "getnode",
+						"value": "spent_st"
+					},
+					{
+						"op": "f3",
+						"value": "rawattribute"
+					}
+				],
+				"type": "float"
+			},
+			"rawattribute_td": {
+				"_id": "rawattribute_td",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_st"
+					},
+					{
+						"op": "pushconst",
+						"value": 5
+					},
+					{
+						"op": "f2",
+						"value": "mul"
+					},
+					{
+						"op": "pushconst",
+						"value": -15
+					},
+					{
+						"op": "f2",
+						"value": "minus"
+					}
+				],
+				"type": "float"
+			},
+			"rawattribute_tem": {
+				"_id": "rawattribute_tem",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_ps"
+					},
+					{
+						"op": "pushconst",
+						"value": 22.67959976196289
+					},
+					{
+						"op": "f2",
+						"value": "mul"
+					},
+					{
+						"op": "pushconst",
+						"value": 68.03880310058594
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"dimension": "mass",
+				"type": "float"
+			},
+			"rawattribute_ten": {
+				"_id": "rawattribute_ten",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_ps"
+					},
+					{
+						"op": "pushconst",
+						"value": 2.2679600715637207
+					},
+					{
+						"op": "f2",
+						"value": "mul"
+					},
+					{
+						"op": "pushconst",
+						"value": 6.803880214691162
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"dimension": "mass",
+				"type": "float"
+			},
+			"rawattribute_tu": {
+				"_id": "rawattribute_tu",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_wp"
+					},
+					{
+						"op": "pushconst",
+						"value": 2
+					},
+					{
+						"op": "f2",
+						"value": "mul"
+					},
+					{
+						"op": "pushconst",
+						"value": -10
+					},
+					{
+						"op": "f2",
+						"value": "minus"
+					}
+				],
+				"type": "float"
+			},
+			"rawattribute_vg": {
+				"_id": "rawattribute_vg",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "proppergate_ps"
+					},
+					{
+						"op": "getnode",
+						"value": "proppergate_ag"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"rawattribute_wp": {
+				"_id": "rawattribute_wp",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "racialmin_wp"
+					},
+					{
+						"op": "getnode",
+						"value": "racialmax_wp"
+					},
+					{
+						"op": "getnode",
+						"value": "spent_wp"
+					},
+					{
+						"op": "f3",
+						"value": "rawattribute"
+					}
+				],
+				"type": "float"
+			},
+			"remaining_attribute_points": {
+				"_id": "remaining_attribute_points",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "spent_attribute_points"
+					},
+					{
+						"op": "getnode",
+						"value": "attribute_points"
+					},
+					{
+						"op": "f2",
+						"value": "minus"
+					}
+				],
+				"type": "int"
+			},
+			"remaining_experence_points": {
+				"_id": "remaining_experence_points",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "spent_experence_points"
+					},
+					{
+						"op": "getnode",
+						"value": "experence_points"
+					},
+					{
+						"op": "f2",
+						"value": "minus"
+					}
+				],
+				"type": "int"
+			},
+			"right_equipment": {
+				"_id": "right_equipment",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "loadout_right_hand_equipment"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "getarrayvalue"
+					}
+				],
+				"type": "document"
+			},
+			"right_hand_attack_bonus": {
+				"_id": "right_hand_attack_bonus",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "attack_bonus_right_equipment"
+					},
+					{
+						"op": "getnode",
+						"value": "attack_bonus_left_right_equipment"
+					},
+					{
+						"op": "getnode",
+						"value": "is_left_right_equipment"
+					},
+					{
+						"op": "if"
+					}
+				],
+				"type": "float"
+			},
+			"right_hand_equipment_name": {
+				"_id": "right_hand_equipment_name",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "right_equipment"
+					},
+					{
+						"op": "pushconst",
+						"value": "name"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "getnode",
+						"value": "left_right_equipment"
+					},
+					{
+						"op": "pushconst",
+						"value": "name"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "getnode",
+						"value": "is_left_right_weapon"
+					},
+					{
+						"op": "if"
+					},
+					{
+						"op": "pushconst",
+						"value": "none"
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"islocale": true,
+				"type": "string"
+			},
+			"right_weapon": {
+				"_id": "right_weapon",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "right_equipment"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "pushconst",
+						"value": "weapon"
+					},
+					{
+						"op": "f2",
+						"value": "arraydocumentfiltertype"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "getarrayvalue"
+					}
+				],
+				"type": "document"
+			},
+			"size": {
+				"_id": "size",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": 1.5
+					},
+					{
+						"op": "pushconst",
+						"value": 30.479999542236328
+					},
+					{
+						"op": "getnode",
+						"value": "height"
+					},
+					{
+						"op": "f2",
+						"value": "div"
+					},
+					{
+						"op": "f2",
+						"value": "log"
+					}
+				],
+				"type": "float"
+			},
+			"skill_map": {
+				"_id": "skill_map",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "skill_training_map"
+					},
+					{
+						"op": "getnode",
+						"value": "skill_array"
+					},
+					{
+						"op": "f2",
+						"value": "makeskillmap"
+					}
+				],
+				"type": "object"
+			},
+			"skill_training_array": {
+				"_id": "skill_training_array",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "active_classes"
+					},
+					{
+						"op": "pushconst",
+						"value": "skill_training"
+					},
+					{
+						"op": "getdocumentarrayvalue"
+					},
+					{
+						"op": "arrayofarraytostack"
+					},
+					{
+						"op": "getnode",
+						"value": "deity_calculate"
+					},
+					{
+						"op": "pushconst",
+						"value": "skill_training"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "arraytostack"
+					},
+					{
+						"op": "stacktoarray"
+					}
+				],
+				"type": "array"
+			},
+			"skill_training_map": {
+				"_id": "skill_training_map",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "skill_training_array"
+					},
+					{
+						"op": "getnode",
+						"value": "training_data"
+					},
+					{
+						"op": "f2",
+						"value": "maketrainingmap"
+					}
+				],
+				"type": "object"
+			},
+			"spent_attribute_points": {
+				"_id": "spent_attribute_points",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "spent_ps"
+					},
+					{
+						"op": "getnode",
+						"value": "spent_st"
+					},
+					{
+						"op": "getnode",
+						"value": "spent_ag"
+					},
+					{
+						"op": "getnode",
+						"value": "spent_md"
+					},
+					{
+						"op": "getnode",
+						"value": "spent_pc"
+					},
+					{
+						"op": "getnode",
+						"value": "spent_wp"
+					},
+					{
+						"op": "getnode",
+						"value": "spent_fa"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "f1",
+						"value": "sumarray"
+					}
+				],
+				"type": "int"
+			},
+			"spent_experence_points": {
+				"_id": "spent_experence_points",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "skill_array"
+					},
+					{
+						"op": "pushconst",
+						"value": "spent_xp"
+					},
+					{
+						"op": "getdocumentarrayvalue"
+					},
+					{
+						"op": "f1",
+						"value": "sumarray"
+					}
+				],
+				"type": "int"
+			},
+			"talent_array": {
+				"_id": "talent_array",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "active_classes"
+					},
+					{
+						"op": "pushconst",
+						"value": "talents"
+					},
+					{
+						"op": "getdocumentarrayvalue"
+					},
+					{
+						"op": "arrayofarraytostack"
+					},
+					{
+						"op": "getnode",
+						"value": "deity_calculate"
+					},
+					{
+						"op": "pushconst",
+						"value": "talents"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "arraytostack"
+					},
+					{
+						"op": "getnode",
+						"value": "talent_array_base"
+					},
+					{
+						"op": "arraytostack"
+					},
+					{
+						"op": "stacktoarray"
+					}
+				],
+				"type": "stringarray"
+			},
+			"talent_map": {
+				"_id": "talent_map",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "talent_array"
+					},
+					{
+						"op": "arraytomap"
+					}
+				],
+				"type": "stringmap"
+			},
+			"talent_options": {
+				"_id": "talent_options",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "talent"
+					},
+					{
+						"op": "pushconst",
+						"value": "character"
+					},
+					{
+						"op": "pushconst",
+						"value": "data"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getstaticdataobject"
+					}
+				],
+				"type": "object"
+			},
+			"total_mass": {
+				"_id": "total_mass",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "mass_carried"
+					},
+					{
+						"op": "getnode",
+						"value": "mass"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"dimension": "mass",
+				"type": "float"
+			},
+			"training_data": {
+				"_id": "training_data",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": "skill_training_classification"
+					},
+					{
+						"op": "pushconst",
+						"value": "character"
+					},
+					{
+						"op": "pushconst",
+						"value": "data"
+					},
+					{
+						"op": "stacktoarray"
+					},
+					{
+						"op": "getstaticdataobject"
+					}
+				],
+				"type": "object"
+			},
+			"two_weapon_attack_penalty_ambidextrous": {
+				"_id": "two_weapon_attack_penalty_ambidextrous",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": 2.0
+					},
+					{
+						"op": "pushconst",
+						"value": 2
+					},
+					{
+						"op": "getnode",
+						"value": "attribute_cd"
+					},
+					{
+						"op": "f2",
+						"value": "div"
+					},
+					{
+						"op": "f2",
+						"value": "minus"
+					}
+				],
+				"type": "float"
+			},
+			"two_weapon_attack_penalty_major": {
+				"_id": "two_weapon_attack_penalty_major",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": 1.5
+					},
+					{
+						"op": "pushconst",
+						"value": 2
+					},
+					{
+						"op": "getnode",
+						"value": "attribute_cd"
+					},
+					{
+						"op": "f2",
+						"value": "div"
+					},
+					{
+						"op": "f2",
+						"value": "minus"
+					}
+				],
+				"type": "float"
+			},
+			"two_weapon_attack_penalty_minor": {
+				"_id": "two_weapon_attack_penalty_minor",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": 3.0
+					},
+					{
+						"op": "pushconst",
+						"value": 2
+					},
+					{
+						"op": "getnode",
+						"value": "attribute_cd"
+					},
+					{
+						"op": "f2",
+						"value": "div"
+					},
+					{
+						"op": "f2",
+						"value": "minus"
+					}
+				],
+				"type": "float"
+			},
+			"two_weapon_min_ps": {
+				"_id": "two_weapon_min_ps",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "left_weapon"
+					},
+					{
+						"op": "pushconst",
+						"value": "minimum_ps"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0.0
+					},
+					{
+						"op": "f2",
+						"value": "max"
+					},
+					{
+						"op": "getnode",
+						"value": "right_weapon"
+					},
+					{
+						"op": "pushconst",
+						"value": "minimum_ps"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0.0
+					},
+					{
+						"op": "f2",
+						"value": "max"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "float"
+			},
+			"using_two_weapons": {
+				"_id": "using_two_weapons",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "is_left_right_weapon"
+					},
+					{
+						"op": "not"
+					},
+					{
+						"op": "getnode",
+						"value": "is_left_weapon"
+					},
+					{
+						"op": "getnode",
+						"value": "is_right_weapon"
+					},
+					{
+						"op": "and"
+					},
+					{
+						"op": "and"
+					}
+				],
+				"type": "bool"
+			},
+			"weapon_level": {
+				"_id": "weapon_level",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "weapon_level_left_equipment"
+					},
+					{
+						"op": "getnode",
+						"value": "weapon_level_right_equipment"
+					},
+					{
+						"op": "f2",
+						"value": "max"
+					},
+					{
+						"op": "getnode",
+						"value": "weapon_level_left_right_equipment"
+					},
+					{
+						"op": "getnode",
+						"value": "is_left_right_equipment"
+					},
+					{
+						"op": "if"
+					}
+				],
+				"type": "int"
+			},
+			"weapon_level_left_equipment": {
+				"_id": "weapon_level_left_equipment",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "left_equipment"
+					},
+					{
+						"op": "pushconst",
+						"value": "weapon_level"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "int"
+			},
+			"weapon_level_left_right_equipment": {
+				"_id": "weapon_level_left_right_equipment",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "left_right_equipment"
+					},
+					{
+						"op": "pushconst",
+						"value": "weapon_level"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "int"
+			},
+			"weapon_level_right_equipment": {
+				"_id": "weapon_level_right_equipment",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "right_equipment"
+					},
+					{
+						"op": "pushconst",
+						"value": "weapon_level"
+					},
+					{
+						"op": "getdocumentvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "int"
+			}
+		},
+		"class": {
+			"active": {
+				"_id": "active",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "pass_restrictions"
+					},
+					{
+						"op": "getnode",
+						"value": "pass_attributes"
+					},
+					{
+						"op": "and"
+					}
+				],
+				"type": "bool"
+			},
+			"classpath": {
+				"_id": "classpath",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "class"
+					},
+					{
+						"op": "pushconst",
+						"value": "class"
+					},
+					{
+						"op": "pushconst",
+						"value": "character"
+					},
+					{
+						"op": "pushconst",
+						"value": "data"
+					},
+					{
+						"op": "stacktoarray"
+					}
+				],
+				"tooltipstop": true,
+				"type": "stringarray"
+			},
+			"empty_array": {
+				"_id": "empty_array",
+				"data": [
+					{
+						"op": "stacktoarray"
+					}
+				],
+				"type": "array"
+			},
+			"not_restrictions": {
+				"_id": "not_restrictions",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "static_data"
+					},
+					{
+						"op": "pushconst",
+						"value": "not_restrictions"
+					},
+					{
+						"op": "getobjectvalue"
+					},
+					{
+						"op": "getnode",
+						"value": "empty_array"
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "array"
+			},
+			"pass_attributes": {
+				"_id": "pass_attributes",
+				"data": [
+					{
+						"op": "getparentnode",
+						"value": "attribute_object"
+					},
+					{
+						"op": "getnode",
+						"value": "static_data"
+					},
+					{
+						"op": "f2",
+						"value": "evalueattributes"
+					}
+				],
+				"type": "bool"
+			},
+			"pass_restrictions": {
+				"_id": "pass_restrictions",
+				"data": [
+					{
+						"op": "getparentnode",
+						"value": "is_object"
+					},
+					{
+						"op": "getnode",
+						"value": "not_restrictions"
+					},
+					{
+						"op": "getnode",
+						"value": "restrictions"
+					},
+					{
+						"op": "f3",
+						"value": "evaluerestrictions"
+					}
+				],
+				"type": "bool"
+			},
+			"restrictions": {
+				"_id": "restrictions",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "static_data"
+					},
+					{
+						"op": "pushconst",
+						"value": "restrictions"
+					},
+					{
+						"op": "getobjectvalue"
+					},
+					{
+						"op": "getnode",
+						"value": "empty_array"
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "array"
+			},
+			"skill_training": {
+				"_id": "skill_training",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "static_data"
+					},
+					{
+						"op": "pushconst",
+						"value": "skill"
+					},
+					{
+						"op": "getobjectvalue"
+					},
+					{
+						"op": "getnode",
+						"value": "empty_array"
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "array"
+			},
+			"static_data": {
+				"_id": "static_data",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "classpath"
+					},
+					{
+						"op": "getstaticdataobject"
+					}
+				],
+				"type": "object"
+			},
+			"talents": {
+				"_id": "talents",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "static_data"
+					},
+					{
+						"op": "pushconst",
+						"value": "talent"
+					},
+					{
+						"op": "getobjectvalue"
+					},
+					{
+						"op": "getnode",
+						"value": "empty_array"
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "array"
+			}
+		},
+		"deity": {
+			"alignment_law": {
+				"_id": "alignment_law",
+				"data": [
+					{
+						"op": "getparentnode",
+						"value": "alignment_law"
+					}
+				],
+				"type": "string"
+			},
+			"alignment_moral": {
+				"_id": "alignment_moral",
+				"data": [
+					{
+						"op": "getparentnode",
+						"value": "alignment_moral"
+					}
+				],
+				"type": "string"
+			},
+			"alignment_social": {
+				"_id": "alignment_social",
+				"data": [
+					{
+						"op": "getparentnode",
+						"value": "alignment_social"
+					}
+				],
+				"type": "string"
+			},
+			"datapath": {
+				"_id": "datapath",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "deity"
+					},
+					{
+						"op": "pushconst",
+						"value": "deity"
+					},
+					{
+						"op": "pushconst",
+						"value": "character"
+					},
+					{
+						"op": "pushconst",
+						"value": "data"
+					},
+					{
+						"op": "stacktoarray"
+					}
+				],
+				"tooltipstop": true,
+				"type": "stringarray"
+			},
+			"deity": {
+				"_id": "deity",
+				"data": [
+					{
+						"op": "getparentnode",
+						"value": "deity"
+					}
+				],
+				"type": "string"
+			},
+			"emptyarray": {
+				"_id": "emptyarray",
+				"data": [
+					{
+						"op": "stacktoarray"
+					}
+				],
+				"type": "array"
+			},
+			"is_deity_celtic": {
+				"_id": "is_deity_celtic",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "pass_restrictions"
+					},
+					{
+						"op": "getnode",
+						"value": "static_data"
+					},
+					{
+						"op": "pushconst",
+						"value": "celtic"
+					},
+					{
+						"op": "getobjectvalue"
+					},
+					{
+						"op": "and"
+					}
+				],
+				"type": "bool"
+			},
+			"is_deity_female": {
+				"_id": "is_deity_female",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "pass_restrictions"
+					},
+					{
+						"op": "getnode",
+						"value": "static_data"
+					},
+					{
+						"op": "pushconst",
+						"value": "female"
+					},
+					{
+						"op": "getobjectvalue"
+					},
+					{
+						"op": "and"
+					}
+				],
+				"type": "bool"
+			},
+			"is_deity_followed": {
+				"_id": "is_deity_followed",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "pass_restrictions"
+					},
+					{
+						"op": "getnode",
+						"value": "static_data"
+					},
+					{
+						"op": "pushconst",
+						"value": "deity"
+					},
+					{
+						"op": "getobjectvalue"
+					},
+					{
+						"op": "and"
+					}
+				],
+				"type": "bool"
+			},
+			"is_deity_greek": {
+				"_id": "is_deity_greek",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "pass_restrictions"
+					},
+					{
+						"op": "getnode",
+						"value": "static_data"
+					},
+					{
+						"op": "pushconst",
+						"value": "greek"
+					},
+					{
+						"op": "getobjectvalue"
+					},
+					{
+						"op": "and"
+					}
+				],
+				"type": "bool"
+			},
+			"is_deity_male": {
+				"_id": "is_deity_male",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "pass_restrictions"
+					},
+					{
+						"op": "getnode",
+						"value": "static_data"
+					},
+					{
+						"op": "pushconst",
+						"value": "male"
+					},
+					{
+						"op": "getobjectvalue"
+					},
+					{
+						"op": "and"
+					}
+				],
+				"type": "bool"
+			},
+			"is_deity_match_alignment": {
+				"_id": "is_deity_match_alignment",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "pass_restrictions"
+					},
+					{
+						"op": "getnode",
+						"value": "match_social"
+					},
+					{
+						"op": "and"
+					},
+					{
+						"op": "getnode",
+						"value": "match_law"
+					},
+					{
+						"op": "and"
+					},
+					{
+						"op": "getnode",
+						"value": "match_moral"
+					},
+					{
+						"op": "and"
+					}
+				],
+				"type": "bool"
+			},
+			"is_deity_norse": {
+				"_id": "is_deity_norse",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "pass_restrictions"
+					},
+					{
+						"op": "getnode",
+						"value": "static_data"
+					},
+					{
+						"op": "pushconst",
+						"value": "norse"
+					},
+					{
+						"op": "getobjectvalue"
+					},
+					{
+						"op": "and"
+					}
+				],
+				"type": "bool"
+			},
+			"is_female": {
+				"_id": "is_female",
+				"data": [
+					{
+						"op": "getparentnode",
+						"value": "is_female"
+					}
+				],
+				"type": "bool"
+			},
+			"is_male": {
+				"_id": "is_male",
+				"data": [
+					{
+						"op": "getparentnode",
+						"value": "is_male"
+					}
+				],
+				"type": "bool"
+			},
+			"is_object": {
+				"_id": "is_object",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "is_female"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_female"
+					},
+					{
+						"op": "getnode",
+						"value": "is_male"
+					},
+					{
+						"op": "pushconst",
+						"value": "is_male"
+					},
+					{
+						"op": "stacktoobject"
+					}
+				],
+				"type": "object"
+			},
+			"match_law": {
+				"_id": "match_law",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "static_data"
+					},
+					{
+						"op": "pushconst",
+						"value": "law"
+					},
+					{
+						"op": "getobjectvalue"
+					},
+					{
+						"op": "getnode",
+						"value": "alignment_law"
+					},
+					{
+						"op": "equal"
+					}
+				],
+				"type": "bool"
+			},
+			"match_moral": {
+				"_id": "match_moral",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "static_data"
+					},
+					{
+						"op": "pushconst",
+						"value": "moral"
+					},
+					{
+						"op": "getobjectvalue"
+					},
+					{
+						"op": "getnode",
+						"value": "alignment_moral"
+					},
+					{
+						"op": "equal"
+					}
+				],
+				"type": "bool"
+			},
+			"match_social": {
+				"_id": "match_social",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "static_data"
+					},
+					{
+						"op": "pushconst",
+						"value": "social"
+					},
+					{
+						"op": "getobjectvalue"
+					},
+					{
+						"op": "getnode",
+						"value": "alignment_social"
+					},
+					{
+						"op": "equal"
+					}
+				],
+				"type": "bool"
+			},
+			"not_restrictions": {
+				"_id": "not_restrictions",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "static_data"
+					},
+					{
+						"op": "pushconst",
+						"value": "not_restrictions"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "array"
+			},
+			"pass_restrictions": {
+				"_id": "pass_restrictions",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "is_object"
+					},
+					{
+						"op": "getnode",
+						"value": "not_restrictions"
+					},
+					{
+						"op": "getnode",
+						"value": "restrictions"
+					},
+					{
+						"op": "f3",
+						"value": "evaluerestrictions"
+					}
+				],
+				"type": "bool"
+			},
+			"restrictions": {
+				"_id": "restrictions",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "static_data"
+					},
+					{
+						"op": "pushconst",
+						"value": "restrictions"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "array"
+			},
+			"skill_training": {
+				"_id": "skill_training",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "pass_restrictions"
+					},
+					{
+						"op": "getnode",
+						"value": "static_data"
+					},
+					{
+						"op": "pushconst",
+						"value": "skill"
+					},
+					{
+						"op": "getobjectvalue"
+					},
+					{
+						"op": "getnode",
+						"value": "emptyarray"
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "array"
+			},
+			"static_data": {
+				"_id": "static_data",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "datapath"
+					},
+					{
+						"op": "getstaticdataobject"
+					}
+				],
+				"type": "object"
+			},
+			"talents": {
+				"_id": "talents",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "pass_restrictions"
+					},
+					{
+						"op": "getnode",
+						"value": "static_data"
+					},
+					{
+						"op": "pushconst",
+						"value": "talent"
+					},
+					{
+						"op": "getobjectvalue"
+					},
+					{
+						"op": "getnode",
+						"value": "emptyarray"
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "array"
+			}
+		},
+		"skill": {
+			"base": {
+				"_id": "base",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "datapath"
+					},
+					{
+						"op": "getstaticdataobject"
+					},
+					{
+						"op": "pushconst",
+						"value": "base"
+					},
+					{
+						"op": "getobjectvalue"
+					}
+				],
+				"type": "int"
+			},
+			"datapath": {
+				"_id": "datapath",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "skill"
+					},
+					{
+						"op": "pushconst",
+						"value": "skill"
+					},
+					{
+						"op": "pushconst",
+						"value": "character"
+					},
+					{
+						"op": "pushconst",
+						"value": "data"
+					},
+					{
+						"op": "stacktoarray"
+					}
+				],
+				"tooltipstop": true,
+				"type": "stringarray"
+			},
+			"skill_level": {
+				"_id": "skill_level",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "level"
+					},
+					{
+						"op": "getnode",
+						"value": "traininglevel"
+					},
+					{
+						"op": "f2",
+						"value": "add"
+					}
+				],
+				"type": "int"
+			},
+			"skill_training_map": {
+				"_id": "skill_training_map",
+				"data": [
+					{
+						"op": "getparentnode",
+						"value": "skill_training_map"
+					}
+				],
+				"type": "object"
+			},
+			"spent_xp": {
+				"_id": "spent_xp",
+				"data": [
+					{
+						"op": "pushconst",
+						"value": 1
+					},
+					{
+						"op": "getnode",
+						"value": "level"
+					},
+					{
+						"op": "f2",
+						"value": "minus"
+					},
+					{
+						"op": "pushconst",
+						"value": 2
+					},
+					{
+						"op": "f2",
+						"value": "pow"
+					},
+					{
+						"op": "getnode",
+						"value": "base"
+					},
+					{
+						"op": "f2",
+						"value": "mul"
+					}
+				],
+				"type": "int"
+			},
+			"traininglevel": {
+				"_id": "traininglevel",
+				"data": [
+					{
+						"op": "getnode",
+						"value": "skill_training_map"
+					},
+					{
+						"op": "getnode",
+						"value": "skill"
+					},
+					{
+						"op": "getobjectvalue"
+					},
+					{
+						"op": "pushconst",
+						"value": 0
+					},
+					{
+						"op": "replaceundefined"
+					}
+				],
+				"type": "int"
+			}
+		}
+	},
+	"value": {
+		"character": {
+			"age": {
+				"_id": "age",
+				"defaultvaluefloat": 18.0,
+				"floatrangelow": 0.0,
+				"type": "float"
+			},
+			"alignment_law": {
+				"_id": "alignment_law",
+				"defaultvaluekey": "law_neutral",
+				"keypath": [
+					"data",
+					"alignment_law"
+				],
+				"type": "key"
+			},
+			"alignment_moral": {
+				"_id": "alignment_moral",
+				"defaultvaluekey": "moral_neutral",
+				"keypath": [
+					"data",
+					"alignment_moral"
+				],
+				"type": "key"
+			},
+			"alignment_social": {
+				"_id": "alignment_social",
+				"defaultvaluekey": "social_neutral",
+				"keypath": [
+					"data",
+					"alignment_social"
+				],
+				"type": "key"
+			},
+			"class_array": {
+				"_id": "class_array",
+				"documenttypearray": [
+					"class"
+				],
+				"type": "documentarray"
+			},
+			"copper_coins": {
+				"_id": "copper_coins",
+				"intrangelow": 0,
+				"type": "int"
+			},
+			"culture": {
+				"_id": "culture",
+				"defaultvaluekey": "everything",
+				"keypath": [
+					"data",
+					"character",
+					"culture"
+				],
+				"type": "key"
+			},
+			"current_loadout": {
+				"_id": "current_loadout",
+				"defaultvaluekey": "rest",
+				"keypath": [
+					"data",
+					"character",
+					"loadout"
+				],
+				"type": "key"
+			},
+			"deity": {
+				"_id": "deity",
+				"defaultvaluekey": "none",
+				"keypath": [
+					"data",
+					"character",
+					"deity"
+				],
+				"type": "key"
+			},
+			"deity_calculate": {
+				"_id": "deity_calculate",
+				"documenttypearray": [
+					"deity"
+				],
+				"type": "document"
+			},
+			"electrum_coins": {
+				"_id": "electrum_coins",
+				"intrangelow": 0,
+				"type": "int"
+			},
+			"enchantment_array": {
+				"_id": "enchantment_array",
+				"documenttypearray": [
+					"enchantment"
+				],
+				"type": "documentarray"
+			},
+			"environment": {
+				"_id": "environment",
+				"documenttypearray": [
+					"environment"
+				],
+				"type": "document"
+			},
+			"equipment_array": {
+				"_id": "equipment_array",
+				"documenttypearray": [
+					"armor",
+					"accessory",
+					"shield",
+					"weapon"
+				],
+				"type": "documentarray"
+			},
+			"experence_points": {
+				"_id": "experence_points",
+				"intrangelow": 0,
+				"type": "int"
+			},
+			"fatigue": {
+				"_id": "fatigue",
+				"floatrangelow": 0.0,
+				"type": "float"
+			},
+			"gender": {
+				"_id": "gender",
+				"defaultvaluekeyrandarray": [
+					"male",
+					"female"
+				],
+				"defaultvaluekeyuserand": true,
+				"keypath": [
+					"data",
+					"character",
+					"gender"
+				],
+				"type": "key"
+			},
+			"gold_coins": {
+				"_id": "gold_coins",
+				"intrangelow": 0,
+				"type": "int"
+			},
+			"handedness": {
+				"_id": "handedness",
+				"defaultvaluekeyrandarray": [
+					"ambidextrous",
+					"lefthanded",
+					"lefthanded",
+					"righthanded",
+					"righthanded",
+					"righthanded",
+					"righthanded",
+					"righthanded",
+					"righthanded",
+					"righthanded",
+					"righthanded",
+					"righthanded",
+					"righthanded",
+					"righthanded",
+					"righthanded",
+					"righthanded",
+					"righthanded",
+					"righthanded",
+					"righthanded",
+					"righthanded"
+				],
+				"defaultvaluekeyuserand": true,
+				"keypath": [
+					"data",
+					"character",
+					"handedness"
+				],
+				"type": "key"
+			},
+			"height": {
+				"_id": "height",
+				"defaultvaluefloat": 185.0,
+				"dimension": "length",
+				"floatrangelow": 0.0,
+				"type": "float"
+			},
+			"id": {
+				"_id": "id",
+				"defaultvaluestringrandid": true
+			},
+			"illusion_damage": {
+				"_id": "illusion_damage",
+				"floatrangelow": 0.0,
+				"type": "float"
+			},
+			"latten_coins": {
+				"_id": "latten_coins",
+				"intrangelow": 0,
+				"type": "int"
+			},
+			"mass": {
+				"_id": "mass",
+				"defaultvaluefloat": 75.0,
+				"dimension": "mass",
+				"floatrangelow": 0.0,
+				"type": "float"
+			},
+			"name": {
+				"_id": "name",
+				"type": "string"
+			},
+			"physical_damage": {
+				"_id": "physical_damage",
+				"floatrangelow": 0.0,
+				"type": "float"
+			},
+			"platinum_coins": {
+				"_id": "platinum_coins",
+				"intrangelow": 0,
+				"type": "int"
+			},
+			"race": {
+				"_id": "race",
+				"defaultvaluekeyuserand": true,
+				"keypath": [
+					"data",
+					"character",
+					"race"
+				],
+				"type": "key"
+			},
+			"silver_coins": {
+				"_id": "silver_coins",
+				"type": "int"
+			},
+			"skill_array": {
+				"_id": "skill_array",
+				"documenttypearray": [
+					"skill"
+				],
+				"type": "documentarray"
+			},
+			"spent_ag": {
+				"_id": "spent_ag",
+				"intrangelow": 0,
+				"type": "int"
+			},
+			"spent_fa": {
+				"_id": "spent_fa",
+				"intrangelow": 0,
+				"type": "int"
+			},
+			"spent_md": {
+				"_id": "spent_md",
+				"intrangelow": 0,
+				"type": "int"
+			},
+			"spent_pc": {
+				"_id": "spent_pc",
+				"intrangelow": 0,
+				"type": "int"
+			},
+			"spent_ps": {
+				"_id": "spent_ps",
+				"intrangelow": 0,
+				"type": "int"
+			},
+			"spent_st": {
+				"_id": "spent_st",
+				"intrangelow": 0,
+				"type": "int"
+			},
+			"spent_wp": {
+				"_id": "spent_wp",
+				"intrangelow": 0,
+				"type": "int"
+			},
+			"talent_array_base": {
+				"_id": "talent_array_base",
+				"type": "stringarray"
+			}
+		},
+		"class": {
+			"class": {
+				"_id": "class",
+				"keypath": [
+					"data",
+					"character",
+					"class"
+				],
+				"type": "key"
+			}
+		},
+		"enchantment": {
+			"active": {
+				"_id": "active",
+				"type": "bool"
+			},
+			"attribute": {
+				"_id": "attribute",
+				"keypath": [
+					"data",
+					"character",
+					"attribute"
+				],
+				"type": "key"
+			},
+			"delta": {
+				"_id": "delta",
+				"type": "float"
+			},
+			"end": {
+				"_id": "end",
+				"type": "int"
+			},
+			"has_end": {
+				"_id": "has_end",
+				"type": "bool"
+			},
+			"level": {
+				"_id": "level",
+				"type": "int"
+			},
+			"start": {
+				"_id": "start",
+				"type": "int"
+			}
+		},
+		"environment": {
+			"time": {
+				"_id": "time",
+				"type": "int"
+			}
+		},
+		"skill": {
+			"level": {
+				"_id": "level",
+				"intrangelow": 1,
+				"type": "int"
+			},
+			"skill": {
+				"_id": "skill",
+				"keypath": [
+					"data",
+					"character",
+					"skill"
+				],
+				"type": "key"
+			}
+		}
+	}
+}

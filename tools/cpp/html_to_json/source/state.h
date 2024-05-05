@@ -29,5 +29,6 @@ public:
     /// filter values via items given in data set
     std::set<std::string> data_set = {};
 
-    nlohmann::json output_data = nlohmann::json({});
+    //nlohmann::json output_data = nlohmann::json({});
+    nlohmann::json output_data = nlohmann::json(nlohmann::json::value_t::object);
 };

@@ -1,6 +1,8 @@
 #include "main.h"
 #include "state.h"
 #include "string_to_worksheet.h"
+#include "worksheet_to_json.h"
+#include "cursor.h"
 
 #include <fstream>
 #include <sstream>
@@ -20,7 +22,8 @@ namespace
         TInputFileFail = -8,
         TInputURLFail = -16,
         TUnimplemented = -32,
-        TParseSource = -64
+        TParseSource = -64,
+        TWorksheetError = -128
     };
 
     void Help()
@@ -30,7 +33,7 @@ usage:
 	drive-json [options]
 		
 sample:
-	html_to_json.exe --input ./input/character_only.html --sheet3rd toc --outjson ./output/character.json
+	html_to_json.exe --input ./input/character_only.html --sheet5th toc --outjson ./output/character.json
 		add the data from the saved webpage at the given path in 3rd normalised form, and save result data as json file at output
 		
 options:
@@ -196,19 +199,55 @@ int main(const int in_argc, const char* const in_argv[])
         Help();
     }
 
+    // input
     if (false == state.input_file_path.empty())
     {
         result |= DealInputFile(state.source_data, state.input_file_path);
     }
-
     if (false == state.input_url.empty())
     {
         result |= DealInputUrl(state.source_data, state.input_url);
     }
 
+    // process
+    if (false == state.sheet_3rd_worksheet_name.empty())
+    {
+        if (false == WorksheetToJson::Deal3rd(
+            state.output_data,
+            state.source_data,
+            state.sheet_3rd_worksheet_name,
+            Cursor(state.data_set, false)
+            ))
+        {
+            result |= TWorksheetError;
+        }
+    }
+    if (false == state.sheet_5th_worksheet_name.empty())
+    {
+        if (false == WorksheetToJson::Deal5th(
+            state.output_data,
+            state.source_data,
+            state.sheet_5th_worksheet_name,
+            Cursor()
+            ))
+        {
+            result |= TWorksheetError;
+        }
+    }
+    if (false == state.sheet_3rd_key_value_worksheet_name.empty())
+    {
+        if (false == WorksheetToJson::Deal3rd(
+            state.output_data,
+            state.source_data,
+            state.sheet_3rd_key_value_worksheet_name,
+            Cursor(state.data_set, true)
+            ))
+        {
+            result |= TWorksheetError;
+        }
+    }
 
-
-
+    // output
     if (false == state.output_file_path.empty())
     {
         result |= DealOutput(state.output_data, state.output_file_path);

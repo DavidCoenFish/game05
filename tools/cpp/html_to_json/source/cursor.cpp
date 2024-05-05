@@ -4,7 +4,7 @@ namespace
 {
     nlohmann::json MakePath(const std::vector<Cursor::Data>& in_stack, const int in_index, const nlohmann::json& in_value, nlohmann::json& in_parent)
     {
-        if (0 < in_stack.size())
+        if (in_index < in_stack.size())
         {
             const auto item = in_stack[in_index];
 
@@ -28,7 +28,7 @@ namespace
                     }
                     else
                     {
-                        trace = {};
+                        trace = nlohmann::json(nlohmann::json::value_t::null);
                     }
 
                     in_parent[item.member_key] = MakePath(in_stack, in_index + 1, in_value, trace);
@@ -60,13 +60,45 @@ namespace
         }
         return in_parent;
     }
-}
+
+    const int GetArrayLengthPath(const std::vector<Cursor::Data>& in_stack, const int in_stack_index, nlohmann::json& in_base_object)
+    {
+        if (in_stack_index == static_cast<int>(in_stack.size()))
+        {
+            return static_cast<int>(in_base_object.size());
+        }
+
+        const auto& item = in_stack[in_stack_index];
+        switch(item.type)
+        {
+        default:
+            break;
+        case Cursor::Type::TArray:
+            {
+                auto& trace = in_base_object[item.array_index];
+                return GetArrayLengthPath(in_stack, in_stack_index + 1, trace);
+            }
+            break;
+        case Cursor::Type::TMember:
+            {
+                auto& trace = in_base_object[item.member_key];
+                return GetArrayLengthPath(in_stack, in_stack_index + 1, trace);
+            }
+            break;
+        }
+
+        return 0;
+    }
+
+} // end namespace
 
 Cursor::Cursor(
     const std::set<std::string>& in_data_set,
+    const bool in_use_data_set,
     const std::vector<Data>& in_stack
     )
     : _data_set(in_data_set)
+    , _use_data_set(in_use_data_set)
     , _stack(in_stack)
 {
     // nop
@@ -90,8 +122,14 @@ void Cursor::PushArray(const int in_array_index)
     return;
 }
 
+#if 0
 const bool Cursor::TestDataset(const std::set<std::string>& in_data_set) const
 {
+    if (false == _use_data_set)
+    {
+        return true;
+    }
+
     for (auto item : _data_set)
     {
         auto found = in_data_set.find(item);
@@ -103,10 +141,32 @@ const bool Cursor::TestDataset(const std::set<std::string>& in_data_set) const
 
     return false;
 }
+#else
+const bool Cursor::TestDataset(const std::string& in_needle) const
+{
+    if (false == _use_data_set)
+    {
+        return true;
+    }
+
+    auto found = _data_set.find(in_needle);
+    if (found != _data_set.end())
+    {
+        return true;
+    }
+
+    return false;
+}
+#endif
 
 Cursor Cursor::Clone() const
 {
-    return Cursor(_data_set, _stack);
+    return Cursor(_data_set, _use_data_set, _stack);
+}
+
+Cursor Cursor::CloneSetUseDataSet(const bool in_use_data_set) const
+{
+    return Cursor(_data_set, in_use_data_set, _stack);
 }
 
 //template<typename TYPE>
@@ -117,7 +177,7 @@ Cursor Cursor::Clone() const
 //nlohmann::json SetValueFloat(const float in_value, nlohmann::json& in_base_object);
 //nlohmann::json SetValueString(const std::string& in_value, nlohmann::json& in_base_object);
 
-void Cursor::SetValue(nlohmann::json& in_out_base_object, const nlohmann::json& in_value)
+void Cursor::SetValue(nlohmann::json& in_out_base_object, const nlohmann::json& in_value) const
 {
     if (0 < _stack.size())
     {
@@ -166,4 +226,15 @@ void Cursor::SetValue(nlohmann::json& in_out_base_object, const nlohmann::json& 
     }
 
     return;
+}
+
+const int Cursor::GetArrayLength(nlohmann::json& in_out_base_object) const
+{
+    if (0 < _stack.size())
+    {
+        return GetArrayLengthPath(_stack, 0, in_out_base_object);
+    }
+    printf("Cursor GetArrayLength, no contents");
+    return 0;
+
 }
