@@ -2,7 +2,6 @@
 	"calculate": {
 		"character": {
 			"active_class_base_count": {
-				"_id": "active_class_base_count",
 				"data": [
 					{
 						"op": "getnode",
@@ -16,7 +15,6 @@
 				"type": "int"
 			},
 			"active_classes": {
-				"_id": "active_classes",
 				"data": [
 					{
 						"op": "getnode",
@@ -34,7 +32,6 @@
 				"type": "documentarray"
 			},
 			"active_classes_base": {
-				"_id": "active_classes_base",
 				"data": [
 					{
 						"op": "pushconst",
@@ -56,7 +53,6 @@
 				"type": "documentarray"
 			},
 			"armor_name": {
-				"_id": "armor_name",
 				"data": [
 					{
 						"op": "getnode",
@@ -92,7 +88,6 @@
 				"type": "string"
 			},
 			"attack_bonus_left_equipment": {
-				"_id": "attack_bonus_left_equipment",
 				"data": [
 					{
 						"op": "getnode",
@@ -116,7 +111,6 @@
 				"type": "float"
 			},
 			"attack_bonus_left_right_equipment": {
-				"_id": "attack_bonus_left_right_equipment",
 				"data": [
 					{
 						"op": "getnode",
@@ -140,7 +134,6 @@
 				"type": "float"
 			},
 			"attack_bonus_right_equipment": {
-				"_id": "attack_bonus_right_equipment",
 				"data": [
 					{
 						"op": "getnode",
@@ -164,7 +157,6 @@
 				"type": "float"
 			},
 			"attribute_ag": {
-				"_id": "attribute_ag",
 				"data": [
 					{
 						"op": "getnode",
@@ -182,7 +174,6 @@
 				"type": "float"
 			},
 			"attribute_br": {
-				"_id": "attribute_br",
 				"data": [
 					{
 						"op": "getnode",
@@ -200,7 +191,6 @@
 				"type": "float"
 			},
 			"attribute_cd": {
-				"_id": "attribute_cd",
 				"data": [
 					{
 						"op": "getnode",
@@ -218,7 +208,6 @@
 				"type": "float"
 			},
 			"attribute_ch": {
-				"_id": "attribute_ch",
 				"data": [
 					{
 						"op": "getnode",
@@ -236,7 +225,6 @@
 				"type": "float"
 			},
 			"attribute_delta": {
-				"_id": "attribute_delta",
 				"data": [
 					{
 						"op": "getnode",
@@ -256,7 +244,6 @@
 				"type": "int"
 			},
 			"attribute_delta_ag": {
-				"_id": "attribute_delta_ag",
 				"data": [
 					{
 						"op": "getnode",
@@ -284,7 +271,6 @@
 				"type": "float"
 			},
 			"attribute_delta_br": {
-				"_id": "attribute_delta_br",
 				"data": [
 					{
 						"op": "getnode",
@@ -312,7 +298,6 @@
 				"type": "float"
 			},
 			"attribute_delta_cd": {
-				"_id": "attribute_delta_cd",
 				"data": [
 					{
 						"op": "getnode",
@@ -340,7 +325,6 @@
 				"type": "float"
 			},
 			"attribute_delta_ch": {
-				"_id": "attribute_delta_ch",
 				"data": [
 					{
 						"op": "getnode",
@@ -368,7 +352,6 @@
 				"type": "float"
 			},
 			"attribute_delta_df": {
-				"_id": "attribute_delta_df",
 				"data": [
 					{
 						"op": "getnode",
@@ -396,7 +379,6 @@
 				"type": "float"
 			},
 			"attribute_delta_dhr": {
-				"_id": "attribute_delta_dhr",
 				"data": [
 					{
 						"op": "getnode",
@@ -424,7 +406,6 @@
 				"type": "float"
 			},
 			"attribute_delta_dt": {
-				"_id": "attribute_delta_dt",
 				"data": [
 					{
 						"op": "getnode",
@@ -452,7 +433,6 @@
 				"type": "float"
 			},
 			"attribute_delta_fa": {
-				"_id": "attribute_delta_fa",
 				"data": [
 					{
 						"op": "getnode",
@@ -480,7 +460,6 @@
 				"type": "float"
 			},
 			"attribute_delta_he": {
-				"_id": "attribute_delta_he",
 				"data": [
 					{
 						"op": "getnode",
@@ -508,7 +487,6 @@
 				"type": "float"
 			},
 			"attribute_delta_in": {
-				"_id": "attribute_delta_in",
 				"data": [
 					{
 						"op": "getnode",
@@ -536,7 +514,6 @@
 				"type": "float"
 			},
 			"attribute_delta_mc": {
-				"_id": "attribute_delta_mc",
 				"data": [
 					{
 						"op": "getnode",
@@ -564,7 +541,6 @@
 				"type": "float"
 			},
 			"attribute_delta_md": {
-				"_id": "attribute_delta_md",
 				"data": [
 					{
 						"op": "getnode",
@@ -592,7 +568,6 @@
 				"type": "float"
 			},
 			"attribute_delta_mg": {
-				"_id": "attribute_delta_mg",
 				"data": [
 					{
 						"op": "getnode",
@@ -620,7 +595,6 @@
 				"type": "float"
 			},
 			"attribute_delta_pc": {
-				"_id": "attribute_delta_pc",
 				"data": [
 					{
 						"op": "getnode",
@@ -648,7 +622,6 @@
 				"type": "float"
 			},
 			"attribute_delta_ps": {
-				"_id": "attribute_delta_ps",
 				"data": [
 					{
 						"op": "getnode",
@@ -676,7 +649,6 @@
 				"type": "float"
 			},
 			"attribute_delta_rd": {
-				"_id": "attribute_delta_rd",
 				"data": [
 					{
 						"op": "getnode",
@@ -704,7 +676,6 @@
 				"type": "float"
 			},
 			"attribute_delta_sp": {
-				"_id": "attribute_delta_sp",
 				"data": [
 					{
 						"op": "getnode",
@@ -733,7 +704,6 @@
 				"type": "float"
 			},
 			"attribute_delta_st": {
-				"_id": "attribute_delta_st",
 				"data": [
 					{
 						"op": "getnode",
@@ -761,7 +731,6 @@
 				"type": "float"
 			},
 			"attribute_delta_td": {
-				"_id": "attribute_delta_td",
 				"data": [
 					{
 						"op": "getnode",
@@ -789,7 +758,6 @@
 				"type": "float"
 			},
 			"attribute_delta_tem": {
-				"_id": "attribute_delta_tem",
 				"data": [
 					{
 						"op": "getnode",
@@ -818,7 +786,6 @@
 				"type": "float"
 			},
 			"attribute_delta_ten": {
-				"_id": "attribute_delta_ten",
 				"data": [
 					{
 						"op": "getnode",
@@ -847,7 +814,6 @@
 				"type": "float"
 			},
 			"attribute_delta_tu": {
-				"_id": "attribute_delta_tu",
 				"data": [
 					{
 						"op": "getnode",
@@ -875,7 +841,6 @@
 				"type": "float"
 			},
 			"attribute_delta_vg": {
-				"_id": "attribute_delta_vg",
 				"data": [
 					{
 						"op": "getnode",
@@ -903,7 +868,6 @@
 				"type": "float"
 			},
 			"attribute_delta_wp": {
-				"_id": "attribute_delta_wp",
 				"data": [
 					{
 						"op": "getnode",
@@ -931,7 +895,6 @@
 				"type": "float"
 			},
 			"attribute_df": {
-				"_id": "attribute_df",
 				"data": [
 					{
 						"op": "getnode",
@@ -949,7 +912,6 @@
 				"type": "float"
 			},
 			"attribute_dhr": {
-				"_id": "attribute_dhr",
 				"data": [
 					{
 						"op": "getnode",
@@ -967,7 +929,6 @@
 				"type": "float"
 			},
 			"attribute_dt": {
-				"_id": "attribute_dt",
 				"data": [
 					{
 						"op": "getnode",
@@ -985,7 +946,6 @@
 				"type": "float"
 			},
 			"attribute_enchantments_ag": {
-				"_id": "attribute_enchantments_ag",
 				"data": [
 					{
 						"op": "pushconst",
@@ -1014,7 +974,6 @@
 				"type": "documentarray"
 			},
 			"attribute_enchantments_br": {
-				"_id": "attribute_enchantments_br",
 				"data": [
 					{
 						"op": "pushconst",
@@ -1043,7 +1002,6 @@
 				"type": "documentarray"
 			},
 			"attribute_enchantments_cd": {
-				"_id": "attribute_enchantments_cd",
 				"data": [
 					{
 						"op": "pushconst",
@@ -1072,7 +1030,6 @@
 				"type": "documentarray"
 			},
 			"attribute_enchantments_ch": {
-				"_id": "attribute_enchantments_ch",
 				"data": [
 					{
 						"op": "pushconst",
@@ -1101,7 +1058,6 @@
 				"type": "documentarray"
 			},
 			"attribute_enchantments_df": {
-				"_id": "attribute_enchantments_df",
 				"data": [
 					{
 						"op": "pushconst",
@@ -1130,7 +1086,6 @@
 				"type": "documentarray"
 			},
 			"attribute_enchantments_dhr": {
-				"_id": "attribute_enchantments_dhr",
 				"data": [
 					{
 						"op": "pushconst",
@@ -1159,7 +1114,6 @@
 				"type": "documentarray"
 			},
 			"attribute_enchantments_dt": {
-				"_id": "attribute_enchantments_dt",
 				"data": [
 					{
 						"op": "pushconst",
@@ -1188,7 +1142,6 @@
 				"type": "documentarray"
 			},
 			"attribute_enchantments_fa": {
-				"_id": "attribute_enchantments_fa",
 				"data": [
 					{
 						"op": "pushconst",
@@ -1217,7 +1170,6 @@
 				"type": "documentarray"
 			},
 			"attribute_enchantments_he": {
-				"_id": "attribute_enchantments_he",
 				"data": [
 					{
 						"op": "pushconst",
@@ -1246,7 +1198,6 @@
 				"type": "documentarray"
 			},
 			"attribute_enchantments_in": {
-				"_id": "attribute_enchantments_in",
 				"data": [
 					{
 						"op": "pushconst",
@@ -1275,7 +1226,6 @@
 				"type": "documentarray"
 			},
 			"attribute_enchantments_mc": {
-				"_id": "attribute_enchantments_mc",
 				"data": [
 					{
 						"op": "pushconst",
@@ -1304,7 +1254,6 @@
 				"type": "documentarray"
 			},
 			"attribute_enchantments_md": {
-				"_id": "attribute_enchantments_md",
 				"data": [
 					{
 						"op": "pushconst",
@@ -1333,7 +1282,6 @@
 				"type": "documentarray"
 			},
 			"attribute_enchantments_mg": {
-				"_id": "attribute_enchantments_mg",
 				"data": [
 					{
 						"op": "pushconst",
@@ -1362,7 +1310,6 @@
 				"type": "documentarray"
 			},
 			"attribute_enchantments_pc": {
-				"_id": "attribute_enchantments_pc",
 				"data": [
 					{
 						"op": "pushconst",
@@ -1391,7 +1338,6 @@
 				"type": "documentarray"
 			},
 			"attribute_enchantments_ps": {
-				"_id": "attribute_enchantments_ps",
 				"data": [
 					{
 						"op": "pushconst",
@@ -1420,7 +1366,6 @@
 				"type": "documentarray"
 			},
 			"attribute_enchantments_rd": {
-				"_id": "attribute_enchantments_rd",
 				"data": [
 					{
 						"op": "pushconst",
@@ -1449,7 +1394,6 @@
 				"type": "documentarray"
 			},
 			"attribute_enchantments_sp": {
-				"_id": "attribute_enchantments_sp",
 				"data": [
 					{
 						"op": "pushconst",
@@ -1478,7 +1422,6 @@
 				"type": "documentarray"
 			},
 			"attribute_enchantments_st": {
-				"_id": "attribute_enchantments_st",
 				"data": [
 					{
 						"op": "pushconst",
@@ -1507,7 +1450,6 @@
 				"type": "documentarray"
 			},
 			"attribute_enchantments_td": {
-				"_id": "attribute_enchantments_td",
 				"data": [
 					{
 						"op": "pushconst",
@@ -1536,7 +1478,6 @@
 				"type": "documentarray"
 			},
 			"attribute_enchantments_tem": {
-				"_id": "attribute_enchantments_tem",
 				"data": [
 					{
 						"op": "pushconst",
@@ -1565,7 +1506,6 @@
 				"type": "documentarray"
 			},
 			"attribute_enchantments_ten": {
-				"_id": "attribute_enchantments_ten",
 				"data": [
 					{
 						"op": "pushconst",
@@ -1594,7 +1534,6 @@
 				"type": "documentarray"
 			},
 			"attribute_enchantments_tu": {
-				"_id": "attribute_enchantments_tu",
 				"data": [
 					{
 						"op": "pushconst",
@@ -1623,7 +1562,6 @@
 				"type": "documentarray"
 			},
 			"attribute_enchantments_vg": {
-				"_id": "attribute_enchantments_vg",
 				"data": [
 					{
 						"op": "pushconst",
@@ -1652,7 +1590,6 @@
 				"type": "documentarray"
 			},
 			"attribute_enchantments_wp": {
-				"_id": "attribute_enchantments_wp",
 				"data": [
 					{
 						"op": "pushconst",
@@ -1681,7 +1618,6 @@
 				"type": "documentarray"
 			},
 			"attribute_fa": {
-				"_id": "attribute_fa",
 				"data": [
 					{
 						"op": "getnode",
@@ -1699,7 +1635,6 @@
 				"type": "float"
 			},
 			"attribute_he": {
-				"_id": "attribute_he",
 				"data": [
 					{
 						"op": "getnode",
@@ -1717,7 +1652,6 @@
 				"type": "float"
 			},
 			"attribute_in": {
-				"_id": "attribute_in",
 				"data": [
 					{
 						"op": "getnode",
@@ -1735,7 +1669,6 @@
 				"type": "float"
 			},
 			"attribute_mc": {
-				"_id": "attribute_mc",
 				"data": [
 					{
 						"op": "getnode",
@@ -1753,7 +1686,6 @@
 				"type": "float"
 			},
 			"attribute_md": {
-				"_id": "attribute_md",
 				"data": [
 					{
 						"op": "getnode",
@@ -1771,7 +1703,6 @@
 				"type": "float"
 			},
 			"attribute_mg": {
-				"_id": "attribute_mg",
 				"data": [
 					{
 						"op": "getnode",
@@ -1793,7 +1724,6 @@
 				"type": "int"
 			},
 			"attribute_object": {
-				"_id": "attribute_object",
 				"data": [
 					{
 						"op": "getnode",
@@ -1858,7 +1788,6 @@
 				"type": "object"
 			},
 			"attribute_pc": {
-				"_id": "attribute_pc",
 				"data": [
 					{
 						"op": "getnode",
@@ -1876,7 +1805,6 @@
 				"type": "float"
 			},
 			"attribute_points": {
-				"_id": "attribute_points",
 				"data": [
 					{
 						"op": "getnode",
@@ -1902,7 +1830,6 @@
 				"type": "int"
 			},
 			"attribute_ps": {
-				"_id": "attribute_ps",
 				"data": [
 					{
 						"op": "getnode",
@@ -1920,7 +1847,6 @@
 				"type": "float"
 			},
 			"attribute_rd": {
-				"_id": "attribute_rd",
 				"data": [
 					{
 						"op": "getnode",
@@ -1938,7 +1864,6 @@
 				"type": "float"
 			},
 			"attribute_sp": {
-				"_id": "attribute_sp",
 				"data": [
 					{
 						"op": "getnode",
@@ -1957,7 +1882,6 @@
 				"type": "float"
 			},
 			"attribute_st": {
-				"_id": "attribute_st",
 				"data": [
 					{
 						"op": "getnode",
@@ -1975,7 +1899,6 @@
 				"type": "float"
 			},
 			"attribute_td": {
-				"_id": "attribute_td",
 				"data": [
 					{
 						"op": "getnode",
@@ -1993,7 +1916,6 @@
 				"type": "float"
 			},
 			"attribute_tem": {
-				"_id": "attribute_tem",
 				"data": [
 					{
 						"op": "getnode",
@@ -2020,7 +1942,6 @@
 				"type": "float"
 			},
 			"attribute_ten": {
-				"_id": "attribute_ten",
 				"data": [
 					{
 						"op": "getnode",
@@ -2047,7 +1968,6 @@
 				"type": "float"
 			},
 			"attribute_tu": {
-				"_id": "attribute_tu",
 				"data": [
 					{
 						"op": "getnode",
@@ -2065,7 +1985,6 @@
 				"type": "float"
 			},
 			"attribute_vg": {
-				"_id": "attribute_vg",
 				"data": [
 					{
 						"op": "getnode",
@@ -2083,7 +2002,6 @@
 				"type": "float"
 			},
 			"attribute_wp": {
-				"_id": "attribute_wp",
 				"data": [
 					{
 						"op": "getnode",
@@ -2101,7 +2019,6 @@
 				"type": "float"
 			},
 			"carried_defence_penalty": {
-				"_id": "carried_defence_penalty",
 				"data": [
 					{
 						"op": "pushconst",
@@ -2123,7 +2040,6 @@
 				"type": "int"
 			},
 			"carried_speed_penalty": {
-				"_id": "carried_speed_penalty",
 				"data": [
 					{
 						"op": "pushconst",
@@ -2153,7 +2069,6 @@
 				"type": "int"
 			},
 			"combat_level": {
-				"_id": "combat_level",
 				"data": [
 					{
 						"op": "pushconst",
@@ -2183,7 +2098,6 @@
 				"type": "int"
 			},
 			"current_dt": {
-				"_id": "current_dt",
 				"data": [
 					{
 						"op": "getnode",
@@ -2217,7 +2131,6 @@
 				"type": "float"
 			},
 			"handedness_data": {
-				"_id": "handedness_data",
 				"data": [
 					{
 						"op": "getnode",
@@ -2245,7 +2158,6 @@
 				"type": "object"
 			},
 			"is_ambidextrous": {
-				"_id": "is_ambidextrous",
 				"data": [
 					{
 						"op": "getnode",
@@ -2262,7 +2174,6 @@
 				"type": "bool"
 			},
 			"is_deity_celtic": {
-				"_id": "is_deity_celtic",
 				"data": [
 					{
 						"op": "getnode",
@@ -2279,7 +2190,6 @@
 				"type": "bool"
 			},
 			"is_deity_female": {
-				"_id": "is_deity_female",
 				"data": [
 					{
 						"op": "getnode",
@@ -2296,7 +2206,6 @@
 				"type": "bool"
 			},
 			"is_deity_followed": {
-				"_id": "is_deity_followed",
 				"data": [
 					{
 						"op": "getnode",
@@ -2313,7 +2222,6 @@
 				"type": "bool"
 			},
 			"is_deity_greek": {
-				"_id": "is_deity_greek",
 				"data": [
 					{
 						"op": "getnode",
@@ -2330,7 +2238,6 @@
 				"type": "bool"
 			},
 			"is_deity_male": {
-				"_id": "is_deity_male",
 				"data": [
 					{
 						"op": "getnode",
@@ -2347,7 +2254,6 @@
 				"type": "bool"
 			},
 			"is_deity_match_alignment": {
-				"_id": "is_deity_match_alignment",
 				"data": [
 					{
 						"op": "getnode",
@@ -2364,7 +2270,6 @@
 				"type": "bool"
 			},
 			"is_deity_norse": {
-				"_id": "is_deity_norse",
 				"data": [
 					{
 						"op": "getnode",
@@ -2381,7 +2286,6 @@
 				"type": "bool"
 			},
 			"is_female": {
-				"_id": "is_female",
 				"data": [
 					{
 						"op": "getnode",
@@ -2416,7 +2320,6 @@
 				"type": "bool"
 			},
 			"is_florentine": {
-				"_id": "is_florentine",
 				"data": [
 					{
 						"op": "getnode",
@@ -2433,7 +2336,6 @@
 				"type": "bool"
 			},
 			"is_law_lawful": {
-				"_id": "is_law_lawful",
 				"data": [
 					{
 						"op": "getnode",
@@ -2464,7 +2366,6 @@
 				"type": "bool"
 			},
 			"is_law_neutral": {
-				"_id": "is_law_neutral",
 				"data": [
 					{
 						"op": "getnode",
@@ -2495,7 +2396,6 @@
 				"type": "bool"
 			},
 			"is_law_unlawful": {
-				"_id": "is_law_unlawful",
 				"data": [
 					{
 						"op": "getnode",
@@ -2526,7 +2426,6 @@
 				"type": "bool"
 			},
 			"is_left_equipment": {
-				"_id": "is_left_equipment",
 				"data": [
 					{
 						"op": "getnode",
@@ -2542,7 +2441,6 @@
 				"type": "bool"
 			},
 			"is_left_hand_major": {
-				"_id": "is_left_hand_major",
 				"data": [
 					{
 						"op": "getnode",
@@ -2559,7 +2457,6 @@
 				"type": "bool"
 			},
 			"is_left_right_equipment": {
-				"_id": "is_left_right_equipment",
 				"data": [
 					{
 						"op": "getnode",
@@ -2575,7 +2472,6 @@
 				"type": "bool"
 			},
 			"is_left_right_weapon": {
-				"_id": "is_left_right_weapon",
 				"data": [
 					{
 						"op": "getnode",
@@ -2591,7 +2487,6 @@
 				"type": "bool"
 			},
 			"is_left_weapon": {
-				"_id": "is_left_weapon",
 				"data": [
 					{
 						"op": "getnode",
@@ -2607,7 +2502,6 @@
 				"type": "bool"
 			},
 			"is_male": {
-				"_id": "is_male",
 				"data": [
 					{
 						"op": "getnode",
@@ -2642,7 +2536,6 @@
 				"type": "bool"
 			},
 			"is_moral_evil": {
-				"_id": "is_moral_evil",
 				"data": [
 					{
 						"op": "getnode",
@@ -2673,7 +2566,6 @@
 				"type": "bool"
 			},
 			"is_moral_good": {
-				"_id": "is_moral_good",
 				"data": [
 					{
 						"op": "getnode",
@@ -2704,7 +2596,6 @@
 				"type": "bool"
 			},
 			"is_moral_neutral": {
-				"_id": "is_moral_neutral",
 				"data": [
 					{
 						"op": "getnode",
@@ -2735,7 +2626,6 @@
 				"type": "bool"
 			},
 			"is_object": {
-				"_id": "is_object",
 				"data": [
 					{
 						"op": "getnode",
@@ -2888,7 +2778,6 @@
 				"type": "object"
 			},
 			"is_right_equipment": {
-				"_id": "is_right_equipment",
 				"data": [
 					{
 						"op": "getnode",
@@ -2904,7 +2793,6 @@
 				"type": "bool"
 			},
 			"is_right_hand_major": {
-				"_id": "is_right_hand_major",
 				"data": [
 					{
 						"op": "getnode",
@@ -2921,7 +2809,6 @@
 				"type": "bool"
 			},
 			"is_right_weapon": {
-				"_id": "is_right_weapon",
 				"data": [
 					{
 						"op": "getnode",
@@ -2937,7 +2824,6 @@
 				"type": "bool"
 			},
 			"is_social_antisocial": {
-				"_id": "is_social_antisocial",
 				"data": [
 					{
 						"op": "getnode",
@@ -2968,7 +2854,6 @@
 				"type": "bool"
 			},
 			"is_social_neutral": {
-				"_id": "is_social_neutral",
 				"data": [
 					{
 						"op": "getnode",
@@ -2999,7 +2884,6 @@
 				"type": "bool"
 			},
 			"is_social_social": {
-				"_id": "is_social_social",
 				"data": [
 					{
 						"op": "getnode",
@@ -3030,7 +2914,6 @@
 				"type": "bool"
 			},
 			"left_equipment": {
-				"_id": "left_equipment",
 				"data": [
 					{
 						"op": "getnode",
@@ -3047,7 +2930,6 @@
 				"type": "document"
 			},
 			"left_hand_attack_bonus": {
-				"_id": "left_hand_attack_bonus",
 				"data": [
 					{
 						"op": "getnode",
@@ -3067,7 +2949,6 @@
 				"type": "float"
 			},
 			"left_hand_equipment_name": {
-				"_id": "left_hand_equipment_name",
 				"data": [
 					{
 						"op": "getnode",
@@ -3110,7 +2991,6 @@
 				"type": "string"
 			},
 			"left_right_equipment": {
-				"_id": "left_right_equipment",
 				"data": [
 					{
 						"op": "getnode",
@@ -3127,7 +3007,6 @@
 				"type": "document"
 			},
 			"left_right_weapon": {
-				"_id": "left_right_weapon",
 				"data": [
 					{
 						"op": "getnode",
@@ -3155,7 +3034,6 @@
 				"type": "document"
 			},
 			"left_weapon": {
-				"_id": "left_weapon",
 				"data": [
 					{
 						"op": "getnode",
@@ -3183,7 +3061,6 @@
 				"type": "document"
 			},
 			"level": {
-				"_id": "level",
 				"data": [
 					{
 						"op": "pushconst",
@@ -3229,7 +3106,6 @@
 				"type": "int"
 			},
 			"loadout_absorption": {
-				"_id": "loadout_absorption",
 				"data": [
 					{
 						"op": "getnode",
@@ -3250,7 +3126,6 @@
 				"type": "int"
 			},
 			"loadout_active": {
-				"_id": "loadout_active",
 				"data": [
 					{
 						"op": "pushconst",
@@ -3272,7 +3147,6 @@
 				"type": "documentarray"
 			},
 			"loadout_defence_bonus": {
-				"_id": "loadout_defence_bonus",
 				"data": [
 					{
 						"op": "getnode",
@@ -3293,7 +3167,6 @@
 				"type": "int"
 			},
 			"loadout_defence_penalty": {
-				"_id": "loadout_defence_penalty",
 				"data": [
 					{
 						"op": "getnode",
@@ -3314,7 +3187,6 @@
 				"type": "int"
 			},
 			"loadout_equipment": {
-				"_id": "loadout_equipment",
 				"data": [
 					{
 						"op": "getnode",
@@ -3336,7 +3208,6 @@
 				"type": "documentarray"
 			},
 			"loadout_equipment_all": {
-				"_id": "loadout_equipment_all",
 				"data": [
 					{
 						"op": "getnode",
@@ -3373,7 +3244,6 @@
 				"type": "documentarray"
 			},
 			"loadout_left_hand_equipment": {
-				"_id": "loadout_left_hand_equipment",
 				"data": [
 					{
 						"op": "getnode",
@@ -3403,7 +3273,6 @@
 				"type": "documentarray"
 			},
 			"loadout_left_right_hand_equipment": {
-				"_id": "loadout_left_right_hand_equipment",
 				"data": [
 					{
 						"op": "getnode",
@@ -3433,7 +3302,6 @@
 				"type": "documentarray"
 			},
 			"loadout_magic_count": {
-				"_id": "loadout_magic_count",
 				"data": [
 					{
 						"op": "getnode",
@@ -3454,7 +3322,6 @@
 				"type": "int"
 			},
 			"loadout_right_hand_equipment": {
-				"_id": "loadout_right_hand_equipment",
 				"data": [
 					{
 						"op": "getnode",
@@ -3484,7 +3351,6 @@
 				"type": "documentarray"
 			},
 			"mass_carried": {
-				"_id": "mass_carried",
 				"data": [
 					{
 						"op": "getnode",
@@ -3511,7 +3377,6 @@
 				"type": "float"
 			},
 			"mass_coins": {
-				"_id": "mass_coins",
 				"data": [
 					{
 						"op": "getnode",
@@ -3557,7 +3422,6 @@
 				"type": "float"
 			},
 			"mass_equipment": {
-				"_id": "mass_equipment",
 				"data": [
 					{
 						"op": "getnode",
@@ -3579,7 +3443,6 @@
 				"type": "float"
 			},
 			"max_speed": {
-				"_id": "max_speed",
 				"data": [
 					{
 						"op": "getnode",
@@ -3606,7 +3469,6 @@
 				"type": "int"
 			},
 			"parry": {
-				"_id": "parry",
 				"data": [
 					{
 						"op": "getnode",
@@ -3627,7 +3489,6 @@
 				"type": "float"
 			},
 			"parry_left_and_or_right": {
-				"_id": "parry_left_and_or_right",
 				"data": [
 					{
 						"op": "getnode",
@@ -3653,7 +3514,6 @@
 				"type": "float"
 			},
 			"parry_left_equipment": {
-				"_id": "parry_left_equipment",
 				"data": [
 					{
 						"op": "getnode",
@@ -3677,7 +3537,6 @@
 				"type": "float"
 			},
 			"parry_left_right_equipment": {
-				"_id": "parry_left_right_equipment",
 				"data": [
 					{
 						"op": "getnode",
@@ -3701,7 +3560,6 @@
 				"type": "float"
 			},
 			"parry_right_equipment": {
-				"_id": "parry_right_equipment",
 				"data": [
 					{
 						"op": "getnode",
@@ -3725,7 +3583,6 @@
 				"type": "float"
 			},
 			"parry_two_weapon_bonus": {
-				"_id": "parry_two_weapon_bonus",
 				"data": [
 					{
 						"op": "pushconst",
@@ -3753,7 +3610,6 @@
 				"type": "int"
 			},
 			"proppergate_ag": {
-				"_id": "proppergate_ag",
 				"data": [
 					{
 						"op": "getnode",
@@ -3771,7 +3627,6 @@
 				"type": "float"
 			},
 			"proppergate_br": {
-				"_id": "proppergate_br",
 				"data": [
 					{
 						"op": "getnode",
@@ -3789,7 +3644,6 @@
 				"type": "float"
 			},
 			"proppergate_cd": {
-				"_id": "proppergate_cd",
 				"data": [
 					{
 						"op": "getnode",
@@ -3807,7 +3661,6 @@
 				"type": "float"
 			},
 			"proppergate_ch": {
-				"_id": "proppergate_ch",
 				"data": [
 					{
 						"op": "getnode",
@@ -3825,7 +3678,6 @@
 				"type": "float"
 			},
 			"proppergate_delta_ag": {
-				"_id": "proppergate_delta_ag",
 				"data": [
 					{
 						"op": "getnode",
@@ -3853,7 +3705,6 @@
 				"type": "float"
 			},
 			"proppergate_delta_br": {
-				"_id": "proppergate_delta_br",
 				"data": [
 					{
 						"op": "getnode",
@@ -3881,7 +3732,6 @@
 				"type": "float"
 			},
 			"proppergate_delta_cd": {
-				"_id": "proppergate_delta_cd",
 				"data": [
 					{
 						"op": "getnode",
@@ -3909,7 +3759,6 @@
 				"type": "float"
 			},
 			"proppergate_delta_ch": {
-				"_id": "proppergate_delta_ch",
 				"data": [
 					{
 						"op": "getnode",
@@ -3937,7 +3786,6 @@
 				"type": "float"
 			},
 			"proppergate_delta_fa": {
-				"_id": "proppergate_delta_fa",
 				"data": [
 					{
 						"op": "getnode",
@@ -3965,7 +3813,6 @@
 				"type": "float"
 			},
 			"proppergate_delta_he": {
-				"_id": "proppergate_delta_he",
 				"data": [
 					{
 						"op": "getnode",
@@ -3993,7 +3840,6 @@
 				"type": "float"
 			},
 			"proppergate_delta_in": {
-				"_id": "proppergate_delta_in",
 				"data": [
 					{
 						"op": "getnode",
@@ -4021,7 +3867,6 @@
 				"type": "float"
 			},
 			"proppergate_delta_md": {
-				"_id": "proppergate_delta_md",
 				"data": [
 					{
 						"op": "getnode",
@@ -4049,7 +3894,6 @@
 				"type": "float"
 			},
 			"proppergate_delta_pc": {
-				"_id": "proppergate_delta_pc",
 				"data": [
 					{
 						"op": "getnode",
@@ -4077,7 +3921,6 @@
 				"type": "float"
 			},
 			"proppergate_delta_ps": {
-				"_id": "proppergate_delta_ps",
 				"data": [
 					{
 						"op": "getnode",
@@ -4105,7 +3948,6 @@
 				"type": "float"
 			},
 			"proppergate_delta_st": {
-				"_id": "proppergate_delta_st",
 				"data": [
 					{
 						"op": "getnode",
@@ -4133,7 +3975,6 @@
 				"type": "float"
 			},
 			"proppergate_delta_vg": {
-				"_id": "proppergate_delta_vg",
 				"data": [
 					{
 						"op": "getnode",
@@ -4161,7 +4002,6 @@
 				"type": "float"
 			},
 			"proppergate_delta_wp": {
-				"_id": "proppergate_delta_wp",
 				"data": [
 					{
 						"op": "getnode",
@@ -4189,7 +4029,6 @@
 				"type": "float"
 			},
 			"proppergate_enchantments_ag": {
-				"_id": "proppergate_enchantments_ag",
 				"data": [
 					{
 						"op": "pushconst",
@@ -4214,7 +4053,6 @@
 				"type": "documentarray"
 			},
 			"proppergate_enchantments_br": {
-				"_id": "proppergate_enchantments_br",
 				"data": [
 					{
 						"op": "pushconst",
@@ -4239,7 +4077,6 @@
 				"type": "documentarray"
 			},
 			"proppergate_enchantments_cd": {
-				"_id": "proppergate_enchantments_cd",
 				"data": [
 					{
 						"op": "pushconst",
@@ -4264,7 +4101,6 @@
 				"type": "documentarray"
 			},
 			"proppergate_enchantments_ch": {
-				"_id": "proppergate_enchantments_ch",
 				"data": [
 					{
 						"op": "pushconst",
@@ -4289,7 +4125,6 @@
 				"type": "documentarray"
 			},
 			"proppergate_enchantments_fa": {
-				"_id": "proppergate_enchantments_fa",
 				"data": [
 					{
 						"op": "pushconst",
@@ -4314,7 +4149,6 @@
 				"type": "documentarray"
 			},
 			"proppergate_enchantments_he": {
-				"_id": "proppergate_enchantments_he",
 				"data": [
 					{
 						"op": "pushconst",
@@ -4339,7 +4173,6 @@
 				"type": "documentarray"
 			},
 			"proppergate_enchantments_in": {
-				"_id": "proppergate_enchantments_in",
 				"data": [
 					{
 						"op": "pushconst",
@@ -4364,7 +4197,6 @@
 				"type": "documentarray"
 			},
 			"proppergate_enchantments_md": {
-				"_id": "proppergate_enchantments_md",
 				"data": [
 					{
 						"op": "pushconst",
@@ -4389,7 +4221,6 @@
 				"type": "documentarray"
 			},
 			"proppergate_enchantments_pc": {
-				"_id": "proppergate_enchantments_pc",
 				"data": [
 					{
 						"op": "pushconst",
@@ -4414,7 +4245,6 @@
 				"type": "documentarray"
 			},
 			"proppergate_enchantments_ps": {
-				"_id": "proppergate_enchantments_ps",
 				"data": [
 					{
 						"op": "pushconst",
@@ -4439,7 +4269,6 @@
 				"type": "documentarray"
 			},
 			"proppergate_enchantments_st": {
-				"_id": "proppergate_enchantments_st",
 				"data": [
 					{
 						"op": "pushconst",
@@ -4464,7 +4293,6 @@
 				"type": "documentarray"
 			},
 			"proppergate_enchantments_vg": {
-				"_id": "proppergate_enchantments_vg",
 				"data": [
 					{
 						"op": "pushconst",
@@ -4489,7 +4317,6 @@
 				"type": "documentarray"
 			},
 			"proppergate_enchantments_wp": {
-				"_id": "proppergate_enchantments_wp",
 				"data": [
 					{
 						"op": "pushconst",
@@ -4514,7 +4341,6 @@
 				"type": "documentarray"
 			},
 			"proppergate_fa": {
-				"_id": "proppergate_fa",
 				"data": [
 					{
 						"op": "getnode",
@@ -4532,7 +4358,6 @@
 				"type": "float"
 			},
 			"proppergate_he": {
-				"_id": "proppergate_he",
 				"data": [
 					{
 						"op": "getnode",
@@ -4550,7 +4375,6 @@
 				"type": "float"
 			},
 			"proppergate_in": {
-				"_id": "proppergate_in",
 				"data": [
 					{
 						"op": "getnode",
@@ -4568,7 +4392,6 @@
 				"type": "float"
 			},
 			"proppergate_md": {
-				"_id": "proppergate_md",
 				"data": [
 					{
 						"op": "getnode",
@@ -4586,7 +4409,6 @@
 				"type": "float"
 			},
 			"proppergate_pc": {
-				"_id": "proppergate_pc",
 				"data": [
 					{
 						"op": "getnode",
@@ -4604,7 +4426,6 @@
 				"type": "float"
 			},
 			"proppergate_ps": {
-				"_id": "proppergate_ps",
 				"data": [
 					{
 						"op": "getnode",
@@ -4622,7 +4443,6 @@
 				"type": "float"
 			},
 			"proppergate_st": {
-				"_id": "proppergate_st",
 				"data": [
 					{
 						"op": "getnode",
@@ -4640,7 +4460,6 @@
 				"type": "float"
 			},
 			"proppergate_vg": {
-				"_id": "proppergate_vg",
 				"data": [
 					{
 						"op": "getnode",
@@ -4658,7 +4477,6 @@
 				"type": "float"
 			},
 			"proppergate_wp": {
-				"_id": "proppergate_wp",
 				"data": [
 					{
 						"op": "getnode",
@@ -4676,7 +4494,6 @@
 				"type": "float"
 			},
 			"racialmax_ag": {
-				"_id": "racialmax_ag",
 				"data": [
 					{
 						"op": "getnode",
@@ -4696,7 +4513,6 @@
 				"type": "int"
 			},
 			"racialmax_fa": {
-				"_id": "racialmax_fa",
 				"data": [
 					{
 						"op": "getnode",
@@ -4716,7 +4532,6 @@
 				"type": "int"
 			},
 			"racialmax_md": {
-				"_id": "racialmax_md",
 				"data": [
 					{
 						"op": "getnode",
@@ -4736,7 +4551,6 @@
 				"type": "int"
 			},
 			"racialmax_pc": {
-				"_id": "racialmax_pc",
 				"data": [
 					{
 						"op": "getnode",
@@ -4756,7 +4570,6 @@
 				"type": "int"
 			},
 			"racialmax_ps": {
-				"_id": "racialmax_ps",
 				"data": [
 					{
 						"op": "getnode",
@@ -4776,7 +4589,6 @@
 				"type": "int"
 			},
 			"racialmax_st": {
-				"_id": "racialmax_st",
 				"data": [
 					{
 						"op": "getnode",
@@ -4796,7 +4608,6 @@
 				"type": "int"
 			},
 			"racialmax_wp": {
-				"_id": "racialmax_wp",
 				"data": [
 					{
 						"op": "getnode",
@@ -4816,7 +4627,6 @@
 				"type": "int"
 			},
 			"racialmaxpath": {
-				"_id": "racialmaxpath",
 				"data": [
 					{
 						"op": "getnode",
@@ -4850,7 +4660,6 @@
 				"type": "stringarray"
 			},
 			"racialmin_ag": {
-				"_id": "racialmin_ag",
 				"data": [
 					{
 						"op": "getnode",
@@ -4870,7 +4679,6 @@
 				"type": "int"
 			},
 			"racialmin_fa": {
-				"_id": "racialmin_fa",
 				"data": [
 					{
 						"op": "getnode",
@@ -4890,7 +4698,6 @@
 				"type": "int"
 			},
 			"racialmin_md": {
-				"_id": "racialmin_md",
 				"data": [
 					{
 						"op": "getnode",
@@ -4910,7 +4717,6 @@
 				"type": "int"
 			},
 			"racialmin_pc": {
-				"_id": "racialmin_pc",
 				"data": [
 					{
 						"op": "getnode",
@@ -4930,7 +4736,6 @@
 				"type": "int"
 			},
 			"racialmin_ps": {
-				"_id": "racialmin_ps",
 				"data": [
 					{
 						"op": "getnode",
@@ -4950,7 +4755,6 @@
 				"type": "int"
 			},
 			"racialmin_st": {
-				"_id": "racialmin_st",
 				"data": [
 					{
 						"op": "getnode",
@@ -4970,7 +4774,6 @@
 				"type": "int"
 			},
 			"racialmin_wp": {
-				"_id": "racialmin_wp",
 				"data": [
 					{
 						"op": "getnode",
@@ -4990,7 +4793,6 @@
 				"type": "int"
 			},
 			"racialminpath": {
-				"_id": "racialminpath",
 				"data": [
 					{
 						"op": "getnode",
@@ -5016,7 +4818,6 @@
 				"type": "stringarray"
 			},
 			"rawattribute_ag": {
-				"_id": "rawattribute_ag",
 				"data": [
 					{
 						"op": "getnode",
@@ -5038,7 +4839,6 @@
 				"type": "float"
 			},
 			"rawattribute_br": {
-				"_id": "rawattribute_br",
 				"data": [
 					{
 						"op": "getnode",
@@ -5056,7 +4856,6 @@
 				"type": "float"
 			},
 			"rawattribute_cd": {
-				"_id": "rawattribute_cd",
 				"data": [
 					{
 						"op": "getnode",
@@ -5074,7 +4873,6 @@
 				"type": "float"
 			},
 			"rawattribute_ch": {
-				"_id": "rawattribute_ch",
 				"data": [
 					{
 						"op": "getnode",
@@ -5092,7 +4890,6 @@
 				"type": "float"
 			},
 			"rawattribute_df": {
-				"_id": "rawattribute_df",
 				"data": [
 					{
 						"op": "getnode",
@@ -5142,7 +4939,6 @@
 				"type": "float"
 			},
 			"rawattribute_dhr": {
-				"_id": "rawattribute_dhr",
 				"data": [
 					{
 						"op": "getnode",
@@ -5160,7 +4956,6 @@
 				"type": "float"
 			},
 			"rawattribute_dt": {
-				"_id": "rawattribute_dt",
 				"data": [
 					{
 						"op": "getnode",
@@ -5186,7 +4981,6 @@
 				"type": "float"
 			},
 			"rawattribute_fa": {
-				"_id": "rawattribute_fa",
 				"data": [
 					{
 						"op": "getnode",
@@ -5208,7 +5002,6 @@
 				"type": "float"
 			},
 			"rawattribute_he": {
-				"_id": "rawattribute_he",
 				"data": [
 					{
 						"op": "getnode",
@@ -5226,7 +5019,6 @@
 				"type": "float"
 			},
 			"rawattribute_in": {
-				"_id": "rawattribute_in",
 				"data": [
 					{
 						"op": "getnode",
@@ -5244,7 +5036,6 @@
 				"type": "float"
 			},
 			"rawattribute_mc": {
-				"_id": "rawattribute_mc",
 				"data": [
 					{
 						"op": "pushconst",
@@ -5274,7 +5065,6 @@
 				"type": "float"
 			},
 			"rawattribute_md": {
-				"_id": "rawattribute_md",
 				"data": [
 					{
 						"op": "getnode",
@@ -5296,7 +5086,6 @@
 				"type": "float"
 			},
 			"rawattribute_mg": {
-				"_id": "rawattribute_mg",
 				"data": [
 					{
 						"op": "getnode",
@@ -5314,7 +5103,6 @@
 				"type": "float"
 			},
 			"rawattribute_pc": {
-				"_id": "rawattribute_pc",
 				"data": [
 					{
 						"op": "getnode",
@@ -5336,7 +5124,6 @@
 				"type": "float"
 			},
 			"rawattribute_ps": {
-				"_id": "rawattribute_ps",
 				"data": [
 					{
 						"op": "getnode",
@@ -5358,7 +5145,6 @@
 				"type": "float"
 			},
 			"rawattribute_rd": {
-				"_id": "rawattribute_rd",
 				"data": [
 					{
 						"op": "getnode",
@@ -5376,7 +5162,6 @@
 				"type": "float"
 			},
 			"rawattribute_sp": {
-				"_id": "rawattribute_sp",
 				"data": [
 					{
 						"op": "getnode",
@@ -5411,7 +5196,6 @@
 				"type": "float"
 			},
 			"rawattribute_st": {
-				"_id": "rawattribute_st",
 				"data": [
 					{
 						"op": "getnode",
@@ -5433,7 +5217,6 @@
 				"type": "float"
 			},
 			"rawattribute_td": {
-				"_id": "rawattribute_td",
 				"data": [
 					{
 						"op": "getnode",
@@ -5459,7 +5242,6 @@
 				"type": "float"
 			},
 			"rawattribute_tem": {
-				"_id": "rawattribute_tem",
 				"data": [
 					{
 						"op": "getnode",
@@ -5486,7 +5268,6 @@
 				"type": "float"
 			},
 			"rawattribute_ten": {
-				"_id": "rawattribute_ten",
 				"data": [
 					{
 						"op": "getnode",
@@ -5513,7 +5294,6 @@
 				"type": "float"
 			},
 			"rawattribute_tu": {
-				"_id": "rawattribute_tu",
 				"data": [
 					{
 						"op": "getnode",
@@ -5539,7 +5319,6 @@
 				"type": "float"
 			},
 			"rawattribute_vg": {
-				"_id": "rawattribute_vg",
 				"data": [
 					{
 						"op": "getnode",
@@ -5557,7 +5336,6 @@
 				"type": "float"
 			},
 			"rawattribute_wp": {
-				"_id": "rawattribute_wp",
 				"data": [
 					{
 						"op": "getnode",
@@ -5579,7 +5357,6 @@
 				"type": "float"
 			},
 			"remaining_attribute_points": {
-				"_id": "remaining_attribute_points",
 				"data": [
 					{
 						"op": "getnode",
@@ -5597,7 +5374,6 @@
 				"type": "int"
 			},
 			"remaining_experence_points": {
-				"_id": "remaining_experence_points",
 				"data": [
 					{
 						"op": "getnode",
@@ -5615,7 +5391,6 @@
 				"type": "int"
 			},
 			"right_equipment": {
-				"_id": "right_equipment",
 				"data": [
 					{
 						"op": "getnode",
@@ -5632,7 +5407,6 @@
 				"type": "document"
 			},
 			"right_hand_attack_bonus": {
-				"_id": "right_hand_attack_bonus",
 				"data": [
 					{
 						"op": "getnode",
@@ -5653,7 +5427,6 @@
 				"type": "float"
 			},
 			"right_hand_equipment_name": {
-				"_id": "right_hand_equipment_name",
 				"data": [
 					{
 						"op": "getnode",
@@ -5696,7 +5469,6 @@
 				"type": "string"
 			},
 			"right_weapon": {
-				"_id": "right_weapon",
 				"data": [
 					{
 						"op": "getnode",
@@ -5724,7 +5496,6 @@
 				"type": "document"
 			},
 			"size": {
-				"_id": "size",
 				"data": [
 					{
 						"op": "pushconst",
@@ -5750,7 +5521,6 @@
 				"type": "float"
 			},
 			"skill_map": {
-				"_id": "skill_map",
 				"data": [
 					{
 						"op": "getnode",
@@ -5768,7 +5538,6 @@
 				"type": "object"
 			},
 			"skill_training_array": {
-				"_id": "skill_training_array",
 				"data": [
 					{
 						"op": "getnode",
@@ -5805,7 +5574,6 @@
 				"type": "array"
 			},
 			"skill_training_map": {
-				"_id": "skill_training_map",
 				"data": [
 					{
 						"op": "getnode",
@@ -5823,7 +5591,6 @@
 				"type": "object"
 			},
 			"spent_attribute_points": {
-				"_id": "spent_attribute_points",
 				"data": [
 					{
 						"op": "getnode",
@@ -5864,7 +5631,6 @@
 				"type": "int"
 			},
 			"spent_experence_points": {
-				"_id": "spent_experence_points",
 				"data": [
 					{
 						"op": "getnode",
@@ -5885,7 +5651,6 @@
 				"type": "int"
 			},
 			"talent_array": {
-				"_id": "talent_array",
 				"data": [
 					{
 						"op": "getnode",
@@ -5929,7 +5694,6 @@
 				"type": "stringarray"
 			},
 			"talent_map": {
-				"_id": "talent_map",
 				"data": [
 					{
 						"op": "getnode",
@@ -5942,7 +5706,6 @@
 				"type": "stringmap"
 			},
 			"talent_options": {
-				"_id": "talent_options",
 				"data": [
 					{
 						"op": "pushconst",
@@ -5966,7 +5729,6 @@
 				"type": "object"
 			},
 			"total_mass": {
-				"_id": "total_mass",
 				"data": [
 					{
 						"op": "getnode",
@@ -5985,7 +5747,6 @@
 				"type": "float"
 			},
 			"training_data": {
-				"_id": "training_data",
 				"data": [
 					{
 						"op": "pushconst",
@@ -6009,7 +5770,6 @@
 				"type": "object"
 			},
 			"two_weapon_attack_penalty_ambidextrous": {
-				"_id": "two_weapon_attack_penalty_ambidextrous",
 				"data": [
 					{
 						"op": "pushconst",
@@ -6035,7 +5795,6 @@
 				"type": "float"
 			},
 			"two_weapon_attack_penalty_major": {
-				"_id": "two_weapon_attack_penalty_major",
 				"data": [
 					{
 						"op": "pushconst",
@@ -6061,7 +5820,6 @@
 				"type": "float"
 			},
 			"two_weapon_attack_penalty_minor": {
-				"_id": "two_weapon_attack_penalty_minor",
 				"data": [
 					{
 						"op": "pushconst",
@@ -6087,7 +5845,6 @@
 				"type": "float"
 			},
 			"two_weapon_min_ps": {
-				"_id": "two_weapon_min_ps",
 				"data": [
 					{
 						"op": "getnode",
@@ -6135,7 +5892,6 @@
 				"type": "float"
 			},
 			"using_two_weapons": {
-				"_id": "using_two_weapons",
 				"data": [
 					{
 						"op": "getnode",
@@ -6162,7 +5918,6 @@
 				"type": "bool"
 			},
 			"weapon_level": {
-				"_id": "weapon_level",
 				"data": [
 					{
 						"op": "getnode",
@@ -6191,7 +5946,6 @@
 				"type": "int"
 			},
 			"weapon_level_left_equipment": {
-				"_id": "weapon_level_left_equipment",
 				"data": [
 					{
 						"op": "getnode",
@@ -6215,7 +5969,6 @@
 				"type": "int"
 			},
 			"weapon_level_left_right_equipment": {
-				"_id": "weapon_level_left_right_equipment",
 				"data": [
 					{
 						"op": "getnode",
@@ -6239,7 +5992,6 @@
 				"type": "int"
 			},
 			"weapon_level_right_equipment": {
-				"_id": "weapon_level_right_equipment",
 				"data": [
 					{
 						"op": "getnode",
@@ -6265,7 +6017,6 @@
 		},
 		"class": {
 			"active": {
-				"_id": "active",
 				"data": [
 					{
 						"op": "getnode",
@@ -6282,7 +6033,6 @@
 				"type": "bool"
 			},
 			"classpath": {
-				"_id": "classpath",
 				"data": [
 					{
 						"op": "getnode",
@@ -6308,7 +6058,6 @@
 				"type": "stringarray"
 			},
 			"empty_array": {
-				"_id": "empty_array",
 				"data": [
 					{
 						"op": "stacktoarray"
@@ -6317,7 +6066,6 @@
 				"type": "array"
 			},
 			"not_restrictions": {
-				"_id": "not_restrictions",
 				"data": [
 					{
 						"op": "getnode",
@@ -6341,7 +6089,6 @@
 				"type": "array"
 			},
 			"pass_attributes": {
-				"_id": "pass_attributes",
 				"data": [
 					{
 						"op": "getparentnode",
@@ -6359,7 +6106,6 @@
 				"type": "bool"
 			},
 			"pass_restrictions": {
-				"_id": "pass_restrictions",
 				"data": [
 					{
 						"op": "getparentnode",
@@ -6381,7 +6127,6 @@
 				"type": "bool"
 			},
 			"restrictions": {
-				"_id": "restrictions",
 				"data": [
 					{
 						"op": "getnode",
@@ -6405,7 +6150,6 @@
 				"type": "array"
 			},
 			"skill_training": {
-				"_id": "skill_training",
 				"data": [
 					{
 						"op": "getnode",
@@ -6429,7 +6173,6 @@
 				"type": "array"
 			},
 			"static_data": {
-				"_id": "static_data",
 				"data": [
 					{
 						"op": "getnode",
@@ -6442,7 +6185,6 @@
 				"type": "object"
 			},
 			"talents": {
-				"_id": "talents",
 				"data": [
 					{
 						"op": "getnode",
@@ -6468,7 +6210,6 @@
 		},
 		"deity": {
 			"alignment_law": {
-				"_id": "alignment_law",
 				"data": [
 					{
 						"op": "getparentnode",
@@ -6478,7 +6219,6 @@
 				"type": "string"
 			},
 			"alignment_moral": {
-				"_id": "alignment_moral",
 				"data": [
 					{
 						"op": "getparentnode",
@@ -6488,7 +6228,6 @@
 				"type": "string"
 			},
 			"alignment_social": {
-				"_id": "alignment_social",
 				"data": [
 					{
 						"op": "getparentnode",
@@ -6498,7 +6237,6 @@
 				"type": "string"
 			},
 			"datapath": {
-				"_id": "datapath",
 				"data": [
 					{
 						"op": "getnode",
@@ -6524,7 +6262,6 @@
 				"type": "stringarray"
 			},
 			"deity": {
-				"_id": "deity",
 				"data": [
 					{
 						"op": "getparentnode",
@@ -6534,7 +6271,6 @@
 				"type": "string"
 			},
 			"emptyarray": {
-				"_id": "emptyarray",
 				"data": [
 					{
 						"op": "stacktoarray"
@@ -6543,7 +6279,6 @@
 				"type": "array"
 			},
 			"is_deity_celtic": {
-				"_id": "is_deity_celtic",
 				"data": [
 					{
 						"op": "getnode",
@@ -6567,7 +6302,6 @@
 				"type": "bool"
 			},
 			"is_deity_female": {
-				"_id": "is_deity_female",
 				"data": [
 					{
 						"op": "getnode",
@@ -6591,7 +6325,6 @@
 				"type": "bool"
 			},
 			"is_deity_followed": {
-				"_id": "is_deity_followed",
 				"data": [
 					{
 						"op": "getnode",
@@ -6615,7 +6348,6 @@
 				"type": "bool"
 			},
 			"is_deity_greek": {
-				"_id": "is_deity_greek",
 				"data": [
 					{
 						"op": "getnode",
@@ -6639,7 +6371,6 @@
 				"type": "bool"
 			},
 			"is_deity_male": {
-				"_id": "is_deity_male",
 				"data": [
 					{
 						"op": "getnode",
@@ -6663,7 +6394,6 @@
 				"type": "bool"
 			},
 			"is_deity_match_alignment": {
-				"_id": "is_deity_match_alignment",
 				"data": [
 					{
 						"op": "getnode",
@@ -6694,7 +6424,6 @@
 				"type": "bool"
 			},
 			"is_deity_norse": {
-				"_id": "is_deity_norse",
 				"data": [
 					{
 						"op": "getnode",
@@ -6718,7 +6447,6 @@
 				"type": "bool"
 			},
 			"is_female": {
-				"_id": "is_female",
 				"data": [
 					{
 						"op": "getparentnode",
@@ -6728,7 +6456,6 @@
 				"type": "bool"
 			},
 			"is_male": {
-				"_id": "is_male",
 				"data": [
 					{
 						"op": "getparentnode",
@@ -6738,7 +6465,6 @@
 				"type": "bool"
 			},
 			"is_object": {
-				"_id": "is_object",
 				"data": [
 					{
 						"op": "getnode",
@@ -6763,7 +6489,6 @@
 				"type": "object"
 			},
 			"match_law": {
-				"_id": "match_law",
 				"data": [
 					{
 						"op": "getnode",
@@ -6787,7 +6512,6 @@
 				"type": "bool"
 			},
 			"match_moral": {
-				"_id": "match_moral",
 				"data": [
 					{
 						"op": "getnode",
@@ -6811,7 +6535,6 @@
 				"type": "bool"
 			},
 			"match_social": {
-				"_id": "match_social",
 				"data": [
 					{
 						"op": "getnode",
@@ -6835,7 +6558,6 @@
 				"type": "bool"
 			},
 			"not_restrictions": {
-				"_id": "not_restrictions",
 				"data": [
 					{
 						"op": "getnode",
@@ -6852,7 +6574,6 @@
 				"type": "array"
 			},
 			"pass_restrictions": {
-				"_id": "pass_restrictions",
 				"data": [
 					{
 						"op": "getnode",
@@ -6874,7 +6595,6 @@
 				"type": "bool"
 			},
 			"restrictions": {
-				"_id": "restrictions",
 				"data": [
 					{
 						"op": "getnode",
@@ -6891,7 +6611,6 @@
 				"type": "array"
 			},
 			"skill_training": {
-				"_id": "skill_training",
 				"data": [
 					{
 						"op": "getnode",
@@ -6919,7 +6638,6 @@
 				"type": "array"
 			},
 			"static_data": {
-				"_id": "static_data",
 				"data": [
 					{
 						"op": "getnode",
@@ -6932,7 +6650,6 @@
 				"type": "object"
 			},
 			"talents": {
-				"_id": "talents",
 				"data": [
 					{
 						"op": "getnode",
@@ -6962,7 +6679,6 @@
 		},
 		"skill": {
 			"base": {
-				"_id": "base",
 				"data": [
 					{
 						"op": "getnode",
@@ -6982,7 +6698,6 @@
 				"type": "int"
 			},
 			"datapath": {
-				"_id": "datapath",
 				"data": [
 					{
 						"op": "getnode",
@@ -7008,7 +6723,6 @@
 				"type": "stringarray"
 			},
 			"skill_level": {
-				"_id": "skill_level",
 				"data": [
 					{
 						"op": "getnode",
@@ -7026,7 +6740,6 @@
 				"type": "int"
 			},
 			"skill_training_map": {
-				"_id": "skill_training_map",
 				"data": [
 					{
 						"op": "getparentnode",
@@ -7036,7 +6749,6 @@
 				"type": "object"
 			},
 			"spent_xp": {
-				"_id": "spent_xp",
 				"data": [
 					{
 						"op": "pushconst",
@@ -7070,7 +6782,6 @@
 				"type": "int"
 			},
 			"traininglevel": {
-				"_id": "traininglevel",
 				"data": [
 					{
 						"op": "getnode",
@@ -7095,16 +6806,226 @@
 			}
 		}
 	},
+	"documenttypes": {
+		"character": {
+			"calculate": [
+				"calculate",
+				"character"
+			],
+			"value": [
+				"value",
+				"character"
+			]
+		},
+		"class": {
+			"calculate": [
+				"calculate",
+				"class"
+			],
+			"value": [
+				"value",
+				"class"
+			]
+		},
+		"deity": {
+			"calculate": [
+				"calculate",
+				"deity"
+			]
+		},
+		"enchantment": {
+			"value": [
+				"value",
+				"enchantment"
+			]
+		},
+		"environment": {
+			"value": [
+				"value",
+				"environment"
+			]
+		},
+		"skill": {
+			"calculate": [
+				"calculate",
+				"skill"
+			],
+			"value": [
+				"value",
+				"skill"
+			]
+		}
+	},
+	"locale": {
+		"age": {},
+		"alignment_law": {},
+		"alignment_law_tooltip": {},
+		"alignment_moral": {},
+		"alignment_moral_tooltip": {},
+		"alignment_social": {},
+		"alignment_social_tooltip": {},
+		"armor_name": {},
+		"attribute_ag": {},
+		"attribute_br": {},
+		"attribute_cd": {},
+		"attribute_ch": {},
+		"attribute_df": {},
+		"attribute_dhr": {},
+		"attribute_dt": {},
+		"attribute_fa": {},
+		"attribute_he": {},
+		"attribute_in": {},
+		"attribute_mc": {},
+		"attribute_md": {},
+		"attribute_mg": {},
+		"attribute_pc": {},
+		"attribute_points": {},
+		"attribute_ps": {},
+		"attribute_rd": {},
+		"attribute_sp": {},
+		"attribute_sp_tooltip": {},
+		"attribute_st": {},
+		"attribute_td": {},
+		"attribute_td_tooltip": {},
+		"attribute_tem": {},
+		"attribute_tem_tooltip": {},
+		"attribute_ten": {},
+		"attribute_ten_tooltip": {},
+		"attribute_tu": {},
+		"attribute_tu_tooltip": {},
+		"attribute_vg": {},
+		"attribute_wp": {},
+		"character": {},
+		"class": {},
+		"class_count": {},
+		"classes": {},
+		"combat_level": {},
+		"copper_coins": {},
+		"copper_coins_tooltip": {},
+		"culture": {},
+		"current_dt": {},
+		"current_dt_tooltip": {},
+		"current_loadout": {},
+		"deity": {},
+		"electrum_coins": {},
+		"electrum_coins_tooltip": {},
+		"enchantment": {},
+		"enchantments": {},
+		"environment": {},
+		"equipment": {},
+		"experence_points": {},
+		"fatigue": {},
+		"gender": {},
+		"gold_coins": {},
+		"gold_coins_tooltip": {},
+		"handedness": {},
+		"height": {},
+		"height_tooltip": {},
+		"illusion_damage": {},
+		"latten_coins": {},
+		"latten_coins_tooltip": {},
+		"left_hand_attack_bonus": {},
+		"left_hand_equipment_name": {},
+		"level": {},
+		"loadout_absorption": {},
+		"magic_items": {},
+		"mass": {},
+		"mass_carried": {},
+		"mass_coins": {},
+		"mass_tooltip": {},
+		"max_speed": {},
+		"max_speed_tooltip": {},
+		"name": {},
+		"parry": {},
+		"physical_damage": {},
+		"platinum_coins": {},
+		"platinum_coins_tooltip": {},
+		"proppergate_ag": {},
+		"proppergate_br": {},
+		"proppergate_cd": {},
+		"proppergate_ch": {},
+		"proppergate_dhr": {},
+		"proppergate_dt": {},
+		"proppergate_fa": {},
+		"proppergate_he": {},
+		"proppergate_in": {},
+		"proppergate_mc": {},
+		"proppergate_md": {},
+		"proppergate_mg": {},
+		"proppergate_pc": {},
+		"proppergate_ps": {},
+		"proppergate_rd": {},
+		"proppergate_sp": {},
+		"proppergate_st": {},
+		"proppergate_td": {},
+		"proppergate_tu": {},
+		"proppergate_vg": {},
+		"proppergate_wp": {},
+		"race": {},
+		"racialmax_ag": {},
+		"racialmax_fa": {},
+		"racialmax_md": {},
+		"racialmax_pc": {},
+		"racialmax_ps": {},
+		"racialmax_st": {},
+		"racialmax_wp": {},
+		"racialmaxpath": {},
+		"racialmin_ag": {},
+		"racialmin_fa": {},
+		"racialmin_md": {},
+		"racialmin_pc": {},
+		"racialmin_ps": {},
+		"racialmin_st": {},
+		"racialmin_wp": {},
+		"racialminpath": {},
+		"rawattribute_ag": {},
+		"rawattribute_br": {},
+		"rawattribute_cd": {},
+		"rawattribute_ch": {},
+		"rawattribute_dhr": {},
+		"rawattribute_dt": {},
+		"rawattribute_fa": {},
+		"rawattribute_he": {},
+		"rawattribute_in": {},
+		"rawattribute_mc": {},
+		"rawattribute_md": {},
+		"rawattribute_mg": {},
+		"rawattribute_pc": {},
+		"rawattribute_ps": {},
+		"rawattribute_rd": {},
+		"rawattribute_sp": {},
+		"rawattribute_st": {},
+		"rawattribute_td": {},
+		"rawattribute_tu": {},
+		"rawattribute_vg": {},
+		"rawattribute_wp": {},
+		"remaining_attribute_points": {},
+		"remaining_experence_points": {},
+		"right_hand_attack_bonus": {},
+		"right_hand_equipment_name": {},
+		"silver_coins": {},
+		"skill": {},
+		"skills": {},
+		"spent_ag": {},
+		"spent_attribute_points": {},
+		"spent_experence_points": {},
+		"spent_fa": {},
+		"spent_md": {},
+		"spent_pc": {},
+		"spent_ps": {},
+		"spent_st": {},
+		"spent_wp": {},
+		"status": {},
+		"talents": {}
+	},
 	"value": {
 		"character": {
 			"age": {
-				"_id": "age",
 				"defaultvaluefloat": 18.0,
 				"floatrangelow": 0.0,
 				"type": "float"
 			},
 			"alignment_law": {
-				"_id": "alignment_law",
 				"defaultvaluekey": "law_neutral",
 				"keypath": [
 					"data",
@@ -7113,7 +7034,6 @@
 				"type": "key"
 			},
 			"alignment_moral": {
-				"_id": "alignment_moral",
 				"defaultvaluekey": "moral_neutral",
 				"keypath": [
 					"data",
@@ -7122,7 +7042,6 @@
 				"type": "key"
 			},
 			"alignment_social": {
-				"_id": "alignment_social",
 				"defaultvaluekey": "social_neutral",
 				"keypath": [
 					"data",
@@ -7131,19 +7050,16 @@
 				"type": "key"
 			},
 			"class_array": {
-				"_id": "class_array",
 				"documenttypearray": [
 					"class"
 				],
 				"type": "documentarray"
 			},
 			"copper_coins": {
-				"_id": "copper_coins",
 				"intrangelow": 0,
 				"type": "int"
 			},
 			"culture": {
-				"_id": "culture",
 				"defaultvaluekey": "everything",
 				"keypath": [
 					"data",
@@ -7153,7 +7069,6 @@
 				"type": "key"
 			},
 			"current_loadout": {
-				"_id": "current_loadout",
 				"defaultvaluekey": "rest",
 				"keypath": [
 					"data",
@@ -7163,7 +7078,6 @@
 				"type": "key"
 			},
 			"deity": {
-				"_id": "deity",
 				"defaultvaluekey": "none",
 				"keypath": [
 					"data",
@@ -7173,33 +7087,28 @@
 				"type": "key"
 			},
 			"deity_calculate": {
-				"_id": "deity_calculate",
 				"documenttypearray": [
 					"deity"
 				],
 				"type": "document"
 			},
 			"electrum_coins": {
-				"_id": "electrum_coins",
 				"intrangelow": 0,
 				"type": "int"
 			},
 			"enchantment_array": {
-				"_id": "enchantment_array",
 				"documenttypearray": [
 					"enchantment"
 				],
 				"type": "documentarray"
 			},
 			"environment": {
-				"_id": "environment",
 				"documenttypearray": [
 					"environment"
 				],
 				"type": "document"
 			},
 			"equipment_array": {
-				"_id": "equipment_array",
 				"documenttypearray": [
 					"armor",
 					"accessory",
@@ -7209,17 +7118,14 @@
 				"type": "documentarray"
 			},
 			"experence_points": {
-				"_id": "experence_points",
 				"intrangelow": 0,
 				"type": "int"
 			},
 			"fatigue": {
-				"_id": "fatigue",
 				"floatrangelow": 0.0,
 				"type": "float"
 			},
 			"gender": {
-				"_id": "gender",
 				"defaultvaluekeyrandarray": [
 					"male",
 					"female"
@@ -7233,12 +7139,10 @@
 				"type": "key"
 			},
 			"gold_coins": {
-				"_id": "gold_coins",
 				"intrangelow": 0,
 				"type": "int"
 			},
 			"handedness": {
-				"_id": "handedness",
 				"defaultvaluekeyrandarray": [
 					"ambidextrous",
 					"lefthanded",
@@ -7270,49 +7174,40 @@
 				"type": "key"
 			},
 			"height": {
-				"_id": "height",
 				"defaultvaluefloat": 185.0,
 				"dimension": "length",
 				"floatrangelow": 0.0,
 				"type": "float"
 			},
 			"id": {
-				"_id": "id",
 				"defaultvaluestringrandid": true
 			},
 			"illusion_damage": {
-				"_id": "illusion_damage",
 				"floatrangelow": 0.0,
 				"type": "float"
 			},
 			"latten_coins": {
-				"_id": "latten_coins",
 				"intrangelow": 0,
 				"type": "int"
 			},
 			"mass": {
-				"_id": "mass",
 				"defaultvaluefloat": 75.0,
 				"dimension": "mass",
 				"floatrangelow": 0.0,
 				"type": "float"
 			},
 			"name": {
-				"_id": "name",
 				"type": "string"
 			},
 			"physical_damage": {
-				"_id": "physical_damage",
 				"floatrangelow": 0.0,
 				"type": "float"
 			},
 			"platinum_coins": {
-				"_id": "platinum_coins",
 				"intrangelow": 0,
 				"type": "int"
 			},
 			"race": {
-				"_id": "race",
 				"defaultvaluekeyuserand": true,
 				"keypath": [
 					"data",
@@ -7322,59 +7217,48 @@
 				"type": "key"
 			},
 			"silver_coins": {
-				"_id": "silver_coins",
 				"type": "int"
 			},
 			"skill_array": {
-				"_id": "skill_array",
 				"documenttypearray": [
 					"skill"
 				],
 				"type": "documentarray"
 			},
 			"spent_ag": {
-				"_id": "spent_ag",
 				"intrangelow": 0,
 				"type": "int"
 			},
 			"spent_fa": {
-				"_id": "spent_fa",
 				"intrangelow": 0,
 				"type": "int"
 			},
 			"spent_md": {
-				"_id": "spent_md",
 				"intrangelow": 0,
 				"type": "int"
 			},
 			"spent_pc": {
-				"_id": "spent_pc",
 				"intrangelow": 0,
 				"type": "int"
 			},
 			"spent_ps": {
-				"_id": "spent_ps",
 				"intrangelow": 0,
 				"type": "int"
 			},
 			"spent_st": {
-				"_id": "spent_st",
 				"intrangelow": 0,
 				"type": "int"
 			},
 			"spent_wp": {
-				"_id": "spent_wp",
 				"intrangelow": 0,
 				"type": "int"
 			},
 			"talent_array_base": {
-				"_id": "talent_array_base",
 				"type": "stringarray"
 			}
 		},
 		"class": {
 			"class": {
-				"_id": "class",
 				"keypath": [
 					"data",
 					"character",
@@ -7385,11 +7269,9 @@
 		},
 		"enchantment": {
 			"active": {
-				"_id": "active",
 				"type": "bool"
 			},
 			"attribute": {
-				"_id": "attribute",
 				"keypath": [
 					"data",
 					"character",
@@ -7398,40 +7280,32 @@
 				"type": "key"
 			},
 			"delta": {
-				"_id": "delta",
 				"type": "float"
 			},
 			"end": {
-				"_id": "end",
 				"type": "int"
 			},
 			"has_end": {
-				"_id": "has_end",
 				"type": "bool"
 			},
 			"level": {
-				"_id": "level",
 				"type": "int"
 			},
 			"start": {
-				"_id": "start",
 				"type": "int"
 			}
 		},
 		"environment": {
 			"time": {
-				"_id": "time",
 				"type": "int"
 			}
 		},
 		"skill": {
 			"level": {
-				"_id": "level",
 				"intrangelow": 1,
 				"type": "int"
 			},
 			"skill": {
-				"_id": "skill",
 				"keypath": [
 					"data",
 					"character",

@@ -15,7 +15,7 @@ namespace
         TSheet3rd, //make a map, obliges an _id string to use as map key
         TSheet5th,
         TSheet3rdKeyValue,
-        TSheet3rdArray
+        TSheet5thKeyValue
     };
 
     void SplitString(
@@ -125,10 +125,10 @@ namespace
             {
                 action = ActionEnum::TSheet3rd;
             }
-            else if (0 == strcmp("sheet3rdArray", token.c_str()))
-            {
-                action = ActionEnum::TSheet3rdArray;
-            }
+            //else if (0 == strcmp("sheet3rdArray", token.c_str()))
+            //{
+            //    action = ActionEnum::TSheet3rdArray;
+            //}
             else if (0 == strcmp("sheet3rdKeyValue", token.c_str()))
             {
                 action = ActionEnum::TSheet3rdKeyValue;
@@ -136,6 +136,10 @@ namespace
             else if (0 == strcmp("sheet5th", token.c_str()))
             {
                 action = ActionEnum::TSheet5th;
+            }
+            else if (0 == strcmp("sheet5thKeyValue", token.c_str()))
+            {
+                action = ActionEnum::TSheet5thKeyValue;
             }
             else if (0 == strcmp("array", token.c_str()))
             {
@@ -233,9 +237,9 @@ namespace
         case ActionEnum::TSheet3rdKeyValue:
             WorksheetToJson::Deal3rd(out_data, in_worksheets, in_cell, in_cursor.CloneSetUseDataSet(true));
             break;
-        case ActionEnum::TSheet3rdArray:
-            WorksheetToJson::Deal3rdArray(out_data, in_worksheets, in_cell, in_cursor.CloneSetUseDataSet(false));
-            break;
+        //case ActionEnum::TSheet3rdArray:
+        //    WorksheetToJson::Deal3rdArray(out_data, in_worksheets, in_cell, in_cursor.CloneSetUseDataSet(false));
+        //    break;
         }
     }
 
@@ -261,12 +265,13 @@ namespace
         {
             return;
         }
+        //const bool is_key = 0 == strcmp("_key", "
 
         auto local_cursor = in_cursor.Clone();
         local_cursor.PushMember(id);
         local_cursor.SetValue(out_data, nlohmann::json(nlohmann::json::value_t::object));
 
-        for (int index = 0; index < count; ++index)
+        for (int index = 1; index < count; ++index)
         {
             auto local_cursor_inner = local_cursor.Clone();
             const ActionEnum action = DealKey(
@@ -392,16 +397,15 @@ const bool WorksheetToJson::Deal3rd(
     return true;
 }
 
-const bool WorksheetToJson::Deal3rdArray(
-    nlohmann::json& out_data,
-    const std::map<std::string, std::shared_ptr<Worksheet>>& in_worksheets, 
-    const std::string& in_worksheet_name,
-    const Cursor& in_cursor
-    )
-{
-    return false;
-}
-
+//const bool WorksheetToJson::Deal3rdArray(
+//    nlohmann::json& out_data,
+//    const std::map<std::string, std::shared_ptr<Worksheet>>& in_worksheets, 
+//    const std::string& in_worksheet_name,
+//    const Cursor& in_cursor
+//    )
+//{
+//    return false;
+//}
 
 const bool WorksheetToJson::Deal5th(
     nlohmann::json& out_data,
