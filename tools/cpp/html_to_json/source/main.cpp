@@ -4,12 +4,26 @@
 #include "worksheet_to_json.h"
 #include "cursor.h"
 
+#include <curl\curl.h>
 #include <fstream>
 #include <sstream>
 #include <stdio.h>
 #include <locale>
 #include <codecvt>
 #include <string>
+
+/*
+-i "C:\development\game05\tools\cpp\html_to_json\input\character_only.html" -o "C:\development\game05\tools\cpp\html_to_json\output\character.json" --sheet5th toc --dataSet en
+
+-u https://docs.google.com/spreadsheets/d/e/2PACX-1vR2_sq9ul16UTDL72R36B5esxO7lH7F6A_LXuaycE3VLl3R-9OTGEyNeMrhQ4-gxwUfGTrRGzvjdiLw/pubhtml -o "C:\development\game05\tools\cpp\html_to_json\output\character_url.json" --sheet5th toc --dataSet en
+
+https://stackoverflow.com/questions/53861300/how-do-you-properly-install-libcurl-for-use-in-visual-studio-2017
+Get latest vcpkg zip file from https://github.com/microsoft/vcpkg/releases (e.g. https://github.com/microsoft/vcpkg/archive/2019.09.zip) and extract it to a folder of your choice (e.g. C:\vcpkg\)
+Open Developer Command Prompt for VS 2017 (see Windows Start menu or %PROGRAMDATA%\Microsoft\Windows\Start Menu\Programs\Visual Studio 2017\Visual Studio Tools\) and cd to C:\vcpkg\
+Run bootstrap-vcpkg.bat
+Run vcpkg.exe integrate install
+Run vcpkg.exe install curl
+*/
 
 namespace
 {
@@ -84,11 +98,52 @@ options:
         return ApplicationExitCode::TNone;
     }
 
+    size_t WriteData(void *ptr, size_t size, size_t nmemb, void* source_data_raw)
+    {
+        std::string& source_data = *(std::string*)source_data_raw;
+        size_t written = 0;
+        //size_t written = fwrite(ptr, size, nmemb, (FILE *)stream);
+        if (size == 1)
+        {
+            char* trace = (char*)ptr;
+            for (int index = 0; index < nmemb; ++index)
+            {
+                source_data += trace[index];
+                written += 1;
+            }
+        }
+
+        return written;
+    }
+
     const int DealInputUrl(std::map<std::string, std::shared_ptr<Worksheet>>& out_source_data, const std::string& in_input_url)
     {
         printf("Input url:%s\n", in_input_url.c_str());
         //get the source string
         std::string source_data;
+
+        //https://curl.se/libcurl/c/url2file.html
+        curl_global_init(CURL_GLOBAL_ALL);
+        CURL *curl;
+        curl = curl_easy_init();
+        curl_easy_setopt(curl, CURLOPT_URL, in_input_url.c_str());
+
+        /* Switch on full protocol/debug output while testing */
+        //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+ 
+        /* disable progress meter, set to 0L to enable it */
+        curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1L);
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteData);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &source_data);
+        CURLcode res = curl_easy_perform(curl);
+
+        curl_easy_cleanup(curl);
+        curl_global_cleanup();
+
+        if (CURLE_OK != res)
+        {
+            return ApplicationExitCode::TInputURLFail;
+        }
 
         //convert source string to Worksheets
         if (false == StringToWorksheet::DealSourceData(out_source_data, source_data))
@@ -96,8 +151,7 @@ options:
             return ApplicationExitCode::TParseSource;
         }
 
-        //return ApplicationExitCode::TNone;
-        return ApplicationExitCode::TInputURLFail;
+        return ApplicationExitCode::TNone;
     }
 
     const int DealOutput(const nlohmann::json& in_output_data, const std::string& in_output_file_path)
@@ -236,7 +290,7 @@ int main(const int in_argc, const char* const in_argv[])
     }
     if (false == state.sheet_3rd_key_value_worksheet_name.empty())
     {
-        if (false == WorksheetToJson::Deal3rd(
+        if (false == WorksheetToJson::Deal3rdKeyValue(
             state.output_data,
             state.source_data,
             state.sheet_3rd_key_value_worksheet_name,

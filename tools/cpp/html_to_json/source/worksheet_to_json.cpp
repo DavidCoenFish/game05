@@ -265,7 +265,6 @@ namespace
         {
             return;
         }
-        //const bool is_key = 0 == strcmp("_key", "
 
         auto local_cursor = in_cursor.Clone();
         local_cursor.PushMember(id);
@@ -292,6 +291,59 @@ namespace
                 cell,
                 in_worksheets
                 );
+        }
+        return;
+    }
+
+    void Sheet3rdNormalisedRowKeyValue(
+        nlohmann::json& out_data,
+        const std::map<std::string, std::shared_ptr<Worksheet>>& in_worksheets, 
+        const Cursor& in_cursor,
+        const std::vector<std::string>& in_key_row,
+        const Worksheet& in_worksheet, 
+        const int in_row_index
+        )
+    {
+        const int cell_count = in_worksheet.GetRowCellCount(in_row_index);
+        const int count = std::min(cell_count, static_cast<int>(in_key_row.size()));
+        if (count <= 0)
+        {
+            return;
+        }
+        const std::string id = in_worksheet.GetCell(in_row_index, 0);
+
+        // skip blank id~ comment row?
+        if (true == id.empty())
+        {
+            return;
+        }
+
+        auto local_cursor = in_cursor.Clone();
+        local_cursor.PushMember(id);
+        local_cursor.SetValue(out_data, nlohmann::json(nlohmann::json::value_t::object));
+
+        for (int index = 1; index < count; ++index)
+        {
+            auto local_cursor_inner = local_cursor.Clone();
+            const ActionEnum action = DealKey(
+                out_data, 
+                local_cursor_inner,
+                in_key_row[index]
+                );
+            if (ActionEnum::TIgnore == action)
+            {
+                continue;
+            }
+
+            const std::string cell = in_worksheet.GetCell(in_row_index, index);
+            ConsumeCell(
+                out_data, 
+                local_cursor_inner, 
+                action, 
+                cell,
+                in_worksheets
+                );
+            break;
         }
         return;
     }
@@ -442,4 +494,64 @@ const bool WorksheetToJson::Deal5th(
 
     return true;
 }
+
+const bool WorksheetToJson::Deal3rdKeyValue(
+    nlohmann::json& out_data,
+    const std::map<std::string, std::shared_ptr<Worksheet>>& in_worksheets, 
+    const std::string& in_worksheet_name,
+    const Cursor& in_cursor
+    )
+{
+    const auto found = in_worksheets.find(in_worksheet_name);
+    const auto worksheet = found != in_worksheets.end() ? found->second.get() : nullptr;
+    if (nullptr == worksheet)
+    {
+        printf("failed to find worksheet:%s [Deal3rd]\n", in_worksheet_name.c_str());
+        return false;
+    }
+
+    const int row_count = worksheet->GetRowCount();
+    if (row_count <= 0)
+    {
+        printf("empty row worksheet:%s [Deal3rd]\n", in_worksheet_name.c_str());
+        return false;
+    }
+
+    std::vector<std::string> key_row;
+    for (int index = 0; index < worksheet->GetRowCellCount(0); ++index)
+    {
+        key_row.push_back(worksheet->GetCell(0, index));
+    }
+
+    if (static_cast<int>(key_row.size()) <= 0)
+    {
+        printf("empty key worksheet:%s [Deal3rd]\n", in_worksheet_name.c_str());
+        return false;
+    }
+
+    const std::string first_key = key_row[0];
+    std::vector<std::string> split_first_key;
+    SplitString(split_first_key, first_key, ':');
+    if (false == Contains(split_first_key, "_id"))
+    {
+        printf("first key should contain _id:%s [%s] [Deal3rd]\n", in_worksheet_name.c_str(), first_key.c_str());
+        return false;
+    }
+
+    // deal with the other rows past the first
+    for (int index = 1; index < row_count; ++index)
+    {
+        Sheet3rdNormalisedRowKeyValue(
+            out_data,
+            in_worksheets,
+            in_cursor,
+            key_row, 
+            *worksheet, 
+            index
+            );
+    }
+
+    return true;
+}
+
 

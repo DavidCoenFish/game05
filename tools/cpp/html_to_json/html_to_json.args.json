@@ -11,6 +11,10 @@
       "Command": "-i \"C:\\development\\game05\\tools\\cpp\\html_to_json\\input\\character_only.html\""
     },
     {
+      "Id": "154c8bde-5f21-4964-ae04-9ef55d21d978",
+      "Command": "-u https://docs.google.com/spreadsheets/d/e/2PACX-1vR2_sq9ul16UTDL72R36B5esxO7lH7F6A_LXuaycE3VLl3R-9OTGEyNeMrhQ4-gxwUfGTrRGzvjdiLw/pubhtml"
+    },
+    {
       "Id": "c8e34148-6aeb-4c9b-8f4e-ff1b2bf0e734",
       "Command": "-o \"C:\\development\\game05\\tools\\cpp\\html_to_json\\output\\character.json\""
     },
