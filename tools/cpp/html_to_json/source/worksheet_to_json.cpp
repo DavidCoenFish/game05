@@ -14,8 +14,7 @@ namespace
         TString,
         TSheet3rd, //make a map, obliges an _id string to use as map key
         TSheet5th,
-        TSheet3rdKeyValue,
-        TSheet5thKeyValue
+        TSheet3rdKeyValue
     };
 
     void SplitString(
@@ -137,10 +136,6 @@ namespace
             {
                 action = ActionEnum::TSheet5th;
             }
-            else if (0 == strcmp("sheet5thKeyValue", token.c_str()))
-            {
-                action = ActionEnum::TSheet5thKeyValue;
-            }
             else if (0 == strcmp("array", token.c_str()))
             {
                 if (false == name_set)
@@ -167,24 +162,24 @@ namespace
             }
             else if (0 == strcmp("dataset", token.c_str()))
             {
+                // consume all the dataset token, if none match, ignore
+                bool data_set_pass = false;
+                //dataset:en:string
                 while (index < count)
                 {
-                    if (false == in_out_cursor.TestDataset(split_key[index + 1]))
+                    if (true == in_out_cursor.TestDataset(split_key[index + 1]))
                     {
-                        return ActionEnum::TIgnore;
+                        data_set_pass = true;
                     }
-                    if (count <= index + 2)
+                    index += 1;
+                    if (0 != strcmp("dataset", split_key[index + 1].c_str()))
                     {
                         break;
                     }
-                    if (0 == strcmp("dataset", split_key[index + 2].c_str()))
-                    {
-                        index += 2;
-                    }
-                    else
-                    {
-                        index += 1;
-                    }
+                }
+                if (false == data_set_pass)
+                {
+                    return ActionEnum::TIgnore;
                 }
             }
             else
@@ -235,11 +230,8 @@ namespace
             WorksheetToJson::Deal5th(out_data, in_worksheets, in_cell, in_cursor.CloneSetUseDataSet(false));
             break;
         case ActionEnum::TSheet3rdKeyValue:
-            WorksheetToJson::Deal3rd(out_data, in_worksheets, in_cell, in_cursor.CloneSetUseDataSet(true));
+            WorksheetToJson::Deal3rdKeyValue(out_data, in_worksheets, in_cell, in_cursor.CloneSetUseDataSet(true));
             break;
-        //case ActionEnum::TSheet3rdArray:
-        //    WorksheetToJson::Deal3rdArray(out_data, in_worksheets, in_cell, in_cursor.CloneSetUseDataSet(false));
-        //    break;
         }
     }
 
@@ -320,7 +312,7 @@ namespace
 
         auto local_cursor = in_cursor.Clone();
         local_cursor.PushMember(id);
-        local_cursor.SetValue(out_data, nlohmann::json(nlohmann::json::value_t::object));
+        //local_cursor.SetValue(out_data, nlohmann::json(nlohmann::json::value_t::object));
 
         for (int index = 1; index < count; ++index)
         {

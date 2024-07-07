@@ -7,24 +7,52 @@
       "Command": "-h"
     },
     {
-      "Id": "48d03143-e288-4618-9931-a1335f579845",
-      "Command": "-i \"C:\\development\\game05\\tools\\cpp\\html_to_json\\input\\character_only.html\""
-    },
-    {
       "Id": "154c8bde-5f21-4964-ae04-9ef55d21d978",
       "Command": "-u https://docs.google.com/spreadsheets/d/e/2PACX-1vR2_sq9ul16UTDL72R36B5esxO7lH7F6A_LXuaycE3VLl3R-9OTGEyNeMrhQ4-gxwUfGTrRGzvjdiLw/pubhtml"
     },
     {
-      "Id": "c8e34148-6aeb-4c9b-8f4e-ff1b2bf0e734",
-      "Command": "-o \"C:\\development\\game05\\tools\\cpp\\html_to_json\\output\\character.json\""
+      "Id": "6400195a-b345-4145-a5c8-5ec39aa400d7",
+      "Command": "",
+      "Items": [
+        {
+          "Id": "48d03143-e288-4618-9931-a1335f579845",
+          "Command": "-i \"C:\\development\\game05\\tools\\cpp\\html_to_json\\input\\character_only.html\""
+        },
+        {
+          "Id": "c8e34148-6aeb-4c9b-8f4e-ff1b2bf0e734",
+          "Command": "-o \"C:\\development\\game05\\tools\\cpp\\html_to_json\\output\\character.json\""
+        },
+        {
+          "Id": "eaf80188-422f-4d27-af7e-bd7e0dc6ad42",
+          "Command": "--sheet5th toc"
+        },
+        {
+          "Id": "209e82b0-77ed-472b-84db-e7e7e9d7d8ae",
+          "Command": "--dataSet en"
+        }
+      ]
     },
     {
-      "Id": "eaf80188-422f-4d27-af7e-bd7e0dc6ad42",
-      "Command": "--sheet5th toc"
-    },
-    {
-      "Id": "209e82b0-77ed-472b-84db-e7e7e9d7d8ae",
-      "Command": "--dataSet en"
+      "Id": "cab28fb3-53aa-428d-8f32-71910b22a8eb",
+      "Command": "",
+      "Items": [
+        {
+          "Id": "f6936481-77e4-45ab-bd2c-44462f5ca2b5",
+          "Command": "-i \"C:\\development\\game05\\tools\\cpp\\html_to_json\\input\\character_only.html\""
+        },
+        {
+          "Id": "49d4f684-0120-4928-a262-e6e7e3c08dbb",
+          "Command": "-o \"C:\\development\\game05\\tools\\cpp\\html_to_json\\output\\locale.json\""
+        },
+        {
+          "Id": "67aefd5e-a62e-4b04-abdb-6323fc3b1513",
+          "Command": "--sheet3rdKeyValue locale"
+        },
+        {
+          "Id": "6c7922df-9f6e-4d33-9cdc-c55a01079c03",
+          "Command": "--dataSet es"
+        }
+      ]
     }
   ]
 }

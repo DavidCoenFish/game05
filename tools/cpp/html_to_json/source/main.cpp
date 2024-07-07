@@ -13,9 +13,10 @@
 #include <string>
 
 /*
--i "C:\development\game05\tools\cpp\html_to_json\input\character_only.html" -o "C:\development\game05\tools\cpp\html_to_json\output\character.json" --sheet5th toc --dataSet en
-
 -u https://docs.google.com/spreadsheets/d/e/2PACX-1vR2_sq9ul16UTDL72R36B5esxO7lH7F6A_LXuaycE3VLl3R-9OTGEyNeMrhQ4-gxwUfGTrRGzvjdiLw/pubhtml -o "C:\development\game05\tools\cpp\html_to_json\output\character_url.json" --sheet5th toc --dataSet en
+
+-i "C:\development\game05\tools\cpp\html_to_json\input\character_only.html" -o "C:\development\game05\tools\cpp\html_to_json\output\character.json" --sheet5th toc --dataSet en
+-i "C:\development\game05\tools\cpp\html_to_json\input\character_only.html" -o "C:\development\game05\tools\cpp\html_to_json\output\locale.json" --sheet3rdKeyValue locale --dataSet es
 
 https://stackoverflow.com/questions/53861300/how-do-you-properly-install-libcurl-for-use-in-visual-studio-2017
 Get latest vcpkg zip file from https://github.com/microsoft/vcpkg/releases (e.g. https://github.com/microsoft/vcpkg/archive/2019.09.zip) and extract it to a folder of your choice (e.g. C:\vcpkg\)
@@ -282,7 +283,7 @@ int main(const int in_argc, const char* const in_argv[])
             state.output_data,
             state.source_data,
             state.sheet_5th_worksheet_name,
-            Cursor()
+            Cursor(state.data_set, false)
             ))
         {
             result |= TWorksheetError;
