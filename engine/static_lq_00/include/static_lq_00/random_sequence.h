@@ -1,0 +1,41 @@
+#pragma once
+
+class CommandEngineImplementation;
+class InputDatabase;
+class Snapshot;
+
+namespace static_lq_00
+{
+    class RandomSequence
+    {
+    public:
+        RandomSequence(
+            const uint32_t in_seed = 0
+            );
+        ~RandomSequence();
+
+        static const uint32_t GenerateSeed();
+
+        /// warning, return [0 ... 1> not inclusive of 1.0, max value is 0.9999957
+        const float GenerateFloat();
+        /// warning, 1 based and inclusive of upper bounds, so in_sides == 4, result is of set [1,2,3,4]
+        const int32_t GenerateDice(const int32_t in_sides);
+
+        const uint32_t GetSeed() const { return m_seed; }
+        const int32_t GetItterationCount() const { return m_itteration_count; }
+
+    private:
+        void Itterate();
+
+    private:
+        std::mt19937 m_generator;
+
+        /// the initial seed of the sequence
+        const uint32_t m_seed;
+        /// index of the sequence, ie, count of nb generated
+        uint32_t m_itteration_count;
+        /// current value
+        uint32_t m_trace = 0;
+
+    };
+}

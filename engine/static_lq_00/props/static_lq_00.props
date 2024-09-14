@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <DscBuildDir>$(SolutionDir)..\build\$(SolutionName)\$(ProjectName)\$(Platform)\$(Configuration)\</DscBuildDir>
+    <DscIncludeDir>$(SolutionDir)common\include\;$(SolutionDir)sdk\;$(SolutionDir)sdk\free_type\Include\;$(SolutionDir)sdk\harf_buzz\Include\;$(projectDir)source\;$(projectDir)include\</DscIncludeDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OutDir>$(DscBuildDir)output\</OutDir>
+    <IntDir>$(DscBuildDir)intermediate\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(DscIncludeDir);$(IncludePath)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>static_lq_00\static_lq_pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="DscBuildDir">
+      <Value>$(DscBuildDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="DscIncludeDir">
+      <Value>$(DscIncludeDir)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>
