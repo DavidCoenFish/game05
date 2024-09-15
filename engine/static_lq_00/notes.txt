@@ -1,0 +1,3 @@
+C:\development\showntell\webengine\webglengine\www\javascript\legendaryquest\rules\data.js
+C:\development\ancient-code-2\webengine\webglengine\www\javascript\legendaryquest\combat.js
+

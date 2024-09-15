@@ -81,20 +81,24 @@
     <None Include="props\static_lq_00.props" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\static_lq_00\random_sequence.cpp" />
-    <ClCompile Include="source\static_lq_00\static_lq_pch.cpp">
+    <ClCompile Include="source\static_lq\random_sequence.cpp" />
+    <ClCompile Include="source\static_lq\static_lq_pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\static_lq_00\random_sequence.h" />
-    <ClInclude Include="source\static_lq_00\static_lq_pch.h" />
+    <ClInclude Include="include\static_lq\common.h" />
+    <ClInclude Include="include\static_lq\random_sequence.h" />
+    <ClInclude Include="source\static_lq\static_lq_pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\common\common.vcxproj">
       <Project>{3de01963-e730-4a3f-9d8a-76dc5a1f1683}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="notes.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -22,11 +22,14 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\common\common.vcxproj">
-      <Project>{3de01963-e730-4a3f-9d8a-76dc5a1f1683}</Project>
+      <Project>{3de01963-e730-4a47-9d8a-76dc5a1f1683}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\static_lq_00\static_lq_00.vcxproj">
+      <Project>{99d2dc42-e150-9816-64d5-0e8bc12aff3f}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="props\unit_test.props" />
+    <None Include="props\unit_test_lq.props" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -59,11 +62,11 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="props\unit_test.props" />
+    <Import Project="props\unit_test_lq.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="props\unit_test.props" />
+    <Import Project="props\unit_test_lq.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

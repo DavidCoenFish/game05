@@ -4,7 +4,7 @@ class CommandEngineImplementation;
 class InputDatabase;
 class Snapshot;
 
-namespace static_lq_00
+namespace static_lq
 {
     class RandomSequence
     {
@@ -16,7 +16,7 @@ namespace static_lq_00
 
         static const uint32_t GenerateSeed();
 
-        /// warning, return [0 ... 1> not inclusive of 1.0, max value is 0.9999957
+        /// warning, return [0 ... 1> not inclusive of 1.0, max value approaches 1.0, but may be similare to 0.9999999957
         const float GenerateFloat();
         /// warning, 1 based and inclusive of upper bounds, so in_sides == 4, result is of set [1,2,3,4]
         const int32_t GenerateDice(const int32_t in_sides);

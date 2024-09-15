@@ -13,7 +13,7 @@
     <ClCompile>
       <AdditionalIncludeDirectories>$(DscIncludeDir);$(IncludePath)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>static_lq_00\static_lq_pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>static_lq\static_lq_pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>

@@ -110,6 +110,9 @@
     <ProjectReference Include="..\common\common.vcxproj">
       <Project>{3de01963-e730-4a3f-9d8a-76dc5a1f1683}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\static_lq_00\static_lq_00.vcxproj">
+      <Project>{99d2dc42-e150-9816-64d5-0e8bc12aff3f}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\application_lq_00.rc" />

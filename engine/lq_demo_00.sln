@@ -57,6 +57,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "application_lq_00", "applic
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "static_lq_00", "static_lq_00\static_lq_00.vcxproj", "{99D2DC42-E150-9816-64D5-0E8BC12AFF3F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "unit_test_lq", "unit_test_lq\unit_test_lq.vcxproj", "{0B76C9D3-BA28-446A-B699-8A3D82C75506}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -116,6 +118,16 @@ Global
 		{99D2DC42-E150-9816-64D5-0E8BC12AFF3F}.Release|Any CPU.ActiveCfg = Release|x64
 		{99D2DC42-E150-9816-64D5-0E8BC12AFF3F}.Release|x64.ActiveCfg = Release|x64
 		{99D2DC42-E150-9816-64D5-0E8BC12AFF3F}.Release|x64.Build.0 = Release|x64
+		{0B76C9D3-BA28-446A-B699-8A3D82C75506}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{0B76C9D3-BA28-446A-B699-8A3D82C75506}.Debug|x64.ActiveCfg = Debug|x64
+		{0B76C9D3-BA28-446A-B699-8A3D82C75506}.Debug|x64.Build.0 = Debug|x64
+		{0B76C9D3-BA28-446A-B699-8A3D82C75506}.Profile|Any CPU.ActiveCfg = Debug|x64
+		{0B76C9D3-BA28-446A-B699-8A3D82C75506}.Profile|Any CPU.Build.0 = Debug|x64
+		{0B76C9D3-BA28-446A-B699-8A3D82C75506}.Profile|x64.ActiveCfg = Debug|x64
+		{0B76C9D3-BA28-446A-B699-8A3D82C75506}.Profile|x64.Build.0 = Debug|x64
+		{0B76C9D3-BA28-446A-B699-8A3D82C75506}.Release|Any CPU.ActiveCfg = Release|x64
+		{0B76C9D3-BA28-446A-B699-8A3D82C75506}.Release|x64.ActiveCfg = Release|x64
+		{0B76C9D3-BA28-446A-B699-8A3D82C75506}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
