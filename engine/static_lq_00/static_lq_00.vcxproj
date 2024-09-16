@@ -81,6 +81,13 @@
     <None Include="props\static_lq_00.props" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\static_lq\combat\combat.cpp" />
+    <ClCompile Include="source\static_lq\combat\combat_enum.cpp" />
+    <ClCompile Include="source\static_lq\combat\simple\simple_combatant_monster.cpp" />
+    <ClCompile Include="source\static_lq\combat\simple\simple_combatant_player.cpp" />
+    <ClCompile Include="source\static_lq\combat\simple\simple_combat_output.cpp" />
+    <ClCompile Include="source\static_lq\combat\simple\simple_combat_side.cpp" />
+    <ClCompile Include="source\static_lq\combat\simple\simple_combat_topology.cpp" />
     <ClCompile Include="source\static_lq\random_sequence.cpp" />
     <ClCompile Include="source\static_lq\static_lq_pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -88,6 +95,17 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\static_lq\combat\combat.h" />
+    <ClInclude Include="include\static_lq\combat\combat_enum.h" />
+    <ClInclude Include="include\static_lq\combat\i_combatant.h" />
+    <ClInclude Include="include\static_lq\combat\i_combat_output.h" />
+    <ClInclude Include="include\static_lq\combat\i_combat_side.h" />
+    <ClInclude Include="include\static_lq\combat\i_combat_topology.h" />
+    <ClInclude Include="include\static_lq\combat\simple\simple_combatant_monster.h" />
+    <ClInclude Include="include\static_lq\combat\simple\simple_combatant_player.h" />
+    <ClInclude Include="include\static_lq\combat\simple\simple_combat_output.h" />
+    <ClInclude Include="include\static_lq\combat\simple\simple_combat_side.h" />
+    <ClInclude Include="include\static_lq\combat\simple\simple_combat_topology.h" />
     <ClInclude Include="include\static_lq\common.h" />
     <ClInclude Include="include\static_lq\random_sequence.h" />
     <ClInclude Include="source\static_lq\static_lq_pch.h" />

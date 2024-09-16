@@ -7,6 +7,27 @@
     <ClCompile Include="source\static_lq\static_lq_pch.cpp">
       <Filter>source\static_lq</Filter>
     </ClCompile>
+    <ClCompile Include="source\static_lq\combat\simple\simple_combat_topology.cpp">
+      <Filter>source\static_lq\combat\simple</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\simple\simple_combatant_monster.cpp">
+      <Filter>source\static_lq\combat\simple</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\simple\simple_combatant_player.cpp">
+      <Filter>source\static_lq\combat\simple</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\simple\simple_combat_output.cpp">
+      <Filter>source\static_lq\combat\simple</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\simple\simple_combat_side.cpp">
+      <Filter>source\static_lq\combat\simple</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\combat.cpp">
+      <Filter>source\static_lq\combat</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\combat_enum.cpp">
+      <Filter>source\static_lq\combat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\static_lq\random_sequence.h">
@@ -17,6 +38,39 @@
     </ClInclude>
     <ClInclude Include="include\static_lq\common.h">
       <Filter>include\static_lq</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\combat.h">
+      <Filter>include\static_lq\combat</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\combat_enum.h">
+      <Filter>include\static_lq\combat</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\i_combat_output.h">
+      <Filter>include\static_lq\combat</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\i_combat_side.h">
+      <Filter>include\static_lq\combat</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\i_combat_topology.h">
+      <Filter>include\static_lq\combat</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\i_combatant.h">
+      <Filter>include\static_lq\combat</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\simple\simple_combat_topology.h">
+      <Filter>include\static_lq\combat\simple</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\simple\simple_combatant_monster.h">
+      <Filter>include\static_lq\combat\simple</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\simple\simple_combatant_player.h">
+      <Filter>include\static_lq\combat\simple</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\simple\simple_combat_output.h">
+      <Filter>include\static_lq\combat\simple</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\simple\simple_combat_side.h">
+      <Filter>include\static_lq\combat\simple</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -34,6 +88,18 @@
     </Filter>
     <Filter Include="source\static_lq">
       <UniqueIdentifier>{8e06a6a2-ed08-4279-bf77-dcafc32c185a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\static_lq\combat">
+      <UniqueIdentifier>{a3cab6b0-968a-4210-9a42-198a685e2cd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\static_lq\combat">
+      <UniqueIdentifier>{e1a1e405-bfc1-44cf-b72f-32ad60b36598}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\static_lq\combat\simple">
+      <UniqueIdentifier>{fbbea330-9ef7-4b4d-8c17-01261cbbf8c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\static_lq\combat\simple">
+      <UniqueIdentifier>{ec228fd8-65c3-4c54-a457-2d2aac52495c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
