@@ -11,6 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\lq_bestiary.cpp" />
+    <ClCompile Include="source\lq_combat.cpp" />
     <ClCompile Include="source\lq_random_sequence.cpp" />
     <ClCompile Include="source\unit_test_lq_pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

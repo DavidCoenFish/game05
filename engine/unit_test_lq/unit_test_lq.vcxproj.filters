@@ -7,6 +7,12 @@
     <ClCompile Include="source\unit_test_lq_pch.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="source\lq_bestiary.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\lq_combat.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="props">

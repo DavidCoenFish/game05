@@ -12,11 +12,11 @@
 
 static std::atomic<Log*> s_singleton = nullptr;
 
-class LogImplimentation
+class LogImplementation
 {
 public:
-	LogImplimentation(const std::vector< std::shared_ptr< ILogConsumer > >& in_log_consumers);
-	~LogImplimentation();
+	LogImplementation(const std::vector< std::shared_ptr< ILogConsumer > >& in_log_consumers);
+	~LogImplementation();
 	void DrainLogMessages();
 	const bool AcceptsTopic(const LogTopic in_topic);
 	void AddMessage(const LogTopic in_topic, const std::string& in_message);
@@ -78,7 +78,7 @@ public:
 };
 static CheckAllLogMessagesConsumed s_CheckAllLogMessagesConsumed;
 
-LogImplimentation::LogImplimentation(const std::vector< std::shared_ptr< ILogConsumer > >& in_log_consumers)
+LogImplementation::LogImplementation(const std::vector< std::shared_ptr< ILogConsumer > >& in_log_consumers)
 	: _log_consumers(in_log_consumers)
 {
 	//DSC_ASSERT(nullptr == s_singleton);
@@ -99,12 +99,12 @@ LogImplimentation::LogImplimentation(const std::vector< std::shared_ptr< ILogCon
 	}
 }
 
-LogImplimentation::~LogImplimentation()
+LogImplementation::~LogImplementation()
 {
 	_worker_thread = nullptr;
 }
 
-void LogImplimentation::DrainLogMessages()
+void LogImplementation::DrainLogMessages()
 {
 	std::lock_guard< std::mutex > lock(_list_messages_mutex);
 	s_CheckAllLogMessagesConsumed.ConsumeAllMessages(_list_messages);
@@ -113,12 +113,12 @@ void LogImplimentation::DrainLogMessages()
 	_worker_thread->SignalWorkToDo();
 }
 
-const bool LogImplimentation::AcceptsTopic(const LogTopic in_topic)
+const bool LogImplementation::AcceptsTopic(const LogTopic in_topic)
 {
 	return (0 != _topic_log_consumers[(unsigned int)in_topic].size());
 }
 
-void LogImplimentation::AddMessage(const LogTopic in_topic, const std::string& in_message)
+void LogImplementation::AddMessage(const LogTopic in_topic, const std::string& in_message)
 {
 	{
 		std::lock_guard< std::mutex > lock(_list_messages_mutex);
@@ -132,7 +132,7 @@ void LogImplimentation::AddMessage(const LogTopic in_topic, const std::string& i
 	return;
 }
 
-void LogImplimentation::DoWork()
+void LogImplementation::DoWork()
 {
 	while (true)
 	{
@@ -223,7 +223,7 @@ std::shared_ptr< Log > Log::Factory(const LogContainer& in_array_consumer, const
 Log::Log(const std::vector< std::shared_ptr< ILogConsumer >>& in_array_consumer, const bool in_owner_singelton)
 	: _owner_singelton(in_owner_singelton)
 {
-	_implimentation = std::make_unique< LogImplimentation >(in_array_consumer);
+	_Implementation = std::make_unique< LogImplementation >(in_array_consumer);
 	if (true == _owner_singelton)
 	{
 		auto pOldSingelton = s_singleton.exchange(this);
@@ -239,7 +239,7 @@ Log::~Log()
 		auto pOldSingelton = s_singleton.exchange(nullptr);
 		DSC_ASSERT(nullptr != pOldSingelton, "multiple log destruction");
 	}
-	_implimentation = nullptr;
+	_Implementation = nullptr;
 }
 
 //https://stackoverflow.com/questions/2342162/stdstring-formatting-like-sprintf/8098080
@@ -287,12 +287,12 @@ void Log::RunningUintTest()
 
 const bool Log::AcceptsTopic(const LogTopic in_topic)
 {
-	return _implimentation->AcceptsTopic(in_topic);
+	return _Implementation->AcceptsTopic(in_topic);
 }
 
 void Log::MemberAddMessage(const LogTopic in_topic, const char* const in_format, ... )
 {
-	if (false == _implimentation->AcceptsTopic(in_topic))
+	if (false == _Implementation->AcceptsTopic(in_topic))
 	{
 		return;
 	}
@@ -302,15 +302,15 @@ void Log::MemberAddMessage(const LogTopic in_topic, const char* const in_format,
 	const std::string message = FormatString(in_format, va_args);
 	va_end(va_args);
 
-	_implimentation->AddMessage(in_topic, message);
+	_Implementation->AddMessage(in_topic, message);
 }
 
 void Log::DrainLogMessages()
 {
-	_implimentation->DrainLogMessages();
+	_Implementation->DrainLogMessages();
 }
 
 void Log::AddMessageInternal(const LogTopic in_topic, const std::string& in_message)
 {
-	_implimentation->AddMessage(in_topic, in_message);
+	_Implementation->AddMessage(in_topic, in_message);
 }

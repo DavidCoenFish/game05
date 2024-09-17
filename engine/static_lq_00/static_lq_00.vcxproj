@@ -81,6 +81,7 @@
     <None Include="props\static_lq_00.props" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\static_lq\bestiary\bestiary.cpp" />
     <ClCompile Include="source\static_lq\combat\combat.cpp" />
     <ClCompile Include="source\static_lq\combat\combat_enum.cpp" />
     <ClCompile Include="source\static_lq\combat\simple\simple_combatant_monster.cpp" />
@@ -95,6 +96,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\static_lq\bestiary\bestiary.h" />
     <ClInclude Include="include\static_lq\combat\combat.h" />
     <ClInclude Include="include\static_lq\combat\combat_enum.h" />
     <ClInclude Include="include\static_lq\combat\i_combatant.h" />

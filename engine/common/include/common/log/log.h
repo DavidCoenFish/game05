@@ -62,7 +62,7 @@ what would a FileSystem log consumer look like, how does it know the provider fi
 
 class CommandLine;
 class ILogConsumer;
-class LogImplimentation;
+class LogImplementation;
 
 class Log
 {
@@ -98,6 +98,6 @@ private:
 
 private:
 	bool _owner_singelton;
-	std::unique_ptr< LogImplimentation > _implimentation;
+	std::unique_ptr< LogImplementation > _Implementation;
 
 };

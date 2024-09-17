@@ -4,7 +4,7 @@ namespace static_lq
 {
 class ICombatant;
 
-class ICombatantTopology
+class ICombatTopology
 {
 public:
     virtual const bool CanAttackMellee(const ICombatant& attacker, const ICombatant& receive) = 0;

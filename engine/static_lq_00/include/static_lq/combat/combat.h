@@ -1,5 +1,7 @@
 #pragma once
 
+class CombatImplementation;
+
 namespace static_lq
 {
 class ICombatant;
@@ -12,9 +14,9 @@ class Combat
 {
 public:
     Combat(
-        const std::shared_ptr<ICombatTopology>& combatant_topology,
         const std::shared_ptr<ICombatOutput>& combat_output,
-        const std::shared_ptr<RandomSequence>& random_sequence
+        const std::shared_ptr<RandomSequence>& random_sequence,
+        const std::shared_ptr<ICombatTopology>& combatant_topology
         );
 
     // enum for supprise/ ambush/ readyness?
@@ -22,10 +24,12 @@ public:
     void RemoveSide(const ICombatSide& side);
 
     void AddCombatant(const std::shared_ptr<ICombatant>& combatant, ICombatSide& side);
-    void RemoveCombatant(const std::shared_ptr<ICombatant>& combatant, ICombatSide& side);
+    void RemoveCombatant(const ICombatant& combatant, ICombatSide& side);
 
     // return true if combat can continue
     const bool AdvanceTime();
 
+private:
+	std::unique_ptr< CombatImplementation > m_implementation;
 };
 }
