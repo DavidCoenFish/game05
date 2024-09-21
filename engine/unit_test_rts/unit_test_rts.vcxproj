@@ -11,31 +11,29 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\lq_bestiary.cpp" />
-    <ClCompile Include="source\lq_combat.cpp" />
-    <ClCompile Include="source\lq_random_sequence.cpp" />
-    <ClCompile Include="source\unit_test_lq_pch.cpp">
+    <ClCompile Include="source\rts_path.cpp" />
+    <ClCompile Include="source\unit_test_rts_pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="source\unit_test_lq_pch.h" />
+    <ClInclude Include="source\unit_test_rts_pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\common\common.vcxproj">
-      <Project>{3de01963-e730-4a3f-9d8a-76dc5a1f1683}</Project>
+      <Project>{3de01963-e730-4a47-9d8a-76dc5a1f1683}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\static_lq_00\static_lq_00.vcxproj">
+    <ProjectReference Include="..\static_rts_00\static_rts_00.vcxproj">
       <Project>{99d2dc42-e150-9816-64d5-0e8bc12aff3f}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="props\unit_test_lq.props" />
+    <None Include="props\unit_test_rts.props" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{0B76C9D3-BA28-446A-B699-8A3D82C75506}</ProjectGuid>
+    <ProjectGuid>{0B76C9D3-BA28-446B-B699-163D82C75506}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>unit_test</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
@@ -64,11 +62,11 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="props\unit_test_lq.props" />
+    <Import Project="props\unit_test_rts.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="props\unit_test_lq.props" />
+    <Import Project="props\unit_test_rts.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

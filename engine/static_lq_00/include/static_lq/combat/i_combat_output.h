@@ -9,6 +9,8 @@ class ICombatant;
 class ICombatOutput
 {
 public:
+    virtual ~ICombatOutput(){}
+
     virtual void CombatantAdded(const ICombatant& combatant, const ICombatSide& side) = 0;
     virtual void CombatantRemoved(const ICombatant& combatant, const ICombatSide& side) = 0;
 

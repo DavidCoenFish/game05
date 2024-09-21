@@ -10,13 +10,13 @@
     <Filter Include="include">
       <UniqueIdentifier>{f4229292-340a-4172-b392-ea2d02f8c5a5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\static_rts_00">
+    <Filter Include="include\static_rts">
       <UniqueIdentifier>{23b26e8c-64af-43be-a5d9-3d02d628834b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\static_rts_00">
+    <Filter Include="source\static_rts">
       <UniqueIdentifier>{60e4476b-18c1-47a6-a33a-5d9efad725ac}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\static_rts_00\path_finder">
+    <Filter Include="include\static_rts\path_finder">
       <UniqueIdentifier>{a5d2288f-5657-4b6b-a36e-09a4b175f6c8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -26,46 +26,46 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\static_rts_00\static_rts_pch.cpp">
+    <ClCompile Include="source\static_rts\static_rts_pch.cpp">
       <Filter>source\static_rts_00</Filter>
     </ClCompile>
-    <ClCompile Include="source\static_rts_00\input_database.cpp">
+    <ClCompile Include="source\static_rts\input_database.cpp">
       <Filter>source\static_rts_00</Filter>
     </ClCompile>
-    <ClCompile Include="source\static_rts_00\snapshot_cache.cpp">
+    <ClCompile Include="source\static_rts\snapshot_cache.cpp">
       <Filter>source\static_rts_00</Filter>
     </ClCompile>
-    <ClCompile Include="source\static_rts_00\snapshot.cpp">
+    <ClCompile Include="source\static_rts\snapshot.cpp">
       <Filter>source\static_rts_00</Filter>
     </ClCompile>
-    <ClCompile Include="source\static_rts_00\command_engine.cpp">
+    <ClCompile Include="source\static_rts\command_engine.cpp">
       <Filter>source\static_rts_00</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="source\static_rts_00\static_rts_pch.h">
+    <ClInclude Include="source\static_rts\static_rts_pch.h">
       <Filter>source\static_rts_00</Filter>
     </ClInclude>
-    <ClInclude Include="include\static_rts_00\input_database.h">
+    <ClInclude Include="include\static_rts\input_database.h">
       <Filter>include\static_rts_00</Filter>
     </ClInclude>
-    <ClInclude Include="include\static_rts_00\command_engine.h">
+    <ClInclude Include="include\static_rts\command_engine.h">
       <Filter>include\static_rts_00</Filter>
     </ClInclude>
-    <ClInclude Include="include\static_rts_00\snapshot.h">
+    <ClInclude Include="include\static_rts\snapshot.h">
       <Filter>include\static_rts_00</Filter>
     </ClInclude>
-    <ClInclude Include="include\static_rts_00\snapshot_cache.h">
+    <ClInclude Include="include\static_rts\snapshot_cache.h">
       <Filter>include\static_rts_00</Filter>
     </ClInclude>
-    <ClInclude Include="include\static_rts_00\path_finder\path_finder_map.h">
-      <Filter>include\static_rts_00\path_finder</Filter>
+    <ClInclude Include="include\static_rts\path_finder\path_finder_map.h">
+      <Filter>include\static_rts\path_finder</Filter>
     </ClInclude>
-    <ClInclude Include="include\static_rts_00\path_finder\path_finder_tile.h">
-      <Filter>include\static_rts_00\path_finder</Filter>
+    <ClInclude Include="include\static_rts\path_finder\path_finder_tile.h">
+      <Filter>include\static_rts\path_finder</Filter>
     </ClInclude>
-    <ClInclude Include="include\static_rts_00\path_finder\path_finder_math.h">
-      <Filter>include\static_rts_00\path_finder</Filter>
+    <ClInclude Include="include\static_rts\path_finder\path_finder_math.h">
+      <Filter>include\static_rts\path_finder</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

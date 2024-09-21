@@ -27,6 +27,10 @@ namespace LqCombat
                 random_sequence,
                 combatant_topology
                 );
+            while(true == combat.AdvanceTime())
+            {
+                //nop
+            }
 		}
 
     };

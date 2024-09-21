@@ -13,6 +13,12 @@ class SimpleCombatMonster : public ICombatant
 public:
     SimpleCombatMonster();
 
+private:
+    const int GetId() const override;
+
+private:
+    const int _id;
+
 };
 
 }

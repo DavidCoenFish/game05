@@ -18,13 +18,14 @@ public:
         const std::shared_ptr<RandomSequence>& random_sequence,
         const std::shared_ptr<ICombatTopology>& combatant_topology
         );
+    ~Combat();
 
     // enum for supprise/ ambush/ readyness?
     void AddSide(const std::shared_ptr<ICombatSide>& combat_side);
-    void RemoveSide(const ICombatSide& side);
+    void RemoveSide(const int side_id);
 
-    void AddCombatant(const std::shared_ptr<ICombatant>& combatant, ICombatSide& side);
-    void RemoveCombatant(const ICombatant& combatant, ICombatSide& side);
+    void AddCombatant(const std::shared_ptr<ICombatant>& combatant, const int side_id);
+    void RemoveCombatant(const int combatant_id, const int side_id);
 
     // return true if combat can continue
     const bool AdvanceTime();

@@ -69,6 +69,8 @@ class Log
 public:
 	typedef std::vector< std::shared_ptr< ILogConsumer >> LogContainer;
 
+	static std::string Printf(const char* const in_format, ... );
+
 	//any thread, no dependance on scope of Log object, just put a message on the visual studio output console
 	static void AddConsole(const char* const in_format, ... );
 

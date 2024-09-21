@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="source\rts_path.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\unit_test_rts_pch.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="props">
+      <UniqueIdentifier>{4af2a1a5-e6ce-4466-92f2-6cb8a4c429aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{1610ca9b-2501-4171-a0ae-8ea2cd5609ab}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="props\unit_test_rts.props">
+      <Filter>props</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\unit_test_rts_pch.h">
+      <Filter>source</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -21,21 +21,21 @@ namespace static_lq
         /// warning, 1 based and inclusive of upper bounds, so in_sides == 4, result is of set [1,2,3,4]
         const int32_t GenerateDice(const int32_t in_sides);
 
-        const uint32_t GetSeed() const { return m_seed; }
-        const int32_t GetItterationCount() const { return m_itteration_count; }
+        const uint32_t GetSeed() const { return _seed; }
+        const int32_t GetItterationCount() const { return _itteration_count; }
 
     private:
         void Itterate();
 
     private:
-        std::mt19937 m_generator;
+        std::mt19937 _generator;
 
         /// the initial seed of the sequence
-        const uint32_t m_seed;
+        const uint32_t _seed;
         /// index of the sequence, ie, count of nb generated
-        uint32_t m_itteration_count;
+        uint32_t _itteration_count;
         /// current value
-        uint32_t m_trace = 0;
+        uint32_t _trace = 0;
 
     };
 }

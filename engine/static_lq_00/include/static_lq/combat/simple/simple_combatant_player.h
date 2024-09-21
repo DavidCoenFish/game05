@@ -13,6 +13,12 @@ class SimpleCombatPlayer : public ICombatant
 public:
     SimpleCombatPlayer();
 
+private:
+    const int GetId() const override;
+
+private:
+    const int _id;
+
 };
 
 }

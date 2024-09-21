@@ -13,9 +13,9 @@ public:
         const std::shared_ptr<static_lq::RandomSequence>& random_sequence,
         const std::shared_ptr<static_lq::ICombatTopology>& combatant_topology
         )
-        : m_combat_output(combat_output)
-        , m_random_sequence(random_sequence)
-        , m_combatant_topology(combatant_topology)
+        : _combat_output(combat_output)
+        , _random_sequence(random_sequence)
+        , _combatant_topology(combatant_topology)
         {
             // nop
         }
@@ -23,62 +23,75 @@ public:
     void AddSide(const std::shared_ptr<static_lq::ICombatSide>& side)
     {
         // check for duplicates
-        std::vector<std::shared_ptr<static_lq::ICombatSide>>::iterator found = std::find(m_side_array.begin(), m_side_array.end(), &side);
-        if (found != m_side_array.end())
+        auto lambda = [side](const std::shared_ptr<static_lq::ICombatSide>& rhs) { return rhs.get() == side.get();};
+        const auto found = std::find_if(_side_array.begin(), _side_array.end(), lambda);
+
+        if (found != _side_array.end())
         {
             DSC_ASSERT_ALWAYS("AddSide side duplicate");
             return;
         }
 
-        m_side_array.push_back(side);
+        _side_array.push_back(side);
     }
 
-    void RemoveSide(const static_lq::ICombatSide& side)
+    void RemoveSide(const int side_id)
     {
-        //std::vector<std::shared_ptr<static_lq::ICombatSide>> m_side_array;
-        std::vector<std::shared_ptr<static_lq::ICombatSide>>::iterator found = std::find(m_side_array.begin(), m_side_array.end(), &side);
-        if (found != m_side_array.end())
+        auto lambda = [side_id](const std::shared_ptr<static_lq::ICombatSide>& rhs) -> bool{ return rhs->GetId() == side_id;};
+        const auto found = std::find_if(_side_array.begin(), _side_array.end(), lambda);
+        if (found != _side_array.end())
         {
-            m_side_array.erase(found);
+            _side_array.erase(found);
         }
     }
 
-    void AddCombatant(const std::shared_ptr<static_lq::ICombatant>& combatant, static_lq::ICombatSide& side)
+    void AddCombatant(const std::shared_ptr<static_lq::ICombatant>& combatant, const int side_id)
     {
-        std::vector<std::shared_ptr<static_lq::ICombatSide>>::iterator found = std::find(m_side_array.begin(), m_side_array.end(), &side);
-        if (found != m_side_array.end())
+        auto lambda = [side_id](const std::shared_ptr<static_lq::ICombatSide>& rhs) { return rhs->GetId() == side_id;};
+        const auto found = std::find_if(_side_array.begin(), _side_array.end(), lambda);
+        if (found != _side_array.end())
         {
             (*found)->AddCombatant(combatant);
         }
     }
 
-    void RemoveCombatant(const static_lq::ICombatant& combatant, static_lq::ICombatSide& side)
+    void RemoveCombatant(const int combatant_id, const int side_id)
     {
-        std::vector<std::shared_ptr<static_lq::ICombatSide>>::iterator found = std::find(m_side_array.begin(), m_side_array.end(), &side);
-        if (found != m_side_array.end())
+        auto lambda = [side_id](const std::shared_ptr<static_lq::ICombatSide>& rhs) { return rhs->GetId() == side_id;};
+        const auto found = std::find_if(_side_array.begin(), _side_array.end(), lambda);
+        if (found != _side_array.end())
         {
-            (*found)->RemoveCombatant(combatant);
+            (*found)->RemoveCombatant(combatant_id);
         }
     }
 
     // return true if combat can continue
     const bool AdvanceTime()
     {
+        _segment += 1;
+        while (10 <= _segment)
+        {
+            _segment -= 10;
+            _turn += 1;
+        }
+
+        _combat_output->SetTurnSegment(_turn, _segment);
+
+        const std::vector<std::shared_ptr<static_lq::ICombatSide>> result = {};
+        _combat_output->SetCombatEnd(result);
         return false;
     }
 
-
 private:
-    std::shared_ptr<static_lq::ICombatOutput> m_combat_output;
-    std::shared_ptr<static_lq::RandomSequence> m_random_sequence;
-    std::shared_ptr<static_lq::ICombatTopology> m_combatant_topology;
+    std::shared_ptr<static_lq::ICombatOutput> _combat_output;
+    std::shared_ptr<static_lq::RandomSequence> _random_sequence;
+    std::shared_ptr<static_lq::ICombatTopology> _combatant_topology;
     
-    int m_turn = 0;
-    int m_segment = 0;
+    int _turn = 0;
+    int _segment = 0;
 
-    std::vector<std::shared_ptr<static_lq::ICombatSide>> m_side_array;
+    std::vector<std::shared_ptr<static_lq::ICombatSide>> _side_array;
 };
-
 
 static_lq::Combat::Combat(
     const std::shared_ptr<ICombatOutput>& combat_output,
@@ -89,24 +102,29 @@ static_lq::Combat::Combat(
 	m_implementation = std::make_unique<CombatImplementation>(combat_output, random_sequence, combatant_topology);
 }
 
+static_lq::Combat::~Combat()
+{
+    //nop
+}
+
 void static_lq::Combat::AddSide(const std::shared_ptr<ICombatSide>& combat_side)
 {
     m_implementation->AddSide(combat_side);
 }
 
-void static_lq::Combat::RemoveSide(const ICombatSide& side)
+void static_lq::Combat::RemoveSide(const int side_id)
 {
-    m_implementation->RemoveSide(side);
+    m_implementation->RemoveSide(side_id);
 }
 
-void static_lq::Combat::AddCombatant(const std::shared_ptr<ICombatant>& combatant, ICombatSide& side)
+void static_lq::Combat::AddCombatant(const std::shared_ptr<ICombatant>& combatant, const int side_id)
 {
-    m_implementation->AddCombatant(combatant, side);
+    m_implementation->AddCombatant(combatant, side_id);
 }
 
-void static_lq::Combat::RemoveCombatant(const ICombatant& combatant, ICombatSide& side)
+void static_lq::Combat::RemoveCombatant(const int combatant_id, const int side_id)
 {
-    m_implementation->RemoveCombatant(combatant, side);
+    m_implementation->RemoveCombatant(combatant_id, side_id);
 }
 
 const bool static_lq::Combat::AdvanceTime()

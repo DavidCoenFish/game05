@@ -176,6 +176,15 @@ static const std::string FormatString(const char* const pFormat, va_list vaArgs)
 	return message;
 }
 
+std::string Log::Printf(const char* const in_format, ... )
+{
+	va_list va_args;
+	va_start(va_args, in_format);
+	const std::string message = FormatString(in_format, va_args);
+	va_end(va_args);
+	return message;
+}
+
 void Log::AddConsole(const char* const in_format, ... )
 {
 	va_list va_args;

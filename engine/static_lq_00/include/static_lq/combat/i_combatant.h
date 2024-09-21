@@ -5,6 +5,11 @@ namespace static_lq
 class ICombatant
 {
 public:
+    static const int MakeNewId();
+
+    virtual ~ICombatant(){}
+    virtual const int GetId() const = 0;
+
     //virtual const bool CanContinueCombat(const std::shared_ptr<ICombatant>& combatant) = 0;
     //set side? no
     //is weapon drawn

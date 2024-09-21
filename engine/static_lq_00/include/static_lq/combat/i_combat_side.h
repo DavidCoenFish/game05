@@ -7,8 +7,13 @@ class ICombatant;
 class ICombatSide
 {
 public:
+    static const int MakeNewId();
+
+    virtual ~ICombatSide(){}
+
+    virtual const int GetId() const = 0;
     virtual void AddCombatant(const std::shared_ptr<ICombatant>& combatant) = 0;
-    virtual void RemoveCombatant(const ICombatant& combatant) = 0;
+    virtual void RemoveCombatant(const int combatant_id) = 0;
     virtual const std::vector<std::shared_ptr<ICombatant>>& GetCombatantList() const = 0;
 
     virtual const bool CanContinueCombat() const = 0;

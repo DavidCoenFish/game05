@@ -31,6 +31,18 @@
     <ClCompile Include="source\static_lq\bestiary\bestiary.cpp">
       <Filter>source\static_lq\bestiary</Filter>
     </ClCompile>
+    <ClCompile Include="source\static_lq\bestiary\monster_data.cpp">
+      <Filter>source\static_lq\bestiary</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\bestiary\bestiary_enum.cpp">
+      <Filter>source\static_lq\bestiary</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\i_combat_side.cpp">
+      <Filter>source\static_lq\combat</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\i_combatant.cpp">
+      <Filter>source\static_lq\combat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\static_lq\random_sequence.h">
@@ -76,6 +88,12 @@
       <Filter>include\static_lq\combat\simple</Filter>
     </ClInclude>
     <ClInclude Include="include\static_lq\bestiary\bestiary.h">
+      <Filter>include\static_lq\bestiary</Filter>
+    </ClInclude>
+    <ClInclude Include="source\static_lq\bestiary\monster_data.h">
+      <Filter>source\static_lq\bestiary</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\bestiary\bestiary_enum.h">
       <Filter>include\static_lq\bestiary</Filter>
     </ClInclude>
   </ItemGroup>
