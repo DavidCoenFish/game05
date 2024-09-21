@@ -346,6 +346,15 @@
     <ClCompile Include="source\common\bezier\bezier_border_helper.cpp">
       <Filter>souce\common\bezier</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\locale\string_format_data_source_simple.cpp">
+      <Filter>souce\common\locale</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\locale\i_string_format_data_source.cpp">
+      <Filter>souce\common\locale</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\locale\string_format_data_source_lambda.cpp">
+      <Filter>souce\common\locale</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
@@ -716,6 +725,15 @@
     </ClInclude>
     <ClInclude Include="include\common\bezier\bezier_border_helper.h">
       <Filter>include\common\bezier</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\locale\i_string_format_data_source.h">
+      <Filter>include\common\locale</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\locale\string_format_data_source_simple.h">
+      <Filter>include\common\locale</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\locale\string_format_data_source_lambda.h">
+      <Filter>include\common\locale</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
