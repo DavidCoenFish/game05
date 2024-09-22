@@ -1,8 +1,8 @@
 #include "unit_test_pch.h"
-#include "common\locale\locale_system.h"
-#include "common\locale\locale_enum.h"
-#include "common\locale\string_format_data_source_simple.h"
-#include "common\locale\string_format_data_source_lambda.h"
+#include "common/locale/locale_system.h"
+#include "common/locale/locale_enum.h"
+#include "common/locale/string_format_data_source_simple.h"
+#include "common/locale/string_format_data_source_lambda.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -17,7 +17,8 @@ namespace CommonLocaleSystem
             locale_system.Append(LocaleISO_639_1::English, std::vector<LocaleSystem::Data>({{"key", "value {}"}}));
             StringFormatDataSourceSimple data_source(std::vector<std::string>({"moo"}));
 
-            const std::string result = locale_system.GetValueFormatted(LocaleISO_639_1::English, "key", data_source);
+            locale_system.GetValueFormatted(LocaleISO_639_1::English, "key", data_source);
+            const std::string result = data_source.GetResult();
 
             Assert::AreEqual(result.c_str(), "value moo");
         }
@@ -28,7 +29,8 @@ namespace CommonLocaleSystem
             locale_system.Append(LocaleISO_639_1::English, std::vector<LocaleSystem::Data>({{"key", "value {} {{}}"}}));
             StringFormatDataSourceSimple data_source(std::vector<std::string>({"moo"}));
 
-            const std::string result = locale_system.GetValueFormatted(LocaleISO_639_1::English, "key", data_source);
+            locale_system.GetValueFormatted(LocaleISO_639_1::English, "key", data_source);
+            const std::string result = data_source.GetResult();
 
             Assert::AreEqual(result.c_str(), "value moo {}");
         }
@@ -61,7 +63,8 @@ namespace CommonLocaleSystem
                 return std::string();
             });
 
-            const std::string result = locale_system.GetValueFormatted(LocaleISO_639_1::English, "key", data_source);
+            locale_system.GetValueFormatted(LocaleISO_639_1::English, "key", data_source);
+            const std::string result = data_source.GetResult();
 
             Assert::AreEqual(result.c_str(), "value 1 2 3");
         }

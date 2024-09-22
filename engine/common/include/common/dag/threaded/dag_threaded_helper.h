@@ -1,6 +1,6 @@
 #pragma once
 
-#include "common/dag_threaded/dag_threaded_value.h"
+#include "common/dag/threaded/dag_threaded_value.h"
 
 namespace DagThreadedHelper
 {

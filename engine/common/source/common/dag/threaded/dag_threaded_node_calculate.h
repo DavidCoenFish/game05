@@ -1,8 +1,9 @@
 #pragma once
 
-#include "common/dag_threaded/i_dag_threaded_node.h"
+#include "common/dag/threaded/i_dag_threaded_node.h"
 
 class IDagThreadedValue;
+class IDagThreadedVisitor;
 class DagThreadedCollection;
 
 // Rename DagThreadedNodeCalculate
@@ -15,9 +16,10 @@ public:
 		) > CalculateFunction;
 
 	DagThreadedNodeCalculate(
-		//const DagThreadedCollection& in_collection, 
-		const std::string& in_name,
-		const CalculateFunction& in_calculate_function
+		const std::string& in_uid,
+		const CalculateFunction& in_calculate_function,
+		const std::string& in_display_name,
+		const std::string& in_display_description
 		);
 	virtual ~DagThreadedNodeCalculate();
 
@@ -27,16 +29,23 @@ public:
 	void Unlink();
 
 private:
-	const std::string& GetName() const override { return _name; }
-    //std::mutex& GetOutputMutex() override { return _array_output_mutex; }
+	const std::string& GetUid() const override { return _uid; }
+	const std::string& GetDisplayName() const override { return _display_name; }
+	const std::string& GetDisplayDescription() const override { return _display_description; }
+
 	void SetOutput(IDagThreadedNode* const pNode) override;
 	void RemoveOutput(IDagThreadedNode* const pNode) override;
 	std::shared_ptr<IDagThreadedValue> GetValue() override;
+
+    /// return true to continue visiting 
+	virtual const bool Visit(IDagThreadedVisitor& visitor) override;
+
 	void MarkDirty() override;
 
 private:
-	//const DagThreadedCollection& _collection;
-	const std::string _name;
+	const std::string _uid;
+	const std::string _display_name;
+	const std::string _display_description;
 	const CalculateFunction _calculate_function;
 
     std::shared_mutex _array_input_stack_mutex;
@@ -49,7 +58,6 @@ private:
     std::vector< IDagThreadedNode* > _array_output;
 
     // Shared_ptr has an internal lock
-    //std::shared_mutex _value_mutex;
 	std::shared_ptr< IDagThreadedValue > _value;
 
 	// Each time we are marked dirty, _change_id increments

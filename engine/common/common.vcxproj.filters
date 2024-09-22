@@ -1,29 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="source\common\dag_threaded\dag_threaded_collection.cpp">
-      <Filter>souce\common\dag_threaded</Filter>
-    </ClCompile>
     <ClCompile Include="source\common\common_pch.cpp">
       <Filter>souce\common</Filter>
     </ClCompile>
     <ClCompile Include="source\common\platform.cpp">
       <Filter>souce\common</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\dag_threaded\i_dag_threaded_node.cpp">
-      <Filter>souce\common\dag_threaded</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\dag_threaded\dag_threaded_node_calculate.cpp">
-      <Filter>souce\common\dag_threaded</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\dag_threaded\i_dag_threaded_value.cpp">
-      <Filter>souce\common\dag_threaded</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\dag_threaded\dag_threaded_node_variable.cpp">
-      <Filter>souce\common\dag_threaded</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\dag_threaded\dag_threaded_value.cpp">
-      <Filter>souce\common\dag_threaded</Filter>
     </ClCompile>
     <ClCompile Include="source\common\util\utf8.cpp">
       <Filter>souce\common\util</Filter>
@@ -355,11 +337,38 @@
     <ClCompile Include="source\common\locale\string_format_data_source_lambda.cpp">
       <Filter>souce\common\locale</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\dag\threaded\dag_threaded_node_calculate.cpp">
+      <Filter>souce\common\dag\threaded</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\dag\threaded\dag_threaded_node_variable.cpp">
+      <Filter>souce\common\dag\threaded</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\dag\threaded\dag_threaded_value.cpp">
+      <Filter>souce\common\dag\threaded</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\dag\threaded\i_dag_threaded_node.cpp">
+      <Filter>souce\common\dag\threaded</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\dag\threaded\i_dag_threaded_value.cpp">
+      <Filter>souce\common\dag\threaded</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\dag\threaded\dag_threaded_collection.cpp">
+      <Filter>souce\common\dag\threaded</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\tooltip\i_tooltip_action.cpp">
+      <Filter>souce\common\tooltip</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\tooltip\tooltip.cpp">
+      <Filter>souce\common\tooltip</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\tooltip\tooltip_data.cpp">
+      <Filter>souce\common\tooltip</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\dag\threaded\i_dag_threaded_visitor.cpp">
+      <Filter>souce\common\dag\threaded</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h">
-      <Filter>include\common\dag_threaded</Filter>
-    </ClInclude>
     <ClInclude Include="source\common\common_pch.h">
       <Filter>souce\common</Filter>
     </ClInclude>
@@ -371,27 +380,6 @@
     </ClInclude>
     <ClInclude Include="include\common\macro.h">
       <Filter>include\common</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\dag_threaded\i_dag_threaded_node.h">
-      <Filter>souce\common\dag_threaded</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\dag_threaded\dag_threaded_node_calculate.h">
-      <Filter>souce\common\dag_threaded</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\dag_threaded\dag_threaded_node_variable.h">
-      <Filter>souce\common\dag_threaded</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\dag_threaded\i_dag_threaded_value.h">
-      <Filter>include\common\dag_threaded</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\dag_threaded\dag_threaded.h">
-      <Filter>include\common\dag_threaded</Filter>
-    </ClInclude>
-    <ClInclude Include="source\common\dag_threaded\dag_threaded_value.h">
-      <Filter>souce\common\dag_threaded</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\dag_threaded\dag_threaded_helper.h">
-      <Filter>include\common\dag_threaded</Filter>
     </ClInclude>
     <ClInclude Include="include\common\util\utf8.h">
       <Filter>include\common\util</Filter>
@@ -735,6 +723,42 @@
     <ClInclude Include="include\common\locale\string_format_data_source_lambda.h">
       <Filter>include\common\locale</Filter>
     </ClInclude>
+    <ClInclude Include="include\common\dag\threaded\dag_threaded_collection.h">
+      <Filter>include\common\dag\threaded</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\dag\threaded\dag_threaded_helper.h">
+      <Filter>include\common\dag\threaded</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\dag\threaded\i_dag_threaded_value.h">
+      <Filter>include\common\dag\threaded</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\dag\threaded\dag_threaded.h">
+      <Filter>include\common\dag\threaded</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\dag\threaded\dag_threaded_node_calculate.h">
+      <Filter>souce\common\dag\threaded</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\dag\threaded\dag_threaded_node_variable.h">
+      <Filter>souce\common\dag\threaded</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\dag\threaded\dag_threaded_value.h">
+      <Filter>souce\common\dag\threaded</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\dag\threaded\i_dag_threaded_node.h">
+      <Filter>souce\common\dag\threaded</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\tooltip\tooltip.h">
+      <Filter>include\common\tooltip</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\tooltip\tooltip_data.h">
+      <Filter>include\common\tooltip</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\tooltip\i_tooltip_action.h">
+      <Filter>include\common\tooltip</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\dag\threaded\i_dag_threaded_visitor.h">
+      <Filter>include\common\dag\threaded</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="souce">
@@ -742,9 +766,6 @@
     </Filter>
     <Filter Include="souce\common">
       <UniqueIdentifier>{66487263-154c-46d3-9252-7dd8e90ddccd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="souce\common\dag_threaded">
-      <UniqueIdentifier>{8675f3fd-2713-475b-87e6-a4996d1f1e15}</UniqueIdentifier>
     </Filter>
     <Filter Include="props">
       <UniqueIdentifier>{fd8283c2-2d3b-4ebd-8a47-48da937382ee}</UniqueIdentifier>
@@ -754,9 +775,6 @@
     </Filter>
     <Filter Include="include\common">
       <UniqueIdentifier>{8df0200f-419f-4049-a30a-59b591fd2d02}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="include\common\dag_threaded">
-      <UniqueIdentifier>{15396a69-74b3-45ba-889a-b56cf99f64d6}</UniqueIdentifier>
     </Filter>
     <Filter Include="souce\common\util">
       <UniqueIdentifier>{b4c697ce-4861-4158-a8b0-4fbb4939c1d1}</UniqueIdentifier>
@@ -874,6 +892,24 @@
     </Filter>
     <Filter Include="souce\common\bezier">
       <UniqueIdentifier>{e1f6da53-9f7a-4055-aa55-a6445b6710c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\dag">
+      <UniqueIdentifier>{8675f3fd-2713-475b-87e6-a4996d1f1e15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\dag\threaded">
+      <UniqueIdentifier>{439a12bf-71ca-4306-8f73-dd9ce9272921}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\dag">
+      <UniqueIdentifier>{15396a69-74b3-45ba-889a-b56cf99f64d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\dag\threaded">
+      <UniqueIdentifier>{d23d368b-5d9c-41c0-8d74-740abc161d47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\tooltip">
+      <UniqueIdentifier>{ca239481-7f2a-43e7-a7db-cdf2def6a8a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\tooltip">
+      <UniqueIdentifier>{306252d7-9059-46a4-9942-d5fe9bd158b1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

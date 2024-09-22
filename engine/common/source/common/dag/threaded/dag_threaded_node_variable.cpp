@@ -1,16 +1,22 @@
 #include "common/common_pch.h"
 
-#include "common/dag_threaded/dag_threaded_node_variable.h"
-#include "common/dag_threaded/i_dag_threaded_value.h"
+#include "common/dag/threaded/dag_threaded_node_variable.h"
+#include "common/dag/threaded/i_dag_threaded_value.h"
+#include "common/dag/threaded/i_dag_threaded_visitor.h"
 
 DagThreadedNodeVariable::DagThreadedNodeVariable(
-	const std::string& in_name, 
+	const std::string& in_uid,
 	const std::shared_ptr< IDagThreadedValue >& in_value,
-	const DagThreaded::DirtyCase in_dirty_case
+	const DagThreaded::DirtyCase in_dirty_case,
+	const std::string& in_display_name,
+	const std::string& in_display_description
 	)
-	: _name(in_name)
+	: _uid(in_uid)
+    , _display_name(in_display_name)
+    , _display_description(in_display_description)
 	, _value(in_value)
 	, _dirty_case(in_dirty_case)
+
 {
 	//nop
 }
@@ -77,6 +83,16 @@ void DagThreadedNodeVariable::RemoveOutput(IDagThreadedNode* const in_node)
 std::shared_ptr<IDagThreadedValue> DagThreadedNodeVariable::GetValue()
 {
 	return _value;
+}
+
+const bool DagThreadedNodeVariable::Visit(IDagThreadedVisitor& visitor) 
+{
+    return visitor.OnVariable(
+        _value,
+        _uid,
+        _display_name,
+        _display_description
+        );
 }
 
 void DagThreadedNodeVariable::MarkDirty()

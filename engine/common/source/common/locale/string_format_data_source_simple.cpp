@@ -20,3 +20,13 @@ const std::string StringFormatDataSourceSimple::GetValue(const LocaleISO_639_1 i
     return std::string();
 }
 
+void StringFormatDataSourceSimple::AccumulateResult(const std::string value, const LocaleISO_639_1)
+{
+    _result += value;
+}
+
+void StringFormatDataSourceSimple::AccumulateToken(const std::string value, const LocaleISO_639_1, const std::string&, const int)
+{
+    _result += value;
+}
+

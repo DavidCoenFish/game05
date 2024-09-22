@@ -1,6 +1,6 @@
 #include "unit_test_pch.h"
-#include "common\dag_threaded\dag_threaded_collection.h"
-#include "common\dag_threaded\dag_threaded_helper.h"
+#include "common/dag/threaded/dag_threaded_collection.h"
+#include "common/dag/threaded/dag_threaded_helper.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 

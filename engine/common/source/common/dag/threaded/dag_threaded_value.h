@@ -1,7 +1,7 @@
 #pragma once
 
-#include "common/dag_threaded/dag_threaded.h"
-#include "common/dag_threaded/i_dag_threaded_value.h"
+#include "common/dag/threaded/dag_threaded.h"
+#include "common/dag/threaded/i_dag_threaded_value.h"
 
 template< typename TYPE >
 class DagThreadedValue : public IDagThreadedValue

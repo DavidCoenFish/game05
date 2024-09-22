@@ -1,5 +1,5 @@
 #include "unit_test_pch.h"
-#include "common\math\vector_float3.h"
+#include "common/math/vector_float3.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 

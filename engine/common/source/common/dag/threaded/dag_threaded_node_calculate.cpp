@@ -1,12 +1,18 @@
 #include "common/common_pch.h"
 
-#include "common/dag_threaded/dag_threaded_node_calculate.h"
+#include "common/dag/threaded/dag_threaded_node_calculate.h"
+#include "common/dag/threaded/i_dag_threaded_visitor.h"
 
 
 DagThreadedNodeCalculate::DagThreadedNodeCalculate(
-	const std::string& in_name,
-	const CalculateFunction& in_calculate_function)
-	: _name(in_name)
+	const std::string& in_uid,
+	const CalculateFunction& in_calculate_function,
+	const std::string& in_display_name,
+	const std::string& in_display_description
+    )
+	: _uid(in_uid)
+    , _display_name(in_display_name)
+    , _display_description(in_display_description)
 	, _calculate_function(in_calculate_function)
 {
 	//nop
@@ -162,6 +168,92 @@ std::shared_ptr<IDagThreadedValue> DagThreadedNodeCalculate::GetValue()
 		result = _value;
 	}
 	return result;
+}
+
+const bool DagThreadedNodeCalculate::Visit(IDagThreadedVisitor& visitor)
+{
+    std::vector<std::string> array_input_stack_uid;
+    {
+        std::unique_lock read_lock(_array_input_stack_mutex);
+        for (const auto& item : _array_input_stack)
+        {
+            if (item)
+            {
+                array_input_stack_uid.push_back(item->GetUid());
+            }
+        }
+    }
+
+    std::vector<std::string> array_input_index_uid;
+    {
+        std::unique_lock read_lock(_array_input_index_mutex);
+        for (const auto& item : _array_input_index)
+        {
+            if (item)
+            {
+                array_input_index_uid.push_back(item->GetUid());
+            }
+            else
+            {
+                array_input_index_uid.push_back("");
+            }
+        }
+    }
+    std::vector<std::string> array_output_uid;
+    {
+        std::unique_lock read_lock(_array_output_mutex);
+        for (const auto& item : _array_output)
+        {
+            if (item)
+            {
+                array_output_uid.push_back(item->GetUid());
+            }
+        }
+    }
+
+    if (false == visitor.OnCalculate(
+        GetValue(),
+        _uid,
+        _display_name,
+        _display_description,
+        array_input_stack_uid,
+        array_input_index_uid,
+        array_output_uid
+        ))
+    {
+        return false;
+    }
+
+    {
+        std::unique_lock read_lock(_array_input_stack_mutex);
+        for (const auto& item : _array_input_stack)
+        {
+            if (item)
+            {
+                if (false == item->Visit(visitor))
+                {
+                    return false;
+                }
+            }
+        }
+    }
+
+    {
+        std::unique_lock read_lock(_array_input_index_mutex);
+        for (const auto& item : _array_input_index)
+        {
+            if (item)
+            {
+                if (false == item->Visit(visitor))
+                {
+                    return false;
+                }
+            }
+        }
+    }
+
+
+    return true;
 }
 
 void DagThreadedNodeCalculate::MarkDirty()

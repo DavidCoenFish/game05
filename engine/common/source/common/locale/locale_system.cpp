@@ -13,13 +13,20 @@ enum class State
     TToken,
 };
 
-const std::string DealToken(const LocaleISO_639_1 in_locale, std::string& in_out_token, int& in_out_index,
-        const IStringFormatDataSource& in_stringFormatDataSource)
+void DealToken(const LocaleISO_639_1 in_locale, std::string& in_out_token, int& in_out_index,
+        IStringFormatDataSource& in_stringFormatDataSource, std::string& in_out_result)
 {
-    const std::string result = in_stringFormatDataSource.GetValue(in_locale, in_out_token, in_out_index);
+    if (false == in_out_result.empty())
+    {
+        in_stringFormatDataSource.AccumulateResult(in_out_result, in_locale);
+        in_out_result = {};
+    }
+
+    const std::string value = in_stringFormatDataSource.GetValue(in_locale, in_out_token, in_out_index);
+    in_stringFormatDataSource.AccumulateToken(value, in_locale, in_out_token, in_out_index);
     in_out_token = {};
     in_out_index += 1;
-    return result;
+    return;
 }
 
 };
@@ -58,10 +65,10 @@ public:
         return std::string();
     }
 
-    const std::string GetValueFormatted(
+    void GetValueFormatted(
         const LocaleISO_639_1 in_locale,
         const std::string& in_key,
-        const IStringFormatDataSource& in_stringFormatDataSource
+        IStringFormatDataSource& in_stringFormatDataSource
         )
     {
         const std::string value = GetValue(in_locale, in_key);
@@ -81,7 +88,7 @@ public:
                 }
                 else if (state == State::TBracketEnd)
                 {
-                    result += DealToken(in_locale, token, index, in_stringFormatDataSource);
+                    DealToken(in_locale, token, index, in_stringFormatDataSource, result);
                     state = State::TDefault;
                 }
                 else if (state == State::TToken) // inside a token
@@ -97,7 +104,7 @@ public:
             {
                 if (state == State::TBracketStart)
                 {
-                    result += DealToken(in_locale, token, index, in_stringFormatDataSource);
+                    DealToken(in_locale, token, index, in_stringFormatDataSource, result);
                     state = State::TDefault;
                 }
                 if (state == State::TBracketEnd) // escape
@@ -105,9 +112,9 @@ public:
                     result += character;
                     state = State::TDefault;
                 }
-                else if (state == State::TToken)
+                else if (state == State::TToken) // end of markup token
                 {
-                    result += DealToken(in_locale, token, index, in_stringFormatDataSource);
+                    DealToken(in_locale, token, index, in_stringFormatDataSource, result);
                     state = State::TDefault;
                 }
                 else // start of escape?
@@ -124,7 +131,7 @@ public:
                 }
                 else if (state == State::TBracketEnd)
                 {
-                    result += DealToken(in_locale, token, index, in_stringFormatDataSource);
+                    DealToken(in_locale, token, index, in_stringFormatDataSource, result);
                     result += character;
                     state = State::TDefault;
                 }
@@ -142,11 +149,15 @@ public:
         // did the input end on a bracket end
         if (state == State::TBracketEnd)
         {
-            result += DealToken(in_locale, token, index, in_stringFormatDataSource);
+            DealToken(in_locale, token, index, in_stringFormatDataSource, result);
         }
 
+        if (false == result.empty())
+        {
+            in_stringFormatDataSource.AccumulateResult(result, in_locale);
+        }
 
-        return result;
+        return;
     }
 
     const std::vector<LocaleISO_639_1> GatherLocale() const
@@ -234,13 +245,14 @@ const std::string LocaleSystem::GetValue(
     return _implementation->GetValue(in_locale, in_key);
 }
 
-const std::string LocaleSystem::GetValueFormatted(
+void LocaleSystem::GetValueFormatted(
     const LocaleISO_639_1 in_locale,
     const std::string& in_key,
-    const IStringFormatDataSource& in_stringFormatDataSource
+    IStringFormatDataSource& in_stringFormatDataSource
     )
 {
-    return _implementation->GetValueFormatted(in_locale, in_key, in_stringFormatDataSource);
+    _implementation->GetValueFormatted(in_locale, in_key, in_stringFormatDataSource);
+    return;
 }
 
 const std::vector<LocaleISO_639_1> LocaleSystem::GatherLocale() const

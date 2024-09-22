@@ -1,5 +1,5 @@
 #include "unit_test_pch.h"
-#include "common\ui\ui_screen_space.h"
+#include "common/ui/ui_screen_space.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 

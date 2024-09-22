@@ -25,12 +25,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="source\common\dag_threaded\dag_threaded_node_calculate.cpp" />
-    <ClCompile Include="source\common\dag_threaded\dag_threaded_collection.cpp" />
-    <ClCompile Include="source\common\dag_threaded\dag_threaded_value.cpp" />
-    <ClCompile Include="source\common\dag_threaded\dag_threaded_node_variable.cpp" />
-    <ClCompile Include="source\common\dag_threaded\i_dag_threaded_node.cpp" />
-    <ClCompile Include="source\common\dag_threaded\i_dag_threaded_value.cpp" />
+    <ClCompile Include="source\common\dag\threaded\dag_threaded_collection.cpp" />
+    <ClCompile Include="source\common\dag\threaded\dag_threaded_node_calculate.cpp" />
+    <ClCompile Include="source\common\dag\threaded\dag_threaded_node_variable.cpp" />
+    <ClCompile Include="source\common\dag\threaded\dag_threaded_value.cpp" />
+    <ClCompile Include="source\common\dag\threaded\i_dag_threaded_node.cpp" />
+    <ClCompile Include="source\common\dag\threaded\i_dag_threaded_value.cpp" />
+    <ClCompile Include="source\common\dag\threaded\i_dag_threaded_visitor.cpp" />
     <ClCompile Include="source\common\direct_xtk12\direct_x_helpers.cpp" />
     <ClCompile Include="source\common\direct_xtk12\graphics_memory.cpp" />
     <ClCompile Include="source\common\direct_xtk12\handle_closer.cpp" />
@@ -100,6 +101,9 @@
     <ClCompile Include="source\common\text\text_run_data_icon.cpp" />
     <ClCompile Include="source\common\text\text_run_data_string.cpp" />
     <ClCompile Include="source\common\text\text_texture.cpp" />
+    <ClCompile Include="source\common\tooltip\i_tooltip_action.cpp" />
+    <ClCompile Include="source\common\tooltip\tooltip.cpp" />
+    <ClCompile Include="source\common\tooltip\tooltip_data.cpp" />
     <ClCompile Include="source\common\ui\i_ui_input.cpp" />
     <ClCompile Include="source\common\ui\i_ui_model.cpp" />
     <ClCompile Include="source\common\ui\ui_base_colour.cpp" />
@@ -145,10 +149,11 @@
     <ClInclude Include="include\common\bezier\bezier_manager.h" />
     <ClInclude Include="include\common\bezier\bezier_simulate.h" />
     <ClInclude Include="include\common\common.h" />
-    <ClInclude Include="include\common\dag_threaded\dag_threaded.h" />
-    <ClInclude Include="include\common\dag_threaded\dag_threaded_collection.h" />
-    <ClInclude Include="include\common\dag_threaded\dag_threaded_helper.h" />
-    <ClInclude Include="include\common\dag_threaded\i_dag_threaded_value.h" />
+    <ClInclude Include="include\common\dag\threaded\dag_threaded.h" />
+    <ClInclude Include="include\common\dag\threaded\dag_threaded_collection.h" />
+    <ClInclude Include="include\common\dag\threaded\dag_threaded_helper.h" />
+    <ClInclude Include="include\common\dag\threaded\i_dag_threaded_value.h" />
+    <ClInclude Include="include\common\dag\threaded\i_dag_threaded_visitor.h" />
     <ClInclude Include="include\common\direct_xtk12\d3dx12.h" />
     <ClInclude Include="include\common\draw_system\custom_command_list.h" />
     <ClInclude Include="include\common\draw_system\draw_system.h" />
@@ -201,6 +206,9 @@
     <ClInclude Include="include\common\text\text_manager.h" />
     <ClInclude Include="include\common\text\text_pre_vertex.h" />
     <ClInclude Include="include\common\text\text_run.h" />
+    <ClInclude Include="include\common\tooltip\i_tooltip_action.h" />
+    <ClInclude Include="include\common\tooltip\tooltip.h" />
+    <ClInclude Include="include\common\tooltip\tooltip_data.h" />
     <ClInclude Include="include\common\ui\i_ui_input.h" />
     <ClInclude Include="include\common\ui\i_ui_model.h" />
     <ClInclude Include="include\common\ui\ui_base_colour.h" />
@@ -237,10 +245,10 @@
     <ClInclude Include="include\common\window\window_application_param.h" />
     <ClInclude Include="include\common\worker\worker_task.h" />
     <ClInclude Include="source\common\common_pch.h" />
-    <ClInclude Include="source\common\dag_threaded\dag_threaded_node_calculate.h" />
-    <ClInclude Include="source\common\dag_threaded\dag_threaded_value.h" />
-    <ClInclude Include="source\common\dag_threaded\dag_threaded_node_variable.h" />
-    <ClInclude Include="source\common\dag_threaded\i_dag_threaded_node.h" />
+    <ClInclude Include="source\common\dag\threaded\dag_threaded_node_calculate.h" />
+    <ClInclude Include="source\common\dag\threaded\dag_threaded_node_variable.h" />
+    <ClInclude Include="source\common\dag\threaded\dag_threaded_value.h" />
+    <ClInclude Include="source\common\dag\threaded\i_dag_threaded_node.h" />
     <ClInclude Include="source\common\direct_xtk12\direct_x_helpers.h" />
     <ClInclude Include="source\common\direct_xtk12\graphics_memory.h" />
     <ClInclude Include="source\common\direct_xtk12\handle_closer.h" />

@@ -18,3 +18,13 @@ const std::string StringFormatDataSourceLambda::GetValue(const LocaleISO_639_1 i
     return std::string();
 }
 
+void StringFormatDataSourceLambda::AccumulateResult(const std::string value, const LocaleISO_639_1)
+{
+    _result += value;
+}
+
+void StringFormatDataSourceLambda::AccumulateToken(const std::string value, const LocaleISO_639_1, const std::string&, const int)
+{
+    _result += value;
+}
+

@@ -18,11 +18,12 @@ public:
 
     /// example value sourced from in_key "hello {foo} may name is {}, have a nice {day}"
     /// escape via double "hello {{world}}" => "hello {world}"
-    /// escape via double "hello {world}" => "hello meow" with in_stringFormatDataSource returning "meow" 
-    const std::string GetValueFormatted(
+    /// "hello {world}" => "hello meow" with in_stringFormatDataSource returning "meow" for token "world"
+    /// collection of result moved into IStringFormatDataSource to allow tooltip to build link data
+    void GetValueFormatted(
         const LocaleISO_639_1 in_locale,
         const std::string& in_key,
-        const IStringFormatDataSource& in_stringFormatDataSource
+        IStringFormatDataSource& in_stringFormatDataSource
         );
 
     const std::vector<LocaleISO_639_1> GatherLocale() const;
