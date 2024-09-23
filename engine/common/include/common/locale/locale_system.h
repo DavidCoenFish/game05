@@ -1,7 +1,7 @@
 #pragma once
 
 class LocaleSystemImplementation;
-class IStringFormatDataSource;
+class ILocaleStringFormat;
 enum class LocaleISO_639_1;
 
 class LocaleSystem
@@ -19,11 +19,11 @@ public:
     /// example value sourced from in_key "hello {foo} may name is {}, have a nice {day}"
     /// escape via double "hello {{world}}" => "hello {world}"
     /// "hello {world}" => "hello meow" with in_stringFormatDataSource returning "meow" for token "world"
-    /// collection of result moved into IStringFormatDataSource to allow tooltip to build link data
+    /// collection of result moved into ILocaleStringFormat to allow tooltip to build link data
     void GetValueFormatted(
         const LocaleISO_639_1 in_locale,
         const std::string& in_key,
-        IStringFormatDataSource& in_stringFormatDataSource
+        ILocaleStringFormat& in_stringFormatDataSource
         );
 
     const std::vector<LocaleISO_639_1> GatherLocale() const;
@@ -37,6 +37,10 @@ public:
         const LocaleISO_639_1 in_locale,
         const std::vector<Data>& in_data
         );
+
+    // ILocaleProvider::Populate(LocaleSystem& in_local_system, const LocaleISO_639_1 in_locale)
+    // register locale provider(const std::shared_ptr<ILocaleProvider>& in_provider)
+    // set locale
 
 private:
     std::unique_ptr<LocaleSystemImplementation> _implementation;

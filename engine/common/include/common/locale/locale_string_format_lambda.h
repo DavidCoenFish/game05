@@ -1,11 +1,11 @@
 #pragma once
 
-#include "common/locale/i_string_format_data_source.h"
+#include "common/locale/i_locale_string_format.h"
 
-class StringFormatDataSourceLambda : public IStringFormatDataSource
+class LocaleStringFormatLambda : public ILocaleStringFormat
 {
 public:
-    StringFormatDataSourceLambda(const std::function<const std::string(const LocaleISO_639_1, const std::string&, const int)>& in_callback);
+    LocaleStringFormatLambda(const std::function<const std::string(const LocaleISO_639_1, const std::string&, const int)>& in_callback);
 
     const std::string& GetResult() const { return _result; }
 

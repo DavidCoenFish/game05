@@ -4,9 +4,9 @@
 #include "common/dag/threaded/dag_threaded_value.h"
 
 class DagThreadedCollectionImplementation;
-class IDagThreadedValue;
 class IDagThreadedNode;
-class Tooltip;
+class IDagThreadedValue;
+class IDagThreadedVisitor;
 
 /*
 "foo(7) = bar(3) + meow(4)", where bar(3) is a link to bar tooltip, if a calculate, and meow(4) a link to 
@@ -32,7 +32,7 @@ class DagThreadedCollection
 {
 public:
 	//typedef void* NodeID;
-    typedef std::shared_ptr< IDagThreadedNode > NodeID;
+    typedef IDagThreadedNode* NodeID;
 
 	typedef std::function< std::shared_ptr< IDagThreadedValue > (
 		const std::vector< std::shared_ptr< IDagThreadedValue > >& in_array_stack, 
@@ -59,19 +59,19 @@ public:
         const std::string& in_display_name = "", // possibly a local key
         const std::string& in_display_description = "" // possibly a local key
         );
-	void DestroyNode(const NodeID& in_node_id);
-	void AddNodeLinkIndexed(const NodeID& in_node_id_subject, const NodeID& in_node_id_to_add, const int in_index);
-	void RemoveNodeLinkIndexed(const NodeID& in_node_id_subject, const int in_index);
-	void AddNodeLinkStack(const NodeID& in_node_id_subject, const NodeID& in_node_id_to_add);
-	void RemoveNodeLinkStack(const NodeID& in_node_id_subject, const NodeID& in_node_id_to_remove);
-	void UnlinkNode(const NodeID& in_node_id);
+	void DestroyNode(const NodeID in_node_id);
+	void AddNodeLinkIndexed(const NodeID in_node_id_subject, const NodeID in_node_id_to_add, const int in_index);
+	void RemoveNodeLinkIndexed(const NodeID in_node_id_subject, const int in_index);
+	void AddNodeLinkStack(const NodeID in_node_id_subject, const NodeID in_node_id_to_add);
+	void RemoveNodeLinkStack(const NodeID in_node_id_subject, const NodeID in_node_id_to_remove);
+	void UnlinkNode(const NodeID in_node_id);
 
     /// here or in helper
-    void VisitNode(const NodeID& in_node_id);
+    const bool VisitNode(const NodeID in_node_id, IDagThreadedVisitor& in_visitor);
 
 	// Primary thread unless multi threaded mode == true
-	std::shared_ptr< IDagThreadedValue > GetDagValue(const NodeID& in_node_id);
-	void SetDagValue(const NodeID& in_node_id, const std::shared_ptr< IDagThreadedValue >& in_dag_value);
+	std::shared_ptr< IDagThreadedValue > GetDagValue(const NodeID in_node_id);
+	void SetDagValue(const NodeID in_node_id, const std::shared_ptr< IDagThreadedValue >& in_dag_value);
 
 private:
 	std::unique_ptr< DagThreadedCollectionImplementation > _implementation;

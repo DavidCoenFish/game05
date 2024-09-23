@@ -22,7 +22,7 @@ namespace CommonDagThreaded
 			auto collection = DagThreadedCollection::Factory();
 			Assert::IsNotNull( collection.get() );
 			auto node_found = collection->FindNode("bar");
-			Assert::IsNull(node_found.get());
+			Assert::IsNull(node_found);
 		}
 
 		TEST_METHOD(DagThreadedCreateVariable)
@@ -30,9 +30,9 @@ namespace CommonDagThreaded
 			auto collection = DagThreadedCollection::Factory();
 			Assert::IsNotNull( collection.get() );
 			auto node = collection->CreateNodeVariable("foo");
-			Assert::IsNotNull(node.get());
+			Assert::IsNotNull(node);
 			auto node_found = collection->FindNode("foo");
-			Assert::AreEqual((void*)node.get(), (void*)node_found.get());
+			Assert::AreEqual((void*)node, (void*)node_found);
 			auto dag_value = DagThreadedHelper::CreateDagValue<int>(3);
 			collection->SetDagValue(node, dag_value);
 

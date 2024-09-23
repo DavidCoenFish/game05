@@ -172,56 +172,22 @@ std::shared_ptr<IDagThreadedValue> DagThreadedNodeCalculate::GetValue()
 
 const bool DagThreadedNodeCalculate::Visit(IDagThreadedVisitor& visitor)
 {
-    std::vector<std::string> array_input_stack_uid;
     {
-        std::unique_lock read_lock(_array_input_stack_mutex);
-        for (const auto& item : _array_input_stack)
+        std::unique_lock read_lock_stack(_array_input_stack_mutex);
+        std::unique_lock read_lock_index(_array_input_index_mutex);
+        std::unique_lock read_lock_output(_array_output_mutex);
+        if (false == visitor.OnCalculate(
+            GetValue(),
+            _uid,
+            _display_name,
+            _display_description,
+            _array_input_index,
+            _array_input_index,
+            _array_output
+            ))
         {
-            if (item)
-            {
-                array_input_stack_uid.push_back(item->GetUid());
-            }
+            return false;
         }
-    }
-
-    std::vector<std::string> array_input_index_uid;
-    {
-        std::unique_lock read_lock(_array_input_index_mutex);
-        for (const auto& item : _array_input_index)
-        {
-            if (item)
-            {
-                array_input_index_uid.push_back(item->GetUid());
-            }
-            else
-            {
-                array_input_index_uid.push_back("");
-            }
-        }
-    }
-    std::vector<std::string> array_output_uid;
-    {
-        std::unique_lock read_lock(_array_output_mutex);
-        for (const auto& item : _array_output)
-        {
-            if (item)
-            {
-                array_output_uid.push_back(item->GetUid());
-            }
-        }
-    }
-
-    if (false == visitor.OnCalculate(
-        GetValue(),
-        _uid,
-        _display_name,
-        _display_description,
-        array_input_stack_uid,
-        array_input_index_uid,
-        array_output_uid
-        ))
-    {
-        return false;
     }
 
     {
