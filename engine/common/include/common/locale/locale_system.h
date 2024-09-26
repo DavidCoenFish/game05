@@ -1,6 +1,7 @@
 #pragma once
 
 class LocaleSystemImplementation;
+class ILocaleDataProvider;
 class ILocaleStringFormat;
 enum class LocaleISO_639_1;
 
@@ -16,6 +17,10 @@ public:
         const std::string& in_key
         );
 
+    const std::string GetValue(
+        const std::string& in_key
+        );
+
     /// example value sourced from in_key "hello {foo} may name is {}, have a nice {day}"
     /// escape via double "hello {{world}}" => "hello {world}"
     /// "hello {world}" => "hello meow" with in_stringFormatDataSource returning "meow" for token "world"
@@ -25,6 +30,15 @@ public:
         const std::string& in_key,
         ILocaleStringFormat& in_stringFormatDataSource
         );
+
+    void GetValueFormatted(
+        const std::string& in_key,
+        ILocaleStringFormat& in_stringFormatDataSource
+        );
+
+    void RegisterProvider(const std::shared_ptr<ILocaleDataProvider>& in_provider);
+    void SetLocaleAndPopulate(const LocaleISO_639_1 in_locale);
+    const LocaleISO_639_1 GetLocale() const;
 
     const std::vector<LocaleISO_639_1> GatherLocale() const;
 
@@ -37,10 +51,6 @@ public:
         const LocaleISO_639_1 in_locale,
         const std::vector<Data>& in_data
         );
-
-    // ILocaleProvider::Populate(LocaleSystem& in_local_system, const LocaleISO_639_1 in_locale)
-    // register locale provider(const std::shared_ptr<ILocaleProvider>& in_provider)
-    // set locale
 
 private:
     std::unique_ptr<LocaleSystemImplementation> _implementation;

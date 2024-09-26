@@ -1,6 +1,7 @@
 #include "common/common_pch.h"
 #include "common/locale/locale_system.h"
 #include "common/locale/locale_enum.h"
+#include "common/locale/i_locale_data_provider.h"
 #include "common/locale/i_locale_string_format.h"
 
 namespace
@@ -37,7 +38,8 @@ private:
     typedef std::map<std::string, std::string> TDataMap;
 public:
     LocaleSystemImplementation()
-    : _last_locale(LocaleISO_639_1::Invalid)
+    : _locale(LocaleISO_639_1::Invalid)
+    , _last_locale(LocaleISO_639_1::Invalid)
     , _last_data_map(nullptr)
     {
         // Nop
@@ -63,6 +65,13 @@ public:
             }
         }
         return std::string();
+    }
+
+    const std::string GetValue(
+        const std::string& in_key
+        )
+    {
+        return GetValue(_locale, in_key);
     }
 
     void GetValueFormatted(
@@ -160,6 +169,38 @@ public:
         return;
     }
 
+    void GetValueFormatted(
+        const std::string& in_key,
+        ILocaleStringFormat& in_localeStringFormat
+        )
+    {
+        GetValueFormatted(_locale, in_key, in_localeStringFormat);
+    }
+
+    void RegisterProvider(const std::shared_ptr<ILocaleDataProvider>& in_provider)
+    {
+        DSC_ASSERT(nullptr != in_provider, "invlid param");
+        _provider_array.push_back(in_provider);
+    }
+
+    void SetLocaleAndPopulate(LocaleSystem& that, const LocaleISO_639_1 in_locale)
+    {
+        if (_locale == in_locale)
+        {
+            return;
+        }
+        _locale = in_locale;
+        for (const auto& item : _provider_array)
+        {
+            item->Populate(that, _locale);
+        }
+    }
+
+    const LocaleISO_639_1 GetLocale() const
+    {
+        return _locale;
+    }
+
     const std::vector<LocaleISO_639_1> GatherLocale() const
     {
         std::vector<LocaleISO_639_1> result;
@@ -221,10 +262,11 @@ private:
     }
 
 private:
+    LocaleISO_639_1 _locale;
     LocaleISO_639_1 _last_locale;
     TDataMap* _last_data_map;
     std::map<LocaleISO_639_1, std::shared_ptr<TDataMap>> _locale_data_map;
-
+    std::vector<std::shared_ptr<ILocaleDataProvider>> _provider_array;
 };
 
 LocaleSystem::LocaleSystem()
@@ -245,6 +287,13 @@ const std::string LocaleSystem::GetValue(
     return _implementation->GetValue(in_locale, in_key);
 }
 
+const std::string LocaleSystem::GetValue(
+    const std::string& in_key
+    )
+{
+    return _implementation->GetValue(in_key);
+}
+
 void LocaleSystem::GetValueFormatted(
     const LocaleISO_639_1 in_locale,
     const std::string& in_key,
@@ -253,6 +302,32 @@ void LocaleSystem::GetValueFormatted(
 {
     _implementation->GetValueFormatted(in_locale, in_key, in_localeStringFormat);
     return;
+}
+
+void LocaleSystem::GetValueFormatted(
+    const std::string& in_key,
+    ILocaleStringFormat& in_localeStringFormat
+    )
+{
+    _implementation->GetValueFormatted(in_key, in_localeStringFormat);
+    return;
+}
+
+void LocaleSystem::RegisterProvider(const std::shared_ptr<ILocaleDataProvider>& in_provider)
+{
+    _implementation->RegisterProvider(in_provider);
+    return;
+}
+
+void LocaleSystem::SetLocaleAndPopulate(const LocaleISO_639_1 in_locale)
+{
+    _implementation->SetLocaleAndPopulate(*this, in_locale);
+    return;
+}
+
+const LocaleISO_639_1 LocaleSystem::GetLocale() const
+{
+    return _implementation->GetLocale();
 }
 
 const std::vector<LocaleISO_639_1> LocaleSystem::GatherLocale() const
