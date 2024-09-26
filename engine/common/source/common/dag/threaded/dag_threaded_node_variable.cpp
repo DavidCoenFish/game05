@@ -8,12 +8,10 @@ DagThreadedNodeVariable::DagThreadedNodeVariable(
 	const std::string& in_uid,
 	const std::shared_ptr< IDagThreadedValue >& in_value,
 	const DagThreaded::DirtyCase in_dirty_case,
-	const std::string& in_display_name,
-	const std::string& in_display_description
+	const std::string& in_display_name
 	)
 	: _uid(in_uid)
     , _display_name(in_display_name)
-    , _display_description(in_display_description)
 	, _value(in_value)
 	, _dirty_case(in_dirty_case)
 
@@ -90,8 +88,7 @@ const bool DagThreadedNodeVariable::Visit(IDagThreadedVisitor& visitor)
     return visitor.OnVariable(
         _value,
         _uid,
-        _display_name,
-        _display_description
+        _display_name
         );
 }
 

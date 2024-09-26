@@ -15,8 +15,7 @@ public:
 		const std::string& in_uid,
 		const std::shared_ptr< IDagThreadedValue >& in_value,
 		const DagThreaded::DirtyCase in_dirty_case,
-		const std::string& in_display_name,
-		const std::string& in_display_description
+		const std::string& in_display_name
 		);
 	virtual ~DagThreadedNodeVariable();
 
@@ -25,7 +24,6 @@ public:
 private:
 	const std::string& GetUid() const override { return _uid; }
 	const std::string& GetDisplayName() const override { return _display_name; }
-	const std::string& GetDisplayDescription() const override { return _display_description; }
 
 	void SetOutput(IDagThreadedNode* const in_node) override;
 	void RemoveOutput(IDagThreadedNode* const in_node) override;
@@ -39,7 +37,6 @@ private:
 private:
 	const std::string _uid;
 	const std::string _display_name;
-	const std::string _display_description;
 
 	const DagThreaded::DirtyCase _dirty_case;
 

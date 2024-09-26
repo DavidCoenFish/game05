@@ -50,14 +50,12 @@ public:
 		const std::string& in_uid, 
 		const std::shared_ptr< IDagThreadedValue >& in_dag_value = nullptr,
 		const DagThreaded::DirtyCase in_dirty_case = DagThreaded::DirtyCase::ValueChanged,
-        const std::string& in_display_name = "", // possibly a local key
-        const std::string& in_display_description = "" // possibly a local key
+        const std::string& in_display_name = "" // possibly a local key
 		);
 	NodeID CreateNodeCalculate(
         const std::string& in_uid, 
         const CalculateFunction& in_function,
-        const std::string& in_display_name = "", // possibly a local key
-        const std::string& in_display_description = "" // possibly a local key
+        const std::string& in_display_name = "" // possibly a local key
         );
 	void DestroyNode(const NodeID in_node_id);
 	void AddNodeLinkIndexed(const NodeID in_node_id_subject, const NodeID in_node_id_to_add, const int in_index);

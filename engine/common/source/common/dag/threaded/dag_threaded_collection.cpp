@@ -33,11 +33,10 @@ public:
 		const std::string& in_uid, 
 		const std::shared_ptr< IDagThreadedValue >& in_dag_value,
 		const DagThreaded::DirtyCase in_dirty_case,
-        const std::string& in_display_name,
-        const std::string& in_display_description
+        const std::string& in_display_name
 		)
 	{
-		auto node_variable = std::make_shared<DagThreadedNodeVariable>(in_uid, in_dag_value, in_dirty_case, in_display_name, in_display_description);
+		auto node_variable = std::make_shared<DagThreadedNodeVariable>(in_uid, in_dag_value, in_dirty_case, in_display_name);
         {
             std::unique_lock write_lock(_dag_node_map_mutex);
             DSC_CONDITION_THROW(_dag_node_map.find(in_uid) != _dag_node_map.end(), "CreateNodeVariable replacing existing node");
@@ -50,11 +49,10 @@ public:
 	DagThreadedCollection::NodeID CreateNodeCalculate(
         const std::string& in_uid, 
         const DagThreadedCollection::CalculateFunction& in_function,
-        const std::string& in_display_name,
-        const std::string& in_display_description
+        const std::string& in_display_name
         )
 	{
-		auto node_calculate = std::make_shared<DagThreadedNodeCalculate>(in_uid, in_function, in_display_name, in_display_description);
+		auto node_calculate = std::make_shared<DagThreadedNodeCalculate>(in_uid, in_function, in_display_name);
         {
             std::unique_lock write_lock(_dag_node_map_mutex);
             DSC_CONDITION_THROW(_dag_node_map.find(in_uid) != _dag_node_map.end(), "CreateNodeCalculate replacing existing node");
@@ -175,21 +173,19 @@ DagThreadedCollection::NodeID DagThreadedCollection::CreateNodeVariable(
 	const std::string& in_uid, 
 	const std::shared_ptr< IDagThreadedValue >& in_dag_value,
 	const DagThreaded::DirtyCase in_dirty_case,
-    const std::string& in_display_name,
-    const std::string& in_display_description
+    const std::string& in_display_name
 	)
 {
-	return _implementation->CreateNodeVariable(in_uid, in_dag_value, in_dirty_case, in_display_name, in_display_description);
+	return _implementation->CreateNodeVariable(in_uid, in_dag_value, in_dirty_case, in_display_name);
 }
 
 DagThreadedCollection::NodeID DagThreadedCollection::CreateNodeCalculate(
     const std::string& in_uid, 
     const CalculateFunction& in_function,    
-    const std::string& in_display_name,
-    const std::string& in_display_description
+    const std::string& in_display_name
 )
 {
-	return _implementation->CreateNodeCalculate(in_uid, in_function, in_display_name, in_display_description);
+	return _implementation->CreateNodeCalculate(in_uid, in_function, in_display_name);
 }
 
 void DagThreadedCollection::DestroyNode(const NodeID in_node_id)

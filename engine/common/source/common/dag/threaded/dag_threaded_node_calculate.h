@@ -18,8 +18,7 @@ public:
 	DagThreadedNodeCalculate(
 		const std::string& in_uid,
 		const CalculateFunction& in_calculate_function,
-		const std::string& in_display_name,
-		const std::string& in_display_description
+		const std::string& in_display_name
 		);
 	virtual ~DagThreadedNodeCalculate();
 
@@ -31,7 +30,6 @@ public:
 private:
 	const std::string& GetUid() const override { return _uid; }
 	const std::string& GetDisplayName() const override { return _display_name; }
-	const std::string& GetDisplayDescription() const override { return _display_description; }
 
 	void SetOutput(IDagThreadedNode* const pNode) override;
 	void RemoveOutput(IDagThreadedNode* const pNode) override;
@@ -45,7 +43,6 @@ private:
 private:
 	const std::string _uid;
 	const std::string _display_name;
-	const std::string _display_description;
 	const CalculateFunction _calculate_function;
 
     std::shared_mutex _array_input_stack_mutex;
