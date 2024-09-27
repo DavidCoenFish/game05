@@ -31,6 +31,6 @@ public:
     const bool AdvanceTime();
 
 private:
-	std::unique_ptr< CombatImplementation > m_implementation;
+	std::unique_ptr< CombatImplementation > _implementation;
 };
 }

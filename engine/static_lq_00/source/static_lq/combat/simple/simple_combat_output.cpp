@@ -5,20 +5,33 @@
 #include "common/log/log.h"
 #include "common/locale/locale_system.h"
 #include "common/locale/i_locale_data_provider.h"
+#include "common/locale/locale_string_format_map.h"
 
 namespace
 {
-    constexpr char s_locale_key_combatant_added[] = "combatant_added";
+    constexpr char s_locale_key_combat_started[] = "slqsc_combat_started";
+    constexpr char s_locale_key_combatant_added[] = "slqsc_combatant_added";
+    constexpr char s_locale_key_combatant_removed[] = "slqsc_combatant_removed";
+    constexpr char s_locale_key_set_turn_segment[] = "slqsc_set_turn_segment";
+    constexpr char s_locale_key_combat_ended[] = "slqsc_combat_ended";
+    constexpr char s_locale_key_side_victory[] = "slqsc_side_victory";
 
     class LocaleDataProvider : public ILocaleDataProvider
     {
     private:
+        /// for debug, 
         void Populate(LocaleSystem& in_out_locale_system, const LocaleISO_639_1 in_locale) const override
         {
             in_locale;
 
             const std::vector<LocaleSystem::Data> data = {
-                {s_locale_key_combatant_added, "Combatant {combatant} added to side {side}"}};
+                {s_locale_key_combat_started, "Combat started\n"},
+                {s_locale_key_combatant_added, "Combatant {combatant} added to side {side}\n"},
+                {s_locale_key_combatant_removed, "Combatant {combatant} removed from side {side}\n"},
+                {s_locale_key_set_turn_segment, "Turn {turn} Segment {segment}\n"},
+                {s_locale_key_combat_ended, "Combat ended\n"},
+                {s_locale_key_side_victory, "Victory for side {side}\n"}
+                };
 
             in_out_locale_system.Append(in_locale, data);
         }
@@ -38,26 +51,77 @@ static_lq::SimpleCombatOutput::SimpleCombatOutput(const FCallback& in_log, const
     // nop
 }
 
-void static_lq::SimpleCombatOutput::CombatantAdded(const ICombatant& combatant, const ICombatSide& side)
+void static_lq::SimpleCombatOutput::SetCombatStart()
 {
-    //const std::string message = Log::Printf("CombatantAdded [%d] [%d]\n", combatant.GetId(), side.GetId());
-    //m_log(message);
+    _log(_locale_system->GetValue(s_locale_key_combat_started));
 }
 
-void static_lq::SimpleCombatOutput::CombatantRemoved(const ICombatant& combatant, const ICombatSide& side)
+void static_lq::SimpleCombatOutput::CombatantAdded(ICombatant& combatant, ICombatSide& side)
 {
-    const std::string message = Log::Printf("CombatantRemoved [%d] [%d]\n", combatant.GetId(), side.GetId());
-    _log(message);
+    const LocaleISO_639_1 locale = _locale_system->GetLocale();
+    std::map<std::string, std::string> data_map = {
+        { "combatant", combatant.GetDisplayName(locale) },
+        { "side", side.GetDisplayName(locale) }
+    };
+    LocaleStringFormatMap format_map(data_map);
+
+    _locale_system->GetValueFormatted(
+        s_locale_key_combatant_added,
+        format_map
+        );
+
+    _log(format_map.GetResult());
+}
+
+void static_lq::SimpleCombatOutput::CombatantRemoved(ICombatant& combatant, ICombatSide& side)
+{
+    const LocaleISO_639_1 locale = _locale_system->GetLocale();
+    std::map<std::string, std::string> data_map = {
+        { "combatant", combatant.GetDisplayName(locale) },
+        { "side", side.GetDisplayName(locale) }
+    };
+    LocaleStringFormatMap format_map(data_map);
+
+    _locale_system->GetValueFormatted(
+        s_locale_key_combatant_removed,
+        format_map
+        );
+
+    _log(format_map.GetResult());
 }
 
 void static_lq::SimpleCombatOutput::SetTurnSegment(const int turn, const int segment)
 {
-    const std::string message = Log::Printf("Turn[%d] Segment[%d]\n", turn, segment);
-    _log(message);
+    std::map<std::string, std::string> data_map = {
+        { "turn", std::to_string(turn)},
+        { "segment", std::to_string(segment)}
+    };
+    LocaleStringFormatMap format_map(data_map);
+
+    _locale_system->GetValueFormatted(
+        s_locale_key_set_turn_segment,
+        format_map
+        );
+
+    _log(format_map.GetResult());
 }
 
 void static_lq::SimpleCombatOutput::SetCombatEnd(const std::vector<std::shared_ptr<ICombatSide>>& sides_able_to_continue)
 {
-    const std::string message = Log::Printf("SetCombatEnd sides_able_to_continue.size[%d]\n", sides_able_to_continue.size());
-    _log(message);
+    _log(_locale_system->GetValue(s_locale_key_combat_ended));
+    for (const auto& item : sides_able_to_continue)
+    {
+        const LocaleISO_639_1 locale = _locale_system->GetLocale();
+        std::map<std::string, std::string> data_map = {
+            { "side", item->GetDisplayName(locale) }
+        };
+        LocaleStringFormatMap format_map(data_map);
+
+        _locale_system->GetValueFormatted(
+            s_locale_key_combatant_removed,
+            format_map
+            );
+
+        _log(format_map.GetResult());
+    }
 }

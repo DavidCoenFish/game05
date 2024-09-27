@@ -64,7 +64,6 @@ public:
 	void RemoveNodeLinkStack(const NodeID in_node_id_subject, const NodeID in_node_id_to_remove);
 	void UnlinkNode(const NodeID in_node_id);
 
-    /// here or in helper
     const bool VisitNode(const NodeID in_node_id, IDagThreadedVisitor& in_visitor);
 
 	// Primary thread unless multi threaded mode == true

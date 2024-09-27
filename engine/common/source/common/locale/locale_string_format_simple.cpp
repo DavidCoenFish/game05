@@ -19,12 +19,12 @@ const std::string LocaleStringFormatSimple::GetValue(const LocaleISO_639_1 in_lo
     return std::string();
 }
 
-void LocaleStringFormatSimple::AccumulateResult(const std::string value, const LocaleISO_639_1)
+void LocaleStringFormatSimple::AccumulateResult(const std::string value)
 {
     _result += value;
 }
 
-void LocaleStringFormatSimple::AccumulateToken(const std::string value, const LocaleISO_639_1, const std::string&, const int)
+void LocaleStringFormatSimple::AccumulateToken(const std::string value, const std::string&, const int)
 {
     _result += value;
 }

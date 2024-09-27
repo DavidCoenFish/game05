@@ -18,8 +18,9 @@ public:
     SimpleCombatOutput(const FCallback& in_log, const std::shared_ptr<LocaleSystem>& in_locale_system);
 
 private:
-    virtual void CombatantAdded(const ICombatant& in_combatant, const ICombatSide& in_side) override;
-    virtual void CombatantRemoved(const ICombatant& in_combatant, const ICombatSide& in_side) override;
+    virtual void SetCombatStart() override;
+    virtual void CombatantAdded(ICombatant& in_combatant, ICombatSide& in_side) override;
+    virtual void CombatantRemoved(ICombatant& in_combatant, ICombatSide& in_side) override;
 
     virtual void SetTurnSegment(const int in_turn, const int in_segment) override;
 

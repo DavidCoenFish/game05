@@ -93,6 +93,10 @@
     <ClCompile Include="source\static_lq\combat\simple\simple_combat_output.cpp" />
     <ClCompile Include="source\static_lq\combat\simple\simple_combat_side.cpp" />
     <ClCompile Include="source\static_lq\combat\simple\simple_combat_topology.cpp" />
+    <ClCompile Include="source\static_lq\name\i_name_system_generator.cpp" />
+    <ClCompile Include="source\static_lq\name\name_system.cpp" />
+    <ClCompile Include="source\static_lq\name\name_system_generator_random.cpp" />
+    <ClCompile Include="source\static_lq\name\name_system_generator_random_data.cpp" />
     <ClCompile Include="source\static_lq\random_sequence.cpp" />
     <ClCompile Include="source\static_lq\static_lq_pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -114,6 +118,10 @@
     <ClInclude Include="include\static_lq\combat\simple\simple_combat_side.h" />
     <ClInclude Include="include\static_lq\combat\simple\simple_combat_topology.h" />
     <ClInclude Include="include\static_lq\common.h" />
+    <ClInclude Include="include\static_lq\name\i_name_system_generator.h" />
+    <ClInclude Include="include\static_lq\name\name_system.h" />
+    <ClInclude Include="include\static_lq\name\name_system_generator_random.h" />
+    <ClInclude Include="include\static_lq\name\name_system_generator_random_data.h" />
     <ClInclude Include="include\static_lq\random_sequence.h" />
     <ClInclude Include="source\static_lq\bestiary\monster_data.h" />
     <ClInclude Include="source\static_lq\static_lq_pch.h" />

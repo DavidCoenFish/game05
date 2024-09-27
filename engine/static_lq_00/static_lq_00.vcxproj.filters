@@ -43,6 +43,18 @@
     <ClCompile Include="source\static_lq\combat\i_combatant.cpp">
       <Filter>source\static_lq\combat</Filter>
     </ClCompile>
+    <ClCompile Include="source\static_lq\name\name_system.cpp">
+      <Filter>source\static_lq\name</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\name\name_system_generator_random.cpp">
+      <Filter>source\static_lq\name</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\name\name_system_generator_random_data.cpp">
+      <Filter>source\static_lq\name</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\name\i_name_system_generator.cpp">
+      <Filter>source\static_lq\name</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\static_lq\random_sequence.h">
@@ -96,6 +108,18 @@
     <ClInclude Include="include\static_lq\bestiary\bestiary_enum.h">
       <Filter>include\static_lq\bestiary</Filter>
     </ClInclude>
+    <ClInclude Include="include\static_lq\name\name_system_generator_random.h">
+      <Filter>include\static_lq\name</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\name\name_system_generator_random_data.h">
+      <Filter>include\static_lq\name</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\name\i_name_system_generator.h">
+      <Filter>include\static_lq\name</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\name\name_system.h">
+      <Filter>include\static_lq\name</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="source">
@@ -130,6 +154,12 @@
     </Filter>
     <Filter Include="source\static_lq\bestiary">
       <UniqueIdentifier>{30e08fbf-92f0-4d76-ab78-c20f9ed95b5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\static_lq\name">
+      <UniqueIdentifier>{ec277233-0d8c-48af-b57d-27b059a87f62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\static_lq\name">
+      <UniqueIdentifier>{f66246ae-34b5-4de4-9af1-602516bcde87}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

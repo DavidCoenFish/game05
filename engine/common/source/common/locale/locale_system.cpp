@@ -17,14 +17,15 @@ enum class State
 void DealToken(const LocaleISO_639_1 in_locale, std::string& in_out_token, int& in_out_index,
         ILocaleStringFormat& in_locale_string_format, std::string& in_out_result)
 {
+    // consume the result string if not empty
     if (false == in_out_result.empty())
     {
-        in_locale_string_format.AccumulateResult(in_out_result, in_locale);
+        in_locale_string_format.AccumulateResult(in_out_result);
         in_out_result = {};
     }
 
     const std::string value = in_locale_string_format.GetValue(in_locale, in_out_token, in_out_index);
-    in_locale_string_format.AccumulateToken(value, in_locale, in_out_token, in_out_index);
+    in_locale_string_format.AccumulateToken(value, in_out_token, in_out_index);
     in_out_token = {};
     in_out_index += 1;
     return;
@@ -163,7 +164,7 @@ public:
 
         if (false == result.empty())
         {
-            in_localeStringFormat.AccumulateResult(result, in_locale);
+            in_localeStringFormat.AccumulateResult(result);
         }
 
         return;
@@ -216,6 +217,32 @@ public:
         const std::vector<LocaleSystem::Data>& in_data
         )
     {
+        TDataMap* const data_map = FindCreateDataMap(in_locale);
+        DSC_ASSERT(nullptr != data_map, "invalid case");
+
+        for (const auto iter : in_data)
+        {
+            (*data_map)[iter._key] = iter._value;
+        }
+        return;
+    }
+
+    void AppendCurrent(
+        const std::string& in_key,
+        const std::string& in_value
+        )
+    {
+        TDataMap* const data_map = FindCreateDataMap(_locale);
+        DSC_ASSERT(nullptr != data_map, "invalid case");
+
+        (*data_map)[in_key] = in_value;
+    }
+
+private:
+    TDataMap* const FindCreateDataMap(
+        const LocaleISO_639_1 in_locale
+        )
+    {
         TDataMap* data_map = nullptr;
         auto found = _locale_data_map.find(in_locale);
         if (found == _locale_data_map.end())
@@ -229,16 +256,9 @@ public:
             data_map = found->second.get();
         }
 
-        DSC_ASSERT(nullptr != data_map, "invalid case");
-
-        for (const auto iter : in_data)
-        {
-            (*data_map)[iter._key] = iter._value;
-        }
-        return;
+        return data_map;
     }
 
-private:
     TDataMap* const ReturnDataMap(
         const LocaleISO_639_1 in_locale
         )
@@ -343,3 +363,13 @@ void LocaleSystem::Append(
     _implementation->Append(in_locale, in_data);
     return;
 }
+
+void LocaleSystem::AppendCurrent(
+    const std::string& in_key,
+    const std::string& in_value
+    )
+{
+    _implementation->AppendCurrent(in_key, in_value);
+    return;
+}
+

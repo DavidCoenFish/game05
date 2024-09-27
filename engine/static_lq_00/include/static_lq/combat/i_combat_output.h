@@ -11,8 +11,9 @@ class ICombatOutput
 public:
     virtual ~ICombatOutput(){}
 
-    virtual void CombatantAdded(const ICombatant& combatant, const ICombatSide& side) = 0;
-    virtual void CombatantRemoved(const ICombatant& combatant, const ICombatSide& side) = 0;
+    virtual void SetCombatStart() = 0;
+    virtual void CombatantAdded(ICombatant& combatant, ICombatSide& side) = 0;
+    virtual void CombatantRemoved(ICombatant& combatant, ICombatSide& side) = 0;
 
     virtual void SetTurnSegment(const int turn, const int segment) = 0;
 

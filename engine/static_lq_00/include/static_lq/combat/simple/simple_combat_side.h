@@ -14,7 +14,8 @@ public:
     SimpleCombatSide();
 
 private:
-    virtual const int GetId() const override;
+    const int GetId() const override;
+    const std::string GetDisplayName(const LocaleISO_639_1 in_locale) override;
     void AddCombatant(const std::shared_ptr<ICombatant>& combatant) override;
     void RemoveCombatant(const int combatant_id) override;
     const std::vector<std::shared_ptr<ICombatant>>& GetCombatantList() const override;
@@ -23,6 +24,7 @@ private:
 
 private:
     const int _id;
+    std::vector<std::shared_ptr<ICombatant>> _combatant_array;
 };
 
 }

@@ -52,6 +52,11 @@ public:
         const std::vector<Data>& in_data
         );
 
+    void AppendCurrent(
+        const std::string& in_key,
+        const std::string& in_value
+        );
+
 private:
     std::unique_ptr<LocaleSystemImplementation> _implementation;
 

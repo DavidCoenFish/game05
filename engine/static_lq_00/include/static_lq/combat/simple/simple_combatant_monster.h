@@ -15,10 +15,11 @@ public:
 
 private:
     const int GetId() const override;
+    const std::string GetDisplayName(const LocaleISO_639_1 in_locale) override;
 
 private:
     const int _id;
-
+    //DagThreadedCollection
 };
 
 }

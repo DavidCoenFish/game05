@@ -16,6 +16,8 @@ namespace static_lq
 
         static const uint32_t GenerateSeed();
 
+        /// generate a value
+        const uint32_t Generate();
         /// warning, return [0 ... 1> not inclusive of 1.0, max value approaches 1.0, but may be similare to 0.9999999957
         const float GenerateFloat();
         /// warning, 1 based and inclusive of upper bounds, so in_sides == 4, result is of set [1,2,3,4]

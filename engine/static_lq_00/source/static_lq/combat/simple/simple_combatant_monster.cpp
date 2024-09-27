@@ -10,3 +10,10 @@ const int static_lq::SimpleCombatMonster::GetId() const
 {
     return _id;
 }
+
+const std::string static_lq::SimpleCombatMonster::GetDisplayName(const LocaleISO_639_1 in_locale)
+{
+    in_locale;
+    return "";
+}
+

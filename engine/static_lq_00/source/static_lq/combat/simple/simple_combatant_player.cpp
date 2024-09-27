@@ -10,3 +10,10 @@ const int static_lq::SimpleCombatPlayer::GetId() const
 {
     return _id;
 }
+
+const std::string static_lq::SimpleCombatPlayer::GetDisplayName(const LocaleISO_639_1 in_locale)
+{
+    in_locale;
+    return "";
+}
+

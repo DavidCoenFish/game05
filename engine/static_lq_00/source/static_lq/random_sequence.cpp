@@ -23,6 +23,12 @@ const uint32_t static_lq::RandomSequence::GenerateSeed()
     return random_device();
 }
 
+const uint32_t static_lq::RandomSequence::Generate()
+{
+    Itterate();
+    return _trace;
+}
+
 const float static_lq::RandomSequence::GenerateFloat()
 {
     Itterate();

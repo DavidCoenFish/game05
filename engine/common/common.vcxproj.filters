@@ -370,6 +370,9 @@
     <ClCompile Include="source\common\locale\locale_string_format_simple.cpp">
       <Filter>souce\common\locale</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\locale\locale_string_format_map.cpp">
+      <Filter>souce\common\locale</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\common\common_pch.h">
@@ -763,6 +766,9 @@
       <Filter>include\common\locale</Filter>
     </ClInclude>
     <ClInclude Include="include\common\locale\locale_string_format_lambda.h">
+      <Filter>include\common\locale</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\locale\locale_string_format_map.h">
       <Filter>include\common\locale</Filter>
     </ClInclude>
   </ItemGroup>

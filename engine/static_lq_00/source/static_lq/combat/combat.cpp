@@ -13,12 +13,13 @@ public:
         const std::shared_ptr<static_lq::RandomSequence>& random_sequence,
         const std::shared_ptr<static_lq::ICombatTopology>& combatant_topology
         )
-        : _combat_output(combat_output)
-        , _random_sequence(random_sequence)
-        , _combatant_topology(combatant_topology)
-        {
-            // nop
-        }
+    : _combat_output(combat_output)
+    , _random_sequence(random_sequence)
+    , _combatant_topology(combatant_topology)
+    {
+        // nop
+        _combat_output->SetCombatStart();
+    }
 
     void AddSide(const std::shared_ptr<static_lq::ICombatSide>& side)
     {
@@ -99,7 +100,7 @@ static_lq::Combat::Combat(
     const std::shared_ptr<ICombatTopology>& combatant_topology
     )
 {
-	m_implementation = std::make_unique<CombatImplementation>(combat_output, random_sequence, combatant_topology);
+	_implementation = std::make_unique<CombatImplementation>(combat_output, random_sequence, combatant_topology);
 }
 
 static_lq::Combat::~Combat()
@@ -109,27 +110,27 @@ static_lq::Combat::~Combat()
 
 void static_lq::Combat::AddSide(const std::shared_ptr<ICombatSide>& combat_side)
 {
-    m_implementation->AddSide(combat_side);
+    _implementation->AddSide(combat_side);
 }
 
 void static_lq::Combat::RemoveSide(const int side_id)
 {
-    m_implementation->RemoveSide(side_id);
+    _implementation->RemoveSide(side_id);
 }
 
 void static_lq::Combat::AddCombatant(const std::shared_ptr<ICombatant>& combatant, const int side_id)
 {
-    m_implementation->AddCombatant(combatant, side_id);
+    _implementation->AddCombatant(combatant, side_id);
 }
 
 void static_lq::Combat::RemoveCombatant(const int combatant_id, const int side_id)
 {
-    m_implementation->RemoveCombatant(combatant_id, side_id);
+    _implementation->RemoveCombatant(combatant_id, side_id);
 }
 
 const bool static_lq::Combat::AdvanceTime()
 {
-    return m_implementation->AdvanceTime();
+    return _implementation->AdvanceTime();
 }
 
 

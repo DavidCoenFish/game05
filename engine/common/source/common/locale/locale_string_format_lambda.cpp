@@ -17,12 +17,12 @@ const std::string LocaleStringFormatLambda::GetValue(const LocaleISO_639_1 in_lo
     return std::string();
 }
 
-void LocaleStringFormatLambda::AccumulateResult(const std::string value, const LocaleISO_639_1)
+void LocaleStringFormatLambda::AccumulateResult(const std::string value)
 {
     _result += value;
 }
 
-void LocaleStringFormatLambda::AccumulateToken(const std::string value, const LocaleISO_639_1, const std::string&, const int)
+void LocaleStringFormatLambda::AccumulateToken(const std::string value, const std::string&, const int)
 {
     _result += value;
 }
