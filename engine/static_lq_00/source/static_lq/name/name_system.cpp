@@ -96,6 +96,21 @@ private:
 
 };
 
+const std::string static_lq::NameSystem::GetKeySide()
+{
+    return "builtin_side";
+}
+
+const std::string static_lq::NameSystem::GetKeyGiantAnt()
+{
+    return "builtin_giant_ant";
+}
+
+const std::string static_lq::NameSystem::GetKeyGiantSpider()
+{
+    return "builtin_giant_spider";
+}
+
 void static_lq::NameSystem::RegisterLocaleSystem(const std::shared_ptr<NameSystem>& in_name_system,  LocaleSystem& in_locale_system)
 {
     in_locale_system.RegisterProvider(std::make_shared<LocaleDataProvider>(in_name_system));

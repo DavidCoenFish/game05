@@ -4,11 +4,6 @@
 #include "common/locale/locale_enum.h"
 #include "static_lq/random_sequence.h"
 
-const std::string static_lq::NameSystemGeneratorRandom::GetKeySide()
-{
-    return "side";
-}
-
 std::shared_ptr<static_lq::INameSystemGenerator> static_lq::NameSystemGeneratorRandom::FactoryGeneratorSide()
 {
     std::vector<NameSystemGeneratorData> generator_data;
@@ -67,16 +62,16 @@ std::shared_ptr<static_lq::INameSystemGenerator> static_lq::NameSystemGeneratorR
             "day",
         });
         data.repeat_pool_count = 1;
+        generator_data.push_back(data);
+    }
+    {
+        NameSystemGeneratorData data;
+        data.prepend_first = " ";
         data.post_digit_range = 1000;
         generator_data.push_back(data);
     }
 
     return std::make_shared<NameSystemGeneratorRandom>(generator_data);
-}
-
-const std::string static_lq::NameSystemGeneratorRandom::GetKeyGiantAnt()
-{
-    return "giant_ant";
 }
 
 std::shared_ptr<static_lq::INameSystemGenerator> static_lq::NameSystemGeneratorRandom::FactoryGeneratorGiantAnt()
@@ -90,29 +85,26 @@ std::shared_ptr<static_lq::INameSystemGenerator> static_lq::NameSystemGeneratorR
             "TI",
             "TO",
         });
-        data.repeat_pool_count = 16;
+        data.repeat_pool_count = 8;
         generator_data.push_back(data);
     }
     return std::make_shared<NameSystemGeneratorRandom>(generator_data);
-}
-
-const std::string static_lq::NameSystemGeneratorRandom::GetKeyGiantSpider()
-{
-    return "giant_spider";
 }
 
 std::shared_ptr<static_lq::INameSystemGenerator> static_lq::NameSystemGeneratorRandom::FactoryGeneratorGiantSpider()
 {
     std::vector<NameSystemGeneratorData> generator_data;
     {
-        NameSystemGeneratorData data;
-        data.prepend_first = "x";
-        data.pool[LocaleISO_639_1::Default] = std::vector<std::string>({
-            "I",
-            "l"
-        });
-        data.repeat_pool_count = 32;
-        generator_data.push_back(data);
+        {
+            NameSystemGeneratorData data;
+            data.prepend_first = "x";
+            data.pool[LocaleISO_639_1::Default] = std::vector<std::string>({
+                "I",
+                "l"
+            });
+            data.repeat_pool_count = 32;
+            generator_data.push_back(data);
+        }
     }
     return std::make_shared<NameSystemGeneratorRandom>(generator_data);
 }

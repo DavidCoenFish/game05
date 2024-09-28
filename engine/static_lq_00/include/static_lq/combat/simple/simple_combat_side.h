@@ -2,16 +2,28 @@
 
 #include "static_lq/combat/i_combat_side.h"
 
+class LocaleSystem;
+
 namespace static_lq
 {
-
 class ICombatSide;
 class ICombatant;
+class NameSystem;
 
 class SimpleCombatSide : public ICombatSide
 {
 public:
-    SimpleCombatSide();
+    static std::shared_ptr<ICombatSide> Factory(
+        NameSystem& in_name_system, 
+        LocaleSystem& in_locale_system, 
+        const std::vector<std::shared_ptr<ICombatant>>& in_combatant_array = {}
+        );
+
+    SimpleCombatSide(
+        const int in_id,
+        const std::string& in_display_name, //up to project if this is locale key or raw value
+        const std::vector<std::shared_ptr<ICombatant>>& in_combatant_array = {}
+        );
 
 private:
     const int GetId() const override;
@@ -24,6 +36,7 @@ private:
 
 private:
     const int _id;
+    const std::string _display_name;
     std::vector<std::shared_ptr<ICombatant>> _combatant_array;
 };
 

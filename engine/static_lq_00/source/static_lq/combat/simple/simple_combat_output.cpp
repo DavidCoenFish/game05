@@ -60,8 +60,8 @@ void static_lq::SimpleCombatOutput::CombatantAdded(ICombatant& combatant, IComba
 {
     const LocaleISO_639_1 locale = _locale_system->GetLocale();
     std::map<std::string, std::string> data_map = {
-        { "combatant", combatant.GetDisplayName(locale) },
-        { "side", side.GetDisplayName(locale) }
+        { "combatant", _locale_system->GetValue(combatant.GetDisplayName(locale)) },
+        { "side", _locale_system->GetValue(side.GetDisplayName(locale)) }
     };
     LocaleStringFormatMap format_map(data_map);
 
@@ -77,8 +77,8 @@ void static_lq::SimpleCombatOutput::CombatantRemoved(ICombatant& combatant, ICom
 {
     const LocaleISO_639_1 locale = _locale_system->GetLocale();
     std::map<std::string, std::string> data_map = {
-        { "combatant", combatant.GetDisplayName(locale) },
-        { "side", side.GetDisplayName(locale) }
+        { "combatant", _locale_system->GetValue(combatant.GetDisplayName(locale)) },
+        { "side", _locale_system->GetValue(side.GetDisplayName(locale)) }
     };
     LocaleStringFormatMap format_map(data_map);
 
@@ -113,7 +113,7 @@ void static_lq::SimpleCombatOutput::SetCombatEnd(const std::vector<std::shared_p
     {
         const LocaleISO_639_1 locale = _locale_system->GetLocale();
         std::map<std::string, std::string> data_map = {
-            { "side", item->GetDisplayName(locale) }
+            { "side", _locale_system->GetValue(item->GetDisplayName(locale)) }
         };
         LocaleStringFormatMap format_map(data_map);
 

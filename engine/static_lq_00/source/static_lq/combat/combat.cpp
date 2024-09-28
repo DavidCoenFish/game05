@@ -3,6 +3,7 @@
 #include "static_lq/combat/i_combat_output.h"
 #include "static_lq/combat/i_combat_side.h"
 #include "static_lq/combat/i_combat_topology.h"
+#include "static_lq/combat/i_combatant.h"
 #include "static_lq/random_sequence.h"
 
 class CombatImplementation
@@ -34,6 +35,14 @@ public:
         }
 
         _side_array.push_back(side);
+
+        if (nullptr != _combat_output)
+        {
+            for (const auto& item : side->GetCombatantList())
+            {
+                _combat_output->CombatantAdded(*item, *side);
+            }
+        }
     }
 
     void RemoveSide(const int side_id)
@@ -42,6 +51,15 @@ public:
         const auto found = std::find_if(_side_array.begin(), _side_array.end(), lambda);
         if (found != _side_array.end())
         {
+            if (nullptr != _combat_output)
+            {
+                std::shared_ptr<static_lq::ICombatSide>& side = *found;
+                for (const auto& item : side->GetCombatantList())
+                {
+                    _combat_output->CombatantRemoved(*item, *side);
+                }
+            }
+
             _side_array.erase(found);
         }
     }
@@ -53,6 +71,12 @@ public:
         if (found != _side_array.end())
         {
             (*found)->AddCombatant(combatant);
+
+            if (nullptr != _combat_output)
+            {
+                std::shared_ptr<static_lq::ICombatSide>& side = *found;
+                _combat_output->CombatantAdded(*combatant, *side);
+            }
         }
     }
 
@@ -62,6 +86,19 @@ public:
         const auto found = std::find_if(_side_array.begin(), _side_array.end(), lambda);
         if (found != _side_array.end())
         {
+            if (nullptr != _combat_output)
+            {
+                std::shared_ptr<static_lq::ICombatSide>& side = *found;
+                for (const auto& item : side->GetCombatantList())
+                {
+                    if (item->GetId() == combatant_id)
+                    {
+                        _combat_output->CombatantRemoved(*item, *side);
+                        break;
+                    }
+                }
+            }
+
             (*found)->RemoveCombatant(combatant_id);
         }
     }

@@ -11,6 +11,10 @@ class INameSystemGenerator;
 class NameSystem
 {
 public:
+    static const std::string GetKeySide();
+    static const std::string GetKeyGiantAnt();
+    static const std::string GetKeyGiantSpider();
+
     // could be static, but need a ref to the list of generated names, which may be under the NameSystem
     static void RegisterLocaleSystem(const std::shared_ptr<NameSystem>& in_name_system,  LocaleSystem& in_locale_system);
 

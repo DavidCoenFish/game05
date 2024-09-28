@@ -4,14 +4,13 @@
 
 namespace static_lq
 {
-
-class ICombatSide;
-class ICombatant;
-
 class SimpleCombatMonster : public ICombatant
 {
 public:
-    SimpleCombatMonster();
+    SimpleCombatMonster(
+        const int in_id,
+        const std::string& in_display_name
+        );
 
 private:
     const int GetId() const override;
@@ -19,6 +18,8 @@ private:
 
 private:
     const int _id;
+    const std::string _display_name;
+
     //DagThreadedCollection
 };
 

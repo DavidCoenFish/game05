@@ -11,11 +11,8 @@ class NameSystemGeneratorRandom : public INameSystemGenerator
 {
 public:
     // this was for unit test, normal use wants to load generators from data? or move statics to another file?
-    static const std::string GetKeySide();
     static std::shared_ptr<INameSystemGenerator> FactoryGeneratorSide();
-    static const std::string GetKeyGiantAnt();
     static std::shared_ptr<INameSystemGenerator> FactoryGeneratorGiantAnt();
-    static const std::string GetKeyGiantSpider();
     static std::shared_ptr<INameSystemGenerator> FactoryGeneratorGiantSpider();
 
     NameSystemGeneratorRandom(const std::vector<NameSystemGeneratorData>& in_generator_data);
