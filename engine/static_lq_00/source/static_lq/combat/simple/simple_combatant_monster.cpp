@@ -7,10 +7,12 @@
 
 static_lq::SimpleCombatMonster::SimpleCombatMonster(
     const int in_id,
-    const std::string& in_display_name
+    const std::string& in_display_name,
+    const std::shared_ptr<DagThreadedCollection>& in_dag_collection 
     )
 : _id(in_id)
 , _display_name(in_display_name)
+, _dag_collection(in_dag_collection)
 {
 }
 

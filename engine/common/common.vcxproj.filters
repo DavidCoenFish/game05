@@ -738,9 +738,6 @@
     <ClInclude Include="source\common\dag\threaded\dag_threaded_node_variable.h">
       <Filter>souce\common\dag\threaded</Filter>
     </ClInclude>
-    <ClInclude Include="source\common\dag\threaded\dag_threaded_value.h">
-      <Filter>souce\common\dag\threaded</Filter>
-    </ClInclude>
     <ClInclude Include="source\common\dag\threaded\i_dag_threaded_node.h">
       <Filter>souce\common\dag\threaded</Filter>
     </ClInclude>
@@ -770,6 +767,9 @@
     </ClInclude>
     <ClInclude Include="include\common\locale\locale_string_format_map.h">
       <Filter>include\common\locale</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\dag\threaded\dag_threaded_value.h">
+      <Filter>include\common\dag\threaded</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

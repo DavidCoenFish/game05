@@ -2,6 +2,8 @@
 
 #include "static_lq/combat/i_combatant.h"
 
+class DagThreadedCollection;
+
 namespace static_lq
 {
 class SimpleCombatMonster : public ICombatant
@@ -9,7 +11,8 @@ class SimpleCombatMonster : public ICombatant
 public:
     SimpleCombatMonster(
         const int in_id,
-        const std::string& in_display_name
+        const std::string& in_display_name,
+        const std::shared_ptr<DagThreadedCollection>& in_dag_collection 
         );
 
 private:
@@ -19,6 +22,7 @@ private:
 private:
     const int _id;
     const std::string _display_name;
+    std::shared_ptr<DagThreadedCollection> _dag_collection;
 
     //DagThreadedCollection
 };

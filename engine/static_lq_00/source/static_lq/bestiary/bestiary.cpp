@@ -5,6 +5,7 @@
 #include "common/dag/threaded/dag_threaded_helper.h"
 #include "common/locale/locale_system.h"
 #include "common/locale/locale_enum.h"
+#include "common/log/log.h"
 #include "static_lq/bestiary/monster_data.h"
 #include "static_lq/bestiary/special_characteristic_data.h"
 #include "static_lq/combat/i_combatant.h"
@@ -23,15 +24,59 @@ namespace
     constexpr char s_locale_key_species_above_average[] = "slqsc_bestiary_species_above_average";
     constexpr char s_locale_key_species_exceptional[] = "slqsc_bestiary_species_exceptional";
 
-    void MakeHealthDag(DagThreadedCollection& in_dag_collection, const int32_t in_id, const static_lq::MonsterVariationData& in_monster_variation_data)
+    void DagAddDamageTolerance(DagThreadedCollection& in_dag_collection, const int32_t in_id, const static_lq::MonsterVariationData& in_monster_variation_data)
     {
-        
-        auto damage_tolerance_constant = DagThreadedHelper::CreateDagValue<int32_t>(in_monster_variation_data._damage_tolerance._constant);
-        auto damage_dice_count = DagThreadedHelper::CreateDagValue<int32_t>(in_monster_variation_data._damage_tolerance._dice_count);
-        auto damage_dice_base = DagThreadedHelper::CreateDagValue<int32_t>(in_monster_variation_data._damage_tolerance._dice_base);
-        // we could make a calculate node which used the Roll data, so if that was changed, we get a new total?
-        //auto damage_tolerance = in_monster_variation_data._damage_tolerance._constant + 
+        auto value_damage_tolerance_seed = DagThreadedHelper::CreateDagValue<int32_t>(in_id);
+        auto value_damage_tolerance_constant = DagThreadedHelper::CreateDagValue<int32_t>(in_monster_variation_data._damage_tolerance._constant);
+        auto value_damage_dice_count = DagThreadedHelper::CreateDagValue<int32_t>(in_monster_variation_data._damage_tolerance._dice_count);
+        auto value_damage_dice_base = DagThreadedHelper::CreateDagValue<int32_t>(in_monster_variation_data._damage_tolerance._dice_base);
+        // make a calculate node which used the Roll data, so if that was changed, we get a new total?
 
+        auto damage_tolerance_seed = in_dag_collection.CreateNodeVariable(
+            in_dag_collection.MakeUid(), 
+            DagThreadedHelper::CreateDagValue<int32_t>(in_id)
+            );
+        auto damage_tolerance_constant = in_dag_collection.CreateNodeVariable(
+            in_dag_collection.MakeUid(), 
+            DagThreadedHelper::CreateDagValue<int32_t>(in_monster_variation_data._damage_tolerance._constant)
+            );
+        auto damage_tolerance_dice_count = in_dag_collection.CreateNodeVariable(
+            in_dag_collection.MakeUid(), 
+            DagThreadedHelper::CreateDagValue<int32_t>(in_monster_variation_data._damage_tolerance._dice_count)
+            );
+        auto damage_tolerance_dice_base = in_dag_collection.CreateNodeVariable(
+            in_dag_collection.MakeUid(), 
+            DagThreadedHelper::CreateDagValue<int32_t>(in_monster_variation_data._damage_tolerance._dice_base)
+            );
+
+        auto damage_tolerance = in_dag_collection.CreateNodeCalculate(
+            "damage_tolerance_raw",
+            [](
+            	const std::vector< std::shared_ptr< IDagThreadedValue > >&, 
+        		const std::vector< std::shared_ptr< IDagThreadedValue > >& in_array_indexed
+            ) -> std::shared_ptr< IDagThreadedValue >
+            {
+                const int32_t id = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[0]);
+                const int32_t constant = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[1]);
+                const int32_t dice_count = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[2]);
+                const int32_t dice_base = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[3]);
+                int32_t result = constant;
+                static_lq::RandomSequence random_sequence(id);
+                for (int index = 0; index < dice_count; ++index)
+                {
+                    result += random_sequence.GenerateDice(dice_base);
+                }
+
+                return DagThreadedHelper::CreateDagValue<int32_t>(result);
+            },
+            "damage_tolerance",
+            "{self} = {index.1} + {index.2}d{index.3}"
+            );
+
+        in_dag_collection.AddNodeLinkIndexed(damage_tolerance, damage_tolerance_seed, 0);
+        in_dag_collection.AddNodeLinkIndexed(damage_tolerance, damage_tolerance_constant, 1);
+        in_dag_collection.AddNodeLinkIndexed(damage_tolerance, damage_tolerance_dice_count, 2);
+        in_dag_collection.AddNodeLinkIndexed(damage_tolerance, damage_tolerance_dice_base, 3);
     }
 
     std::shared_ptr<DagThreadedCollection> MakeMonsterDag(const int32_t in_id, const static_lq::MonsterData& in_monster_data, const int32_t in_variation_index)
@@ -39,7 +84,12 @@ namespace
         //static_lq::RandomSequence random_sequence(in_id);
         std::shared_ptr<DagThreadedCollection> result = DagThreadedCollection::Factory();
 
-        MakeHealthDag(*result, in_id, in_monster_data._array_variation[in_variation_index]);
+        DagAddDamageTolerance(*result, in_id, in_monster_data._array_variation[in_variation_index]);
+
+        //const int32_t hp = DagThreadedHelper::GetValue();
+        auto damage_tollerace = result->FindNode("damage_tolerance_raw");
+        const int32_t hp = DagThreadedHelper::GetValue<int32_t>(result->GetDagValue(damage_tollerace));
+        LOG_CONSOLE("MakeMonsterDag hp:[%d]", hp);
 
         return result;
     }
@@ -190,7 +240,8 @@ std::shared_ptr<static_lq::ICombatant> static_lq::Bestiary::FactoryDefaultGiantA
     const int32_t in_variation_index
     )
 {
+    in_variation_index;
     const int id = ICombatant::MakeNewId();
     const std::string name_key = in_name_system.GenerateName(static_lq::NameSystem::GetKeyGiantSpider(), id, in_locale_system);
-    return std::make_shared<SimpleCombatMonster>(id, name_key);
+    return std::make_shared<SimpleCombatMonster>(id, name_key, nullptr);
 }

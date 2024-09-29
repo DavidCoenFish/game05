@@ -18,6 +18,18 @@ public:
 		//nop
 	}
 
+    const std::string MakeUid()
+    {
+        std::string result;
+        do 
+        {
+            const int trace = _auto_generate_uid.fetch_add(1);
+            result = std::string("_auto_uid_") + std::to_string(trace);
+        }
+        while(_dag_node_map.find(result) != _dag_node_map.end());
+        return result;
+    }
+
 	DagThreadedCollection::NodeID FindNode(const std::string& in_name)
 	{
         std::shared_lock read_lock(_dag_node_map_mutex);
@@ -146,6 +158,8 @@ private:
     std::shared_mutex _dag_node_map_mutex;
 	std::map< std::string, std::shared_ptr< IDagThreadedNode > > _dag_node_map;
 
+    std::atomic<int> _auto_generate_uid = 0;
+
 };
 
 std::shared_ptr<DagThreadedCollection> DagThreadedCollection::Factory()
@@ -163,6 +177,11 @@ DagThreadedCollection::~DagThreadedCollection()
 {
     _implementation.reset();
     return;
+}
+
+const std::string DagThreadedCollection::MakeUid()
+{
+	return _implementation->MakeUid();
 }
 
 DagThreadedCollection::NodeID DagThreadedCollection::FindNode(const std::string& in_name)
