@@ -83,7 +83,11 @@
   <ItemGroup>
     <ClCompile Include="source\static_lq\bestiary\bestiary.cpp" />
     <ClCompile Include="source\static_lq\bestiary\bestiary_enum.cpp" />
+    <ClCompile Include="source\static_lq\bestiary\monster_attack_data.cpp" />
+    <ClCompile Include="source\static_lq\bestiary\monster_attribute_data.cpp" />
     <ClCompile Include="source\static_lq\bestiary\monster_data.cpp" />
+    <ClCompile Include="source\static_lq\bestiary\monster_variation_data.cpp" />
+    <ClCompile Include="source\static_lq\bestiary\special_characteristic_data.cpp" />
     <ClCompile Include="source\static_lq\combat\combat.cpp" />
     <ClCompile Include="source\static_lq\combat\combat_enum.cpp" />
     <ClCompile Include="source\static_lq\combat\i_combatant.cpp" />
@@ -98,6 +102,7 @@
     <ClCompile Include="source\static_lq\name\name_system_generator_random.cpp" />
     <ClCompile Include="source\static_lq\name\name_system_generator_random_data.cpp" />
     <ClCompile Include="source\static_lq\random_sequence.cpp" />
+    <ClCompile Include="source\static_lq\roll_data.cpp" />
     <ClCompile Include="source\static_lq\static_lq_pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -123,7 +128,12 @@
     <ClInclude Include="include\static_lq\name\name_system_generator_random.h" />
     <ClInclude Include="include\static_lq\name\name_system_generator_random_data.h" />
     <ClInclude Include="include\static_lq\random_sequence.h" />
+    <ClInclude Include="include\static_lq\roll_data.h" />
+    <ClInclude Include="source\static_lq\bestiary\monster_attack_data.h" />
+    <ClInclude Include="source\static_lq\bestiary\monster_attribute_data.h" />
     <ClInclude Include="source\static_lq\bestiary\monster_data.h" />
+    <ClInclude Include="source\static_lq\bestiary\monster_variation_data.h" />
+    <ClInclude Include="source\static_lq\bestiary\special_characteristic_data.h" />
     <ClInclude Include="source\static_lq\static_lq_pch.h" />
   </ItemGroup>
   <ItemGroup>

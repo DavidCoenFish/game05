@@ -1,42 +1,69 @@
 #pragma once
 
 #include "static_lq/bestiary/bestiary_enum.h"
+#include "static_lq/bestiary/monster_attribute_data.h"
+#include "static_lq/bestiary/monster_variation_data.h"
+#include "static_lq/bestiary/special_characteristic_data.h"
 
 namespace static_lq
 {
-class MonsterData
+struct MonsterData
 {
 public:
-    MonsterData();
-
+    // locale key
 	std::string _species = {};
-	std::string _inheritance_parent = {};
 
     bestiary_enum::Habitat _habitat = bestiary_enum::Habitat::TDefault;
-    std::vector<bestiary_enum::Lifestyle> _lifestyle = {};
-    std::vector<bestiary_enum::WealthType> _wealthType = {};
+    bestiary_enum::Lifestyle _lifestyle = bestiary_enum::Lifestyle::TDefault;
+    bestiary_enum::WealthType  _wealth_type = bestiary_enum::WealthType::TDefault;
     bestiary_enum::Alignment _alignment = bestiary_enum::Alignment::TDefault;
     bestiary_enum::Cunning _cunning = bestiary_enum::Cunning::TDefault;
 	int _speed = 0;
     bestiary_enum::Strength _strength = bestiary_enum::Strength::TDefault;
     bestiary_enum::Size _size = bestiary_enum::Size::TDefault;
-	//_specialCharacteristicArray : undefined,
-	int _recoveryTime = 0;
+    std::vector<SpecialCharacteristicData>_array_special_characteristic;
+	int _recovery_time = 0;
 	int _absorption = 0;
-	int _surpriseAdjust = 0;
-    //std::vector<MonsterAttackData> _arrayAttack;
+	int _surprise_adjust = 0;
+    MonsterAttributeData _attribute_data;
+    std::vector<MonsterVariationData> _array_variation;
+
+};
+}
+/*
+    std::vector<bestiary_enum::Habitat>_habitat = {};
+    std::vector<bestiary_enum::Lifestyle> _lifestyle = {};
+    std::vector<bestiary_enum::WealthType> _wealth_type = {};
+    bestiary_enum::Alignment _alignment = bestiary_enum::Alignment::TDefault;
+    bestiary_enum::Cunning _cunning = bestiary_enum::Cunning::TDefault;
+	int _speed = 0;
+    bestiary_enum::Strength _strength = bestiary_enum::Strength::TDefault;
+    bestiary_enum::Size _size = bestiary_enum::Size::TDefault;
+    //std::vector<bestiary_enum::SpecialCharacteristics> _special_characteristic = {};
+    //std::vector<SpecialCharacteristicData>_array_special_characteristic;
+	int _recovery_time = 0;
+	int _absorption = 0;
+	int _surprise_adjust = 0;
+    //std::vector<MonsterAttackData> _array_attack;
 	//_arrayAttackName : [ "mandibles" ],
 
-	int _physicalStrength = 0;
-	int _stamina = 0;
-	int _agility = 0;
-	int _manualDexterity = 0;
-	int _perception = 0;
-	int _willpower = 0;
-	int _faith = 0;
+	//int _physical_strength = 0;
+	//int _stamina = 0;
+	//int _agility = 0;
+	//int _manual_dexterity = 0;
+	//int _perception = 0;
+	//int _willpower = 0;
+	//int _faith = 0;
 
-	bool _effectedBySeverityDamage = false;
-	bool _effectedByFaithDamage = false;
+    int _combat_level = 0;
+
+    int _attack_bonus = 0;
+    int _defence = 0;
+    RollData _damage_tolerance;
+    int _experence_points = 0;
+
+	bool _effected_by_severity_damage = false;
+	bool _effected_by_faith_damage = false;
 };
 
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
@@ -46,27 +73,28 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
 
 	_habitat,
 	_lifestyle,
-	_wealthType,
+	_wealth_type,
 	_alignment,
 	_cunning,
 	_speed,
 	_strength,
 	_size,
-	//_specialCharacteristicArray,
-	_recoveryTime,
+	_special_characteristic,
+	_recovery_time,
 	_absorption,
 	_surpriseAdjust,
 	//_arrayAttackName,
 
-	_physicalStrength,
+	_physical_strength,
 	_stamina,
 	_agility,
-	_manualDexterity,
+	_manual_dexterity,
 	_perception,
 	_willpower,
 	_faith,
 
-	_effectedBySeverityDamage,
-	_effectedByFaithDamage
+	_effected_by_severity_damage,
+	_effected_by_faith_damage
     );
 }
+*/

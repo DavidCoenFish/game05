@@ -7,10 +7,12 @@
 DagThreadedNodeCalculate::DagThreadedNodeCalculate(
 	const std::string& in_uid,
 	const CalculateFunction& in_calculate_function,
-	const std::string& in_display_name
+	const std::string& in_display_name,
+    const std::string& in_tooltip_body
     )
 	: _uid(in_uid)
     , _display_name(in_display_name)
+    , _tooltip_body(in_tooltip_body)
 	, _calculate_function(in_calculate_function)
 {
 	//nop
@@ -178,6 +180,7 @@ const bool DagThreadedNodeCalculate::Visit(IDagThreadedVisitor& visitor)
             GetValue(),
             _uid,
             _display_name,
+            _tooltip_body,
             _array_input_index,
             _array_input_index,
             _array_output

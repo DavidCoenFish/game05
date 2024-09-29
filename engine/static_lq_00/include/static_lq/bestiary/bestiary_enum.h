@@ -4,14 +4,25 @@ namespace static_lq
 {
 namespace bestiary_enum
 {
+//enum class MonsterAttribute
+//{
+//    T
+//}
+
 enum class Habitat
 {
     TDefault = 0,
-    TEverywhere,
+    TForest = 1 << 0,
+    TSubterranean = 1 << 1,
+    TDesert = 1 << 2,
 
+    TEverywhere = -1
 };
 NLOHMANN_JSON_SERIALIZE_ENUM( Habitat, {
     {Habitat::TDefault, nullptr},
+    {Habitat::TEverywhere, "everywhere"},
+    {Habitat::TForest, "forest"},
+    {Habitat::TSubterranean, "subterranean"},
     {Habitat::TEverywhere, "everywhere"},
 });
 
@@ -20,13 +31,15 @@ enum class Lifestyle
     TDefault = 0,
     TComunal = 1 << 0,
     TInstinctive = 1 << 1,
-    TInsect = 1 << 2
+    TInsect = 1 << 2,
+    TArachnid = 1 << 3,
 };
 NLOHMANN_JSON_SERIALIZE_ENUM( Lifestyle, {
     {Lifestyle::TDefault, nullptr},
     {Lifestyle::TComunal, "comunal"},
     {Lifestyle::TInstinctive, "instinctive"},
     {Lifestyle::TInsect, "insect"},
+    {Lifestyle::TArachnid, "arachnid"},
 });
 
 //_wealthType : LegendaryQuest.Bestiary.Enum.s_wealth.TMineral,
@@ -35,10 +48,12 @@ enum class WealthType
 {
     TDefault = 0,
     TMineral = 1 << 0,
+    TIncidental = 1 << 1
 };
 NLOHMANN_JSON_SERIALIZE_ENUM( WealthType, {
     {WealthType::TDefault, nullptr},
     {WealthType::TMineral, "mineral"},
+    {WealthType::TIncidental, "incidental"},
 });
 
 //_alignment :  LegendaryQuest.Bestiary.Enum.s_alignment.TNeutral,
@@ -68,10 +83,12 @@ NLOHMANN_JSON_SERIALIZE_ENUM( Cunning, {
 enum class Strength
 {
     TDefault = 0,
+    TBelowAverage,
     THigh,
 };
 NLOHMANN_JSON_SERIALIZE_ENUM( Strength, {
     {Strength::TDefault, nullptr},
+    {Strength::TBelowAverage, "below_average"},
     {Strength::THigh, "high"},
 });
 
@@ -86,8 +103,6 @@ NLOHMANN_JSON_SERIALIZE_ENUM( Size, {
     {Size::TDefault, nullptr},
     {Size::TMedium, "medium"},
 });
-
-
 
 }
 }

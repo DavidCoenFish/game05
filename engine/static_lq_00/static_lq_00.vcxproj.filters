@@ -55,6 +55,21 @@
     <ClCompile Include="source\static_lq\name\i_name_system_generator.cpp">
       <Filter>source\static_lq\name</Filter>
     </ClCompile>
+    <ClCompile Include="source\static_lq\roll_data.cpp">
+      <Filter>source\static_lq</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\bestiary\special_characteristic_data.cpp">
+      <Filter>source\static_lq\bestiary</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\bestiary\monster_variation_data.cpp">
+      <Filter>source\static_lq\bestiary</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\bestiary\monster_attribute_data.cpp">
+      <Filter>source\static_lq\bestiary</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\bestiary\monster_attack_data.cpp">
+      <Filter>source\static_lq\bestiary</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\static_lq\random_sequence.h">
@@ -119,6 +134,21 @@
     </ClInclude>
     <ClInclude Include="include\static_lq\name\name_system.h">
       <Filter>include\static_lq\name</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\roll_data.h">
+      <Filter>include\static_lq</Filter>
+    </ClInclude>
+    <ClInclude Include="source\static_lq\bestiary\special_characteristic_data.h">
+      <Filter>source\static_lq\bestiary</Filter>
+    </ClInclude>
+    <ClInclude Include="source\static_lq\bestiary\monster_variation_data.h">
+      <Filter>source\static_lq\bestiary</Filter>
+    </ClInclude>
+    <ClInclude Include="source\static_lq\bestiary\monster_attack_data.h">
+      <Filter>source\static_lq\bestiary</Filter>
+    </ClInclude>
+    <ClInclude Include="source\static_lq\bestiary\monster_attribute_data.h">
+      <Filter>source\static_lq\bestiary</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -14,6 +14,7 @@ public:
         const std::shared_ptr<IDagThreadedValue>& in_value,
 	    const std::string& in_uid,
 	    const std::string& in_display_name,
+	    const std::string& in_tooltip_body,
         const std::vector<NodeID>& in_array_input_stack,
         const std::vector<NodeID>& in_array_input_index,
         const std::vector<NodeID>& in_array_output
