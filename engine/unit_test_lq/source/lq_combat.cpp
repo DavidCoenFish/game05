@@ -52,7 +52,6 @@ namespace LqCombat
                 combatant_array.push_back(static_lq::Bestiary::FactoryDefaultGiantAnt(*name_system, *locale_system));
                 combatant_array.push_back(static_lq::Bestiary::FactoryDefaultGiantAnt(*name_system, *locale_system));
                 combatant_array.push_back(static_lq::Bestiary::FactoryDefaultGiantAnt(*name_system, *locale_system));
-                combatant_array.push_back(static_lq::Bestiary::FactoryDefaultGiantAnt(*name_system, *locale_system));
                 std::shared_ptr<static_lq::ICombatSide> side = static_lq::SimpleCombatSide::Factory(*name_system, *locale_system, combatant_array);
                 combat.AddSide(side);
             }

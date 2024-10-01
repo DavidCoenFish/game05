@@ -61,10 +61,14 @@ enum class Alignment
 {
     TDefault = 0,
     TNeutral,
+    TGood,
+    TEvil,
 };
 NLOHMANN_JSON_SERIALIZE_ENUM( Alignment, {
     {Alignment::TDefault, nullptr},
     {Alignment::TNeutral, "neutral"},
+    {Alignment::TGood, "good"},
+    {Alignment::TEvil, "evil"},
 });
 
 //_cunning :  LegendaryQuest.Bestiary.Enum.s_cunning.TLow,
