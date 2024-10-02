@@ -70,6 +70,12 @@
     <ClCompile Include="source\static_lq\bestiary\monster_attack_data.cpp">
       <Filter>source\static_lq\bestiary</Filter>
     </ClCompile>
+    <ClCompile Include="source\static_lq\combat\i_combat_action.cpp">
+      <Filter>source\static_lq\combat</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\action\combat_action_mellee_attack.cpp">
+      <Filter>source\static_lq\combat\action</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\static_lq\random_sequence.h">
@@ -150,6 +156,12 @@
     <ClInclude Include="source\static_lq\bestiary\monster_attribute_data.h">
       <Filter>source\static_lq\bestiary</Filter>
     </ClInclude>
+    <ClInclude Include="include\static_lq\combat\i_combat_action.h">
+      <Filter>include\static_lq\combat</Filter>
+    </ClInclude>
+    <ClInclude Include="source\static_lq\combat\action\combat_action_mellee_attack.h">
+      <Filter>source\static_lq\combat\action</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="source">
@@ -190,6 +202,9 @@
     </Filter>
     <Filter Include="source\static_lq\name">
       <UniqueIdentifier>{f66246ae-34b5-4de4-9af1-602516bcde87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\static_lq\combat\action">
+      <UniqueIdentifier>{8553f0a3-8394-430e-b64a-445420c58ada}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

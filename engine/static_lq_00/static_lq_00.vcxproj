@@ -88,9 +88,11 @@
     <ClCompile Include="source\static_lq\bestiary\monster_data.cpp" />
     <ClCompile Include="source\static_lq\bestiary\monster_variation_data.cpp" />
     <ClCompile Include="source\static_lq\bestiary\special_characteristic_data.cpp" />
+    <ClCompile Include="source\static_lq\combat\action\combat_action_mellee_attack.cpp" />
     <ClCompile Include="source\static_lq\combat\combat.cpp" />
     <ClCompile Include="source\static_lq\combat\combat_enum.cpp" />
     <ClCompile Include="source\static_lq\combat\i_combatant.cpp" />
+    <ClCompile Include="source\static_lq\combat\i_combat_action.cpp" />
     <ClCompile Include="source\static_lq\combat\i_combat_side.cpp" />
     <ClCompile Include="source\static_lq\combat\simple\simple_combatant_monster.cpp" />
     <ClCompile Include="source\static_lq\combat\simple\simple_combatant_player.cpp" />
@@ -114,6 +116,7 @@
     <ClInclude Include="include\static_lq\combat\combat.h" />
     <ClInclude Include="include\static_lq\combat\combat_enum.h" />
     <ClInclude Include="include\static_lq\combat\i_combatant.h" />
+    <ClInclude Include="include\static_lq\combat\i_combat_action.h" />
     <ClInclude Include="include\static_lq\combat\i_combat_output.h" />
     <ClInclude Include="include\static_lq\combat\i_combat_side.h" />
     <ClInclude Include="include\static_lq\combat\i_combat_topology.h" />
@@ -134,6 +137,7 @@
     <ClInclude Include="source\static_lq\bestiary\monster_data.h" />
     <ClInclude Include="source\static_lq\bestiary\monster_variation_data.h" />
     <ClInclude Include="source\static_lq\bestiary\special_characteristic_data.h" />
+    <ClInclude Include="source\static_lq\combat\action\combat_action_mellee_attack.h" />
     <ClInclude Include="source\static_lq\static_lq_pch.h" />
   </ItemGroup>
   <ItemGroup>
