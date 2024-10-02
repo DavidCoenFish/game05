@@ -101,10 +101,12 @@ NLOHMANN_JSON_SERIALIZE_ENUM( Strength, {
 enum class Size
 {
     TDefault = 0,
+    TSmall,
     TMedium,
 };
 NLOHMANN_JSON_SERIALIZE_ENUM( Size, {
     {Size::TDefault, nullptr},
+    {Size::TSmall, "small"},
     {Size::TMedium, "medium"},
 });
 

@@ -17,12 +17,19 @@ namespace
 {
     constexpr char s_locale_key_species_name[] = "slqsc_bestiary_species_name";
     constexpr char s_locale_key_species_name_variation[] = "slqsc_bestiary_species_name_variation";
+    constexpr char s_locale_key_species_giant_ant[] = "slqsc_bestiary_species_giant_ant";
     constexpr char s_locale_key_species_giant_spider[] = "slqsc_bestiary_species_giant_spider";
+    constexpr char s_locale_key_attack_mandibles[] = "slqsc_bestiary_attack_mandibles";
     constexpr char s_locale_key_attack_bite[] = "slqsc_bestiary_attack_bite";
-    constexpr char s_locale_key_species_below_average[] = "slqsc_bestiary_species_below_average";
-    constexpr char s_locale_key_species_average[] = "slqsc_bestiary_species_average";
-    constexpr char s_locale_key_species_above_average[] = "slqsc_bestiary_species_above_average";
-    constexpr char s_locale_key_species_exceptional[] = "slqsc_bestiary_species_exceptional";
+    constexpr char s_locale_key_example_below_average[] = "slqsc_bestiary_example_below_average";
+    constexpr char s_locale_key_example_average[] = "slqsc_bestiary_example_average";
+    constexpr char s_locale_key_example_above_average[] = "slqsc_bestiary_example_above_average";
+    constexpr char s_locale_key_example_exceptional[] = "slqsc_bestiary_example_exceptional";
+    constexpr char s_locale_key_example_worker_ant[] = "slqsc_bestiary_example_worker_ant";
+    constexpr char s_locale_key_example_warrior_ant[] = "slqsc_bestiary_example_warrior_ant";
+    constexpr char s_locale_key_example_dew_pot_worker_ant[] = "slqsc_bestiary_example_dew_pot_worker_ant";
+    constexpr char s_locale_key_example_queen_ant[] = "slqsc_bestiary_example_queen_ant";
+
     constexpr char s_locale_key_damage_tolerance[] = "slqsc_damage_tolerance";
     constexpr char s_locale_key_damage_tolerance_tooltip[] = "slqsc_damage_tolerance_tooltip";
     constexpr char s_locale_key_damage_sum[] = "slqsc_damage_sum";
@@ -202,11 +209,19 @@ void static_lq::Bestiary::RegisterLocaleSystem(LocaleSystem& in_out_locale_syste
     const std::vector<LocaleSystem::Data> data = {
         {s_locale_key_species_name, "{species}"},
         {s_locale_key_species_name_variation, "{species} ({variation})"},
+        {s_locale_key_species_giant_ant, "Giant Ant"},
         {s_locale_key_species_giant_spider, "Giant Spider"},
-        {s_locale_key_species_below_average, "Below Average"},
-        {s_locale_key_species_average, "Average"},
-        {s_locale_key_species_above_average, "Above Average"},
-        {s_locale_key_species_exceptional, "Exceptional"},
+        {s_locale_key_example_below_average, "Below Average"},
+        {s_locale_key_example_average, "Average"},
+        {s_locale_key_example_above_average, "Above Average"},
+        {s_locale_key_example_exceptional, "Exceptional"},
+        {s_locale_key_example_worker_ant, "Worker Ant"},
+        {s_locale_key_example_warrior_ant, "Warrior Ant"},
+        {s_locale_key_example_dew_pot_worker_ant, "Dew-Pot Worker Ant"},
+        {s_locale_key_example_queen_ant, "Queen Ant"},
+
+        {s_locale_key_attack_mandibles, "mandibles"},
+        {s_locale_key_attack_bite, "bite"},
 
         {s_locale_key_damage_tolerance, "Damage tolerance"},
         {s_locale_key_damage_tolerance_tooltip, "{self} = {index.1} + {index.2}d{index.3}"},
@@ -267,7 +282,7 @@ std::shared_ptr<static_lq::ICombatant> static_lq::Bestiary::FactoryDefaultGiantS
         },
         std::vector<MonsterVariationData>({
             MonsterVariationData({
-                s_locale_key_species_below_average,
+                s_locale_key_example_below_average,
                 1,
                 3,
                 22,
@@ -283,7 +298,7 @@ std::shared_ptr<static_lq::ICombatant> static_lq::Bestiary::FactoryDefaultGiantS
                 })
             }),
             MonsterVariationData({
-                s_locale_key_species_average,
+                s_locale_key_example_average,
                 3,
                 5,
                 24,
@@ -299,7 +314,7 @@ std::shared_ptr<static_lq::ICombatant> static_lq::Bestiary::FactoryDefaultGiantS
                 })
             }),
             MonsterVariationData({
-                s_locale_key_species_above_average,
+                s_locale_key_example_above_average,
                 5,
                 7,
                 26,
@@ -315,7 +330,7 @@ std::shared_ptr<static_lq::ICombatant> static_lq::Bestiary::FactoryDefaultGiantS
                 })
             }),
             MonsterVariationData({
-                s_locale_key_species_above_average,
+                s_locale_key_example_above_average,
                 7,
                 9,
                 28,
@@ -341,13 +356,115 @@ std::shared_ptr<static_lq::ICombatant> static_lq::Bestiary::FactoryDefaultGiantS
     return std::make_shared<SimpleCombatMonster>(id, name_key, dag_collection);
 }
 
+/*
+tome_of_terrors.pdf page:32
+*/
 std::shared_ptr<static_lq::ICombatant> static_lq::Bestiary::FactoryDefaultGiantAnt(
     NameSystem& in_name_system, 
     LocaleSystem& in_locale_system 
     )
 {
+    const MonsterData monster_data = {
+        s_locale_key_species_giant_ant,
+        bestiary_enum::Habitat::TEverywhere,
+        static_cast<bestiary_enum::Lifestyle>(
+            static_cast<int32_t>(bestiary_enum::Lifestyle::TInstinctive) | 
+            static_cast<int32_t>(bestiary_enum::Lifestyle::TComunal) | 
+            static_cast<int32_t>(bestiary_enum::Lifestyle::TInsect)
+            ),
+        bestiary_enum::WealthType::TMineral,
+        bestiary_enum::Alignment::TNeutral,
+        bestiary_enum::Cunning::TLow,
+        70,
+        bestiary_enum::Strength::THigh,
+        bestiary_enum::Size::TSmall,
+        {},
+        7,
+        6,
+        0,
+        {
+            std::optional<int32_t>(6),
+            std::optional<int32_t>(6),
+            std::optional<int32_t>(0),
+            std::nullopt,
+            std::optional<int32_t>(0),
+            std::optional<int32_t>(-3),
+            std::optional<int32_t>(-3)
+        },
+        std::vector<MonsterVariationData>({
+            MonsterVariationData({
+                s_locale_key_example_worker_ant,
+                1,
+                3,
+                21,
+                {15, 1, 10},
+                15,
+                std::vector<MonsterAttackData>({
+                    {
+                        s_locale_key_attack_mandibles,
+                        {0,2,4},
+                        true,
+                        {}
+                    }
+                })
+            }),
+            MonsterVariationData({
+                s_locale_key_example_warrior_ant,
+                4,
+                6,
+                22,
+                {15, 4, 10},
+                35,
+                std::vector<MonsterAttackData>({
+                    {
+                        s_locale_key_attack_mandibles,
+                        {0,5,4},
+                        true,
+                        std::vector<AttackEffect>({static_lq::AttackEffect::TModerateParalyzingVenom})
+                    }
+                })
+            }),
+            MonsterVariationData({
+                s_locale_key_example_dew_pot_worker_ant,
+                0,
+                0,
+                5,
+                {10, 1, 10},
+                1,
+                std::vector<MonsterAttackData>({
+                    {
+                        s_locale_key_attack_mandibles,
+                        {0,2,4},
+                        true,
+                        {}
+                    }
+                })
+                // set speed 10
+            }),
+            MonsterVariationData({
+                s_locale_key_example_queen_ant,
+                0,
+                0,
+                5,
+                {80, 2, 10},
+                2,
+                std::vector<MonsterAttackData>({
+                    {
+                        s_locale_key_attack_mandibles,
+                        {0,2,4},
+                        true,
+                        {}
+                    }
+                })
+                // set speed 0
+            })
+        })
+    };
+
     const int id = ICombatant::MakeNewId();
     const std::string name_key = in_name_system.GenerateName(static_lq::NameSystem::GetKeyGiantAnt(), id, in_locale_system);
 
-    return std::make_shared<SimpleCombatMonster>(id, name_key, nullptr);
+    std::shared_ptr<DagThreadedCollection> dag_collection = MakeMonsterDag(id, monster_data, 1);
+
+    return std::make_shared<SimpleCombatMonster>(id, name_key, dag_collection);
 }
