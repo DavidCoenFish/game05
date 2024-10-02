@@ -10,6 +10,9 @@ so, do we return a localisation key for the display name, or deal with localisat
 */
 namespace static_lq
 {
+class ICombatAction;
+class RandomSequence;
+
 class ICombatant
 {
 public:
@@ -19,8 +22,44 @@ public:
     virtual const int GetId() const = 0;
 
     /// if these values get sourced from a dag node collection, it's GetValue is not const
-    virtual const std::string GetDisplayName(const LocaleISO_639_1 in_locale) = 0;
+
+    virtual const std::string GetDisplayName() = 0;
+    virtual const int GetHealthPoints() = 0;
+    virtual const int GetDefense() = 0;
+    virtual const int GetAttackBonus() = 0;
     virtual const bool IsAbleToContinueCombat() = 0;
+    virtual const bool IsMellee() = 0;
+    virtual void SetMelleeInititive(const int in_inititive) = 0;
+    virtual const int GetMelleeInititive() = 0;
+    virtual void SetTurnSegment(const int in_turn, const int in_segment) = 0;
+    virtual void SetTargets(
+        const std::vector<std::shared_ptr<ICombatant>>& in_team_mellee,
+        const std::vector<std::shared_ptr<ICombatant>>& in_team_range,
+        const std::vector<std::shared_ptr<ICombatant>>& in_opponent_mellee,
+        const std::vector<std::shared_ptr<ICombatant>>& in_opponent_range
+        ) = 0;
+    virtual void GatherAction(
+        RandomSequence& in_random_sequence,
+        std::vector<std::shared_ptr<ICombatAction>>& out_actions
+        ) = 0;
+    virtual void ApplyDamage(
+        const int32_t in_physical_damage_basic,
+        const int32_t in_physical_damage_severity,
+        const int32_t in_fatigue_damage,
+        const int32_t in_paralyzation_damage
+        ) = 0;
+
+    //virtual void ApplyAction(const ICombatAction& in_action) = 0;
+    //virtual void SetMellee(const bool value) = 0;
+    //virtual const bool IsRange() = 0;
+    //virtual void SetRange(const bool value) = 0;
+
+    /// if mellee, then the 1d10 at the start of the turn
+
+    /// recovery time (change weapon? surprise? after weapon action?)
+    //virtual void AddRecoveryTime(const int in_recovery_time) = 0;
+    //virtual void AdvanceTurn() = 0; //const int in_turn_delta, const int in_segment_delta
+    //virtual void AdvanceSegment() = 0; //const int in_turn_delta, const int in_segment_delta
 
     //add attribut value of "faith" to basic attack, though if attach weapon is non magical, and target is immune non magical, then no damage is done
     //virtual const bool IsSubjectFaithDamage(const bestiary_enum::Alignment in_alignment_assailant);
@@ -28,11 +67,11 @@ public:
     //difference between the assailant’s overall Attack Roll and the target’s Defense
     //virtual const bool IsSubjectSeverityDamage();
 
-    virtual void ApplyDamage(
-        const int32_t in_fatigue_damage,
-        const int32_t in_physical_damage,
-        const int32_t in_paralyzation_damage
-        ) = 0;
+    //virtual void ApplyDamage(
+    //    const int32_t in_fatigue_damage,
+    //    const int32_t in_physical_damage,
+    //    const int32_t in_paralyzation_damage
+    //    ) = 0;
 
     // 
     //virtual void ApplyDamage(

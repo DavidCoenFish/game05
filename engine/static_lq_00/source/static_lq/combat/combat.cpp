@@ -1,5 +1,6 @@
 #include "static_lq/static_lq_pch.h"
 #include "static_lq/combat/combat.h"
+#include "static_lq/combat/i_combat_action.h"
 #include "static_lq/combat/i_combat_output.h"
 #include "static_lq/combat/i_combat_side.h"
 #include "static_lq/combat/i_combat_topology.h"
@@ -107,7 +108,7 @@ public:
     const bool AdvanceTime()
     {
         _segment += 1;
-        while (10 <= _segment)
+        while (10 < _segment)
         {
             _segment -= 10;
             _turn += 1;
@@ -115,9 +116,22 @@ public:
 
         _combat_output->SetTurnSegment(_turn, _segment);
 
+        if (1 == _segment) 
+        {
+            DoFirstSegmentOfTurn();
+        }
+
+        std::vector<std::shared_ptr<static_lq::ICombatAction>> combat_action_array;
+        GatherActions(combat_action_array);
+
+        PerformActions(combat_action_array);
+
+#if 0
         const std::vector<std::shared_ptr<static_lq::ICombatSide>> result = {};
         _combat_output->SetCombatEnd(result);
         return false;
+#else
+#endif
     }
 
 private:
