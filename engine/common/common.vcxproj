@@ -210,7 +210,6 @@
     <ClInclude Include="include\common\text\text_manager.h" />
     <ClInclude Include="include\common\text\text_pre_vertex.h" />
     <ClInclude Include="include\common\text\text_run.h" />
-    <ClInclude Include="include\common\tooltip\i_tooltip_action.h" />
     <ClInclude Include="include\common\tooltip\tooltip.h" />
     <ClInclude Include="include\common\tooltip\tooltip_data.h" />
     <ClInclude Include="include\common\ui\i_ui_input.h" />

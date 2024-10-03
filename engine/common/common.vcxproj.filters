@@ -747,9 +747,6 @@
     <ClInclude Include="include\common\tooltip\tooltip_data.h">
       <Filter>include\common\tooltip</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\tooltip\i_tooltip_action.h">
-      <Filter>include\common\tooltip</Filter>
-    </ClInclude>
     <ClInclude Include="include\common\dag\threaded\i_dag_threaded_visitor.h">
       <Filter>include\common\dag\threaded</Filter>
     </ClInclude>

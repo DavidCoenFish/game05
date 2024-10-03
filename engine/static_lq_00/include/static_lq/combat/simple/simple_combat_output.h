@@ -22,7 +22,7 @@ private:
     virtual void CombatantAdded(ICombatant& in_combatant, ICombatSide& in_side) override;
     virtual void CombatantRemoved(ICombatant& in_combatant, ICombatSide& in_side) override;
 
-    virtual void SetTurnSegment(const int in_turn, const int in_segment) override;
+    virtual void SetTurnSegment(const int32_t in_turn, const int32_t in_segment) override;
 
     //virtual void RecordAttackRoll(const int turn, const int segment) = 0;
 

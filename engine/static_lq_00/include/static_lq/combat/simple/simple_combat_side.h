@@ -20,13 +20,13 @@ public:
         );
 
     SimpleCombatSide(
-        const int in_id,
+        const int32_t in_id,
         const std::string& in_display_name, //up to project if this is locale key or raw value
         const std::vector<std::shared_ptr<ICombatant>>& in_combatant_array = {}
         );
 
 private:
-    const int GetId() const override;
+    const int32_t GetId() const override;
     const std::string GetDisplayName(const LocaleISO_639_1 in_locale) override;
     void AddCombatant(const std::shared_ptr<ICombatant>& combatant) override;
     void RemoveCombatant(const int combatant_id) override;
@@ -35,7 +35,7 @@ private:
     const bool IsHostileToSide(const ICombatSide& side) const override;
 
 private:
-    const int _id;
+    const int32_t _id;
     const std::string _display_name;
     std::vector<std::shared_ptr<ICombatant>> _combatant_array;
 };

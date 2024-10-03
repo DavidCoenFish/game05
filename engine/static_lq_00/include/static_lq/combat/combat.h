@@ -22,10 +22,10 @@ public:
 
     // enum for supprise/ ambush/ readyness?
     void AddSide(const std::shared_ptr<ICombatSide>& combat_side);
-    void RemoveSide(const int side_id);
+    void RemoveSide(const int32_t side_id);
 
-    void AddCombatant(const std::shared_ptr<ICombatant>& combatant, const int side_id);
-    void RemoveCombatant(const int combatant_id, const int side_id);
+    void AddCombatant(const std::shared_ptr<ICombatant>& combatant, const int32_t side_id);
+    void RemoveCombatant(const int32_t combatant_id, const int32_t side_id);
 
     // return true if combat can continue
     const bool AdvanceTime();

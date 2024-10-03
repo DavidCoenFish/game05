@@ -11,6 +11,7 @@ class Bestiary
 {
 public:
     static const std::string GetDagKeyAlive();
+    static const std::string GetDagKeyAttackBonus();
     static const std::string GetDagKeyFatigueDamage();
     static const std::string GetDagKeyPhysicalDamage();
     static const std::string GetDagKeyParalyzationDamage();

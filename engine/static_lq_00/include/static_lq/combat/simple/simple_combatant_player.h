@@ -11,20 +11,13 @@ class ICombatant;
 class SimpleCombatPlayer : public ICombatant
 {
 public:
-    SimpleCombatPlayer();
+    SimpleCombatPlayer(const int32_t in_id);
 
 private:
-    const int GetId() const override;
-    const std::string GetDisplayName(const LocaleISO_639_1 in_locale) override;
-    const bool IsAbleToContinueCombat() override;
-    void ApplyDamage(
-        const int32_t in_fatigue_damage,
-        const int32_t in_physical_damage,
-        const int32_t in_paralyzation_damage
-        ) override;
+    const int32_t GetId() const override;
 
 private:
-    const int _id;
+    const int32_t _id;
 
 };
 

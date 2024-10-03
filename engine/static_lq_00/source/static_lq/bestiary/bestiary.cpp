@@ -39,7 +39,9 @@ namespace
     constexpr char s_locale_key_paralyzation_damage[] = "slqsc_paralyzation_damage";
     constexpr char s_locale_key_alive[] = "slqsc_alive";
     constexpr char s_locale_key_alive_tooltip[] = "slqsc_alive_tooltip";
-
+    constexpr char s_dag_key_attack_bonus[] = "slqsc_attack_bonus";
+    constexpr char s_dag_key_attack_bonus_tooltip[] = "slqsc_attack_bonus_tooltip";
+    
     constexpr char s_dag_key_damage_tolerance_dice_constant[] = "damage_tolerance_dice_constant";
     constexpr char s_dag_key_damage_tolerance_dice_count[] = "damage_tolerance_dice_count";
     constexpr char s_dag_key_damage_tolerance_dice_sides[] = "damage_tolerance_dice_sides";
@@ -186,6 +188,11 @@ namespace
 const std::string static_lq::Bestiary::GetDagKeyAlive()
 {
     return s_dag_key_alive;
+}
+
+const std::string static_lq::Bestiary::GetDagKeyAttackBonus()
+{
+    return s_dag_key_attack_bonus;
 }
 
 const std::string static_lq::Bestiary::GetDagKeyFatigueDamage()
