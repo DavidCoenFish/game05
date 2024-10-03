@@ -2,7 +2,7 @@
 
 #include "static_lq/combat/i_combatant.h"
 
-namespace static_lq
+namespace StaticLq
 {
 
 class ICombatSide;

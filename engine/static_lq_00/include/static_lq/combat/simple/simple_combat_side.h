@@ -4,7 +4,7 @@
 
 class LocaleSystem;
 
-namespace static_lq
+namespace StaticLq
 {
 class ICombatSide;
 class ICombatant;
@@ -26,11 +26,11 @@ public:
         );
 
 private:
-    const int32_t GetId() const override;
-    const std::string GetDisplayName(const LocaleISO_639_1 in_locale) override;
+    const int32_t GetId() const override { return _id; }
+    const std::string GetDisplayName() override { return _display_name; }
     void AddCombatant(const std::shared_ptr<ICombatant>& combatant) override;
     void RemoveCombatant(const int combatant_id) override;
-    const std::vector<std::shared_ptr<ICombatant>>& GetCombatantList() const override;
+    const std::vector<std::shared_ptr<ICombatant>>& GetCombatantList() const override { return _combatant_array; }
     const bool CanContinueCombat() const override;
     const bool IsHostileToSide(const ICombatSide& side) const override;
 

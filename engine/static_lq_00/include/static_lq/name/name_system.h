@@ -4,7 +4,7 @@ class LocaleSystem;
 class NameSystemImplementation;
 enum class LocaleISO_639_1;
 
-namespace static_lq
+namespace StaticLq
 {
 class INameSystemGenerator;
 

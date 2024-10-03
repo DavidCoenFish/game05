@@ -1,6 +1,6 @@
 #pragma once
 
-namespace static_lq
+namespace StaticLq
 {
 struct MonsterAttributeData
 {

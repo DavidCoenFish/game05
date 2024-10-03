@@ -2,17 +2,18 @@
 #include "static_lq/combat/simple/simple_combat_side.h"
 
 #include "common/locale/locale_system.h"
+#include "static_lq/combat/combat_enum.h"
 #include "static_lq/combat/i_combatant.h"
 #include "static_lq/name/name_system.h"
 
-std::shared_ptr<static_lq::ICombatSide> static_lq::SimpleCombatSide::Factory(NameSystem& in_name_system, LocaleSystem& in_locale_system, const std::vector<std::shared_ptr<ICombatant>>& in_combatant_array)
+std::shared_ptr<StaticLq::ICombatSide> StaticLq::SimpleCombatSide::Factory(NameSystem& in_name_system, LocaleSystem& in_locale_system, const std::vector<std::shared_ptr<ICombatant>>& in_combatant_array)
 {
     const int id = ICombatSide::MakeNewId();
-    const std::string name_key = in_name_system.GenerateName(static_lq::NameSystem::GetKeySide(), id, in_locale_system);
+    const std::string name_key = in_name_system.GenerateName(StaticLq::NameSystem::GetKeySide(), id, in_locale_system);
     return std::make_shared<SimpleCombatSide>(id, name_key, in_combatant_array);
 }
 
-static_lq::SimpleCombatSide::SimpleCombatSide(
+StaticLq::SimpleCombatSide::SimpleCombatSide(
     const int in_id,
     const std::string& in_display_name,
     const std::vector<std::shared_ptr<ICombatant>>& in_combatant_array
@@ -24,23 +25,12 @@ static_lq::SimpleCombatSide::SimpleCombatSide(
     // nop
 }
 
-const int static_lq::SimpleCombatSide::GetId() const 
-{
-    return _id;
-}
-
-const std::string static_lq::SimpleCombatSide::GetDisplayName(const LocaleISO_639_1 in_locale)
-{
-    in_locale;
-    return _display_name;
-}
-
-void static_lq::SimpleCombatSide::AddCombatant(const std::shared_ptr<ICombatant>& in_combatant) 
+void StaticLq::SimpleCombatSide::AddCombatant(const std::shared_ptr<ICombatant>& in_combatant) 
 {
     _combatant_array.push_back(in_combatant);
 }
 
-void static_lq::SimpleCombatSide::RemoveCombatant(const int combatant_id) 
+void StaticLq::SimpleCombatSide::RemoveCombatant(const int combatant_id) 
 {
     auto new_end = std::remove_if(_combatant_array.begin(), _combatant_array.end(),
                                   [combatant_id](const std::shared_ptr<ICombatant>& combatant)
@@ -49,15 +39,20 @@ void static_lq::SimpleCombatSide::RemoveCombatant(const int combatant_id)
     _combatant_array.erase(new_end, _combatant_array.end());
 }
 
-const std::vector<std::shared_ptr<static_lq::ICombatant>>& static_lq::SimpleCombatSide::GetCombatantList() const
+const bool StaticLq::SimpleCombatSide::CanContinueCombat() const 
 {
-    return _combatant_array;
-}
-const bool static_lq::SimpleCombatSide::CanContinueCombat() const 
-{
+    for (const auto& item : _combatant_array)
+    {
+        if (1 == item->GetValue(CombatEnum::CombatantValue::TCanContinueCombat))
+        {
+            return true;
+        }
+    }
     return false;
 }
-const bool static_lq::SimpleCombatSide::IsHostileToSide(const ICombatSide& /*side*/) const 
+
+const bool StaticLq::SimpleCombatSide::IsHostileToSide(const ICombatSide& /*side*/) const 
 {
+    //todo, take into account combantant intelegence and attacked history
     return true;
 }

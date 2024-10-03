@@ -4,7 +4,7 @@ class CommandEngineImplementation;
 class InputDatabase;
 class Snapshot;
 
-namespace static_lq
+namespace StaticLq
 {
     class RandomSequence
     {

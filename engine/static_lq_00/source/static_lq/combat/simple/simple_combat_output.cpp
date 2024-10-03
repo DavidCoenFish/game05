@@ -39,29 +39,29 @@ namespace
 }
 
 
-void static_lq::SimpleCombatOutput::RegisterLocaleSystem(LocaleSystem& in_locale_system)
+void StaticLq::SimpleCombatOutput::RegisterLocaleSystem(LocaleSystem& in_locale_system)
 {
     in_locale_system.RegisterProvider(std::make_shared<LocaleDataProvider>());
 }
 
-static_lq::SimpleCombatOutput::SimpleCombatOutput(const FCallback& in_log, const std::shared_ptr<LocaleSystem>& in_locale_system)
+StaticLq::SimpleCombatOutput::SimpleCombatOutput(const FCallback& in_log, const std::shared_ptr<LocaleSystem>& in_locale_system)
 : _log(in_log)
 , _locale_system(in_locale_system)
 {
     // nop
 }
 
-void static_lq::SimpleCombatOutput::SetCombatStart()
+void StaticLq::SimpleCombatOutput::SetCombatStart()
 {
     _log(_locale_system->GetValue(s_locale_key_combat_started));
 }
 
-void static_lq::SimpleCombatOutput::CombatantAdded(ICombatant& combatant, ICombatSide& side)
+void StaticLq::SimpleCombatOutput::CombatantAdded(ICombatant& combatant, ICombatSide& side)
 {
     const LocaleISO_639_1 locale = _locale_system->GetLocale();
     std::map<std::string, std::string> data_map = {
-        { "combatant", _locale_system->GetValue(combatant.GetDisplayName(locale)) },
-        { "side", _locale_system->GetValue(side.GetDisplayName(locale)) }
+        { "combatant", _locale_system->GetValue(combatant.GetDisplayName()) },
+        { "side", _locale_system->GetValue(side.GetDisplayName()) }
     };
     LocaleStringFormatMap format_map(data_map);
 
@@ -73,12 +73,12 @@ void static_lq::SimpleCombatOutput::CombatantAdded(ICombatant& combatant, IComba
     _log(format_map.GetResult());
 }
 
-void static_lq::SimpleCombatOutput::CombatantRemoved(ICombatant& combatant, ICombatSide& side)
+void StaticLq::SimpleCombatOutput::CombatantRemoved(ICombatant& combatant, ICombatSide& side)
 {
     const LocaleISO_639_1 locale = _locale_system->GetLocale();
     std::map<std::string, std::string> data_map = {
-        { "combatant", _locale_system->GetValue(combatant.GetDisplayName(locale)) },
-        { "side", _locale_system->GetValue(side.GetDisplayName(locale)) }
+        { "combatant", _locale_system->GetValue(combatant.GetDisplayName()) },
+        { "side", _locale_system->GetValue(side.GetDisplayName()) }
     };
     LocaleStringFormatMap format_map(data_map);
 
@@ -90,7 +90,7 @@ void static_lq::SimpleCombatOutput::CombatantRemoved(ICombatant& combatant, ICom
     _log(format_map.GetResult());
 }
 
-void static_lq::SimpleCombatOutput::SetTurnSegment(const int turn, const int segment)
+void StaticLq::SimpleCombatOutput::SetTurnSegment(const int32_t turn, const int32_t segment)
 {
     std::map<std::string, std::string> data_map = {
         { "turn", std::to_string(turn)},
@@ -106,14 +106,14 @@ void static_lq::SimpleCombatOutput::SetTurnSegment(const int turn, const int seg
     _log(format_map.GetResult());
 }
 
-void static_lq::SimpleCombatOutput::SetCombatEnd(const std::vector<std::shared_ptr<ICombatSide>>& sides_able_to_continue)
+void StaticLq::SimpleCombatOutput::SetCombatEnd(const std::vector<std::shared_ptr<ICombatSide>>& sides_able_to_continue)
 {
     _log(_locale_system->GetValue(s_locale_key_combat_ended));
     for (const auto& item : sides_able_to_continue)
     {
         const LocaleISO_639_1 locale = _locale_system->GetLocale();
         std::map<std::string, std::string> data_map = {
-            { "side", _locale_system->GetValue(item->GetDisplayName(locale)) }
+            { "side", _locale_system->GetValue(item->GetDisplayName()) }
         };
         LocaleStringFormatMap format_map(data_map);
 

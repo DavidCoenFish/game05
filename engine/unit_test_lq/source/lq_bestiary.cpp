@@ -5,6 +5,7 @@
 #include "static_lq\name\name_system.h"
 #include "static_lq\name\name_system_generator_random.h"
 #include "static_lq\combat\i_combatant.h"
+#include "static_lq\combat\combat_enum.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -16,24 +17,24 @@ namespace LqBestiary
 		TEST_METHOD(FactoryDefaultGiantSpider)
 		{
             std::shared_ptr<LocaleSystem> locale_system = std::make_shared<LocaleSystem>();
-            std::shared_ptr<static_lq::NameSystem> name_system = std::make_shared<static_lq::NameSystem>();
-            name_system->AddGenerator(static_lq::NameSystem::GetKeyGiantSpider(), static_lq::NameSystemGeneratorRandom::FactoryGeneratorGiantSpider());
+            std::shared_ptr<StaticLq::NameSystem> name_system = std::make_shared<StaticLq::NameSystem>();
+            name_system->AddGenerator(StaticLq::NameSystem::GetKeyGiantSpider(), StaticLq::NameSystemGeneratorRandom::FactoryGeneratorGiantSpider());
 
-            auto giant_spider = static_lq::Bestiary::FactoryDefaultGiantSpider(*name_system, *locale_system);
+            auto giant_spider = StaticLq::Bestiary::FactoryDefaultGiantSpider(*name_system, *locale_system);
 			Assert::IsNotNull(giant_spider.get());
-			Assert::AreEqual(true, giant_spider->IsAbleToContinueCombat());
+			Assert::AreEqual(1, giant_spider->GetValue(StaticLq::CombatEnum::CombatantValue::TCanContinueCombat));
 
-            giant_spider->ApplyDamage(100, 200, 300);
-			Assert::AreEqual(false, giant_spider->IsAbleToContinueCombat());
+            giant_spider->ApplyDamageDelta(100, 200, 300);
+			Assert::AreEqual(0, giant_spider->GetValue(StaticLq::CombatEnum::CombatantValue::TCanContinueCombat));
 		}
 
 		TEST_METHOD(FactoryDefaultGiantAnt)
 		{
             std::shared_ptr<LocaleSystem> locale_system = std::make_shared<LocaleSystem>();
-            std::shared_ptr<static_lq::NameSystem> name_system = std::make_shared<static_lq::NameSystem>();
-            name_system->AddGenerator(static_lq::NameSystem::GetKeyGiantAnt(), static_lq::NameSystemGeneratorRandom::FactoryGeneratorGiantAnt());
+            std::shared_ptr<StaticLq::NameSystem> name_system = std::make_shared<StaticLq::NameSystem>();
+            name_system->AddGenerator(StaticLq::NameSystem::GetKeyGiantAnt(), StaticLq::NameSystemGeneratorRandom::FactoryGeneratorGiantAnt());
 
-            auto item = static_lq::Bestiary::FactoryDefaultGiantAnt(*name_system, *locale_system);
+            auto item = StaticLq::Bestiary::FactoryDefaultGiantAnt(*name_system, *locale_system);
 			Assert::IsNotNull(item.get());
 		}
 

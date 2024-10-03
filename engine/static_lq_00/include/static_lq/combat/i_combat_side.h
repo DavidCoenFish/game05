@@ -2,7 +2,7 @@
 
 enum class LocaleISO_639_1;
 
-namespace static_lq
+namespace StaticLq
 {
 class ICombatant;
 

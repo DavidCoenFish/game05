@@ -5,7 +5,7 @@
 #include "static_lq/bestiary/monster_variation_data.h"
 #include "static_lq/bestiary/special_characteristic_data.h"
 
-namespace static_lq
+namespace StaticLq
 {
 struct MonsterData
 {
@@ -13,14 +13,14 @@ public:
     // locale key
 	std::string _species = {};
 
-    bestiary_enum::Habitat _habitat = bestiary_enum::Habitat::TDefault;
-    bestiary_enum::Lifestyle _lifestyle = bestiary_enum::Lifestyle::TDefault;
-    bestiary_enum::WealthType  _wealth_type = bestiary_enum::WealthType::TDefault;
-    bestiary_enum::Alignment _alignment = bestiary_enum::Alignment::TDefault;
-    bestiary_enum::Cunning _cunning = bestiary_enum::Cunning::TDefault;
+    BestiaryEnum::Habitat _habitat = BestiaryEnum::Habitat::TDefault;
+    BestiaryEnum::Lifestyle _lifestyle = BestiaryEnum::Lifestyle::TDefault;
+    BestiaryEnum::WealthType  _wealth_type = BestiaryEnum::WealthType::TDefault;
+    BestiaryEnum::Alignment _alignment = BestiaryEnum::Alignment::TDefault;
+    BestiaryEnum::Cunning _cunning = BestiaryEnum::Cunning::TDefault;
 	int _speed = 0;
-    bestiary_enum::Strength _strength = bestiary_enum::Strength::TDefault;
-    bestiary_enum::Size _size = bestiary_enum::Size::TDefault;
+    BestiaryEnum::Strength _strength = BestiaryEnum::Strength::TDefault;
+    BestiaryEnum::Size _size = BestiaryEnum::Size::TDefault;
     std::vector<SpecialCharacteristicData>_array_special_characteristic;
 	int _recovery_time = 0;
 	int _absorption = 0;
@@ -31,15 +31,15 @@ public:
 };
 }
 /*
-    std::vector<bestiary_enum::Habitat>_habitat = {};
-    std::vector<bestiary_enum::Lifestyle> _lifestyle = {};
-    std::vector<bestiary_enum::WealthType> _wealth_type = {};
-    bestiary_enum::Alignment _alignment = bestiary_enum::Alignment::TDefault;
-    bestiary_enum::Cunning _cunning = bestiary_enum::Cunning::TDefault;
+    std::vector<BestiaryEnum::Habitat>_habitat = {};
+    std::vector<BestiaryEnum::Lifestyle> _lifestyle = {};
+    std::vector<BestiaryEnum::WealthType> _wealth_type = {};
+    BestiaryEnum::Alignment _alignment = BestiaryEnum::Alignment::TDefault;
+    BestiaryEnum::Cunning _cunning = BestiaryEnum::Cunning::TDefault;
 	int _speed = 0;
-    bestiary_enum::Strength _strength = bestiary_enum::Strength::TDefault;
-    bestiary_enum::Size _size = bestiary_enum::Size::TDefault;
-    //std::vector<bestiary_enum::SpecialCharacteristics> _special_characteristic = {};
+    BestiaryEnum::Strength _strength = BestiaryEnum::Strength::TDefault;
+    BestiaryEnum::Size _size = BestiaryEnum::Size::TDefault;
+    //std::vector<BestiaryEnum::SpecialCharacteristics> _special_characteristic = {};
     //std::vector<SpecialCharacteristicData>_array_special_characteristic;
 	int _recovery_time = 0;
 	int _absorption = 0;

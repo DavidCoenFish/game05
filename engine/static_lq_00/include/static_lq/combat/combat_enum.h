@@ -1,18 +1,30 @@
 #pragma once
 
-namespace static_lq
+#include "common/util/enum_soft_bind.h"
+
+namespace StaticLq
 {
-namespace combat_enum
+namespace CombatEnum
 {
-//CombatantValueString? CombatantValueInt?
+
+// using this as both as the DagCollection node key, and the local system dag node display value key
 enum class CombatantValue
 {
     TDefault = 0,
     TDisplayName,
+    TSpecies,
+    TVariation,
+
     TDamageTollerance,
+    TDamageSum,
+    TDamageFatigue,
+    TDamagePhysical,
+    TDamageParalyzation,
+
     THealthPoints,
     TMelleeInitiative,
-    //TAlive,
+
+    TAlive,
     TCanContinueCombat,
     TAttackBonus,
     TDefense,
@@ -21,3 +33,10 @@ enum class CombatantValue
 
 }
 }
+
+
+template <> 
+const StaticLq::CombatEnum::CombatantValue EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumFromString(const std::string& in_locale);
+template <> 
+const const std::string EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(const StaticLq::CombatEnum::CombatantValue in_locale);
+

@@ -1,7 +1,7 @@
 #include "static_lq/static_lq_pch.h"
 #include "static_lq/name/name_system_generator_random_data.h"
 
-static_lq::NameSystemGeneratorData::NameSystemGeneratorData(
+StaticLq::NameSystemGeneratorData::NameSystemGeneratorData(
     const std::string in_prepend_first,
     const std::map<LocaleISO_639_1, std::vector<std::string>>& in_pool,
     const int in_repeat_pool_count,

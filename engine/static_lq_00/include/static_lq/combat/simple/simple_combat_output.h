@@ -4,7 +4,7 @@
 
 class LocaleSystem;
 
-namespace static_lq
+namespace StaticLq
 {
 class ICombatSide;
 class ICombatant;

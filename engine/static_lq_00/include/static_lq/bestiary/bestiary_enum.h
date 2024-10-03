@@ -1,8 +1,8 @@
 #pragma once
 
-namespace static_lq
+namespace StaticLq
 {
-namespace bestiary_enum
+namespace BestiaryEnum
 {
 //enum class MonsterAttribute
 //{

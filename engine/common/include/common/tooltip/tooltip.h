@@ -1,8 +1,8 @@
 #pragma once
 
-//#include "common/tooltip/tooltip_data.h"
+#include "common/tooltip/tooltip_data.h"
 
-struct TooltipData;
+//struct TooltipData;
 
 /*
 i_tooltip_data::PerformLinkAction? PopupNewTooltip, Follow Link...

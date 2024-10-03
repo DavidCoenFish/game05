@@ -4,30 +4,30 @@
 
 class DagThreadedCollection;
 
-namespace static_lq
+namespace StaticLq
 {
 class SimpleCombatMonster : public ICombatant
 {
 public:
     SimpleCombatMonster(
         const int32_t in_id,
-        const std::string& in_display_name,
         const std::shared_ptr<DagThreadedCollection>& in_dag_collection 
         );
 
 private:
-    const int32_t GetId() const override;
+    const int32_t GetId() const override { return _id; }
 
-    const std::string GetValueString(const combat_enum::CombatantValue in_key) override;
-    const int32_t GetValue(const combat_enum::CombatantValue in_key) override;
-    void SetValue(const combat_enum::CombatantValue in_key, const int32_t in_value) override;
-    std::shared_ptr<TooltipData> GetTooltip(const combat_enum::CombatantValue in_key) override;
+    const std::string GetDisplayName() override;
+    std::shared_ptr<TooltipData> GetDisplayNameTooltip(const int32_t in_level = 0) override;
+    const int32_t GetValue(const CombatEnum::CombatantValue in_key) override;
+    std::shared_ptr<TooltipData> GetTooltip(const CombatEnum::CombatantValue in_key, const int32_t in_level = 0) override;
+
+    void SetValue(const CombatEnum::CombatantValue in_key, const int32_t in_value) override;
 
     void GatherAction(
         std::vector<std::shared_ptr<ICombatAction>>& out_actions,
         RandomSequence& in_out_random_sequence,
-        const int32_t in_turn, 
-        const int32_t in_segment,
+        const CombatTime& in_combat_time,
         const std::vector<std::shared_ptr<ICombatant>>& in_team_mellee,
         const std::vector<std::shared_ptr<ICombatant>>& in_team_range,
         const std::vector<std::shared_ptr<ICombatant>>& in_opponent_mellee,
@@ -44,7 +44,6 @@ private:
 
 private:
     const int32_t _id;
-    const std::string _display_name;
     std::shared_ptr<DagThreadedCollection> _dag_collection;
 };
 

@@ -4,8 +4,8 @@ template<class ENUM>
 class EnumSoftBind
 {
 public:
-    static const ENUM EnumFromString(const std::string& in_locale);
-    static const std::string EnumToString(const ENUM in_locale);
+    static const ENUM EnumFromString(const std::string& in_string);
+    static const std::string EnumToString(const ENUM in_enum);
 
 private:
     EnumSoftBind()=delete;

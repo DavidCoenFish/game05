@@ -4,7 +4,7 @@
 #include "common/locale/locale_enum.h"
 #include "static_lq/random_sequence.h"
 
-std::shared_ptr<static_lq::INameSystemGenerator> static_lq::NameSystemGeneratorRandom::FactoryGeneratorSide()
+std::shared_ptr<StaticLq::INameSystemGenerator> StaticLq::NameSystemGeneratorRandom::FactoryGeneratorSide()
 {
     std::vector<NameSystemGeneratorData> generator_data;
     {
@@ -74,7 +74,7 @@ std::shared_ptr<static_lq::INameSystemGenerator> static_lq::NameSystemGeneratorR
     return std::make_shared<NameSystemGeneratorRandom>(generator_data);
 }
 
-std::shared_ptr<static_lq::INameSystemGenerator> static_lq::NameSystemGeneratorRandom::FactoryGeneratorGiantAnt()
+std::shared_ptr<StaticLq::INameSystemGenerator> StaticLq::NameSystemGeneratorRandom::FactoryGeneratorGiantAnt()
 {
     std::vector<NameSystemGeneratorData> generator_data;
     {
@@ -91,7 +91,7 @@ std::shared_ptr<static_lq::INameSystemGenerator> static_lq::NameSystemGeneratorR
     return std::make_shared<NameSystemGeneratorRandom>(generator_data);
 }
 
-std::shared_ptr<static_lq::INameSystemGenerator> static_lq::NameSystemGeneratorRandom::FactoryGeneratorGiantSpider()
+std::shared_ptr<StaticLq::INameSystemGenerator> StaticLq::NameSystemGeneratorRandom::FactoryGeneratorGiantSpider()
 {
     std::vector<NameSystemGeneratorData> generator_data;
     {
@@ -109,13 +109,13 @@ std::shared_ptr<static_lq::INameSystemGenerator> static_lq::NameSystemGeneratorR
     return std::make_shared<NameSystemGeneratorRandom>(generator_data);
 }
 
-static_lq::NameSystemGeneratorRandom::NameSystemGeneratorRandom(const std::vector<NameSystemGeneratorData>& in_generator_data)
+StaticLq::NameSystemGeneratorRandom::NameSystemGeneratorRandom(const std::vector<NameSystemGeneratorData>& in_generator_data)
 : _generator_data(in_generator_data)
 {
     // nop
 }
 
-const std::string static_lq::NameSystemGeneratorRandom::GenerateName(const int in_seed, const LocaleISO_639_1 in_locale) const
+const std::string StaticLq::NameSystemGeneratorRandom::GenerateName(const int in_seed, const LocaleISO_639_1 in_locale) const
 {
     std::string result;
     RandomSequence random_sequence(in_seed);

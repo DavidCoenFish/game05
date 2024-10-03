@@ -8,6 +8,7 @@
 #include "common/log/log.h"
 #include "static_lq/bestiary/monster_data.h"
 #include "static_lq/bestiary/special_characteristic_data.h"
+#include "static_lq/combat/combat_enum.h"
 #include "static_lq/combat/i_combatant.h"
 #include "static_lq/combat/simple/simple_combatant_monster.h"
 #include "static_lq/name/name_system.h"
@@ -30,29 +31,48 @@ namespace
     constexpr char s_locale_key_example_dew_pot_worker_ant[] = "slqsc_bestiary_example_dew_pot_worker_ant";
     constexpr char s_locale_key_example_queen_ant[] = "slqsc_bestiary_example_queen_ant";
 
-    constexpr char s_locale_key_damage_tolerance[] = "slqsc_damage_tolerance";
-    constexpr char s_locale_key_damage_tolerance_tooltip[] = "slqsc_damage_tolerance_tooltip";
-    constexpr char s_locale_key_damage_sum[] = "slqsc_damage_sum";
-    constexpr char s_locale_key_damage_sum_tooltip[] = "slqsc_damage_sum_tooltip";
-    constexpr char s_locale_key_fatigue_damage[] = "slqsc_fatigue_damage";
-    constexpr char s_locale_key_physical_damage[] = "slqsc_physical_damage";
-    constexpr char s_locale_key_paralyzation_damage[] = "slqsc_paralyzation_damage";
-    constexpr char s_locale_key_alive[] = "slqsc_alive";
-    constexpr char s_locale_key_alive_tooltip[] = "slqsc_alive_tooltip";
-    constexpr char s_dag_key_attack_bonus[] = "slqsc_attack_bonus";
-    constexpr char s_dag_key_attack_bonus_tooltip[] = "slqsc_attack_bonus_tooltip";
-    
-    constexpr char s_dag_key_damage_tolerance_dice_constant[] = "damage_tolerance_dice_constant";
-    constexpr char s_dag_key_damage_tolerance_dice_count[] = "damage_tolerance_dice_count";
-    constexpr char s_dag_key_damage_tolerance_dice_sides[] = "damage_tolerance_dice_sides";
-    constexpr char s_dag_key_damage_tolerance_raw[] = "damage_tolerance_raw";
-    constexpr char s_dag_key_fatigue_damage[] = "fatigue_damage";
-    constexpr char s_dag_key_physical_damage[] = "physical_damage";
-    constexpr char s_dag_key_paralyzation_damage[] = "paralyzation_damage";
-    constexpr char s_dag_key_damage_sum_raw[] = "damage_sum_raw";
-    constexpr char s_dag_key_alive[] = "alive";
+    //constexpr char s_locale_key_damage_tolerance[] = "slqsc_damage_tolerance";
+    //constexpr char s_locale_key_damage_tolerance_tooltip[] = "slqsc_damage_tolerance_tooltip";
+    //constexpr char s_locale_key_damage_sum[] = "slqsc_damage_sum";
+    //constexpr char s_locale_key_damage_sum_tooltip[] = "slqsc_damage_sum_tooltip";
+    //constexpr char s_locale_key_fatigue_damage[] = "slqsc_fatigue_damage";
+    //constexpr char s_locale_key_physical_damage[] = "slqsc_physical_damage";
+    //constexpr char s_locale_key_paralyzation_damage[] = "slqsc_paralyzation_damage";
+    //constexpr char s_locale_key_alive[] = "slqsc_alive";
+    //constexpr char s_locale_key_alive_tooltip[] = "slqsc_alive_tooltip";
+    //constexpr char s_dag_key_attack_bonus[] = "slqsc_attack_bonus";
+    //constexpr char s_dag_key_attack_bonus_tooltip[] = "slqsc_attack_bonus_tooltip";
+    //
+    //constexpr char s_dag_key_damage_tolerance_dice_constant[] = "damage_tolerance_dice_constant";
+    //constexpr char s_dag_key_damage_tolerance_dice_count[] = "damage_tolerance_dice_count";
+    //constexpr char s_dag_key_damage_tolerance_dice_sides[] = "damage_tolerance_dice_sides";
+    //constexpr char s_dag_key_damage_tolerance_raw[] = "damage_tolerance_raw";
+    //constexpr char s_dag_key_fatigue_damage[] = "fatigue_damage";
+    //constexpr char s_dag_key_physical_damage[] = "physical_damage";
+    //constexpr char s_dag_key_paralyzation_damage[] = "paralyzation_damage";
+    //constexpr char s_dag_key_damage_sum_raw[] = "damage_sum_raw";
+    //constexpr char s_dag_key_alive[] = "alive";
 
-    void DagAddDamageTolerance(DagThreadedCollection& in_dag_collection, const int32_t in_id, const static_lq::MonsterVariationData& in_monster_variation_data)
+    void DagAddName(DagThreadedCollection& in_dag_collection, const std::string& in_name_key, const std::string& in_species, const std::string& in_variation)
+    {
+        in_dag_collection.CreateNodeVariable(
+            EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDisplayName),
+            DagThreadedHelper::CreateDagValue<std::string>(in_name_key)
+            );
+        in_dag_collection.CreateNodeVariable(
+            EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TSpecies),
+            DagThreadedHelper::CreateDagValue<std::string>(in_species)
+            );
+        in_dag_collection.CreateNodeVariable(
+            EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TVariation),
+            DagThreadedHelper::CreateDagValue<std::string>(in_variation)
+            );
+            // TDisplayNameToolTip0
+            // TDisplayNameToolTip1
+            // TDisplayNameToolTip2
+    }
+
+    void DagAddDamageTolerance(DagThreadedCollection& in_dag_collection, const int32_t in_id, const StaticLq::MonsterVariationData& in_monster_variation_data)
     {
         auto damage_tolerance_seed = in_dag_collection.CreateNodeVariable(
             in_dag_collection.MakeUid(), 
@@ -83,7 +103,7 @@ namespace
                 const int32_t dice_count = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[2]);
                 const int32_t dice_base = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[3]);
                 int32_t result = constant;
-                static_lq::RandomSequence random_sequence(id);
+                StaticLq::RandomSequence random_sequence(id);
                 for (int index = 0; index < dice_count; ++index)
                 {
                     result += random_sequence.GenerateDice(dice_base);
@@ -166,10 +186,12 @@ namespace
         in_dag_collection.AddNodeLinkIndexed(alive, in_dag_collection.FindNode(s_dag_key_damage_sum_raw), 1);
     }
 
-    std::shared_ptr<DagThreadedCollection> MakeMonsterDag(const int32_t in_id, const static_lq::MonsterData& in_monster_data, const int32_t in_variation_index)
+    std::shared_ptr<DagThreadedCollection> MakeMonsterDag(const int32_t in_id, const StaticLq::MonsterData& in_monster_data, const int32_t in_variation_index, const std::string& in_name_key)
     {
-        //static_lq::RandomSequence random_sequence(in_id);
+        //StaticLq::RandomSequence random_sequence(in_id);
         std::shared_ptr<DagThreadedCollection> result = DagThreadedCollection::Factory();
+
+        DagAddName(in_name_key, in_monster_data._species, in_monster_data._array_variation[in_variation_index]._display_name);
 
         DagAddDamageTolerance(*result, in_id, in_monster_data._array_variation[in_variation_index]);
         DagAddDamageSum(*result);
@@ -185,33 +207,8 @@ namespace
     }
 }
 
-const std::string static_lq::Bestiary::GetDagKeyAlive()
-{
-    return s_dag_key_alive;
-}
-
-const std::string static_lq::Bestiary::GetDagKeyAttackBonus()
-{
-    return s_dag_key_attack_bonus;
-}
-
-const std::string static_lq::Bestiary::GetDagKeyFatigueDamage()
-{
-    return s_dag_key_fatigue_damage;
-}
-
-const std::string static_lq::Bestiary::GetDagKeyPhysicalDamage()
-{
-    return s_dag_key_physical_damage;
-}
-
-const std::string static_lq::Bestiary::GetDagKeyParalyzationDamage()
-{
-    return s_dag_key_paralyzation_damage;
-}
-
 /// somewhere for locale data for the factory default combatabts to be specified
-void static_lq::Bestiary::RegisterLocaleSystem(LocaleSystem& in_out_locale_system)
+void StaticLq::Bestiary::RegisterLocaleSystem(LocaleSystem& in_out_locale_system)
 {
     const std::vector<LocaleSystem::Data> data = {
         {s_locale_key_species_name, "{species}"},
@@ -230,17 +227,9 @@ void static_lq::Bestiary::RegisterLocaleSystem(LocaleSystem& in_out_locale_syste
         {s_locale_key_attack_mandibles, "mandibles"},
         {s_locale_key_attack_bite, "bite"},
 
-        {s_locale_key_damage_tolerance, "Damage tolerance"},
         {s_locale_key_damage_tolerance_tooltip, "{self} = {index.1} + {index.2}d{index.3}"},
-        {s_locale_key_damage_sum, "Damage sum"},
         {s_locale_key_damage_sum_tooltip, "{self} = {index.1} + {index.2} + {index.3}"},
-
-        {s_locale_key_fatigue_damage, "slqsc_fatigue_damage"},
-        {s_locale_key_physical_damage, "slqsc_physical_damage"},
-        {s_locale_key_paralyzation_damage, "slqsc_paralyzation_damage"},
-        {s_locale_key_alive, "slqsc_alive"},
-        {s_locale_key_alive_tooltip, "slqsc_alive_tooltip"},
-
+        {s_locale_key_alive_tooltip, "{self} = 0 <= {index.0}"},
         };
 
     in_out_locale_system.Append(LocaleISO_639_1::Default, data);
@@ -249,28 +238,28 @@ void static_lq::Bestiary::RegisterLocaleSystem(LocaleSystem& in_out_locale_syste
 /*
 tome_of_terrors.pdf page:142
 */
-std::shared_ptr<static_lq::ICombatant> static_lq::Bestiary::FactoryDefaultGiantSpider(
+std::shared_ptr<StaticLq::ICombatant> StaticLq::Bestiary::FactoryDefaultGiantSpider(
     NameSystem& in_name_system, 
     LocaleSystem& in_locale_system 
     )
 {
     const MonsterData monster_data = {
         s_locale_key_species_giant_spider,
-        static_cast<bestiary_enum::Habitat>(
-            static_cast<int32_t>(bestiary_enum::Habitat::TForest) | 
-            static_cast<int32_t>(bestiary_enum::Habitat::TSubterranean) | 
-            static_cast<int32_t>(bestiary_enum::Habitat::TDesert)
+        static_cast<BestiaryEnum::Habitat>(
+            static_cast<int32_t>(BestiaryEnum::Habitat::TForest) | 
+            static_cast<int32_t>(BestiaryEnum::Habitat::TSubterranean) | 
+            static_cast<int32_t>(BestiaryEnum::Habitat::TDesert)
             ),
-        static_cast<bestiary_enum::Lifestyle>(
-            static_cast<int32_t>(bestiary_enum::Lifestyle::TInstinctive) | 
-            static_cast<int32_t>(bestiary_enum::Lifestyle::TArachnid)
+        static_cast<BestiaryEnum::Lifestyle>(
+            static_cast<int32_t>(BestiaryEnum::Lifestyle::TInstinctive) | 
+            static_cast<int32_t>(BestiaryEnum::Lifestyle::TArachnid)
             ),
-        bestiary_enum::WealthType::TIncidental,
-        bestiary_enum::Alignment::TNeutral,
-        bestiary_enum::Cunning::TLow,
+        BestiaryEnum::WealthType::TIncidental,
+        BestiaryEnum::Alignment::TNeutral,
+        BestiaryEnum::Cunning::TLow,
         60,
-        bestiary_enum::Strength::TBelowAverage,
-        bestiary_enum::Size::TMedium,
+        BestiaryEnum::Strength::TBelowAverage,
+        BestiaryEnum::Size::TMedium,
         {
             {SpecialCharacteristics::TAttackCuresDisease},
             {SpecialCharacteristics::TDarkVision}
@@ -300,7 +289,7 @@ std::shared_ptr<static_lq::ICombatant> static_lq::Bestiary::FactoryDefaultGiantS
                         s_locale_key_attack_bite,
                         {0,1,4},
                         false,
-                        std::vector<AttackEffect>({static_lq::AttackEffect::TModerateParalyzingVenom})
+                        std::vector<AttackEffect>({StaticLq::AttackEffect::TModerateParalyzingVenom})
                     }
                 })
             }),
@@ -316,7 +305,7 @@ std::shared_ptr<static_lq::ICombatant> static_lq::Bestiary::FactoryDefaultGiantS
                         s_locale_key_attack_bite,
                         {0,1,4},
                         false,
-                        std::vector<AttackEffect>({static_lq::AttackEffect::TModerateParalyzingVenom})
+                        std::vector<AttackEffect>({StaticLq::AttackEffect::TModerateParalyzingVenom})
                     }
                 })
             }),
@@ -332,7 +321,7 @@ std::shared_ptr<static_lq::ICombatant> static_lq::Bestiary::FactoryDefaultGiantS
                         s_locale_key_attack_bite,
                         {0,1,6},
                         false,
-                        std::vector<AttackEffect>({static_lq::AttackEffect::TModerateParalyzingVenom})
+                        std::vector<AttackEffect>({StaticLq::AttackEffect::TModerateParalyzingVenom})
                     }
                 })
             }),
@@ -348,7 +337,7 @@ std::shared_ptr<static_lq::ICombatant> static_lq::Bestiary::FactoryDefaultGiantS
                         s_locale_key_attack_bite,
                         {0,1,6},
                         false,
-                        std::vector<AttackEffect>({static_lq::AttackEffect::TModerateParalyzingVenom})
+                        std::vector<AttackEffect>({StaticLq::AttackEffect::TModerateParalyzingVenom})
                     }
                 })
             })
@@ -356,35 +345,35 @@ std::shared_ptr<static_lq::ICombatant> static_lq::Bestiary::FactoryDefaultGiantS
     };
 
     const int id = ICombatant::MakeNewId();
-    const std::string name_key = in_name_system.GenerateName(static_lq::NameSystem::GetKeyGiantSpider(), id, in_locale_system);
+    const std::string name_key = in_name_system.GenerateName(StaticLq::NameSystem::GetKeyGiantSpider(), id, in_locale_system);
 
-    std::shared_ptr<DagThreadedCollection> dag_collection = MakeMonsterDag(id, monster_data, 1);
+    std::shared_ptr<DagThreadedCollection> dag_collection = MakeMonsterDag(id, monster_data, 1, name_key);
 
-    return std::make_shared<SimpleCombatMonster>(id, name_key, dag_collection);
+    return std::make_shared<SimpleCombatMonster>(id, dag_collection);
 }
 
 /*
 tome_of_terrors.pdf page:32
 */
-std::shared_ptr<static_lq::ICombatant> static_lq::Bestiary::FactoryDefaultGiantAnt(
+std::shared_ptr<StaticLq::ICombatant> StaticLq::Bestiary::FactoryDefaultGiantAnt(
     NameSystem& in_name_system, 
     LocaleSystem& in_locale_system 
     )
 {
     const MonsterData monster_data = {
         s_locale_key_species_giant_ant,
-        bestiary_enum::Habitat::TEverywhere,
-        static_cast<bestiary_enum::Lifestyle>(
-            static_cast<int32_t>(bestiary_enum::Lifestyle::TInstinctive) | 
-            static_cast<int32_t>(bestiary_enum::Lifestyle::TComunal) | 
-            static_cast<int32_t>(bestiary_enum::Lifestyle::TInsect)
+        BestiaryEnum::Habitat::TEverywhere,
+        static_cast<BestiaryEnum::Lifestyle>(
+            static_cast<int32_t>(BestiaryEnum::Lifestyle::TInstinctive) | 
+            static_cast<int32_t>(BestiaryEnum::Lifestyle::TComunal) | 
+            static_cast<int32_t>(BestiaryEnum::Lifestyle::TInsect)
             ),
-        bestiary_enum::WealthType::TMineral,
-        bestiary_enum::Alignment::TNeutral,
-        bestiary_enum::Cunning::TLow,
+        BestiaryEnum::WealthType::TMineral,
+        BestiaryEnum::Alignment::TNeutral,
+        BestiaryEnum::Cunning::TLow,
         70,
-        bestiary_enum::Strength::THigh,
-        bestiary_enum::Size::TSmall,
+        BestiaryEnum::Strength::THigh,
+        BestiaryEnum::Size::TSmall,
         {},
         7,
         6,
@@ -427,7 +416,7 @@ std::shared_ptr<static_lq::ICombatant> static_lq::Bestiary::FactoryDefaultGiantA
                         s_locale_key_attack_mandibles,
                         {0,5,4},
                         true,
-                        std::vector<AttackEffect>({static_lq::AttackEffect::TModerateParalyzingVenom})
+                        std::vector<AttackEffect>({StaticLq::AttackEffect::TModerateParalyzingVenom})
                     }
                 })
             }),
@@ -469,7 +458,7 @@ std::shared_ptr<static_lq::ICombatant> static_lq::Bestiary::FactoryDefaultGiantA
     };
 
     const int id = ICombatant::MakeNewId();
-    const std::string name_key = in_name_system.GenerateName(static_lq::NameSystem::GetKeyGiantAnt(), id, in_locale_system);
+    const std::string name_key = in_name_system.GenerateName(StaticLq::NameSystem::GetKeyGiantAnt(), id, in_locale_system);
 
     std::shared_ptr<DagThreadedCollection> dag_collection = MakeMonsterDag(id, monster_data, 1);
 

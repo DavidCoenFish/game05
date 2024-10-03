@@ -5,6 +5,7 @@
 #include "common/dag/threaded/dag_threaded_helper.h"
 #include "common/locale/locale_system.h"
 #include "static_lq/combat/combat_enum.h"
+#include "static_lq/combat/combat_time.h"
 #include "static_lq/combat/i_combatant.h"
 #include "static_lq/bestiary/bestiary.h"
 #include "static_lq/name/name_system.h"
@@ -23,7 +24,7 @@ void AddDamage(DagThreadedCollection& in_dag_collection, const std::string& in_d
 
 }
 
-static_lq::SimpleCombatMonster::SimpleCombatMonster(
+StaticLq::SimpleCombatMonster::SimpleCombatMonster(
     const int in_id,
     const std::string& in_display_name,
     const std::shared_ptr<DagThreadedCollection>& in_dag_collection 
@@ -34,16 +35,16 @@ static_lq::SimpleCombatMonster::SimpleCombatMonster(
 {
 }
 
-const int static_lq::SimpleCombatMonster::GetId() const
+const int StaticLq::SimpleCombatMonster::GetId() const
 {
     return _id;
 }
 
-const std::string static_lq::SimpleCombatMonster::GetValueString(const combat_enum::CombatantValue in_key) 
+const std::string StaticLq::SimpleCombatMonster::GetValueString(const CombatEnum::CombatantValue in_key) 
 {
     switch(in_key)
     {
-    case combat_enum::CombatantValue::TDisplayName:
+    case CombatEnum::CombatantValue::TDisplayName:
         return _display_name;
     default:
         break;
@@ -51,109 +52,55 @@ const std::string static_lq::SimpleCombatMonster::GetValueString(const combat_en
     const int value = GetValue(in_key);
     return std::to_string(value);
 }
-const int static_lq::SimpleCombatMonster::GetValue(const combat_enum::CombatantValue in_key) 
+const int StaticLq::SimpleCombatMonster::GetValue(const CombatEnum::CombatantValue in_key) 
 {
     switch(in_key)
     {
-    case combat_enum::CombatantValue::TAttackBonus:
-        return DagThreadedHelper::GetValue<int32_t>(_dag_collection->GetDagValue(_dag_collection->FindNode(static_lq::Bestiary::GetDagKeyAlive())));
+    case CombatEnum::CombatantValue::TAttackBonus:
+        return DagThreadedHelper::GetValue<int32_t>(_dag_collection->GetDagValue(_dag_collection->FindNode(StaticLq::Bestiary::GetDagKeyAlive())));
     default:
         break;
     }
     return 0;
 }
 
-void static_lq::SimpleCombatMonster::SetValue(const combat_enum::CombatantValue in_key, const int in_value) 
+void StaticLq::SimpleCombatMonster::SetValue(const CombatEnum::CombatantValue in_key, const int32_t in_value) 
 {
     switch(in_key)
     {
-    case combat_enum::CombatantValue::TAttackBonus:
+    case CombatEnum::CombatantValue::TAttackBonus:
         _dag_collection->SetDagValue(
-            _dag_collection->FindNode(static_lq::Bestiary::GetDagKeyAttackBonus()), 
+            _dag_collection->FindNode(StaticLq::Bestiary::GetDagKeyAttackBonus()), 
             DagThreadedHelper::CreateDagValue<int32_t>(in_value)
             );
         break;
     default:
         break;
     }
-    return 0;
+    return;
 }
 
-std::shared_ptr<TooltipData> static_lq::SimpleCombatMonster::GetTooltip(const combat_enum::CombatantValue in_key) {}
+std::shared_ptr<TooltipData> StaticLq::SimpleCombatMonster::GetTooltip(const CombatEnum::CombatantValue in_key) {}
 
-void static_lq::SimpleCombatMonster::GatherAction(
+void StaticLq::SimpleCombatMonster::GatherAction(
     std::vector<std::shared_ptr<ICombatAction>>& out_actions,
     RandomSequence& in_out_random_sequence,
-    const int in_turn, 
-    const int in_segment,
+    const CombatTime& in_combat_time,
     const std::vector<std::shared_ptr<ICombatant>>& in_team_mellee,
     const std::vector<std::shared_ptr<ICombatant>>& in_team_range,
     const std::vector<std::shared_ptr<ICombatant>>& in_opponent_mellee,
     const std::vector<std::shared_ptr<ICombatant>>& in_opponent_range
     ) {}
 
-// you could use SetValue, but there is some logic to not allow negative value totals for damage
+// you could use SetValue, but there is some logic to not allow negative value totals for damage.
 // positive to do damage, negative to heal
-void static_lq::SimpleCombatMonster::ApplyDamageDelta(
+void StaticLq::SimpleCombatMonster::ApplyDamageDelta(
     const int32_t in_physical_damage_delta,
     const int32_t in_fatigue_damage_delta,
     const int32_t in_paralyzation_damage_delta
     )
 {
+    AddDamage(*_dag_collection, StaticLq::Bestiary::GetDagKeyFatigueDamage(), in_fatigue_damage);
+    AddDamage(*_dag_collection, StaticLq::Bestiary::GetDagKeyPhysicalDamage(), in_physical_damage);
+    AddDamage(*_dag_collection, StaticLq::Bestiary::GetDagKeyParalyzationDamage(), in_paralyzation_damage);
 }
-
-//const std::string static_lq::SimpleCombatMonster::GetDisplayName()
-//{
-//    return _display_name;
-//}
-//
-//const int static_lq::SimpleCombatMonster::GetHealthPoints()
-//{
-//}
-//
-//const int static_lq::SimpleCombatMonster::GetDamageTollerance()
-//{
-//}
-//
-//const int static_lq::SimpleCombatMonster::GetDefense()
-//{
-//}
-//
-//const int static_lq::SimpleCombatMonster::GetAttackBonus()
-//{
-//}
-//
-//const bool static_lq::SimpleCombatMonster::IsAbleToContinueCombat()
-//{
-//    const bool alive = DagThreadedHelper::GetValue<bool>(_dag_collection->GetDagValue(_dag_collection->FindNode(static_lq::Bestiary::GetDagKeyAlive())));
-//    return alive; // && concious
-//}
-//
-//const bool static_lq::SimpleCombatMonster::IsMellee()
-//const bool static_lq::SimpleCombatMonster::IsSusceptibleSeverityDamage()
-//
-//void static_lq::SimpleCombatMonster::SetMelleeInititive(const int in_inititive)
-//const int static_lq::SimpleCombatMonster::GetMelleeInititive() {}
-//void static_lq::SimpleCombatMonster::GatherAction(
-//    std::vector<std::shared_ptr<ICombatAction>>& out_actions,
-//    RandomSequence& in_out_random_sequence,
-//    const int in_turn, 
-//    const int in_segment,
-//    const std::vector<std::shared_ptr<ICombatant>>& in_team_mellee,
-//    const std::vector<std::shared_ptr<ICombatant>>& in_team_range,
-//    const std::vector<std::shared_ptr<ICombatant>>& in_opponent_mellee,
-//    const std::vector<std::shared_ptr<ICombatant>>& in_opponent_range
-//    )
-//
-//void static_lq::SimpleCombatMonster::ApplyDamage(
-//    const int32_t in_fatigue_damage,
-//    const int32_t in_physical_damage,
-//    const int32_t in_paralyzation_damage
-//    )
-//{
-//    AddDamage(*_dag_collection, static_lq::Bestiary::GetDagKeyFatigueDamage(), in_fatigue_damage);
-//    AddDamage(*_dag_collection, static_lq::Bestiary::GetDagKeyPhysicalDamage(), in_physical_damage);
-//    AddDamage(*_dag_collection, static_lq::Bestiary::GetDagKeyParalyzationDamage(), in_paralyzation_damage);
-//}
-//
-//

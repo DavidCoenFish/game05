@@ -2,7 +2,7 @@
 
 #include "static_lq/combat/i_combat_topology.h"
 
-namespace static_lq
+namespace StaticLq
 {
 
 class ICombatSide;

@@ -10,8 +10,8 @@ namespace LqRandomSequence
 	public:
 		TEST_METHOD(TestSequence)
 		{
-            static_lq::RandomSequence randomSequence00(42);
-            static_lq::RandomSequence randomSequence01(42);
+            StaticLq::RandomSequence randomSequence00(42);
+            StaticLq::RandomSequence randomSequence01(42);
 
             for (int index = 0; index < 100; ++index)
             {
@@ -21,7 +21,7 @@ namespace LqRandomSequence
 
 		TEST_METHOD(TestFloat)
 		{
-            static_lq::RandomSequence randomSequence00(107);
+            StaticLq::RandomSequence randomSequence00(107);
             for (int index = 0; index < 100; ++index)
             {
                 const float value = randomSequence00.GenerateFloat();
@@ -32,10 +32,10 @@ namespace LqRandomSequence
 
 		TEST_METHOD(TestSeed)
 		{
-            static_lq::RandomSequence randomSequence00(0);
+            StaticLq::RandomSequence randomSequence00(0);
             Assert::AreEqual(randomSequence00.GetSeed(), static_cast<uint32_t>(0));
 
-            static_lq::RandomSequence randomSequence01(42);
+            StaticLq::RandomSequence randomSequence01(42);
             Assert::AreEqual(randomSequence01.GetSeed(), static_cast<uint32_t>(42));
 
             bool different = false;
@@ -52,7 +52,7 @@ namespace LqRandomSequence
 
 		TEST_METHOD(TestDistributionDice)
 		{
-            static_lq::RandomSequence randomSequence00(42);
+            StaticLq::RandomSequence randomSequence00(42);
             int result_count[4] = {0,0,0,0};
             for (int index = 0; index < 10000; ++index)
             {
@@ -70,7 +70,7 @@ namespace LqRandomSequence
         }
 		TEST_METHOD(TestDistributionFloat)
 		{
-            static_lq::RandomSequence randomSequence00(42);
+            StaticLq::RandomSequence randomSequence00(42);
             float sum_value = 0.0f;
             float sum_distance_middle = 0.0f;
             for (int index = 0; index < 10000; ++index)

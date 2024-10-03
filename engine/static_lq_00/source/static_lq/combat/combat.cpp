@@ -1,6 +1,7 @@
 #include "static_lq/static_lq_pch.h"
 #include "static_lq/combat/combat.h"
 #include "static_lq/combat/combat_enum.h"
+#include "static_lq/combat/combat_time.h"
 #include "static_lq/combat/i_combat_action.h"
 #include "static_lq/combat/i_combat_output.h"
 #include "static_lq/combat/i_combat_side.h"
@@ -10,7 +11,7 @@
 
 namespace
 {
-void GatherStillFunctionalSides(std::vector<std::shared_ptr<static_lq::ICombatSide>>& out_still_functional_sides, const std::vector<std::shared_ptr<static_lq::ICombatSide>>& in_side_array)
+void GatherStillFunctionalSides(std::vector<std::shared_ptr<StaticLq::ICombatSide>>& out_still_functional_sides, const std::vector<std::shared_ptr<StaticLq::ICombatSide>>& in_side_array)
 {
     for (const auto& item : in_side_array)
     {
@@ -21,7 +22,7 @@ void GatherStillFunctionalSides(std::vector<std::shared_ptr<static_lq::ICombatSi
     }
 }
 
-const bool TestSidesAntagonistic(const std::vector<std::shared_ptr<static_lq::ICombatSide>>& in_side_array)
+const bool TestSidesAntagonistic(const std::vector<std::shared_ptr<StaticLq::ICombatSide>>& in_side_array)
 {
     const int32_t count = static_cast<int32_t>(in_side_array.size());
     for (int32_t index = 0; index < count; ++index)
@@ -42,10 +43,10 @@ const bool TestSidesAntagonistic(const std::vector<std::shared_ptr<static_lq::IC
     return false;
 }
 
-void SetMelleeInititive(static_lq::ICombatant& in_combatant, static_lq::RandomSequence& in_random_sequence)
+void SetMelleeInititive(StaticLq::ICombatant& in_combatant, StaticLq::RandomSequence& in_random_sequence)
 {
     const int32_t value = in_random_sequence.GenerateDice(10);
-    in_combatant.SetValue(static_lq::combat_enum::CombatantValue::TMelleeInitiative, value);
+    in_combatant.SetValue(StaticLq::CombatEnum::CombatantValue::TMelleeInitiative, value);
 }
 }
 
@@ -53,9 +54,9 @@ class CombatImplementation
 {
 public:
     CombatImplementation(
-        const std::shared_ptr<static_lq::ICombatOutput>& combat_output,
-        const std::shared_ptr<static_lq::RandomSequence>& random_sequence,
-        const std::shared_ptr<static_lq::ICombatTopology>& combatant_topology
+        const std::shared_ptr<StaticLq::ICombatOutput>& combat_output,
+        const std::shared_ptr<StaticLq::RandomSequence>& random_sequence,
+        const std::shared_ptr<StaticLq::ICombatTopology>& combatant_topology
         )
     : _combat_output(combat_output)
     , _random_sequence(random_sequence)
@@ -65,10 +66,10 @@ public:
         _combat_output->SetCombatStart();
     }
 
-    void AddSide(const std::shared_ptr<static_lq::ICombatSide>& side)
+    void AddSide(const std::shared_ptr<StaticLq::ICombatSide>& side)
     {
         // check for duplicates
-        auto lambda = [side](const std::shared_ptr<static_lq::ICombatSide>& rhs) { return rhs.get() == side.get();};
+        auto lambda = [side](const std::shared_ptr<StaticLq::ICombatSide>& rhs) { return rhs.get() == side.get();};
         const auto found = std::find_if(_side_array.begin(), _side_array.end(), lambda);
 
         if (found != _side_array.end())
@@ -91,13 +92,13 @@ public:
 
     void RemoveSide(const int32_t side_id)
     {
-        auto lambda = [side_id](const std::shared_ptr<static_lq::ICombatSide>& rhs) -> bool{ return rhs->GetId() == side_id;};
+        auto lambda = [side_id](const std::shared_ptr<StaticLq::ICombatSide>& rhs) -> bool{ return rhs->GetId() == side_id;};
         const auto found = std::find_if(_side_array.begin(), _side_array.end(), lambda);
         if (found != _side_array.end())
         {
             if (nullptr != _combat_output)
             {
-                std::shared_ptr<static_lq::ICombatSide>& side = *found;
+                std::shared_ptr<StaticLq::ICombatSide>& side = *found;
                 for (const auto& item : side->GetCombatantList())
                 {
                     _combat_output->CombatantRemoved(*item, *side);
@@ -108,10 +109,10 @@ public:
         }
     }
 
-    void AddCombatant(const std::shared_ptr<static_lq::ICombatant>& combatant, const int32_t side_id)
+    void AddCombatant(const std::shared_ptr<StaticLq::ICombatant>& combatant, const int32_t side_id)
     {
         SetMelleeInititive(*combatant, *_random_sequence);
-        auto lambda = [side_id](const std::shared_ptr<static_lq::ICombatSide>& rhs) { return rhs->GetId() == side_id;};
+        auto lambda = [side_id](const std::shared_ptr<StaticLq::ICombatSide>& rhs) { return rhs->GetId() == side_id;};
         const auto found = std::find_if(_side_array.begin(), _side_array.end(), lambda);
         if (found != _side_array.end())
         {
@@ -119,7 +120,7 @@ public:
 
             if (nullptr != _combat_output)
             {
-                std::shared_ptr<static_lq::ICombatSide>& side = *found;
+                std::shared_ptr<StaticLq::ICombatSide>& side = *found;
                 _combat_output->CombatantAdded(*combatant, *side);
             }
         }
@@ -127,13 +128,13 @@ public:
 
     void RemoveCombatant(const int32_t combatant_id, const int32_t side_id)
     {
-        auto lambda = [side_id](const std::shared_ptr<static_lq::ICombatSide>& rhs) { return rhs->GetId() == side_id;};
+        auto lambda = [side_id](const std::shared_ptr<StaticLq::ICombatSide>& rhs) { return rhs->GetId() == side_id;};
         const auto found = std::find_if(_side_array.begin(), _side_array.end(), lambda);
         if (found != _side_array.end())
         {
             if (nullptr != _combat_output)
             {
-                std::shared_ptr<static_lq::ICombatSide>& side = *found;
+                std::shared_ptr<StaticLq::ICombatSide>& side = *found;
                 for (const auto& item : side->GetCombatantList())
                 {
                     if (item->GetId() == combatant_id)
@@ -159,7 +160,7 @@ public:
         }
     }
 
-    void GatherMellee(std::vector<std::shared_ptr<static_lq::ICombatant>>& out_mellee, const static_lq::ICombatSide& in_side, const static_lq::ICombatant& in_subject)
+    void GatherMellee(std::vector<std::shared_ptr<StaticLq::ICombatant>>& out_mellee, const StaticLq::ICombatSide& in_side, const StaticLq::ICombatant& in_subject)
     {
         for (const auto& item: in_side.GetCombatantList())
         {
@@ -170,7 +171,7 @@ public:
         }
     }
 
-    void GatherRange(std::vector<std::shared_ptr<static_lq::ICombatant>>& out_range, const static_lq::ICombatSide& in_side, const static_lq::ICombatant& in_subject)
+    void GatherRange(std::vector<std::shared_ptr<StaticLq::ICombatant>>& out_range, const StaticLq::ICombatSide& in_side, const StaticLq::ICombatant& in_subject)
     {
         for (const auto& item: in_side.GetCombatantList())
         {
@@ -181,16 +182,16 @@ public:
         }
     }
 
-    void GatherActions(std::vector<std::shared_ptr<static_lq::ICombatAction>>& out_combat_action_array)
+    void GatherActions(std::vector<std::shared_ptr<StaticLq::ICombatAction>>& out_combat_action_array)
     {
         for (const auto& item: _side_array)
         {
             for (const auto& sub_item : item->GetCombatantList())
             {
-                std::vector<std::shared_ptr<static_lq::ICombatant>> team_mellee;
-                std::vector<std::shared_ptr<static_lq::ICombatant>> team_range;
-                std::vector<std::shared_ptr<static_lq::ICombatant>> opponent_mellee;
-                std::vector<std::shared_ptr<static_lq::ICombatant>> opponent_range;
+                std::vector<std::shared_ptr<StaticLq::ICombatant>> team_mellee;
+                std::vector<std::shared_ptr<StaticLq::ICombatant>> team_range;
+                std::vector<std::shared_ptr<StaticLq::ICombatant>> opponent_mellee;
+                std::vector<std::shared_ptr<StaticLq::ICombatant>> opponent_range;
 
                 GatherMellee(team_mellee, *item, *sub_item);
                 GatherRange(team_range, *item, *sub_item);
@@ -206,8 +207,7 @@ public:
                 sub_item->GatherAction(
                     out_combat_action_array,
                     *_random_sequence,
-                    _turn,
-                    _segment,
+                    _time,
                     team_mellee,
                     team_range,
                     opponent_mellee,
@@ -217,7 +217,7 @@ public:
         }
     }
 
-    void PerformActions(const std::vector<std::shared_ptr<static_lq::ICombatAction>>& in_combat_action_array)
+    void PerformActions(const std::vector<std::shared_ptr<StaticLq::ICombatAction>>& in_combat_action_array)
     {
         for (const auto& item: in_combat_action_array)
         {
@@ -228,26 +228,21 @@ public:
     // return true if combat can continue
     const bool AdvanceTime()
     {
-        _segment += 1;
-        while (10 < _segment)
-        {
-            _segment -= 10;
-            _turn += 1;
-        }
+        _time.AdvanceTime();
 
-        _combat_output->SetTurnSegment(_turn, _segment);
+        _combat_output->SetTurnSegment(_time.GetTurn(), _time.GetSegment());
 
-        if (1 == _segment) 
+        if (true == _time.IsStartOfTurn()) 
         {
             DoFirstSegmentOfTurn();
         }
 
-        std::vector<std::shared_ptr<static_lq::ICombatAction>> combat_action_array;
+        std::vector<std::shared_ptr<StaticLq::ICombatAction>> combat_action_array;
         GatherActions(combat_action_array);
 
         PerformActions(combat_action_array);
 
-        std::vector<std::shared_ptr<static_lq::ICombatSide>> still_functional_sides = {};
+        std::vector<std::shared_ptr<StaticLq::ICombatSide>> still_functional_sides = {};
         GatherStillFunctionalSides(still_functional_sides, _side_array);
 
         bool continue_combat = TestSidesAntagonistic(still_functional_sides);
@@ -259,17 +254,16 @@ public:
     }
 
 private:
-    std::shared_ptr<static_lq::ICombatOutput> _combat_output;
-    std::shared_ptr<static_lq::RandomSequence> _random_sequence;
-    std::shared_ptr<static_lq::ICombatTopology> _combatant_topology;
+    std::shared_ptr<StaticLq::ICombatOutput> _combat_output;
+    std::shared_ptr<StaticLq::RandomSequence> _random_sequence;
+    std::shared_ptr<StaticLq::ICombatTopology> _combatant_topology;
     
-    int32_t _turn = 0;
-    int32_t _segment = 0;
+    StaticLq::CombatTime _time;
 
-    std::vector<std::shared_ptr<static_lq::ICombatSide>> _side_array;
+    std::vector<std::shared_ptr<StaticLq::ICombatSide>> _side_array;
 };
 
-static_lq::Combat::Combat(
+StaticLq::Combat::Combat(
     const std::shared_ptr<ICombatOutput>& combat_output,
     const std::shared_ptr<RandomSequence>& random_sequence,
     const std::shared_ptr<ICombatTopology>& combatant_topology
@@ -278,32 +272,32 @@ static_lq::Combat::Combat(
 	_implementation = std::make_unique<CombatImplementation>(combat_output, random_sequence, combatant_topology);
 }
 
-static_lq::Combat::~Combat()
+StaticLq::Combat::~Combat()
 {
     //nop
 }
 
-void static_lq::Combat::AddSide(const std::shared_ptr<ICombatSide>& combat_side)
+void StaticLq::Combat::AddSide(const std::shared_ptr<ICombatSide>& combat_side)
 {
     _implementation->AddSide(combat_side);
 }
 
-void static_lq::Combat::RemoveSide(const int32_t side_id)
+void StaticLq::Combat::RemoveSide(const int32_t side_id)
 {
     _implementation->RemoveSide(side_id);
 }
 
-void static_lq::Combat::AddCombatant(const std::shared_ptr<ICombatant>& combatant, const int32_t side_id)
+void StaticLq::Combat::AddCombatant(const std::shared_ptr<ICombatant>& combatant, const int32_t side_id)
 {
     _implementation->AddCombatant(combatant, side_id);
 }
 
-void static_lq::Combat::RemoveCombatant(const int32_t combatant_id, const int32_t side_id)
+void StaticLq::Combat::RemoveCombatant(const int32_t combatant_id, const int32_t side_id)
 {
     _implementation->RemoveCombatant(combatant_id, side_id);
 }
 
-const bool static_lq::Combat::AdvanceTime()
+const bool StaticLq::Combat::AdvanceTime()
 {
     return _implementation->AdvanceTime();
 }

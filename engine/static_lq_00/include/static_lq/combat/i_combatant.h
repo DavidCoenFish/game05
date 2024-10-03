@@ -2,6 +2,7 @@
 
 #include "static_lq/bestiary/bestiary_enum.h"
 
+class CombatTime;
 class TooltipData;
 enum class LocaleISO_639_1;
 
@@ -9,12 +10,12 @@ enum class LocaleISO_639_1;
 so, do we return a localisation key for the display name, or deal with localisation internally (via DAG?)
 
 */
-namespace static_lq
+namespace StaticLq
 {
 class ICombatAction;
 class RandomSequence;
 
-namespace combat_enum
+namespace CombatEnum
 {
 enum class CombatantValue;
 }
@@ -28,16 +29,17 @@ public:
     virtual const int32_t GetId() const = 0;
 
     /// if these values get sourced from a dag node collection, it's GetValue is not const
-    virtual const std::string GetValueString(const combat_enum::CombatantValue in_key) = 0;
-    virtual const int32_t GetValue(const combat_enum::CombatantValue in_key) = 0;
-    virtual void SetValue(const combat_enum::CombatantValue in_key, const int32_t in_value) = 0;
-    virtual std::shared_ptr<TooltipData> GetTooltip(const combat_enum::CombatantValue in_key) = 0;
+    virtual const std::string GetDisplayName() = 0;
+    virtual std::shared_ptr<TooltipData> GetDisplayNameTooltip(const int32_t in_level = 0) = 0;
+    virtual const int32_t GetValue(const CombatEnum::CombatantValue in_key) = 0;
+    virtual std::shared_ptr<TooltipData> GetTooltip(const CombatEnum::CombatantValue in_key, const int32_t in_level = 0) = 0;
+
+    virtual void SetValue(const CombatEnum::CombatantValue in_key, const int32_t in_value) = 0;
 
     virtual void GatherAction(
         std::vector<std::shared_ptr<ICombatAction>>& out_actions,
         RandomSequence& in_out_random_sequence,
-        const int in_turn, 
-        const int in_segment,
+        const CombatTime& in_combat_time,
         const std::vector<std::shared_ptr<ICombatant>>& in_team_mellee,
         const std::vector<std::shared_ptr<ICombatant>>& in_team_range,
         const std::vector<std::shared_ptr<ICombatant>>& in_opponent_mellee,

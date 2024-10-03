@@ -2,7 +2,7 @@
 
 #include "static_lq/roll_data.h"
 
-namespace static_lq
+namespace StaticLq
 {
 enum class AttackEffect
 {

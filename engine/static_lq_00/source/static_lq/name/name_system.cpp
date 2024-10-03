@@ -10,7 +10,7 @@ namespace
     class LocaleDataProvider : public ILocaleDataProvider
     {
     public:
-        LocaleDataProvider(const std::shared_ptr<static_lq::NameSystem>& in_name_system)
+        LocaleDataProvider(const std::shared_ptr<StaticLq::NameSystem>& in_name_system)
         : _name_system(in_name_system)
         {
             // _nop
@@ -18,7 +18,7 @@ namespace
     private:
         void Populate(LocaleSystem& in_out_locale_system, const LocaleISO_639_1 in_locale) const override
         {
-            std::shared_ptr<static_lq::NameSystem> name_system = _name_system.lock();
+            std::shared_ptr<StaticLq::NameSystem> name_system = _name_system.lock();
             if (name_system)
             {
                 name_system->AddAllValuesToLocaleSystem(in_out_locale_system, in_locale);
@@ -26,7 +26,7 @@ namespace
         }
 
     private:
-        std::weak_ptr<static_lq::NameSystem> _name_system;
+        std::weak_ptr<StaticLq::NameSystem> _name_system;
     };
 }
 
@@ -42,7 +42,7 @@ public:
         // nop
     }
 
-    void AddGenerator(const std::string& in_key, const std::shared_ptr<static_lq::INameSystemGenerator>& in_generator)
+    void AddGenerator(const std::string& in_key, const std::shared_ptr<StaticLq::INameSystemGenerator>& in_generator)
     {
         _generator_map[in_key] = in_generator;
     }
@@ -58,7 +58,7 @@ public:
                 continue;
             }
 
-            const std::string key = static_lq::INameSystemGenerator::GenerateKey(item.key, item.seed);
+            const std::string key = StaticLq::INameSystemGenerator::GenerateKey(item.key, item.seed);
             const std::string value = found->second->GenerateName(item.seed, in_locale);
 
             data.push_back({key, value});
@@ -85,7 +85,7 @@ public:
     }
 
 private:
-    std::map<std::string, std::shared_ptr<static_lq::INameSystemGenerator>> _generator_map;
+    std::map<std::string, std::shared_ptr<StaticLq::INameSystemGenerator>> _generator_map;
     struct NameInstance
     {
         std::string key; 
@@ -96,47 +96,47 @@ private:
 
 };
 
-const std::string static_lq::NameSystem::GetKeySide()
+const std::string StaticLq::NameSystem::GetKeySide()
 {
     return "builtin_side";
 }
 
-const std::string static_lq::NameSystem::GetKeyGiantAnt()
+const std::string StaticLq::NameSystem::GetKeyGiantAnt()
 {
     return "builtin_giant_ant";
 }
 
-const std::string static_lq::NameSystem::GetKeyGiantSpider()
+const std::string StaticLq::NameSystem::GetKeyGiantSpider()
 {
     return "builtin_giant_spider";
 }
 
-void static_lq::NameSystem::RegisterLocaleSystem(const std::shared_ptr<NameSystem>& in_name_system,  LocaleSystem& in_locale_system)
+void StaticLq::NameSystem::RegisterLocaleSystem(const std::shared_ptr<NameSystem>& in_name_system,  LocaleSystem& in_locale_system)
 {
     in_locale_system.RegisterProvider(std::make_shared<LocaleDataProvider>(in_name_system));
 }
 
-static_lq::NameSystem::NameSystem()
+StaticLq::NameSystem::NameSystem()
 {
 	_implementation = std::make_unique<NameSystemImplementation>();
 }
 
-static_lq::NameSystem::~NameSystem()
+StaticLq::NameSystem::~NameSystem()
 {
     // nop
 }
 
-void static_lq::NameSystem::AddGenerator(const std::string& in_key, const std::shared_ptr<INameSystemGenerator>& in_generator)
+void StaticLq::NameSystem::AddGenerator(const std::string& in_key, const std::shared_ptr<INameSystemGenerator>& in_generator)
 {
     _implementation->AddGenerator(in_key, in_generator);
 }
 
-const std::string static_lq::NameSystem::GenerateName(const std::string& in_key, const int in_seed, LocaleSystem& in_locale_system)
+const std::string StaticLq::NameSystem::GenerateName(const std::string& in_key, const int in_seed, LocaleSystem& in_locale_system)
 {
     return _implementation->GenerateName(in_key, in_seed, in_locale_system);
 }
 
-void static_lq::NameSystem::AddAllValuesToLocaleSystem(LocaleSystem& in_locale_system, const LocaleISO_639_1 in_locale)
+void StaticLq::NameSystem::AddAllValuesToLocaleSystem(LocaleSystem& in_locale_system, const LocaleISO_639_1 in_locale)
 {
     return _implementation->AddAllValuesToLocaleSystem(in_locale_system, in_locale);
 }

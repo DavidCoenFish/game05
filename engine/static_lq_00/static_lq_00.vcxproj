@@ -91,6 +91,7 @@
     <ClCompile Include="source\static_lq\combat\action\combat_action_mellee_attack.cpp" />
     <ClCompile Include="source\static_lq\combat\combat.cpp" />
     <ClCompile Include="source\static_lq\combat\combat_enum.cpp" />
+    <ClCompile Include="source\static_lq\combat\combat_time.cpp" />
     <ClCompile Include="source\static_lq\combat\i_combatant.cpp" />
     <ClCompile Include="source\static_lq\combat\i_combat_action.cpp" />
     <ClCompile Include="source\static_lq\combat\i_combat_side.cpp" />
@@ -115,6 +116,7 @@
     <ClInclude Include="include\static_lq\bestiary\bestiary_enum.h" />
     <ClInclude Include="include\static_lq\combat\combat.h" />
     <ClInclude Include="include\static_lq\combat\combat_enum.h" />
+    <ClInclude Include="include\static_lq\combat\combat_time.h" />
     <ClInclude Include="include\static_lq\combat\i_combatant.h" />
     <ClInclude Include="include\static_lq\combat\i_combat_action.h" />
     <ClInclude Include="include\static_lq\combat\i_combat_output.h" />

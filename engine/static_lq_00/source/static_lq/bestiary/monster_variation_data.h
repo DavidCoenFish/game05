@@ -3,7 +3,7 @@
 #include "static_lq/roll_data.h"
 #include "static_lq/bestiary/monster_attack_data.h"
 
-namespace static_lq
+namespace StaticLq
 {
 struct MonsterVariationData
 {

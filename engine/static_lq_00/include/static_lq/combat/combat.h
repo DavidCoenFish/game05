@@ -2,7 +2,7 @@
 
 class CombatImplementation;
 
-namespace static_lq
+namespace StaticLq
 {
 class ICombatant;
 class ICombatOutput;
