@@ -8,24 +8,18 @@ LocaleStringFormatSimple::LocaleStringFormatSimple(const std::vector<std::string
     // nop
 }
 
-const std::string LocaleStringFormatSimple::GetValue(const LocaleISO_639_1 in_locale, const std::string& in_token, const int in_index) const
+void LocaleStringFormatSimple::AccumulateString(const std::string& in_value)
 {
+    _result += in_value;
+}
+
+void LocaleStringFormatSimple::AccumulateToken(LocaleSystem& in_locale_system, const LocaleISO_639_1 in_locale, const std::string& in_token, const int in_index)
+{
+    in_locale_system;
     in_locale;
     in_token;
     if ((0 <= in_index) && (in_index < _data.size()))
     {
-        return _data[in_index];
+        _result += _data[in_index];
     }
-    return std::string();
 }
-
-void LocaleStringFormatSimple::AccumulateResult(const std::string value)
-{
-    _result += value;
-}
-
-void LocaleStringFormatSimple::AccumulateToken(const std::string value, const std::string&, const int)
-{
-    _result += value;
-}
-

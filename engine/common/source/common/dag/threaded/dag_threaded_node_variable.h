@@ -24,8 +24,7 @@ public:
 private:
 	const std::string& GetUid() const override { return _uid; }
 	const std::string& GetDisplayName() const override { return _display_name; }
-	const std::string& GetTooltipBody() const override;
-
+	const std::string& GetTooltipRaw() const override { return {}; }
 	void SetOutput(IDagThreadedNode* const in_node) override;
 	void RemoveOutput(IDagThreadedNode* const in_node) override;
 	std::shared_ptr<IDagThreadedValue> GetValue() override;

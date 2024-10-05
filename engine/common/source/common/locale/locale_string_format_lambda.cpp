@@ -8,22 +8,15 @@ LocaleStringFormatLambda::LocaleStringFormatLambda(const std::function<const std
     // nop
 }
 
-const std::string LocaleStringFormatLambda::GetValue(const LocaleISO_639_1 in_locale, const std::string& in_token, const int in_index) const
+void LocaleStringFormatLambda::AccumulateString(const std::string& in_value)
 {
+    _result += in_value;
+}
+void LocaleStringFormatLambda::AccumulateToken(LocaleSystem& in_locale_system, const LocaleISO_639_1 in_locale, const std::string& in_token, const int in_index)
+{
+    in_locale_system;
     if (_callback)
     {
-        return _callback(in_locale, in_token, in_index);
+        _result += _callback(in_locale, in_token, in_index);
     }
-    return std::string();
 }
-
-void LocaleStringFormatLambda::AccumulateResult(const std::string value)
-{
-    _result += value;
-}
-
-void LocaleStringFormatLambda::AccumulateToken(const std::string value, const std::string&, const int)
-{
-    _result += value;
-}
-

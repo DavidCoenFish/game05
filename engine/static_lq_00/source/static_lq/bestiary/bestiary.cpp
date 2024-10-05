@@ -56,7 +56,7 @@ namespace
     void DagAddName(DagThreadedCollection& in_dag_collection, const std::string& in_name_key, const std::string& in_species, const std::string& in_variation)
     {
         in_dag_collection.CreateNodeVariable(
-            EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDisplayName),
+            EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::),
             DagThreadedHelper::CreateDagValue<std::string>(in_name_key)
             );
         in_dag_collection.CreateNodeVariable(

@@ -7,25 +7,19 @@ LocaleStringFormatMap::LocaleStringFormatMap(const std::map<std::string, std::st
     // nop
 }
 
-const std::string LocaleStringFormatMap::GetValue(const LocaleISO_639_1 in_locale, const std::string& in_token, const int in_index) const
+void LocaleStringFormatMap::AccumulateString(const std::string& in_value)
 {
-    in_locale;in_index;
-    std::string result;
+    _accumulated_result += in_value;
+}
+
+void LocaleStringFormatMap::AccumulateToken(LocaleSystem& in_locale_system, const LocaleISO_639_1 in_locale, const std::string& in_token, const int in_index)
+{
+    in_locale_system;
+    in_locale;
+    in_index;
     const auto found = _data_map.find(in_token);
     if (found != _data_map.end())
     {
-        result = found->second;
+        _accumulated_result += found->second;
     }
-    return result;
-}
-
-void LocaleStringFormatMap::AccumulateResult(const std::string value)
-{
-    _accumulated_result += value;
-}
-
-void LocaleStringFormatMap::AccumulateToken(const std::string value, const std::string& in_token, const int in_index)
-{
-    in_token; in_index;
-    _accumulated_result += value;
 }

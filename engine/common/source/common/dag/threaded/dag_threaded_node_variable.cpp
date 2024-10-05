@@ -61,12 +61,6 @@ void DagThreadedNodeVariable::SetValue(const std::shared_ptr<IDagThreadedValue>&
 	return;
 }
 
-const std::string& DagThreadedNodeVariable::GetTooltipBody() const
-{
-    static std::string s_empty;
-    return s_empty;
-}
-
 void DagThreadedNodeVariable::SetOutput(IDagThreadedNode* const in_node)
 {
 	if (nullptr != in_node)
