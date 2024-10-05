@@ -34,4 +34,5 @@ namespace DagThreadedHelper
 		static TYPE s_default(0);
 		return s_default;
 	}
+
 };

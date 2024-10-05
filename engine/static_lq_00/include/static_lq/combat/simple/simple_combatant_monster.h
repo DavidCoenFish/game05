@@ -17,10 +17,10 @@ public:
 private:
     const int32_t GetId() const override { return _id; }
 
-    const std::string GetDisplayName() override;
-    std::shared_ptr<TooltipData> GetDisplayNameTooltip(const int32_t in_level = 0) override;
+    //const std::string GetDisplayName() override;
+    //std::shared_ptr<TooltipData> GetDisplayNameTooltip(const int32_t in_level = 0) override;
     const int32_t GetValue(const CombatEnum::CombatantValue in_key) override;
-    std::shared_ptr<TooltipData> GetTooltip(const CombatEnum::CombatantValue in_key, const int32_t in_level = 0) override;
+    std::shared_ptr<TooltipData> GetTooltip(const CombatEnum::CombatantValue in_key) override;
 
     void SetValue(const CombatEnum::CombatantValue in_key, const int32_t in_value) override;
 

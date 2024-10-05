@@ -26,11 +26,9 @@ void AddDamage(DagThreadedCollection& in_dag_collection, const std::string& in_d
 
 StaticLq::SimpleCombatMonster::SimpleCombatMonster(
     const int in_id,
-    const std::string& in_display_name,
     const std::shared_ptr<DagThreadedCollection>& in_dag_collection 
     )
 : _id(in_id)
-, _display_name(in_display_name)
 , _dag_collection(in_dag_collection)
 {
 }
@@ -40,47 +38,29 @@ const int StaticLq::SimpleCombatMonster::GetId() const
     return _id;
 }
 
-const std::string StaticLq::SimpleCombatMonster::GetValueString(const CombatEnum::CombatantValue in_key) 
-{
-    switch(in_key)
-    {
-    case CombatEnum::CombatantValue::TDisplayName:
-        return _display_name;
-    default:
-        break;
-    }
-    const int value = GetValue(in_key);
-    return std::to_string(value);
-}
 const int StaticLq::SimpleCombatMonster::GetValue(const CombatEnum::CombatantValue in_key) 
 {
-    switch(in_key)
-    {
-    case CombatEnum::CombatantValue::TAttackBonus:
-        return DagThreadedHelper::GetValue<int32_t>(_dag_collection->GetDagValue(_dag_collection->FindNode(StaticLq::Bestiary::GetDagKeyAlive())));
-    default:
-        break;
-    }
-    return 0;
+    const std::string key = EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(in_key);
+    const int32_t result = DagThreadedHelper::GetValue<int32_t>(_dag_collection->GetDagValue(_dag_collection->FindNode(key)));
+    return result;
 }
 
 void StaticLq::SimpleCombatMonster::SetValue(const CombatEnum::CombatantValue in_key, const int32_t in_value) 
 {
-    switch(in_key)
-    {
-    case CombatEnum::CombatantValue::TAttackBonus:
-        _dag_collection->SetDagValue(
-            _dag_collection->FindNode(StaticLq::Bestiary::GetDagKeyAttackBonus()), 
-            DagThreadedHelper::CreateDagValue<int32_t>(in_value)
-            );
-        break;
-    default:
-        break;
-    }
+    const std::string key = EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(in_key);
+    _dag_collection->SetDagValue(
+        _dag_collection->FindNode(key), 
+        DagThreadedHelper::CreateDagValue<int32_t>(in_value)
+        );
     return;
 }
 
-std::shared_ptr<TooltipData> StaticLq::SimpleCombatMonster::GetTooltip(const CombatEnum::CombatantValue in_key) {}
+std::shared_ptr<TooltipData> StaticLq::SimpleCombatMonster::GetTooltip(const CombatEnum::CombatantValue in_key) 
+{
+    const std::string key = EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(in_key);
+    const std::string tooltip = GetTooltipBody
+
+}
 
 void StaticLq::SimpleCombatMonster::GatherAction(
     std::vector<std::shared_ptr<ICombatAction>>& out_actions,

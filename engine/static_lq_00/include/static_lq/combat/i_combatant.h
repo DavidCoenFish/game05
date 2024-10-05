@@ -29,10 +29,10 @@ public:
     virtual const int32_t GetId() const = 0;
 
     /// if these values get sourced from a dag node collection, it's GetValue is not const
-    virtual const std::string GetDisplayName() = 0;
-    virtual std::shared_ptr<TooltipData> GetDisplayNameTooltip(const int32_t in_level = 0) = 0;
+    //virtual const std::string GetDisplayName() = 0;
+    //virtual std::shared_ptr<TooltipData> GetDisplayNameTooltip() = 0;
     virtual const int32_t GetValue(const CombatEnum::CombatantValue in_key) = 0;
-    virtual std::shared_ptr<TooltipData> GetTooltip(const CombatEnum::CombatantValue in_key, const int32_t in_level = 0) = 0;
+    virtual std::shared_ptr<TooltipData> GetTooltip(const CombatEnum::CombatantValue in_key) = 0;
 
     virtual void SetValue(const CombatEnum::CombatantValue in_key, const int32_t in_value) = 0;
 

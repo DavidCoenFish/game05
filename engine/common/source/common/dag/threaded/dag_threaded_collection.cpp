@@ -203,10 +203,10 @@ DagThreadedCollection::NodeID DagThreadedCollection::CreateNodeCalculate(
     const std::string& in_uid, 
     const CalculateFunction& in_function,    
     const std::string& in_display_name,
-    const std::string& in_tooltip_body
+    const std::string& in_tooltip_raw
 )
 {
-	return _implementation->CreateNodeCalculate(in_uid, in_function, in_display_name, in_tooltip_body);
+	return _implementation->CreateNodeCalculate(in_uid, in_function, in_display_name, in_tooltip_raw);
 }
 
 void DagThreadedCollection::DestroyNode(const NodeID in_node_id)
@@ -248,6 +248,16 @@ void DagThreadedCollection::UnlinkNode(const NodeID in_node_id)
 const bool DagThreadedCollection::VisitNode(const NodeID in_node_id, IDagThreadedVisitor& in_visitor)
 {
 	return in_node_id->Visit(in_visitor);
+}
+
+const std::string DagThreadedCollection::GetDisplayName(const NodeID in_node_id)
+{
+    return in_node_id->GetDisplayName();
+}
+
+const std::string DagThreadedCollection::GetTooltipRaw(const NodeID in_node_id)
+{
+    return in_node_id->GetTooltipRaw();
 }
 
 std::shared_ptr< IDagThreadedValue > DagThreadedCollection::GetDagValue(const NodeID in_node_id)

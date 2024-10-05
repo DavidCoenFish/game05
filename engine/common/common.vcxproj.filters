@@ -373,6 +373,9 @@
     <ClCompile Include="source\common\locale\locale_string_format_map.cpp">
       <Filter>souce\common\locale</Filter>
     </ClCompile>
+    <ClCompile Include="source\common\dag\threaded\dag_threaded.cpp">
+      <Filter>souce\common\dag\threaded</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\common\common_pch.h">

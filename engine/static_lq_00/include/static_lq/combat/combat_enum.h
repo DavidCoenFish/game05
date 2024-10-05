@@ -8,10 +8,14 @@ namespace CombatEnum
 {
 
 // using this as both as the DagCollection node key, and the local system dag node display value key
+
+/// these are the keys that the Combat system expects a Combatant to be able to provide
+/// used for combat and output (tooltips)
 enum class CombatantValue
 {
     TDefault = 0,
-    TDisplayName,
+    TSelf,
+    TName,
     TSpecies,
     TVariation,
 
