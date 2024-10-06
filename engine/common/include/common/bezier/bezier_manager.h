@@ -13,22 +13,22 @@ class BezierManagerImplementation;
 class BezierManager
 {
 public:
-    static const std::vector<D3D12_INPUT_ELEMENT_DESC>& GetInputElementDesc();
+	static const std::vector<D3D12_INPUT_ELEMENT_DESC>& GetInputElementDesc();
 
-    BezierManager(
-        DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list,
-        const std::filesystem::path& in_root_path
-        );
-    ~BezierManager();
+	BezierManager(
+		DrawSystem* const in_draw_system,
+		ID3D12GraphicsCommandList* const in_command_list,
+		const std::filesystem::path& in_root_path
+		);
+	~BezierManager();
 
-    void DrawBezierCurve(
-        DrawSystem* const in_draw_system,
-        DrawSystemFrame* const in_draw_system_frame,
-        BezierCurve* const in_bezier_curve
-        );
+	void DrawBezierCurve(
+		DrawSystem* const in_draw_system,
+		DrawSystemFrame* const in_draw_system_frame,
+		BezierCurve* const in_bezier_curve
+		);
 
 private:
-    std::unique_ptr<BezierManagerImplementation> _implementation;
+	std::unique_ptr<BezierManagerImplementation> _implementation;
 
 };

@@ -41,9 +41,9 @@ what would a FileSystem log consumer look like, how does it know the provider fi
 	#define LOG_CONSOLE(format, ...) (void)0
 
 	#define LOG_MESSAGE(format, ...) (void)0
-    #define LOG_MESSAGE_INFO(format, ...) (void)0
-    #define LOG_MESSAGE_DEBUG(format, ...) (void)0
-    #define LOG_MESSAGE_WARNING(format, ...) (void)0
+	#define LOG_MESSAGE_INFO(format, ...) (void)0
+	#define LOG_MESSAGE_DEBUG(format, ...) (void)0
+	#define LOG_MESSAGE_WARNING(format, ...) (void)0
 	#define LOG_MESSAGE_ERROR(format, ...) (void)0
 	#define LOG_MESSAGE_SCOPE(format, ...) (void)0
 	#define LOG_MESSAGE_FILESYSTEM(format, ...) (void)0
@@ -53,7 +53,7 @@ what would a FileSystem log consumer look like, how does it know the provider fi
 #endif
 
 #if defined(DSC_LOG) && 1
-    // note: cmd line "log_output" will send log messages to visual studio output
+	// note: cmd line "log_output" will send log messages to visual studio output
 	#define LOG_MESSAGE_UI_VERBOSE(format, ...) Log::AddMessage(LogTopic::UIVerbose, format, ##__VA_ARGS__)
 	//#define LOG_MESSAGE_UI_VERBOSE(format, ...) Log::AddConsole(format, ##__VA_ARGS__)
 #else

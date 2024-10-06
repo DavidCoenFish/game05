@@ -3,5 +3,5 @@
 
 ILocaleStringFormat::~ILocaleStringFormat()
 {
-    // nop
+	// nop
 }

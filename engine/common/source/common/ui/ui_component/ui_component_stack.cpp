@@ -12,198 +12,198 @@
 #include "common/ui/ui_enum.h"
 
 UIComponentStack::UIComponentStack(
-    const UIOrientation in_orientation,
-    const UICoord& in_gap
-    )
-    : IUIComponent()
-    , _orientation(in_orientation)
-    , _gap(in_gap)
+	const UIOrientation in_orientation,
+	const UICoord& in_gap
+	)
+	: IUIComponent()
+	, _orientation(in_orientation)
+	, _gap(in_gap)
 {
-    // Nop
+	// Nop
 }
 
 UIComponentStack::~UIComponentStack()
 {
-    // Nop
+	// Nop
 }
 
 const bool UIComponentStack::Set(
-    const UIOrientation in_orientation,
-    const UICoord& in_gap
-    )
+	const UIOrientation in_orientation,
+	const UICoord& in_gap
+	)
 {
-    bool dirty = false;
+	bool dirty = false;
 
-    if (_orientation != in_orientation)
-    {
-        dirty = true;
-        _orientation = in_orientation;
-    }
+	if (_orientation != in_orientation)
+	{
+		dirty = true;
+		_orientation = in_orientation;
+	}
 
-    if (_gap != in_gap)
-    {
-        dirty = true;
-        _gap = in_gap;
-    }
+	if (_gap != in_gap)
+	{
+		dirty = true;
+		_gap = in_gap;
+	}
 
-    return dirty;
+	return dirty;
 }
 
 const VectorInt2 UIComponentStack::GetDesiredSize(
-    UIHierarchyNodeChild& in_component_owner,
-    const UIHierarchyNodeUpdateParam& in_param,
-    const VectorInt2& in_parent_window
-    )
+	UIHierarchyNodeChild& in_component_owner,
+	const UIHierarchyNodeUpdateParam& in_param,
+	const VectorInt2& in_parent_window
+	)
 {
-    const VectorInt2 base_layout_size = in_component_owner.GetLayout().CalculateLayoutSize(in_parent_window, in_param._ui_scale);
-    const VectorInt2 base_layout_minus_margin = in_component_owner.GetLayout().SubtractMargin(base_layout_size, in_param._ui_scale);
-    std::vector<VectorInt4> child_window_offset_array;
-    const VectorInt2 desired_size_with_margin = CalculateDesiredSize(
-        in_component_owner, 
-        in_param, 
-        base_layout_minus_margin,
-        VectorInt2::s_zero,
-        child_window_offset_array
-        );
+	const VectorInt2 base_layout_size = in_component_owner.GetLayout().CalculateLayoutSize(in_parent_window, in_param._ui_scale);
+	const VectorInt2 base_layout_minus_margin = in_component_owner.GetLayout().SubtractMargin(base_layout_size, in_param._ui_scale);
+	std::vector<VectorInt4> child_window_offset_array;
+	const VectorInt2 desired_size_with_margin = CalculateDesiredSize(
+		in_component_owner, 
+		in_param, 
+		base_layout_minus_margin,
+		VectorInt2::s_zero,
+		child_window_offset_array
+		);
 
-    //const VectorInt2 desired_plus_margin = in_component_owner.GetLayout().AddMargin(base_desired_size, in_param._ui_scale);
+	//const VectorInt2 desired_plus_margin = in_component_owner.GetLayout().AddMargin(base_desired_size, in_param._ui_scale);
 
-    return desired_size_with_margin;
+	return desired_size_with_margin;
 }
 
 void UIComponentStack::UpdateLayout(
-    UIHierarchyNodeChild& in_component_owner,
-    const UIHierarchyNodeUpdateParam& in_param,
-    const VectorInt2& in_parent_window
-    )
+	UIHierarchyNodeChild& in_component_owner,
+	const UIHierarchyNodeUpdateParam& in_param,
+	const VectorInt2& in_parent_window
+	)
 {
-    // calculate layout size given parent window
-    const VectorInt2 base_layout_size = in_component_owner.GetLayout().CalculateLayoutSize(in_parent_window, in_param._ui_scale);
-    const VectorInt2 base_layout_minus_margin = in_component_owner.GetLayout().SubtractMargin(base_layout_size, in_param._ui_scale);
+	// calculate layout size given parent window
+	const VectorInt2 base_layout_size = in_component_owner.GetLayout().CalculateLayoutSize(in_parent_window, in_param._ui_scale);
+	const VectorInt2 base_layout_minus_margin = in_component_owner.GetLayout().SubtractMargin(base_layout_size, in_param._ui_scale);
 
-    // offset for texture margin, stack needs to add
-    VectorInt2 base_offset = in_component_owner.GetLayout().CalculateMarginOffset(in_param._ui_scale);
+	// offset for texture margin, stack needs to add
+	VectorInt2 base_offset = in_component_owner.GetLayout().CalculateMarginOffset(in_param._ui_scale);
 
-    //const VectorInt4& texture_margin = in_component_owner.GetLayout().GetTextureMarginRef();
+	//const VectorInt4& texture_margin = in_component_owner.GetLayout().GetTextureMarginRef();
 
-    std::vector<VectorInt4> child_window_offset_array;
-    const VectorInt2 base_desired_size = CalculateDesiredSize(
-        in_component_owner, 
-        in_param, 
-        base_layout_minus_margin,
-        base_offset,
-        child_window_offset_array
-        );
+	std::vector<VectorInt4> child_window_offset_array;
+	const VectorInt2 base_desired_size = CalculateDesiredSize(
+		in_component_owner, 
+		in_param, 
+		base_layout_minus_margin,
+		base_offset,
+		child_window_offset_array
+		);
 
-    in_component_owner.Finalise(
-        base_layout_size,
-        base_desired_size
-        );
+	in_component_owner.Finalise(
+		base_layout_size,
+		base_desired_size
+		);
 
-    int trace = 0;
-    const VectorInt2 texture_size = in_component_owner.GetNode().GetTextureSize(in_param._draw_system);
-    typedef std::vector<std::shared_ptr<UIHierarchyNodeChild>> TChildArray;
-    TChildArray& child_array = in_component_owner.GetNode().GetChildData();
-    for (TChildArray::reverse_iterator iter = child_array.rbegin(); iter != child_array.rend(); ++iter)
-    {
-        UIHierarchyNodeChild& child_data = **iter;
-        const VectorInt4& child_window_offset = child_window_offset_array[trace];
-        trace += 1;
+	int trace = 0;
+	const VectorInt2 texture_size = in_component_owner.GetNode().GetTextureSize(in_param._draw_system);
+	typedef std::vector<std::shared_ptr<UIHierarchyNodeChild>> TChildArray;
+	TChildArray& child_array = in_component_owner.GetNode().GetChildData();
+	for (TChildArray::reverse_iterator iter = child_array.rbegin(); iter != child_array.rend(); ++iter)
+	{
+		UIHierarchyNodeChild& child_data = **iter;
+		const VectorInt4& child_window_offset = child_window_offset_array[trace];
+		trace += 1;
 
-        // Todo: deal with horizontal stack
+		// Todo: deal with horizontal stack
 
-        const VectorInt2 window(child_window_offset.GetX(), child_window_offset.GetY());
-        const VectorInt2& adjust_offset = in_component_owner.GetAdjustOffsetRef(); 
-        const VectorInt2 offset(
-            child_window_offset.GetZ() + adjust_offset[0], // + texture_margin[0],
-            child_window_offset.GetW() + adjust_offset[1]
-            );
+		const VectorInt2 window(child_window_offset.GetX(), child_window_offset.GetY());
+		const VectorInt2& adjust_offset = in_component_owner.GetAdjustOffsetRef(); 
+		const VectorInt2 offset(
+			child_window_offset.GetZ() + adjust_offset[0], // + texture_margin[0],
+			child_window_offset.GetW() + adjust_offset[1]
+			);
 
-        child_data.UpdateLayout(
-            in_param,
-            window,
-            offset
-            );
-    }
+		child_data.UpdateLayout(
+			in_param,
+			window,
+			offset
+			);
+	}
 }
 
 const VectorInt2 UIComponentStack::CalculateDesiredSize(
-    UIHierarchyNodeChild& in_component_owner,
-    const UIHierarchyNodeUpdateParam& in_param,
-    const VectorInt2& in_base_layout_size_minus_margin,
-    const VectorInt2& in_base_offset,
-    std::vector<VectorInt4>& out_child_window_offset_array
-    )
+	UIHierarchyNodeChild& in_component_owner,
+	const UIHierarchyNodeUpdateParam& in_param,
+	const VectorInt2& in_base_layout_size_minus_margin,
+	const VectorInt2& in_base_offset,
+	std::vector<VectorInt4>& out_child_window_offset_array
+	)
 {
-    const int gap = _gap.Calculate(in_base_layout_size_minus_margin, in_param._ui_scale);
+	const int gap = _gap.Calculate(in_base_layout_size_minus_margin, in_param._ui_scale);
 
-    VectorInt2 max_desired_size;
+	VectorInt2 max_desired_size;
 
-    //for (auto& child_data_ptr : in_component_owner.GetNode().GetChildData())
-    typedef std::vector<std::shared_ptr<UIHierarchyNodeChild>> TChildArray;
-    TChildArray& child_array = in_component_owner.GetNode().GetChildData();
-    for (TChildArray::reverse_iterator iter = child_array.rbegin(); iter != child_array.rend(); ++iter)
-    {
-        UIHierarchyNodeChild& child_data = **iter;
+	//for (auto& child_data_ptr : in_component_owner.GetNode().GetChildData())
+	typedef std::vector<std::shared_ptr<UIHierarchyNodeChild>> TChildArray;
+	TChildArray& child_array = in_component_owner.GetNode().GetChildData();
+	for (TChildArray::reverse_iterator iter = child_array.rbegin(); iter != child_array.rend(); ++iter)
+	{
+		UIHierarchyNodeChild& child_data = **iter;
 
-        // how to skip null components?  
-        VectorInt2 child_desired = child_data.GetDesiredSize(
-            in_param,
-            in_base_layout_size_minus_margin
-            );
+		// how to skip null components?  
+		VectorInt2 child_desired = child_data.GetDesiredSize(
+			in_param,
+			in_base_layout_size_minus_margin
+			);
 
-        VectorInt4 window_offset(child_desired.GetX(), child_desired.GetY(), 0, 0);
-        switch(_orientation)
-        {
-        default:
-            break;
-        case UIOrientation::TVertical:
-            if ((0 != max_desired_size[1]) && (0 != child_desired[1]))
-            {
-                max_desired_size[1] += gap;
-            }
-            window_offset[2] = in_base_offset[0];
-            window_offset[3] = max_desired_size[1] + in_base_offset[1];
-            max_desired_size[0] = std::max(max_desired_size[0], child_desired[0]);
-            max_desired_size[1] += child_desired[1];
+		VectorInt4 window_offset(child_desired.GetX(), child_desired.GetY(), 0, 0);
+		switch(_orientation)
+		{
+		default:
+			break;
+		case UIOrientation::TVertical:
+			if ((0 != max_desired_size[1]) && (0 != child_desired[1]))
+			{
+				max_desired_size[1] += gap;
+			}
+			window_offset[2] = in_base_offset[0];
+			window_offset[3] = max_desired_size[1] + in_base_offset[1];
+			max_desired_size[0] = std::max(max_desired_size[0], child_desired[0]);
+			max_desired_size[1] += child_desired[1];
 
-            break;
-        case UIOrientation::THorizontal:
-            if ((0 != max_desired_size[0]) && (0 != child_desired[0]))
-            {
-                max_desired_size[0] += gap;
-            }
-            window_offset[2] = max_desired_size[0] + in_base_offset[0];
-            window_offset[3] = in_base_offset[1];
-            max_desired_size[0] += child_desired[0];
-            max_desired_size[1] = std::max(max_desired_size[1], child_desired[1]);
+			break;
+		case UIOrientation::THorizontal:
+			if ((0 != max_desired_size[0]) && (0 != child_desired[0]))
+			{
+				max_desired_size[0] += gap;
+			}
+			window_offset[2] = max_desired_size[0] + in_base_offset[0];
+			window_offset[3] = in_base_offset[1];
+			max_desired_size[0] += child_desired[0];
+			max_desired_size[1] = std::max(max_desired_size[1], child_desired[1]);
 
-            break;
-        }
+			break;
+		}
 
-        out_child_window_offset_array.push_back(window_offset);
-    }
+		out_child_window_offset_array.push_back(window_offset);
+	}
 
-    for (auto& iter : out_child_window_offset_array)
-    {
-        switch(_orientation)
-        {
-        default:
-            break;
-        case UIOrientation::TVertical:
-            iter[0] = max_desired_size[0];
-            break;
-        case UIOrientation::THorizontal:
-            iter[1] = max_desired_size[1];
-            break;
-        }
-    }
+	for (auto& iter : out_child_window_offset_array)
+	{
+		switch(_orientation)
+		{
+		default:
+			break;
+		case UIOrientation::TVertical:
+			iter[0] = max_desired_size[0];
+			break;
+		case UIOrientation::THorizontal:
+			iter[1] = max_desired_size[1];
+			break;
+		}
+	}
 
-    max_desired_size = in_component_owner.GetLayout().AddMargin(
-        max_desired_size,
-        in_param._ui_scale
-        );
+	max_desired_size = in_component_owner.GetLayout().AddMargin(
+		max_desired_size,
+		in_param._ui_scale
+		);
 
-    return max_desired_size;
+	return max_desired_size;
 }
 

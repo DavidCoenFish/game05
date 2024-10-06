@@ -9,16 +9,16 @@ class UILayout;
 /// result is that UIComponentCanvas could be a typedef of IUIComponent
 class UIComponentCanvas : public IUIComponent
 {
-    typedef IUIComponent TSuper;
+	typedef IUIComponent TSuper;
 public:
-    UIComponentCanvas();
-    virtual ~UIComponentCanvas();
+	UIComponentCanvas();
+	virtual ~UIComponentCanvas();
 
 private:
-    //virtual const VectorInt2 GetDesiredSize(
-    //    UIHierarchyNodeChild& in_component_owner,
-    //    const UIHierarchyNodeUpdateParam& in_layout_param,
-    //    const VectorInt2& in_pre_shrink_layout_size //in_parent_window
-    //    ) override;
+	//virtual const VectorInt2 GetDesiredSize(
+	//	UIHierarchyNodeChild& in_component_owner,
+	//	const UIHierarchyNodeUpdateParam& in_layout_param,
+	//	const VectorInt2& in_pre_shrink_layout_size //in_parent_window
+	//	) override;
 
 };

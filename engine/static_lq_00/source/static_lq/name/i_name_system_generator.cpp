@@ -3,5 +3,5 @@
 
 const std::string StaticLq::INameSystemGenerator::GenerateKey(const std::string& in_generator_key, const int in_seed)
 {
-    return std::string("slqns_") + in_generator_key + std::to_string(in_seed);
+	return std::string("slqns_") + in_generator_key + std::to_string(in_seed);
 }

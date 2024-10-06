@@ -98,24 +98,24 @@ big units build a bigger building?
 
 use hex grid, not squares?
 base (max 6 add ons)
-    * *
+	* *
    * * *
-    * *
+	* *
 addon
-    * *
-     *
+	* *
+	 *
 big base
-    * * *
+	* * *
    * * * *
   * * * * *
    * * * *
-    * * *
-    max 9 addons?
-      * 
+	* * *
+	max 9 addons?
+	  * 
    * * * *
-    * * *  
+	* * *  
    * * * *
-      *  
+	  *  
 
 
 is random to get skill of input units on building, but 100% if all four input units have the same skill
@@ -129,32 +129,32 @@ tutorial host otherwise is just a flying building with neural "yeap, i am a flyi
 dead bodies can accumulate to block map, can be gather for food or damaged to remove
 
 implementation
-    photoshop style cached tiles of traversal distance maps, invalidate tile on change, and paths using tile
-    density map of population/ slowdown of each cell
-    visiblity map, what each player can currently see, has seen of the map
-    render list units/ buildings and what they are doing.
-    frame state database (unit build, unit move, build building, gather resources, special abblities, camera)
-        state database can rewind (single player's undo/ and multiplay network message stitch in)
-        save to current time, save full database
-        - how to order input from multiple players on same frame? mod order for player index?
+	photoshop style cached tiles of traversal distance maps, invalidate tile on change, and paths using tile
+	density map of population/ slowdown of each cell
+	visiblity map, what each player can currently see, has seen of the map
+	render list units/ buildings and what they are doing.
+	frame state database (unit build, unit move, build building, gather resources, special abblities, camera)
+		state database can rewind (single player's undo/ and multiplay network message stitch in)
+		save to current time, save full database
+		- how to order input from multiple players on same frame? mod order for player index?
 
 
 extern to input is the change id of the frame input- only have what needs to be saved in the input database, but have extra data for each frame like the change id
 frame change id array std::vector<{int byte stream offset, int change id}>
 input database
-    initial config, engine version, game mode, map id, initial nb players? starting pos? bytestream length
-    byte stream of [command length, id, data....][command length, ...
-    0 frame id [4 bytes]
-    1 set selection self, unit id
-    2 add selection self, unit id
-    3 set selection generic, player count, player id, unit count, units
-    2 build drone, unit id
-    3 selected unit command gather
-    4 selected unit command gather target coord
-    5 set building waypoint
-    6 select unit move
-    6 select unit attack move 
+	initial config, engine version, game mode, map id, initial nb players? starting pos? bytestream length
+	byte stream of [command length, id, data....][command length, ...
+	0 frame id [4 bytes]
+	1 set selection self, unit id
+	2 add selection self, unit id
+	3 set selection generic, player count, player id, unit count, units
+	2 build drone, unit id
+	3 selected unit command gather
+	4 selected unit command gather target coord
+	5 set building waypoint
+	6 select unit move
+	6 select unit attack move 
 
 
 snapshot
-    frame id, 
+	frame id, 

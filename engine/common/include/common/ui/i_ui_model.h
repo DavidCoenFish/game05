@@ -8,20 +8,20 @@ class UIData;
 class IUIModel
 {
 public:
-    virtual ~IUIModel();
+	virtual ~IUIModel();
 
-    virtual UIData* const GetData(
-        const std::string& in_key
-        ) const = 0;
+	virtual UIData* const GetData(
+		const std::string& in_key
+		) const = 0;
 
-    template <class InType>
-    InType* const GetDataType(
-        const std::string& in_key
-        )
-    {
-        UIData* const data = GetData(in_key);
-        return dynamic_cast<InType*>(data);
-    }
+	template <class InType>
+	InType* const GetDataType(
+		const std::string& in_key
+		)
+	{
+		UIData* const data = GetData(in_key);
+		return dynamic_cast<InType*>(data);
+	}
 
-    // make a visitor, or provide tools to set locale on string/textrun resources? (or both)
+	// make a visitor, or provide tools to set locale on string/textrun resources? (or both)
 };

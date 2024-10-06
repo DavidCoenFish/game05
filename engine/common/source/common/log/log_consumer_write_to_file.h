@@ -6,8 +6,8 @@ class LogConsumerWriteToFile: public ILogConsumer
 {
 public:
    LogConsumerWriteToFile(
-      const std::string& in_log_file_path = GetDefaultPath(),
-      const std::vector<bool>& in_topic_filter_array_or_empty = std::vector<bool>()
+	  const std::string& in_log_file_path = GetDefaultPath(),
+	  const std::vector<bool>& in_topic_filter_array_or_empty = std::vector<bool>()
    );
    ~LogConsumerWriteToFile();
 private:

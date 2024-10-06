@@ -11,13 +11,13 @@ class ICombatant;
 class SimpleCombatPlayer : public ICombatant
 {
 public:
-    SimpleCombatPlayer(const int32_t in_id);
+	SimpleCombatPlayer(const int32_t in_id);
 
 private:
-    const int32_t GetId() const override;
+	const int32_t GetId() const override { return _id; }
 
 private:
-    const int32_t _id;
+	const int32_t _id;
 
 };
 

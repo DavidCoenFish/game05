@@ -6,10 +6,10 @@
 Tooltip::Tooltip(const std::vector< TooltipData >& in_data)
 : _data(in_data)
 {
-    // nop
+	// nop
 }
 
 Tooltip::~Tooltip()
 {
-    // nop
+	// nop
 }

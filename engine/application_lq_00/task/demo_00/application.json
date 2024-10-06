@@ -1,16 +1,16 @@
 {
    "_tasks": [
-      {
-         "_factory": "Window",
-         "_data": [
-            {
-                "_name": "Demo 00",
-                "_fullScreen": false,
-                "_width": 800,
-                "_height": 600,
-                "_factory": "demo_00"
-            }
-         ]
-      }
+	  {
+		 "_factory": "Window",
+		 "_data": [
+			{
+				"_name": "Demo 00",
+				"_fullScreen": false,
+				"_width": 800,
+				"_height": 600,
+				"_factory": "demo_00"
+			}
+		 ]
+	  }
    ]
 }

@@ -3,7 +3,7 @@
 
 const int32_t StaticLq::ICombatSide::MakeNewId()
 {
-    static int32_t s_value = 0;
-    ++s_value;
-    return s_value;
+	static int32_t s_value = 0;
+	++s_value;
+	return s_value;
 }

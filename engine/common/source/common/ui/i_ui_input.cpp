@@ -3,45 +3,45 @@
 
 IUIInput::~IUIInput()
 {
-    // Nop
+	// Nop
 }
 
 void IUIInput::OnInputTouch(
-    const VectorFloat4&,
-    const VectorFloat2&,
-    std::string&
-    )
+	const VectorFloat4&,
+	const VectorFloat2&,
+	std::string&
+	)
 {
-    // Nop
+	// Nop
 }
 
 void IUIInput::OnInputClick(
-    UIRootInputState&,
-    const VectorFloat4&,
-    const VectorFloat2&
-    )
+	UIRootInputState&,
+	const VectorFloat4&,
+	const VectorFloat2&
+	)
 {
-    // Nop
+	// Nop
 }
 
 void IUIInput::OnInputRepeat(
-    const VectorFloat4&,
-    const VectorFloat2&,
-    const float,
-    const float,
-    std::string&
-    )
+	const VectorFloat4&,
+	const VectorFloat2&,
+	const float,
+	const float,
+	std::string&
+	)
 {
-    // Nop
+	// Nop
 }
 
 void IUIInput::OnHover(
-    const VectorFloat4&,
-    const VectorFloat2&,
-    std::string&
-    )
+	const VectorFloat4&,
+	const VectorFloat2&,
+	std::string&
+	)
 {
-    // Nop
+	// Nop
 }
 
 

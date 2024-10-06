@@ -9,12 +9,12 @@ SET GIT="git.exe"
 
 FOR /F "skip=1 tokens=1-6" %%G IN ('WMIC Path Win32_LocalTime Get Day^,Hour^,Minute^,Month^,Second^,Year /Format:table') DO (
    IF "%%~L"=="" goto S_DONE
-      SET _yyyy=%%L
-      SET _mm=00%%J
-      SET _dd=00%%G
-      SET _hour=00%%H
-      SET _minute=00%%I
-      SET _second=00%%K
+	  SET _yyyy=%%L
+	  SET _mm=00%%J
+	  SET _dd=00%%G
+	  SET _hour=00%%H
+	  SET _minute=00%%I
+	  SET _second=00%%K
 )
 : S_DONE
 

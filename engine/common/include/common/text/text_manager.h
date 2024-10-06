@@ -14,48 +14,48 @@ enum class LocaleISO_639_1;
 class TextManager
 {
 public:
-    static const std::vector<D3D12_INPUT_ELEMENT_DESC>& GetInputElementDesc();
+	static const std::vector<D3D12_INPUT_ELEMENT_DESC>& GetInputElementDesc();
 
-    TextManager(
-        DrawSystem* const in_draw_system,
-        ID3D12GraphicsCommandList* const in_command_list,
-        const std::filesystem::path& in_root_path
-        );
-    ~TextManager();
+	TextManager(
+		DrawSystem* const in_draw_system,
+		ID3D12GraphicsCommandList* const in_command_list,
+		const std::filesystem::path& in_root_path
+		);
+	~TextManager();
 
-    // Find or make a new text face
-    TextFont* const GetTextFont(
-        const std::filesystem::path& in_font_rel_path
-        );
+	// Find or make a new text face
+	TextFont* const GetTextFont(
+		const std::filesystem::path& in_font_rel_path
+		);
 
-    // An Icon is a small 4 channel image
-    IconFont* const GetIconFont();
+	// An Icon is a small 4 channel image
+	IconFont* const GetIconFont();
 
-    void DrawText(
-        DrawSystem* const in_draw_system,
-        DrawSystemFrame* const in_draw_system_frame,
-        TextBlock* const in_text_block
-        );
+	void DrawText(
+		DrawSystem* const in_draw_system,
+		DrawSystemFrame* const in_draw_system_frame,
+		TextBlock* const in_text_block
+		);
 
-    void DrawTextRun(
-        DrawSystem* const in_draw_system,
-        DrawSystemFrame* const in_draw_system_frame,
-        TextRun* const in_text_run
-        );
+	void DrawTextRun(
+		DrawSystem* const in_draw_system,
+		DrawSystemFrame* const in_draw_system_frame,
+		TextRun* const in_text_run
+		);
 
-    //void AddIcon(
-    //    const int in_icon_id,
-    //    const int in_width,
-    //    const int in_height,
-    //    const uint8_t* const in_buffer
-    //    );
+	//void AddIcon(
+	//	const int in_icon_id,
+	//	const int in_width,
+	//	const int in_height,
+	//	const uint8_t* const in_buffer
+	//	);
 
-    // Assert if there are any live TextBlocks, clear the font/icon texture
-    void RestUsage();
+	// Assert if there are any live TextBlocks, clear the font/icon texture
+	void RestUsage();
 
-    const TextLocale* const GetLocaleToken(const LocaleISO_639_1 in_locale) const;
+	const TextLocale* const GetLocaleToken(const LocaleISO_639_1 in_locale) const;
 
 private:
-    std::unique_ptr<TextManagerImplementation> _implementation;
+	std::unique_ptr<TextManagerImplementation> _implementation;
 
 };

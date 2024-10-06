@@ -7,11 +7,11 @@ If (Test-Path $source)
 {
   If (Test-Path $destination)
   {
-    $replace = (Get-FileHash $destination).hash -ne (Get-FileHash $source).hash
+	$replace = (Get-FileHash $destination).hash -ne (Get-FileHash $source).hash
   }
   else
   {
-    $replace = $true
+	$replace = $true
   }
 }
 

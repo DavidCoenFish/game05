@@ -3,10 +3,10 @@
 
 void HandleCloser::operator()(HANDLE in_handle)
 {
-    if (in_handle)
-    {
-        CloseHandle(in_handle);
-    }
-    return;
+	if (in_handle)
+	{
+		CloseHandle(in_handle);
+	}
+	return;
 }
 

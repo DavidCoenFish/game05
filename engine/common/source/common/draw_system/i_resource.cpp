@@ -8,47 +8,47 @@ int s_draw_system_resource_alive_count = 0;
 #endif
 
 IResource::IResource(DrawSystem* const in_draw_system) 
-    : _draw_system(in_draw_system)
+	: _draw_system(in_draw_system)
 {
-    if (nullptr != _draw_system)
-    {
-        _draw_system->AddResource(this);
-    }
+	if (nullptr != _draw_system)
+	{
+		_draw_system->AddResource(this);
+	}
 
 #if defined(DRAW_SYSTEM_RESOURCE_ALIVE_COUNT)
-    s_draw_system_resource_alive_count += 1;
+	s_draw_system_resource_alive_count += 1;
 #endif
 
-    return;
+	return;
 }
 
 IResource::~IResource()
 {
-    if (nullptr != _draw_system)
-    {
-        _draw_system->RemoveResource(this);
-    }
+	if (nullptr != _draw_system)
+	{
+		_draw_system->RemoveResource(this);
+	}
 
 #if defined(DRAW_SYSTEM_RESOURCE_ALIVE_COUNT)
-    s_draw_system_resource_alive_count -= 1;
+	s_draw_system_resource_alive_count -= 1;
 #endif
 
 }
 
 void IResource::OnResize(
-    ID3D12GraphicsCommandList* const,
-    ID3D12Device2* const,
-    const VectorInt2&
-    )
+	ID3D12GraphicsCommandList* const,
+	ID3D12Device2* const,
+	const VectorInt2&
+	)
 {
-    return;
+	return;
 }
 
 void IResource::OnResourceBarrier(
-    ID3D12GraphicsCommandList* const,
-    D3D12_RESOURCE_STATES
-    )
+	ID3D12GraphicsCommandList* const,
+	D3D12_RESOURCE_STATES
+	)
 {
-    return;
+	return;
 }
 

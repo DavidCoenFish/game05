@@ -19,7 +19,7 @@ public:
 		const std::string& in_uid,
 		const CalculateFunction& in_calculate_function,
 		const std::string& in_display_name,
-        const std::string& in_tooltip_raw
+		const std::string& in_tooltip_raw
 		);
 	virtual ~DagThreadedNodeCalculate();
 
@@ -37,7 +37,7 @@ private:
 	void RemoveOutput(IDagThreadedNode* const pNode) override;
 	std::shared_ptr<IDagThreadedValue> GetValue() override;
 
-    /// return true to continue visiting 
+	/// return true to continue visiting 
 	virtual const bool Visit(IDagThreadedVisitor& visitor) override;
 
 	void MarkDirty() override;
@@ -48,16 +48,16 @@ private:
 	const std::string _tooltip_raw;
 	const CalculateFunction _calculate_function;
 
-    std::shared_mutex _array_input_stack_mutex;
-    std::vector< IDagThreadedNode* > _array_input_stack;
+	std::shared_mutex _array_input_stack_mutex;
+	std::vector< IDagThreadedNode* > _array_input_stack;
 
-    std::shared_mutex _array_input_index_mutex;
-    std::vector< IDagThreadedNode* > _array_input_index;
+	std::shared_mutex _array_input_index_mutex;
+	std::vector< IDagThreadedNode* > _array_input_index;
 
-    std::shared_mutex _array_output_mutex;
-    std::vector< IDagThreadedNode* > _array_output;
+	std::shared_mutex _array_output_mutex;
+	std::vector< IDagThreadedNode* > _array_output;
 
-    // Shared_ptr has an internal lock
+	// Shared_ptr has an internal lock
 	std::shared_ptr< IDagThreadedValue > _value;
 
 	// Each time we are marked dirty, _change_id increments

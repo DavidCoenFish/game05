@@ -2,49 +2,49 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <DscBuildDir>$(SolutionDir)..\build\$(SolutionName)\$(ProjectName)\$(Platform)\$(Configuration)\</DscBuildDir>
-    <DscIncludeDir>$(SolutionDir)common\include\;$(SolutionDir)sdk\;$(projectDir)source\</DscIncludeDir>
+	<DscBuildDir>$(SolutionDir)..\build\$(SolutionName)\$(ProjectName)\$(Platform)\$(Configuration)\</DscBuildDir>
+	<DscIncludeDir>$(SolutionDir)common\include\;$(SolutionDir)sdk\;$(projectDir)source\</DscIncludeDir>
   </PropertyGroup>
   <PropertyGroup>
-    <OutDir>$(DscBuildDir)output\</OutDir>
-    <IntDir>$(DscBuildDir)intermediate\</IntDir>
+	<OutDir>$(DscBuildDir)output\</OutDir>
+	<IntDir>$(DscBuildDir)intermediate\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup>
-    <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-    </ClCompile>
+	<ClCompile>
+	  <PrecompiledHeader>Use</PrecompiledHeader>
+	</ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup>
-    <ClCompile>
-      <PrecompiledHeaderFile>application_lq_00_pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(DscIncludeDir);$(IncludePath)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalUsingDirectories>%WindowsSdkDir\Include%WindowsSDKVersion%\um;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
-    </ClCompile>
-    <FxCompile>
-      <ObjectFileOutput>$(OutDirFullPath)%(RelativeDir)%(Filename).cso</ObjectFileOutput>
-    </FxCompile>
-    <CopyFileToFolders />
-    <CopyFileToFolders>
-      <DestinationFolders>$(OutDirFullPath)%(RelativeDir)</DestinationFolders>
-    </CopyFileToFolders>
-    <PreBuildEvent>
-      <Command>$(ProjectDir)script\prebuild.cmd "$(Configuration)" "$(Platform)" 0 0 "$(ProjectName)" "$(TargetName)"</Command>
-    </PreBuildEvent>
-    <Link>
-      <AdditionalLibraryDirectories>%WindowsSdkDir%\Lib%WindowsSDKVersion%\\um\arch;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>D3d12.lib;DXGI.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <EntryPointSymbol>
-      </EntryPointSymbol>
-      <SubSystem>Windows</SubSystem>
-    </Link>
+	<ClCompile>
+	  <PrecompiledHeaderFile>application_lq_00_pch.h</PrecompiledHeaderFile>
+	  <AdditionalIncludeDirectories>$(DscIncludeDir);$(IncludePath)</AdditionalIncludeDirectories>
+	  <LanguageStandard>stdcpp17</LanguageStandard>
+	  <AdditionalUsingDirectories>%WindowsSdkDir\Include%WindowsSDKVersion%\um;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+	</ClCompile>
+	<FxCompile>
+	  <ObjectFileOutput>$(OutDirFullPath)%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+	</FxCompile>
+	<CopyFileToFolders />
+	<CopyFileToFolders>
+	  <DestinationFolders>$(OutDirFullPath)%(RelativeDir)</DestinationFolders>
+	</CopyFileToFolders>
+	<PreBuildEvent>
+	  <Command>$(ProjectDir)script\prebuild.cmd "$(Configuration)" "$(Platform)" 0 0 "$(ProjectName)" "$(TargetName)"</Command>
+	</PreBuildEvent>
+	<Link>
+	  <AdditionalLibraryDirectories>%WindowsSdkDir%\Lib%WindowsSDKVersion%\\um\arch;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+	  <AdditionalDependencies>D3d12.lib;DXGI.lib;%(AdditionalDependencies)</AdditionalDependencies>
+	  <EntryPointSymbol>
+	  </EntryPointSymbol>
+	  <SubSystem>Windows</SubSystem>
+	</Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <BuildMacro Include="DscBuildDir">
-      <Value>$(DscBuildDir)</Value>
-    </BuildMacro>
-    <BuildMacro Include="DscIncludeDir">
-      <Value>$(DscIncludeDir)</Value>
-    </BuildMacro>
+	<BuildMacro Include="DscBuildDir">
+	  <Value>$(DscBuildDir)</Value>
+	</BuildMacro>
+	<BuildMacro Include="DscIncludeDir">
+	  <Value>$(DscIncludeDir)</Value>
+	</BuildMacro>
   </ItemGroup>
 </Project>

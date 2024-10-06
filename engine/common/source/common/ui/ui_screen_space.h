@@ -6,31 +6,31 @@
 class UIScreenSpace
 {
 public:
-    /// default constructor is a full screen with no clipping
-    UIScreenSpace(
-        const VectorFloat4& in_pos = VectorFloat4::s_render_coordinates_full,
-        const VectorFloat4& in_clip = VectorFloat4::s_render_coordinates_full
-        );
-    ~UIScreenSpace();
+	/// default constructor is a full screen with no clipping
+	UIScreenSpace(
+		const VectorFloat4& in_pos = VectorFloat4::s_render_coordinates_full,
+		const VectorFloat4& in_clip = VectorFloat4::s_render_coordinates_full
+		);
+	~UIScreenSpace();
 
-    void Set(
-        const VectorFloat4& in_pos,
-        const VectorFloat4& in_clip
-        );
+	void Set(
+		const VectorFloat4& in_pos,
+		const VectorFloat4& in_clip
+		);
 
-    void Update(
-        const UIScreenSpace& in_parent,
-        const VectorFloat4& in_pos,
-        const VectorFloat4& in_uv
-        );
+	void Update(
+		const UIScreenSpace& in_parent,
+		const VectorFloat4& in_pos,
+		const VectorFloat4& in_uv
+		);
 
-    const VectorFloat4& GetPosRef() const { return _pos; }
-    const VectorFloat4& GetClipRef() const { return _clip; }
+	const VectorFloat4& GetPosRef() const { return _pos; }
+	const VectorFloat4& GetClipRef() const { return _clip; }
 
 private:
-    /// screen space pos we would end up at, ie, flattenened
-    VectorFloat4 _pos;
-    /// if each UISceenSpace clipped content at bounds, what would our screen space coverage be
-    VectorFloat4 _clip;
+	/// screen space pos we would end up at, ie, flattenened
+	VectorFloat4 _pos;
+	/// if each UISceenSpace clipped content at bounds, what would our screen space coverage be
+	VectorFloat4 _clip;
 
 };

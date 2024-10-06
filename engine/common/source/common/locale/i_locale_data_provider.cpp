@@ -3,5 +3,5 @@
 
 ILocaleDataProvider::~ILocaleDataProvider()
 {
-    // nop
+	// nop
 }

@@ -4,8 +4,8 @@
 
 namespace BezierFileHelper
 {
-    const bool SegmentDataFromSvg(
-        std::vector<BezierCurve::BezierSegment>& out_segment_data, 
-        const std::filesystem::path& in_file_path
-        );
+	const bool SegmentDataFromSvg(
+		std::vector<BezierCurve::BezierSegment>& out_segment_data, 
+		const std::filesystem::path& in_file_path
+		);
 }

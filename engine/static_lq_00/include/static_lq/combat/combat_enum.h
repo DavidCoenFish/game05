@@ -10,29 +10,23 @@ namespace CombatEnum
 // using this as both as the DagCollection node key, and the local system dag node display value key
 
 /// these are the keys that the Combat system expects a Combatant to be able to provide
-/// used for combat and output (tooltips)
+/// used for combat (values) and output (tooltips)
 enum class CombatantValue
 {
-    TDefault = 0,
-    TSelf,
-    TName,
-    TSpecies,
-    TVariation,
+	TDefault = 0,
 
-    TDamageTollerance,
-    TDamageSum,
-    TDamageFatigue,
-    TDamagePhysical,
-    TDamageParalyzation,
+	TSelf, // output
 
-    THealthPoints,
-    TMelleeInitiative,
+	TCanContinueCombat, // combat
+	TMelleeInitiative, // combat
+	TDefense, // combat
+	TAttackBonus, // combat
+	TSusceptibleSeverityDamage, // combat
+	// TIsMagicalDamage or is this part of the attack data
+	TSusceptibleFaithDamage, // combat
+	TAlignment, // combat
+	TSusceptibleNonMagicalDamage, // combat
 
-    TAlive,
-    TCanContinueCombat,
-    TAttackBonus,
-    TDefense,
-    TSusceptibleSeverityDamage,
 };
 
 }
@@ -42,5 +36,5 @@ enum class CombatantValue
 template <> 
 const StaticLq::CombatEnum::CombatantValue EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumFromString(const std::string& in_locale);
 template <> 
-const const std::string EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(const StaticLq::CombatEnum::CombatantValue in_locale);
+const std::string EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(const StaticLq::CombatEnum::CombatantValue in_locale);
 

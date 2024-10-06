@@ -11,11 +11,11 @@ class ICombatant;
 class SimpleCombatTopology : public ICombatTopology
 {
 public:
-    SimpleCombatTopology();
+	SimpleCombatTopology();
 
 private:
-    const bool CanAttackMellee(const ICombatant& attacker, const ICombatant& receive) override;
-    const bool CanAttackRange(const ICombatant& attacker, const ICombatant& receive) override;
+	const bool CanAttackMellee(const ICombatant& attacker, const ICombatant& receive) override;
+	const bool CanAttackRange(const ICombatant& attacker, const ICombatant& receive) override;
 
 };
 

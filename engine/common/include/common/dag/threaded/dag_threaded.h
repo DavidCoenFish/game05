@@ -22,19 +22,16 @@ namespace DagThreaded
 	}
 
 	template <>
-	const bool IsZero(const std::string& value)
-	{
-		return value.empty();
-	}
+	const bool IsZero<std::string>(const std::string& value);
 
 
-    static void RegisterLocaleSystem(LocaleSystem& in_locale_system);
+	static void RegisterLocaleSystem(LocaleSystem& in_locale_system);
 
-    /// example "Damage Tollerance"
-    const std::string GetTooltipName(const NodeID in_node_id, LocaleSystem& in_locale_system);
-    /// example "Damage Tollerance(17)"
-    const std::string GetTooltipText(DagThreadedCollection& in_collection, const NodeID in_node_id, LocaleSystem& in_locale_system);
-    /// example "Damage Tollerance(17) = 12 + 1d12"
-    const std::shared_ptr<Tooltip> GetTooltipBody(DagThreadedCollection& in_collection, const NodeID in_node_id, LocaleSystem& in_locale_system);
+	/// example "Damage Tollerance"
+	const std::string GetTooltipName(const NodeID in_node_id, const LocaleSystem& in_locale_system);
+	/// example "Damage Tollerance(17)"
+	const std::string GetTooltipText(const DagThreadedCollection& in_collection, const NodeID in_node_id, const LocaleSystem& in_locale_system);
+	/// example "Damage Tollerance(17) = 12 + 1d12"
+	const std::shared_ptr<Tooltip> GetTooltipBody(const DagThreadedCollection& in_collection, const NodeID in_node_id, const LocaleSystem& in_locale_system);
 
 };

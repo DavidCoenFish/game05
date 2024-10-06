@@ -3,7 +3,7 @@
 class HandleCloser
 {
 public:
-    typedef HANDLE pointer;
-    void operator()(HANDLE in_handle);
+	typedef HANDLE pointer;
+	void operator()(HANDLE in_handle);
 };
 

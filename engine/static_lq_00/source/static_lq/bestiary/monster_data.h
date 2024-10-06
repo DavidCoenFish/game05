@@ -10,41 +10,41 @@ namespace StaticLq
 struct MonsterData
 {
 public:
-    // locale key
+	// locale key
 	std::string _species = {};
 
-    BestiaryEnum::Habitat _habitat = BestiaryEnum::Habitat::TDefault;
-    BestiaryEnum::Lifestyle _lifestyle = BestiaryEnum::Lifestyle::TDefault;
-    BestiaryEnum::WealthType  _wealth_type = BestiaryEnum::WealthType::TDefault;
-    BestiaryEnum::Alignment _alignment = BestiaryEnum::Alignment::TDefault;
-    BestiaryEnum::Cunning _cunning = BestiaryEnum::Cunning::TDefault;
+	BestiaryEnum::Habitat _habitat = BestiaryEnum::Habitat::TDefault;
+	BestiaryEnum::Lifestyle _lifestyle = BestiaryEnum::Lifestyle::TDefault;
+	BestiaryEnum::WealthType  _wealth_type = BestiaryEnum::WealthType::TDefault;
+	BestiaryEnum::Alignment _alignment = BestiaryEnum::Alignment::TDefault;
+	BestiaryEnum::Cunning _cunning = BestiaryEnum::Cunning::TDefault;
 	int _speed = 0;
-    BestiaryEnum::Strength _strength = BestiaryEnum::Strength::TDefault;
-    BestiaryEnum::Size _size = BestiaryEnum::Size::TDefault;
-    std::vector<SpecialCharacteristicData>_array_special_characteristic;
+	BestiaryEnum::Strength _strength = BestiaryEnum::Strength::TDefault;
+	BestiaryEnum::Size _size = BestiaryEnum::Size::TDefault;
+	std::vector<SpecialCharacteristicData>_array_special_characteristic;
 	int _recovery_time = 0;
 	int _absorption = 0;
 	int _surprise_adjust = 0;
-    MonsterAttributeData _attribute_data;
-    std::vector<MonsterVariationData> _array_variation;
+	MonsterAttributeData _attribute_data;
+	std::vector<MonsterVariationData> _array_variation;
 
 };
 }
 /*
-    std::vector<BestiaryEnum::Habitat>_habitat = {};
-    std::vector<BestiaryEnum::Lifestyle> _lifestyle = {};
-    std::vector<BestiaryEnum::WealthType> _wealth_type = {};
-    BestiaryEnum::Alignment _alignment = BestiaryEnum::Alignment::TDefault;
-    BestiaryEnum::Cunning _cunning = BestiaryEnum::Cunning::TDefault;
+	std::vector<BestiaryEnum::Habitat>_habitat = {};
+	std::vector<BestiaryEnum::Lifestyle> _lifestyle = {};
+	std::vector<BestiaryEnum::WealthType> _wealth_type = {};
+	BestiaryEnum::Alignment _alignment = BestiaryEnum::Alignment::TDefault;
+	BestiaryEnum::Cunning _cunning = BestiaryEnum::Cunning::TDefault;
 	int _speed = 0;
-    BestiaryEnum::Strength _strength = BestiaryEnum::Strength::TDefault;
-    BestiaryEnum::Size _size = BestiaryEnum::Size::TDefault;
-    //std::vector<BestiaryEnum::SpecialCharacteristics> _special_characteristic = {};
-    //std::vector<SpecialCharacteristicData>_array_special_characteristic;
+	BestiaryEnum::Strength _strength = BestiaryEnum::Strength::TDefault;
+	BestiaryEnum::Size _size = BestiaryEnum::Size::TDefault;
+	//std::vector<BestiaryEnum::SpecialCharacteristics> _special_characteristic = {};
+	//std::vector<SpecialCharacteristicData>_array_special_characteristic;
 	int _recovery_time = 0;
 	int _absorption = 0;
 	int _surprise_adjust = 0;
-    //std::vector<MonsterAttackData> _array_attack;
+	//std::vector<MonsterAttackData> _array_attack;
 	//_arrayAttackName : [ "mandibles" ],
 
 	//int _physical_strength = 0;
@@ -55,19 +55,19 @@ public:
 	//int _willpower = 0;
 	//int _faith = 0;
 
-    int _combat_level = 0;
+	int _combat_level = 0;
 
-    int _attack_bonus = 0;
-    int _defence = 0;
-    RollData _damage_tolerance;
-    int _experence_points = 0;
+	int _attack_bonus = 0;
+	int _defence = 0;
+	RollData _damage_tolerance;
+	int _experence_points = 0;
 
 	bool _effected_by_severity_damage = false;
 	bool _effected_by_faith_damage = false;
 };
 
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
-    MonsterData,
+	MonsterData,
 	_species,
 	_inheritance_parent,
 
@@ -95,6 +95,6 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
 
 	_effected_by_severity_damage,
 	_effected_by_faith_damage
-    );
+	);
 }
 */

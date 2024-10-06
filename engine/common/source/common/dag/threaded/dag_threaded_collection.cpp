@@ -18,21 +18,21 @@ public:
 		//nop
 	}
 
-    const std::string MakeUid()
-    {
-        std::string result;
-        do 
-        {
-            const int trace = _auto_generate_uid.fetch_add(1);
-            result = std::string("_auto_uid_") + std::to_string(trace);
-        }
-        while(_dag_node_map.find(result) != _dag_node_map.end());
-        return result;
-    }
-
-	DagThreadedCollection::NodeID FindNode(const std::string& in_name)
+	const std::string MakeUid()
 	{
-        std::shared_lock read_lock(_dag_node_map_mutex);
+		std::string result;
+		do 
+		{
+			const int trace = _auto_generate_uid.fetch_add(1);
+			result = std::string("_auto_uid_") + std::to_string(trace);
+		}
+		while(_dag_node_map.find(result) != _dag_node_map.end());
+		return result;
+	}
+
+	DagThreadedCollection::NodeID FindNode(const std::string& in_name) const
+	{
+		std::shared_lock read_lock(_dag_node_map_mutex);
 		auto found = _dag_node_map.find(in_name);
 		if (found != _dag_node_map.end())
 		{
@@ -45,32 +45,33 @@ public:
 		const std::string& in_uid, 
 		const std::shared_ptr< IDagThreadedValue >& in_dag_value,
 		const DagThreaded::DirtyCase in_dirty_case,
-        const std::string& in_display_name
+		const std::string& in_display_name,
+		const std::string& in_tooltip_raw
 		)
 	{
-		auto node_variable = std::make_shared<DagThreadedNodeVariable>(in_uid, in_dag_value, in_dirty_case, in_display_name);
-        {
-            std::unique_lock write_lock(_dag_node_map_mutex);
-            DSC_CONDITION_THROW(_dag_node_map.find(in_uid) != _dag_node_map.end(), "CreateNodeVariable replacing existing node");
-            _dag_node_map[in_uid] = node_variable;
-        }
+		auto node_variable = std::make_shared<DagThreadedNodeVariable>(in_uid, in_dag_value, in_dirty_case, in_display_name, in_tooltip_raw);
+		{
+			std::unique_lock write_lock(_dag_node_map_mutex);
+			DSC_CONDITION_THROW(_dag_node_map.find(in_uid) != _dag_node_map.end(), "CreateNodeVariable replacing existing node");
+			_dag_node_map[in_uid] = node_variable;
+		}
 
 		return node_variable.get();
 	}
 
 	DagThreadedCollection::NodeID CreateNodeCalculate(
-        const std::string& in_uid, 
-        const DagThreadedCollection::CalculateFunction& in_function,
-        const std::string& in_display_name,
-        const std::string& in_tooltip_body
-        )
+		const std::string& in_uid, 
+		const DagThreadedCollection::CalculateFunction& in_function,
+		const std::string& in_display_name,
+		const std::string& in_tooltip_body
+		)
 	{
 		auto node_calculate = std::make_shared<DagThreadedNodeCalculate>(in_uid, in_function, in_display_name, in_tooltip_body);
-        {
-            std::unique_lock write_lock(_dag_node_map_mutex);
-            DSC_CONDITION_THROW(_dag_node_map.find(in_uid) != _dag_node_map.end(), "CreateNodeCalculate replacing existing node");
-            _dag_node_map[in_uid] = node_calculate;
-        }
+		{
+			std::unique_lock write_lock(_dag_node_map_mutex);
+			DSC_CONDITION_THROW(_dag_node_map.find(in_uid) != _dag_node_map.end(), "CreateNodeCalculate replacing existing node");
+			_dag_node_map[in_uid] = node_calculate;
+		}
 
 		return node_calculate.get();
 	}
@@ -79,8 +80,8 @@ public:
 	{
 		if (nullptr != in_node_id)
 		{
-            std::unique_lock write_lock(_dag_node_map_mutex);
-            auto found = _dag_node_map.find(in_node_id->GetUid());
+			std::unique_lock write_lock(_dag_node_map_mutex);
+			auto found = _dag_node_map.find(in_node_id->GetUid());
 			if (found != _dag_node_map.end())
 			{
 				_dag_node_map.erase(found);
@@ -91,7 +92,7 @@ public:
 
 	void AddNodeLinkIndexed(const DagThreadedCollection::NodeID in_node_id_subject, const DagThreadedCollection::NodeID in_node_id_to_add, const int in_index)
 	{
-        auto node_subject = dynamic_cast<DagThreadedNodeCalculate*>(in_node_id_subject);
+		auto node_subject = dynamic_cast<DagThreadedNodeCalculate*>(in_node_id_subject);
 
 		if (nullptr != node_subject)
 		{
@@ -101,8 +102,8 @@ public:
 	}
 	void RemoveNodeLinkIndexed(const DagThreadedCollection::NodeID in_node_id_subject, const int in_index)
 	{
-        auto node_subject = dynamic_cast<DagThreadedNodeCalculate*>(in_node_id_subject);
-        if (nullptr != node_subject)
+		auto node_subject = dynamic_cast<DagThreadedNodeCalculate*>(in_node_id_subject);
+		if (nullptr != node_subject)
 		{
 			node_subject->SetInputIndex(nullptr, in_index);
 		}
@@ -110,7 +111,7 @@ public:
 	}
 	void AddNodeLinkStack(const DagThreadedCollection::NodeID in_node_id_subject, const DagThreadedCollection::NodeID in_node_id_to_add)
 	{
-        auto node_subject = dynamic_cast<DagThreadedNodeCalculate*>(in_node_id_subject);
+		auto node_subject = dynamic_cast<DagThreadedNodeCalculate*>(in_node_id_subject);
 		if (nullptr != node_subject)
 		{
 			node_subject->AddInputStack(in_node_id_to_add);
@@ -119,15 +120,15 @@ public:
 	}
 	void RemoveNodeLinkStack(const DagThreadedCollection::NodeID in_node_id_subject, const DagThreadedCollection::NodeID in_node_id_to_remove)
 	{
-        auto node_subject = dynamic_cast<DagThreadedNodeCalculate*>(in_node_id_subject);
-        if (nullptr != node_subject)
+		auto node_subject = dynamic_cast<DagThreadedNodeCalculate*>(in_node_id_subject);
+		if (nullptr != node_subject)
 		{
 			node_subject->RemoveInputStack(in_node_id_to_remove);
 		}
 	}
 	void UnlinkNode(const DagThreadedCollection::NodeID in_node_id)
 	{
-        auto node_calculate = dynamic_cast<DagThreadedNodeCalculate*>(in_node_id);
+		auto node_calculate = dynamic_cast<DagThreadedNodeCalculate*>(in_node_id);
 		if (nullptr != node_calculate)
 		{
 			node_calculate->Unlink();
@@ -146,7 +147,7 @@ public:
 
 	void SetDagValue(const DagThreadedCollection::NodeID in_node_id, const std::shared_ptr< IDagThreadedValue >& in_dag_value)
 	{
-        auto node_variable = dynamic_cast<DagThreadedNodeVariable*>(in_node_id);
+		auto node_variable = dynamic_cast<DagThreadedNodeVariable*>(in_node_id);
 		if (nullptr != node_variable)
 		{
 			node_variable->SetValue(in_dag_value);
@@ -155,10 +156,10 @@ public:
 	}
 
 private:
-    std::shared_mutex _dag_node_map_mutex;
+	mutable std::shared_mutex _dag_node_map_mutex;
 	std::map< std::string, std::shared_ptr< IDagThreadedNode > > _dag_node_map;
 
-    std::atomic<int> _auto_generate_uid = 0;
+	std::atomic<int> _auto_generate_uid = 0;
 
 };
 
@@ -175,8 +176,8 @@ DagThreadedCollection::DagThreadedCollection()
 
 DagThreadedCollection::~DagThreadedCollection()
 {
-    _implementation.reset();
-    return;
+	_implementation.reset();
+	return;
 }
 
 const std::string DagThreadedCollection::MakeUid()
@@ -184,7 +185,7 @@ const std::string DagThreadedCollection::MakeUid()
 	return _implementation->MakeUid();
 }
 
-DagThreadedCollection::NodeID DagThreadedCollection::FindNode(const std::string& in_name)
+DagThreadedCollection::NodeID DagThreadedCollection::FindNode(const std::string& in_name) const
 {
 	return _implementation->FindNode(in_name);
 }
@@ -193,17 +194,18 @@ DagThreadedCollection::NodeID DagThreadedCollection::CreateNodeVariable(
 	const std::string& in_uid, 
 	const std::shared_ptr< IDagThreadedValue >& in_dag_value,
 	const DagThreaded::DirtyCase in_dirty_case,
-    const std::string& in_display_name
+	const std::string& in_display_name,
+	const std::string& in_tooltip_raw
 	)
 {
-	return _implementation->CreateNodeVariable(in_uid, in_dag_value, in_dirty_case, in_display_name);
+	return _implementation->CreateNodeVariable(in_uid, in_dag_value, in_dirty_case, in_display_name, in_tooltip_raw);
 }
 
 DagThreadedCollection::NodeID DagThreadedCollection::CreateNodeCalculate(
-    const std::string& in_uid, 
-    const CalculateFunction& in_function,    
-    const std::string& in_display_name,
-    const std::string& in_tooltip_raw
+	const std::string& in_uid, 
+	const CalculateFunction& in_function,	
+	const std::string& in_display_name,
+	const std::string& in_tooltip_raw
 )
 {
 	return _implementation->CreateNodeCalculate(in_uid, in_function, in_display_name, in_tooltip_raw);
@@ -252,12 +254,12 @@ const bool DagThreadedCollection::VisitNode(const NodeID in_node_id, IDagThreade
 
 const std::string DagThreadedCollection::GetDisplayName(const NodeID in_node_id)
 {
-    return in_node_id->GetDisplayName();
+	return in_node_id->GetDisplayName();
 }
 
 const std::string DagThreadedCollection::GetTooltipRaw(const NodeID in_node_id)
 {
-    return in_node_id->GetTooltipRaw();
+	return in_node_id->GetTooltipRaw();
 }
 
 std::shared_ptr< IDagThreadedValue > DagThreadedCollection::GetDagValue(const NodeID in_node_id)

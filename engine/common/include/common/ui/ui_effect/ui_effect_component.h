@@ -16,82 +16,82 @@ struct UIManagerDrawParam;
 class UIEffectComponent
 {
 public:
-    typedef std::array<VectorFloat4, static_cast<int>(UIStateFlag::TTintPermutationCount)> TStateFlagTintArray;
+	typedef std::array<VectorFloat4, static_cast<int>(UIStateFlag::TTintPermutationCount)> TStateFlagTintArray;
 
-    /// the generic data for the effect shaders
-    struct TShaderConstantBuffer
-    {
-        VectorFloat4 _width_height_iwidth_iheight;
-        VectorFloat4 _data;
-        VectorFloat4 _tint;
-        VectorFloat4 _margin;
-    };
+	/// the generic data for the effect shaders
+	struct TShaderConstantBuffer
+	{
+		VectorFloat4 _width_height_iwidth_iheight;
+		VectorFloat4 _data;
+		VectorFloat4 _tint;
+		VectorFloat4 _margin;
+	};
 
-    UIEffectComponent(
-        const UIEffectEnum in_type,
-        const UICoord& in_coord_a,
-        const UICoord& in_coord_b,
-        const UICoord& in_coord_c,
-        const UICoord& in_coord_d,
-        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null = nullptr,
-        const VectorFloat4& in_default_tint = VectorFloat4::s_white
-        );
-    /// destructed by base type IUIComponent which has virtual dtor, so virtual here may be redundant but does provide info
-    virtual ~UIEffectComponent();
+	UIEffectComponent(
+		const UIEffectEnum in_type,
+		const UICoord& in_coord_a,
+		const UICoord& in_coord_b,
+		const UICoord& in_coord_c,
+		const UICoord& in_coord_d,
+		const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null = nullptr,
+		const VectorFloat4& in_default_tint = VectorFloat4::s_white
+		);
+	/// destructed by base type IUIComponent which has virtual dtor, so virtual here may be redundant but does provide info
+	virtual ~UIEffectComponent();
 
-    /// return true if modified, else false
-    const bool Set(
-        const UIEffectEnum in_type,
-        const UICoord& in_coord_a,
-        const UICoord& in_coord_b,
-        const UICoord& in_coord_c,
-        const UICoord& in_coord_d,
-        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null = nullptr,
-        const VectorFloat4& in_default_tint = VectorFloat4::s_white
-        );
+	/// return true if modified, else false
+	const bool Set(
+		const UIEffectEnum in_type,
+		const UICoord& in_coord_a,
+		const UICoord& in_coord_b,
+		const UICoord& in_coord_c,
+		const UICoord& in_coord_d,
+		const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null = nullptr,
+		const VectorFloat4& in_default_tint = VectorFloat4::s_white
+		);
 
-    void Update(
-        const UIHierarchyNodeUpdateParam& in_param,
-        const VectorInt2& in_target_size,
-        const VectorInt4& in_texture_margin
-        );
+	void Update(
+		const UIHierarchyNodeUpdateParam& in_param,
+		const VectorInt2& in_target_size,
+		const VectorInt4& in_texture_margin
+		);
 
-    /// Given the input UITexture as a shader resource input, we draw to our own texture using an effect shader
-    void Render(
-        const UIManagerDrawParam& in_draw_param,
-        UITexture& in_input_texture,
-        const UIStateFlag in_state_flag
-        );
+	/// Given the input UITexture as a shader resource input, we draw to our own texture using an effect shader
+	void Render(
+		const UIManagerDrawParam& in_draw_param,
+		UITexture& in_input_texture,
+		const UIStateFlag in_state_flag
+		);
 
-    UITexture& GetUITexture() const { return *_texture; }
+	UITexture& GetUITexture() const { return *_texture; }
 
-    const bool HasTintArray() const { return (nullptr != _state_flag_tint_array_or_null); }
+	const bool HasTintArray() const { return (nullptr != _state_flag_tint_array_or_null); }
 
 private:
-    /// The shader constants for this effect
-    std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;
+	/// The shader constants for this effect
+	std::shared_ptr<ShaderConstantBuffer> _shader_constant_buffer;
 
-    /// either we don't use type none as default ui shader, or need to be carefull with type to use with _shader_constant_buffer
-    UIEffectEnum _type;
+	/// either we don't use type none as default ui shader, or need to be carefull with type to use with _shader_constant_buffer
+	UIEffectEnum _type;
 
-    /// used to build the shader constants
-    UICoord _coord_a;
-    /// used to build the shader constants
-    UICoord _coord_b;
-    /// used to build the shader constants
-    UICoord _coord_c;
-    /// used to build the shader constants
-    UICoord _coord_d;
+	/// used to build the shader constants
+	UICoord _coord_a;
+	/// used to build the shader constants
+	UICoord _coord_b;
+	/// used to build the shader constants
+	UICoord _coord_c;
+	/// used to build the shader constants
+	UICoord _coord_d;
 
-    /// optional array of tint colours selected via input state flag in Render
-    std::shared_ptr<const TStateFlagTintArray> _state_flag_tint_array_or_null;
+	/// optional array of tint colours selected via input state flag in Render
+	std::shared_ptr<const TStateFlagTintArray> _state_flag_tint_array_or_null;
 
-    /// tint colour to use if _state_flag_tint_array_or_null is null
-    VectorFloat4 _default_tint;
+	/// tint colour to use if _state_flag_tint_array_or_null is null
+	VectorFloat4 _default_tint;
 
-    /// The render target we draw to and then the shader resource (texture) that others consume
-    std::unique_ptr<UITexture> _texture;
+	/// The render target we draw to and then the shader resource (texture) that others consume
+	std::unique_ptr<UITexture> _texture;
 
-    VectorFloat4 _margin;
+	VectorFloat4 _margin;
 
 };

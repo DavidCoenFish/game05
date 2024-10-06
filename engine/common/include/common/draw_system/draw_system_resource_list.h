@@ -7,36 +7,36 @@ class IResource;
 class DrawSystemResourceList
 {
 public:
-    static std::shared_ptr<DrawSystemResourceList> Factory(
-        ID3D12Device& in_device
-        );
+	static std::shared_ptr<DrawSystemResourceList> Factory(
+		ID3D12Device& in_device
+		);
 
-    /// move fence creation internal, fence created against value of zero, is set to one once finished
-    DrawSystemResourceList(
-        Microsoft::WRL::ComPtr<ID3D12Fence>& in_fence
-        );
-    /// dtor will decrement refereces to added IResource
-    ~DrawSystemResourceList();
+	/// move fence creation internal, fence created against value of zero, is set to one once finished
+	DrawSystemResourceList(
+		Microsoft::WRL::ComPtr<ID3D12Fence>& in_fence
+		);
+	/// dtor will decrement refereces to added IResource
+	~DrawSystemResourceList();
 
-    /// Add a reference to resources that needs to be kept alive till the fence is passed in the command list
-    void AddResource(
-        const std::shared_ptr<IResource>& in_resource
-        );
+	/// Add a reference to resources that needs to be kept alive till the fence is passed in the command list
+	void AddResource(
+		const std::shared_ptr<IResource>& in_resource
+		);
 
-    /// Add to the command list a fence so we know when it is done, assert if any more calls to AddResource are made
-    void MarkFinished(
-        const Microsoft::WRL::ComPtr<ID3D12CommandQueue>& in_command_queue
-        );
+	/// Add to the command list a fence so we know when it is done, assert if any more calls to AddResource are made
+	void MarkFinished(
+		const Microsoft::WRL::ComPtr<ID3D12CommandQueue>& in_command_queue
+		);
 
-    /// Return true if the relevant command list has finished
-    const bool GetFinished() const;
+	/// Return true if the relevant command list has finished
+	const bool GetFinished() const;
 
 private:
-    std::vector<std::shared_ptr<IResource>> _resource_array;
-    Microsoft::WRL::ComPtr<ID3D12Fence> _fence;
-    bool _command_list_marked_finished;
+	std::vector<std::shared_ptr<IResource>> _resource_array;
+	Microsoft::WRL::ComPtr<ID3D12Fence> _fence;
+	bool _command_list_marked_finished;
 
 #if defined(DRAW_SYSTEM_RESOURCE_LIST_DEBUG)
-    int _id;
+	int _id;
 #endif
 };

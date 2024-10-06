@@ -2,6 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup>
-    <NMakeBuildCommandLine>script\build.cmd $(SolutionDir).. engine $(SolutionDir)$(ProjectName)\output 0 0 0 0 True</NMakeBuildCommandLine>
+	<NMakeBuildCommandLine>script\build.cmd $(SolutionDir).. engine $(SolutionDir)$(ProjectName)\output 0 0 0 0 True</NMakeBuildCommandLine>
   </PropertyGroup>
 </Project>

@@ -9,42 +9,42 @@ class UIEffectComponent;
 class UIEffectData
 {
 public:
-    typedef std::array<VectorFloat4, static_cast<int>(UIStateFlag::TTintPermutationCount)> TStateFlagTintArray;
+	typedef std::array<VectorFloat4, static_cast<int>(UIStateFlag::TTintPermutationCount)> TStateFlagTintArray;
 
-    /// let the text manager what locale hint to render text as, for harfbuz
-    UIEffectData(
-        const UIEffectEnum in_type = UIEffectEnum::TNone,
-        const UICoord& in_coord_a = UICoord(),
-        const UICoord& in_coord_b = UICoord(),
-        const UICoord& in_coord_c = UICoord(),
-        const UICoord& in_coord_d = UICoord(),
-        const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null = nullptr,
-        const VectorFloat4& in_default_tint = VectorFloat4::s_white
-        );
-    virtual ~UIEffectData();
+	/// let the text manager what locale hint to render text as, for harfbuz
+	UIEffectData(
+		const UIEffectEnum in_type = UIEffectEnum::TNone,
+		const UICoord& in_coord_a = UICoord(),
+		const UICoord& in_coord_b = UICoord(),
+		const UICoord& in_coord_c = UICoord(),
+		const UICoord& in_coord_d = UICoord(),
+		const std::shared_ptr<const TStateFlagTintArray>& in_state_flag_tint_array_or_null = nullptr,
+		const VectorFloat4& in_default_tint = VectorFloat4::s_white
+		);
+	virtual ~UIEffectData();
 
-    const bool ApplyComponent(
-        std::shared_ptr<UIEffectComponent>& in_out_component,
-        const UIHierarchyNodeUpdateParam& in_param
-        );
+	const bool ApplyComponent(
+		std::shared_ptr<UIEffectComponent>& in_out_component,
+		const UIHierarchyNodeUpdateParam& in_param
+		);
 
 private:
-    /// either we don't use type none as default ui shader, or need to be carefull with type to use with _shader_constant_buffer
-    UIEffectEnum _type;
+	/// either we don't use type none as default ui shader, or need to be carefull with type to use with _shader_constant_buffer
+	UIEffectEnum _type;
 
-    /// used to build the shader constants
-    UICoord _coord_a;
-    /// used to build the shader constants
-    UICoord _coord_b;
-    /// used to build the shader constants
-    UICoord _coord_c;
-    /// used to build the shader constants
-    UICoord _coord_d;
+	/// used to build the shader constants
+	UICoord _coord_a;
+	/// used to build the shader constants
+	UICoord _coord_b;
+	/// used to build the shader constants
+	UICoord _coord_c;
+	/// used to build the shader constants
+	UICoord _coord_d;
 
-    /// array of tint colours to be selected from
-    std::shared_ptr<const TStateFlagTintArray> _state_flag_tint_array_or_null;
+	/// array of tint colours to be selected from
+	std::shared_ptr<const TStateFlagTintArray> _state_flag_tint_array_or_null;
 
-    /// tint colour to use if _state_flag_tint_array_or_null is null
-    VectorFloat4 _default_tint;
+	/// tint colour to use if _state_flag_tint_array_or_null is null
+	VectorFloat4 _default_tint;
 
 };

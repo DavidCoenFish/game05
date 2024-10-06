@@ -16,25 +16,25 @@ namespace LqBestiary
 	public:
 		TEST_METHOD(FactoryDefaultGiantSpider)
 		{
-            std::shared_ptr<LocaleSystem> locale_system = std::make_shared<LocaleSystem>();
-            std::shared_ptr<StaticLq::NameSystem> name_system = std::make_shared<StaticLq::NameSystem>();
-            name_system->AddGenerator(StaticLq::NameSystem::GetKeyGiantSpider(), StaticLq::NameSystemGeneratorRandom::FactoryGeneratorGiantSpider());
+			std::shared_ptr<LocaleSystem> locale_system = std::make_shared<LocaleSystem>();
+			std::shared_ptr<StaticLq::NameSystem> name_system = std::make_shared<StaticLq::NameSystem>();
+			name_system->AddGenerator(StaticLq::NameSystem::GetKeyGiantSpider(), StaticLq::NameSystemGeneratorRandom::FactoryGeneratorGiantSpider());
 
-            auto giant_spider = StaticLq::Bestiary::FactoryDefaultGiantSpider(*name_system, *locale_system);
+			auto giant_spider = StaticLq::Bestiary::FactoryDefaultGiantSpider(*name_system, *locale_system);
 			Assert::IsNotNull(giant_spider.get());
 			Assert::AreEqual(1, giant_spider->GetValue(StaticLq::CombatEnum::CombatantValue::TCanContinueCombat));
 
-            giant_spider->ApplyDamageDelta(100, 200, 300);
+			giant_spider->ApplyDamageDelta(100, 200, 300);
 			Assert::AreEqual(0, giant_spider->GetValue(StaticLq::CombatEnum::CombatantValue::TCanContinueCombat));
 		}
 
 		TEST_METHOD(FactoryDefaultGiantAnt)
 		{
-            std::shared_ptr<LocaleSystem> locale_system = std::make_shared<LocaleSystem>();
-            std::shared_ptr<StaticLq::NameSystem> name_system = std::make_shared<StaticLq::NameSystem>();
-            name_system->AddGenerator(StaticLq::NameSystem::GetKeyGiantAnt(), StaticLq::NameSystemGeneratorRandom::FactoryGeneratorGiantAnt());
+			std::shared_ptr<LocaleSystem> locale_system = std::make_shared<LocaleSystem>();
+			std::shared_ptr<StaticLq::NameSystem> name_system = std::make_shared<StaticLq::NameSystem>();
+			name_system->AddGenerator(StaticLq::NameSystem::GetKeyGiantAnt(), StaticLq::NameSystemGeneratorRandom::FactoryGeneratorGiantAnt());
 
-            auto item = StaticLq::Bestiary::FactoryDefaultGiantAnt(*name_system, *locale_system);
+			auto item = StaticLq::Bestiary::FactoryDefaultGiantAnt(*name_system, *locale_system);
 			Assert::IsNotNull(item.get());
 		}
 

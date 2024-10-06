@@ -3,15 +3,15 @@
 
 StaticLq::SimpleCombatTopology::SimpleCombatTopology()
 {
-    //nop
+	//nop
 }
 
 const bool StaticLq::SimpleCombatTopology::CanAttackMellee(const ICombatant& , const ICombatant& )
 {
-    return true;
+	return true;
 }
 
 const bool StaticLq::SimpleCombatTopology::CanAttackRange(const ICombatant& , const ICombatant& )
 {
-    return true;
+	return true;
 }

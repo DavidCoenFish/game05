@@ -10,66 +10,66 @@ const char* const Build::GetBuildHost( void )
 {
    return 
 #include "..\..\version\output\build_host.txt"
-       ;
+	   ;
 }
 
 const char* const Build::GetBuildConfiguration(void)
 {
-    return
+	return
 #if defined(_DEBUG)
-    "DEBUG"
+	"DEBUG"
 #endif
 #if defined(NDEBUG)
-    "RELEASE"
+	"RELEASE"
 #endif
-        ;
+		;
 }
 
 const char* const Build::GetBuildPlatform(void)
 {
-    return "Win64";
+	return "Win64";
 }
 
 const char* const Build::GetBuildTime(void)
 {
    return 
-       __DATE__ 
-       " "
-       __TIME__
-       ;
+	   __DATE__ 
+	   " "
+	   __TIME__
+	   ;
 }
 const char* const Build::GetBuildVersion(void)
 {
    return 
 #include "..\..\version\output\build_version.txt"
-       ;
+	   ;
 }
 
 const int Build::GetBuildVersionMajor()
 {
    return 
 #include "..\..\version\output\build_version_major.txt"
-      ;
+	  ;
 }
 
 const int Build::GetBuildVersionMinor()
 {
    return 
 #include "..\..\version\output\build_version_minor.txt"
-      ;
+	  ;
 }
 
 const int Build::GetBuildVersionPatch()
 {
    return 
 #include "..\..\version\output\build_version_patch.txt"
-      ;
+	  ;
 }
 const int Build::GetBuildVersionStore()
 {
    return 
 #include "..\..\version\output\build_version_store.txt"
-      ;
+	  ;
 }
 
 

@@ -8,11 +8,11 @@
 // --------------------------------------------------------------------------------------
 #pragma once
 #ifdef _GAMING_XBOX_SCARLETT
-    #include <d3d12_xs.h>
+	#include <d3d12_xs.h>
 #elif(defined (_XBOX_ONE) && defined (_TITLE)) || defined (_GAMING_XBOX)
-    #include <d3d12_x.h>
+	#include <d3d12_x.h>
 #else
-    #include <d3d12.h>
+	#include <d3d12.h>
 #endif
 
 #include <DirectXMath.h>
@@ -29,11 +29,11 @@
 
 
 #ifndef _GAMING_XBOX
-    #pragma comment(lib, "dxguid.lib")
+	#pragma comment(lib, "dxguid.lib")
 #endif
 
 #ifndef IID_GRAPHICS_PPV_ARGS
-    #define IID_GRAPHICS_PPV_ARGS(x) IID_PPV_ARGS(x)
+	#define IID_GRAPHICS_PPV_ARGS(x) IID_PPV_ARGS(x)
 #endif
 
 //
@@ -78,35 +78,35 @@
 //
 namespace DirectX
 {
-    /// Helpers for aligning values by a power of 2, round down
-    template < typename T > inline T AlignDown(
-        T in_size,
-        size_t in_alignment
-        ) noexcept
-    {
-        if (in_alignment > 0)
-        {
-            assert(((in_alignment - 1) &in_alignment) == 0);
-            auto mask = static_cast < T > (in_alignment - 1);
-            return in_size&~mask;
-        }
-        return in_size;
-    }
+	/// Helpers for aligning values by a power of 2, round down
+	template < typename T > inline T AlignDown(
+		T in_size,
+		size_t in_alignment
+		) noexcept
+	{
+		if (in_alignment > 0)
+		{
+			assert(((in_alignment - 1) &in_alignment) == 0);
+			auto mask = static_cast < T > (in_alignment - 1);
+			return in_size&~mask;
+		}
+		return in_size;
+	}
 
-    /// Helpers for aligning values by a power of 2, round up
-    template < typename T > inline T AlignUp(
-        T in_size,
-        size_t in_alignment
-        ) noexcept
-    {
-        if (in_alignment > 0)
-        {
-            assert(((in_alignment - 1) &in_alignment) == 0);
-            auto mask = static_cast < T > (in_alignment - 1);
-            return (in_size + mask) &~mask;
-        }
-        return in_size;
-    }
+	/// Helpers for aligning values by a power of 2, round up
+	template < typename T > inline T AlignUp(
+		T in_size,
+		size_t in_alignment
+		) noexcept
+	{
+		if (in_alignment > 0)
+		{
+			assert(((in_alignment - 1) &in_alignment) == 0);
+			auto mask = static_cast < T > (in_alignment - 1);
+			return (in_size + mask) &~mask;
+		}
+		return in_size;
+	}
 
-    size_t BytesPerPixel(DXGI_FORMAT in_fmt);
+	size_t BytesPerPixel(DXGI_FORMAT in_fmt);
 }

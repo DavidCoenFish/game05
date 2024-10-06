@@ -7,11 +7,11 @@ IRenderTarget::IRenderTarget()// DrawSystem* const pDrawSystem)
 // : IResource(pDrawSystem)
 
 {
-    return;
+	return;
 }
 
 IRenderTarget::~IRenderTarget()
 {
-    return;
+	return;
 }
 

@@ -8,105 +8,105 @@ const VectorFloat2 VectorFloat2::s_min(-std::numeric_limits<float>::max(), -std:
 const VectorFloat2 VectorFloat2::s_max(std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
 
 VectorFloat2::VectorFloat2(
-    const float in_x,
-    const float in_y
-    ) : _data{ in_x, in_y}
+	const float in_x,
+	const float in_y
+	) : _data{ in_x, in_y}
 {
-    return;
+	return;
 }
 float&VectorFloat2::operator[](const int in_index)
 {
-    if ((0 <= in_index) && (in_index < Index::Count))
-    {
-        return _data[in_index];
-    }
-    static float s_dummy = 0;
-    return s_dummy;
+	if ((0 <= in_index) && (in_index < Index::Count))
+	{
+		return _data[in_index];
+	}
+	static float s_dummy = 0;
+	return s_dummy;
 }
 
 const float VectorFloat2::operator[](const int in_index) const
 {
-    if ((0 <= in_index) && (in_index < Index::Count))
-    {
-        return _data[in_index];
-    }
-    return 0;
+	if ((0 <= in_index) && (in_index < Index::Count))
+	{
+		return _data[in_index];
+	}
+	return 0;
 }
 
 const float VectorFloat2::GetX() const
 {
-    return _data[Index::X];
+	return _data[Index::X];
 }
 
 const float VectorFloat2::GetY() const
 {
-    return _data[Index::Y];
+	return _data[Index::Y];
 }
 
 void VectorFloat2::NormaliseSelf()
 {
-    const float length_squared = ((_data[X]* _data[X]) + (_data[Y]* _data[Y]));
-    if (0.0f != length_squared)
-    {
-        const float length = sqrt(length_squared);
-        if (0.0f != length)
-        {
-            const float mul = 1.0f / length;
-            _data[0] *= mul;
-            _data[1] *= mul;
-        }
-    }
+	const float length_squared = ((_data[X]* _data[X]) + (_data[Y]* _data[Y]));
+	if (0.0f != length_squared)
+	{
+		const float length = sqrt(length_squared);
+		if (0.0f != length)
+		{
+			const float mul = 1.0f / length;
+			_data[0] *= mul;
+			_data[1] *= mul;
+		}
+	}
 }
 
 const VectorFloat2 VectorFloat2::Cross(const VectorFloat2&in_subject)
 {
-    VectorFloat2 result(
-        in_subject._data[Y],
-        - (in_subject._data[X])
-        );
-    return result;
+	VectorFloat2 result(
+		in_subject._data[Y],
+		- (in_subject._data[X])
+		);
+	return result;
 }
 
 const bool VectorFloat2::operator==(const VectorFloat2&in_rhs) const
 {
-    for (int index = 0; index < Index::Count;++ index)
-    {
-        if (_data[index] != in_rhs._data[index])
-        {
-            return false;
-        }
-    }
-    return true;
+	for (int index = 0; index < Index::Count;++ index)
+	{
+		if (_data[index] != in_rhs._data[index])
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 const bool VectorFloat2::operator!=(const VectorFloat2& in_rhs) const
 {
-    return !operator==(in_rhs);
+	return !operator==(in_rhs);
 }
 
 const VectorFloat2 VectorFloat2::Min(const VectorFloat2& in_lhs, const VectorFloat2& in_rhs)
 {
-    return VectorFloat2(std::min(in_lhs.GetX(), in_rhs.GetX()),
-        std::min(in_lhs.GetY(), in_rhs.GetY()));
+	return VectorFloat2(std::min(in_lhs.GetX(), in_rhs.GetX()),
+		std::min(in_lhs.GetY(), in_rhs.GetY()));
 }
 
 const VectorFloat2 VectorFloat2::Max(const VectorFloat2& in_lhs, const VectorFloat2& in_rhs)
 {
-    return VectorFloat2(std::max(in_lhs.GetX(), in_rhs.GetX()),
-        std::max(in_lhs.GetY(), in_rhs.GetY()));
+	return VectorFloat2(std::max(in_lhs.GetX(), in_rhs.GetX()),
+		std::max(in_lhs.GetY(), in_rhs.GetY()));
 }
 
 const VectorFloat2 operator+(const VectorFloat2& in_lhs, const VectorFloat2& in_rhs)
 {
-    return VectorFloat2(in_lhs.GetX() + in_rhs.GetX(), in_lhs.GetY() + in_rhs.GetY());
+	return VectorFloat2(in_lhs.GetX() + in_rhs.GetX(), in_lhs.GetY() + in_rhs.GetY());
 }
 
 const VectorFloat2 operator-(const VectorFloat2& in_lhs, const VectorFloat2& in_rhs)
 {
-    return VectorFloat2(in_lhs.GetX() - in_rhs.GetX(), in_lhs.GetY() - in_rhs.GetY());
+	return VectorFloat2(in_lhs.GetX() - in_rhs.GetX(), in_lhs.GetY() - in_rhs.GetY());
 }
 
 const VectorFloat2 operator*(const VectorFloat2& in_lhs, const float in_rhs)
 {
-    return VectorFloat2(in_lhs.GetX() * in_rhs, in_lhs.GetY() * in_rhs);
+	return VectorFloat2(in_lhs.GetX() * in_rhs, in_lhs.GetY() * in_rhs);
 }

@@ -4,15 +4,15 @@ https://github.com/sammycage/lunasvg
 https://github.com/memononen/nanosvg
 
 UIHierarchyNode // N0 
-    _texture // T0 texture or backbuffer A0 draws to
-    [_input_state] // I0 optional top level input state, which uidata a touch started on for click tracking
-    _child_node_array // A0
-        _component // C1 controls size of T1 and G1. for now, one to one with a ui data
-        _shader_constant_buffer // S1 the shader constants
-        _geometry // G1 geometry to draw texture T1 onto T0
-        UIHierarchyNode // N1 child node (recursion)
-            _texture // T1 texture or backbuffer A1 draws to, mostly always a render target texture once past the root~ cant use backbuffer as shader resource
-            _child_node_array // A1
+	_texture // T0 texture or backbuffer A0 draws to
+	[_input_state] // I0 optional top level input state, which uidata a touch started on for click tracking
+	_child_node_array // A0
+		_component // C1 controls size of T1 and G1. for now, one to one with a ui data
+		_shader_constant_buffer // S1 the shader constants
+		_geometry // G1 geometry to draw texture T1 onto T0
+		UIHierarchyNode // N1 child node (recursion)
+			_texture // T1 texture or backbuffer A1 draws to, mostly always a render target texture once past the root~ cant use backbuffer as shader resource
+			_child_node_array // A1
 
 ui longterm todo.
 have way of not recalculating heirarchy each frame, dirty flag in UIData, propergation dirty to parent on modify

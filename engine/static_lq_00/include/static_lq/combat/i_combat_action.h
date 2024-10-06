@@ -7,9 +7,9 @@ class ICombatOutput;
 class ICombatAction
 {
 public:
-    virtual ~ICombatAction(){}
+	virtual ~ICombatAction(){}
 
-    virtual void PerformAction(const ICombatOutput& in_output) = 0;
+	virtual void PerformAction(const ICombatOutput& in_output) = 0;
 
 };
 
