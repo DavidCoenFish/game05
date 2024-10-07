@@ -1,6 +1,7 @@
 #pragma once
 
 #include "static_lq/combat/i_combatant.h"
+#include "static_lq/bestiary/monster_attack_data.h"
 
 class DagThreadedCollection;
 class LocaleSystem;
@@ -16,7 +17,8 @@ class SimpleCombatMonster : public ICombatant
 public:
 	SimpleCombatMonster(
 		const int32_t in_id,
-		const std::shared_ptr<DagThreadedCollection>& in_dag_collection 
+		const std::shared_ptr<DagThreadedCollection>& in_dag_collection,
+		const std::vector<MonsterAttackData> in_attack_data
 		);
 
 private:
@@ -50,6 +52,12 @@ private:
 private:
 	const int32_t _id;
 	std::shared_ptr<DagThreadedCollection> _dag_collection;
+
+	std::vector<MonsterAttackData> _attack_data;
+
+	int32_t _attack_index = 0;
+	int32_t _mellee_attack_recovery = 0;
+	int32_t _range_attack_recovery = 0;
 };
 
 }

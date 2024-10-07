@@ -9,7 +9,7 @@ class ICombatAction
 public:
 	virtual ~ICombatAction(){}
 
-	virtual void PerformAction(const ICombatOutput& in_output) = 0;
+	virtual void PerformAction(ICombatOutput& in_output) = 0;
 
 };
 

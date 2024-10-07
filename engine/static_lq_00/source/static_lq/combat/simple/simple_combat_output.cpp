@@ -18,6 +18,7 @@ namespace
 	constexpr char s_locale_key_set_turn_segment[] = "slqsc_set_turn_segment";
 	constexpr char s_locale_key_combat_ended[] = "slqsc_combat_ended";
 	constexpr char s_locale_key_side_victory[] = "slqsc_side_victory";
+	constexpr char s_locale_key_combatant_damage[] = "slqsc_combatant_damage";
 
 	class LocaleDataProvider : public ILocaleDataProvider
 	{
@@ -33,7 +34,8 @@ namespace
 				{s_locale_key_combatant_removed, "Combatant {combatant} removed from side {side}\n"},
 				{s_locale_key_set_turn_segment, "Turn {turn} Segment {segment}\n"},
 				{s_locale_key_combat_ended, "Combat ended\n"},
-				{s_locale_key_side_victory, "Victory for side {side}\n"}
+				{s_locale_key_side_victory, "Victory for side {side}\n"},
+				{s_locale_key_combatant_damage, "{combatant} took {physical_damage} physical damage, {fatigue_damage} fatigue damage, {paralyzation_damage} paralyzation damage\n"},
 				};
 
 			in_out_locale_system.Append(in_locale, data);
@@ -61,7 +63,6 @@ void StaticLq::SimpleCombatOutput::SetCombatStart()
 
 void StaticLq::SimpleCombatOutput::CombatantAdded(ICombatant& combatant, ICombatSide& side)
 {
-	const LocaleISO_639_1 locale = _locale_system->GetLocale();
 	std::shared_ptr<TooltipData> tooltip_data = combatant.GetTooltip(StaticLq::CombatEnum::CombatantValue::TSelf, *_locale_system);
 	std::map<std::string, std::string> data_map = {
 		{ "combatant", tooltip_data->_text },
@@ -79,7 +80,6 @@ void StaticLq::SimpleCombatOutput::CombatantAdded(ICombatant& combatant, ICombat
 
 void StaticLq::SimpleCombatOutput::CombatantRemoved(ICombatant& combatant, ICombatSide& side)
 {
-	const LocaleISO_639_1 locale = _locale_system->GetLocale();
 	std::shared_ptr<TooltipData> tooltip_data = combatant.GetTooltip(StaticLq::CombatEnum::CombatantValue::TSelf, *_locale_system);
 	std::map<std::string, std::string> data_map = {
 		{ "combatant", tooltip_data->_text },
@@ -111,12 +111,39 @@ void StaticLq::SimpleCombatOutput::SetTurnSegment(const int32_t turn, const int3
 	_log(format_map.GetResult());
 }
 
+
+void StaticLq::SimpleCombatOutput::CombatantDamage(
+	ICombatant& in_combatant_receive, 
+	ICombatant* const in_cause_damage, 
+	int32_t in_physical_damage_delta,
+	int32_t in_fatigue_damage_delta,
+	int32_t in_paralyzation_damage_delta
+	)
+{
+	in_cause_damage;
+	std::shared_ptr<TooltipData> tooltip_data = in_combatant_receive.GetTooltip(StaticLq::CombatEnum::CombatantValue::TSelf, *_locale_system);
+	std::map<std::string, std::string> data_map = {
+		{ "combatant", tooltip_data->_text },
+		{ "physical_damage", std::to_string(in_physical_damage_delta) },
+		{ "fatigue_damage", std::to_string(in_fatigue_damage_delta) },
+		{ "paralyzation_damage", std::to_string(in_paralyzation_damage_delta) }
+	};
+	LocaleStringFormatMap format_map(data_map);
+
+	_locale_system->GetValueFormatted(
+		s_locale_key_combatant_damage,
+		format_map
+		);
+
+	_log(format_map.GetResult());
+
+}
+
 void StaticLq::SimpleCombatOutput::SetCombatEnd(const std::vector<std::shared_ptr<ICombatSide>>& sides_able_to_continue)
 {
 	_log(_locale_system->GetValue(s_locale_key_combat_ended));
 	for (const auto& item : sides_able_to_continue)
 	{
-		const LocaleISO_639_1 locale = _locale_system->GetLocale();
 		std::map<std::string, std::string> data_map = {
 			{ "side", _locale_system->GetValue(item->GetDisplayName()) }
 		};

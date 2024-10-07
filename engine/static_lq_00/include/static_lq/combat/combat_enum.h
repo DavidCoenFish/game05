@@ -26,7 +26,6 @@ enum class CombatantValue
 	TSusceptibleFaithDamage, // combat
 	TAlignment, // combat
 	TSusceptibleNonMagicalDamage, // combat
-
 };
 
 }

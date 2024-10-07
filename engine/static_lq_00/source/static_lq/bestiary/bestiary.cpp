@@ -41,6 +41,8 @@ namespace
 	constexpr char s_locale_key_paralyzation_damage[] = "slqsc_paralyzation_damage";
 	constexpr char s_locale_key_alive[] = "slqsc_alive";
 	constexpr char s_locale_key_alive_tooltip[] = "slqsc_alive_tooltip";
+	constexpr char s_locale_key_can_continue_combat[] = "slqsc_can_continue_combat";
+	constexpr char s_locale_key_can_continue_combat_tooltip[] = "slqsc_can_continue_combat_tooltip";
 
 	//constexpr char s_dag_key_attack_bonus[] = "slqsc_attack_bonus";
 	//constexpr char s_dag_key_attack_bonus_tooltip[] = "slqsc_attack_bonus_tooltip";
@@ -200,6 +202,36 @@ namespace
 			1);
 	}
 
+	void DagAddCanContinueCombat(DagThreadedCollection& in_dag_collection)
+	{
+		auto can_continue_combat = in_dag_collection.CreateNodeCalculate(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TCanContinueCombat),
+			[](
+				const std::vector< std::shared_ptr< IDagThreadedValue > >&, 
+				const std::vector< std::shared_ptr< IDagThreadedValue > >& in_array_indexed
+			) -> std::shared_ptr< IDagThreadedValue >
+			{
+				const bool alive = DagThreadedHelper::GetValue<bool>(in_array_indexed[0]);
+				return DagThreadedHelper::CreateDagValue<int32_t>(alive);
+			},
+			s_locale_key_can_continue_combat,
+			s_locale_key_can_continue_combat_tooltip
+			);
+		in_dag_collection.AddNodeLinkIndexed(
+			can_continue_combat, 
+			in_dag_collection.FindNode(EnumSoftBind<StaticLq::BestiaryEnum::CombatantValueInternal>::EnumToString(StaticLq::BestiaryEnum::CombatantValueInternal::TAlive)),
+			0);
+
+	}
+
+	void DagAddCombatVariables(DagThreadedCollection& in_dag_collection)
+	{
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TMelleeInitiative),
+			DagThreadedHelper::CreateDagValue<int32_t>(0)
+			);
+	}
+
 	std::shared_ptr<DagThreadedCollection> MakeMonsterDag(const int32_t in_id, const StaticLq::MonsterData& in_monster_data, const int32_t in_variation_index, const std::string& in_name_key)
 	{
 		//StaticLq::RandomSequence random_sequence(in_id);
@@ -210,6 +242,8 @@ namespace
 		DagAddDamageTolerance(*result, in_id, in_monster_data._array_variation[in_variation_index]);
 		DagAddDamageSum(*result);
 		DagAddAlive(*result);
+		DagAddCanContinueCombat(*result);
+		DagAddCombatVariables(*result);
 
 		#if 0
 		auto damage_tollerace = result->FindNode(s_dag_key_damage_tolerance_raw);
@@ -361,10 +395,10 @@ std::shared_ptr<StaticLq::ICombatant> StaticLq::Bestiary::FactoryDefaultGiantSpi
 
 	const int id = ICombatant::MakeNewId();
 	const std::string name_key = in_name_system.GenerateName(StaticLq::NameSystem::GetKeyGiantSpider(), id, in_locale_system);
+	const int32_t variation_index = 1;
+	std::shared_ptr<DagThreadedCollection> dag_collection = MakeMonsterDag(id, monster_data, variation_index, name_key);
 
-	std::shared_ptr<DagThreadedCollection> dag_collection = MakeMonsterDag(id, monster_data, 1, name_key);
-
-	return std::make_shared<SimpleCombatMonster>(id, dag_collection);
+	return std::make_shared<SimpleCombatMonster>(id, dag_collection, monster_data._array_variation[variation_index]._array_attack_data);
 }
 
 /*
@@ -475,7 +509,8 @@ std::shared_ptr<StaticLq::ICombatant> StaticLq::Bestiary::FactoryDefaultGiantAnt
 	const int id = ICombatant::MakeNewId();
 	const std::string name_key = in_name_system.GenerateName(StaticLq::NameSystem::GetKeyGiantAnt(), id, in_locale_system);
 
-	std::shared_ptr<DagThreadedCollection> dag_collection = MakeMonsterDag(id, monster_data, 1, name_key);
+	const int32_t variation_index = 1;
+	std::shared_ptr<DagThreadedCollection> dag_collection = MakeMonsterDag(id, monster_data, variation_index, name_key);
 
-	return std::make_shared<SimpleCombatMonster>(id, dag_collection);
+	return std::make_shared<SimpleCombatMonster>(id, dag_collection, monster_data._array_variation[variation_index]._array_attack_data);
 }

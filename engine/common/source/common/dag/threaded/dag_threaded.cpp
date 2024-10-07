@@ -31,6 +31,7 @@ namespace
 	private:
 	virtual const bool OnCalculate(
 		const std::shared_ptr<IDagThreadedValue>&,
+		const int,
 		const std::string&,
 		const std::string&,
 		const std::string&,

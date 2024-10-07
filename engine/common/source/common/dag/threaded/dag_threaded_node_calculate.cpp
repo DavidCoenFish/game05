@@ -178,6 +178,7 @@ const bool DagThreadedNodeCalculate::Visit(IDagThreadedVisitor& visitor)
 		std::unique_lock read_lock_output(_array_output_mutex);
 		if (false == visitor.OnCalculate(
 			GetValue(),
+			_calculate_id.load(), // this is not perfect, need to have GetValue return the calculate id?
 			_uid,
 			_display_name,
 			_tooltip_raw,
