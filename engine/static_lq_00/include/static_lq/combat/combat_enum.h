@@ -15,6 +15,7 @@ enum class CombatantValue
 {
 	TDefault = 0,
 
+	TDisplayName, // output
 	TSelf, // output
 
 	TCanContinueCombat, // combat

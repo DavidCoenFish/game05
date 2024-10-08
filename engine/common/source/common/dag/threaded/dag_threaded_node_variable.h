@@ -29,6 +29,7 @@ private:
 	void SetOutput(IDagThreadedNode* const in_node) override;
 	void RemoveOutput(IDagThreadedNode* const in_node) override;
 	std::shared_ptr<IDagThreadedValue> GetValue() override;
+	std::shared_ptr<Tooltip> GetTooltip(const DagThreadedCollection& in_collection, const LocaleSystem& in_locale_system) override;
 
 	/// return true to continue visiting 
 	virtual const bool Visit(IDagThreadedVisitor& visitor) override;

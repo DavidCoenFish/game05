@@ -37,6 +37,8 @@ private:
 	void RemoveOutput(IDagThreadedNode* const pNode) override;
 	std::shared_ptr<IDagThreadedValue> GetValue() override;
 
+	std::shared_ptr<Tooltip> GetTooltip(const DagThreadedCollection& in_collection, const LocaleSystem& in_locale_system) override;
+
 	/// return true to continue visiting 
 	virtual const bool Visit(IDagThreadedVisitor& visitor) override;
 
@@ -49,19 +51,25 @@ private:
 	const CalculateFunction _calculate_function;
 
 	std::shared_mutex _array_input_stack_mutex;
-	std::vector< IDagThreadedNode* > _array_input_stack;
+	std::vector<IDagThreadedNode*> _array_input_stack;
 
 	std::shared_mutex _array_input_index_mutex;
-	std::vector< IDagThreadedNode* > _array_input_index;
+	std::vector<IDagThreadedNode*> _array_input_index;
 
 	std::shared_mutex _array_output_mutex;
-	std::vector< IDagThreadedNode* > _array_output;
-
-	// Shared_ptr has an internal lock
-	std::shared_ptr< IDagThreadedValue > _value;
+	std::vector<IDagThreadedNode*> _array_output;
 
 	// Each time we are marked dirty, _change_id increments
 	std::atomic_int _change_id;
+
 	// If _calculate_id == _change_id, presume _value is up to date and doesn't need to be calculated via the _calculate_function
 	std::atomic_int _calculate_id;
+	// Shared_ptr has an internal lock
+	std::shared_ptr<IDagThreadedValue> _value;
+
+	// If _tooltip_id == _change_id, presume _tooltip is up to date and doesn't need to be calculated
+	std::atomic_int _tooltip_id;
+	// Shared_ptr has an internal lock
+	std::shared_ptr<Tooltip> _tooltip;
+
 };

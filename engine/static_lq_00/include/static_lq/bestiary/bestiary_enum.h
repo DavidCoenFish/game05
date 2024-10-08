@@ -7,11 +7,12 @@ namespace StaticLq
 namespace BestiaryEnum
 {
 /// internal to the bestiary, values for a combatant
+/// see CombatantEnum for non internal Combatant values
 enum class CombatantValueInternal
 {
 	TDefault = 0,
 
-	TName,
+	//TName,
 	TSpecies,
 	TVariation,
 

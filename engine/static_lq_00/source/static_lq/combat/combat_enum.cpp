@@ -14,6 +14,7 @@ namespace
 	static const Data s_data[] = {
 		{s_default_data, StaticLq::CombatEnum::CombatantValue::TDefault},
 
+		{"DisplayName", StaticLq::CombatEnum::CombatantValue::TDisplayName},
 		{"Self", StaticLq::CombatEnum::CombatantValue::TSelf},
 		{"CanContinueCombat", StaticLq::CombatEnum::CombatantValue::TCanContinueCombat},
 		{"MelleeInitiative", StaticLq::CombatEnum::CombatantValue::TMelleeInitiative},

@@ -7,6 +7,8 @@ class DagThreadedCollectionImplementation;
 class IDagThreadedNode;
 class IDagThreadedValue;
 class IDagThreadedVisitor;
+class Tooltip;
+class LocaleSystem;
 
 /*
 "foo(7) = bar(3) + meow(4)", where bar(3) is not a link as it is a value, but meow(4) is a line as it is a calculate
@@ -79,9 +81,12 @@ public:
 	/// could be the locale key to the tooltip text
 	const std::string GetTooltipRaw(const NodeID in_node_id);
 
-	// Primary thread unless multi threaded mode == true
-	std::shared_ptr< IDagThreadedValue > GetDagValue(const NodeID in_node_id);
-	void SetDagValue(const NodeID in_node_id, const std::shared_ptr< IDagThreadedValue >& in_dag_value);
+	std::shared_ptr<IDagThreadedValue> GetDagValue(const NodeID in_node_id);
+	void SetDagValue(const NodeID in_node_id, const std::shared_ptr<IDagThreadedValue>& in_dag_value);
+
+	/// this could have been kept external to the DagCollection and implemented via visitor, but want to cache the tooltip
+	/// and only regenerate if dirty
+	std::shared_ptr<Tooltip> GetTooltip(const NodeID in_node_id, const LocaleSystem& in_locale_system) const;
 
 private:
 	std::unique_ptr< DagThreadedCollectionImplementation > _implementation;

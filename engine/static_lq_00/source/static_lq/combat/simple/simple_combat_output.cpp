@@ -63,9 +63,8 @@ void StaticLq::SimpleCombatOutput::SetCombatStart()
 
 void StaticLq::SimpleCombatOutput::CombatantAdded(ICombatant& combatant, ICombatSide& side)
 {
-	std::shared_ptr<TooltipData> tooltip_data = combatant.GetTooltip(StaticLq::CombatEnum::CombatantValue::TSelf, *_locale_system);
 	std::map<std::string, std::string> data_map = {
-		{ "combatant", tooltip_data->_text },
+		{ "combatant", _locale_system->GetValue(combatant.GetDisplayName()) },
 		{ "side", _locale_system->GetValue(side.GetDisplayName()) }
 	};
 	LocaleStringFormatMap format_map(data_map);
@@ -80,9 +79,8 @@ void StaticLq::SimpleCombatOutput::CombatantAdded(ICombatant& combatant, ICombat
 
 void StaticLq::SimpleCombatOutput::CombatantRemoved(ICombatant& combatant, ICombatSide& side)
 {
-	std::shared_ptr<TooltipData> tooltip_data = combatant.GetTooltip(StaticLq::CombatEnum::CombatantValue::TSelf, *_locale_system);
 	std::map<std::string, std::string> data_map = {
-		{ "combatant", tooltip_data->_text },
+		{ "combatant", _locale_system->GetValue(combatant.GetDisplayName()) },
 		{ "side", _locale_system->GetValue(side.GetDisplayName()) }
 	};
 	LocaleStringFormatMap format_map(data_map);
@@ -121,9 +119,8 @@ void StaticLq::SimpleCombatOutput::CombatantDamage(
 	)
 {
 	in_cause_damage;
-	std::shared_ptr<TooltipData> tooltip_data = in_combatant_receive.GetTooltip(StaticLq::CombatEnum::CombatantValue::TSelf, *_locale_system);
 	std::map<std::string, std::string> data_map = {
-		{ "combatant", tooltip_data->_text },
+		{ "combatant", _locale_system->GetValue(in_combatant_receive.GetDisplayName()) },
 		{ "physical_damage", std::to_string(in_physical_damage_delta) },
 		{ "fatigue_damage", std::to_string(in_fatigue_damage_delta) },
 		{ "paralyzation_damage", std::to_string(in_paralyzation_damage_delta) }
@@ -150,7 +147,7 @@ void StaticLq::SimpleCombatOutput::SetCombatEnd(const std::vector<std::shared_pt
 		LocaleStringFormatMap format_map(data_map);
 
 		_locale_system->GetValueFormatted(
-			s_locale_key_combatant_removed,
+			s_locale_key_side_victory,
 			format_map
 			);
 

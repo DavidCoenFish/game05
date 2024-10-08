@@ -1,7 +1,10 @@
 #include "common/common_pch.h"
-
 #include "common/dag/threaded/dag_threaded_node_calculate.h"
+
+#include "common/dag/threaded/dag_threaded.h"
+#include "common/dag/threaded/dag_threaded_collection.h"
 #include "common/dag/threaded/i_dag_threaded_visitor.h"
+#include "common/locale/locale_system.h"
 
 
 DagThreadedNodeCalculate::DagThreadedNodeCalculate(
@@ -168,6 +171,18 @@ std::shared_ptr<IDagThreadedValue> DagThreadedNodeCalculate::GetValue()
 		result = _value;
 	}
 	return result;
+}
+
+std::shared_ptr<Tooltip> DagThreadedNodeCalculate::GetTooltip(const DagThreadedCollection& in_collection, const LocaleSystem& in_locale_system)
+{
+	const int change_id = _change_id.load();
+	const int tooltip_id = _tooltip_id.exchange(change_id);
+	std::shared_ptr<IDagThreadedValue> result;
+	if ((change_id != tooltip_id) || (nullptr == _tooltip))
+	{
+		_tooltip = DagThreaded::GetTooltipBody(in_collection, this, in_locale_system);
+	}
+	return _tooltip;
 }
 
 const bool DagThreadedNodeCalculate::Visit(IDagThreadedVisitor& visitor)

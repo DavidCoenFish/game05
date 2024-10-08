@@ -85,6 +85,11 @@ std::shared_ptr<IDagThreadedValue> DagThreadedNodeVariable::GetValue()
 	return _value;
 }
 
+std::shared_ptr<Tooltip> DagThreadedNodeVariable::GetTooltip(const DagThreadedCollection&, const LocaleSystem&)
+{
+	return nullptr;
+}
+
 const bool DagThreadedNodeVariable::Visit(IDagThreadedVisitor& visitor) 
 {
 	return visitor.OnVariable(

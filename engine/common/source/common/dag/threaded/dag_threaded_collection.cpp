@@ -155,6 +155,15 @@ public:
 		return;
 	}
 
+	std::shared_ptr<Tooltip> GetTooltip(const DagThreadedCollection& in_collection, const NodeID in_node_id, const LocaleSystem& in_locale_system)
+	{
+		if (nullptr != in_node_id)
+		{
+			return in_node_id->GetTooltip(in_collection, in_locale_system);
+		}
+		return nullptr;
+	}
+
 private:
 	mutable std::shared_mutex _dag_node_map_mutex;
 	std::map< std::string, std::shared_ptr< IDagThreadedNode > > _dag_node_map;
@@ -271,3 +280,9 @@ void DagThreadedCollection::SetDagValue(const NodeID in_node_id, const std::shar
 {
 	return _implementation->SetDagValue(in_node_id, in_dag_value);
 }
+
+std::shared_ptr<Tooltip> DagThreadedCollection::GetTooltip(const NodeID in_node_id, const LocaleSystem& in_locale_system) const
+{
+	return _implementation->GetTooltip(*this, in_node_id, in_locale_system);
+}
+

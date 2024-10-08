@@ -13,7 +13,7 @@ namespace
 
 	static const Data s_data[] = {
 		{s_default_data, StaticLq::BestiaryEnum::CombatantValueInternal::TDefault},
-		{"Name", StaticLq::BestiaryEnum::CombatantValueInternal::TName},
+		//{"Name", StaticLq::BestiaryEnum::CombatantValueInternal::TName},
 		{"Species", StaticLq::BestiaryEnum::CombatantValueInternal::TSpecies},
 		{"Variation", StaticLq::BestiaryEnum::CombatantValueInternal::TVariation},
 		{"DamageTollerance", StaticLq::BestiaryEnum::CombatantValueInternal::TDamageTollerance},

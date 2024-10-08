@@ -44,22 +44,10 @@ namespace
 	constexpr char s_locale_key_can_continue_combat[] = "slqsc_can_continue_combat";
 	constexpr char s_locale_key_can_continue_combat_tooltip[] = "slqsc_can_continue_combat_tooltip";
 
-	//constexpr char s_dag_key_attack_bonus[] = "slqsc_attack_bonus";
-	//constexpr char s_dag_key_attack_bonus_tooltip[] = "slqsc_attack_bonus_tooltip";
-	//constexpr char s_dag_key_damage_tolerance_dice_constant[] = "damage_tolerance_dice_constant";
-	//constexpr char s_dag_key_damage_tolerance_dice_count[] = "damage_tolerance_dice_count";
-	//constexpr char s_dag_key_damage_tolerance_dice_sides[] = "damage_tolerance_dice_sides";
-	//constexpr char s_dag_key_damage_tolerance_raw[] = "damage_tolerance_raw";
-	//constexpr char s_dag_key_fatigue_damage[] = "fatigue_damage";
-	//constexpr char s_dag_key_physical_damage[] = "physical_damage";
-	//constexpr char s_dag_key_paralyzation_damage[] = "paralyzation_damage";
-	//constexpr char s_dag_key_damage_sum_raw[] = "damage_sum_raw";
-	//constexpr char s_dag_key_alive[] = "alive";
-
 	void DagAddName(DagThreadedCollection& in_dag_collection, const std::string& in_name_key, const std::string& in_species, const std::string& in_variation)
 	{
 		in_dag_collection.CreateNodeVariable(
-			EnumSoftBind<StaticLq::BestiaryEnum::CombatantValueInternal>::EnumToString(StaticLq::BestiaryEnum::CombatantValueInternal::TName),
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDisplayName),
 			DagThreadedHelper::CreateDagValue<std::string>(in_name_key)
 			);
 		in_dag_collection.CreateNodeVariable(

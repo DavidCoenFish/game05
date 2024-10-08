@@ -40,6 +40,19 @@ StaticLq::SimpleCombatMonster::SimpleCombatMonster(
 {
 }
 
+const std::string StaticLq::SimpleCombatMonster::GetDisplayName()
+{
+	const std::string key = EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDisplayName);
+	const std::string result = DagThreadedHelper::GetValue<std::string>(_dag_collection->GetDagValue(_dag_collection->FindNode(key)));
+	return result;
+}
+
+std::shared_ptr<Tooltip> StaticLq::SimpleCombatMonster::GetDisplayNameTooltip(const LocaleSystem& in_locale_system)
+{
+	const std::string key = EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TSelf);
+	return _dag_collection->GetTooltip(_dag_collection->FindNode(key), in_locale_system);
+}
+
 const int StaticLq::SimpleCombatMonster::GetValue(const CombatEnum::CombatantValue in_key) 
 {
 	const std::string key = EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(in_key);
