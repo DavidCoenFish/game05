@@ -25,7 +25,6 @@ private:
 	ICombatant* _combatant_performing_action = nullptr;
 	ICombatant* _combatant_receiving_action = nullptr;
 
-	// each would get a tooltip?
 	int32_t _physical_damage_delta = 0;
 	int32_t _fatigue_damage_delta = 0;
 	int32_t _paralyzation_damage_delta = 0;

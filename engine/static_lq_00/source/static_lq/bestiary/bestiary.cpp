@@ -270,6 +270,7 @@ void StaticLq::Bestiary::RegisterLocaleSystem(LocaleSystem& in_out_locale_system
 		};
 
 	in_out_locale_system.Append(LocaleISO_639_1::Default, data);
+	in_out_locale_system.Append(LocaleISO_639_1::English, data);
 }
 
 /*

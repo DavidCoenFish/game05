@@ -24,6 +24,7 @@ namespace LqCombat
 		{
 			std::shared_ptr<LocaleSystem> locale_system = std::make_shared<LocaleSystem>();
 			StaticLq::SimpleCombatOutput::RegisterLocaleSystem(*locale_system);
+			StaticLq::Bestiary::RegisterLocaleSystem(*locale_system);
 			std::shared_ptr<StaticLq::NameSystem> name_system = std::make_shared<StaticLq::NameSystem>();
 			name_system->AddGenerator(StaticLq::NameSystem::GetKeySide(), StaticLq::NameSystemGeneratorRandom::FactoryGeneratorSide());
 			name_system->AddGenerator(StaticLq::NameSystem::GetKeyGiantAnt(), StaticLq::NameSystemGeneratorRandom::FactoryGeneratorGiantAnt());

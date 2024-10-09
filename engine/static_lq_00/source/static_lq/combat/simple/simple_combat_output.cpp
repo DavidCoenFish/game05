@@ -19,6 +19,8 @@ namespace
 	constexpr char s_locale_key_combat_ended[] = "slqsc_combat_ended";
 	constexpr char s_locale_key_side_victory[] = "slqsc_side_victory";
 	constexpr char s_locale_key_combatant_damage[] = "slqsc_combatant_damage";
+	constexpr char s_locale_key_set_mellee_initiative[] = "slqsc_set_mellee_initiative";
+	constexpr char s_locale_key_attempt_mellee_attack[] = "slqsc_attempt_mellee_attack";
 
 	class LocaleDataProvider : public ILocaleDataProvider
 	{
@@ -36,6 +38,8 @@ namespace
 				{s_locale_key_combat_ended, "Combat ended\n"},
 				{s_locale_key_side_victory, "Victory for side {side}\n"},
 				{s_locale_key_combatant_damage, "{combatant} took {physical_damage} physical damage, {fatigue_damage} fatigue damage, {paralyzation_damage} paralyzation damage\n"},
+				{s_locale_key_set_mellee_initiative, "{combatant} set mellee inititive {value}\n"},
+				{s_locale_key_attempt_mellee_attack, "{combatant} tries to {attack} {target} with attack roll {attack_roll} attack bonus {attack_bonus} against defence {defence}. is hit {hit}\n"},
 				};
 
 			in_out_locale_system.Append(in_locale, data);
@@ -109,6 +113,55 @@ void StaticLq::SimpleCombatOutput::SetTurnSegment(const int32_t turn, const int3
 	_log(format_map.GetResult());
 }
 
+void StaticLq::SimpleCombatOutput::CombatantSetMelleeInitiative(ICombatant& in_combatant, const int32_t in_value)
+{
+	std::map<std::string, std::string> data_map = {
+		{ "combatant", _locale_system->GetValue(in_combatant.GetDisplayName()) },
+		{ "value", std::to_string(in_value) }
+	};
+	LocaleStringFormatMap format_map(data_map);
+
+	_locale_system->GetValueFormatted(
+		s_locale_key_set_mellee_initiative,
+		format_map
+		);
+
+	_log(format_map.GetResult());
+
+}
+
+void StaticLq::SimpleCombatOutput::CombatantAttemptMelleeAttack(
+	ICombatant* const in_combatant_performing_action, 
+	ICombatant* const in_combatant_being_hit, 
+	const std::string& in_attack,
+	const int32_t in_attack_roll,
+	const int32_t in_attack_bonus,
+	const int32_t in_defence,
+	const bool in_hit
+	)
+{
+	if ((nullptr == in_combatant_performing_action) || (nullptr == in_combatant_being_hit))
+	{
+		return;
+	}
+	std::map<std::string, std::string> data_map = {
+		{ "combatant", _locale_system->GetValue(in_combatant_performing_action->GetDisplayName()) },
+		{ "target", _locale_system->GetValue(in_combatant_being_hit->GetDisplayName()) },
+		{ "attack", _locale_system->GetValue(in_attack) },
+		{ "attack_roll", std::to_string(in_attack_roll) },
+		{ "attack_bonus", std::to_string(in_attack_bonus) },
+		{ "defence", std::to_string(in_defence) },
+		{ "hit", std::to_string(in_hit) }
+	};
+	LocaleStringFormatMap format_map(data_map);
+
+	_locale_system->GetValueFormatted(
+		s_locale_key_attempt_mellee_attack,
+		format_map
+		);
+
+	_log(format_map.GetResult());
+}
 
 void StaticLq::SimpleCombatOutput::CombatantDamage(
 	ICombatant& in_combatant_receive, 

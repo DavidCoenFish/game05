@@ -12,13 +12,21 @@ public:
 	virtual ~ICombatOutput(){}
 
 	virtual void SetCombatStart() = 0;
-	virtual void CombatantAdded(ICombatant& combatant, ICombatSide& side) = 0;
-	virtual void CombatantRemoved(ICombatant& combatant, ICombatSide& side) = 0;
+	virtual void CombatantAdded(ICombatant& in_combatant, ICombatSide& in_side) = 0;
+	virtual void CombatantRemoved(ICombatant& in_combatant, ICombatSide& in_side) = 0;
 
 
-	virtual void SetTurnSegment(const int32_t turn, const int32_t segment) = 0;
-
-	//virtual void RecordAttackRoll(const int turn, const int segment) = 0;
+	virtual void SetTurnSegment(const int32_t in_turn, const int32_t in_segment) = 0;
+	virtual void CombatantSetMelleeInitiative(ICombatant& in_combatant, const int32_t in_value) = 0;
+	virtual void CombatantAttemptMelleeAttack(
+				ICombatant* const in_combatant_performing_action, 
+				ICombatant* const in_combatant_being_hit, 
+				const std::string& in_attack,
+				const int32_t in_attack_roll,
+				const int32_t in_attack_bonus,
+				const int32_t in_defence,
+				const bool in_hit
+				) = 0;
 
 	virtual void CombatantDamage(
 		ICombatant& in_combatant_receive, 

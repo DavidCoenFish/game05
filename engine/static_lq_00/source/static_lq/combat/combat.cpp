@@ -43,10 +43,11 @@ const bool TestSidesAntagonistic(const std::vector<std::shared_ptr<StaticLq::ICo
 	return false;
 }
 
-void SetMelleeInititive(StaticLq::ICombatant& in_combatant, StaticLq::RandomSequence& in_random_sequence)
+void SetMelleeInititive(StaticLq::ICombatant& in_combatant, StaticLq::RandomSequence& in_random_sequence, StaticLq::ICombatOutput& combat_output)
 {
 	const int32_t value = in_random_sequence.GenerateDice(10);
 	in_combatant.SetValue(StaticLq::CombatEnum::CombatantValue::TMelleeInitiative, value);
+	combat_output.CombatantSetMelleeInitiative(in_combatant, value);
 }
 }
 
@@ -84,7 +85,7 @@ public:
 		{
 			for (const auto& item : side->GetCombatantList())
 			{
-				SetMelleeInititive(*item, *_random_sequence);
+				SetMelleeInititive(*item, *_random_sequence, *_combat_output);
 				_combat_output->CombatantAdded(*item, *side);
 			}
 		}
@@ -111,11 +112,11 @@ public:
 
 	void AddCombatant(const std::shared_ptr<StaticLq::ICombatant>& combatant, const int32_t side_id)
 	{
-		SetMelleeInititive(*combatant, *_random_sequence);
 		auto lambda = [side_id](const std::shared_ptr<StaticLq::ICombatSide>& rhs) { return rhs->GetId() == side_id;};
 		const auto found = std::find_if(_side_array.begin(), _side_array.end(), lambda);
 		if (found != _side_array.end())
 		{
+			SetMelleeInititive(*combatant, *_random_sequence, *_combat_output);
 			(*found)->AddCombatant(combatant);
 
 			if (nullptr != _combat_output)
@@ -155,7 +156,7 @@ public:
 		{
 			for (const auto& sub_item : item->GetCombatantList())
 			{
-				SetMelleeInititive(*sub_item, *_random_sequence);
+				SetMelleeInititive(*sub_item, *_random_sequence, *_combat_output);
 			}
 		}
 	}
@@ -206,6 +207,7 @@ public:
 
 				sub_item->GatherAction(
 					out_combat_action_array,
+					*_combat_output,
 					*_random_sequence,
 					_time,
 					team_mellee,

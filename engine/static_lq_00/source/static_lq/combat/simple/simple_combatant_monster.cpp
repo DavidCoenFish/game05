@@ -12,6 +12,7 @@
 #include "static_lq/combat/combat_time.h"
 #include "static_lq/combat/i_combatant.h"
 #include "static_lq/combat/i_combat_action.h"
+#include "static_lq/combat/i_combat_output.h"
 #include "static_lq/name/name_system.h"
 #include "static_lq/random_sequence.h"
 
@@ -87,6 +88,7 @@ std::shared_ptr<TooltipData> StaticLq::SimpleCombatMonster::GetTooltip(const Com
 
 void StaticLq::SimpleCombatMonster::GatherAction(
 	std::vector<std::shared_ptr<ICombatAction>>& out_actions,
+	ICombatOutput& in_output,
 	RandomSequence& in_out_random_sequence,
 	const CombatTime& in_combat_time,
 	const std::vector<std::shared_ptr<ICombatant>>& in_team_mellee,
@@ -123,7 +125,8 @@ void StaticLq::SimpleCombatMonster::GatherAction(
 			{
 				_mellee_attack_recovery -= 1;
 			}
-			else
+
+			if (_mellee_attack_recovery <= 0)
 			{
 				const int opponent_mellee_initiative = target->GetValue(StaticLq::CombatEnum::CombatantValue::TMelleeInitiative);
 				if ((_attack_index == 0) || (in_combat_time.GetSegment() < opponent_mellee_initiative))
@@ -137,7 +140,7 @@ void StaticLq::SimpleCombatMonster::GatherAction(
 		{
 			const MonsterAttackData& attack = _attack_data[_attack_index];
 			_attack_index = (_attack_index + 1) % _attack_data.size();
-			_mellee_attack_recovery = 0; //attack._recovery_time; 
+			_mellee_attack_recovery = 1; //attack._recovery_time; 
 			const int attack_roll = in_out_random_sequence.GenerateDice(30);
 			const int32_t attack_bonus = GetValue(StaticLq::CombatEnum::CombatantValue::TAttackBonus);
 			const int32_t defence = target->GetValue(StaticLq::CombatEnum::CombatantValue::TDefense);
@@ -155,6 +158,15 @@ void StaticLq::SimpleCombatMonster::GatherAction(
 			{
 				hit = true;
 			}
+			in_output.CombatantAttemptMelleeAttack(
+				this, 
+				target.get(), 
+				attack._display_name,
+				attack_roll,
+				attack_bonus,
+				defence,
+				hit
+				);
 
 			if (true == hit)
 			{
@@ -168,9 +180,8 @@ void StaticLq::SimpleCombatMonster::GatherAction(
 					pysical_damage += severity;
 				}
 
-				ICombatant* combatant_performing_action = this;
 				std::shared_ptr<CombatActionMelleeAttack> action = std::make_shared<CombatActionMelleeAttack>(
-					combatant_performing_action, 
+					this, 
 					target.get(), 
 					pysical_damage
 					);

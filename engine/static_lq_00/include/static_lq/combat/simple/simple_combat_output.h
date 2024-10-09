@@ -23,9 +23,16 @@ private:
 	virtual void CombatantRemoved(ICombatant& in_combatant, ICombatSide& in_side) override;
 
 	virtual void SetTurnSegment(const int32_t in_turn, const int32_t in_segment) override;
-
-	//virtual void RecordAttackRoll(const int turn, const int segment) = 0;
-
+	virtual void CombatantSetMelleeInitiative(ICombatant& in_combatant, const int32_t in_value) override;
+	virtual void CombatantAttemptMelleeAttack(
+				ICombatant* const in_combatant_performing_action, 
+				ICombatant* const in_combatant_being_hit, 
+				const std::string& in_attack,
+				const int32_t in_attack_roll,
+				const int32_t in_attack_bonus,
+				const int32_t in_defence,
+				const bool in_hit
+				) override;
 	virtual void CombatantDamage(
 		ICombatant& in_combatant_receive, 
 		ICombatant* const in_cause_damage = nullptr, 
