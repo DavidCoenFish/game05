@@ -40,8 +40,9 @@ public:
 	LocaleSystemImplementation()
 	: _locale(LocaleISO_639_1::Invalid)
 	, _cached_data_map(nullptr)
+	, _default_data_map(nullptr)
 	{
-		// Nop
+		_default_data_map = FindCreateDataMap(LocaleISO_639_1::Default);
 	}
 
 	~LocaleSystemImplementation()
@@ -59,6 +60,15 @@ public:
 		{
 			auto found = data_map->find(in_key);
 			if (found != data_map->end())
+			{
+				return found->second;
+			}
+		}
+		// look in default data map if we didn't find in the requested map
+		if (nullptr != _default_data_map)
+		{
+			auto found = _default_data_map->find(in_key);
+			if (found != _default_data_map->end())
 			{
 				return found->second;
 			}
@@ -281,6 +291,7 @@ private:
 	LocaleISO_639_1 _locale;
 	/// most of the time we will just being using the selected locale, so save a lookup
 	TDataMap* _cached_data_map;
+	TDataMap* _default_data_map;
 	std::map<LocaleISO_639_1, std::shared_ptr<TDataMap>> _locale_data_map;
 	std::vector<std::shared_ptr<ILocaleDataProvider>> _provider_array;
 };

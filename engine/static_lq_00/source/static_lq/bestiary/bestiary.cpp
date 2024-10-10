@@ -212,11 +212,24 @@ namespace
 
 	}
 
-	void DagAddCombatVariables(DagThreadedCollection& in_dag_collection)
+	void DagAddCombatVariables(DagThreadedCollection& in_dag_collection, const StaticLq::MonsterData& in_monster_data, const StaticLq::MonsterVariationData& in_monster_variation_data)
 	{
+		// we need a node to hold the value
 		in_dag_collection.CreateNodeVariable(
 			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TMelleeInitiative),
 			DagThreadedHelper::CreateDagValue<int32_t>(0)
+			);
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TAttackBonus),
+			DagThreadedHelper::CreateDagValue<int32_t>(in_monster_variation_data._attack_bonus)
+			);
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDefense),
+			DagThreadedHelper::CreateDagValue<int32_t>(in_monster_variation_data._defence)
+			);
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TRecoveryTime),
+			DagThreadedHelper::CreateDagValue<int32_t>(in_monster_data._recovery_time)
 			);
 	}
 
@@ -231,7 +244,7 @@ namespace
 		DagAddDamageSum(*result);
 		DagAddAlive(*result);
 		DagAddCanContinueCombat(*result);
-		DagAddCombatVariables(*result);
+		DagAddCombatVariables(*result, in_monster_data, in_monster_data._array_variation[in_variation_index]);
 
 		#if 0
 		auto damage_tollerace = result->FindNode(s_dag_key_damage_tolerance_raw);
@@ -270,7 +283,7 @@ void StaticLq::Bestiary::RegisterLocaleSystem(LocaleSystem& in_out_locale_system
 		};
 
 	in_out_locale_system.Append(LocaleISO_639_1::Default, data);
-	in_out_locale_system.Append(LocaleISO_639_1::English, data);
+	//in_out_locale_system.Append(LocaleISO_639_1::English, data);
 }
 
 /*

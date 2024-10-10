@@ -22,6 +22,7 @@ enum class CombatantValue
 	TMelleeInitiative, // combat
 	TDefense, // combat
 	TAttackBonus, // combat
+	TRecoveryTime, // combat
 	TSusceptibleSeverityDamage, // combat
 	// TIsMagicalDamage or is this part of the attack data
 	TSusceptibleFaithDamage, // combat

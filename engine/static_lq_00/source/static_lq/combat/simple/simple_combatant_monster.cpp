@@ -140,7 +140,7 @@ void StaticLq::SimpleCombatMonster::GatherAction(
 		{
 			const MonsterAttackData& attack = _attack_data[_attack_index];
 			_attack_index = (_attack_index + 1) % _attack_data.size();
-			_mellee_attack_recovery = 1; //attack._recovery_time; 
+			_mellee_attack_recovery = GetValue(StaticLq::CombatEnum::CombatantValue::TRecoveryTime);
 			const int attack_roll = in_out_random_sequence.GenerateDice(30);
 			const int32_t attack_bonus = GetValue(StaticLq::CombatEnum::CombatantValue::TAttackBonus);
 			const int32_t defence = target->GetValue(StaticLq::CombatEnum::CombatantValue::TDefense);

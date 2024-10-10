@@ -51,8 +51,8 @@ const bool StaticLq::SimpleCombatSide::CanContinueCombat() const
 	return false;
 }
 
-const bool StaticLq::SimpleCombatSide::IsHostileToSide(const ICombatSide& /*side*/) const 
+const bool StaticLq::SimpleCombatSide::IsHostileToSide(const ICombatSide& side) const 
 {
 	//todo, take into account combantant intelegence and attacked history
-	return true;
+	return (&side != this);
 }

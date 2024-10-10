@@ -20,6 +20,7 @@ namespace
 		{"MelleeInitiative", StaticLq::CombatEnum::CombatantValue::TMelleeInitiative},
 		{"Defense", StaticLq::CombatEnum::CombatantValue::TDefense},
 		{"AttackBonus", StaticLq::CombatEnum::CombatantValue::TAttackBonus},
+		{"RecoveryTime", StaticLq::CombatEnum::CombatantValue::TRecoveryTime},
 		{"SusceptibleSeverityDamage", StaticLq::CombatEnum::CombatantValue::TSusceptibleSeverityDamage},
 		{"SusceptibleFaithDamage", StaticLq::CombatEnum::CombatantValue::TSusceptibleFaithDamage},
 		{"Alignment", StaticLq::CombatEnum::CombatantValue::TAlignment},
