@@ -207,7 +207,6 @@ public:
 
 				sub_item->GatherAction(
 					out_combat_action_array,
-					*_combat_output,
 					*_random_sequence,
 					_time,
 					team_mellee,

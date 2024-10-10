@@ -1,224 +1,230 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-	<ClCompile Include="source\static_lq\random_sequence.cpp">
-	  <Filter>source\static_lq</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\static_lq_pch.cpp">
-	  <Filter>source\static_lq</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\combat\simple\simple_combat_topology.cpp">
-	  <Filter>source\static_lq\combat\simple</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\combat\simple\simple_combatant_monster.cpp">
-	  <Filter>source\static_lq\combat\simple</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\combat\simple\simple_combatant_player.cpp">
-	  <Filter>source\static_lq\combat\simple</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\combat\simple\simple_combat_output.cpp">
-	  <Filter>source\static_lq\combat\simple</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\combat\simple\simple_combat_side.cpp">
-	  <Filter>source\static_lq\combat\simple</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\combat\combat.cpp">
-	  <Filter>source\static_lq\combat</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\combat\combat_enum.cpp">
-	  <Filter>source\static_lq\combat</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\bestiary\bestiary.cpp">
-	  <Filter>source\static_lq\bestiary</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\bestiary\monster_data.cpp">
-	  <Filter>source\static_lq\bestiary</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\bestiary\bestiary_enum.cpp">
-	  <Filter>source\static_lq\bestiary</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\combat\i_combat_side.cpp">
-	  <Filter>source\static_lq\combat</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\combat\i_combatant.cpp">
-	  <Filter>source\static_lq\combat</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\name\name_system.cpp">
-	  <Filter>source\static_lq\name</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\name\name_system_generator_random.cpp">
-	  <Filter>source\static_lq\name</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\name\name_system_generator_random_data.cpp">
-	  <Filter>source\static_lq\name</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\name\i_name_system_generator.cpp">
-	  <Filter>source\static_lq\name</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\roll_data.cpp">
-	  <Filter>source\static_lq</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\bestiary\special_characteristic_data.cpp">
-	  <Filter>source\static_lq\bestiary</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\bestiary\monster_variation_data.cpp">
-	  <Filter>source\static_lq\bestiary</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\bestiary\monster_attribute_data.cpp">
-	  <Filter>source\static_lq\bestiary</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\bestiary\monster_attack_data.cpp">
-	  <Filter>source\static_lq\bestiary</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\combat\i_combat_action.cpp">
-	  <Filter>source\static_lq\combat</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\combat\action\combat_action_mellee_attack.cpp">
-	  <Filter>source\static_lq\combat\action</Filter>
-	</ClCompile>
-	<ClCompile Include="source\static_lq\combat\combat_time.cpp">
-	  <Filter>source\static_lq\combat</Filter>
-	</ClCompile>
+    <ClCompile Include="source\static_lq\random_sequence.cpp">
+      <Filter>source\static_lq</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\static_lq_pch.cpp">
+      <Filter>source\static_lq</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\simple\simple_combat_topology.cpp">
+      <Filter>source\static_lq\combat\simple</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\simple\simple_combatant_monster.cpp">
+      <Filter>source\static_lq\combat\simple</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\simple\simple_combatant_player.cpp">
+      <Filter>source\static_lq\combat\simple</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\simple\simple_combat_output.cpp">
+      <Filter>source\static_lq\combat\simple</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\simple\simple_combat_side.cpp">
+      <Filter>source\static_lq\combat\simple</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\combat.cpp">
+      <Filter>source\static_lq\combat</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\combat_enum.cpp">
+      <Filter>source\static_lq\combat</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\bestiary\bestiary.cpp">
+      <Filter>source\static_lq\bestiary</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\bestiary\monster_data.cpp">
+      <Filter>source\static_lq\bestiary</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\bestiary\bestiary_enum.cpp">
+      <Filter>source\static_lq\bestiary</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\i_combat_side.cpp">
+      <Filter>source\static_lq\combat</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\i_combatant.cpp">
+      <Filter>source\static_lq\combat</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\name\name_system.cpp">
+      <Filter>source\static_lq\name</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\name\name_system_generator_random.cpp">
+      <Filter>source\static_lq\name</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\name\name_system_generator_random_data.cpp">
+      <Filter>source\static_lq\name</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\name\i_name_system_generator.cpp">
+      <Filter>source\static_lq\name</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\roll_data.cpp">
+      <Filter>source\static_lq</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\bestiary\special_characteristic_data.cpp">
+      <Filter>source\static_lq\bestiary</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\bestiary\monster_variation_data.cpp">
+      <Filter>source\static_lq\bestiary</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\bestiary\monster_attribute_data.cpp">
+      <Filter>source\static_lq\bestiary</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\bestiary\monster_attack_data.cpp">
+      <Filter>source\static_lq\bestiary</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\i_combat_action.cpp">
+      <Filter>source\static_lq\combat</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\action\combat_action_mellee_attack.cpp">
+      <Filter>source\static_lq\combat\action</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\combat_time.cpp">
+      <Filter>source\static_lq\combat</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\action\combat_action_mellee_miss.cpp">
+      <Filter>source\static_lq\combat\action</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-	<ClInclude Include="include\static_lq\random_sequence.h">
-	  <Filter>include\static_lq</Filter>
-	</ClInclude>
-	<ClInclude Include="source\static_lq\static_lq_pch.h">
-	  <Filter>source\static_lq</Filter>
-	</ClInclude>
-	<ClInclude Include="include\static_lq\common.h">
-	  <Filter>include\static_lq</Filter>
-	</ClInclude>
-	<ClInclude Include="include\static_lq\combat\combat.h">
-	  <Filter>include\static_lq\combat</Filter>
-	</ClInclude>
-	<ClInclude Include="include\static_lq\combat\combat_enum.h">
-	  <Filter>include\static_lq\combat</Filter>
-	</ClInclude>
-	<ClInclude Include="include\static_lq\combat\i_combat_output.h">
-	  <Filter>include\static_lq\combat</Filter>
-	</ClInclude>
-	<ClInclude Include="include\static_lq\combat\i_combat_side.h">
-	  <Filter>include\static_lq\combat</Filter>
-	</ClInclude>
-	<ClInclude Include="include\static_lq\combat\i_combat_topology.h">
-	  <Filter>include\static_lq\combat</Filter>
-	</ClInclude>
-	<ClInclude Include="include\static_lq\combat\i_combatant.h">
-	  <Filter>include\static_lq\combat</Filter>
-	</ClInclude>
-	<ClInclude Include="include\static_lq\combat\simple\simple_combat_topology.h">
-	  <Filter>include\static_lq\combat\simple</Filter>
-	</ClInclude>
-	<ClInclude Include="include\static_lq\combat\simple\simple_combatant_monster.h">
-	  <Filter>include\static_lq\combat\simple</Filter>
-	</ClInclude>
-	<ClInclude Include="include\static_lq\combat\simple\simple_combatant_player.h">
-	  <Filter>include\static_lq\combat\simple</Filter>
-	</ClInclude>
-	<ClInclude Include="include\static_lq\combat\simple\simple_combat_output.h">
-	  <Filter>include\static_lq\combat\simple</Filter>
-	</ClInclude>
-	<ClInclude Include="include\static_lq\combat\simple\simple_combat_side.h">
-	  <Filter>include\static_lq\combat\simple</Filter>
-	</ClInclude>
-	<ClInclude Include="include\static_lq\bestiary\bestiary.h">
-	  <Filter>include\static_lq\bestiary</Filter>
-	</ClInclude>
-	<ClInclude Include="source\static_lq\bestiary\monster_data.h">
-	  <Filter>source\static_lq\bestiary</Filter>
-	</ClInclude>
-	<ClInclude Include="include\static_lq\bestiary\bestiary_enum.h">
-	  <Filter>include\static_lq\bestiary</Filter>
-	</ClInclude>
-	<ClInclude Include="include\static_lq\name\name_system_generator_random.h">
-	  <Filter>include\static_lq\name</Filter>
-	</ClInclude>
-	<ClInclude Include="include\static_lq\name\name_system_generator_random_data.h">
-	  <Filter>include\static_lq\name</Filter>
-	</ClInclude>
-	<ClInclude Include="include\static_lq\name\i_name_system_generator.h">
-	  <Filter>include\static_lq\name</Filter>
-	</ClInclude>
-	<ClInclude Include="include\static_lq\name\name_system.h">
-	  <Filter>include\static_lq\name</Filter>
-	</ClInclude>
-	<ClInclude Include="include\static_lq\roll_data.h">
-	  <Filter>include\static_lq</Filter>
-	</ClInclude>
-	<ClInclude Include="source\static_lq\bestiary\special_characteristic_data.h">
-	  <Filter>source\static_lq\bestiary</Filter>
-	</ClInclude>
-	<ClInclude Include="source\static_lq\bestiary\monster_variation_data.h">
-	  <Filter>source\static_lq\bestiary</Filter>
-	</ClInclude>
-	<ClInclude Include="source\static_lq\bestiary\monster_attack_data.h">
-	  <Filter>source\static_lq\bestiary</Filter>
-	</ClInclude>
-	<ClInclude Include="source\static_lq\bestiary\monster_attribute_data.h">
-	  <Filter>source\static_lq\bestiary</Filter>
-	</ClInclude>
-	<ClInclude Include="include\static_lq\combat\i_combat_action.h">
-	  <Filter>include\static_lq\combat</Filter>
-	</ClInclude>
-	<ClInclude Include="source\static_lq\combat\action\combat_action_mellee_attack.h">
-	  <Filter>source\static_lq\combat\action</Filter>
-	</ClInclude>
-	<ClInclude Include="include\static_lq\combat\combat_time.h">
-	  <Filter>include\static_lq\combat</Filter>
-	</ClInclude>
+    <ClInclude Include="include\static_lq\random_sequence.h">
+      <Filter>include\static_lq</Filter>
+    </ClInclude>
+    <ClInclude Include="source\static_lq\static_lq_pch.h">
+      <Filter>source\static_lq</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\common.h">
+      <Filter>include\static_lq</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\combat.h">
+      <Filter>include\static_lq\combat</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\combat_enum.h">
+      <Filter>include\static_lq\combat</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\i_combat_output.h">
+      <Filter>include\static_lq\combat</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\i_combat_side.h">
+      <Filter>include\static_lq\combat</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\i_combat_topology.h">
+      <Filter>include\static_lq\combat</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\i_combatant.h">
+      <Filter>include\static_lq\combat</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\simple\simple_combat_topology.h">
+      <Filter>include\static_lq\combat\simple</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\simple\simple_combatant_monster.h">
+      <Filter>include\static_lq\combat\simple</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\simple\simple_combatant_player.h">
+      <Filter>include\static_lq\combat\simple</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\simple\simple_combat_output.h">
+      <Filter>include\static_lq\combat\simple</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\simple\simple_combat_side.h">
+      <Filter>include\static_lq\combat\simple</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\bestiary\bestiary.h">
+      <Filter>include\static_lq\bestiary</Filter>
+    </ClInclude>
+    <ClInclude Include="source\static_lq\bestiary\monster_data.h">
+      <Filter>source\static_lq\bestiary</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\bestiary\bestiary_enum.h">
+      <Filter>include\static_lq\bestiary</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\name\name_system_generator_random.h">
+      <Filter>include\static_lq\name</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\name\name_system_generator_random_data.h">
+      <Filter>include\static_lq\name</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\name\i_name_system_generator.h">
+      <Filter>include\static_lq\name</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\name\name_system.h">
+      <Filter>include\static_lq\name</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\roll_data.h">
+      <Filter>include\static_lq</Filter>
+    </ClInclude>
+    <ClInclude Include="source\static_lq\bestiary\special_characteristic_data.h">
+      <Filter>source\static_lq\bestiary</Filter>
+    </ClInclude>
+    <ClInclude Include="source\static_lq\bestiary\monster_variation_data.h">
+      <Filter>source\static_lq\bestiary</Filter>
+    </ClInclude>
+    <ClInclude Include="source\static_lq\bestiary\monster_attack_data.h">
+      <Filter>source\static_lq\bestiary</Filter>
+    </ClInclude>
+    <ClInclude Include="source\static_lq\bestiary\monster_attribute_data.h">
+      <Filter>source\static_lq\bestiary</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\i_combat_action.h">
+      <Filter>include\static_lq\combat</Filter>
+    </ClInclude>
+    <ClInclude Include="source\static_lq\combat\action\combat_action_mellee_attack.h">
+      <Filter>source\static_lq\combat\action</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\combat_time.h">
+      <Filter>include\static_lq\combat</Filter>
+    </ClInclude>
+    <ClInclude Include="source\static_lq\combat\action\combat_action_mellee_miss.h">
+      <Filter>source\static_lq\combat\action</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-	<Filter Include="source">
-	  <UniqueIdentifier>{e1aa87e1-310a-4463-9cec-c6bcf19dc23e}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="props">
-	  <UniqueIdentifier>{dba37b23-5319-46dd-b748-51cd89ac5934}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include">
-	  <UniqueIdentifier>{cc886b6e-0cf0-42c5-9f49-9ef38f455667}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\static_lq">
-	  <UniqueIdentifier>{32da0a5f-371c-4b42-a606-e0b075de215f}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="source\static_lq">
-	  <UniqueIdentifier>{8e06a6a2-ed08-4279-bf77-dcafc32c185a}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="source\static_lq\combat">
-	  <UniqueIdentifier>{a3cab6b0-968a-4210-9a42-198a685e2cd6}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\static_lq\combat">
-	  <UniqueIdentifier>{e1a1e405-bfc1-44cf-b72f-32ad60b36598}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\static_lq\combat\simple">
-	  <UniqueIdentifier>{fbbea330-9ef7-4b4d-8c17-01261cbbf8c8}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="source\static_lq\combat\simple">
-	  <UniqueIdentifier>{ec228fd8-65c3-4c54-a457-2d2aac52495c}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\static_lq\bestiary">
-	  <UniqueIdentifier>{13388b05-c46c-4b3d-b669-1e1a8bfae51f}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="source\static_lq\bestiary">
-	  <UniqueIdentifier>{30e08fbf-92f0-4d76-ab78-c20f9ed95b5f}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\static_lq\name">
-	  <UniqueIdentifier>{ec277233-0d8c-48af-b57d-27b059a87f62}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="source\static_lq\name">
-	  <UniqueIdentifier>{f66246ae-34b5-4de4-9af1-602516bcde87}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="source\static_lq\combat\action">
-	  <UniqueIdentifier>{8553f0a3-8394-430e-b64a-445420c58ada}</UniqueIdentifier>
-	</Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{e1aa87e1-310a-4463-9cec-c6bcf19dc23e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="props">
+      <UniqueIdentifier>{dba37b23-5319-46dd-b748-51cd89ac5934}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{cc886b6e-0cf0-42c5-9f49-9ef38f455667}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\static_lq">
+      <UniqueIdentifier>{32da0a5f-371c-4b42-a606-e0b075de215f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\static_lq">
+      <UniqueIdentifier>{8e06a6a2-ed08-4279-bf77-dcafc32c185a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\static_lq\combat">
+      <UniqueIdentifier>{a3cab6b0-968a-4210-9a42-198a685e2cd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\static_lq\combat">
+      <UniqueIdentifier>{e1a1e405-bfc1-44cf-b72f-32ad60b36598}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\static_lq\combat\simple">
+      <UniqueIdentifier>{fbbea330-9ef7-4b4d-8c17-01261cbbf8c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\static_lq\combat\simple">
+      <UniqueIdentifier>{ec228fd8-65c3-4c54-a457-2d2aac52495c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\static_lq\bestiary">
+      <UniqueIdentifier>{13388b05-c46c-4b3d-b669-1e1a8bfae51f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\static_lq\bestiary">
+      <UniqueIdentifier>{30e08fbf-92f0-4d76-ab78-c20f9ed95b5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\static_lq\name">
+      <UniqueIdentifier>{ec277233-0d8c-48af-b57d-27b059a87f62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\static_lq\name">
+      <UniqueIdentifier>{f66246ae-34b5-4de4-9af1-602516bcde87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\static_lq\combat\action">
+      <UniqueIdentifier>{8553f0a3-8394-430e-b64a-445420c58ada}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-	<None Include="props\static_lq_00.props">
-	  <Filter>props</Filter>
-	</None>
+    <None Include="props\static_lq_00.props">
+      <Filter>props</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-	<Text Include="notes.txt" />
+    <Text Include="notes.txt" />
   </ItemGroup>
 </Project>

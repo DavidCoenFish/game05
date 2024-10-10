@@ -25,6 +25,7 @@ public:
 	int _recovery_time = 0;
 	int _absorption = 0;
 	int _surprise_adjust = 0;
+	bool _susceptible_severity_damage = false;
 	MonsterAttributeData _attribute_data;
 	std::vector<MonsterVariationData> _array_variation;
 

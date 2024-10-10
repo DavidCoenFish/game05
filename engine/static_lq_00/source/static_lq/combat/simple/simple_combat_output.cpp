@@ -21,6 +21,7 @@ namespace
 	constexpr char s_locale_key_combatant_damage[] = "slqsc_combatant_damage";
 	constexpr char s_locale_key_set_mellee_initiative[] = "slqsc_set_mellee_initiative";
 	constexpr char s_locale_key_attempt_mellee_attack[] = "slqsc_attempt_mellee_attack";
+	constexpr char s_locale_key_attempt_mellee_miss[] = "slqsc_attempt_mellee_miss";
 
 	class LocaleDataProvider : public ILocaleDataProvider
 	{
@@ -39,7 +40,8 @@ namespace
 				{s_locale_key_side_victory, "Victory for side {side}\n"},
 				{s_locale_key_combatant_damage, "{combatant} took {physical_damage} physical damage, {fatigue_damage} fatigue damage, {paralyzation_damage} paralyzation damage\n"},
 				{s_locale_key_set_mellee_initiative, "{combatant} set mellee inititive {value}\n"},
-				{s_locale_key_attempt_mellee_attack, "{combatant} tries to {attack} {target} with attack roll {attack_roll} attack bonus {attack_bonus} against defence {defence}. is hit {hit}\n"},
+				{s_locale_key_attempt_mellee_attack, "{combatant} attacks {target} with {attack}. Attack roll {attack_roll} attack bonus {attack_bonus} against defence {defence}\n"},
+				{s_locale_key_attempt_mellee_miss, "{combatant} tries to {attack} {target} but misses. Attack roll {attack_roll} attack bonus {attack_bonus} against defence {defence}\n"},
 				};
 
 			in_out_locale_system.Append(in_locale, data);
@@ -150,13 +152,12 @@ void StaticLq::SimpleCombatOutput::CombatantAttemptMelleeAttack(
 		{ "attack", _locale_system->GetValue(in_attack) },
 		{ "attack_roll", std::to_string(in_attack_roll) },
 		{ "attack_bonus", std::to_string(in_attack_bonus) },
-		{ "defence", std::to_string(in_defence) },
-		{ "hit", std::to_string(in_hit) }
+		{ "defence", std::to_string(in_defence) }
 	};
 	LocaleStringFormatMap format_map(data_map);
 
 	_locale_system->GetValueFormatted(
-		s_locale_key_attempt_mellee_attack,
+		in_hit ? s_locale_key_attempt_mellee_attack : s_locale_key_attempt_mellee_miss,
 		format_map
 		);
 

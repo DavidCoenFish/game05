@@ -89,6 +89,7 @@
     <ClCompile Include="source\static_lq\bestiary\monster_variation_data.cpp" />
     <ClCompile Include="source\static_lq\bestiary\special_characteristic_data.cpp" />
     <ClCompile Include="source\static_lq\combat\action\combat_action_mellee_attack.cpp" />
+    <ClCompile Include="source\static_lq\combat\action\combat_action_mellee_miss.cpp" />
     <ClCompile Include="source\static_lq\combat\combat.cpp" />
     <ClCompile Include="source\static_lq\combat\combat_enum.cpp" />
     <ClCompile Include="source\static_lq\combat\combat_time.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="source\static_lq\bestiary\monster_variation_data.h" />
     <ClInclude Include="source\static_lq\bestiary\special_characteristic_data.h" />
     <ClInclude Include="source\static_lq\combat\action\combat_action_mellee_attack.h" />
+    <ClInclude Include="source\static_lq\combat\action\combat_action_mellee_miss.h" />
     <ClInclude Include="source\static_lq\static_lq_pch.h" />
   </ItemGroup>
   <ItemGroup>

@@ -41,7 +41,6 @@ public:
 
 	virtual void GatherAction(
 		std::vector<std::shared_ptr<ICombatAction>>& out_actions,
-		ICombatOutput& in_output,
 		RandomSequence& in_out_random_sequence,
 		const CombatTime& in_combat_time,
 		const std::vector<std::shared_ptr<ICombatant>>& in_team_mellee,

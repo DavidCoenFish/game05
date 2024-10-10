@@ -231,6 +231,10 @@ namespace
 			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TRecoveryTime),
 			DagThreadedHelper::CreateDagValue<int32_t>(in_monster_data._recovery_time)
 			);
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TSusceptibleSeverityDamage),
+			DagThreadedHelper::CreateDagValue<int32_t>(in_monster_data._susceptible_severity_damage)
+			);
 	}
 
 	std::shared_ptr<DagThreadedCollection> MakeMonsterDag(const int32_t in_id, const StaticLq::MonsterData& in_monster_data, const int32_t in_variation_index, const std::string& in_name_key)
@@ -318,6 +322,7 @@ std::shared_ptr<StaticLq::ICombatant> StaticLq::Bestiary::FactoryDefaultGiantSpi
 		6,
 		0,
 		2,
+		true,
 		{
 			std::optional<int32_t>(-1),
 			std::optional<int32_t>(-1),
@@ -429,6 +434,7 @@ std::shared_ptr<StaticLq::ICombatant> StaticLq::Bestiary::FactoryDefaultGiantAnt
 		7,
 		6,
 		0,
+		true,
 		{
 			std::optional<int32_t>(6),
 			std::optional<int32_t>(6),

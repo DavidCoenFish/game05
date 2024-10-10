@@ -23,7 +23,8 @@ std::shared_ptr<StaticLq::INameSystemGenerator> StaticLq::NameSystemGeneratorRan
 			"orange",
 			"pink"
 		});
-		data.repeat_pool_count = 1;
+		data.repeat_pool_count_min = 1;
+		data.repeat_pool_count_max = 1;
 		generator_data.push_back(data);
 	}
 	{
@@ -41,7 +42,8 @@ std::shared_ptr<StaticLq::INameSystemGenerator> StaticLq::NameSystemGeneratorRan
 			"discount",
 			"budget"
 		});
-		data.repeat_pool_count = 1;
+		data.repeat_pool_count_min = 1;
+		data.repeat_pool_count_max = 1;
 		generator_data.push_back(data);
 	}
 	{
@@ -61,7 +63,8 @@ std::shared_ptr<StaticLq::INameSystemGenerator> StaticLq::NameSystemGeneratorRan
 			"night",
 			"day",
 		});
-		data.repeat_pool_count = 1;
+		data.repeat_pool_count_min = 1;
+		data.repeat_pool_count_max = 1;
 		generator_data.push_back(data);
 	}
 	{
@@ -85,7 +88,8 @@ std::shared_ptr<StaticLq::INameSystemGenerator> StaticLq::NameSystemGeneratorRan
 			"TI",
 			"TO",
 		});
-		data.repeat_pool_count = 8;
+		data.repeat_pool_count_min = 6;
+		data.repeat_pool_count_max = 8;
 		generator_data.push_back(data);
 	}
 	return std::make_shared<NameSystemGeneratorRandom>(generator_data);
@@ -102,7 +106,8 @@ std::shared_ptr<StaticLq::INameSystemGenerator> StaticLq::NameSystemGeneratorRan
 				"I",
 				"l"
 			});
-			data.repeat_pool_count = 32;
+			data.repeat_pool_count_min = 16;
+			data.repeat_pool_count_max = 32;
 			generator_data.push_back(data);
 		}
 	}
@@ -133,7 +138,14 @@ const std::string StaticLq::NameSystemGeneratorRandom::GenerateName(const int in
 
 			if (found != segment.pool.end())
 			{
-				for (int index = 0; index < segment.repeat_pool_count; ++index)
+				const int range = std::max(0, segment.repeat_pool_count_max - segment.repeat_pool_count_min);
+				int count = segment.repeat_pool_count_min;
+				if (0 < range)
+				{
+					count += random_sequence.Generate() % (range + 1);
+				}
+
+				for (int index = 0; index < count; ++index)
 				{
 					const auto& segment_pool = found->second;
 					const int sub_index = random_sequence.Generate() % segment_pool.size();

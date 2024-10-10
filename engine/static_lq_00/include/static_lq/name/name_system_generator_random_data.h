@@ -12,7 +12,8 @@ struct NameSystemGeneratorData
 	explicit NameSystemGeneratorData(
 		const std::string in_prepend_first = "",
 		const std::map<LocaleISO_639_1, std::vector<std::string>>& in_pool = {},
-		const int in_repeat_pool_count = 0,
+		const int in_repeat_pool_count_min = 0,
+		const int in_repeat_pool_count_max = 0,
 		const int in_post_digit_range = 0
 		);
 
@@ -21,7 +22,8 @@ struct NameSystemGeneratorData
 	/// defaults to LocaleISO_639_1::Default if no locale match
 	std::map<LocaleISO_639_1, std::vector<std::string>> pool; 
 	// how many time to sample pool (min,max)?
-	int repeat_pool_count; 
+	int repeat_pool_count_min; 
+	int repeat_pool_count_max; 
 	// zero or negative, do not use, else postpend section with a (random_num()) % post_digit_range
 	int post_digit_range;
 };

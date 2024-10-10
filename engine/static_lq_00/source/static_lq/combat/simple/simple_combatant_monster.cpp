@@ -8,6 +8,7 @@
 #include "common/tooltip/tooltip_data.h"
 #include "static_lq/bestiary/bestiary.h"
 #include "static_lq/combat/action/combat_action_mellee_attack.h"
+#include "static_lq/combat/action/combat_action_mellee_miss.h"
 #include "static_lq/combat/combat_enum.h"
 #include "static_lq/combat/combat_time.h"
 #include "static_lq/combat/i_combatant.h"
@@ -88,7 +89,6 @@ std::shared_ptr<TooltipData> StaticLq::SimpleCombatMonster::GetTooltip(const Com
 
 void StaticLq::SimpleCombatMonster::GatherAction(
 	std::vector<std::shared_ptr<ICombatAction>>& out_actions,
-	ICombatOutput& in_output,
 	RandomSequence& in_out_random_sequence,
 	const CombatTime& in_combat_time,
 	const std::vector<std::shared_ptr<ICombatant>>& in_team_mellee,
@@ -158,15 +158,6 @@ void StaticLq::SimpleCombatMonster::GatherAction(
 			{
 				hit = true;
 			}
-			in_output.CombatantAttemptMelleeAttack(
-				this, 
-				target.get(), 
-				attack._display_name,
-				attack_roll,
-				attack_bonus,
-				defence,
-				hit
-				);
 
 			if (true == hit)
 			{
@@ -183,10 +174,28 @@ void StaticLq::SimpleCombatMonster::GatherAction(
 				std::shared_ptr<CombatActionMelleeAttack> action = std::make_shared<CombatActionMelleeAttack>(
 					this, 
 					target.get(), 
-					pysical_damage
+					pysical_damage,
+					0, 
+					0,
+					attack._display_name,
+					attack_roll,
+					attack_bonus,
+					defence
 					);
 				std::shared_ptr<ICombatAction> action_down = action;
 				out_actions.push_back(action_down);
+			}
+			else
+			{
+				std::shared_ptr<ICombatAction> action = std::make_shared<CombatActionMelleeMiss>(
+					this, 
+					target.get(), 
+					attack._display_name,
+					attack_roll,
+					attack_bonus,
+					defence
+					);
+				out_actions.push_back(action);
 			}
 		}
 	}
