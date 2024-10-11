@@ -235,6 +235,10 @@ namespace
 			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TSusceptibleSeverityDamage),
 			DagThreadedHelper::CreateDagValue<int32_t>(in_monster_data._susceptible_severity_damage)
 			);
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TAbsorption),
+			DagThreadedHelper::CreateDagValue<int32_t>(in_monster_data._absorption)
+			);
 	}
 
 	std::shared_ptr<DagThreadedCollection> MakeMonsterDag(const int32_t in_id, const StaticLq::MonsterData& in_monster_data, const int32_t in_variation_index, const std::string& in_name_key)

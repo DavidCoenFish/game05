@@ -30,10 +30,13 @@ public:
 
 	virtual void CombatantDamage(
 		ICombatant& in_combatant_receive, 
-		ICombatant* const in_cause_damage = nullptr, 
-		int32_t in_physical_damage_delta = 0,
-		int32_t in_fatigue_damage_delta = 0,
-		int32_t in_paralyzation_damage_delta = 0
+		const int32_t in_physical_damage = 0,
+		const int32_t in_absoprtption = 0,
+		const int32_t in_subseptableToSeverityDamage = 0,
+		const int32_t in_physical_damage_delta = 0,
+		const int32_t in_severity_damage_delta = 0,
+		const int32_t in_fatigue_damage_delta = 0,
+		const int32_t in_paralyzation_damage_delta = 0
 	) = 0;
 
 	virtual void SetCombatEnd(const std::vector<std::shared_ptr<ICombatSide>>& sides_able_to_continue) = 0;

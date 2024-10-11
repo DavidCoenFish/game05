@@ -14,6 +14,7 @@ public:
 		ICombatant* in_combatant_performing_action = nullptr,
 		ICombatant* in_combatant_receiving_action = nullptr,
 		const int32_t in_physical_damage_delta = 0,
+		const int32_t in_severity_damage_delta = 0,
 		const int32_t in_fatigue_damage_delta = 0,
 		const int32_t in_paralyzation_damage_delta = 0,
 		const std::string& in_attack_display_name = {},
@@ -30,6 +31,7 @@ private:
 	ICombatant* _combatant_receiving_action = nullptr;
 
 	int32_t _physical_damage_delta = 0;
+	int32_t _severity_damage_delta = 0;
 	int32_t _fatigue_damage_delta = 0;
 	int32_t _paralyzation_damage_delta = 0;
 

@@ -25,6 +25,7 @@ namespace
 		{"SusceptibleFaithDamage", StaticLq::CombatEnum::CombatantValue::TSusceptibleFaithDamage},
 		{"Alignment", StaticLq::CombatEnum::CombatantValue::TAlignment},
 		{"SusceptibleNonMagicalDamage", StaticLq::CombatEnum::CombatantValue::TSusceptibleNonMagicalDamage},
+		{"Absorption", StaticLq::CombatEnum::CombatantValue::TAbsorption},
 	};
 	const int s_data_count = ARRAY_LITERAL_SIZE(s_data);
 

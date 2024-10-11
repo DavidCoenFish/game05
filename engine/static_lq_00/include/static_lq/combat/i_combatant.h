@@ -51,8 +51,11 @@ public:
 
 	// you could use SetValue, but there is some logic to not allow negative value totals for damage
 	// positive to do damage, negative to heal
+	// may need to pass output to document health change
 	virtual void ApplyDamageDelta(
+		ICombatOutput* in_output,
 		const int32_t in_physical_damage_delta,
+		const int32_t in_severity_damage_delta,
 		const int32_t in_fatigue_damage_delta,
 		const int32_t in_paralyzation_damage_delta
 		) = 0;

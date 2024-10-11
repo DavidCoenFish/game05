@@ -145,7 +145,7 @@ void StaticLq::SimpleCombatMonster::GatherAction(
 			const int32_t attack_bonus = GetValue(StaticLq::CombatEnum::CombatantValue::TAttackBonus);
 			const int32_t defence = target->GetValue(StaticLq::CombatEnum::CombatantValue::TDefense);
 			bool hit = false;
-			int32_t severity = std::max(0, attack_roll + attack_bonus - defence);
+			const int32_t severity = attack._cause_severity_damage ? std::max(0, attack_roll + attack_bonus - defence) : 0;
 			if ((30 == attack_roll) || (29 == attack_roll) || (28 == attack_roll))
 			{
 				hit = true;
@@ -166,15 +166,12 @@ void StaticLq::SimpleCombatMonster::GatherAction(
 				{
 					pysical_damage += in_out_random_sequence.GenerateDice(attack._damage._dice_base);
 				}
-				if ((true == attack._cause_severity_damage) && (0 != target->GetValue(StaticLq::CombatEnum::CombatantValue::TSusceptibleSeverityDamage)))
-				{
-					pysical_damage += severity;
-				}
 
 				std::shared_ptr<CombatActionMelleeAttack> action = std::make_shared<CombatActionMelleeAttack>(
 					this, 
 					target.get(), 
 					pysical_damage,
+					severity,
 					0, 
 					0,
 					attack._display_name,
@@ -204,14 +201,39 @@ void StaticLq::SimpleCombatMonster::GatherAction(
 // you could use SetValue, but there is some logic to not allow negative value totals for damage.
 // positive to do damage, negative to heal
 void StaticLq::SimpleCombatMonster::ApplyDamageDelta(
+	ICombatOutput* in_output,
 	const int32_t in_physical_damage_delta,
+	const int32_t in_severity_damage_delta,
 	const int32_t in_fatigue_damage_delta,
 	const int32_t in_paralyzation_damage_delta
 	)
 {
+	const int32_t absoption = GetValue(StaticLq::CombatEnum::CombatantValue::TAbsorption);
+	const int32_t susceptible_severity_damage = GetValue(StaticLq::CombatEnum::CombatantValue::TSusceptibleSeverityDamage);
+	int32_t physical_damage = in_physical_damage_delta;
+	if (0 != susceptible_severity_damage)
+	{
+		physical_damage += in_severity_damage_delta;
+	}
+	physical_damage = std::max(1, physical_damage - absoption);
+
+	if (nullptr != in_output)
+	{
+		in_output->CombatantDamage(
+			*this,
+			physical_damage,
+			absoption,
+			susceptible_severity_damage,
+			in_physical_damage_delta,
+			in_severity_damage_delta,
+			in_fatigue_damage_delta,		
+			in_paralyzation_damage_delta
+			);
+	}
+
 	AddDamage(*_dag_collection, 
 			EnumSoftBind<StaticLq::BestiaryEnum::CombatantValueInternal>::EnumToString(StaticLq::BestiaryEnum::CombatantValueInternal::TDamagePhysical),
-			in_physical_damage_delta);
+			physical_damage);
 	AddDamage(*_dag_collection, 
 			EnumSoftBind<StaticLq::BestiaryEnum::CombatantValueInternal>::EnumToString(StaticLq::BestiaryEnum::CombatantValueInternal::TDamageFatigue),
 			in_fatigue_damage_delta);
