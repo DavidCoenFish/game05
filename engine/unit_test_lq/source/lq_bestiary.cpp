@@ -24,7 +24,7 @@ namespace LqBestiary
 			Assert::IsNotNull(giant_spider.get());
 			Assert::AreEqual(1, giant_spider->GetValue(StaticLq::CombatEnum::CombatantValue::TCanContinueCombat));
 
-			giant_spider->ApplyDamageDelta(nullptr, 100, 10, 200, 300);
+			giant_spider->ApplyDamageDelta(100, 200, 300);
 			Assert::AreEqual(0, giant_spider->GetValue(StaticLq::CombatEnum::CombatantValue::TCanContinueCombat));
 		}
 

@@ -22,16 +22,19 @@ StaticLq::CombatActionMelleeMiss::CombatActionMelleeMiss(
 	// nop
 }
 
-void StaticLq::CombatActionMelleeMiss::PerformAction(ICombatOutput& in_output)
+void StaticLq::CombatActionMelleeMiss::PerformAction(ICombatOutput* in_output)
 {
-	in_output.CombatantAttemptMelleeAttack(
-		_combatant_performing_action, 
-		_combatant_receiving_action,
-		_attack_display_name,
-		_attack_roll,
-		_attack_bonus,
-		_defence,
-		false
-		);
+	if (nullptr != in_output)
+	{
+		in_output->CombatantAttemptMelleeAttack(
+			_combatant_performing_action, 
+			_combatant_receiving_action,
+			_attack_display_name,
+			_attack_roll,
+			_attack_bonus,
+			_defence,
+			false
+			);
+	}
 }
 

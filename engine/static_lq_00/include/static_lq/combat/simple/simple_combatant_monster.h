@@ -45,9 +45,7 @@ private:
 	// you could use SetValue, but there is some logic to not allow negative value totals for damage
 	// positive to do damage, negative to heal
 	void ApplyDamageDelta(
-		ICombatOutput* in_output,
 		const int32_t in_physical_damage_delta,
-		const int32_t in_severity_damage_delta,
 		const int32_t in_fatigue_damage_delta,
 		const int32_t in_paralyzation_damage_delta
 		) override;

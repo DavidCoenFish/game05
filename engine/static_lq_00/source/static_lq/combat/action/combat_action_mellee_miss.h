@@ -20,7 +20,7 @@ public:
 		);
 
 private:
-	void PerformAction(ICombatOutput& in_output) override;
+	void PerformAction(ICombatOutput* in_output) override;
 
 private:
 	ICombatant* _combatant_performing_action = nullptr;

@@ -222,7 +222,7 @@ public:
 	{
 		for (const auto& item: in_combat_action_array)
 		{
-			item->PerformAction(*_combat_output);
+			item->PerformAction(_combat_output.get());
 		}
 	}
 

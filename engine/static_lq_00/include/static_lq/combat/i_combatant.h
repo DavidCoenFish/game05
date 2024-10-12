@@ -32,6 +32,7 @@ public:
 	virtual const int32_t GetId() const = 0;
 
 	/// if these values get sourced from a dag node collection, it's GetValue is not const
+	/// if we end up with a lot of strings, replace with GetValueString(enum)?
 	virtual const std::string GetDisplayName() = 0;
 	virtual std::shared_ptr<Tooltip> GetDisplayNameTooltip(const LocaleSystem& in_locale_system) = 0;
 	virtual const int32_t GetValue(const CombatEnum::CombatantValue in_key) = 0;
@@ -49,13 +50,14 @@ public:
 		const std::vector<std::shared_ptr<ICombatant>>& in_opponent_range
 		) = 0;
 
-	// you could use SetValue, but there is some logic to not allow negative value totals for damage
-	// positive to do damage, negative to heal
-	// may need to pass output to document health change
+	/// could pass a CombatDamage rather than keep an adding to the list or param for more types of damage
+	/// but would then have a very couppled [ApplyDamageDelta-CombatDamage], else have CombatDamage know
+	/// how to apply damage to an ICombatant.
+	/// you could use SetValue, but there is some logic to not allow negative value totals for damage
+	/// positive to do damage, negative to heal
+	/// assume absorption already applied, assume already checked for being subseptable to severity damage and it being added to pyhsical damage
 	virtual void ApplyDamageDelta(
-		ICombatOutput* in_output,
 		const int32_t in_physical_damage_delta,
-		const int32_t in_severity_damage_delta,
 		const int32_t in_fatigue_damage_delta,
 		const int32_t in_paralyzation_damage_delta
 		) = 0;

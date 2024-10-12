@@ -82,6 +82,9 @@
     <ClCompile Include="source\static_lq\combat\action\combat_action_mellee_miss.cpp">
       <Filter>source\static_lq\combat\action</Filter>
     </ClCompile>
+    <ClCompile Include="source\static_lq\combat\combat_damage.cpp">
+      <Filter>source\static_lq\combat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\static_lq\random_sequence.h">
@@ -173,6 +176,9 @@
     </ClInclude>
     <ClInclude Include="source\static_lq\combat\action\combat_action_mellee_miss.h">
       <Filter>source\static_lq\combat\action</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\combat\combat_damage.h">
+      <Filter>include\static_lq\combat</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -167,13 +167,12 @@ void StaticLq::SimpleCombatMonster::GatherAction(
 					pysical_damage += in_out_random_sequence.GenerateDice(attack._damage._dice_base);
 				}
 
+				const CombatDamage combatDamage(pysical_damage, severity);
+
 				std::shared_ptr<CombatActionMelleeAttack> action = std::make_shared<CombatActionMelleeAttack>(
 					this, 
 					target.get(), 
-					pysical_damage,
-					severity,
-					0, 
-					0,
+					combatDamage,
 					attack._display_name,
 					attack_roll,
 					attack_bonus,
@@ -201,39 +200,14 @@ void StaticLq::SimpleCombatMonster::GatherAction(
 // you could use SetValue, but there is some logic to not allow negative value totals for damage.
 // positive to do damage, negative to heal
 void StaticLq::SimpleCombatMonster::ApplyDamageDelta(
-	ICombatOutput* in_output,
 	const int32_t in_physical_damage_delta,
-	const int32_t in_severity_damage_delta,
 	const int32_t in_fatigue_damage_delta,
 	const int32_t in_paralyzation_damage_delta
 	)
 {
-	const int32_t absoption = GetValue(StaticLq::CombatEnum::CombatantValue::TAbsorption);
-	const int32_t susceptible_severity_damage = GetValue(StaticLq::CombatEnum::CombatantValue::TSusceptibleSeverityDamage);
-	int32_t physical_damage = in_physical_damage_delta;
-	if (0 != susceptible_severity_damage)
-	{
-		physical_damage += in_severity_damage_delta;
-	}
-	physical_damage = std::max(1, physical_damage - absoption);
-
-	if (nullptr != in_output)
-	{
-		in_output->CombatantDamage(
-			*this,
-			physical_damage,
-			absoption,
-			susceptible_severity_damage,
-			in_physical_damage_delta,
-			in_severity_damage_delta,
-			in_fatigue_damage_delta,		
-			in_paralyzation_damage_delta
-			);
-	}
-
 	AddDamage(*_dag_collection, 
 			EnumSoftBind<StaticLq::BestiaryEnum::CombatantValueInternal>::EnumToString(StaticLq::BestiaryEnum::CombatantValueInternal::TDamagePhysical),
-			physical_damage);
+			in_physical_damage_delta);
 	AddDamage(*_dag_collection, 
 			EnumSoftBind<StaticLq::BestiaryEnum::CombatantValueInternal>::EnumToString(StaticLq::BestiaryEnum::CombatantValueInternal::TDamageFatigue),
 			in_fatigue_damage_delta);
