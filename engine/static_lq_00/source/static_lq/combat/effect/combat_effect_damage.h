@@ -1,26 +1,33 @@
 #pragma once
 
+#include "static_lq/combat/i_combat_effect.h"
+
 namespace StaticLq
 {
 class ICombatant;
 class ICombatOutput;
+class CombatTime;
 
-class CombatDamage
+class CombatEffectDamage : public ICombatEffect
 {
 public:
 	// todo: faith damage, need aligment of trigger, need "is magical damage" flag?
-	explicit CombatDamage(
+	explicit CombatEffectDamage(
 		const int32_t in_physical_damage_delta = 0,
 		const int32_t in_severity_damage_delta = 0,
 		const int32_t in_fatigue_damage_delta = 0,
 		const int32_t in_paralyzation_damage_delta = 0
 		);
-	~CombatDamage();
+	~CombatEffectDamage();
 
-	void Apply(
+private:
+	virtual const bool Apply(
+		const CombatTime& in_combat_time,
 		ICombatant& in_target,
 		ICombatOutput* in_output
-		);
+		) override;
+	virtual std::shared_ptr<ICombatEffect> Clone() const override;
+	virtual const bool ContinuePastEndCombat() const override;
 
 private:
 	int32_t _physical_damage_delta = 0;

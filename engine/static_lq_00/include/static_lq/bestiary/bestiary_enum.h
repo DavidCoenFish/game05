@@ -8,6 +8,7 @@ namespace BestiaryEnum
 {
 /// internal to the bestiary, values for a combatant
 /// see CombatantEnum for non internal Combatant values
+/*
 enum class CombatantValueInternal
 {
 	TDefault = 0,
@@ -24,13 +25,26 @@ enum class CombatantValueInternal
 	TDamageSum,
 	TDamageFatigue,
 	TDamagePhysical,
+	TDamageParalyzationSum,
 	TDamageParalyzation,
 
-	THealthPoints,
-	TAlive,
-	TAttackBonus,
-};
+	TRawPhysicalStrength,
+	TRawStamina,
+	TRawAgility,
+	TRawManualDexterity,
+	TRawPerception,
+	TRawWillpower,
+	TRawFaith,
 
+	TBuffPhysicalStrength,
+	TBuffStamina,
+	TBuffAgility,
+	TBuffManualDexterity,
+	TBuffPerception,
+	TBuffWillpower,
+	TBuffFaith,
+};
+*/
 enum class Habitat
 {
 	TDefault = 0,
@@ -132,42 +146,22 @@ NLOHMANN_JSON_SERIALIZE_ENUM( Size, {
 	{Size::TMedium, "medium"},
 });
 
-}
-}
-
-template <> 
-const StaticLq::BestiaryEnum::CombatantValueInternal EnumSoftBind<StaticLq::BestiaryEnum::CombatantValueInternal>::EnumFromString(const std::string& in_locale);
-template <> 
-const std::string EnumSoftBind<StaticLq::BestiaryEnum::CombatantValueInternal>::EnumToString(const StaticLq::BestiaryEnum::CombatantValueInternal in_locale);
-
-
-/*
-#include "common/util/enum_soft_bind.h"
-
-
-template <> 
-const LocaleISO_639_1 EnumSoftBind<LocaleISO_639_1>::EnumFromString(const std::string& in_locale)
+enum class PoisonType
 {
-	const auto& map = GetStringEnumMap();
-	auto found = map.find(in_locale);
-	if (found != map.end())
-	{
-		return found->second;
-	}
-	return LocaleISO_639_1::Default;
+	TDefault,
+	TToxin,
+	THallucinogen,
+	TKillingVenom,
+	TParalyzingVenom
+,
+};
+NLOHMANN_JSON_SERIALIZE_ENUM( PoisonType, {
+	{PoisonType::TDefault, nullptr},
+	{PoisonType::TToxin, "toxin"},
+	{PoisonType::THallucinogen, "hallucinogen"},
+	{PoisonType::TKillingVenom, "killing venom"},
+	{PoisonType::TParalyzingVenom, "paralyzing venom"},
+});
+
 }
-
-template <> 
-const std::string EnumSoftBind<LocaleISO_639_1>::EnumToString(const LocaleISO_639_1 in_locale)
-{
-	const auto& map = GetEnumStringMap();
-	auto found = map.find(in_locale);
-	if (found != map.end())
-	{
-		return found->second;
-	}
-	return s_default_data;
 }
-
-
-*/

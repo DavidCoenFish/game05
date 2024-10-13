@@ -14,6 +14,7 @@
 #include "static_lq/combat/i_combatant.h"
 #include "static_lq/combat/i_combat_action.h"
 #include "static_lq/combat/i_combat_output.h"
+#include "static_lq/combat/i_combat_effect.h"
 #include "static_lq/name/name_system.h"
 #include "static_lq/random_sequence.h"
 
@@ -62,16 +63,6 @@ const int StaticLq::SimpleCombatMonster::GetValue(const CombatEnum::CombatantVal
 	return result;
 }
 
-void StaticLq::SimpleCombatMonster::SetValue(const CombatEnum::CombatantValue in_key, const int32_t in_value) 
-{
-	const std::string key = EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(in_key);
-	_dag_collection->SetDagValue(
-		_dag_collection->FindNode(key), 
-		DagThreadedHelper::CreateDagValue<int32_t>(in_value)
-		);
-	return;
-}
-
 std::shared_ptr<TooltipData> StaticLq::SimpleCombatMonster::GetTooltip(const CombatEnum::CombatantValue in_key, const LocaleSystem& in_locale_system) 
 {
 	const std::string key = EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(in_key);
@@ -85,6 +76,32 @@ std::shared_ptr<TooltipData> StaticLq::SimpleCombatMonster::GetTooltip(const Com
 	tooltip_data->_link = DagThreaded::GetTooltipBody(*_dag_collection, node_id, in_locale_system);
 
 	return tooltip_data;
+}
+
+void StaticLq::SimpleCombatMonster::SetValue(const CombatEnum::CombatantValue in_key, const int32_t in_value) 
+{
+	const std::string key = EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(in_key);
+	_dag_collection->SetDagValue(
+		_dag_collection->FindNode(key), 
+		DagThreadedHelper::CreateDagValue<int32_t>(in_value)
+		);
+	return;
+}
+
+void StaticLq::SimpleCombatMonster::TriggerEffects(
+	const CombatTime& in_combat_time,
+	ICombatOutput* in_output
+	) 
+{
+	std::vector<std::shared_ptr<ICombatEffect>> new_array = {};
+	for (auto& item : _effect_array)
+	{
+		if (item->Apply(in_combat_time, *this, in_output))
+		{
+			new_array.push_back(item);
+		}
+	}
+	_effect_array = new_array;
 }
 
 void StaticLq::SimpleCombatMonster::GatherAction(
@@ -167,7 +184,7 @@ void StaticLq::SimpleCombatMonster::GatherAction(
 					pysical_damage += in_out_random_sequence.GenerateDice(attack._damage._dice_base);
 				}
 
-				const CombatDamage combatDamage(pysical_damage, severity);
+				const CombatEffectDamage combatDamage(pysical_damage, severity);
 
 				std::shared_ptr<CombatActionMelleeAttack> action = std::make_shared<CombatActionMelleeAttack>(
 					this, 
@@ -197,21 +214,46 @@ void StaticLq::SimpleCombatMonster::GatherAction(
 	}
 }
 
-// you could use SetValue, but there is some logic to not allow negative value totals for damage.
-// positive to do damage, negative to heal
+
+void StaticLq::SimpleCombatMonster::ApplyEffect(
+	const ICombatEffect& in_effect,
+	const CombatTime& in_combat_time,
+	ICombatOutput* in_output
+	) 
+{
+	// a little bit wastefull to make a clone, and then decide if we keep or discard
+	std::shared_ptr<ICombatEffect> effect_clone = in_effect.Clone();
+	if (true == effect_clone->Apply(in_combat_time, *this, in_output))
+	{
+		_effect_array.push_back(effect_clone);
+	}
+}
+
+const bool StaticLq::SimpleCombatMonster::HasPostCombatEffect() const 
+{
+	for (const auto& item : _effect_array)
+	{
+		if (true == item->ContinuePastEndCombat())
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 void StaticLq::SimpleCombatMonster::ApplyDamageDelta(
 	const int32_t in_physical_damage_delta,
 	const int32_t in_fatigue_damage_delta,
 	const int32_t in_paralyzation_damage_delta
-	)
+	) 
 {
 	AddDamage(*_dag_collection, 
-			EnumSoftBind<StaticLq::BestiaryEnum::CombatantValueInternal>::EnumToString(StaticLq::BestiaryEnum::CombatantValueInternal::TDamagePhysical),
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDamagePhysical),
 			in_physical_damage_delta);
 	AddDamage(*_dag_collection, 
-			EnumSoftBind<StaticLq::BestiaryEnum::CombatantValueInternal>::EnumToString(StaticLq::BestiaryEnum::CombatantValueInternal::TDamageFatigue),
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDamageFatigue),
 			in_fatigue_damage_delta);
 	AddDamage(*_dag_collection, 
-			EnumSoftBind<StaticLq::BestiaryEnum::CombatantValueInternal>::EnumToString(StaticLq::BestiaryEnum::CombatantValueInternal::TDamageParalyzation),
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDamageParalyzation),
 			in_paralyzation_damage_delta);
 }

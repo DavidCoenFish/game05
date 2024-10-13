@@ -90,12 +90,16 @@
     <ClCompile Include="source\static_lq\bestiary\special_characteristic_data.cpp" />
     <ClCompile Include="source\static_lq\combat\action\combat_action_mellee_attack.cpp" />
     <ClCompile Include="source\static_lq\combat\action\combat_action_mellee_miss.cpp" />
+    <ClCompile Include="source\static_lq\combat\action\combat_action_poison.cpp" />
     <ClCompile Include="source\static_lq\combat\combat.cpp" />
-    <ClCompile Include="source\static_lq\combat\combat_damage.cpp" />
     <ClCompile Include="source\static_lq\combat\combat_enum.cpp" />
     <ClCompile Include="source\static_lq\combat\combat_time.cpp" />
+    <ClCompile Include="source\static_lq\combat\effect\combat_effect_damage.cpp" />
+    <ClCompile Include="source\static_lq\combat\effect\combat_effect_poison.cpp" />
+    <ClCompile Include="source\static_lq\combat\effect\combat_effect_stat_change.cpp" />
     <ClCompile Include="source\static_lq\combat\i_combatant.cpp" />
     <ClCompile Include="source\static_lq\combat\i_combat_action.cpp" />
+    <ClCompile Include="source\static_lq\combat\i_combat_effect.cpp" />
     <ClCompile Include="source\static_lq\combat\i_combat_side.cpp" />
     <ClCompile Include="source\static_lq\combat\simple\simple_combatant_monster.cpp" />
     <ClCompile Include="source\static_lq\combat\simple\simple_combatant_player.cpp" />
@@ -117,11 +121,11 @@
     <ClInclude Include="include\static_lq\bestiary\bestiary.h" />
     <ClInclude Include="include\static_lq\bestiary\bestiary_enum.h" />
     <ClInclude Include="include\static_lq\combat\combat.h" />
-    <ClInclude Include="include\static_lq\combat\combat_damage.h" />
     <ClInclude Include="include\static_lq\combat\combat_enum.h" />
     <ClInclude Include="include\static_lq\combat\combat_time.h" />
     <ClInclude Include="include\static_lq\combat\i_combatant.h" />
     <ClInclude Include="include\static_lq\combat\i_combat_action.h" />
+    <ClInclude Include="include\static_lq\combat\i_combat_effect.h" />
     <ClInclude Include="include\static_lq\combat\i_combat_output.h" />
     <ClInclude Include="include\static_lq\combat\i_combat_side.h" />
     <ClInclude Include="include\static_lq\combat\i_combat_topology.h" />
@@ -144,6 +148,10 @@
     <ClInclude Include="source\static_lq\bestiary\special_characteristic_data.h" />
     <ClInclude Include="source\static_lq\combat\action\combat_action_mellee_attack.h" />
     <ClInclude Include="source\static_lq\combat\action\combat_action_mellee_miss.h" />
+    <ClInclude Include="source\static_lq\combat\action\combat_action_poison.h" />
+    <ClInclude Include="source\static_lq\combat\effect\combat_effect_damage.h" />
+    <ClInclude Include="source\static_lq\combat\effect\combat_effect_poison.h" />
+    <ClInclude Include="source\static_lq\combat\effect\combat_effect_stat_change.h" />
     <ClInclude Include="source\static_lq\static_lq_pch.h" />
   </ItemGroup>
   <ItemGroup>

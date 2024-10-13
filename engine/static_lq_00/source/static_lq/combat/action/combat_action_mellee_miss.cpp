@@ -22,7 +22,10 @@ StaticLq::CombatActionMelleeMiss::CombatActionMelleeMiss(
 	// nop
 }
 
-void StaticLq::CombatActionMelleeMiss::PerformAction(ICombatOutput* in_output)
+void StaticLq::CombatActionMelleeMiss::PerformAction(
+	const CombatTime&,
+	ICombatOutput* in_output
+	)
 {
 	if (nullptr != in_output)
 	{

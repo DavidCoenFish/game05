@@ -1,7 +1,7 @@
 #include "static_lq/static_lq_pch.h"
 #include "static_lq/combat/action/combat_action_mellee_attack.h"
 
-#include "static_lq/combat/combat_damage.h"
+#include "static_lq/combat/effect/combat_effect_damage.h"
 #include "static_lq/combat/combat_enum.h"
 #include "static_lq/combat/i_combat_output.h"
 #include "static_lq/combat/i_combatant.h"
@@ -9,7 +9,7 @@
 StaticLq::CombatActionMelleeAttack::CombatActionMelleeAttack(
 	ICombatant* in_combatant_performing_action,
 	ICombatant* in_combatant_receiving_action,
-	const CombatDamage& in_combat_damage,
+	const CombatEffectDamage& in_combat_damage,
 	const std::string& in_attack_display_name,
 	const int32_t in_attack_roll,
 	const int32_t in_attack_bonus,
@@ -26,7 +26,10 @@ StaticLq::CombatActionMelleeAttack::CombatActionMelleeAttack(
 	// nop
 }
 
-void StaticLq::CombatActionMelleeAttack::PerformAction(ICombatOutput* in_output)
+void StaticLq::CombatActionMelleeAttack::PerformAction(
+	const CombatTime& in_combat_time,
+	ICombatOutput* in_output
+	)
 {
 	if (in_output)
 	{
@@ -43,7 +46,8 @@ void StaticLq::CombatActionMelleeAttack::PerformAction(ICombatOutput* in_output)
 
 	if (_combatant_receiving_action)
 	{
-		_combat_damage.Apply(
+		static_cast<ICombatEffect&>(_combat_damage).Apply(
+			in_combat_time,
 			*_combatant_receiving_action,
 			in_output
 			);

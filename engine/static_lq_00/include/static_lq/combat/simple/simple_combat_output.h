@@ -36,13 +36,19 @@ private:
 	virtual void CombatantDamage(
 		ICombatant& in_combatant_receive, 
 		const int32_t in_physical_damage = 0,
+		const int32_t in_health_points = 0,
+		const int32_t in_damage_tollerance = 0,
 		const int32_t in_absoprtption = 0,
 		const int32_t in_subseptableToSeverityDamage = 0,
 		const int32_t in_physical_damage_delta = 0,
 		const int32_t in_severity_damage_delta = 0,
 		const int32_t in_fatigue_damage_delta = 0,
 		const int32_t in_paralyzation_damage_delta = 0
-	) override;
+		) override;
+
+	virtual void CombatantDied(
+		ICombatant& in_combatant
+		) override;
 
 	virtual void SetCombatEnd(const std::vector<std::shared_ptr<ICombatSide>>& in_sides_able_to_continue) override;
 

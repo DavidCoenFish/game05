@@ -32,7 +32,11 @@ private:
 
 	void SetValue(const CombatEnum::CombatantValue in_key, const int32_t in_value) override;
 
-	void GatherAction(
+	virtual void TriggerEffects(
+		const CombatTime& in_combat_time,
+		ICombatOutput* in_output
+		) override;
+	virtual void GatherAction(
 		std::vector<std::shared_ptr<ICombatAction>>& out_actions,
 		RandomSequence& in_out_random_sequence,
 		const CombatTime& in_combat_time,
@@ -41,10 +45,13 @@ private:
 		const std::vector<std::shared_ptr<ICombatant>>& in_opponent_mellee,
 		const std::vector<std::shared_ptr<ICombatant>>& in_opponent_range
 		) override;
-
-	// you could use SetValue, but there is some logic to not allow negative value totals for damage
-	// positive to do damage, negative to heal
-	void ApplyDamageDelta(
+	virtual void ApplyEffect(
+		const ICombatEffect& in_effect,
+		const CombatTime& in_combat_time,
+		ICombatOutput* in_output
+		) override;
+	virtual const bool HasPostCombatEffect() const override;
+	virtual void ApplyDamageDelta(
 		const int32_t in_physical_damage_delta,
 		const int32_t in_fatigue_damage_delta,
 		const int32_t in_paralyzation_damage_delta
@@ -56,9 +63,15 @@ private:
 
 	std::vector<MonsterAttackData> _attack_data;
 
+	// do we put all state in the dag collection, or for some simple local state, like attack index, recovery count, keep state out of dag collection?
+
 	int32_t _attack_index = 0;
 	int32_t _mellee_attack_recovery = 0;
 	int32_t _range_attack_recovery = 0;
+
+	/// effects that are waiting to be applied, waiting to be disabled
+	std::vector<std::shared_ptr<ICombatEffect>> _effect_array;
+	
 };
 
 }

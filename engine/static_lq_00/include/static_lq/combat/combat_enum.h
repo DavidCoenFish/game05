@@ -17,18 +17,76 @@ enum class CombatantValue
 
 	TDisplayName, // output
 	TSelf, // output
+	THealthPoints, // output
+	TIsAlive, // output
+	TIsParalyzed, // output
 
 	TCanContinueCombat, // combat
 	TMelleeInitiative, // combat
 	TDefense, // combat
 	TAttackBonus, // combat
-	TRecoveryTime, // combat
-	TSusceptibleSeverityDamage, // combat
-	// TIsMagicalDamage or is this part of the attack data
+	TRecoveryTime, // combat? should this be part of the attack data?
+	TSusceptibleSeverityDamage, // combat, do we track IsLivingCreature, or the flags based on IsLivingCreature, like taking severity damage or poison
+	TSusceptiblePoison, // combat, can we be effected by poision, living creatures should be effected?
 	TSusceptibleFaithDamage, // combat
-	TAlignment, // combat
 	TSusceptibleNonMagicalDamage, // combat
+	TSusceptibleMagicalDamage, // combat
 	TAbsorption, // combat
+	TAlignment, // combat
+
+	// poison dose count is mostly cumulative
+	TPoisonDoseCountToxin, 
+	TPoisonDoseCountHallucinogen,
+	TPoisonDoseCountVenom,
+	TPoisonDoseCountKillingVenom,
+	TPoisonDoseCountParalyzingVenom,
+
+	// once you fail a luck throw, all subsuquent luck throws fail untill you get poison state reset
+	TPoisonSaveFailedToxin, 
+	TPoisonSaveFailedHallucinogen,
+	TPoisonSaveFailedVenom,
+	TPoisonSaveFailedKillingVenom,
+	TPoisonSaveFailedParalyzingVenom,
+
+	// do we need an flag for if the atribute is valid, like some monsters not having manual dexterity
+	TPhysicalStrength,
+	TStamina,
+	TAgility,
+	TManualDexterity,
+	TPerception,
+	TWillpower,
+	TFaith,
+
+	TSpecies,
+	TVariation,
+
+	TDamageTollerance,
+	TDamageTolleranceConstant,
+	TDamageTolleranceDiceCount,
+	TDamageTolleranceDiceSide,
+
+	TDamageSum,
+	TDamageFatigue,
+	TDamagePhysical,
+	TDamageParalyzationSum,
+	TDamageParalyzation,
+
+	TRawPhysicalStrength,
+	TRawStamina,
+	TRawAgility,
+	TRawManualDexterity,
+	TRawPerception,
+	TRawWillpower,
+	TRawFaith,
+
+	TBuffPhysicalStrength,
+	TBuffStamina,
+	TBuffAgility,
+	TBuffManualDexterity,
+	TBuffPerception,
+	TBuffWillpower,
+	TBuffFaith,
+
 };
 
 }

@@ -82,8 +82,20 @@
     <ClCompile Include="source\static_lq\combat\action\combat_action_mellee_miss.cpp">
       <Filter>source\static_lq\combat\action</Filter>
     </ClCompile>
-    <ClCompile Include="source\static_lq\combat\combat_damage.cpp">
+    <ClCompile Include="source\static_lq\combat\action\combat_action_poison.cpp">
+      <Filter>source\static_lq\combat\action</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\i_combat_effect.cpp">
       <Filter>source\static_lq\combat</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\effect\combat_effect_poison.cpp">
+      <Filter>source\static_lq\combat\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\effect\combat_effect_damage.cpp">
+      <Filter>source\static_lq\combat\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_lq\combat\effect\combat_effect_stat_change.cpp">
+      <Filter>source\static_lq\combat\effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -177,8 +189,20 @@
     <ClInclude Include="source\static_lq\combat\action\combat_action_mellee_miss.h">
       <Filter>source\static_lq\combat\action</Filter>
     </ClInclude>
-    <ClInclude Include="include\static_lq\combat\combat_damage.h">
+    <ClInclude Include="include\static_lq\combat\i_combat_effect.h">
       <Filter>include\static_lq\combat</Filter>
+    </ClInclude>
+    <ClInclude Include="source\static_lq\combat\action\combat_action_poison.h">
+      <Filter>source\static_lq\combat\action</Filter>
+    </ClInclude>
+    <ClInclude Include="source\static_lq\combat\effect\combat_effect_damage.h">
+      <Filter>source\static_lq\combat\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\static_lq\combat\effect\combat_effect_poison.h">
+      <Filter>source\static_lq\combat\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\static_lq\combat\effect\combat_effect_stat_change.h">
+      <Filter>source\static_lq\combat\effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -223,6 +247,9 @@
     </Filter>
     <Filter Include="source\static_lq\combat\action">
       <UniqueIdentifier>{8553f0a3-8394-430e-b64a-445420c58ada}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\static_lq\combat\effect">
+      <UniqueIdentifier>{333a0d88-93ef-4be4-9c3f-9c611527f463}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

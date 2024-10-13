@@ -15,6 +15,7 @@ namespace StaticLq
 {
 class ICombatAction;
 class ICombatOutput;
+class ICombatEffect;
 class RandomSequence;
 class CombatTime;
 
@@ -40,6 +41,12 @@ public:
 
 	virtual void SetValue(const CombatEnum::CombatantValue in_key, const int32_t in_value) = 0;
 
+	/// at the start of a segment, allow effects to trigger
+	virtual void TriggerEffects(
+		const CombatTime& in_combat_time,
+		ICombatOutput* in_output
+		) = 0;
+
 	virtual void GatherAction(
 		std::vector<std::shared_ptr<ICombatAction>>& out_actions,
 		RandomSequence& in_out_random_sequence,
@@ -49,6 +56,16 @@ public:
 		const std::vector<std::shared_ptr<ICombatant>>& in_opponent_mellee,
 		const std::vector<std::shared_ptr<ICombatant>>& in_opponent_range
 		) = 0;
+
+	/// apply damage, apply poison effect? pass in_effect by value, 
+	virtual void ApplyEffect(
+		const ICombatEffect& in_effect,
+		const CombatTime& in_combat_time,
+		ICombatOutput* in_output
+		) = 0;
+
+	/// some effects are delayed, and want to keep combat going till they take effect, is. poison
+	virtual const bool HasPostCombatEffect() const = 0;
 
 	/// could pass a CombatDamage rather than keep an adding to the list or param for more types of damage
 	/// but would then have a very couppled [ApplyDamageDelta-CombatDamage], else have CombatDamage know
