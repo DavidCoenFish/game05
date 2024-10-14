@@ -21,13 +21,13 @@ public:
 	int _speed = 0;
 	BestiaryEnum::Strength _strength = BestiaryEnum::Strength::TDefault;
 	BestiaryEnum::Size _size = BestiaryEnum::Size::TDefault;
-	std::vector<SpecialCharacteristicData>_array_special_characteristic;
+	std::vector<SpecialCharacteristicData>_array_special_characteristic = {};
 	int _recovery_time = 0;
 	int _absorption = 0;
 	int _surprise_adjust = 0;
 	bool _is_living_creature = false;
-	MonsterAttributeData _attribute_data;
-	std::vector<MonsterVariationData> _array_variation;
+	MonsterAttributeData _attribute_data = {};
+	std::vector<MonsterVariationData> _array_variation = {};
 
 };
 }

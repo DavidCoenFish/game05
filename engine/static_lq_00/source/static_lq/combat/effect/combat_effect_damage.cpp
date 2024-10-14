@@ -25,6 +25,7 @@ StaticLq::CombatEffectDamage::~CombatEffectDamage()
 }
 
 const bool StaticLq::CombatEffectDamage::Apply(
+	RandomSequence&,
 	const CombatTime& in_combat_time,
 	ICombatant& in_target,
 	ICombatOutput* in_output
@@ -75,11 +76,6 @@ const bool StaticLq::CombatEffectDamage::Apply(
 	}
 
 	return false;
-}
-
-std::shared_ptr<StaticLq::ICombatEffect> StaticLq::CombatEffectDamage::Clone() const
-{
-	return std::make_shared<CombatEffectDamage>(*this);
 }
 
 const bool StaticLq::CombatEffectDamage::ContinuePastEndCombat() const

@@ -15,13 +15,11 @@ public:
 	/// return true if we still need to trigger the effect next round, 
 	/// affect the effect...
 	virtual const bool Apply(
+		RandomSequence& in_out_random_sequence,
 		const CombatTime& in_combat_time,
 		ICombatant& in_target,
 		ICombatOutput* in_output
 		) = 0;
-
-	/// some effects could target multiple, but don't want to transfer ownership to avoid state duplication in multiple combatants, ie, CombatantA has poison in 2 turns, B has in 3 turns
-	virtual std::shared_ptr<ICombatEffect> Clone() const = 0;
 
 	/// some effects like poison have delayed effects
 	virtual const bool ContinuePastEndCombat() const = 0;

@@ -34,6 +34,8 @@ namespace
 
 		{"CanContinueCombat", StaticLq::CombatEnum::CombatantValue::TCanContinueCombat},
 		{"MelleeInitiative", StaticLq::CombatEnum::CombatantValue::TMelleeInitiative},
+		{"ExperencePointValue", StaticLq::CombatEnum::CombatantValue::TExperencePointValue},
+		{"CombatLevel", StaticLq::CombatEnum::CombatantValue::TCombatLevel},
 		{"Defense", StaticLq::CombatEnum::CombatantValue::TDefense},
 		{"AttackBonus", StaticLq::CombatEnum::CombatantValue::TAttackBonus},
 		{"RecoveryTime", StaticLq::CombatEnum::CombatantValue::TRecoveryTime},

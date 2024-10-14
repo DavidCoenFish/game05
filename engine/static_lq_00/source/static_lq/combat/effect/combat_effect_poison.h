@@ -18,15 +18,14 @@ public:
 		const BestiaryEnum::PoisonType in_type = BestiaryEnum::PoisonType::TDefault,
 		const int32_t in_risk_factor = 0
 		);
-	~CombatEffectPoison();
 
 private:
 	virtual const bool Apply(
+		RandomSequence& in_out_random_sequence,
 		const CombatTime& in_combat_time,
 		ICombatant& in_target,
 		ICombatOutput* in_output
 		) override;
-	virtual std::shared_ptr<ICombatEffect> Clone() const override;
 	virtual const bool ContinuePastEndCombat() const override;
 
 private:

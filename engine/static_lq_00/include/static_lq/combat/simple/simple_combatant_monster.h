@@ -46,7 +46,8 @@ private:
 		const std::vector<std::shared_ptr<ICombatant>>& in_opponent_range
 		) override;
 	virtual void ApplyEffect(
-		const ICombatEffect& in_effect,
+		RandomSequence& in_out_random_sequence,
+		const std::shared_ptr<ICombatEffect>& in_effect,
 		const CombatTime& in_combat_time,
 		ICombatOutput* in_output
 		) override;
@@ -56,6 +57,24 @@ private:
 		const int32_t in_fatigue_damage_delta,
 		const int32_t in_paralyzation_damage_delta
 		) override;
+
+	void GatherAttackEffects(
+		std::vector<std::shared_ptr<ICombatAction>>& out_actions,
+		RandomSequence& in_out_random_sequence,
+		const std::vector<MonsterAttackData::EffectData>& in_effect_trigger,
+		const CombatTime& in_combat_time,
+		ICombatant* in_combatant_receiving_action = nullptr
+		);
+	void GatherAttackEffectPoison(
+		std::vector<std::shared_ptr<ICombatAction>>& out_actions,
+		RandomSequence& in_out_random_sequence,
+		const BestiaryEnum::PoisonType in_poison_type,
+		const int32_t in_poison_risk_factor,
+		const CombatTime& in_combat_time,
+		ICombatant* in_combatant_receiving_action = nullptr
+		);
+
+
 
 private:
 	const int32_t _id;

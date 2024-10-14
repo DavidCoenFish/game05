@@ -23,6 +23,8 @@ enum class CombatantValue
 
 	TCanContinueCombat, // combat
 	TMelleeInitiative, // combat
+	TExperencePointValue, // combat
+	TCombatLevel, // combat
 	TDefense, // combat
 	TAttackBonus, // combat
 	TRecoveryTime, // combat? should this be part of the attack data?

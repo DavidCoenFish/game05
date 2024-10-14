@@ -23,6 +23,7 @@ StaticLq::CombatActionMelleeMiss::CombatActionMelleeMiss(
 }
 
 void StaticLq::CombatActionMelleeMiss::PerformAction(
+	RandomSequence&,
 	const CombatTime&,
 	ICombatOutput* in_output
 	)

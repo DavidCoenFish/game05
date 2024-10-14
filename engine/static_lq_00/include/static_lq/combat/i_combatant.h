@@ -44,6 +44,7 @@ public:
 	/// at the start of a segment, allow effects to trigger
 	virtual void TriggerEffects(
 		const CombatTime& in_combat_time,
+		RandomSequence& in_out_random_sequence,
 		ICombatOutput* in_output
 		) = 0;
 
@@ -57,9 +58,10 @@ public:
 		const std::vector<std::shared_ptr<ICombatant>>& in_opponent_range
 		) = 0;
 
-	/// apply damage, apply poison effect? pass in_effect by value, 
+	/// apply damage, apply poison effect?
 	virtual void ApplyEffect(
-		const ICombatEffect& in_effect,
+		RandomSequence& in_out_random_sequence,
+		const std::shared_ptr<ICombatEffect>& in_effect,
 		const CombatTime& in_combat_time,
 		ICombatOutput* in_output
 		) = 0;

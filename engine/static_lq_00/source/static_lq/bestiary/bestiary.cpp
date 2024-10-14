@@ -310,6 +310,15 @@ namespace
 			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TMelleeInitiative),
 			DagThreadedHelper::CreateDagValue<int32_t>(0)
 			);
+
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TCombatLevel),
+			DagThreadedHelper::CreateDagValue<int32_t>(in_monster_variation_data._combat_level)
+			);
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TExperencePointValue),
+			DagThreadedHelper::CreateDagValue<int32_t>(in_monster_variation_data._experence_point_value)
+			);
 		in_dag_collection.CreateNodeVariable(
 			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TAttackBonus),
 			DagThreadedHelper::CreateDagValue<int32_t>(in_monster_variation_data._attack_bonus)

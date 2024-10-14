@@ -9,7 +9,7 @@
 StaticLq::CombatActionMelleeAttack::CombatActionMelleeAttack(
 	ICombatant* in_combatant_performing_action,
 	ICombatant* in_combatant_receiving_action,
-	const CombatEffectDamage& in_combat_damage,
+	const std::shared_ptr<ICombatEffect>& in_combat_damage,
 	const std::string& in_attack_display_name,
 	const int32_t in_attack_roll,
 	const int32_t in_attack_bonus,
@@ -27,6 +27,7 @@ StaticLq::CombatActionMelleeAttack::CombatActionMelleeAttack(
 }
 
 void StaticLq::CombatActionMelleeAttack::PerformAction(
+	RandomSequence&,
 	const CombatTime& in_combat_time,
 	ICombatOutput* in_output
 	)
@@ -44,9 +45,9 @@ void StaticLq::CombatActionMelleeAttack::PerformAction(
 			);
 	}
 
-	if (_combatant_receiving_action)
+	if (_combatant_receiving_action && _combat_damage)
 	{
-		static_cast<ICombatEffect&>(_combat_damage).Apply(
+		_combat_damage->Apply(
 			in_combat_time,
 			*_combatant_receiving_action,
 			in_output

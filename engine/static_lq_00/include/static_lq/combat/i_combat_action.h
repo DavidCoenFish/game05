@@ -1,5 +1,7 @@
 #pragma once
 
+class RandomSequence;
+
 namespace StaticLq
 {
 class CombatTime;
@@ -13,6 +15,7 @@ public:
 	virtual ~ICombatAction(){}
 
 	virtual void PerformAction(
+		RandomSequence& in_out_random_sequence,
 		const CombatTime& in_combat_time,
 		ICombatOutput* in_output
 		) = 0;

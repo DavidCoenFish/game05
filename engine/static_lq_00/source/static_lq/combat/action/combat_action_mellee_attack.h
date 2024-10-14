@@ -1,7 +1,7 @@
 #pragma once
 
 #include "static_lq/combat/i_combat_action.h"
-#include "static_lq/combat/effect/combat_effect_damage.h"
+#include "static_lq/combat/i_combat_effect.h"
 
 namespace StaticLq
 {
@@ -14,7 +14,7 @@ public:
 	explicit CombatActionMelleeAttack(
 		ICombatant* in_combatant_performing_action = nullptr,
 		ICombatant* in_combatant_receiving_action = nullptr,
-		const CombatEffectDamage& in_combat_damage = CombatEffectDamage(),
+		const std::shared_ptr<ICombatEffect>& in_combat_damage = nullptr,
 		const std::string& in_attack_display_name = {},
 		const int32_t in_attack_roll = 0,
 		const int32_t in_attack_bonus = 0,
@@ -23,6 +23,7 @@ public:
 
 private:
 	void PerformAction(
+		RandomSequence& in_out_random_sequence,
 		const CombatTime& in_combat_time,
 		ICombatOutput* in_output
 		) override;
@@ -31,7 +32,7 @@ private:
 	ICombatant* _combatant_performing_action = nullptr;
 	ICombatant* _combatant_receiving_action = nullptr;
 
-	CombatEffectDamage _combat_damage = CombatEffectDamage();
+	std::shared_ptr<ICombatEffect> _combat_damage = nullptr;
 
 	std::string _attack_display_name = {};
 	int32_t _attack_roll = 0;

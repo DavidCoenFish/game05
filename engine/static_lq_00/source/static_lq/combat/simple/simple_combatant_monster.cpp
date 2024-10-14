@@ -7,8 +7,11 @@
 #include "common/tooltip/tooltip.h"
 #include "common/tooltip/tooltip_data.h"
 #include "static_lq/bestiary/bestiary.h"
+#include "static_lq/bestiary/bestiary_enum.h"
 #include "static_lq/combat/action/combat_action_mellee_attack.h"
 #include "static_lq/combat/action/combat_action_mellee_miss.h"
+#include "static_lq/combat/action/combat_action_poison.h"
+#include "static_lq/combat/effect/combat_effect_damage.h"
 #include "static_lq/combat/combat_enum.h"
 #include "static_lq/combat/combat_time.h"
 #include "static_lq/combat/i_combatant.h"
@@ -184,7 +187,7 @@ void StaticLq::SimpleCombatMonster::GatherAction(
 					pysical_damage += in_out_random_sequence.GenerateDice(attack._damage._dice_base);
 				}
 
-				const CombatEffectDamage combatDamage(pysical_damage, severity);
+				const std::shared_ptr<ICombatEffect> combatDamage = std::make_shared<CombatEffectDamage>(pysical_damage, severity);
 
 				std::shared_ptr<CombatActionMelleeAttack> action = std::make_shared<CombatActionMelleeAttack>(
 					this, 
@@ -195,8 +198,16 @@ void StaticLq::SimpleCombatMonster::GatherAction(
 					attack_bonus,
 					defence
 					);
-				std::shared_ptr<ICombatAction> action_down = action;
-				out_actions.push_back(action_down);
+				//std::shared_ptr<ICombatAction> action_down = action;
+				out_actions.push_back(action);
+
+				GatherAttackEffects(
+					out_actions,
+					in_out_random_sequence,
+					attack._effect_trigger,
+					in_combat_time,
+					target.get()
+					);
 			}
 			else
 			{
@@ -216,16 +227,15 @@ void StaticLq::SimpleCombatMonster::GatherAction(
 
 
 void StaticLq::SimpleCombatMonster::ApplyEffect(
-	const ICombatEffect& in_effect,
+	RandomSequence& in_out_random_sequence,
+	const std::shared_ptr<ICombatEffect>& in_effect,
 	const CombatTime& in_combat_time,
 	ICombatOutput* in_output
 	) 
 {
-	// a little bit wastefull to make a clone, and then decide if we keep or discard
-	std::shared_ptr<ICombatEffect> effect_clone = in_effect.Clone();
-	if (true == effect_clone->Apply(in_combat_time, *this, in_output))
+	if (true == in_effect->Apply(in_out_random_sequence, in_combat_time, *this, in_output))
 	{
-		_effect_array.push_back(effect_clone);
+		_effect_array.push_back(in_effect);
 	}
 }
 
@@ -257,3 +267,104 @@ void StaticLq::SimpleCombatMonster::ApplyDamageDelta(
 			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDamageParalyzation),
 			in_paralyzation_damage_delta);
 }
+
+void StaticLq::SimpleCombatMonster::GatherAttackEffects(
+	std::vector<std::shared_ptr<ICombatAction>>& out_actions,
+	RandomSequence& in_out_random_sequence,
+	const std::vector<MonsterAttackData::EffectData>& in_effect_trigger,
+	const CombatTime& in_combat_time,
+	ICombatant* in_combatant_receiving_action
+	)
+{
+	for (const auto& item : in_effect_trigger)
+	{
+		if (BestiaryEnum::PoisonType::TDefault != item._poison_type)
+		{
+			GatherAttackEffectPoison(
+				out_actions,
+				in_out_random_sequence,
+				item._poison_type,
+				item._poison_risk_factor,
+				in_combat_time,
+				in_combatant_receiving_action
+				);
+		}
+	}
+}
+
+void StaticLq::SimpleCombatMonster::GatherAttackEffectPoison(
+	std::vector<std::shared_ptr<ICombatAction>>& out_actions,
+	RandomSequence& in_out_random_sequence,
+	const BestiaryEnum::PoisonType in_poison_type,
+	const int32_t in_poison_risk_factor,
+	const CombatTime& in_combat_time,
+	ICombatant* in_combatant_receiving_action
+	)
+{
+	const int32_t susceptible_poison = in_combatant_receiving_action ? in_combatant_receiving_action->GetValue(CombatEnum::CombatantValue::TSusceptiblePoison) : 0;
+	if (0 == susceptible_poison)
+	{
+		return;
+	}
+
+	// for each 5 points of stamina the target has, risk factor reduced by 2
+	const int32_t stamina = in_combatant_receiving_action ? in_combatant_receiving_action->GetValue(CombatEnum::CombatantValue::TStamina) : 0;
+	const int32_t risk_reduction = stamina / 5;
+	int32_t poison_risk_factor = in_poison_risk_factor - risk_reduction;
+	if (poison_risk_factor <= 0)
+	{
+		return;
+	}
+
+	CombatEnum::CombatantValue save_failed_enum = CombatEnum::CombatantValue::TDefault;
+	switch (in_poison_type)
+	{
+	default:
+		break;
+	case BestiaryEnum::PoisonType::THallucinogen:
+		save_failed_enum = CombatEnum::CombatantValue::TPoisonSaveFailedHallucinogen;
+		break;
+	case BestiaryEnum::PoisonType::TKillingVenom:
+		save_failed_enum = CombatEnum::CombatantValue::TPoisonSaveFailedKillingVenom;
+		break;
+	case BestiaryEnum::PoisonType::TParalyzingVenom:
+		save_failed_enum = CombatEnum::CombatantValue::TPoisonSaveFailedParalyzingVenom;
+		break;
+	case BestiaryEnum::PoisonType::TToxin:
+		save_failed_enum = CombatEnum::CombatantValue::TPoisonSaveFailedToxin;
+		break;
+	}
+
+	const bool save_failed = (0 != (in_combatant_receiving_action ? in_combatant_receiving_action->GetValue(save_failed_enum) : 0));
+	if (false == save_failed)
+	{
+		//luck roll
+		const int32_t combat_level = GetValue(CombatEnum::CombatantValue::TCombatLevel);
+		const int32_t threashold = 15 + combat_level;
+		const int32_t roll = in_out_random_sequence.GenerateDice(30);
+		const bool success = threashold <= roll + stamina;
+		if (true == success)
+		{
+			poison_risk_factor -= 2;
+			if (poison_risk_factor <= 0)
+			{
+				return;
+			}
+		}
+		else
+		{
+			in_combatant_receiving_action->SetValue(save_failed_enum, 1);
+		}
+	}
+
+	const int32_t turns_ahead = in_out_random_sequence.GenerateDice(4);
+
+	out_actions.push_back(std::make_shared<CombatActionPosion>(
+		this,
+		in_combatant_receiving_action,
+		in_poison_type,
+		poison_risk_factor,
+		CombatTime::Add(in_combat_time, turns_ahead, 0)
+		));
+}
+
