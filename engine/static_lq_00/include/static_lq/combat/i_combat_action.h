@@ -1,11 +1,10 @@
 #pragma once
 
-class RandomSequence;
-
 namespace StaticLq
 {
 class CombatTime;
 class ICombatOutput;
+class RandomSequence;
 
 /// an action is something we perform in combat, like attacking someone, poisoning someone
 /// an action can apply/add an effect on a combatant

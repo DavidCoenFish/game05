@@ -21,6 +21,9 @@ public:
 	static CombatTime Add(const CombatTime& in_lhs, const int32_t in_turn_delta, const int32_t in_segment_delta);
 
 private:
+	void Wrap();
+
+private:
 	int32_t _turn = 0;
 	int32_t _segment = 0;
 

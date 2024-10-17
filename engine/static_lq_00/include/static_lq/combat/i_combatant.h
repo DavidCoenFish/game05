@@ -79,7 +79,10 @@ public:
 		const int32_t in_physical_damage_delta,
 		const int32_t in_fatigue_damage_delta,
 		const int32_t in_paralyzation_damage_delta
+		// take output and report if status [alive, paralized] changes with damage applied
 		) = 0;
+
+	virtual void AddBuff(StaticLq::CombatEnum::CombatantValue in_value_key, const int32_t in_delta) = 0;
 
 };
 

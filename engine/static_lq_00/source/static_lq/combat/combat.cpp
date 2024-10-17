@@ -11,6 +11,31 @@
 
 namespace
 {
+void TriggerEffects(
+	const std::vector<std::shared_ptr<StaticLq::ICombatSide>>& in_side_array,
+	const StaticLq::CombatTime& in_combat_time,
+	StaticLq::RandomSequence* in_random_sequence,
+	StaticLq::ICombatOutput* in_output
+	)
+{
+	if (nullptr == in_random_sequence)
+	{
+		return;
+	}
+
+	for (const auto& side : in_side_array)
+	{
+		for (const auto& player : side->GetCombatantList())
+		{
+			player->TriggerEffects(
+				in_combat_time,
+				*in_random_sequence,
+				in_output
+				);
+		}
+	}
+}
+
 void GatherStillFunctionalSides(std::vector<std::shared_ptr<StaticLq::ICombatSide>>& out_still_functional_sides, const std::vector<std::shared_ptr<StaticLq::ICombatSide>>& in_side_array)
 {
 	for (const auto& item : in_side_array)
@@ -35,6 +60,22 @@ const bool TestSidesAntagonistic(const std::vector<std::shared_ptr<StaticLq::ICo
 			}
 
 			if (in_side_array[index]->IsHostileToSide(*in_side_array[sub_index]))
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+// are there any post combat effect
+const bool HasPostCombatEffect(const std::vector<std::shared_ptr<StaticLq::ICombatSide>>& in_side_array)
+{
+	for (const auto& side : in_side_array)
+	{
+		for (const auto& player : side->GetCombatantList())
+		{
+			if(player->HasPostCombatEffect())
 			{
 				return true;
 			}
@@ -223,6 +264,7 @@ public:
 		for (const auto& item: in_combat_action_array)
 		{
 			item->PerformAction(
+				*_random_sequence,
 				_time,
 				_combat_output.get()
 				);
@@ -241,6 +283,8 @@ public:
 			DoFirstSegmentOfTurn();
 		}
 
+		TriggerEffects(_side_array, _time, _random_sequence.get(), _combat_output.get());
+
 		std::vector<std::shared_ptr<StaticLq::ICombatAction>> combat_action_array;
 		GatherActions(combat_action_array);
 
@@ -250,6 +294,10 @@ public:
 		GatherStillFunctionalSides(still_functional_sides, _side_array);
 
 		bool continue_combat = TestSidesAntagonistic(still_functional_sides);
+		if (false == continue_combat)
+		{
+			continue_combat = HasPostCombatEffect(_side_array);
+		}
 		if (false == continue_combat)
 		{
 			_combat_output->SetCombatEnd(still_functional_sides);

@@ -34,8 +34,10 @@ private:
 
 	virtual void TriggerEffects(
 		const CombatTime& in_combat_time,
+		RandomSequence& in_out_random_sequence,
 		ICombatOutput* in_output
 		) override;
+
 	virtual void GatherAction(
 		std::vector<std::shared_ptr<ICombatAction>>& out_actions,
 		RandomSequence& in_out_random_sequence,
@@ -57,6 +59,7 @@ private:
 		const int32_t in_fatigue_damage_delta,
 		const int32_t in_paralyzation_damage_delta
 		) override;
+	virtual void AddBuff(StaticLq::CombatEnum::CombatantValue in_value_key, const int32_t in_delta) override;
 
 	void GatherAttackEffects(
 		std::vector<std::shared_ptr<ICombatAction>>& out_actions,

@@ -93,13 +93,14 @@ void StaticLq::SimpleCombatMonster::SetValue(const CombatEnum::CombatantValue in
 
 void StaticLq::SimpleCombatMonster::TriggerEffects(
 	const CombatTime& in_combat_time,
+	RandomSequence& in_out_random_sequence,
 	ICombatOutput* in_output
-	) 
+	)
 {
 	std::vector<std::shared_ptr<ICombatEffect>> new_array = {};
 	for (auto& item : _effect_array)
 	{
-		if (item->Apply(in_combat_time, *this, in_output))
+		if (item->Apply(in_out_random_sequence, in_combat_time, *this, in_output))
 		{
 			new_array.push_back(item);
 		}
@@ -131,6 +132,13 @@ void StaticLq::SimpleCombatMonster::GatherAction(
 		_mellee_attack_recovery = 0; // todo: we don't reset range recovery
 	}
 
+	// can we attack
+	if (0 != GetValue(CombatEnum::CombatantValue::TCanContinueCombat))
+	{
+		// todo, when not alive, you don't get to parry/ defend
+		SetValue(StaticLq::CombatEnum::CombatantValue::TMelleeInitiative, 10);
+		return;
+	}
 
 	if (0 != in_opponent_mellee.size())
 	{
@@ -181,13 +189,24 @@ void StaticLq::SimpleCombatMonster::GatherAction(
 
 			if (true == hit)
 			{
-				int32_t pysical_damage = attack._damage._constant;
+				int32_t physical_damage = attack._damage._constant;
 				for (int32_t index = 0; index < attack._damage._dice_count; ++index)
 				{
-					pysical_damage += in_out_random_sequence.GenerateDice(attack._damage._dice_base);
+					physical_damage += in_out_random_sequence.GenerateDice(attack._damage._dice_base);
 				}
 
-				const std::shared_ptr<ICombatEffect> combatDamage = std::make_shared<CombatEffectDamage>(pysical_damage, severity);
+				// absorption should be worked out earlier, as not all damage effected by absorption, ie, poison damage
+				// the advantage of implementing this here is that it is in one place, not in the many implementations of ICombatant::ApplyDamageDelta
+				// todo: faith damage, is magical damage, is ImuneMagic? is Imune non magic?
+				const int32_t absoption = target ? target->GetValue(StaticLq::CombatEnum::CombatantValue::TAbsorption) : 0;
+				const int32_t susceptible_severity_damage = target ? target->GetValue(StaticLq::CombatEnum::CombatantValue::TSusceptibleSeverityDamage) : 0;
+				if (0 != susceptible_severity_damage)
+				{
+					physical_damage += severity;
+				}
+				physical_damage = std::max(1, physical_damage - absoption);
+
+				const std::shared_ptr<ICombatEffect> combatDamage = std::make_shared<CombatEffectDamage>(physical_damage);
 
 				std::shared_ptr<CombatActionMelleeAttack> action = std::make_shared<CombatActionMelleeAttack>(
 					this, 
@@ -266,6 +285,22 @@ void StaticLq::SimpleCombatMonster::ApplyDamageDelta(
 	AddDamage(*_dag_collection, 
 			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDamageParalyzation),
 			in_paralyzation_damage_delta);
+}
+
+void StaticLq::SimpleCombatMonster::AddBuff(StaticLq::CombatEnum::CombatantValue in_value_key, const int32_t in_delta)
+{
+	auto buff = _dag_collection->CreateNodeVariable(
+		_dag_collection->MakeUid(),
+		DagThreadedHelper::CreateDagValue<int32_t>(in_delta)
+		);
+	auto node = _dag_collection->FindNode(EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(in_value_key));
+
+	if (nullptr != node)
+	{
+	_dag_collection->AddNodeLinkStack(
+		node,
+		buff);
+	}
 }
 
 void StaticLq::SimpleCombatMonster::GatherAttackEffects(

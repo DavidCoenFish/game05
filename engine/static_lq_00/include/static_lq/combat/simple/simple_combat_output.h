@@ -35,15 +35,17 @@ private:
 				) override;
 	virtual void CombatantDamage(
 		ICombatant& in_combatant_receive, 
-		const int32_t in_physical_damage = 0,
-		const int32_t in_health_points = 0,
-		const int32_t in_damage_tollerance = 0,
-		const int32_t in_absoprtption = 0,
-		const int32_t in_subseptableToSeverityDamage = 0,
-		const int32_t in_physical_damage_delta = 0,
-		const int32_t in_severity_damage_delta = 0,
-		const int32_t in_fatigue_damage_delta = 0,
-		const int32_t in_paralyzation_damage_delta = 0
+		const int32_t in_health_points,
+		const int32_t in_damage_tollerance,
+		const int32_t in_physical_damage_delta,
+		const int32_t in_fatigue_damage_delta,
+		const int32_t in_paralyzation_damage_delta
+		) override;
+
+	virtual void CombatantPoisoned(
+		ICombatant& in_combatant_receive, 
+		const int32_t in_risk,
+		const CombatTime& in_when
 		) override;
 
 	virtual void CombatantDied(

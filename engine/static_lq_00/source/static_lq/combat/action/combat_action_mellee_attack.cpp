@@ -27,7 +27,7 @@ StaticLq::CombatActionMelleeAttack::CombatActionMelleeAttack(
 }
 
 void StaticLq::CombatActionMelleeAttack::PerformAction(
-	RandomSequence&,
+	RandomSequence& in_out_random_sequence,
 	const CombatTime& in_combat_time,
 	ICombatOutput* in_output
 	)
@@ -48,6 +48,7 @@ void StaticLq::CombatActionMelleeAttack::PerformAction(
 	if (_combatant_receiving_action && _combat_damage)
 	{
 		_combat_damage->Apply(
+			in_out_random_sequence,
 			in_combat_time,
 			*_combatant_receiving_action,
 			in_output

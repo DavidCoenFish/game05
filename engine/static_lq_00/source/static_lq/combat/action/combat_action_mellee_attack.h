@@ -22,7 +22,7 @@ public:
 		);
 
 private:
-	void PerformAction(
+	virtual void PerformAction(
 		RandomSequence& in_out_random_sequence,
 		const CombatTime& in_combat_time,
 		ICombatOutput* in_output

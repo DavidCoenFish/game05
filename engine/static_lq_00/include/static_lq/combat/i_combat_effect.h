@@ -5,6 +5,7 @@ namespace StaticLq
 class CombatTime;
 class ICombatant;
 class ICombatOutput;
+class RandomSequence;
 
 // an effect is something like adding damage to a combatant, or setting up poison to trigger in 1d4 turns on a combatant
 class ICombatEffect

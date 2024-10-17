@@ -10,6 +10,7 @@
 #include "static_lq/combat/combat_enum.h"
 #include "static_lq/combat/i_combatant.h"
 #include "static_lq/combat/i_combat_side.h"
+#include "static_lq/combat/combat_time.h"
 
 namespace
 {
@@ -24,6 +25,7 @@ namespace
 	constexpr char s_locale_key_attempt_mellee_attack[] = "slqsc_attempt_mellee_attack";
 	constexpr char s_locale_key_attempt_mellee_miss[] = "slqsc_attempt_mellee_miss";
 	constexpr char s_locale_key_combatant_died[] = "slqsc_combatant_died";
+	constexpr char s_locale_key_combatant_poisoned[] = "slqsc_combatant_poisoned"; 
 
 	//class LocaleDataProvider : public ILocaleDataProvider
 	//{
@@ -47,10 +49,11 @@ void StaticLq::SimpleCombatOutput::RegisterLocaleSystem(LocaleSystem& in_locale_
 		{s_locale_key_set_turn_segment, "Turn {turn} Segment {segment}\n"},
 		{s_locale_key_combat_ended, "Combat ended\n"},
 		{s_locale_key_side_victory, "Victory for side {side}\n"},
-		{s_locale_key_combatant_damage, "{combatant} took {damage} damage. {health_points}/{damage_tollerance}. {absoprtption} absoprtption, {physical_damage} physical damage, {severity_damage} severity_damage, {subseptable_to_severity_damage} subseptable_to_severity_damage, {fatigue_damage} fatigue damage, {paralyzation_damage} paralyzation damage\n"},
+		{s_locale_key_combatant_damage, "{combatant} took damage. {physical_damage} physical damage, {fatigue_damage} fatigue damage, {paralyzation_damage} paralyzation damage, {health_points}/{damage_tollerance}\n"},
 		{s_locale_key_set_mellee_initiative, "{combatant} set mellee inititive {value}\n"},
 		{s_locale_key_attempt_mellee_attack, "{combatant} attacks {target} with {attack}. Attack roll {attack_roll} attack bonus {attack_bonus} against defence {defence}\n"},
 		{s_locale_key_attempt_mellee_miss, "{combatant} tries to {attack} {target} but misses. Attack roll {attack_roll} attack bonus {attack_bonus} against defence {defence}\n"},
+		{s_locale_key_combatant_poisoned, "{combatant} poisoned! {risk} risk, {turn} turn, {segment} segment\n"},
 		{s_locale_key_combatant_died, "{combatant} died!\n"},
 		};
 
@@ -168,13 +171,9 @@ void StaticLq::SimpleCombatOutput::CombatantAttemptMelleeAttack(
 
 void StaticLq::SimpleCombatOutput::CombatantDamage(
 	ICombatant& in_combatant_receive, 
-	const int32_t in_physical_damage,
 	const int32_t in_health_points,
 	const int32_t in_damage_tollerance,
-	const int32_t in_absoprtption,
-	const int32_t in_subseptable_to_severity_damage,
 	const int32_t in_physical_damage_delta,
-	const int32_t in_severity_damage_delta,
 	const int32_t in_fatigue_damage_delta,
 	const int32_t in_paralyzation_damage_delta
 	)
@@ -183,11 +182,7 @@ void StaticLq::SimpleCombatOutput::CombatantDamage(
 		{ "combatant", _locale_system->GetValue(in_combatant_receive.GetDisplayName()) },
 		{ "health_points", std::to_string(in_health_points) },
 		{ "damage_tollerance", std::to_string(in_damage_tollerance) },
-		{ "damage", std::to_string(in_physical_damage) },
-		{ "absoprtption", std::to_string(in_absoprtption) },
 		{ "physical_damage", std::to_string(in_physical_damage_delta) },
-		{ "severity_damage", std::to_string(in_severity_damage_delta) },
-		{ "subseptable_to_severity_damage", std::to_string(in_subseptable_to_severity_damage) },
 		{ "fatigue_damage", std::to_string(in_fatigue_damage_delta) },
 		{ "paralyzation_damage", std::to_string(in_paralyzation_damage_delta) }
 	};
@@ -214,6 +209,29 @@ void StaticLq::SimpleCombatOutput::CombatantDied(
 
 	_locale_system->GetValueFormatted(
 		s_locale_key_combatant_died,
+		format_map
+		);
+
+	_log(format_map.GetResult());
+}
+
+void StaticLq::SimpleCombatOutput::CombatantPoisoned(
+	ICombatant& in_combatant, 
+	const int32_t in_risk,
+		const CombatTime& in_when
+	)
+{
+	std::map<std::string, std::string> data_map = {
+		{ "combatant", _locale_system->GetValue(in_combatant.GetDisplayName()) },
+		{ "risk", std::to_string(in_risk) },
+		{ "turn", std::to_string(in_when.GetTurn()) },
+		{ "segment", std::to_string(in_when.GetSegment()) }
+		};
+
+	LocaleStringFormatMap format_map(data_map);
+
+	_locale_system->GetValueFormatted(
+		s_locale_key_combatant_poisoned,
 		format_map
 		);
 
