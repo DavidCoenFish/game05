@@ -97,6 +97,9 @@
     <ClCompile Include="source\static_lq\combat\effect\combat_effect_stat_change.cpp">
       <Filter>source\static_lq\combat\effect</Filter>
     </ClCompile>
+    <ClCompile Include="source\static_lq\combat\action\combat_action_poison_save.cpp">
+      <Filter>source\static_lq\combat\action</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\static_lq\random_sequence.h">
@@ -203,6 +206,9 @@
     </ClInclude>
     <ClInclude Include="source\static_lq\combat\effect\combat_effect_stat_change.h">
       <Filter>source\static_lq\combat\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\static_lq\combat\action\combat_action_poison_save.h">
+      <Filter>source\static_lq\combat\action</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

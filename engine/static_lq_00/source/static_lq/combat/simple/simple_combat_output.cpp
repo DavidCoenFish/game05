@@ -26,6 +26,8 @@ namespace
 	constexpr char s_locale_key_attempt_mellee_miss[] = "slqsc_attempt_mellee_miss";
 	constexpr char s_locale_key_combatant_died[] = "slqsc_combatant_died";
 	constexpr char s_locale_key_combatant_poisoned[] = "slqsc_combatant_poisoned"; 
+	constexpr char s_locale_key_combatant_poison_save[] = "slqsc_combatant_poison_save";
+
 
 	//class LocaleDataProvider : public ILocaleDataProvider
 	//{
@@ -51,9 +53,10 @@ void StaticLq::SimpleCombatOutput::RegisterLocaleSystem(LocaleSystem& in_locale_
 		{s_locale_key_side_victory, "Victory for side {side}\n"},
 		{s_locale_key_combatant_damage, "{combatant} took damage. {physical_damage} physical damage, {fatigue_damage} fatigue damage, {paralyzation_damage} paralyzation damage, {health_points}/{damage_tollerance}\n"},
 		{s_locale_key_set_mellee_initiative, "{combatant} set mellee inititive {value}\n"},
-		{s_locale_key_attempt_mellee_attack, "{combatant} attacks {target} with {attack}. Attack roll {attack_roll} attack bonus {attack_bonus} against defence {defence}\n"},
-		{s_locale_key_attempt_mellee_miss, "{combatant} tries to {attack} {target} but misses. Attack roll {attack_roll} attack bonus {attack_bonus} against defence {defence}\n"},
-		{s_locale_key_combatant_poisoned, "{combatant} poisoned! {risk} risk, {turn} turn, {segment} segment\n"},
+		{s_locale_key_attempt_mellee_attack, "{combatant} attacks {target} with {attack}. defence({defence}) <= Attack roll({attack_roll}) + attack bonus({attack_bonus})\n"},
+		{s_locale_key_attempt_mellee_miss, "{combatant} tries to {attack} {target} but misses. defence({defence}) <= Attack roll({attack_roll}) + attack bonus({attack_bonus})\n"},
+		{s_locale_key_combatant_poison_save, "{combatant} save vrs poision, risk reduced to {risk}. threashold({threashold}) <= roll({roll}) + stamina({stamina})\n"},
+		{s_locale_key_combatant_poisoned, "{combatant} poisoned! dose({risk}) at turn({turn}) segment({segment})\n"},
 		{s_locale_key_combatant_died, "{combatant} died!\n"},
 		};
 
@@ -216,6 +219,32 @@ void StaticLq::SimpleCombatOutput::CombatantDied(
 
 	_locale_system->GetValueFormatted(
 		s_locale_key_combatant_died,
+		format_map
+		);
+
+	_log(format_map.GetResult());
+}
+
+void StaticLq::SimpleCombatOutput::CombatantPoisonSave(
+	ICombatant& in_combatant, 
+	const int32_t in_risk_after_save,
+	const int32_t in_threashold,
+	const int32_t in_roll, 
+	const int32_t in_stamina
+	)
+{
+	std::map<std::string, std::string> data_map = {
+		{ "combatant", _locale_system->GetValue(in_combatant.GetDisplayName()) },
+		{ "risk", std::to_string(in_risk_after_save) },
+		{ "threashold", std::to_string(in_threashold) },
+		{ "roll", std::to_string(in_roll) },
+		{ "stamina", std::to_string(in_stamina) },
+		};
+
+	LocaleStringFormatMap format_map(data_map);
+
+	_locale_system->GetValueFormatted(
+		s_locale_key_combatant_poison_save,
 		format_map
 		);
 

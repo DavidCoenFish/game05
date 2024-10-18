@@ -10,6 +10,7 @@
 #include "static_lq/bestiary/bestiary_enum.h"
 #include "static_lq/combat/action/combat_action_mellee_attack.h"
 #include "static_lq/combat/action/combat_action_mellee_miss.h"
+#include "static_lq/combat/action/combat_action_poison_save.h"
 #include "static_lq/combat/action/combat_action_poison.h"
 #include "static_lq/combat/effect/combat_effect_damage.h"
 #include "static_lq/combat/combat_enum.h"
@@ -182,7 +183,8 @@ void StaticLq::SimpleCombatMonster::GatherAction(
 			{
 				// nop
 			}
-			else  if (defence < attack_roll + attack_bonus)
+			//If the total (roll + attack bonus) equals or exceeds your target's Defensee, your blow lands soundly.
+			else  if (defence <= attack_roll + attack_bonus)
 			{
 				hit = true;
 			}
@@ -377,10 +379,19 @@ void StaticLq::SimpleCombatMonster::GatherAttackEffectPoison(
 		const int32_t combat_level = GetValue(CombatEnum::CombatantValue::TCombatLevel);
 		const int32_t threashold = 15 + combat_level;
 		const int32_t roll = in_out_random_sequence.GenerateDice(30);
+		//If the total equals or exceeds a set Threshold, your Luck Roll succeeds
 		const bool success = threashold <= roll + stamina;
 		if (true == success)
 		{
 			poison_risk_factor -= 2;
+			out_actions.push_back(std::make_shared<CombatActionPosionSave>(
+				in_combatant_receiving_action,
+				poison_risk_factor,
+				threashold,
+				roll, 
+				stamina
+				));
+
 			if (poison_risk_factor <= 0)
 			{
 				return;

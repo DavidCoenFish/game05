@@ -302,24 +302,37 @@ public:
 
 		TriggerEffects(_side_array, _time, _random_sequence.get(), _combat_output.get());
 
-		std::vector<std::shared_ptr<StaticLq::ICombatAction>> combat_action_array;
-		GatherActions(combat_action_array);
-
-		PerformActions(combat_action_array);
-
-		std::vector<std::shared_ptr<StaticLq::ICombatSide>> still_functional_sides = {};
-		GatherStillFunctionalSides(still_functional_sides, _side_array, _combat_output.get());
-
-		const bool still_have_antagonistic_sides = TestSidesAntagonistic(still_functional_sides);
-		const bool has_post_combat_effect = HasPostCombatEffect(_side_array);
-		const bool continue_combat = still_have_antagonistic_sides || has_post_combat_effect;
-
-		if (false == continue_combat)
+		bool gather_action = false;
 		{
-			_combat_output->SetCombatEnd(still_functional_sides);
+			std::vector<std::shared_ptr<StaticLq::ICombatSide>> still_functional_sides = {};
+			GatherStillFunctionalSides(still_functional_sides, _side_array, _combat_output.get());
+			gather_action = TestSidesAntagonistic(still_functional_sides);
 		}
 
-		return continue_combat;
+		// gather the actions if there are sides wwhich can still function and opponenet sides that can continue combat
+		if (true == gather_action)
+		{
+			std::vector<std::shared_ptr<StaticLq::ICombatAction>> combat_action_array;
+			GatherActions(combat_action_array);
+
+			PerformActions(combat_action_array);
+		}
+
+		// look for sides that can continue, or effects that have post combat effects (poison has a delay)
+		{
+			std::vector<std::shared_ptr<StaticLq::ICombatSide>> still_functional_sides = {};
+			GatherStillFunctionalSides(still_functional_sides, _side_array, _combat_output.get());
+			const bool still_have_antagonistic_sides = TestSidesAntagonistic(still_functional_sides);
+			const bool has_post_combat_effect = HasPostCombatEffect(_side_array);
+			const bool continue_combat = still_have_antagonistic_sides || has_post_combat_effect;
+
+			if (false == continue_combat)
+			{
+				_combat_output->SetCombatEnd(still_functional_sides);
+			}
+
+			return continue_combat;
+		}
 	}
 
 private:

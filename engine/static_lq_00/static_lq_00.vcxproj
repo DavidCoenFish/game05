@@ -91,6 +91,7 @@
     <ClCompile Include="source\static_lq\combat\action\combat_action_mellee_attack.cpp" />
     <ClCompile Include="source\static_lq\combat\action\combat_action_mellee_miss.cpp" />
     <ClCompile Include="source\static_lq\combat\action\combat_action_poison.cpp" />
+    <ClCompile Include="source\static_lq\combat\action\combat_action_poison_save.cpp" />
     <ClCompile Include="source\static_lq\combat\combat.cpp" />
     <ClCompile Include="source\static_lq\combat\combat_enum.cpp" />
     <ClCompile Include="source\static_lq\combat\combat_time.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="source\static_lq\combat\action\combat_action_mellee_attack.h" />
     <ClInclude Include="source\static_lq\combat\action\combat_action_mellee_miss.h" />
     <ClInclude Include="source\static_lq\combat\action\combat_action_poison.h" />
+    <ClInclude Include="source\static_lq\combat\action\combat_action_poison_save.h" />
     <ClInclude Include="source\static_lq\combat\effect\combat_effect_damage.h" />
     <ClInclude Include="source\static_lq\combat\effect\combat_effect_poison.h" />
     <ClInclude Include="source\static_lq\combat\effect\combat_effect_stat_change.h" />

@@ -40,6 +40,14 @@ public:
 		const int32_t in_paralyzation_damage_delta
 		) = 0;
 
+	// todo: replace with CombatantLuckRoll(ICombatant& in_combatant, threashold, roll, bonus)
+	virtual void CombatantPoisonSave(
+		ICombatant& in_combatant_receive, 
+		const int32_t in_risk_after_save,
+		const int32_t in_threashold,
+		const int32_t in_roll, 
+		const int32_t in_stamina
+		) = 0;
 	virtual void CombatantPoisoned(
 		ICombatant& in_combatant_receive, 
 		const int32_t in_risk,
