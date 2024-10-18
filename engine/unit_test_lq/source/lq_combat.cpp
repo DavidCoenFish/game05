@@ -51,8 +51,8 @@ namespace LqCombat
 			{
 				std::vector<std::shared_ptr<StaticLq::ICombatant>> combatant_array;
 				combatant_array.push_back(StaticLq::Bestiary::FactoryDefaultGiantAnt(*name_system, *locale_system));
-				combatant_array.push_back(StaticLq::Bestiary::FactoryDefaultGiantAnt(*name_system, *locale_system));
-				combatant_array.push_back(StaticLq::Bestiary::FactoryDefaultGiantAnt(*name_system, *locale_system));
+				//combatant_array.push_back(StaticLq::Bestiary::FactoryDefaultGiantAnt(*name_system, *locale_system));
+				//combatant_array.push_back(StaticLq::Bestiary::FactoryDefaultGiantAnt(*name_system, *locale_system));
 				std::shared_ptr<StaticLq::ICombatSide> side = StaticLq::SimpleCombatSide::Factory(*name_system, *locale_system, combatant_array);
 				combat.AddSide(side);
 			}
@@ -60,6 +60,8 @@ namespace LqCombat
 			// add side giant spider
 			{
 				std::vector<std::shared_ptr<StaticLq::ICombatant>> combatant_array;
+				combatant_array.push_back(StaticLq::Bestiary::FactoryDefaultGiantSpider(*name_system, *locale_system));
+				combatant_array.push_back(StaticLq::Bestiary::FactoryDefaultGiantSpider(*name_system, *locale_system));
 				combatant_array.push_back(StaticLq::Bestiary::FactoryDefaultGiantSpider(*name_system, *locale_system));
 				combatant_array.push_back(StaticLq::Bestiary::FactoryDefaultGiantSpider(*name_system, *locale_system));
 				std::shared_ptr<StaticLq::ICombatSide> side = StaticLq::SimpleCombatSide::Factory(*name_system, *locale_system, combatant_array);

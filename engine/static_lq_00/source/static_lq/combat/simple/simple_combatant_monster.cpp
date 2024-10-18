@@ -132,8 +132,8 @@ void StaticLq::SimpleCombatMonster::GatherAction(
 		_mellee_attack_recovery = 0; // todo: we don't reset range recovery
 	}
 
-	// can we attack
-	if (0 != GetValue(CombatEnum::CombatantValue::TCanContinueCombat))
+	// bail if we cant attack
+	if (0 == GetValue(CombatEnum::CombatantValue::TCanContinueCombat))
 	{
 		// todo, when not alive, you don't get to parry/ defend
 		SetValue(StaticLq::CombatEnum::CombatantValue::TMelleeInitiative, 10);

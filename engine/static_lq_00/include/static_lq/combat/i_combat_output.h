@@ -12,6 +12,8 @@ class ICombatOutput
 public:
 	virtual ~ICombatOutput(){}
 
+	virtual void DebugLog(const std::string& in_message) = 0;
+
 	virtual void SetCombatStart() = 0;
 	virtual void CombatantAdded(ICombatant& in_combatant, ICombatSide& in_side) = 0;
 	virtual void CombatantRemoved(ICombatant& in_combatant, ICombatSide& in_side) = 0;

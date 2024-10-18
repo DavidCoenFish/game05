@@ -22,9 +22,13 @@ namespace LqBestiary
 
 			auto giant_spider = StaticLq::Bestiary::FactoryDefaultGiantSpider(*name_system, *locale_system);
 			Assert::IsNotNull(giant_spider.get());
+			Logger::WriteMessage((std::to_string(giant_spider->GetValue(StaticLq::CombatEnum::CombatantValue::TDamageTollerance)) + " Damage tollerance\n").c_str());
+			Logger::WriteMessage((std::to_string(giant_spider->GetValue(StaticLq::CombatEnum::CombatantValue::THealthPoints)) + " Health Points\n").c_str());
 			Assert::AreEqual(1, giant_spider->GetValue(StaticLq::CombatEnum::CombatantValue::TCanContinueCombat));
 
 			giant_spider->ApplyDamageDelta(100, 200, 300);
+			Logger::WriteMessage((std::to_string(giant_spider->GetValue(StaticLq::CombatEnum::CombatantValue::TDamageTollerance)) + " Damage tollerance\n").c_str());
+			Logger::WriteMessage((std::to_string(giant_spider->GetValue(StaticLq::CombatEnum::CombatantValue::THealthPoints)) + " Health Points\n").c_str());
 			Assert::AreEqual(0, giant_spider->GetValue(StaticLq::CombatEnum::CombatantValue::TCanContinueCombat));
 		}
 

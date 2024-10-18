@@ -67,6 +67,11 @@ StaticLq::SimpleCombatOutput::SimpleCombatOutput(const FCallback& in_log, const 
 	// nop
 }
 
+void StaticLq::SimpleCombatOutput::DebugLog(const std::string& in_message)
+{
+	_log(in_message);
+}
+
 void StaticLq::SimpleCombatOutput::SetCombatStart()
 {
 	_log(_locale_system->GetValue(s_locale_key_combat_started));
@@ -122,6 +127,8 @@ void StaticLq::SimpleCombatOutput::SetTurnSegment(const int32_t turn, const int3
 
 void StaticLq::SimpleCombatOutput::CombatantSetMelleeInitiative(ICombatant& in_combatant, const int32_t in_value)
 {
+	in_combatant; in_value;
+#if 0
 	std::map<std::string, std::string> data_map = {
 		{ "combatant", _locale_system->GetValue(in_combatant.GetDisplayName()) },
 		{ "value", std::to_string(in_value) }
@@ -134,7 +141,7 @@ void StaticLq::SimpleCombatOutput::CombatantSetMelleeInitiative(ICombatant& in_c
 		);
 
 	_log(format_map.GetResult());
-
+#endif //#if 0
 }
 
 void StaticLq::SimpleCombatOutput::CombatantAttemptMelleeAttack(

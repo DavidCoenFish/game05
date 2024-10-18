@@ -18,6 +18,8 @@ public:
 	SimpleCombatOutput(const FCallback& in_log, const std::shared_ptr<LocaleSystem>& in_locale_system);
 
 private:
+	virtual void DebugLog(const std::string& in_message) override;
+
 	virtual void SetCombatStart() override;
 	virtual void CombatantAdded(ICombatant& in_combatant, ICombatSide& in_side) override;
 	virtual void CombatantRemoved(ICombatant& in_combatant, ICombatSide& in_side) override;

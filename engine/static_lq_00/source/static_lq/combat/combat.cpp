@@ -36,12 +36,28 @@ void TriggerEffects(
 	}
 }
 
-void GatherStillFunctionalSides(std::vector<std::shared_ptr<StaticLq::ICombatSide>>& out_still_functional_sides, const std::vector<std::shared_ptr<StaticLq::ICombatSide>>& in_side_array)
+void GatherStillFunctionalSides(std::vector<std::shared_ptr<StaticLq::ICombatSide>>& out_still_functional_sides, const std::vector<std::shared_ptr<StaticLq::ICombatSide>>& in_side_array, StaticLq::ICombatOutput* in_output)
 {
 	for (const auto& item : in_side_array)
 	{
 		if (true == item->CanContinueCombat())
 		{
+			in_output;
+#if 0
+			if (nullptr != in_output)
+			{
+				in_output->DebugLog(
+					(item->GetDisplayName() + " still functional side\n").c_str()
+ 					);
+				for (const auto& sub_item : item->GetCombatantList())
+				{
+					in_output->DebugLog(
+						std::string(" ") + (sub_item->GetDisplayName() + " can still function:" + std::to_string(sub_item->GetValue(StaticLq::CombatEnum::CombatantValue::TCanContinueCombat)) + "\n").c_str()
+						);
+				}
+			}
+#endif //#if 0
+
 			out_still_functional_sides.push_back(item);
 		}
 	}
@@ -52,14 +68,15 @@ const bool TestSidesAntagonistic(const std::vector<std::shared_ptr<StaticLq::ICo
 	const int32_t count = static_cast<int32_t>(in_side_array.size());
 	for (int32_t index = 0; index < count; ++index)
 	{
+		const StaticLq::ICombatSide* const side = in_side_array[index].get();
 		for (int32_t sub_index = 0; sub_index < count; ++sub_index)
 		{
 			if (index == sub_index)
 			{
 				continue;
 			}
-
-			if (in_side_array[index]->IsHostileToSide(*in_side_array[sub_index]))
+			const StaticLq::ICombatSide* const other_side = in_side_array[sub_index].get();
+			if (side->IsHostileToSide(*other_side))
 			{
 				return true;
 			}
@@ -291,17 +308,17 @@ public:
 		PerformActions(combat_action_array);
 
 		std::vector<std::shared_ptr<StaticLq::ICombatSide>> still_functional_sides = {};
-		GatherStillFunctionalSides(still_functional_sides, _side_array);
+		GatherStillFunctionalSides(still_functional_sides, _side_array, _combat_output.get());
 
-		bool continue_combat = TestSidesAntagonistic(still_functional_sides);
-		if (false == continue_combat)
-		{
-			continue_combat = HasPostCombatEffect(_side_array);
-		}
+		const bool still_have_antagonistic_sides = TestSidesAntagonistic(still_functional_sides);
+		const bool has_post_combat_effect = HasPostCombatEffect(_side_array);
+		const bool continue_combat = still_have_antagonistic_sides || has_post_combat_effect;
+
 		if (false == continue_combat)
 		{
 			_combat_output->SetCombatEnd(still_functional_sides);
 		}
+
 		return continue_combat;
 	}
 
