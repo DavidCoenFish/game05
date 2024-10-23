@@ -83,6 +83,7 @@
   <ItemGroup>
     <ClCompile Include="source\static_lq\bestiary\bestiary.cpp" />
     <ClCompile Include="source\static_lq\bestiary\bestiary_enum.cpp" />
+    <ClCompile Include="source\static_lq\bestiary\bestiary_pool.cpp" />
     <ClCompile Include="source\static_lq\bestiary\monster_attack_data.cpp" />
     <ClCompile Include="source\static_lq\bestiary\monster_attribute_data.cpp" />
     <ClCompile Include="source\static_lq\bestiary\monster_data.cpp" />
@@ -121,6 +122,7 @@
   <ItemGroup>
     <ClInclude Include="include\static_lq\bestiary\bestiary.h" />
     <ClInclude Include="include\static_lq\bestiary\bestiary_enum.h" />
+    <ClInclude Include="include\static_lq\bestiary\bestiary_pool.h" />
     <ClInclude Include="include\static_lq\combat\combat.h" />
     <ClInclude Include="include\static_lq\combat\combat_enum.h" />
     <ClInclude Include="include\static_lq\combat\combat_time.h" />

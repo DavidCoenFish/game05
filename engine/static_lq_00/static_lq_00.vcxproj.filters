@@ -100,6 +100,9 @@
     <ClCompile Include="source\static_lq\combat\action\combat_action_poison_save.cpp">
       <Filter>source\static_lq\combat\action</Filter>
     </ClCompile>
+    <ClCompile Include="source\static_lq\bestiary\bestiary_pool.cpp">
+      <Filter>source\static_lq\bestiary</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\static_lq\random_sequence.h">
@@ -146,9 +149,6 @@
     </ClInclude>
     <ClInclude Include="include\static_lq\bestiary\bestiary.h">
       <Filter>include\static_lq\bestiary</Filter>
-    </ClInclude>
-    <ClInclude Include="source\static_lq\bestiary\monster_data.h">
-      <Filter>source\static_lq\bestiary</Filter>
     </ClInclude>
     <ClInclude Include="include\static_lq\bestiary\bestiary_enum.h">
       <Filter>include\static_lq\bestiary</Filter>
@@ -209,6 +209,12 @@
     </ClInclude>
     <ClInclude Include="source\static_lq\combat\action\combat_action_poison_save.h">
       <Filter>source\static_lq\combat\action</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_lq\bestiary\bestiary_pool.h">
+      <Filter>include\static_lq\bestiary</Filter>
+    </ClInclude>
+    <ClInclude Include="source\static_lq\bestiary\monster_data.h">
+      <Filter>source\static_lq\bestiary</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

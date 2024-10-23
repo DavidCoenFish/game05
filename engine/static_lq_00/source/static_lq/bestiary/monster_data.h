@@ -4,9 +4,41 @@
 #include "static_lq/bestiary/monster_attribute_data.h"
 #include "static_lq/bestiary/monster_variation_data.h"
 #include "static_lq/bestiary/special_characteristic_data.h"
+#include "static_lq/roll_data.h"
 
 namespace StaticLq
 {
+#if 1
+struct MonsterData
+{
+public:
+	static std::shared_ptr<MonsterData> FactoryOverlay(
+		const std::shared_ptr<MonsterData>& in_base,
+		const std::shared_ptr<MonsterData>& in_overlay
+		);
+
+	std::string ParentID = {};
+
+	typedef std::variant<int32_t, 
+		std::string,
+		BestiaryEnum::Habitat,
+		BestiaryEnum::Lifestyle,
+		BestiaryEnum::WealthType,
+		BestiaryEnum::Alignment,
+		BestiaryEnum::Cunning,
+		BestiaryEnum::Strength,
+		BestiaryEnum::Size,
+		std::vector<SpecialCharacteristicData>,
+		std::vector<MonsterAttackData>,
+		RollData
+		> TVariant;
+
+	std::map<BestiaryEnum::MonsterAttribute, TVariant> MapAttibute = {};
+
+};
+}
+
+#else
 struct MonsterData
 {
 public:
@@ -31,6 +63,9 @@ public:
 
 };
 }
+
+#endif
+
 /*
 	std::vector<BestiaryEnum::Habitat>_habitat = {};
 	std::vector<BestiaryEnum::Lifestyle> _lifestyle = {};

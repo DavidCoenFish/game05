@@ -6,45 +6,62 @@ namespace StaticLq
 {
 namespace BestiaryEnum
 {
-/// internal to the bestiary, values for a combatant
-/// see CombatantEnum for non internal Combatant values
-/*
-enum class CombatantValueInternal
+enum class MonsterAttribute
 {
 	TDefault = 0,
 
-	//TName,
-	TSpecies,
-	TVariation,
+	TNameKey, // key for name system to generate name with
+	TSpeciesName, // "giant spider", "giant ant"
+	TVariationName, // "average", "warrior", "queen", "worker"
+	TDescription,
 
-	TDamageTollerance,
-	TDamageTolleranceConstant,
-	TDamageTolleranceDiceCount,
-	TDamageTolleranceDiceSide,
+	TCombatLevel,
+	TAttackBonus,
+	TDefence,
+	TDamageToleranceRollData,
+	TExperencePointValue,
 
-	TDamageSum,
-	TDamageFatigue,
-	TDamagePhysical,
-	TDamageParalyzationSum,
-	TDamageParalyzation,
+	TSpeed,
+	TRecoveryTime,
+	TAbsorption,
+	TSurpriseAdjust,
 
-	TRawPhysicalStrength,
-	TRawStamina,
-	TRawAgility,
-	TRawManualDexterity,
-	TRawPerception,
-	TRawWillpower,
-	TRawFaith,
+	TMonsterType,
+	THabitat,
+	TLifestyle,
+	TWealthType,
+	TAlignment,
+	TCunning,
+	TStrength,
+	TSize,
+	TSpecialCharacteristicData,
+	TMonsterAttackData,
 
-	TBuffPhysicalStrength,
-	TBuffStamina,
-	TBuffAgility,
-	TBuffManualDexterity,
-	TBuffPerception,
-	TBuffWillpower,
-	TBuffFaith,
+	TAttributePhysicalStrength,
+	TAttributeStamina,
+	TAttributeAgility,
+	TAttributeManualDexterity,
+	TAttributePerception,
+	TAttributeWillpower,
+	TAttributeFaith,
+
+	TIsEffectedByPoison,
+	TIsEffectedBySeverityDamage,
+	TIsEffectedByPysicalDamage,
+	TIsEffectedByMagicDamage,
+	TIsEffectedByFaithDamage,
+
 };
-*/
+
+enum class MonsterType
+{
+	TDefault = 0,
+	IsAlive, // effected by severity damage, poision
+	//TMagical
+	//TFaith
+	//TUndead
+};
+
 enum class Habitat
 {
 	TDefault = 0,

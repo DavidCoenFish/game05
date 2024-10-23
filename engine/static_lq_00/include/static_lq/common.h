@@ -7,6 +7,7 @@
 #include <random>
 #include <memory>
 #include <optional>
+#include <variant>
 
 #include <json/json.hpp>
 
