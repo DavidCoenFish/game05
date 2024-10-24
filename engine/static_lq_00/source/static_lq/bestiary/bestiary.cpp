@@ -14,6 +14,7 @@
 #include "static_lq/name/name_system.h"
 #include "static_lq/random_sequence.h"
 
+/*
 namespace
 {
 	constexpr char s_locale_key_species_name[] = "slqsc_bestiary_species_name";
@@ -563,9 +564,7 @@ void StaticLq::Bestiary::RegisterLocaleSystem(LocaleSystem& in_out_locale_system
 	//in_out_locale_system.Append(LocaleISO_639_1::English, data);
 }
 
-/*
-tome_of_terrors.pdf page:142
-*/
+//tome_of_terrors.pdf page:142
 std::shared_ptr<StaticLq::ICombatant> StaticLq::Bestiary::FactoryDefaultGiantSpider(
 	NameSystem& in_name_system, 
 	LocaleSystem& in_locale_system 
@@ -689,9 +688,7 @@ std::shared_ptr<StaticLq::ICombatant> StaticLq::Bestiary::FactoryDefaultGiantSpi
 	return std::make_shared<SimpleCombatMonster>(id, dag_collection, monster_data._array_variation[variation_index]._array_attack_data);
 }
 
-/*
-tome_of_terrors.pdf page:32
-*/
+//tome_of_terrors.pdf page:32
 std::shared_ptr<StaticLq::ICombatant> StaticLq::Bestiary::FactoryDefaultGiantAnt(
 	NameSystem& in_name_system, 
 	LocaleSystem& in_locale_system 
@@ -803,3 +800,5 @@ std::shared_ptr<StaticLq::ICombatant> StaticLq::Bestiary::FactoryDefaultGiantAnt
 
 	return std::make_shared<SimpleCombatMonster>(id, dag_collection, monster_data._array_variation[variation_index]._array_attack_data);
 }
+
+*/

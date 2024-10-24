@@ -16,6 +16,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace LqCombat
 {
+/*
 	// make a combat of a default giant spider and default giant ant, run combat
 	TEST_CLASS(Intergration)
 	{
@@ -75,4 +76,5 @@ namespace LqCombat
 		}
 
 	};
+*/
 }

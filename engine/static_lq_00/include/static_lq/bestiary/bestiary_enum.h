@@ -56,7 +56,7 @@ enum class MonsterAttribute
 enum class MonsterType
 {
 	TDefault = 0,
-	IsAlive, // effected by severity damage, poision
+	LivingCreature, // effected by severity damage, poision
 	//TMagical
 	//TFaith
 	//TUndead

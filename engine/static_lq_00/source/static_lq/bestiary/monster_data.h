@@ -21,6 +21,7 @@ public:
 
 	typedef std::variant<int32_t, 
 		std::string,
+		BestiaryEnum::MonsterType,
 		BestiaryEnum::Habitat,
 		BestiaryEnum::Lifestyle,
 		BestiaryEnum::WealthType,
