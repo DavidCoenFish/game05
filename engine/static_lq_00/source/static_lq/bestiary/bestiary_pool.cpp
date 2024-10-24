@@ -1,14 +1,16 @@
 #include "static_lq/static_lq_pch.h"
 #include "static_lq/bestiary/bestiary_pool.h"
+
+#include "common/locale/locale_enum.h"
+#include "common/locale/locale_system.h"
+#include "common/dag/threaded/dag_threaded_collection.h"
+#include "common/dag/threaded/dag_threaded_helper.h"
 #include "static_lq/bestiary/monster_data.h"
 #include "static_lq/combat/i_combatant.h"
 #include "static_lq/combat/combat_enum.h"
 #include "static_lq/combat/simple/simple_combatant_monster.h"
 #include "static_lq/name/name_system.h"
-#include "common/locale/locale_enum.h"
-#include "common/locale/locale_system.h"
-#include "common/dag/threaded/dag_threaded_collection.h"
-#include "common/dag/threaded/dag_threaded_helper.h"
+#include "static_lq/random_sequence.h"
 
 namespace
 {
@@ -17,6 +19,8 @@ namespace
 	constexpr char s_locale_key_description_giant_ant[] = "slqsc_species_giant_ant";
 	constexpr char s_locale_key_attack_mandibles[] = "slqsc_bestiary_attack_mandibles";
 	constexpr char s_locale_key_attack_bite[] = "slqsc_bestiary_attack_bite";
+	constexpr char s_locale_key_damage_tolerance[] = "slqsc_damage_tolerance";
+	constexpr char s_locale_key_damage_tolerance_tooltip[] = "slqsc_damage_tolerance_tooltip";
 
 	constexpr char s_key_giant_ant[] = "giant_ant";
 	constexpr char s_key_giant_ant_worker[] = "giant_ant_worker";
@@ -35,7 +39,10 @@ namespace
 			auto found = in_monster_data->MapAttibute.find(in_attribute);
 			if (found != in_monster_data->MapAttibute.end())
 			{
-				return std::get<TYPE>(found->second);
+				if (std::holds_alternative<TYPE>(found->second))
+				{
+					return std::get<TYPE>(found->second);
+				}
 			}
 		}
 		static const TYPE result = {};
@@ -49,7 +56,10 @@ namespace
 			auto found = in_monster_data->MapAttibute.find(in_attribute);
 			if (found != in_monster_data->MapAttibute.end())
 			{
-				return std::get<TYPE>(found->second);
+				if (std::holds_alternative<TYPE>(found->second))
+				{
+					return std::get<TYPE>(found->second);
+				}
 			}
 		}
 		return static_cast<TYPE>(0);
@@ -88,13 +98,61 @@ namespace
 		in_dag_collection.AddNodeLinkStack(self, variation);
 	}
 
+	void DagAddDamageTolerance(DagThreadedCollection& in_dag_collection, const int32_t in_id, const StaticLq::RollData& in_roll_data)
+	{
+		auto damage_tolerance_seed = in_dag_collection.CreateNodeVariable(
+			in_dag_collection.MakeUid(), 
+			DagThreadedHelper::CreateDagValue<int32_t>(in_id)
+			);
+		auto damage_tolerance_constant = in_dag_collection.CreateNodeVariable(
+		EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDamageTolleranceConstant),
+			DagThreadedHelper::CreateDagValue<int32_t>(in_roll_data._constant)
+			);
+		auto damage_tolerance_dice_count = in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDamageTolleranceDiceCount),
+			DagThreadedHelper::CreateDagValue<int32_t>(in_roll_data._dice_count)
+			);
+		auto damage_tolerance_dice_base = in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDamageTolleranceDiceSide),
+			DagThreadedHelper::CreateDagValue<int32_t>(in_roll_data._dice_base)
+			);
+
+		auto damage_tolerance = in_dag_collection.CreateNodeCalculate(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDamageTollerance),
+			[](
+				const std::vector< std::shared_ptr< IDagThreadedValue > >&, 
+				const std::vector< std::shared_ptr< IDagThreadedValue > >& in_array_indexed
+			) -> std::shared_ptr< IDagThreadedValue >
+			{
+				const int32_t id = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[0]);
+				const int32_t constant = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[1]);
+				const int32_t dice_count = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[2]);
+				const int32_t dice_base = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[3]);
+				int32_t result = constant;
+				StaticLq::RandomSequence random_sequence(id);
+				for (int index = 0; index < dice_count; ++index)
+				{
+					result += random_sequence.GenerateDice(dice_base);
+				}
+
+				return DagThreadedHelper::CreateDagValue<int32_t>(result);
+			},
+			s_locale_key_damage_tolerance,
+			s_locale_key_damage_tolerance_tooltip
+			);
+
+		in_dag_collection.AddNodeLinkIndexed(damage_tolerance, damage_tolerance_seed, 0);
+		in_dag_collection.AddNodeLinkIndexed(damage_tolerance, damage_tolerance_constant, 1);
+		in_dag_collection.AddNodeLinkIndexed(damage_tolerance, damage_tolerance_dice_count, 2);
+		in_dag_collection.AddNodeLinkIndexed(damage_tolerance, damage_tolerance_dice_base, 3);
+	}
+
 	std::shared_ptr<DagThreadedCollection> MakeMonsterDag(const int32_t in_id, const std::shared_ptr<StaticLq::MonsterData>& in_monster_data, const std::string& in_name_key)
 	{
 		std::shared_ptr<DagThreadedCollection> result = DagThreadedCollection::Factory();
 
-		//DagAddName(*result, in_name_key, in_monster_data._species, in_monster_data._array_variation[in_variation_index]._display_name);
 		DagAddName(*result, in_name_key, GetRef<std::string>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TSpeciesName), GetRef<std::string>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TVariationName));
-		//DagAddDamageTolerance(*result, in_id, in_monster_data._array_variation[in_variation_index]);
+		DagAddDamageTolerance(*result, in_id, GetRef<StaticLq::RollData>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TDamageToleranceRollData));
 		//DagAddDamageSum(*result);
 		//DagAddStatus(*result);
 		//DagAddCanContinueCombat(*result);
@@ -192,6 +250,8 @@ void StaticLq::BestiaryPool::RegisterLocaleSystem(LocaleSystem& in_out_locale_sy
 		{s_locale_key_description_giant_ant, "giant ant description text"},
 		{s_locale_key_attack_mandibles, "mandibles"},
 		{s_locale_key_attack_bite, "bite"},
+		{s_locale_key_damage_tolerance, "Damage Tolerance"},
+		{s_locale_key_damage_tolerance_tooltip, "{self} = {index.1} + {index.2}d{index.3}"},
 		};
 
 	in_out_locale_system.Append(LocaleISO_639_1::Default, data);
