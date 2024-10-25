@@ -24,6 +24,26 @@ namespace
 	constexpr char s_locale_key_attack_bite[] = "slqsc_bestiary_attack_bite";
 	constexpr char s_locale_key_damage_tolerance[] = "slqsc_damage_tolerance";
 	constexpr char s_locale_key_damage_tolerance_tooltip[] = "slqsc_damage_tolerance_tooltip";
+	constexpr char s_locale_key_damage_sum[] = "slqsc_damage_sum";
+	constexpr char s_locale_key_damage_paralyzation_sum[] = "slqsc_damage_sum";
+	constexpr char s_locale_key_sum_tooltip[] = "slqsc_damage_sum_tooltip";
+	constexpr char s_locale_key_fatigue_damage[] = "slqsc_fatigue_damage";
+	constexpr char s_locale_key_physical_damage[] = "slqsc_physical_damage";
+	constexpr char s_locale_key_paralyzation_damage[] = "slqsc_paralyzation_damage";
+	constexpr char s_locale_key_alive[] = "slqsc_alive";
+	constexpr char s_locale_key_paralyzed[] = "slqsc_paralyzed";	
+	constexpr char s_locale_key_0_less_i0_minus_i1[] = "slqsc_alive_tooltip";
+	constexpr char s_locale_key_can_continue_combat[] = "slqsc_can_continue_combat";
+	constexpr char s_locale_key_can_continue_combat_tooltip[] = "slqsc_can_continue_combat_tooltip";
+	constexpr char s_locale_key_stack_sum_tooltip[] = "slqsc_stack_sum";
+
+	constexpr char s_locale_key_physical_strength[] = "slqsc_physical_strength";
+	constexpr char s_locale_key_stamina[] = "slqsc_stamina";
+	constexpr char s_locale_key_agility[] = "slqsc_agility";
+	constexpr char s_locale_key_manual_dexterity[] = "slqsc_manual_dexterity";
+	constexpr char s_locale_key_perception[] = "slqsc_perception";
+	constexpr char s_locale_key_willpower[] = "slqsc_willpower";
+	constexpr char s_locale_key_faith[] = "slqsc_faith";
 
 	constexpr char s_key_giant_ant[] = "giant_ant";
 	constexpr char s_key_giant_ant_worker[] = "giant_ant_worker";
@@ -150,17 +170,375 @@ namespace
 		in_dag_collection.AddNodeLinkIndexed(damage_tolerance, damage_tolerance_dice_base, 3);
 	}
 
+	void DagAddDamageSum(DagThreadedCollection& in_dag_collection)
+	{
+		auto fatigue_damage = in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDamageFatigue),
+			DagThreadedHelper::CreateDagValue<int32_t>(0),
+			DagThreaded::ValueChanged,
+			s_locale_key_fatigue_damage
+			);
+		auto physical_damage = in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDamagePhysical),
+			DagThreadedHelper::CreateDagValue<int32_t>(0),
+			DagThreaded::ValueChanged,
+			s_locale_key_physical_damage
+			);
+		auto paralyzation_damage = in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDamageParalyzation),
+			DagThreadedHelper::CreateDagValue<int32_t>(0),
+			DagThreaded::ValueChanged,
+			s_locale_key_paralyzation_damage
+			);
+
+		auto damage_sum = in_dag_collection.CreateNodeCalculate(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDamageSum),
+			[](
+				const std::vector< std::shared_ptr< IDagThreadedValue > >&, 
+				const std::vector< std::shared_ptr< IDagThreadedValue > >& in_array_indexed
+			) -> std::shared_ptr< IDagThreadedValue >
+			{
+				const int32_t fatigue_damage_value = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[0]);
+				const int32_t physical_damage_value = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[1]);
+				//const int32_t paralyzation_damage_value = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[2]);
+				const int32_t sum = fatigue_damage_value + physical_damage_value; // + paralyzation_damage_value;
+				return DagThreadedHelper::CreateDagValue<int32_t>(sum);
+			},
+			s_locale_key_damage_sum,
+			s_locale_key_sum_tooltip
+			);
+
+		in_dag_collection.AddNodeLinkIndexed(damage_sum, fatigue_damage, 0);
+		in_dag_collection.AddNodeLinkIndexed(damage_sum, physical_damage, 1);
+		//in_dag_collection.AddNodeLinkIndexed(damage_sum, paralyzation_damage, 2);
+
+		auto damage_paralyzation_sum = in_dag_collection.CreateNodeCalculate(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDamageParalyzationSum),
+			[](
+				const std::vector< std::shared_ptr< IDagThreadedValue > >&, 
+				const std::vector< std::shared_ptr< IDagThreadedValue > >& in_array_indexed
+			) -> std::shared_ptr< IDagThreadedValue >
+			{
+				const int32_t damage_sum = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[0]);
+				const int32_t paralyzation_damage = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[1]);
+				const int32_t sum = damage_sum + paralyzation_damage;
+				return DagThreadedHelper::CreateDagValue<int32_t>(sum);
+			},
+			s_locale_key_damage_paralyzation_sum,
+			s_locale_key_sum_tooltip
+			);
+
+		in_dag_collection.AddNodeLinkIndexed(damage_paralyzation_sum, damage_sum, 0);
+		in_dag_collection.AddNodeLinkIndexed(damage_paralyzation_sum, paralyzation_damage, 1);
+	}
+
+	void DagAddStatus(DagThreadedCollection& in_dag_collection)
+	{
+		auto alive = in_dag_collection.CreateNodeCalculate(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TIsAlive),
+			[](
+				const std::vector< std::shared_ptr< IDagThreadedValue > >&, 
+				const std::vector< std::shared_ptr< IDagThreadedValue > >& in_array_indexed
+			) -> std::shared_ptr< IDagThreadedValue >
+			{
+				const int32_t damage_tolerance_value = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[0]);
+				const int32_t damage_sum_value = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[1]);
+				const int32_t alive = 0 < (damage_tolerance_value - damage_sum_value);
+				return DagThreadedHelper::CreateDagValue<int32_t>(alive);
+			},
+			s_locale_key_alive,
+			s_locale_key_0_less_i0_minus_i1
+			);
+
+		in_dag_collection.AddNodeLinkIndexed(
+			alive, 
+			in_dag_collection.FindNode(EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDamageTollerance)),
+			0);
+		in_dag_collection.AddNodeLinkIndexed(
+			alive, 
+			in_dag_collection.FindNode(EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDamageSum)),
+			1);
+
+		auto paralyzed = in_dag_collection.CreateNodeCalculate(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TIsParalyzed),
+			[](
+				const std::vector< std::shared_ptr< IDagThreadedValue > >&, 
+				const std::vector< std::shared_ptr< IDagThreadedValue > >& in_array_indexed
+			) -> std::shared_ptr< IDagThreadedValue >
+			{
+				const int32_t damage_paralyzation_sum_value = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[0]);
+				const int32_t damage_tolerance_value = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[1]);
+				const int32_t paralyzed = 0 < (damage_paralyzation_sum_value - damage_tolerance_value);
+				return DagThreadedHelper::CreateDagValue<int32_t>(paralyzed);
+			},
+			s_locale_key_paralyzed,
+			s_locale_key_0_less_i0_minus_i1
+			);
+
+		in_dag_collection.AddNodeLinkIndexed(
+			paralyzed, 
+			in_dag_collection.FindNode(EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDamageParalyzationSum)),
+			0);
+		in_dag_collection.AddNodeLinkIndexed(
+			paralyzed, 
+			in_dag_collection.FindNode(EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDamageTollerance)),
+			1);
+
+	}
+
+	void DagAddCanContinueCombat(DagThreadedCollection& in_dag_collection)
+	{
+		auto can_continue_combat = in_dag_collection.CreateNodeCalculate(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TCanContinueCombat),
+			[](
+				const std::vector< std::shared_ptr< IDagThreadedValue > >&, 
+				const std::vector< std::shared_ptr< IDagThreadedValue > >& in_array_indexed
+			) -> std::shared_ptr< IDagThreadedValue >
+			{
+				const int32_t alive = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[0]);
+				const int32_t paralyzed = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[1]);
+				const int32_t can_continue = (1 == alive) && (0 == paralyzed);
+				return DagThreadedHelper::CreateDagValue<int32_t>(can_continue);
+			},
+			s_locale_key_can_continue_combat,
+			s_locale_key_can_continue_combat_tooltip
+			);
+		in_dag_collection.AddNodeLinkIndexed(
+			can_continue_combat, 
+			in_dag_collection.FindNode(EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TIsAlive)),
+			0);
+		in_dag_collection.AddNodeLinkIndexed(
+			can_continue_combat, 
+			in_dag_collection.FindNode(EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TIsParalyzed)),
+			1);
+	}
+
+	void DagAddCombatVariables(DagThreadedCollection& in_dag_collection, const std::shared_ptr<StaticLq::MonsterData>& in_monster_data)
+	{
+		auto health_points = in_dag_collection.CreateNodeCalculate(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::THealthPoints),
+			[](
+				const std::vector< std::shared_ptr< IDagThreadedValue > >&, 
+				const std::vector< std::shared_ptr< IDagThreadedValue > >& in_array_indexed
+			) -> std::shared_ptr< IDagThreadedValue >
+			{
+				const int32_t a = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[0]);
+				const int32_t b = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[1]);
+				const int32_t result = a - b;
+				return DagThreadedHelper::CreateDagValue<int32_t>(result);
+			}
+			);
+
+		in_dag_collection.AddNodeLinkIndexed(
+			health_points, 
+			in_dag_collection.FindNode(EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDamageTollerance)),
+			0);
+		in_dag_collection.AddNodeLinkIndexed(
+			health_points, 
+			in_dag_collection.FindNode(EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDamageParalyzationSum)),
+			1);
+
+		// we need a node to hold the value
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TMelleeInitiative),
+			DagThreadedHelper::CreateDagValue<int32_t>(0)
+			);
+
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TCombatLevel),
+			DagThreadedHelper::CreateDagValue<int32_t>(GetValue<int32_t>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TCombatLevel))
+			);
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TExperencePointValue),
+			DagThreadedHelper::CreateDagValue<int32_t>(GetValue<int32_t>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TExperencePointValue))
+			);
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TAttackBonus),
+			DagThreadedHelper::CreateDagValue<int32_t>(GetValue<int32_t>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TAttackBonus))
+			);
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDefense),
+			DagThreadedHelper::CreateDagValue<int32_t>(GetValue<int32_t>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TDefence))
+			);
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TRecoveryTime),
+			DagThreadedHelper::CreateDagValue<int32_t>(GetValue<int32_t>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TRecoveryTime))
+			);
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TSusceptibleSeverityDamage),
+			DagThreadedHelper::CreateDagValue<int32_t>(GetValue<int32_t>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TIsEffectedBySeverityDamage))
+			);
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TSusceptiblePoison),
+			DagThreadedHelper::CreateDagValue<int32_t>(GetValue<int32_t>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TIsEffectedByPoison))
+			);
+		//TSusceptibleFaithDamage, // combat
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TSusceptibleFaithDamage),
+			DagThreadedHelper::CreateDagValue<int32_t>(GetValue<int32_t>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TIsEffectedByFaithDamage))
+			);
+		//TSusceptibleNonMagicalDamage, // combat
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TSusceptibleNonMagicalDamage),
+			DagThreadedHelper::CreateDagValue<int32_t>(GetValue<int32_t>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TIsEffectedByPysicalDamage))
+			);
+		//TSusceptibleMagicalDamage, // combat
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TSusceptibleMagicalDamage),
+			DagThreadedHelper::CreateDagValue<int32_t>(GetValue<int32_t>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TIsEffectedByMagicDamage))
+			);
+
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TAbsorption),
+			DagThreadedHelper::CreateDagValue<int32_t>(GetValue<int32_t>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TAbsorption))
+			);
+
+		//TAlignment
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TAlignment),
+			DagThreadedHelper::CreateDagValue<int32_t>(static_cast<int32_t>(GetValue<StaticLq::BestiaryEnum::Alignment>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TAlignment)))
+			);
+
+		//TPoisonDoseCountToxin, 
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TPoisonDoseCountToxin),
+			DagThreadedHelper::CreateDagValue<int32_t>(0)
+			);
+
+		//TPoisonDoseCountHallucinogen,
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TPoisonDoseCountHallucinogen),
+			DagThreadedHelper::CreateDagValue<int32_t>(0)
+			);
+		//TPoisonDoseCountVenom,
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TPoisonDoseCountVenom),
+			DagThreadedHelper::CreateDagValue<int32_t>(0)
+			);
+
+		//TPoisonDoseCountKillingVenom,
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TPoisonDoseCountKillingVenom),
+			DagThreadedHelper::CreateDagValue<int32_t>(0)
+			);
+
+		//TPoisonDoseCountParalyzingVenom,
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TPoisonDoseCountParalyzingVenom),
+			DagThreadedHelper::CreateDagValue<int32_t>(0)
+			);
+
+		//TPoisonSaveFailedToxin, 
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TPoisonSaveFailedToxin),
+			DagThreadedHelper::CreateDagValue<int32_t>(0)
+			);
+		//TPoisonSaveFailedHallucinogen,
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TPoisonSaveFailedHallucinogen),
+			DagThreadedHelper::CreateDagValue<int32_t>(0)
+			);
+
+		//TPoisonSaveFailedVenom,
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TPoisonSaveFailedVenom),
+			DagThreadedHelper::CreateDagValue<int32_t>(0)
+			);
+
+		//TPoisonSaveFailedKillingVenom,
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TPoisonSaveFailedKillingVenom),
+			DagThreadedHelper::CreateDagValue<int32_t>(0)
+			);
+
+		//TPoisonSaveFailedParalyzingVenom,
+		in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TPoisonSaveFailedParalyzingVenom),
+			DagThreadedHelper::CreateDagValue<int32_t>(0)
+			);
+
+		return;
+	}
+
+	void AddAttribute(DagThreadedCollection& in_dag_collection, const std::optional<int32_t>& in_value, const StaticLq::CombatEnum::CombatantValue in_raw_enum, const StaticLq::CombatEnum::CombatantValue in_buff_enum, const StaticLq::CombatEnum::CombatantValue in_output_enum, const std::string& in_attribute_locale_key)
+	{
+		// todo: do we need a "is valid" flag
+		const int32_t value = in_value.has_value() ? in_value.value() : 0;
+
+		auto raw = in_dag_collection.CreateNodeVariable(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(in_raw_enum),
+			DagThreadedHelper::CreateDagValue<int32_t>(value)
+			);
+
+		auto buff = in_dag_collection.CreateNodeCalculate(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(in_buff_enum),
+			[](
+				const std::vector< std::shared_ptr< IDagThreadedValue > >& in_array_stack, 
+				const std::vector< std::shared_ptr< IDagThreadedValue > >&
+			) -> std::shared_ptr< IDagThreadedValue >
+			{
+				int32_t result = 0;
+				for (const auto& item : in_array_stack)
+				{
+					result += DagThreadedHelper::GetValue<int32_t>(item);
+				}
+				return DagThreadedHelper::CreateDagValue<int32_t>(result);
+			},
+			"",
+			s_locale_key_stack_sum_tooltip
+			);
+
+		auto output_node = in_dag_collection.CreateNodeCalculate(
+			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(in_output_enum),
+			[](
+				const std::vector< std::shared_ptr< IDagThreadedValue > >&, 
+				const std::vector< std::shared_ptr< IDagThreadedValue > >& in_array_indexed
+			) -> std::shared_ptr< IDagThreadedValue >
+			{
+				const int32_t zero = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[0]);
+				const int32_t one = DagThreadedHelper::GetValue<int32_t>(in_array_indexed[1]);
+				const int32_t sum = zero + one;
+				return DagThreadedHelper::CreateDagValue<int32_t>(sum);
+			},
+			in_attribute_locale_key,
+			s_locale_key_sum_tooltip
+			);
+
+		in_dag_collection.AddNodeLinkIndexed(output_node, raw, 0);
+		in_dag_collection.AddNodeLinkIndexed(output_node, buff, 1);
+
+	}
+
+	void DagAddAttributes(DagThreadedCollection& in_dag_collection, const std::shared_ptr<StaticLq::MonsterData>& in_monster_data)
+	{
+		AddAttribute(in_dag_collection, GetValue<int32_t>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TAttributeAgility),
+			StaticLq::CombatEnum::CombatantValue::TRawAgility, StaticLq::CombatEnum::CombatantValue::TBuffAgility, StaticLq::CombatEnum::CombatantValue::TAgility, s_locale_key_agility);
+		AddAttribute(in_dag_collection, GetValue<int32_t>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TAttributeFaith),
+			StaticLq::CombatEnum::CombatantValue::TRawFaith, StaticLq::CombatEnum::CombatantValue::TBuffFaith, StaticLq::CombatEnum::CombatantValue::TFaith, s_locale_key_faith);
+		AddAttribute(in_dag_collection, GetValue<int32_t>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TAttributeManualDexterity),
+			StaticLq::CombatEnum::CombatantValue::TRawManualDexterity, StaticLq::CombatEnum::CombatantValue::TBuffManualDexterity, StaticLq::CombatEnum::CombatantValue::TManualDexterity, s_locale_key_manual_dexterity);
+		AddAttribute(in_dag_collection, GetValue<int32_t>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TAttributePerception),
+			StaticLq::CombatEnum::CombatantValue::TRawPerception, StaticLq::CombatEnum::CombatantValue::TBuffPerception, StaticLq::CombatEnum::CombatantValue::TPerception, s_locale_key_perception);
+		AddAttribute(in_dag_collection, GetValue<int32_t>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TAttributePhysicalStrength),
+			StaticLq::CombatEnum::CombatantValue::TRawPhysicalStrength, StaticLq::CombatEnum::CombatantValue::TBuffPhysicalStrength, StaticLq::CombatEnum::CombatantValue::TPhysicalStrength, s_locale_key_physical_strength);
+		AddAttribute(in_dag_collection, GetValue<int32_t>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TAttributeStamina),
+			StaticLq::CombatEnum::CombatantValue::TRawStamina, StaticLq::CombatEnum::CombatantValue::TBuffStamina, StaticLq::CombatEnum::CombatantValue::TStamina, s_locale_key_stamina);
+		AddAttribute(in_dag_collection, GetValue<int32_t>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TAttributeWillpower),
+			StaticLq::CombatEnum::CombatantValue::TRawWillpower, StaticLq::CombatEnum::CombatantValue::TBuffWillpower, StaticLq::CombatEnum::CombatantValue::TWillpower, s_locale_key_willpower);
+	}
+
+
 	std::shared_ptr<DagThreadedCollection> MakeMonsterDag(const int32_t in_id, const std::shared_ptr<StaticLq::MonsterData>& in_monster_data, const std::string& in_name_key)
 	{
 		std::shared_ptr<DagThreadedCollection> result = DagThreadedCollection::Factory();
 
 		DagAddName(*result, in_name_key, GetRef<std::string>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TSpeciesName), GetRef<std::string>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TVariationName));
 		DagAddDamageTolerance(*result, in_id, GetRef<StaticLq::RollData>(in_monster_data, StaticLq::BestiaryEnum::MonsterAttribute::TDamageToleranceRollData));
-		//DagAddDamageSum(*result);
-		//DagAddStatus(*result);
-		//DagAddCanContinueCombat(*result);
-		//DagAddCombatVariables(*result, in_monster_data, in_monster_data._array_variation[in_variation_index]);
-		//DagAddAttributes(*result, in_monster_data);
+		DagAddDamageSum(*result);
+		DagAddStatus(*result);
+		DagAddCanContinueCombat(*result);
+		DagAddCombatVariables(*result, in_monster_data);
+		DagAddAttributes(*result, in_monster_data);
 
 		return result;
 	}
