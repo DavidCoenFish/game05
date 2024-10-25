@@ -18,6 +18,9 @@ namespace
 	constexpr char s_locale_key_species_giant_ant[] = "slqsc_species_giant_ant";
 	constexpr char s_locale_key_description_giant_ant[] = "slqsc_species_giant_ant";
 	constexpr char s_locale_key_attack_mandibles[] = "slqsc_bestiary_attack_mandibles";
+
+	constexpr char s_locale_key_species_giant_spider[] = "slqsc_species_giant_spider";
+	constexpr char s_locale_key_description_giant_spider[] = "slqsc_species_giant_spider";
 	constexpr char s_locale_key_attack_bite[] = "slqsc_bestiary_attack_bite";
 	constexpr char s_locale_key_damage_tolerance[] = "slqsc_damage_tolerance";
 	constexpr char s_locale_key_damage_tolerance_tooltip[] = "slqsc_damage_tolerance_tooltip";
@@ -246,12 +249,16 @@ void StaticLq::BestiaryPool::RegisterLocaleSystem(LocaleSystem& in_out_locale_sy
 {
 	const std::vector<LocaleSystem::Data> data = {
 		{s_locale_key_self_tooltip, "{Name} the {Species}, {TVariation}"},
+		{s_locale_key_damage_tolerance, "Damage Tolerance"},
+		{s_locale_key_damage_tolerance_tooltip, "{self} = {index.1} + {index.2}d{index.3}"},
+
 		{s_locale_key_species_giant_ant, "Giant Ant"},
 		{s_locale_key_description_giant_ant, "giant ant description text"},
 		{s_locale_key_attack_mandibles, "mandibles"},
+
+		{s_locale_key_species_giant_spider, "Giant Spider"},
+		{s_locale_key_description_giant_ant, "giant spider description text"},
 		{s_locale_key_attack_bite, "bite"},
-		{s_locale_key_damage_tolerance, "Damage Tolerance"},
-		{s_locale_key_damage_tolerance_tooltip, "{self} = {index.1} + {index.2}d{index.3}"},
 		};
 
 	in_out_locale_system.Append(LocaleISO_639_1::Default, data);
@@ -259,16 +266,17 @@ void StaticLq::BestiaryPool::RegisterLocaleSystem(LocaleSystem& in_out_locale_sy
 
 std::shared_ptr<StaticLq::BestiaryPool> StaticLq::BestiaryPool::FactoryWithTestData()
 {
-	std::shared_ptr<StaticLq::BestiaryPool> result = std::make_shared<StaticLq::BestiaryPool>();
+	std::shared_ptr<BestiaryPool> result = std::make_shared<BestiaryPool>();
 
+	//tome_of_terrors.pdf page:32
 	// s_key_giant_ant
 	{
-		std::shared_ptr<StaticLq::MonsterData> monster_data = std::make_shared<StaticLq::MonsterData>();
+		std::shared_ptr<MonsterData> monster_data = std::make_shared<MonsterData>();
 		monster_data->MapAttibute = {
 			//TVariationName, // "average", "warrior", "queen", "worker"
-			{ BestiaryEnum::MonsterAttribute::TNameKey, StaticLq::MonsterData::TVariant(StaticLq::NameSystem::GetKeyGiantAnt())},
-			{ BestiaryEnum::MonsterAttribute::TSpeciesName, StaticLq::MonsterData::TVariant(std::string(s_locale_key_species_giant_ant)) },
-			{ BestiaryEnum::MonsterAttribute::TDescription, StaticLq::MonsterData::TVariant(std::string(s_locale_key_description_giant_ant)) },
+			{ BestiaryEnum::MonsterAttribute::TNameKey, MonsterData::TVariant(NameSystem::GetKeyGiantAnt())},
+			{ BestiaryEnum::MonsterAttribute::TSpeciesName, MonsterData::TVariant(std::string(s_locale_key_species_giant_ant)) },
+			{ BestiaryEnum::MonsterAttribute::TDescription, MonsterData::TVariant(std::string(s_locale_key_description_giant_ant)) },
 
 			//TCombatLevel,
 			//TAttackBonus,
@@ -276,31 +284,31 @@ std::shared_ptr<StaticLq::BestiaryPool> StaticLq::BestiaryPool::FactoryWithTestD
 			//TDamageToleranceRollData,
 			//TExperencePointValue,
 
-			{ BestiaryEnum::MonsterAttribute::TSpeed, StaticLq::MonsterData::TVariant(int32_t(70)) },
-			{ BestiaryEnum::MonsterAttribute::TRecoveryTime, StaticLq::MonsterData::TVariant(int32_t(7)) },
-			{ BestiaryEnum::MonsterAttribute::TAbsorption, StaticLq::MonsterData::TVariant(int32_t(6)) },
-			{ BestiaryEnum::MonsterAttribute::TSurpriseAdjust, StaticLq::MonsterData::TVariant(int32_t(0)) },
+			{ BestiaryEnum::MonsterAttribute::TSpeed, MonsterData::TVariant(int32_t(70)) },
+			{ BestiaryEnum::MonsterAttribute::TRecoveryTime, MonsterData::TVariant(int32_t(7)) },
+			{ BestiaryEnum::MonsterAttribute::TAbsorption, MonsterData::TVariant(int32_t(6)) },
+			{ BestiaryEnum::MonsterAttribute::TSurpriseAdjust, MonsterData::TVariant(int32_t(0)) },
 
-			{ BestiaryEnum::MonsterAttribute::TMonsterType, StaticLq::MonsterData::TVariant(StaticLq::BestiaryEnum::MonsterType::LivingCreature) },
-			{ BestiaryEnum::MonsterAttribute::THabitat, StaticLq::MonsterData::TVariant(StaticLq::BestiaryEnum::Habitat::TEverywhere) },
-			{ BestiaryEnum::MonsterAttribute::TLifestyle, StaticLq::MonsterData::TVariant(
-				static_cast<StaticLq::BestiaryEnum::Lifestyle>(
-					static_cast<int32_t>(StaticLq::BestiaryEnum::Lifestyle::TInstinctive) | 
-					static_cast<int32_t>(StaticLq::BestiaryEnum::Lifestyle::TComunal) | 
-					static_cast<int32_t>(StaticLq::BestiaryEnum::Lifestyle::TInsect) 
+			{ BestiaryEnum::MonsterAttribute::TMonsterType, MonsterData::TVariant(BestiaryEnum::MonsterType::LivingCreature) },
+			{ BestiaryEnum::MonsterAttribute::THabitat, MonsterData::TVariant(BestiaryEnum::Habitat::TEverywhere) },
+			{ BestiaryEnum::MonsterAttribute::TLifestyle, MonsterData::TVariant(
+				static_cast<BestiaryEnum::Lifestyle>(
+					static_cast<int32_t>(BestiaryEnum::Lifestyle::TInstinctive) | 
+					static_cast<int32_t>(BestiaryEnum::Lifestyle::TComunal) | 
+					static_cast<int32_t>(BestiaryEnum::Lifestyle::TInsect) 
 				)) },
-			{ BestiaryEnum::MonsterAttribute::TWealthType, StaticLq::MonsterData::TVariant(StaticLq::BestiaryEnum::WealthType::TMineral) },
-			{ BestiaryEnum::MonsterAttribute::TAlignment, StaticLq::MonsterData::TVariant(StaticLq::BestiaryEnum::Alignment::TNeutral) },
-			{ BestiaryEnum::MonsterAttribute::TCunning, StaticLq::MonsterData::TVariant(StaticLq::BestiaryEnum::Cunning::TLow) },
-			{ BestiaryEnum::MonsterAttribute::TStrength, StaticLq::MonsterData::TVariant(StaticLq::BestiaryEnum::Strength::THigh) },
-			{ BestiaryEnum::MonsterAttribute::TSize, StaticLq::MonsterData::TVariant(
-				static_cast<StaticLq::BestiaryEnum::Size>(
-					static_cast<int32_t>(StaticLq::BestiaryEnum::Size::TSmall) | 
-					static_cast<int32_t>(StaticLq::BestiaryEnum::Size::TMedium) 
+			{ BestiaryEnum::MonsterAttribute::TWealthType, MonsterData::TVariant(BestiaryEnum::WealthType::TMineral) },
+			{ BestiaryEnum::MonsterAttribute::TAlignment, MonsterData::TVariant(BestiaryEnum::Alignment::TNeutral) },
+			{ BestiaryEnum::MonsterAttribute::TCunning, MonsterData::TVariant(BestiaryEnum::Cunning::TLow) },
+			{ BestiaryEnum::MonsterAttribute::TStrength, MonsterData::TVariant(BestiaryEnum::Strength::THigh) },
+			{ BestiaryEnum::MonsterAttribute::TSize, MonsterData::TVariant(
+				static_cast<BestiaryEnum::Size>(
+					static_cast<int32_t>(BestiaryEnum::Size::TSmall) | 
+					static_cast<int32_t>(BestiaryEnum::Size::TMedium) 
 				))},
 			//TSpecialCharacteristicData,
 
-			{ BestiaryEnum::MonsterAttribute::TMonsterAttackData, StaticLq::MonsterData::TVariant(
+			{ BestiaryEnum::MonsterAttribute::TMonsterAttackData, MonsterData::TVariant(
 				std::vector<MonsterAttackData>({
 					{
 						std::string(s_locale_key_attack_mandibles),
@@ -309,19 +317,19 @@ std::shared_ptr<StaticLq::BestiaryPool> StaticLq::BestiaryPool::FactoryWithTestD
 					}
 				}))},
 
-			{ BestiaryEnum::MonsterAttribute::TAttributePhysicalStrength, StaticLq::MonsterData::TVariant(int32_t(6)) },
-			{ BestiaryEnum::MonsterAttribute::TAttributeStamina, StaticLq::MonsterData::TVariant(int32_t(6)) },
-			{ BestiaryEnum::MonsterAttribute::TAttributeAgility, StaticLq::MonsterData::TVariant(int32_t(0)) },
+			{ BestiaryEnum::MonsterAttribute::TAttributePhysicalStrength, MonsterData::TVariant(int32_t(6)) },
+			{ BestiaryEnum::MonsterAttribute::TAttributeStamina, MonsterData::TVariant(int32_t(6)) },
+			{ BestiaryEnum::MonsterAttribute::TAttributeAgility, MonsterData::TVariant(int32_t(0)) },
 			//TAttributeManualDexterity,
-			{ BestiaryEnum::MonsterAttribute::TAttributePerception, StaticLq::MonsterData::TVariant(int32_t(0)) },
-			{ BestiaryEnum::MonsterAttribute::TAttributeWillpower, StaticLq::MonsterData::TVariant(int32_t(-3)) },
-			{ BestiaryEnum::MonsterAttribute::TAttributeFaith, StaticLq::MonsterData::TVariant(int32_t(-3)) },
+			{ BestiaryEnum::MonsterAttribute::TAttributePerception, MonsterData::TVariant(int32_t(0)) },
+			{ BestiaryEnum::MonsterAttribute::TAttributeWillpower, MonsterData::TVariant(int32_t(-3)) },
+			{ BestiaryEnum::MonsterAttribute::TAttributeFaith, MonsterData::TVariant(int32_t(-3)) },
 
-			{ BestiaryEnum::MonsterAttribute::TIsEffectedByPoison, StaticLq::MonsterData::TVariant(int32_t(1)) },
-			{ BestiaryEnum::MonsterAttribute::TIsEffectedBySeverityDamage, StaticLq::MonsterData::TVariant(int32_t(1)) },
-			{ BestiaryEnum::MonsterAttribute::TIsEffectedByPysicalDamage, StaticLq::MonsterData::TVariant(int32_t(1)) },
-			{ BestiaryEnum::MonsterAttribute::TIsEffectedByMagicDamage, StaticLq::MonsterData::TVariant(int32_t(1)) },
-			{ BestiaryEnum::MonsterAttribute::TIsEffectedByFaithDamage, StaticLq::MonsterData::TVariant(int32_t(0)) },
+			{ BestiaryEnum::MonsterAttribute::TIsEffectedByPoison, MonsterData::TVariant(int32_t(1)) },
+			{ BestiaryEnum::MonsterAttribute::TIsEffectedBySeverityDamage, MonsterData::TVariant(int32_t(1)) },
+			{ BestiaryEnum::MonsterAttribute::TIsEffectedByPysicalDamage, MonsterData::TVariant(int32_t(1)) },
+			{ BestiaryEnum::MonsterAttribute::TIsEffectedByMagicDamage, MonsterData::TVariant(int32_t(1)) },
+			{ BestiaryEnum::MonsterAttribute::TIsEffectedByFaithDamage, MonsterData::TVariant(int32_t(0)) },
 		};
 
 		result->_implementation->AddData(s_key_giant_ant, monster_data);
@@ -329,16 +337,16 @@ std::shared_ptr<StaticLq::BestiaryPool> StaticLq::BestiaryPool::FactoryWithTestD
 
 	// s_key_giant_ant_worker
 	{
-		std::shared_ptr<StaticLq::MonsterData> monster_data = std::make_shared<StaticLq::MonsterData>();
+		std::shared_ptr<MonsterData> monster_data = std::make_shared<MonsterData>();
 		monster_data->ParentID = s_key_giant_ant;
 		monster_data->MapAttibute = {
-			{ BestiaryEnum::MonsterAttribute::TVariationName, StaticLq::MonsterData::TVariant(std::string(s_key_giant_ant_worker))},
+			{ BestiaryEnum::MonsterAttribute::TVariationName, MonsterData::TVariant(std::string(s_key_giant_ant_worker))},
 
-			{ BestiaryEnum::MonsterAttribute::TCombatLevel, StaticLq::MonsterData::TVariant(int32_t(1))},
-			{ BestiaryEnum::MonsterAttribute::TAttackBonus, StaticLq::MonsterData::TVariant(int32_t(3))},
-			{ BestiaryEnum::MonsterAttribute::TDefence, StaticLq::MonsterData::TVariant(int32_t(21))},
-			{ BestiaryEnum::MonsterAttribute::TDamageToleranceRollData, StaticLq::MonsterData::TVariant(StaticLq::RollData({15, 1, 10}))},
-			{ BestiaryEnum::MonsterAttribute::TExperencePointValue, StaticLq::MonsterData::TVariant(int32_t(15))},
+			{ BestiaryEnum::MonsterAttribute::TCombatLevel, MonsterData::TVariant(int32_t(1))},
+			{ BestiaryEnum::MonsterAttribute::TAttackBonus, MonsterData::TVariant(int32_t(3))},
+			{ BestiaryEnum::MonsterAttribute::TDefence, MonsterData::TVariant(int32_t(21))},
+			{ BestiaryEnum::MonsterAttribute::TDamageToleranceRollData, MonsterData::TVariant(RollData({15, 1, 10}))},
+			{ BestiaryEnum::MonsterAttribute::TExperencePointValue, MonsterData::TVariant(int32_t(15))},
 		};
 
 		result->_implementation->AddData(s_key_giant_ant_worker, monster_data);
@@ -346,18 +354,18 @@ std::shared_ptr<StaticLq::BestiaryPool> StaticLq::BestiaryPool::FactoryWithTestD
 
 	// s_key_giant_ant_warrior
 	{
-		std::shared_ptr<StaticLq::MonsterData> monster_data = std::make_shared<StaticLq::MonsterData>();
+		std::shared_ptr<MonsterData> monster_data = std::make_shared<MonsterData>();
 		monster_data->ParentID = s_key_giant_ant;
 		monster_data->MapAttibute = {
-			{ BestiaryEnum::MonsterAttribute::TVariationName, StaticLq::MonsterData::TVariant(std::string(s_key_giant_ant_warrior))},
+			{ BestiaryEnum::MonsterAttribute::TVariationName, MonsterData::TVariant(std::string(s_key_giant_ant_warrior))},
 
-			{ BestiaryEnum::MonsterAttribute::TCombatLevel, StaticLq::MonsterData::TVariant(int32_t(4))},
-			{ BestiaryEnum::MonsterAttribute::TAttackBonus, StaticLq::MonsterData::TVariant(int32_t(6))},
-			{ BestiaryEnum::MonsterAttribute::TDefence, StaticLq::MonsterData::TVariant(int32_t(22))},
-			{ BestiaryEnum::MonsterAttribute::TDamageToleranceRollData, StaticLq::MonsterData::TVariant(StaticLq::RollData({15, 4, 10}))},
-			{ BestiaryEnum::MonsterAttribute::TExperencePointValue, StaticLq::MonsterData::TVariant(int32_t(35))},
+			{ BestiaryEnum::MonsterAttribute::TCombatLevel, MonsterData::TVariant(int32_t(4))},
+			{ BestiaryEnum::MonsterAttribute::TAttackBonus, MonsterData::TVariant(int32_t(6))},
+			{ BestiaryEnum::MonsterAttribute::TDefence, MonsterData::TVariant(int32_t(22))},
+			{ BestiaryEnum::MonsterAttribute::TDamageToleranceRollData, MonsterData::TVariant(RollData({15, 4, 10}))},
+			{ BestiaryEnum::MonsterAttribute::TExperencePointValue, MonsterData::TVariant(int32_t(35))},
 
-			{ BestiaryEnum::MonsterAttribute::TMonsterAttackData, StaticLq::MonsterData::TVariant(
+			{ BestiaryEnum::MonsterAttribute::TMonsterAttackData, MonsterData::TVariant(
 				std::vector<MonsterAttackData>({
 					{
 						std::string(s_locale_key_attack_mandibles),
@@ -372,16 +380,16 @@ std::shared_ptr<StaticLq::BestiaryPool> StaticLq::BestiaryPool::FactoryWithTestD
 
 	// s_key_giant_ant_dew_pot_worker
 	{
-		std::shared_ptr<StaticLq::MonsterData> monster_data = std::make_shared<StaticLq::MonsterData>();
+		std::shared_ptr<MonsterData> monster_data = std::make_shared<MonsterData>();
 		monster_data->ParentID = s_key_giant_ant;
 		monster_data->MapAttibute = {
-			{ BestiaryEnum::MonsterAttribute::TVariationName, StaticLq::MonsterData::TVariant(std::string(s_key_giant_ant_dew_pot_worker))},
+			{ BestiaryEnum::MonsterAttribute::TVariationName, MonsterData::TVariant(std::string(s_key_giant_ant_dew_pot_worker))},
 
-			{ BestiaryEnum::MonsterAttribute::TCombatLevel, StaticLq::MonsterData::TVariant(int32_t(0))},
-			{ BestiaryEnum::MonsterAttribute::TAttackBonus, StaticLq::MonsterData::TVariant(int32_t(0))},
-			{ BestiaryEnum::MonsterAttribute::TDefence, StaticLq::MonsterData::TVariant(int32_t(5))},
-			{ BestiaryEnum::MonsterAttribute::TDamageToleranceRollData, StaticLq::MonsterData::TVariant(StaticLq::RollData({15, 1, 10}))},
-			{ BestiaryEnum::MonsterAttribute::TExperencePointValue, StaticLq::MonsterData::TVariant(int32_t(1))},
+			{ BestiaryEnum::MonsterAttribute::TCombatLevel, MonsterData::TVariant(int32_t(0))},
+			{ BestiaryEnum::MonsterAttribute::TAttackBonus, MonsterData::TVariant(int32_t(0))},
+			{ BestiaryEnum::MonsterAttribute::TDefence, MonsterData::TVariant(int32_t(5))},
+			{ BestiaryEnum::MonsterAttribute::TDamageToleranceRollData, MonsterData::TVariant(RollData({15, 1, 10}))},
+			{ BestiaryEnum::MonsterAttribute::TExperencePointValue, MonsterData::TVariant(int32_t(1))},
 		};
 
 		result->_implementation->AddData(s_key_giant_ant_dew_pot_worker, monster_data);
@@ -389,19 +397,159 @@ std::shared_ptr<StaticLq::BestiaryPool> StaticLq::BestiaryPool::FactoryWithTestD
 
 	// s_key_giant_ant_queen
 	{
-		std::shared_ptr<StaticLq::MonsterData> monster_data = std::make_shared<StaticLq::MonsterData>();
+		std::shared_ptr<MonsterData> monster_data = std::make_shared<MonsterData>();
 		monster_data->ParentID = s_key_giant_ant;
 		monster_data->MapAttibute = {
-			{ BestiaryEnum::MonsterAttribute::TVariationName, StaticLq::MonsterData::TVariant(std::string(s_key_giant_ant_queen))},
+			{ BestiaryEnum::MonsterAttribute::TVariationName, MonsterData::TVariant(std::string(s_key_giant_ant_queen))},
 
-			{ BestiaryEnum::MonsterAttribute::TCombatLevel, StaticLq::MonsterData::TVariant(int32_t(0))},
-			{ BestiaryEnum::MonsterAttribute::TAttackBonus, StaticLq::MonsterData::TVariant(int32_t(0))},
-			{ BestiaryEnum::MonsterAttribute::TDefence, StaticLq::MonsterData::TVariant(int32_t(5))},
-			{ BestiaryEnum::MonsterAttribute::TDamageToleranceRollData, StaticLq::MonsterData::TVariant(StaticLq::RollData({80, 2, 10}))},
-			{ BestiaryEnum::MonsterAttribute::TExperencePointValue, StaticLq::MonsterData::TVariant(int32_t(2))},
+			{ BestiaryEnum::MonsterAttribute::TCombatLevel, MonsterData::TVariant(int32_t(0))},
+			{ BestiaryEnum::MonsterAttribute::TAttackBonus, MonsterData::TVariant(int32_t(0))},
+			{ BestiaryEnum::MonsterAttribute::TDefence, MonsterData::TVariant(int32_t(5))},
+			{ BestiaryEnum::MonsterAttribute::TDamageToleranceRollData, MonsterData::TVariant(RollData({80, 2, 10}))},
+			{ BestiaryEnum::MonsterAttribute::TExperencePointValue, MonsterData::TVariant(int32_t(2))},
 		};
 
 		result->_implementation->AddData(s_key_giant_ant_queen, monster_data);
+	}
+
+	//tome_of_terrors.pdf page:142
+	// s_key_giant_spider_average
+	{
+		std::shared_ptr<MonsterData> monster_data = std::make_shared<MonsterData>();
+		monster_data->MapAttibute = {
+			{ BestiaryEnum::MonsterAttribute::TVariationName, MonsterData::TVariant(std::string(s_key_giant_spider_average))},
+
+			{ BestiaryEnum::MonsterAttribute::TNameKey, MonsterData::TVariant(NameSystem::GetKeyGiantSpider())},
+			{ BestiaryEnum::MonsterAttribute::TSpeciesName, MonsterData::TVariant(std::string(s_locale_key_species_giant_spider)) },
+			{ BestiaryEnum::MonsterAttribute::TDescription, MonsterData::TVariant(std::string(s_locale_key_description_giant_spider)) },
+
+			{ BestiaryEnum::MonsterAttribute::TCombatLevel, MonsterData::TVariant(int32_t(3)) },
+			{ BestiaryEnum::MonsterAttribute::TAttackBonus, MonsterData::TVariant(int32_t(5)) },
+			{ BestiaryEnum::MonsterAttribute::TDefence, MonsterData::TVariant(int32_t(24)) },
+			{ BestiaryEnum::MonsterAttribute::TDamageToleranceRollData, MonsterData::TVariant(RollData({10, 3, 10})) },
+			{ BestiaryEnum::MonsterAttribute::TExperencePointValue, MonsterData::TVariant(int32_t(20)) },
+
+			{ BestiaryEnum::MonsterAttribute::TSpeed, MonsterData::TVariant(int32_t(60)) },
+			{ BestiaryEnum::MonsterAttribute::TRecoveryTime, MonsterData::TVariant(int32_t(6)) },
+			{ BestiaryEnum::MonsterAttribute::TAbsorption, MonsterData::TVariant(int32_t(0)) },
+			{ BestiaryEnum::MonsterAttribute::TSurpriseAdjust, MonsterData::TVariant(int32_t(2)) },
+
+			{ BestiaryEnum::MonsterAttribute::TMonsterType, MonsterData::TVariant(BestiaryEnum::MonsterType::LivingCreature) },
+			{ BestiaryEnum::MonsterAttribute::THabitat, MonsterData::TVariant(BestiaryEnum::Habitat::TEverywhere) },
+			{ BestiaryEnum::MonsterAttribute::TLifestyle, MonsterData::TVariant(
+				static_cast<BestiaryEnum::Lifestyle>(
+					static_cast<int32_t>(BestiaryEnum::Lifestyle::TInstinctive) | 
+					static_cast<int32_t>(BestiaryEnum::Lifestyle::TArachnid)
+				)) },
+			{ BestiaryEnum::MonsterAttribute::TWealthType, MonsterData::TVariant(BestiaryEnum::WealthType::TIncidental) },
+			{ BestiaryEnum::MonsterAttribute::TAlignment, MonsterData::TVariant(BestiaryEnum::Alignment::TNeutral) },
+			{ BestiaryEnum::MonsterAttribute::TCunning, MonsterData::TVariant(BestiaryEnum::Cunning::TLow) },
+			{ BestiaryEnum::MonsterAttribute::TStrength, MonsterData::TVariant(BestiaryEnum::Strength::TBelowAverage) },
+			{ BestiaryEnum::MonsterAttribute::TSize, MonsterData::TVariant(BestiaryEnum::Size::TMedium)},
+			{ BestiaryEnum::MonsterAttribute::TSpecialCharacteristicData, MonsterData::TVariant(
+				std::vector<SpecialCharacteristicData>({
+					{ SpecialCharacteristics::TDarkVision },
+					{ SpecialCharacteristics::TAttackCuresDisease },
+				})
+			)},
+
+			{ BestiaryEnum::MonsterAttribute::TMonsterAttackData, MonsterData::TVariant(
+				std::vector<MonsterAttackData>({
+					{
+						std::string(s_locale_key_attack_bite),
+						RollData({0, 1, 4}),
+						false,
+						{{BestiaryEnum::PoisonType::TParalyzingVenom, 2}}
+					}
+				}))},
+
+			{ BestiaryEnum::MonsterAttribute::TAttributePhysicalStrength, MonsterData::TVariant(int32_t(-1)) },
+			{ BestiaryEnum::MonsterAttribute::TAttributeStamina, MonsterData::TVariant(int32_t(-1)) },
+			{ BestiaryEnum::MonsterAttribute::TAttributeAgility, MonsterData::TVariant(int32_t(1)) },
+			//TAttributeManualDexterity,
+			{ BestiaryEnum::MonsterAttribute::TAttributePerception, MonsterData::TVariant(int32_t(1)) },
+			{ BestiaryEnum::MonsterAttribute::TAttributeWillpower, MonsterData::TVariant(int32_t(-4)) },
+			{ BestiaryEnum::MonsterAttribute::TAttributeFaith, MonsterData::TVariant(int32_t(-4)) },
+
+			{ BestiaryEnum::MonsterAttribute::TIsEffectedByPoison, MonsterData::TVariant(int32_t(1)) },
+			{ BestiaryEnum::MonsterAttribute::TIsEffectedBySeverityDamage, MonsterData::TVariant(int32_t(1)) },
+			{ BestiaryEnum::MonsterAttribute::TIsEffectedByPysicalDamage, MonsterData::TVariant(int32_t(1)) },
+			{ BestiaryEnum::MonsterAttribute::TIsEffectedByMagicDamage, MonsterData::TVariant(int32_t(1)) },
+			{ BestiaryEnum::MonsterAttribute::TIsEffectedByFaithDamage, MonsterData::TVariant(int32_t(0)) },
+		};
+
+		result->_implementation->AddData(s_key_giant_spider_average, monster_data);
+	}
+
+	// s_key_giant_spider_below_average
+	{
+		std::shared_ptr<MonsterData> monster_data = std::make_shared<MonsterData>();
+		monster_data->ParentID = s_key_giant_spider_average;
+		monster_data->MapAttibute = {
+			{ BestiaryEnum::MonsterAttribute::TVariationName, MonsterData::TVariant(std::string(s_key_giant_spider_below_average))},
+
+			{ BestiaryEnum::MonsterAttribute::TCombatLevel, MonsterData::TVariant(int32_t(1)) },
+			{ BestiaryEnum::MonsterAttribute::TAttackBonus, MonsterData::TVariant(int32_t(3)) },
+			{ BestiaryEnum::MonsterAttribute::TDefence, MonsterData::TVariant(int32_t(22)) },
+			{ BestiaryEnum::MonsterAttribute::TDamageToleranceRollData, MonsterData::TVariant(RollData({10, 1, 10})) },
+			{ BestiaryEnum::MonsterAttribute::TExperencePointValue, MonsterData::TVariant(int32_t(9)) },
+		};
+
+		result->_implementation->AddData(s_key_giant_spider_below_average, monster_data);
+	}
+
+	// s_key_giant_spider_above_average
+	{
+		std::shared_ptr<MonsterData> monster_data = std::make_shared<MonsterData>();
+		monster_data->ParentID = s_key_giant_spider_average;
+		monster_data->MapAttibute = {
+			{ BestiaryEnum::MonsterAttribute::TVariationName, MonsterData::TVariant(std::string(s_key_giant_spider_above_average))},
+
+			{ BestiaryEnum::MonsterAttribute::TCombatLevel, MonsterData::TVariant(int32_t(5)) },
+			{ BestiaryEnum::MonsterAttribute::TAttackBonus, MonsterData::TVariant(int32_t(7)) },
+			{ BestiaryEnum::MonsterAttribute::TDefence, MonsterData::TVariant(int32_t(26)) },
+			{ BestiaryEnum::MonsterAttribute::TDamageToleranceRollData, MonsterData::TVariant(RollData({10, 5, 10})) },
+			{ BestiaryEnum::MonsterAttribute::TExperencePointValue, MonsterData::TVariant(int32_t(54)) },
+
+			{ BestiaryEnum::MonsterAttribute::TMonsterAttackData, MonsterData::TVariant(
+				std::vector<MonsterAttackData>({
+					{
+						std::string(s_locale_key_attack_bite),
+						RollData({0, 1, 6}),
+						false,
+						{{BestiaryEnum::PoisonType::TParalyzingVenom, 2}}
+					}
+				}))},
+		};
+
+		result->_implementation->AddData(s_key_giant_spider_above_average, monster_data);
+	}
+
+	// s_key_giant_spider_exceptional
+	{
+		std::shared_ptr<MonsterData> monster_data = std::make_shared<MonsterData>();
+		monster_data->ParentID = s_key_giant_spider_exceptional;
+		monster_data->MapAttibute = {
+			{ BestiaryEnum::MonsterAttribute::TVariationName, MonsterData::TVariant(std::string(s_key_giant_spider_exceptional))},
+
+			{ BestiaryEnum::MonsterAttribute::TCombatLevel, MonsterData::TVariant(int32_t(7)) },
+			{ BestiaryEnum::MonsterAttribute::TAttackBonus, MonsterData::TVariant(int32_t(9)) },
+			{ BestiaryEnum::MonsterAttribute::TDefence, MonsterData::TVariant(int32_t(28)) },
+			{ BestiaryEnum::MonsterAttribute::TDamageToleranceRollData, MonsterData::TVariant(RollData({15, 7, 10})) },
+			{ BestiaryEnum::MonsterAttribute::TExperencePointValue, MonsterData::TVariant(int32_t(162)) },
+
+			{ BestiaryEnum::MonsterAttribute::TMonsterAttackData, MonsterData::TVariant(
+				std::vector<MonsterAttackData>({
+					{
+						std::string(s_locale_key_attack_bite),
+						RollData({0, 1, 6}),
+						false,
+						{{BestiaryEnum::PoisonType::TParalyzingVenom, 2}}
+					}
+				}))},
+		};
+
+		result->_implementation->AddData(s_key_giant_spider_exceptional, monster_data);
 	}
 
 	return result;
