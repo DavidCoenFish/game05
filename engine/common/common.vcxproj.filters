@@ -1,932 +1,935 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-	<ClCompile Include="source\common\common_pch.cpp">
-	  <Filter>souce\common</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\platform.cpp">
-	  <Filter>souce\common</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\util\utf8.cpp">
-	  <Filter>souce\common\util</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\util\command_line.cpp">
-	  <Filter>souce\common\util</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\log\log.cpp">
-	  <Filter>souce\common\log</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\log\log_enum.cpp">
-	  <Filter>souce\common\log</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\worker\worker_task.cpp">
-	  <Filter>souce\common\worker</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\log\i_log_consumer.cpp">
-	  <Filter>souce\common\log</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\log\log_consumer_console.cpp">
-	  <Filter>souce\common\log</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\log\log_consumer_write_to_file.cpp">
-	  <Filter>souce\common\log</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\log\log_consumer_output_debug_string.cpp">
-	  <Filter>souce\common\log</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\file_system\file_system.cpp">
-	  <Filter>souce\common\file_system</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\task\i_task.cpp">
-	  <Filter>souce\common\task</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\task\task_window.cpp">
-	  <Filter>souce\common\task</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\window\window_helper.cpp">
-	  <Filter>souce\common\window</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\window\i_window_application.cpp">
-	  <Filter>souce\common\window</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\window\window_application_param.cpp">
-	  <Filter>souce\common\window</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\device_resources.cpp">
-	  <Filter>souce\common\draw_system</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\draw_system.cpp">
-	  <Filter>souce\common\draw_system</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\draw_system_frame.cpp">
-	  <Filter>souce\common\draw_system</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\i_resource.cpp">
-	  <Filter>souce\common\draw_system</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\screen_size_resources.cpp">
-	  <Filter>souce\common\draw_system</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\custom_command_list.cpp">
-	  <Filter>souce\common\draw_system</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\shader\constant_buffer_info.cpp">
-	  <Filter>souce\common\draw_system\shader</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\shader\shader.cpp">
-	  <Filter>souce\common\draw_system\shader</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\shader\shader_pipeline_state_data.cpp">
-	  <Filter>souce\common\draw_system\shader</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\shader\shader_resource.cpp">
-	  <Filter>souce\common\draw_system\shader</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\shader\shader_resource_info.cpp">
-	  <Filter>souce\common\draw_system\shader</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\shader\unordered_access.cpp">
-	  <Filter>souce\common\draw_system\shader</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\shader\unordered_access_info.cpp">
-	  <Filter>souce\common\draw_system\shader</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\shader\constant_buffer.cpp">
-	  <Filter>souce\common\draw_system\shader</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\render_target\render_target_depth_data.cpp">
-	  <Filter>souce\common\draw_system\render_target</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\render_target\render_target_format_data.cpp">
-	  <Filter>souce\common\draw_system\render_target</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\render_target\render_target_texture.cpp">
-	  <Filter>souce\common\draw_system\render_target</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\render_target\i_render_target.cpp">
-	  <Filter>souce\common\draw_system\render_target</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\render_target\render_target_backbuffer.cpp">
-	  <Filter>souce\common\draw_system\render_target</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\heap_wrapper\heap_wrapper_item.cpp">
-	  <Filter>souce\common\draw_system\heap_wrapper</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\heap_wrapper\heap_wrapper_page.cpp">
-	  <Filter>souce\common\draw_system\heap_wrapper</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\heap_wrapper\heap_wrapper.cpp">
-	  <Filter>souce\common\draw_system\heap_wrapper</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\geometry\i_geometry.cpp">
-	  <Filter>souce\common\draw_system\geometry</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\geometry\geometry_generic.cpp">
-	  <Filter>souce\common\draw_system\geometry</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\direct_xtk12\direct_x_helpers.cpp">
-	  <Filter>souce\common\direct_xtk12</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\direct_xtk12\graphics_memory.cpp">
-	  <Filter>souce\common\direct_xtk12</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\direct_xtk12\linear_allocator.cpp">
-	  <Filter>souce\common\direct_xtk12</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\math\quaternion_float.cpp">
-	  <Filter>souce\common\math</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\math\vector_float2.cpp">
-	  <Filter>souce\common\math</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\math\vector_float3.cpp">
-	  <Filter>souce\common\math</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\math\vector_float4.cpp">
-	  <Filter>souce\common\math</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\math\vector_math.cpp">
-	  <Filter>souce\common\math</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\math\matrix_float33.cpp">
-	  <Filter>souce\common\math</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\math\angle.cpp">
-	  <Filter>souce\common\math</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\direct_xtk12\handle_closer.cpp">
-	  <Filter>souce\common\direct_xtk12</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\util\timer.cpp">
-	  <Filter>souce\common\util</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\util\vector_helper.cpp">
-	  <Filter>souce\common\util</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\text\text_font.cpp">
-	  <Filter>souce\common\text</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\text\text_manager.cpp">
-	  <Filter>souce\common\text</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\math\vector_int2.cpp">
-	  <Filter>souce\common\math</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\text\text_block.cpp">
-	  <Filter>souce\common\text</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_manager.cpp">
-	  <Filter>souce\common\ui</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\math\vector_int4.cpp">
-	  <Filter>souce\common\math</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\text\text_cell.cpp">
-	  <Filter>souce\common\text</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\text\text_glyph_row.cpp">
-	  <Filter>souce\common\text</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\text\text_texture.cpp">
-	  <Filter>souce\common\text</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\text\text_locale.cpp">
-	  <Filter>souce\common\text</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_coord.cpp">
-	  <Filter>souce\common\ui</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_geometry.cpp">
-	  <Filter>souce\common\ui</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_hierarchy_node.cpp">
-	  <Filter>souce\common\ui</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_texture.cpp">
-	  <Filter>souce\common\ui</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_data\ui_data.cpp">
-	  <Filter>souce\common\ui\ui_data</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\i_ui_model.cpp">
-	  <Filter>souce\common\ui</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_root_input_state.cpp">
-	  <Filter>souce\common\ui</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\text\text_pre_vertex.cpp">
-	  <Filter>souce\common\text</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\text\text_run.cpp">
-	  <Filter>souce\common\text</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_layout.cpp">
-	  <Filter>souce\common\ui</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\text\icon_font.cpp">
-	  <Filter>souce\common\text</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\text\i_text_run_data.cpp">
-	  <Filter>souce\common\text</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\text\text_run_data_string.cpp">
-	  <Filter>souce\common\text</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\text\text_run_data_icon.cpp">
-	  <Filter>souce\common\text</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\math\dsc_math.cpp">
-	  <Filter>souce\common\math</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\util\hash.cpp">
-	  <Filter>souce\common\util</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_screen_space.cpp">
-	  <Filter>souce\common\ui</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\i_ui_input.cpp">
-	  <Filter>souce\common\ui</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\shader\shader_constant_buffer.cpp">
-	  <Filter>souce\common\draw_system\shader</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_base_colour.cpp">
-	  <Filter>souce\common\ui</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_component\i_ui_component.cpp">
-	  <Filter>souce\common\ui\ui_component</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_component\ui_component_canvas.cpp">
-	  <Filter>souce\common\ui\ui_component</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\draw_system\draw_system_resource_list.cpp">
-	  <Filter>souce\common\draw_system</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_data\ui_data_text_run.cpp">
-	  <Filter>souce\common\ui\ui_data</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_data\ui_data_string.cpp">
-	  <Filter>souce\common\ui\ui_data</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_component\ui_component_string.cpp">
-	  <Filter>souce\common\ui\ui_component</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_effect\ui_effect_component.cpp">
-	  <Filter>souce\common\ui\ui_effect</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_effect\ui_effect_data.cpp">
-	  <Filter>souce\common\ui\ui_effect</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\math\vector_short2.cpp">
-	  <Filter>souce\common\math</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_data\ui_data_stack.cpp">
-	  <Filter>souce\common\ui\ui_data</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_component\ui_component_stack.cpp">
-	  <Filter>souce\common\ui\ui_component</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_tint_colour.cpp">
-	  <Filter>souce\common\ui</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_hierarchy_node_child.cpp">
-	  <Filter>souce\common\ui</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_data\ui_data_canvas.cpp">
-	  <Filter>souce\common\ui\ui_data</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_data\ui_data_button.cpp">
-	  <Filter>souce\common\ui\ui_data</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_component\ui_component_button.cpp">
-	  <Filter>souce\common\ui\ui_component</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_component\ui_component_text_run.cpp">
-	  <Filter>souce\common\ui\ui_component</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\ui\ui_data\ui_data_toggle.cpp">
-	  <Filter>souce\common\ui\ui_data</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\bezier\bezier_curve.cpp">
-	  <Filter>souce\common\bezier</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\bezier\bezier_manager.cpp">
-	  <Filter>souce\common\bezier</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\bezier\bezier_file_helper.cpp">
-	  <Filter>souce\common\bezier</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\bezier\bezier_simulate.cpp">
-	  <Filter>souce\common\bezier</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\bezier\bezier_border_helper.cpp">
-	  <Filter>souce\common\bezier</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\dag\threaded\dag_threaded_node_calculate.cpp">
-	  <Filter>souce\common\dag\threaded</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\dag\threaded\dag_threaded_node_variable.cpp">
-	  <Filter>souce\common\dag\threaded</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\dag\threaded\dag_threaded_value.cpp">
-	  <Filter>souce\common\dag\threaded</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\dag\threaded\i_dag_threaded_node.cpp">
-	  <Filter>souce\common\dag\threaded</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\dag\threaded\i_dag_threaded_value.cpp">
-	  <Filter>souce\common\dag\threaded</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\dag\threaded\dag_threaded_collection.cpp">
-	  <Filter>souce\common\dag\threaded</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\tooltip\i_tooltip_action.cpp">
-	  <Filter>souce\common\tooltip</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\tooltip\tooltip.cpp">
-	  <Filter>souce\common\tooltip</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\tooltip\tooltip_data.cpp">
-	  <Filter>souce\common\tooltip</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\dag\threaded\i_dag_threaded_visitor.cpp">
-	  <Filter>souce\common\dag\threaded</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\locale\locale_string_format_lambda.cpp">
-	  <Filter>souce\common\locale</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\locale\locale_enum.cpp">
-	  <Filter>souce\common\locale</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\locale\i_locale_string_format.cpp">
-	  <Filter>souce\common\locale</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\locale\i_locale_data_provider.cpp">
-	  <Filter>souce\common\locale</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\locale\locale_system.cpp">
-	  <Filter>souce\common\locale</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\locale\locale_string_format_simple.cpp">
-	  <Filter>souce\common\locale</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\locale\locale_string_format_map.cpp">
-	  <Filter>souce\common\locale</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common\dag\threaded\dag_threaded.cpp">
-	  <Filter>souce\common\dag\threaded</Filter>
-	</ClCompile>
+    <ClCompile Include="source\common\common_pch.cpp">
+      <Filter>souce\common</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\platform.cpp">
+      <Filter>souce\common</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\util\utf8.cpp">
+      <Filter>souce\common\util</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\util\command_line.cpp">
+      <Filter>souce\common\util</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\log\log.cpp">
+      <Filter>souce\common\log</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\log\log_enum.cpp">
+      <Filter>souce\common\log</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\worker\worker_task.cpp">
+      <Filter>souce\common\worker</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\log\i_log_consumer.cpp">
+      <Filter>souce\common\log</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\log\log_consumer_console.cpp">
+      <Filter>souce\common\log</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\log\log_consumer_write_to_file.cpp">
+      <Filter>souce\common\log</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\log\log_consumer_output_debug_string.cpp">
+      <Filter>souce\common\log</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\file_system\file_system.cpp">
+      <Filter>souce\common\file_system</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\task\i_task.cpp">
+      <Filter>souce\common\task</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\task\task_window.cpp">
+      <Filter>souce\common\task</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\window\window_helper.cpp">
+      <Filter>souce\common\window</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\window\i_window_application.cpp">
+      <Filter>souce\common\window</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\window\window_application_param.cpp">
+      <Filter>souce\common\window</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\device_resources.cpp">
+      <Filter>souce\common\draw_system</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\draw_system.cpp">
+      <Filter>souce\common\draw_system</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\draw_system_frame.cpp">
+      <Filter>souce\common\draw_system</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\i_resource.cpp">
+      <Filter>souce\common\draw_system</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\screen_size_resources.cpp">
+      <Filter>souce\common\draw_system</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\custom_command_list.cpp">
+      <Filter>souce\common\draw_system</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\shader\constant_buffer_info.cpp">
+      <Filter>souce\common\draw_system\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\shader\shader.cpp">
+      <Filter>souce\common\draw_system\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\shader\shader_pipeline_state_data.cpp">
+      <Filter>souce\common\draw_system\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\shader\shader_resource.cpp">
+      <Filter>souce\common\draw_system\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\shader\shader_resource_info.cpp">
+      <Filter>souce\common\draw_system\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\shader\unordered_access.cpp">
+      <Filter>souce\common\draw_system\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\shader\unordered_access_info.cpp">
+      <Filter>souce\common\draw_system\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\shader\constant_buffer.cpp">
+      <Filter>souce\common\draw_system\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\render_target\render_target_depth_data.cpp">
+      <Filter>souce\common\draw_system\render_target</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\render_target\render_target_format_data.cpp">
+      <Filter>souce\common\draw_system\render_target</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\render_target\render_target_texture.cpp">
+      <Filter>souce\common\draw_system\render_target</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\render_target\i_render_target.cpp">
+      <Filter>souce\common\draw_system\render_target</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\render_target\render_target_backbuffer.cpp">
+      <Filter>souce\common\draw_system\render_target</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\heap_wrapper\heap_wrapper_item.cpp">
+      <Filter>souce\common\draw_system\heap_wrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\heap_wrapper\heap_wrapper_page.cpp">
+      <Filter>souce\common\draw_system\heap_wrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\heap_wrapper\heap_wrapper.cpp">
+      <Filter>souce\common\draw_system\heap_wrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\geometry\i_geometry.cpp">
+      <Filter>souce\common\draw_system\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\geometry\geometry_generic.cpp">
+      <Filter>souce\common\draw_system\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\direct_xtk12\direct_x_helpers.cpp">
+      <Filter>souce\common\direct_xtk12</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\direct_xtk12\graphics_memory.cpp">
+      <Filter>souce\common\direct_xtk12</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\direct_xtk12\linear_allocator.cpp">
+      <Filter>souce\common\direct_xtk12</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\math\quaternion_float.cpp">
+      <Filter>souce\common\math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\math\vector_float2.cpp">
+      <Filter>souce\common\math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\math\vector_float3.cpp">
+      <Filter>souce\common\math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\math\vector_float4.cpp">
+      <Filter>souce\common\math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\math\vector_math.cpp">
+      <Filter>souce\common\math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\math\matrix_float33.cpp">
+      <Filter>souce\common\math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\math\angle.cpp">
+      <Filter>souce\common\math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\direct_xtk12\handle_closer.cpp">
+      <Filter>souce\common\direct_xtk12</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\util\timer.cpp">
+      <Filter>souce\common\util</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\util\vector_helper.cpp">
+      <Filter>souce\common\util</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\text\text_font.cpp">
+      <Filter>souce\common\text</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\text\text_manager.cpp">
+      <Filter>souce\common\text</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\math\vector_int2.cpp">
+      <Filter>souce\common\math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\text\text_block.cpp">
+      <Filter>souce\common\text</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_manager.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\math\vector_int4.cpp">
+      <Filter>souce\common\math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\text\text_cell.cpp">
+      <Filter>souce\common\text</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\text\text_glyph_row.cpp">
+      <Filter>souce\common\text</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\text\text_texture.cpp">
+      <Filter>souce\common\text</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\text\text_locale.cpp">
+      <Filter>souce\common\text</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_coord.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_geometry.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_hierarchy_node.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_texture.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_data\ui_data.cpp">
+      <Filter>souce\common\ui\ui_data</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\i_ui_model.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_root_input_state.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\text\text_pre_vertex.cpp">
+      <Filter>souce\common\text</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\text\text_run.cpp">
+      <Filter>souce\common\text</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_layout.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\text\icon_font.cpp">
+      <Filter>souce\common\text</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\text\i_text_run_data.cpp">
+      <Filter>souce\common\text</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\text\text_run_data_string.cpp">
+      <Filter>souce\common\text</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\text\text_run_data_icon.cpp">
+      <Filter>souce\common\text</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\math\dsc_math.cpp">
+      <Filter>souce\common\math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\util\hash.cpp">
+      <Filter>souce\common\util</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_screen_space.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\i_ui_input.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\shader\shader_constant_buffer.cpp">
+      <Filter>souce\common\draw_system\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_base_colour.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_component\i_ui_component.cpp">
+      <Filter>souce\common\ui\ui_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_component\ui_component_canvas.cpp">
+      <Filter>souce\common\ui\ui_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\draw_system\draw_system_resource_list.cpp">
+      <Filter>souce\common\draw_system</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_data\ui_data_text_run.cpp">
+      <Filter>souce\common\ui\ui_data</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_data\ui_data_string.cpp">
+      <Filter>souce\common\ui\ui_data</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_component\ui_component_string.cpp">
+      <Filter>souce\common\ui\ui_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_effect\ui_effect_component.cpp">
+      <Filter>souce\common\ui\ui_effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_effect\ui_effect_data.cpp">
+      <Filter>souce\common\ui\ui_effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\math\vector_short2.cpp">
+      <Filter>souce\common\math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_data\ui_data_stack.cpp">
+      <Filter>souce\common\ui\ui_data</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_component\ui_component_stack.cpp">
+      <Filter>souce\common\ui\ui_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_tint_colour.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_hierarchy_node_child.cpp">
+      <Filter>souce\common\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_data\ui_data_canvas.cpp">
+      <Filter>souce\common\ui\ui_data</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_data\ui_data_button.cpp">
+      <Filter>souce\common\ui\ui_data</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_component\ui_component_button.cpp">
+      <Filter>souce\common\ui\ui_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_component\ui_component_text_run.cpp">
+      <Filter>souce\common\ui\ui_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\ui\ui_data\ui_data_toggle.cpp">
+      <Filter>souce\common\ui\ui_data</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\bezier\bezier_curve.cpp">
+      <Filter>souce\common\bezier</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\bezier\bezier_manager.cpp">
+      <Filter>souce\common\bezier</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\bezier\bezier_file_helper.cpp">
+      <Filter>souce\common\bezier</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\bezier\bezier_simulate.cpp">
+      <Filter>souce\common\bezier</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\bezier\bezier_border_helper.cpp">
+      <Filter>souce\common\bezier</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\dag\threaded\dag_threaded_node_calculate.cpp">
+      <Filter>souce\common\dag\threaded</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\dag\threaded\dag_threaded_node_variable.cpp">
+      <Filter>souce\common\dag\threaded</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\dag\threaded\dag_threaded_value.cpp">
+      <Filter>souce\common\dag\threaded</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\dag\threaded\i_dag_threaded_node.cpp">
+      <Filter>souce\common\dag\threaded</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\dag\threaded\i_dag_threaded_value.cpp">
+      <Filter>souce\common\dag\threaded</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\dag\threaded\dag_threaded_collection.cpp">
+      <Filter>souce\common\dag\threaded</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\dag\threaded\i_dag_threaded_visitor.cpp">
+      <Filter>souce\common\dag\threaded</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\locale\locale_string_format_lambda.cpp">
+      <Filter>souce\common\locale</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\locale\locale_enum.cpp">
+      <Filter>souce\common\locale</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\locale\i_locale_string_format.cpp">
+      <Filter>souce\common\locale</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\locale\i_locale_data_provider.cpp">
+      <Filter>souce\common\locale</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\locale\locale_system.cpp">
+      <Filter>souce\common\locale</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\locale\locale_string_format_simple.cpp">
+      <Filter>souce\common\locale</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\locale\locale_string_format_map.cpp">
+      <Filter>souce\common\locale</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\dag\threaded\dag_threaded.cpp">
+      <Filter>souce\common\dag\threaded</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\tooltip\tooltip_link.cpp">
+      <Filter>souce\common\tooltip</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\tooltip\tooltip_text.cpp">
+      <Filter>souce\common\tooltip</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\tooltip\i_tooltip.cpp">
+      <Filter>souce\common\tooltip</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-	<ClInclude Include="source\common\common_pch.h">
-	  <Filter>souce\common</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\common.h">
-	  <Filter>include\common</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\platform.h">
-	  <Filter>include\common</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\macro.h">
-	  <Filter>include\common</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\util\utf8.h">
-	  <Filter>include\common\util</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\util\command_line.h">
-	  <Filter>include\common\util</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\log\log.h">
-	  <Filter>include\common\log</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\log\log_enum.h">
-	  <Filter>include\common\log</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\worker\worker_task.h">
-	  <Filter>include\common\worker</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\log\i_log_consumer.h">
-	  <Filter>souce\common\log</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\log\log_consumer_console.h">
-	  <Filter>souce\common\log</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\log\log_consumer_write_to_file.h">
-	  <Filter>souce\common\log</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\log\log_consumer_output_debug_string.h">
-	  <Filter>souce\common\log</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\file_system\file_system.h">
-	  <Filter>include\common\file_system</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\task\i_task.h">
-	  <Filter>include\common\task</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\task\task_window.h">
-	  <Filter>include\common\task</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\window\window_helper.h">
-	  <Filter>souce\common\window</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\draw_system\screen_size_resources.h">
-	  <Filter>souce\common\draw_system</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\draw_system\render_target\render_target_backbuffer.h">
-	  <Filter>souce\common\draw_system\render_target</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\draw_system\heap_wrapper\heap_wrapper_item.h">
-	  <Filter>souce\common\draw_system\heap_wrapper</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\draw_system\heap_wrapper\heap_wrapper_page.h">
-	  <Filter>souce\common\draw_system\heap_wrapper</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\draw_system\heap_wrapper\heap_wrapper.h">
-	  <Filter>souce\common\draw_system\heap_wrapper</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\direct_xtk12\direct_x_helpers.h">
-	  <Filter>souce\common\direct_xtk12</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\direct_xtk12\graphics_memory.h">
-	  <Filter>souce\common\direct_xtk12</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\direct_xtk12\linear_allocator.h">
-	  <Filter>souce\common\direct_xtk12</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\window\i_window_application.h">
-	  <Filter>include\common\window</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\draw_system\custom_command_list.h">
-	  <Filter>include\common\draw_system</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\draw_system\draw_system.h">
-	  <Filter>include\common\draw_system</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\draw_system\draw_system_frame.h">
-	  <Filter>include\common\draw_system</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\draw_system\shader\shader.h">
-	  <Filter>include\common\draw_system\shader</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\draw_system\shader\shader_pipeline_state_data.h">
-	  <Filter>include\common\draw_system\shader</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\draw_system\geometry\geometry_generic.h">
-	  <Filter>include\common\draw_system\geometry</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\draw_system\geometry\i_geometry.h">
-	  <Filter>include\common\draw_system\geometry</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\draw_system\i_resource.h">
-	  <Filter>include\common\draw_system</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\draw_system\render_target\render_target_depth_data.h">
-	  <Filter>include\common\draw_system\render_target</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\draw_system\render_target\render_target_format_data.h">
-	  <Filter>include\common\draw_system\render_target</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\math\matrix_float33.h">
-	  <Filter>include\common\math</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\math\quaternion_float.h">
-	  <Filter>include\common\math</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\math\vector_float2.h">
-	  <Filter>include\common\math</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\math\vector_float3.h">
-	  <Filter>include\common\math</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\math\vector_float4.h">
-	  <Filter>include\common\math</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\math\vector_math.h">
-	  <Filter>include\common\math</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\draw_system\shader\constant_buffer_info.h">
-	  <Filter>include\common\draw_system\shader</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\direct_xtk12\d3dx12.h">
-	  <Filter>include\common\direct_xtk12</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\window\window_application_param.h">
-	  <Filter>include\common\window</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\math\angle.h">
-	  <Filter>include\common\math</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\direct_xtk12\handle_closer.h">
-	  <Filter>souce\common\direct_xtk12</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\util\timer.h">
-	  <Filter>include\common\util</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\draw_system\device_resources.h">
-	  <Filter>souce\common\draw_system</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\util\vector_helper.h">
-	  <Filter>include\common\util</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\draw_system\shader\shader_resource_info.h">
-	  <Filter>include\common\draw_system\shader</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\draw_system\shader\unordered_access_info.h">
-	  <Filter>include\common\draw_system\shader</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\draw_system\shader\shader_resource.h">
-	  <Filter>include\common\draw_system\shader</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\draw_system\shader\unordered_access.h">
-	  <Filter>include\common\draw_system\shader</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\draw_system\render_target\render_target_texture.h">
-	  <Filter>include\common\draw_system\render_target</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\draw_system\render_target\i_render_target.h">
-	  <Filter>include\common\draw_system\render_target</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\text\text_font.h">
-	  <Filter>include\common\text</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\text\text_manager.h">
-	  <Filter>include\common\text</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\text\text_enum.h">
-	  <Filter>include\common\text</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\math\vector_int2.h">
-	  <Filter>include\common\math</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\text\text_block.h">
-	  <Filter>include\common\text</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\ui_manager.h">
-	  <Filter>include\common\ui</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\math\vector_int4.h">
-	  <Filter>include\common\math</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\text\text_cell.h">
-	  <Filter>souce\common\text</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\text\text_glyph_row.h">
-	  <Filter>souce\common\text</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\text\text_texture.h">
-	  <Filter>souce\common\text</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\text\text_locale.h">
-	  <Filter>souce\common\text</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\ui_coord.h">
-	  <Filter>include\common\ui</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\ui_hierarchy_node.h">
-	  <Filter>include\common\ui</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\ui\ui_geometry.h">
-	  <Filter>souce\common\ui</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\ui_texture.h">
-	  <Filter>include\common\ui</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\ui_data\ui_data.h">
-	  <Filter>include\common\ui\ui_data</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\i_ui_model.h">
-	  <Filter>include\common\ui</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\ui\ui_root_input_state.h">
-	  <Filter>souce\common\ui</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\text\text_pre_vertex.h">
-	  <Filter>include\common\text</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\text\text_run.h">
-	  <Filter>include\common\text</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\ui_layout.h">
-	  <Filter>include\common\ui</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\locale\locale_system.h">
-	  <Filter>include\common\locale</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\locale\locale_enum.h">
-	  <Filter>include\common\locale</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\util\enum_soft_bind.h">
-	  <Filter>include\common\util</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\text\icon_font.h">
-	  <Filter>include\common\text</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\text\i_text_run_data.h">
-	  <Filter>include\common\text</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\text\text_run_data_icon.h">
-	  <Filter>souce\common\text</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\text\text_run_data_string.h">
-	  <Filter>souce\common\text</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\math\dsc_math.h">
-	  <Filter>include\common\math</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\util\hash.h">
-	  <Filter>include\common\util</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\ui\ui_screen_space.h">
-	  <Filter>souce\common\ui</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\i_ui_input.h">
-	  <Filter>include\common\ui</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\draw_system\shader\shader_constant_buffer.h">
-	  <Filter>include\common\draw_system\shader</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\draw_system\shader\constant_buffer.h">
-	  <Filter>include\common\draw_system\shader</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\ui_base_colour.h">
-	  <Filter>include\common\ui</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\ui_component\i_ui_component.h">
-	  <Filter>include\common\ui\ui_component</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\ui_component\ui_component_canvas.h">
-	  <Filter>include\common\ui\ui_component</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\draw_system\draw_system_resource_list.h">
-	  <Filter>include\common\draw_system</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\ui_enum.h">
-	  <Filter>include\common\ui</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\ui_data\ui_data_text_run.h">
-	  <Filter>include\common\ui\ui_data</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\ui_data\ui_data_string.h">
-	  <Filter>include\common\ui\ui_data</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\ui_component\ui_component_string.h">
-	  <Filter>include\common\ui\ui_component</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\ui_effect\ui_effect_component.h">
-	  <Filter>include\common\ui\ui_effect</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\ui_effect\ui_effect_data.h">
-	  <Filter>include\common\ui\ui_effect</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\math\vector_short2.h">
-	  <Filter>include\common\math</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\ui_data\ui_data_stack.h">
-	  <Filter>include\common\ui\ui_data</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\ui_component\ui_component_stack.h">
-	  <Filter>include\common\ui\ui_component</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\ui_tint_colour.h">
-	  <Filter>include\common\ui</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\ui_hierarchy_node_child.h">
-	  <Filter>include\common\ui</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\ui_data\ui_data_canvas.h">
-	  <Filter>include\common\ui\ui_data</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\ui_data\ui_data_button.h">
-	  <Filter>include\common\ui\ui_data</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\ui_component\ui_component_button.h">
-	  <Filter>include\common\ui\ui_component</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\ui_component\ui_component_text_run.h">
-	  <Filter>include\common\ui\ui_component</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\ui\ui_data\ui_data_toggle.h">
-	  <Filter>include\common\ui\ui_data</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\bezier\bezier_manager.h">
-	  <Filter>include\common\bezier</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\bezier\bezier_curve.h">
-	  <Filter>include\common\bezier</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\bezier\bezier_file_helper.h">
-	  <Filter>include\common\bezier</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\bezier\bezier_simulate.h">
-	  <Filter>include\common\bezier</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\bezier\bezier_border_helper.h">
-	  <Filter>include\common\bezier</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\dag\threaded\dag_threaded_collection.h">
-	  <Filter>include\common\dag\threaded</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\dag\threaded\dag_threaded_helper.h">
-	  <Filter>include\common\dag\threaded</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\dag\threaded\i_dag_threaded_value.h">
-	  <Filter>include\common\dag\threaded</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\dag\threaded\dag_threaded.h">
-	  <Filter>include\common\dag\threaded</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\dag\threaded\dag_threaded_node_calculate.h">
-	  <Filter>souce\common\dag\threaded</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\dag\threaded\dag_threaded_node_variable.h">
-	  <Filter>souce\common\dag\threaded</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\dag\threaded\i_dag_threaded_node.h">
-	  <Filter>souce\common\dag\threaded</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\tooltip\tooltip.h">
-	  <Filter>include\common\tooltip</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\tooltip\tooltip_data.h">
-	  <Filter>include\common\tooltip</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\dag\threaded\i_dag_threaded_visitor.h">
-	  <Filter>include\common\dag\threaded</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\locale\i_locale_data_provider.h">
-	  <Filter>include\common\locale</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\locale\i_locale_string_format.h">
-	  <Filter>include\common\locale</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\locale\locale_string_format_simple.h">
-	  <Filter>include\common\locale</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\locale\locale_string_format_lambda.h">
-	  <Filter>include\common\locale</Filter>
-	</ClInclude>
-	<ClInclude Include="include\common\locale\locale_string_format_map.h">
-	  <Filter>include\common\locale</Filter>
-	</ClInclude>
-	<ClInclude Include="source\common\dag\threaded\dag_threaded_value.h">
-	  <Filter>include\common\dag\threaded</Filter>
-	</ClInclude>
+    <ClInclude Include="source\common\common_pch.h">
+      <Filter>souce\common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\common.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\platform.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\macro.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\util\utf8.h">
+      <Filter>include\common\util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\util\command_line.h">
+      <Filter>include\common\util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\log\log.h">
+      <Filter>include\common\log</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\log\log_enum.h">
+      <Filter>include\common\log</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\worker\worker_task.h">
+      <Filter>include\common\worker</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\log\i_log_consumer.h">
+      <Filter>souce\common\log</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\log\log_consumer_console.h">
+      <Filter>souce\common\log</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\log\log_consumer_write_to_file.h">
+      <Filter>souce\common\log</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\log\log_consumer_output_debug_string.h">
+      <Filter>souce\common\log</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\file_system\file_system.h">
+      <Filter>include\common\file_system</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\task\i_task.h">
+      <Filter>include\common\task</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\task\task_window.h">
+      <Filter>include\common\task</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\window\window_helper.h">
+      <Filter>souce\common\window</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\draw_system\screen_size_resources.h">
+      <Filter>souce\common\draw_system</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\draw_system\render_target\render_target_backbuffer.h">
+      <Filter>souce\common\draw_system\render_target</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\draw_system\heap_wrapper\heap_wrapper_item.h">
+      <Filter>souce\common\draw_system\heap_wrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\draw_system\heap_wrapper\heap_wrapper_page.h">
+      <Filter>souce\common\draw_system\heap_wrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\draw_system\heap_wrapper\heap_wrapper.h">
+      <Filter>souce\common\draw_system\heap_wrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\direct_xtk12\direct_x_helpers.h">
+      <Filter>souce\common\direct_xtk12</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\direct_xtk12\graphics_memory.h">
+      <Filter>souce\common\direct_xtk12</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\direct_xtk12\linear_allocator.h">
+      <Filter>souce\common\direct_xtk12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\window\i_window_application.h">
+      <Filter>include\common\window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\custom_command_list.h">
+      <Filter>include\common\draw_system</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\draw_system.h">
+      <Filter>include\common\draw_system</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\draw_system_frame.h">
+      <Filter>include\common\draw_system</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\shader\shader.h">
+      <Filter>include\common\draw_system\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\shader\shader_pipeline_state_data.h">
+      <Filter>include\common\draw_system\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\geometry\geometry_generic.h">
+      <Filter>include\common\draw_system\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\geometry\i_geometry.h">
+      <Filter>include\common\draw_system\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\i_resource.h">
+      <Filter>include\common\draw_system</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\render_target\render_target_depth_data.h">
+      <Filter>include\common\draw_system\render_target</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\render_target\render_target_format_data.h">
+      <Filter>include\common\draw_system\render_target</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\math\matrix_float33.h">
+      <Filter>include\common\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\math\quaternion_float.h">
+      <Filter>include\common\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\math\vector_float2.h">
+      <Filter>include\common\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\math\vector_float3.h">
+      <Filter>include\common\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\math\vector_float4.h">
+      <Filter>include\common\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\math\vector_math.h">
+      <Filter>include\common\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\shader\constant_buffer_info.h">
+      <Filter>include\common\draw_system\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\direct_xtk12\d3dx12.h">
+      <Filter>include\common\direct_xtk12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\window\window_application_param.h">
+      <Filter>include\common\window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\math\angle.h">
+      <Filter>include\common\math</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\direct_xtk12\handle_closer.h">
+      <Filter>souce\common\direct_xtk12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\util\timer.h">
+      <Filter>include\common\util</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\draw_system\device_resources.h">
+      <Filter>souce\common\draw_system</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\util\vector_helper.h">
+      <Filter>include\common\util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\shader\shader_resource_info.h">
+      <Filter>include\common\draw_system\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\shader\unordered_access_info.h">
+      <Filter>include\common\draw_system\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\shader\shader_resource.h">
+      <Filter>include\common\draw_system\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\shader\unordered_access.h">
+      <Filter>include\common\draw_system\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\render_target\render_target_texture.h">
+      <Filter>include\common\draw_system\render_target</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\render_target\i_render_target.h">
+      <Filter>include\common\draw_system\render_target</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\text\text_font.h">
+      <Filter>include\common\text</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\text\text_manager.h">
+      <Filter>include\common\text</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\text\text_enum.h">
+      <Filter>include\common\text</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\math\vector_int2.h">
+      <Filter>include\common\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\text\text_block.h">
+      <Filter>include\common\text</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_manager.h">
+      <Filter>include\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\math\vector_int4.h">
+      <Filter>include\common\math</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\text\text_cell.h">
+      <Filter>souce\common\text</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\text\text_glyph_row.h">
+      <Filter>souce\common\text</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\text\text_texture.h">
+      <Filter>souce\common\text</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\text\text_locale.h">
+      <Filter>souce\common\text</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_coord.h">
+      <Filter>include\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_hierarchy_node.h">
+      <Filter>include\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\ui\ui_geometry.h">
+      <Filter>souce\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_texture.h">
+      <Filter>include\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_data\ui_data.h">
+      <Filter>include\common\ui\ui_data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\i_ui_model.h">
+      <Filter>include\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\ui\ui_root_input_state.h">
+      <Filter>souce\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\text\text_pre_vertex.h">
+      <Filter>include\common\text</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\text\text_run.h">
+      <Filter>include\common\text</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_layout.h">
+      <Filter>include\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\locale\locale_system.h">
+      <Filter>include\common\locale</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\locale\locale_enum.h">
+      <Filter>include\common\locale</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\util\enum_soft_bind.h">
+      <Filter>include\common\util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\text\icon_font.h">
+      <Filter>include\common\text</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\text\i_text_run_data.h">
+      <Filter>include\common\text</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\text\text_run_data_icon.h">
+      <Filter>souce\common\text</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\text\text_run_data_string.h">
+      <Filter>souce\common\text</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\math\dsc_math.h">
+      <Filter>include\common\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\util\hash.h">
+      <Filter>include\common\util</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\ui\ui_screen_space.h">
+      <Filter>souce\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\i_ui_input.h">
+      <Filter>include\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\shader\shader_constant_buffer.h">
+      <Filter>include\common\draw_system\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\shader\constant_buffer.h">
+      <Filter>include\common\draw_system\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_base_colour.h">
+      <Filter>include\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_component\i_ui_component.h">
+      <Filter>include\common\ui\ui_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_component\ui_component_canvas.h">
+      <Filter>include\common\ui\ui_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\draw_system\draw_system_resource_list.h">
+      <Filter>include\common\draw_system</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_enum.h">
+      <Filter>include\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_data\ui_data_text_run.h">
+      <Filter>include\common\ui\ui_data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_data\ui_data_string.h">
+      <Filter>include\common\ui\ui_data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_component\ui_component_string.h">
+      <Filter>include\common\ui\ui_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_effect\ui_effect_component.h">
+      <Filter>include\common\ui\ui_effect</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_effect\ui_effect_data.h">
+      <Filter>include\common\ui\ui_effect</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\math\vector_short2.h">
+      <Filter>include\common\math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_data\ui_data_stack.h">
+      <Filter>include\common\ui\ui_data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_component\ui_component_stack.h">
+      <Filter>include\common\ui\ui_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_tint_colour.h">
+      <Filter>include\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_hierarchy_node_child.h">
+      <Filter>include\common\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_data\ui_data_canvas.h">
+      <Filter>include\common\ui\ui_data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_data\ui_data_button.h">
+      <Filter>include\common\ui\ui_data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_component\ui_component_button.h">
+      <Filter>include\common\ui\ui_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_component\ui_component_text_run.h">
+      <Filter>include\common\ui\ui_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\ui\ui_data\ui_data_toggle.h">
+      <Filter>include\common\ui\ui_data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\bezier\bezier_manager.h">
+      <Filter>include\common\bezier</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\bezier\bezier_curve.h">
+      <Filter>include\common\bezier</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\bezier\bezier_file_helper.h">
+      <Filter>include\common\bezier</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\bezier\bezier_simulate.h">
+      <Filter>include\common\bezier</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\bezier\bezier_border_helper.h">
+      <Filter>include\common\bezier</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\dag\threaded\dag_threaded_collection.h">
+      <Filter>include\common\dag\threaded</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\dag\threaded\dag_threaded_helper.h">
+      <Filter>include\common\dag\threaded</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\dag\threaded\i_dag_threaded_value.h">
+      <Filter>include\common\dag\threaded</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\dag\threaded\dag_threaded.h">
+      <Filter>include\common\dag\threaded</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\dag\threaded\dag_threaded_node_calculate.h">
+      <Filter>souce\common\dag\threaded</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\dag\threaded\dag_threaded_node_variable.h">
+      <Filter>souce\common\dag\threaded</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\dag\threaded\i_dag_threaded_node.h">
+      <Filter>souce\common\dag\threaded</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\dag\threaded\i_dag_threaded_visitor.h">
+      <Filter>include\common\dag\threaded</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\locale\i_locale_data_provider.h">
+      <Filter>include\common\locale</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\locale\i_locale_string_format.h">
+      <Filter>include\common\locale</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\locale\locale_string_format_simple.h">
+      <Filter>include\common\locale</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\locale\locale_string_format_lambda.h">
+      <Filter>include\common\locale</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\locale\locale_string_format_map.h">
+      <Filter>include\common\locale</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common\dag\threaded\dag_threaded_value.h">
+      <Filter>include\common\dag\threaded</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\tooltip\tooltip_link.h">
+      <Filter>include\common\tooltip</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\tooltip\tooltip_text.h">
+      <Filter>include\common\tooltip</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\tooltip\i_tooltip.h">
+      <Filter>include\common\tooltip</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-	<Filter Include="souce">
-	  <UniqueIdentifier>{3f2b52a2-3564-433a-99d0-aebceeca2003}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="souce\common">
-	  <UniqueIdentifier>{66487263-154c-46d3-9252-7dd8e90ddccd}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="props">
-	  <UniqueIdentifier>{fd8283c2-2d3b-4ebd-8a47-48da937382ee}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include">
-	  <UniqueIdentifier>{f5ac17de-530c-4479-9e0d-3925e5e37f33}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\common">
-	  <UniqueIdentifier>{8df0200f-419f-4049-a30a-59b591fd2d02}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="souce\common\util">
-	  <UniqueIdentifier>{b4c697ce-4861-4158-a8b0-4fbb4939c1d1}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\common\util">
-	  <UniqueIdentifier>{3b4a41bd-daee-4f92-ae08-61200815ea79}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\common\log">
-	  <UniqueIdentifier>{3db2a7f5-3cf6-4007-8037-38ad5468bf1b}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="souce\common\log">
-	  <UniqueIdentifier>{e484b86d-8ab2-4874-bc0a-497fbf83c124}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="souce\common\worker">
-	  <UniqueIdentifier>{b8d05727-4158-4b45-b449-ae6f3ec9c591}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\common\worker">
-	  <UniqueIdentifier>{34d3dd85-c34c-4a45-ac7b-a778497ba488}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\common\file_system">
-	  <UniqueIdentifier>{5e8f77bc-fa86-4671-962e-83b24c2778c4}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="souce\common\file_system">
-	  <UniqueIdentifier>{6da2c55b-2292-45f6-b5af-f096d0192bbe}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\common\task">
-	  <UniqueIdentifier>{8cd8a765-20ef-449b-b63b-4a55b40a4dec}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="souce\common\task">
-	  <UniqueIdentifier>{13d2da23-209a-4839-8bcb-9c5397e13de2}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="souce\common\window">
-	  <UniqueIdentifier>{3fec1d3a-74b5-4e6c-abd7-4d876c2f35ea}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\common\window">
-	  <UniqueIdentifier>{3ee5eb4a-cbec-4fe8-82d5-b253552e45e1}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="souce\common\draw_system">
-	  <UniqueIdentifier>{73270d6f-cc2e-4a30-a08e-c05525dca773}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="souce\common\draw_system\geometry">
-	  <UniqueIdentifier>{1c08cfb1-a951-4984-be3c-8983db1c6532}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="souce\common\draw_system\heap_wrapper">
-	  <UniqueIdentifier>{2175eb0c-fde2-47a3-8daa-a08aec441fb4}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="souce\common\draw_system\render_target">
-	  <UniqueIdentifier>{ccdc21e0-95cd-497d-8633-a5ec8686dda8}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="souce\common\draw_system\shader">
-	  <UniqueIdentifier>{f93b44a7-17b5-4a9b-b925-47fc8697ede3}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="souce\common\direct_xtk12">
-	  <UniqueIdentifier>{8054dfe3-46f3-43b9-b413-07cc8e6674ac}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\common\draw_system">
-	  <UniqueIdentifier>{6188ceb0-5e9a-4060-a61e-94ab05b98d2f}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\common\draw_system\geometry">
-	  <UniqueIdentifier>{cd52adbc-cd2c-4ec9-9b65-cd00316bfb49}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\common\draw_system\shader">
-	  <UniqueIdentifier>{3bc30901-71a2-42ae-8d38-f7bc9ec2828b}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\common\draw_system\render_target">
-	  <UniqueIdentifier>{22bdc9f7-c243-447c-8901-764828f41bb5}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\common\math">
-	  <UniqueIdentifier>{d0dfc653-fe68-4154-b546-0868c36d2d91}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="souce\common\math">
-	  <UniqueIdentifier>{6fed0663-9f0a-443f-9dac-86a782e00d6d}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\common\direct_xtk12">
-	  <UniqueIdentifier>{fdceebdb-77d6-4c74-be19-6eb6343663a0}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="souce\common\text">
-	  <UniqueIdentifier>{42bf2c07-aaea-4a9e-a80b-1105c22a53a3}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\common\text">
-	  <UniqueIdentifier>{66405304-11f7-4021-955b-be25d0c2f0e7}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="souce\common\ui">
-	  <UniqueIdentifier>{e9c7b836-e85e-44d0-8b02-89c77e356b3a}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\common\ui">
-	  <UniqueIdentifier>{189f9b8c-03fa-4d5a-b32c-a20b2f09f8ea}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\common\ui\ui_data">
-	  <UniqueIdentifier>{97f56c3b-f5d7-43b1-b707-20f08dc55cb3}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="souce\common\ui\ui_data">
-	  <UniqueIdentifier>{2e915536-bbd6-44d6-80e5-07e6d5f840f5}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\common\locale">
-	  <UniqueIdentifier>{f73a6e4f-db56-4c97-be07-134c548bd96a}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="souce\common\locale">
-	  <UniqueIdentifier>{f7e9ac86-6a6f-48d6-b797-8ea6d2d472e8}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\common\ui\ui_component">
-	  <UniqueIdentifier>{9da10cb7-8caf-4629-a953-a7be43ecd01b}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="souce\common\ui\ui_component">
-	  <UniqueIdentifier>{cd80b2d5-46fe-46b6-bda1-eb0783177f17}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\common\ui\ui_effect">
-	  <UniqueIdentifier>{7bf84af4-95b1-4338-ba04-16ccb722d286}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="souce\common\ui\ui_effect">
-	  <UniqueIdentifier>{7ede6d3a-bc6c-4d31-af5f-1789eed6030a}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\common\bezier">
-	  <UniqueIdentifier>{8db5f355-b025-4706-a3e9-b0a58def9955}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="souce\common\bezier">
-	  <UniqueIdentifier>{e1f6da53-9f7a-4055-aa55-a6445b6710c8}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="souce\common\dag">
-	  <UniqueIdentifier>{8675f3fd-2713-475b-87e6-a4996d1f1e15}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="souce\common\dag\threaded">
-	  <UniqueIdentifier>{439a12bf-71ca-4306-8f73-dd9ce9272921}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\common\dag">
-	  <UniqueIdentifier>{15396a69-74b3-45ba-889a-b56cf99f64d6}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\common\dag\threaded">
-	  <UniqueIdentifier>{d23d368b-5d9c-41c0-8d74-740abc161d47}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="souce\common\tooltip">
-	  <UniqueIdentifier>{ca239481-7f2a-43e7-a7db-cdf2def6a8a6}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="include\common\tooltip">
-	  <UniqueIdentifier>{306252d7-9059-46a4-9942-d5fe9bd158b1}</UniqueIdentifier>
-	</Filter>
+    <Filter Include="souce">
+      <UniqueIdentifier>{3f2b52a2-3564-433a-99d0-aebceeca2003}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common">
+      <UniqueIdentifier>{66487263-154c-46d3-9252-7dd8e90ddccd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="props">
+      <UniqueIdentifier>{fd8283c2-2d3b-4ebd-8a47-48da937382ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{f5ac17de-530c-4479-9e0d-3925e5e37f33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common">
+      <UniqueIdentifier>{8df0200f-419f-4049-a30a-59b591fd2d02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\util">
+      <UniqueIdentifier>{b4c697ce-4861-4158-a8b0-4fbb4939c1d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\util">
+      <UniqueIdentifier>{3b4a41bd-daee-4f92-ae08-61200815ea79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\log">
+      <UniqueIdentifier>{3db2a7f5-3cf6-4007-8037-38ad5468bf1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\log">
+      <UniqueIdentifier>{e484b86d-8ab2-4874-bc0a-497fbf83c124}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\worker">
+      <UniqueIdentifier>{b8d05727-4158-4b45-b449-ae6f3ec9c591}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\worker">
+      <UniqueIdentifier>{34d3dd85-c34c-4a45-ac7b-a778497ba488}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\file_system">
+      <UniqueIdentifier>{5e8f77bc-fa86-4671-962e-83b24c2778c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\file_system">
+      <UniqueIdentifier>{6da2c55b-2292-45f6-b5af-f096d0192bbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\task">
+      <UniqueIdentifier>{8cd8a765-20ef-449b-b63b-4a55b40a4dec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\task">
+      <UniqueIdentifier>{13d2da23-209a-4839-8bcb-9c5397e13de2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\window">
+      <UniqueIdentifier>{3fec1d3a-74b5-4e6c-abd7-4d876c2f35ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\window">
+      <UniqueIdentifier>{3ee5eb4a-cbec-4fe8-82d5-b253552e45e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\draw_system">
+      <UniqueIdentifier>{73270d6f-cc2e-4a30-a08e-c05525dca773}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\draw_system\geometry">
+      <UniqueIdentifier>{1c08cfb1-a951-4984-be3c-8983db1c6532}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\draw_system\heap_wrapper">
+      <UniqueIdentifier>{2175eb0c-fde2-47a3-8daa-a08aec441fb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\draw_system\render_target">
+      <UniqueIdentifier>{ccdc21e0-95cd-497d-8633-a5ec8686dda8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\draw_system\shader">
+      <UniqueIdentifier>{f93b44a7-17b5-4a9b-b925-47fc8697ede3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\direct_xtk12">
+      <UniqueIdentifier>{8054dfe3-46f3-43b9-b413-07cc8e6674ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\draw_system">
+      <UniqueIdentifier>{6188ceb0-5e9a-4060-a61e-94ab05b98d2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\draw_system\geometry">
+      <UniqueIdentifier>{cd52adbc-cd2c-4ec9-9b65-cd00316bfb49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\draw_system\shader">
+      <UniqueIdentifier>{3bc30901-71a2-42ae-8d38-f7bc9ec2828b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\draw_system\render_target">
+      <UniqueIdentifier>{22bdc9f7-c243-447c-8901-764828f41bb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\math">
+      <UniqueIdentifier>{d0dfc653-fe68-4154-b546-0868c36d2d91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\math">
+      <UniqueIdentifier>{6fed0663-9f0a-443f-9dac-86a782e00d6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\direct_xtk12">
+      <UniqueIdentifier>{fdceebdb-77d6-4c74-be19-6eb6343663a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\text">
+      <UniqueIdentifier>{42bf2c07-aaea-4a9e-a80b-1105c22a53a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\text">
+      <UniqueIdentifier>{66405304-11f7-4021-955b-be25d0c2f0e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\ui">
+      <UniqueIdentifier>{e9c7b836-e85e-44d0-8b02-89c77e356b3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\ui">
+      <UniqueIdentifier>{189f9b8c-03fa-4d5a-b32c-a20b2f09f8ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\ui\ui_data">
+      <UniqueIdentifier>{97f56c3b-f5d7-43b1-b707-20f08dc55cb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\ui\ui_data">
+      <UniqueIdentifier>{2e915536-bbd6-44d6-80e5-07e6d5f840f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\locale">
+      <UniqueIdentifier>{f73a6e4f-db56-4c97-be07-134c548bd96a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\locale">
+      <UniqueIdentifier>{f7e9ac86-6a6f-48d6-b797-8ea6d2d472e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\ui\ui_component">
+      <UniqueIdentifier>{9da10cb7-8caf-4629-a953-a7be43ecd01b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\ui\ui_component">
+      <UniqueIdentifier>{cd80b2d5-46fe-46b6-bda1-eb0783177f17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\ui\ui_effect">
+      <UniqueIdentifier>{7bf84af4-95b1-4338-ba04-16ccb722d286}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\ui\ui_effect">
+      <UniqueIdentifier>{7ede6d3a-bc6c-4d31-af5f-1789eed6030a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\bezier">
+      <UniqueIdentifier>{8db5f355-b025-4706-a3e9-b0a58def9955}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\bezier">
+      <UniqueIdentifier>{e1f6da53-9f7a-4055-aa55-a6445b6710c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\dag">
+      <UniqueIdentifier>{8675f3fd-2713-475b-87e6-a4996d1f1e15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\dag\threaded">
+      <UniqueIdentifier>{439a12bf-71ca-4306-8f73-dd9ce9272921}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\dag">
+      <UniqueIdentifier>{15396a69-74b3-45ba-889a-b56cf99f64d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\dag\threaded">
+      <UniqueIdentifier>{d23d368b-5d9c-41c0-8d74-740abc161d47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="souce\common\tooltip">
+      <UniqueIdentifier>{ca239481-7f2a-43e7-a7db-cdf2def6a8a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common\tooltip">
+      <UniqueIdentifier>{306252d7-9059-46a4-9942-d5fe9bd158b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-	<None Include="props\common.props">
-	  <Filter>props</Filter>
-	</None>
+    <None Include="props\common.props">
+      <Filter>props</Filter>
+    </None>
   </ItemGroup>
 </Project>

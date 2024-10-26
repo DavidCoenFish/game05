@@ -104,9 +104,9 @@
     <ClCompile Include="source\common\text\text_run_data_icon.cpp" />
     <ClCompile Include="source\common\text\text_run_data_string.cpp" />
     <ClCompile Include="source\common\text\text_texture.cpp" />
-    <ClCompile Include="source\common\tooltip\i_tooltip_action.cpp" />
-    <ClCompile Include="source\common\tooltip\tooltip.cpp" />
-    <ClCompile Include="source\common\tooltip\tooltip_data.cpp" />
+    <ClCompile Include="source\common\tooltip\i_tooltip.cpp" />
+    <ClCompile Include="source\common\tooltip\tooltip_link.cpp" />
+    <ClCompile Include="source\common\tooltip\tooltip_text.cpp" />
     <ClCompile Include="source\common\ui\i_ui_input.cpp" />
     <ClCompile Include="source\common\ui\i_ui_model.cpp" />
     <ClCompile Include="source\common\ui\ui_base_colour.cpp" />
@@ -211,8 +211,9 @@
     <ClInclude Include="include\common\text\text_manager.h" />
     <ClInclude Include="include\common\text\text_pre_vertex.h" />
     <ClInclude Include="include\common\text\text_run.h" />
-    <ClInclude Include="include\common\tooltip\tooltip.h" />
-    <ClInclude Include="include\common\tooltip\tooltip_data.h" />
+    <ClInclude Include="include\common\tooltip\i_tooltip.h" />
+    <ClInclude Include="include\common\tooltip\tooltip_link.h" />
+    <ClInclude Include="include\common\tooltip\tooltip_text.h" />
     <ClInclude Include="include\common\ui\i_ui_input.h" />
     <ClInclude Include="include\common\ui\i_ui_model.h" />
     <ClInclude Include="include\common\ui\ui_base_colour.h" />
