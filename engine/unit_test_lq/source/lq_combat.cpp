@@ -7,6 +7,7 @@
 #include "static_lq\combat\simple\simple_combat_side.h"
 #include "static_lq\combat\simple\simple_combat_topology.h"
 #include "static_lq\bestiary\bestiary.h"
+#include "static_lq\bestiary\bestiary_pool.h"
 
 #include "static_lq\name\name_system.h"
 #include "static_lq\name\name_system_generator_random.h"
@@ -16,7 +17,6 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace LqCombat
 {
-/*
 	// make a combat of a default giant spider and default giant ant, run combat
 	TEST_CLASS(Intergration)
 	{
@@ -24,14 +24,19 @@ namespace LqCombat
 		TEST_METHOD(DefaultCombat)
 		{
 			std::shared_ptr<LocaleSystem> locale_system = std::make_shared<LocaleSystem>();
+			Assert::IsNotNull(locale_system.get());
 			StaticLq::SimpleCombatOutput::RegisterLocaleSystem(*locale_system);
-			StaticLq::Bestiary::RegisterLocaleSystem(*locale_system);
+			StaticLq::BestiaryPool::RegisterLocaleSystem(*locale_system);
+
 			std::shared_ptr<StaticLq::NameSystem> name_system = std::make_shared<StaticLq::NameSystem>();
 			name_system->AddGenerator(StaticLq::NameSystem::GetKeySide(), StaticLq::NameSystemGeneratorRandom::FactoryGeneratorSide());
 			name_system->AddGenerator(StaticLq::NameSystem::GetKeyGiantAnt(), StaticLq::NameSystemGeneratorRandom::FactoryGeneratorGiantAnt());
 			name_system->AddGenerator(StaticLq::NameSystem::GetKeyGiantSpider(), StaticLq::NameSystemGeneratorRandom::FactoryGeneratorGiantSpider());
-			StaticLq::NameSystem::RegisterLocaleSystem(name_system, *locale_system);
-			locale_system->SetLocaleAndPopulate(LocaleISO_639_1::English);
+
+			locale_system->SetLocaleAndPopulate(LocaleISO_639_1::Default);
+
+			auto bestiary_pool = StaticLq::BestiaryPool::FactoryWithTestData();
+			Assert::IsNotNull(bestiary_pool.get());
 
 			std::shared_ptr<StaticLq::ICombatOutput> combat_output = std::make_shared<StaticLq::SimpleCombatOutput>([](const std::string& message)
 			{
@@ -51,9 +56,12 @@ namespace LqCombat
 			// add side giant ants
 			{
 				std::vector<std::shared_ptr<StaticLq::ICombatant>> combatant_array;
-				combatant_array.push_back(StaticLq::Bestiary::FactoryDefaultGiantAnt(*name_system, *locale_system));
-				//combatant_array.push_back(StaticLq::Bestiary::FactoryDefaultGiantAnt(*name_system, *locale_system));
-				//combatant_array.push_back(StaticLq::Bestiary::FactoryDefaultGiantAnt(*name_system, *locale_system));
+				combatant_array.push_back(bestiary_pool->MakeCombatant(
+					StaticLq::BestiaryPool::GetTestDataKeyGiantAnt(),
+					*name_system,
+					*locale_system
+					));
+				
 				std::shared_ptr<StaticLq::ICombatSide> side = StaticLq::SimpleCombatSide::Factory(*name_system, *locale_system, combatant_array);
 				combat.AddSide(side);
 			}
@@ -61,10 +69,25 @@ namespace LqCombat
 			// add side giant spider
 			{
 				std::vector<std::shared_ptr<StaticLq::ICombatant>> combatant_array;
-				combatant_array.push_back(StaticLq::Bestiary::FactoryDefaultGiantSpider(*name_system, *locale_system));
-				combatant_array.push_back(StaticLq::Bestiary::FactoryDefaultGiantSpider(*name_system, *locale_system));
-				combatant_array.push_back(StaticLq::Bestiary::FactoryDefaultGiantSpider(*name_system, *locale_system));
-				combatant_array.push_back(StaticLq::Bestiary::FactoryDefaultGiantSpider(*name_system, *locale_system));
+
+				combatant_array.push_back(bestiary_pool->MakeCombatant(
+					StaticLq::BestiaryPool::GetTestDataKeyGiantSpider(),
+					*name_system,
+					*locale_system
+					));
+
+				combatant_array.push_back(bestiary_pool->MakeCombatant(
+					StaticLq::BestiaryPool::GetTestDataKeyGiantSpider(),
+					*name_system,
+					*locale_system
+					));
+
+				combatant_array.push_back(bestiary_pool->MakeCombatant(
+					StaticLq::BestiaryPool::GetTestDataKeyGiantSpider(),
+					*name_system,
+					*locale_system
+					));
+
 				std::shared_ptr<StaticLq::ICombatSide> side = StaticLq::SimpleCombatSide::Factory(*name_system, *locale_system, combatant_array);
 				combat.AddSide(side);
 			}
@@ -76,5 +99,4 @@ namespace LqCombat
 		}
 
 	};
-*/
 }

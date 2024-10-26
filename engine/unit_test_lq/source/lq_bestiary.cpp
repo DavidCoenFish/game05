@@ -40,20 +40,29 @@ namespace LqBestiary
 			const std::string display_name = locale_system->GetValue(giant_ant->GetDisplayName());
 			Logger::WriteMessage(display_name.c_str());
 		}
-	};
 
-/*
-	TEST_CLASS(StaticMethods)
-	{
-	public:
 		TEST_METHOD(FactoryDefaultGiantSpider)
 		{
 			std::shared_ptr<LocaleSystem> locale_system = std::make_shared<LocaleSystem>();
-			std::shared_ptr<StaticLq::NameSystem> name_system = std::make_shared<StaticLq::NameSystem>();
-			name_system->AddGenerator(StaticLq::NameSystem::GetKeyGiantSpider(), StaticLq::NameSystemGeneratorRandom::FactoryGeneratorGiantSpider());
+			Assert::IsNotNull(locale_system.get());
 
-			auto giant_spider = StaticLq::Bestiary::FactoryDefaultGiantSpider(*name_system, *locale_system);
+			std::shared_ptr<StaticLq::NameSystem> name_system = std::make_shared<StaticLq::NameSystem>();
+			StaticLq::NameSystem::RegisterLocaleSystem(name_system, *locale_system);
+			name_system->AddGenerator(StaticLq::NameSystem::GetKeyGiantSpider(), StaticLq::NameSystemGeneratorRandom::FactoryGeneratorGiantSpider());
+			
+			locale_system->SetLocaleAndPopulate(LocaleISO_639_1::Default);
+
+			auto bestiary_pool = StaticLq::BestiaryPool::FactoryWithTestData();
+			Assert::IsNotNull(bestiary_pool.get());
+
+
+			auto giant_spider = bestiary_pool->MakeCombatant(
+				StaticLq::BestiaryPool::GetTestDataKeyGiantSpider(),
+				*name_system,
+				*locale_system
+				);
 			Assert::IsNotNull(giant_spider.get());
+
 			Logger::WriteMessage((std::to_string(giant_spider->GetValue(StaticLq::CombatEnum::CombatantValue::TDamageTollerance)) + " Damage tollerance\n").c_str());
 			Logger::WriteMessage((std::to_string(giant_spider->GetValue(StaticLq::CombatEnum::CombatantValue::THealthPoints)) + " Health Points\n").c_str());
 			Assert::AreEqual(1, giant_spider->GetValue(StaticLq::CombatEnum::CombatantValue::TCanContinueCombat));
@@ -64,16 +73,5 @@ namespace LqBestiary
 			Assert::AreEqual(0, giant_spider->GetValue(StaticLq::CombatEnum::CombatantValue::TCanContinueCombat));
 		}
 
-		TEST_METHOD(FactoryDefaultGiantAnt)
-		{
-			std::shared_ptr<LocaleSystem> locale_system = std::make_shared<LocaleSystem>();
-			std::shared_ptr<StaticLq::NameSystem> name_system = std::make_shared<StaticLq::NameSystem>();
-			name_system->AddGenerator(StaticLq::NameSystem::GetKeyGiantAnt(), StaticLq::NameSystemGeneratorRandom::FactoryGeneratorGiantAnt());
-
-			auto item = StaticLq::Bestiary::FactoryDefaultGiantAnt(*name_system, *locale_system);
-			Assert::IsNotNull(item.get());
-		}
-
 	};
-*/
 }
