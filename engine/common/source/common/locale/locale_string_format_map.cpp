@@ -7,7 +7,7 @@ LocaleStringFormatMap::LocaleStringFormatMap(const std::map<std::string, std::st
 	// nop
 }
 
-void LocaleStringFormatMap::AccumulateString(const std::string& in_value)
+void LocaleStringFormatMap::AccumulateString(const std::string& in_value, const LocaleISO_639_1)
 {
 	_accumulated_result += in_value;
 }

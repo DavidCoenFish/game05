@@ -20,7 +20,7 @@ void DealToken(const LocaleSystem& in_locale_system, const LocaleISO_639_1 in_lo
 	// consume the result string if not empty
 	if (false == in_out_result.empty())
 	{
-		in_locale_string_format.AccumulateString(in_out_result);
+		in_locale_string_format.AccumulateString(in_out_result, in_locale);
 		in_out_result = {};
 	}
 
@@ -173,7 +173,7 @@ public:
 
 		if (false == result.empty())
 		{
-			in_locale_string_format.AccumulateString(result);
+			in_locale_string_format.AccumulateString(result, in_locale);
 		}
 
 		return;

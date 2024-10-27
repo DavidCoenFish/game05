@@ -8,7 +8,7 @@ LocaleStringFormatLambda::LocaleStringFormatLambda(const std::function<const std
 	// nop
 }
 
-void LocaleStringFormatLambda::AccumulateString(const std::string& in_value)
+void LocaleStringFormatLambda::AccumulateString(const std::string& in_value, const LocaleISO_639_1)
 {
 	_result += in_value;
 }

@@ -8,7 +8,7 @@ LocaleStringFormatSimple::LocaleStringFormatSimple(const std::vector<std::string
 	// nop
 }
 
-void LocaleStringFormatSimple::AccumulateString(const std::string& in_value)
+void LocaleStringFormatSimple::AccumulateString(const std::string& in_value, const LocaleISO_639_1)
 {
 	_result += in_value;
 }

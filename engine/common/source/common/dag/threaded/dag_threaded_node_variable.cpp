@@ -8,15 +8,15 @@ DagThreadedNodeVariable::DagThreadedNodeVariable(
 	const std::string& in_uid,
 	const std::shared_ptr< IDagThreadedValue >& in_value,
 	const DagThreaded::DirtyCase in_dirty_case,
-	const std::string& in_display_name,
-	const std::string& in_tooltip_raw
+	const std::string& in_tooltip_locale_key_text,
+	const std::string& in_tooltip_locale_key_children
 	)
 	: _uid(in_uid)
-	, _display_name(in_display_name)
-	, _tooltip_raw(in_tooltip_raw)
+	, _tooltip_locale_key_text(in_tooltip_locale_key_text)
+	, _tooltip_locale_key_children(in_tooltip_locale_key_children)
 	, _value(in_value)
 	, _dirty_case(in_dirty_case)
-
+	, _tooltip_is_null(false)
 {
 	//nop
 }
@@ -63,6 +63,11 @@ void DagThreadedNodeVariable::SetValue(const std::shared_ptr<IDagThreadedValue>&
 	return;
 }
 
+const std::string& DagThreadedNodeVariable::GetUid() const
+{
+	return _uid;
+}
+
 void DagThreadedNodeVariable::SetOutput(IDagThreadedNode* const in_node)
 {
 	if (nullptr != in_node)
@@ -80,25 +85,6 @@ void DagThreadedNodeVariable::RemoveOutput(IDagThreadedNode* const in_node)
 	return;
 }
 
-std::shared_ptr<IDagThreadedValue> DagThreadedNodeVariable::GetValue()
-{
-	return _value;
-}
-
-std::shared_ptr<Tooltip> DagThreadedNodeVariable::GetTooltip(const DagThreadedCollection&, const LocaleSystem&)
-{
-	return nullptr;
-}
-
-const bool DagThreadedNodeVariable::Visit(IDagThreadedVisitor& visitor) 
-{
-	return visitor.OnVariable(
-		_value,
-		_uid,
-		_display_name
-		);
-}
-
 void DagThreadedNodeVariable::MarkDirty()
 {
 	std::unique_lock read_lock(_array_output_mutex);
@@ -107,4 +93,38 @@ void DagThreadedNodeVariable::MarkDirty()
 		pIter->MarkDirty();
 	}
 	return;
+}
+
+std::shared_ptr<IDagThreadedValue> DagThreadedNodeVariable::GetValue()
+{
+	return _value;
+}
+
+std::shared_ptr<ITooltip> DagThreadedNodeVariable::GetTooltip(const DagThreadedCollection& in_collection, const LocaleSystem& in_locale_system, const LocaleISO_639_1 in_locale)
+{
+	if ((false == _tooltip_locale_key_text.empty()) && (false == _tooltip_is_null) && (nullptr == _tooltip))
+	{
+		_tooltip = DagThreaded::BuildTooltip(
+			in_collection, 
+			in_locale_system, 
+			in_locale,
+			_tooltip_locale_key_text,
+			_tooltip_locale_key_children,
+			_value
+			);
+
+		_tooltip_is_null = (nullptr == _tooltip);
+	}
+
+	return _tooltip;
+}
+
+const bool DagThreadedNodeVariable::Visit(IDagThreadedVisitor& visitor)
+{
+	return visitor.OnVariable(
+		_value,
+		_uid,
+		_tooltip_locale_key_text,
+		_tooltip_locale_key_children
+		);
 }

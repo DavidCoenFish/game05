@@ -5,18 +5,20 @@
 #include "common/dag/threaded/dag_threaded_collection.h"
 #include "common/dag/threaded/i_dag_threaded_visitor.h"
 #include "common/locale/locale_system.h"
+#include "common/tooltip/i_tooltip.h"
 
 
 DagThreadedNodeCalculate::DagThreadedNodeCalculate(
 	const std::string& in_uid,
 	const CalculateFunction& in_calculate_function,
-	const std::string& in_display_name,
-	const std::string& in_tooltip_raw
+	const std::string& in_tooltip_locale_key_text,
+	const std::string& in_tooltip_locale_key_children
 	)
 	: _uid(in_uid)
-	, _display_name(in_display_name)
-	, _tooltip_raw(in_tooltip_raw)
 	, _calculate_function(in_calculate_function)
+	, _tooltip_locale_key_text(in_tooltip_locale_key_text)
+	, _tooltip_locale_key_children(in_tooltip_locale_key_children)
+	, _tooltip_is_null(false)
 {
 	//nop
 }
@@ -24,25 +26,6 @@ DagThreadedNodeCalculate::DagThreadedNodeCalculate(
 DagThreadedNodeCalculate::~DagThreadedNodeCalculate()
 {
 	//nop
-}
-
-void DagThreadedNodeCalculate::SetOutput(IDagThreadedNode* const in_node)
-{
-	if (nullptr != in_node)
-	{
-		std::shared_lock write_lock(_array_output_mutex);
-		_array_output.push_back(in_node);
-	}
-
-	return;
-}
-
-void DagThreadedNodeCalculate::RemoveOutput(IDagThreadedNode* const in_node)
-{
-	std::shared_lock write_lock(_array_output_mutex);
-	_array_output.erase(std::remove(_array_output.begin(), _array_output.end(), in_node), _array_output.end());
-
-	return;
 }
 
 void DagThreadedNodeCalculate::AddInputStack(IDagThreadedNode* const in_node)
@@ -132,56 +115,120 @@ void DagThreadedNodeCalculate::Unlink()
 	return;
 }
 
+const std::string& DagThreadedNodeCalculate::GetUid() const
+{
+	return _uid;
+}
+
+void DagThreadedNodeCalculate::SetOutput(IDagThreadedNode* const in_node)
+{
+	if (nullptr != in_node)
+	{
+		std::shared_lock write_lock(_array_output_mutex);
+		_array_output.push_back(in_node);
+	}
+
+	return;
+}
+
+void DagThreadedNodeCalculate::RemoveOutput(IDagThreadedNode* const in_node)
+{
+	std::shared_lock write_lock(_array_output_mutex);
+	_array_output.erase(std::remove(_array_output.begin(), _array_output.end(), in_node), _array_output.end());
+
+	return;
+}
+
+void DagThreadedNodeCalculate::MarkDirty()
+{
+	const int before_add_change_id = _change_id.fetch_add(1);
+	const int calculate_id = _calculate_id.load();
+
+	// only need to tell outputs we became dirty again when we change to be dirty
+	if (before_add_change_id == calculate_id)
+	{
+		std::unique_lock read_lock(_array_output_mutex);
+		for (auto pIter : _array_output)
+		{
+			pIter->MarkDirty();
+		}
+	}
+	return;
+}
+
 std::shared_ptr<IDagThreadedValue> DagThreadedNodeCalculate::GetValue()
 {
 	const int change_id = _change_id.load();
 	const int calculate_id = _calculate_id.exchange(change_id);
-	std::shared_ptr<IDagThreadedValue> result;
+	if ((change_id != calculate_id) && (nullptr != _calculate_function))
 	{
-		if ((change_id != calculate_id) && (nullptr != _calculate_function))
+		std::vector< std::shared_ptr< IDagThreadedValue > > array_stack;
 		{
-			std::vector< std::shared_ptr< IDagThreadedValue > > array_stack;
+			std::unique_lock read_lock(_array_input_stack_mutex);
+			for(auto iter: _array_input_stack)
 			{
-				std::unique_lock read_lock(_array_input_stack_mutex);
-				for(auto iter: _array_input_stack)
+				auto value = iter ? iter->GetValue() : nullptr;
+				if (nullptr != value)
+				{
+					array_stack.push_back(value);
+				}
+			}
+		}
+
+		std::vector< std::shared_ptr< IDagThreadedValue > > array_indexed;
+		{
+			{
+				std::unique_lock read_lock(_array_input_index_mutex);
+				for(auto iter: _array_input_index)
 				{
 					auto value = iter ? iter->GetValue() : nullptr;
-					if (nullptr != value)
-					{
-						array_stack.push_back(value);
-					}
+					array_indexed.push_back(value);
 				}
 			}
-
-			std::vector< std::shared_ptr< IDagThreadedValue > > array_indexed;
-			{
-				{
-					std::unique_lock read_lock(_array_input_index_mutex);
-					for(auto iter: _array_input_index)
-					{
-						auto value = iter ? iter->GetValue() : nullptr;
-						array_indexed.push_back(value);
-					}
-				}
-			}
-
-			_value = _calculate_function(array_stack, array_indexed);
 		}
-		
-		result = _value;
+
+		_value = _calculate_function(array_stack, array_indexed);
 	}
-	return result;
+
+	return _value;
 }
 
-std::shared_ptr<Tooltip> DagThreadedNodeCalculate::GetTooltip(const DagThreadedCollection& in_collection, const LocaleSystem& in_locale_system)
+std::shared_ptr<ITooltip> DagThreadedNodeCalculate::GetTooltip(const DagThreadedCollection& in_collection, const LocaleSystem& in_locale_system, const LocaleISO_639_1 in_locale)
 {
 	const int change_id = _change_id.load();
 	const int tooltip_id = _tooltip_id.exchange(change_id);
 	std::shared_ptr<IDagThreadedValue> result;
-	if ((change_id != tooltip_id) || (nullptr == _tooltip))
+	bool recalculate = (change_id != tooltip_id);
+	// tooltip never generated/ tooltip doesn't generate as null
+	if ((false == recalculate) && (false == _tooltip_is_null) && (nullptr == _tooltip))
 	{
-		_tooltip = DagThreaded::GetTooltipBody(in_collection, this, in_locale_system);
+		recalculate = true;
 	}
+	// do we have a locale change
+	if ((false == recalculate) && (nullptr != _tooltip) && (in_locale != _tooltip->GetLocale()))
+	{
+		recalculate = true;
+	}
+
+	if (true == recalculate)
+	{
+		std::unique_lock read_lock_stack(_array_input_stack_mutex);
+		std::unique_lock read_lock_index(_array_input_index_mutex);
+
+		_tooltip = DagThreaded::BuildTooltip(
+			in_collection, 
+			in_locale_system, 
+			in_locale,
+			_tooltip_locale_key_text,
+			_tooltip_locale_key_children,
+			GetValue(),
+			_array_input_stack,
+			_array_input_index
+			);
+
+		_tooltip_is_null = (nullptr == _tooltip);
+	}
+
 	return _tooltip;
 }
 
@@ -195,9 +242,9 @@ const bool DagThreadedNodeCalculate::Visit(IDagThreadedVisitor& visitor)
 			GetValue(),
 			_calculate_id.load(), // this is not perfect, need to have GetValue return the calculate id?
 			_uid,
-			_display_name,
-			_tooltip_raw,
-			_array_input_index,
+			_tooltip_locale_key_text,
+			_tooltip_locale_key_children,
+			_array_input_stack,
 			_array_input_index,
 			_array_output
 			))
@@ -234,23 +281,5 @@ const bool DagThreadedNodeCalculate::Visit(IDagThreadedVisitor& visitor)
 		}
 	}
 
-
 	return true;
-}
-
-void DagThreadedNodeCalculate::MarkDirty()
-{
-	const int before_add_change_id = _change_id.fetch_add(1);
-	const int calculate_id = _calculate_id.load();
-
-	// only need to tell outputs we became dirty again when we change to be dirty
-	if (before_add_change_id == calculate_id)
-	{
-		std::unique_lock read_lock(_array_output_mutex);
-		for (auto pIter : _array_output)
-		{
-			pIter->MarkDirty();
-		}
-	}
-	return;
 }

@@ -155,11 +155,11 @@ public:
 		return;
 	}
 
-	std::shared_ptr<Tooltip> GetTooltip(const DagThreadedCollection& in_collection, const NodeID in_node_id, const LocaleSystem& in_locale_system)
+	std::shared_ptr<ITooltip> GetTooltip(const DagThreadedCollection& in_collection, const NodeID in_node_id, const LocaleSystem& in_locale_system, const LocaleISO_639_1 in_locale)
 	{
 		if (nullptr != in_node_id)
 		{
-			return in_node_id->GetTooltip(in_collection, in_locale_system);
+			return in_node_id->GetTooltip(in_collection, in_locale_system, in_locale);
 		}
 		return nullptr;
 	}
@@ -261,16 +261,6 @@ const bool DagThreadedCollection::VisitNode(const NodeID in_node_id, IDagThreade
 	return in_node_id->Visit(in_visitor);
 }
 
-const std::string DagThreadedCollection::GetDisplayName(const NodeID in_node_id)
-{
-	return in_node_id->GetDisplayName();
-}
-
-const std::string DagThreadedCollection::GetTooltipRaw(const NodeID in_node_id)
-{
-	return in_node_id->GetTooltipRaw();
-}
-
 std::shared_ptr< IDagThreadedValue > DagThreadedCollection::GetDagValue(const NodeID in_node_id)
 {
 	return _implementation->GetDagValue(in_node_id);
@@ -281,8 +271,8 @@ void DagThreadedCollection::SetDagValue(const NodeID in_node_id, const std::shar
 	return _implementation->SetDagValue(in_node_id, in_dag_value);
 }
 
-std::shared_ptr<Tooltip> DagThreadedCollection::GetTooltip(const NodeID in_node_id, const LocaleSystem& in_locale_system) const
+std::shared_ptr<ITooltip> DagThreadedCollection::GetTooltip(const NodeID in_node_id, const LocaleSystem& in_locale_system, const LocaleISO_639_1 in_locale) const
 {
-	return _implementation->GetTooltip(*this, in_node_id, in_locale_system);
+	return _implementation->GetTooltip(*this, in_node_id, in_locale_system, in_locale);
 }
 

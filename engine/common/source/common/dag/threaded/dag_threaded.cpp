@@ -9,149 +9,142 @@
 #include "common/locale/locale_enum.h"
 #include "common/locale/locale_system.h"
 #include "common/locale/locale_string_format_map.h"
-#include "common/tooltip/tooltip.h"
-#include "common/tooltip/tooltip_data.h"
+#include "common/tooltip/i_tooltip.h"
+#include "common/tooltip/tooltip_link.h"
+#include "common/tooltip/tooltip_text.h"
  
 namespace
 {
-	constexpr char s_locale_key_tooltip_text[] = "c_dag_tooltip_text";
-	//"{name}({value})";
+	constexpr char s_locale_key_true[] = "c_dag_true";
+	constexpr char s_locale_key_false[] = "c_dag_false";
 
-	class NodeVisitor : public IDagThreadedVisitor
+	class TooltipTextBuilder : public ILocaleStringFormat
 	{
 	public:
-		NodeVisitor(const int32_t in_index, const LocaleSystem& in_locale_system, const DagThreadedCollection& in_collection) 
-		: _index(in_index)
-		, _locale_system(in_locale_system)
-		, _collection(in_collection)
-		{}
-		const std::string& GetDisplayName() const { return _display_name; }
-		const std::shared_ptr<Tooltip>& GetTooltip() const { return _tooltip; }
-
-	private:
-	virtual const bool OnCalculate(
-		const std::shared_ptr<IDagThreadedValue>&,
-		const int,
-		const std::string&,
-		const std::string&,
-		const std::string&,
-		const std::vector<NodeID>&,
-		const std::vector<NodeID>& in_array_input_index,
-		const std::vector<NodeID>&
-		) override
-	{
-		if ((0 <= _index) && (_index <static_cast<int32_t>(in_array_input_index.size())))
-		{
-			IDagThreadedNode* node = in_array_input_index[_index];
-			if (nullptr != node)
-			{
-				_display_name = DagThreaded::GetTooltipName(node, _locale_system);
-				_tooltip = DagThreaded::GetTooltipBody(_collection, node, _locale_system);
-			}
-		}
-		return false;
-	}
-
-	virtual const bool OnVariable(
-		const std::shared_ptr<IDagThreadedValue>&,
-		const std::string&,
-		const std::string&
-		) override
-		{
-			DSC_ASSERT_ALWAYS("invalid code path");
-			return false;
-		}
-	private:
-		const DagThreadedCollection& _collection;
-		const LocaleSystem& _locale_system;
-		const int32_t _index = 0;
-		std::string _display_name;
-		std::shared_ptr<Tooltip> _tooltip;
-	};
-
-	class TooltipBuilder : public ILocaleStringFormat
-	{
-	public:
-		TooltipBuilder(
-			const DagThreadedCollection& in_collection,
-			const NodeID in_node_id
+		TooltipTextBuilder(
+			std::string& out_text,
+			const std::shared_ptr<IDagThreadedValue>& in_value
 			)
-		: _current_level(0)
-		, _collection(in_collection)
-		, _node_id(in_node_id)
+		: _text(out_text)
+		, _value(in_value)
 		{
 			// nop
 		}
-		const std::shared_ptr<Tooltip> GetResult()
-		{ 
-			if (nullptr == _tooltip)
-			{
-				_tooltip = std::make_shared<Tooltip>(_data);
-			}
-			return _tooltip; 
-		}
 	private:
-		void AccumulateString(const std::string& in_value) override
+		void AccumulateString(const std::string& in_value, const LocaleISO_639_1) override
 		{
-			_data.push_back(TooltipData({in_value, {}, _current_level}));
+			_text += in_value;
 		}
 
-		void AccumulateToken(const LocaleSystem& in_locale_system, const LocaleISO_639_1 in_locale, const std::string& in_token, const int in_index) override
+		void AccumulateToken(const LocaleSystem& in_locale_system, const LocaleISO_639_1 in_locale, const std::string& in_token, const int) override
 		{
-			in_locale;
-			in_index;
-			//does token start with "_self"
-			if (in_token == "_self")
+			auto dag_value_int = dynamic_cast< DagThreadedValue< int32_t >* >(_value.get());
+			auto dag_value_string = dynamic_cast< DagThreadedValue< std::string >* >(_value.get());
+
+			// having some conceptual issues with having verbosity set in the text of the tooltip, more of a child thing
+			if (in_token == "_value")
 			{
-				if (nullptr != _node_id)
+				if (nullptr != dag_value_int)
 				{
-					const std::string value = DagThreaded::GetTooltipText(_collection, _node_id, in_locale_system);
-					// self should not link (else recusion)
-					_data.push_back(TooltipData({value, {}, _current_level}));
+					_text += std::to_string(dag_value_int->Get());
 				}
+				else if (nullptr != dag_value_string)
+				{
+					_text += dag_value_string->GetRef();
+				}
+			}
+			else if (in_token == "_value_boolean")
+			{
+				if (nullptr != dag_value_int)
+				{
+					const bool value = 0 != dag_value_int->Get();
+					if (true == value)
+					{
+						_text += in_locale_system.GetValue(in_locale, s_locale_key_true);
+					}
+					else
+					{
+						_text += in_locale_system.GetValue(in_locale, s_locale_key_false);
+					}
+
+					_text += std::to_string(dag_value_int->Get());
+				}
+
+			}
+		}
+
+	private:
+		std::string& _text;
+		const std::shared_ptr<IDagThreadedValue>& _value;
+
+	};
+
+	class TooltipChildrenBuilder : public ILocaleStringFormat
+	{
+	public:
+		TooltipChildrenBuilder(
+			std::vector<std::shared_ptr<ITooltip>>& out_children,
+			const std::string& in_text,
+			const DagThreadedCollection& in_collection, 
+			const std::vector<IDagThreadedNode*> in_array_input_stack,
+			const std::vector<IDagThreadedNode*> in_array_input_index
+			)
+			: _children(out_children)
+			, _text(in_text)
+			, _verbosity(0)
+			, _collection(in_collection)
+			, _array_input_stack(in_array_input_stack)
+			, _array_input_index(in_array_input_index)
+		{
+			// nop
+		}
+	private:
+		void AccumulateString(const std::string& in_value, const LocaleISO_639_1 in_locale) override
+		{
+			_children.push_back(std::make_shared<TooltipText>(in_value, in_locale, _verbosity));
+		}
+		void AccumulateToken(const LocaleSystem& in_locale_system, const LocaleISO_639_1 in_locale, const std::string& in_token, const int) override
+		{
+			if (std::string::npos != in_token.rfind("_v.", 0))
+			{
+				const std::string sub_string = in_token.substr(3);
+				_verbosity = std::stoi(sub_string);
+				return;
+			}
+			else if (in_token == "_self")
+			{
+				_children.push_back(std::make_shared<TooltipText>(_text, in_locale, _verbosity));
 				return;
 			}
 			//does token start with "_index."
-			if (in_token.rfind("_index.", 0))
+			else if (std::string::npos != in_token.rfind("_index.", 0))
 			{
 				const std::string sub_string = in_token.substr(7);
 				const int32_t index = std::stoi(sub_string);
-				DagThreadedNodeCalculate* node = dynamic_cast<DagThreadedNodeCalculate*>(_node_id);
-				if (node)
+				if ((0 <= index) && (index < _array_input_index.size()) && (nullptr != _array_input_index[index]))
 				{
-					NodeVisitor visitor(index, in_locale_system, _collection);
-					_node_id->Visit(visitor);
-					_data.push_back(TooltipData({visitor.GetDisplayName(), visitor.GetTooltip(), _current_level}));
+					_children.push_back(_array_input_index[index]->GetTooltip(_collection, in_locale_system, in_locale));
 				}
-				return;
 			}
-
-			//does token start with "_level."
-			if (in_token.rfind("_level.", 0))
+			else
 			{
-				const std::string sub_string = in_token.substr(7);
-				_current_level = std::stoi(sub_string);
-				return;
-			}
-			//search for node in collection by name token
-			{
-				NodeID new_node = _collection.FindNode(in_token);
-				if (nullptr != new_node)
+				// on reusing tooltip of other nodes, we don't use our current verbosity level, unless we make something to clone the tooltip at a different verbosity?
+				auto tooltip = _collection.GetTooltip(_collection.FindNode(in_token), in_locale_system, in_locale);
+				if (nullptr != tooltip)
 				{
-					const std::string value = DagThreaded::GetTooltipText(_collection, new_node, in_locale_system);
-					const std::shared_ptr<Tooltip> tooltip = DagThreaded::GetTooltipBody(_collection, new_node, in_locale_system);
-					_data.push_back(TooltipData({value, tooltip, _current_level}));
+					_children.push_back(tooltip);
 				}
-				return;
 			}
 		}
 
 	private:
+		std::vector<std::shared_ptr<ITooltip>>& _children;
+		const std::string _text = {};
+		int32_t _verbosity = 0;
 		const DagThreadedCollection& _collection;
-		NodeID _node_id;
-		std::vector<TooltipData> _data;
-		std::shared_ptr<Tooltip> _tooltip;
-		int _current_level;
+		const std::vector<IDagThreadedNode*>& _array_input_stack;
+		const std::vector<IDagThreadedNode*>& _array_input_index;
+
 	};
 }
 
@@ -164,62 +157,60 @@ const bool DagThreaded::IsZero<std::string>(const std::string& value)
 void DagThreaded::RegisterLocaleSystem(LocaleSystem& in_out_locale_system)
 {
 	const std::vector<LocaleSystem::Data> data = {
-		{s_locale_key_tooltip_text, "{name}({value})"}
+		{s_locale_key_true, "True"},
+		{s_locale_key_false, "False"},
 		};
 	in_out_locale_system.Append(LocaleISO_639_1::Default, data);
-
 }
 
-/// example "Damage Tollerance"
-const std::string DagThreaded::GetTooltipName(const NodeID in_node_id, const LocaleSystem& in_locale_system)
-{
-	const std::string key = in_node_id ? in_node_id->GetDisplayName() : std::string();
-	const std::string result = in_locale_system.GetValue(key);
-	return result;
-}
+/*
+in_tooltip_locale_key_text_or_empty
+"Damage Tollerance(17)" via "{_key_damage_tollerance}({_value})" => "Damage Tollerance({_value})"
+"Alive(True)" via "{_key_alive}({_value_boolean})" => "Alive({_value_boolean})"
+move away from the seconday lookup of locale key inside a locale key?
 
-/// example "Damage Tollerance(17)"
-const std::string DagThreaded::GetTooltipText(const DagThreadedCollection& in_collection, const NodeID in_node_id, const LocaleSystem& in_locale_system)
-{
-	in_collection;
-	std::string value;
+in_tooltip_locale_key_children_or_empty
+"Damage Tollerance(17) = 12 + 1d12" via "{_self} = {_index.1} + {_index.2}d{_index.3}"
 
-	const std::shared_ptr<IDagThreadedValue> dag_value = in_node_id ? in_node_id->GetValue() : nullptr;
-	auto dag_value_int = dag_value ? dynamic_cast<DagThreadedValue<int32_t>*>(dag_value.get()) : nullptr;
-	if (nullptr != dag_value_int)
+*/
+
+const std::shared_ptr<ITooltip> DagThreaded::BuildTooltip(
+	const DagThreadedCollection& in_collection, 
+	const LocaleSystem& in_locale_system, 
+	const LocaleISO_639_1 in_locale,
+	const std::string& in_tooltip_locale_key_text_or_empty,
+	const std::string& in_tooltip_locale_key_children_or_empty,
+	const std::shared_ptr<IDagThreadedValue>& in_value,
+	const std::vector<IDagThreadedNode*> in_array_input_stack,
+	const std::vector<IDagThreadedNode*> in_array_input_index
+	)
+{
+	// build text
+	if (true == in_tooltip_locale_key_text_or_empty.empty())
 	{
-		value = std::to_string(dag_value_int->Get());
+		return nullptr;
 	}
-	if (value.empty())
+
+	std::string text = {};
+	int32_t verbosity = 0;
+	TooltipTextBuilder tooltip_text_builder(text, in_value);
+	in_locale_system.GetValueFormatted(in_tooltip_locale_key_text_or_empty, tooltip_text_builder);
+	if (true == text.empty())
 	{
-		auto dag_value_string = dag_value ? dynamic_cast<DagThreadedValue<std::string>*>(dag_value.get()) : nullptr;
-		if (nullptr != dag_value_string)
+		return nullptr;
+	}
+
+	if (false == in_tooltip_locale_key_children_or_empty.empty())
+	{
+		std::vector<std::shared_ptr<ITooltip>> children = {};
+		TooltipChildrenBuilder tooltip_children_builder(children, text, in_collection, in_array_input_stack, in_array_input_index);
+		in_locale_system.GetValueFormatted(in_tooltip_locale_key_children_or_empty, tooltip_children_builder);
+		if (0 < children.size())
 		{
-			value = dag_value_string->Get();
+			return std::make_shared<TooltipLink>(text, in_locale, verbosity, children);
 		}
 	}
 
-	const std::string name = GetTooltipName(in_node_id, in_locale_system);
-	if (value.empty())
-	{
-		return name;
-	}
-
-	std::map<std::string, std::string> format_map;
-	format_map["value"] = value;
-	format_map["name"] = name;
-	LocaleStringFormatMap string_formatting(format_map);
-	in_locale_system.GetValueFormatted(s_locale_key_tooltip_text, string_formatting);
-
-	const std::string result = string_formatting.GetResult();
-	return result;
+	return std::make_shared<TooltipText>(text, in_locale, verbosity);
 }
 
-/// example "Damage Tollerance(17) = 12 + 1d12"
-const std::shared_ptr<Tooltip> DagThreaded::GetTooltipBody(const DagThreadedCollection& in_collection, const NodeID in_node_id, const LocaleSystem& in_locale_system)
-{
-	TooltipBuilder tooltip_builder(in_collection, in_node_id);
-	in_locale_system.GetValueFormatted(in_node_id->GetTooltipRaw(), tooltip_builder);
-	return tooltip_builder.GetResult();
-
-}
