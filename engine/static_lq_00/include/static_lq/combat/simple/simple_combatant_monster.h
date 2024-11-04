@@ -5,7 +5,8 @@
 
 class DagThreadedCollection;
 class LocaleSystem;
-class Tooltip;
+class ITooltip;
+enum class LocaleISO_639_1;
 
 namespace StaticLq
 {
@@ -25,10 +26,9 @@ public:
 private:
 	const int32_t GetId() const override { return _id; }
 
-	const std::string GetDisplayName() override;
-	std::shared_ptr<Tooltip> GetDisplayNameTooltip(const LocaleSystem& in_locale_system) override;
+	const std::shared_ptr<ITooltip> GetSelfTooltip(const LocaleSystem& in_locale_system, const LocaleISO_639_1 in_locale) override;
 	const int32_t GetValue(const CombatEnum::CombatantValue in_key) override;
-	std::shared_ptr<TooltipData> GetTooltip(const CombatEnum::CombatantValue in_key, const LocaleSystem& in_locale_system) override;
+	const std::shared_ptr<ITooltip> GetTooltip(const CombatEnum::CombatantValue in_key, const LocaleSystem& in_locale_system, const LocaleISO_639_1 in_locale) override;
 
 	void SetValue(const CombatEnum::CombatantValue in_key, const int32_t in_value) override;
 

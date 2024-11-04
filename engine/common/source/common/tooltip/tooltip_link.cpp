@@ -26,3 +26,8 @@ void TooltipLink::Visit(const std::function<const bool(const std::string&, const
 		}
 	}
 }
+
+const std::shared_ptr<ITooltip> TooltipLink::Clone(const int32_t in_verbosity) const
+{
+	return std::make_shared<TooltipLink>(_text, _locale, in_verbosity, _children);
+}

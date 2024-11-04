@@ -17,3 +17,9 @@ void TooltipText::Visit(const std::function<const bool(const std::string&, const
 {
 	in_visitor(_text, _locale, _verbosity, in_depth);
 }
+
+const std::shared_ptr<ITooltip> TooltipText::Clone(const int32_t in_verbosity) const
+{
+	return std::make_shared<TooltipText>(_text, _locale, in_verbosity);
+}
+

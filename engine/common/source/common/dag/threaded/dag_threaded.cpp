@@ -123,16 +123,16 @@ namespace
 				const int32_t index = std::stoi(sub_string);
 				if ((0 <= index) && (index < _array_input_index.size()) && (nullptr != _array_input_index[index]))
 				{
-					_children.push_back(_array_input_index[index]->GetTooltip(_collection, in_locale_system, in_locale));
+					auto tooltip = _array_input_index[index]->GetTooltip(_collection, in_locale_system, in_locale);
+					_children.push_back(tooltip->Clone(_verbosity));
 				}
 			}
 			else
 			{
-				// on reusing tooltip of other nodes, we don't use our current verbosity level, unless we make something to clone the tooltip at a different verbosity?
 				auto tooltip = _collection.GetTooltip(_collection.FindNode(in_token), in_locale_system, in_locale);
 				if (nullptr != tooltip)
 				{
-					_children.push_back(tooltip);
+					_children.push_back(tooltip->Clone(_verbosity));
 				}
 			}
 		}

@@ -21,8 +21,8 @@ StaticLq::CombatActionPosionSave::CombatActionPosionSave(
 }
 
 void StaticLq::CombatActionPosionSave::PerformAction(
-	RandomSequence& in_out_random_sequence,
-	const CombatTime& in_combat_time,
+	RandomSequence&, // in_out_random_sequence,
+	const CombatTime&, // in_combat_time,
 	ICombatOutput* in_output
 	)
 {

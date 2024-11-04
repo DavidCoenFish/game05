@@ -6,7 +6,7 @@
 #include "common/locale/locale_system.h"
 #include "common/locale/i_locale_data_provider.h"
 #include "common/locale/locale_string_format_map.h"
-#include "common/tooltip/tooltip_data.h"
+#include "common/tooltip/i_tooltip.h"
 #include "static_lq/combat/combat_enum.h"
 #include "static_lq/combat/i_combatant.h"
 #include "static_lq/combat/i_combat_side.h"

@@ -17,6 +17,7 @@ public:
 
 private:
 	virtual void Visit(const std::function<const bool(const std::string&, const LocaleISO_639_1, const int32_t, const int32_t)>& in_visitor, const int32_t in_depth = 0) const override;
+	virtual const std::shared_ptr<ITooltip> Clone(const int32_t in_verbosity) const override;
 	virtual const LocaleISO_639_1 GetLocale() const override { return _locale; }
 
 private:

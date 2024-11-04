@@ -3,8 +3,7 @@
 #include "static_lq/bestiary/bestiary_enum.h"
 
 class LocaleSystem;
-class Tooltip;
-struct TooltipData;
+class ITooltip;
 enum class LocaleISO_639_1;
 
 /*
@@ -34,10 +33,9 @@ public:
 
 	/// if these values get sourced from a dag node collection, it's GetValue is not const
 	/// if we end up with a lot of strings, replace with GetValueString(enum)?
-	virtual const std::string GetDisplayName() = 0;
-	virtual std::shared_ptr<Tooltip> GetDisplayNameTooltip(const LocaleSystem& in_locale_system) = 0;
+	virtual const std::shared_ptr<ITooltip> GetSelfTooltip(const LocaleSystem& in_locale_system, const LocaleISO_639_1 in_locale) = 0;
 	virtual const int32_t GetValue(const CombatEnum::CombatantValue in_key) = 0;
-	virtual std::shared_ptr<TooltipData> GetTooltip(const CombatEnum::CombatantValue in_key, const LocaleSystem& in_locale_system) = 0;
+	virtual const std::shared_ptr<ITooltip> GetTooltip(const CombatEnum::CombatantValue in_key, const LocaleSystem& in_locale_system, const LocaleISO_639_1 in_locale) = 0;
 
 	virtual void SetValue(const CombatEnum::CombatantValue in_key, const int32_t in_value) = 0;
 

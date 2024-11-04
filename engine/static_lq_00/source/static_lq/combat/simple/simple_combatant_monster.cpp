@@ -4,8 +4,6 @@
 #include "common/dag/threaded/dag_threaded_collection.h"
 #include "common/dag/threaded/dag_threaded_helper.h"
 #include "common/locale/locale_system.h"
-#include "common/tooltip/tooltip.h"
-#include "common/tooltip/tooltip_data.h"
 #include "static_lq/bestiary/bestiary.h"
 #include "static_lq/bestiary/bestiary_enum.h"
 #include "static_lq/combat/action/combat_action_mellee_attack.h"
@@ -47,17 +45,9 @@ StaticLq::SimpleCombatMonster::SimpleCombatMonster(
 {
 }
 
-const std::string StaticLq::SimpleCombatMonster::GetDisplayName()
+const std::shared_ptr<ITooltip> StaticLq::SimpleCombatMonster::GetSelfTooltip(const LocaleSystem& in_locale_system, const LocaleISO_639_1 in_locale)
 {
-	const std::string key = EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDisplayName);
-	const std::string result = DagThreadedHelper::GetValue<std::string>(_dag_collection->GetDagValue(_dag_collection->FindNode(key)));
-	return result;
-}
-
-std::shared_ptr<Tooltip> StaticLq::SimpleCombatMonster::GetDisplayNameTooltip(const LocaleSystem& in_locale_system)
-{
-	const std::string key = EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TSelf);
-	return _dag_collection->GetTooltip(_dag_collection->FindNode(key), in_locale_system);
+	return GetTooltip(StaticLq::CombatEnum::CombatantValue::TSelf, in_locale_system, in_locale);
 }
 
 const int StaticLq::SimpleCombatMonster::GetValue(const CombatEnum::CombatantValue in_key) 
@@ -67,19 +57,10 @@ const int StaticLq::SimpleCombatMonster::GetValue(const CombatEnum::CombatantVal
 	return result;
 }
 
-std::shared_ptr<TooltipData> StaticLq::SimpleCombatMonster::GetTooltip(const CombatEnum::CombatantValue in_key, const LocaleSystem& in_locale_system) 
+const std::shared_ptr<ITooltip> StaticLq::SimpleCombatMonster::GetTooltip(const CombatEnum::CombatantValue in_key, const LocaleSystem& in_locale_system, const LocaleISO_639_1 in_locale)
 {
-	const std::string key = EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(in_key);
-	NodeID node_id = _dag_collection->FindNode(key);
-	const std::string display_name = _dag_collection->GetDisplayName(node_id);
-	const std::string tooltip = _dag_collection->GetTooltipRaw(node_id);
-
-	std::shared_ptr<TooltipData> tooltip_data = std::make_shared<TooltipData>();
-
-	tooltip_data->_text = in_locale_system.GetValue(display_name);
-	tooltip_data->_link = DagThreaded::GetTooltipBody(*_dag_collection, node_id, in_locale_system);
-
-	return tooltip_data;
+	const std::string key = EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TSelf);
+	return _dag_collection->GetTooltip(_dag_collection->FindNode(key), in_locale_system, in_locale);
 }
 
 void StaticLq::SimpleCombatMonster::SetValue(const CombatEnum::CombatantValue in_key, const int32_t in_value) 

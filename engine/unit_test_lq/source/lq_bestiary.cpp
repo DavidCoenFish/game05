@@ -3,6 +3,7 @@
 
 #include "common\locale\locale_system.h"
 #include "common\locale\locale_enum.h"
+#include "common\tooltip\i_tooltip.h"
 #include "static_lq\bestiary\bestiary_enum.h"
 #include "static_lq\bestiary\bestiary_pool.h"
 #include "static_lq\combat\i_combatant.h"
@@ -37,7 +38,14 @@ namespace LqBestiary
 				);
 			Assert::IsNotNull(giant_ant.get());
 
-			const std::string display_name = locale_system->GetValue(giant_ant->GetDisplayName());
+			auto self_tooltip = giant_ant->GetSelfTooltip(*locale_system, locale_system->GetLocale());
+			std::string display_name = {};
+			Assert::IsNotNull(self_tooltip.get());
+			self_tooltip->Visit([&display_name](const std::string& in_text, const LocaleISO_639_1, const int32_t, const int32_t)->const bool{
+				display_name = in_text;
+				return false;
+			});
+
 			Logger::WriteMessage(display_name.c_str());
 		}
 
