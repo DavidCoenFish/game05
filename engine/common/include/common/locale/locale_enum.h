@@ -3,12 +3,14 @@
 #include "common/util/enum_soft_bind.h"
 
 // https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
+// to make the enum more readable, use the language name
+// use the ISO code ["aa", "en",..] when converted to string
 enum class LocaleISO_639_1
 {
 	Default = 0,
 
-	Abkhazian,
-	Afar,
+	Abkhazian, //ab
+	Afar, //aa
 	Afrikaans,
 	Akan,
 	Albanian,

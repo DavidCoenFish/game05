@@ -67,9 +67,7 @@
     <ClCompile Include="source\common\locale\i_locale_data_provider.cpp" />
     <ClCompile Include="source\common\locale\i_locale_string_format.cpp" />
     <ClCompile Include="source\common\locale\locale_enum.cpp" />
-    <ClCompile Include="source\common\locale\locale_string_format_lambda.cpp" />
     <ClCompile Include="source\common\locale\locale_string_format_map.cpp" />
-    <ClCompile Include="source\common\locale\locale_string_format_simple.cpp" />
     <ClCompile Include="source\common\locale\locale_system.cpp" />
     <ClCompile Include="source\common\log\i_log_consumer.cpp" />
     <ClCompile Include="source\common\log\log.cpp" />
@@ -105,6 +103,7 @@
     <ClCompile Include="source\common\text\text_run_data_string.cpp" />
     <ClCompile Include="source\common\text\text_texture.cpp" />
     <ClCompile Include="source\common\tooltip\i_tooltip.cpp" />
+    <ClCompile Include="source\common\tooltip\tooltip_builder.cpp" />
     <ClCompile Include="source\common\tooltip\tooltip_link.cpp" />
     <ClCompile Include="source\common\tooltip\tooltip_text.cpp" />
     <ClCompile Include="source\common\ui\i_ui_input.cpp" />
@@ -182,9 +181,7 @@
     <ClInclude Include="include\common\locale\i_locale_data_provider.h" />
     <ClInclude Include="include\common\locale\i_locale_string_format.h" />
     <ClInclude Include="include\common\locale\locale_enum.h" />
-    <ClInclude Include="include\common\locale\locale_string_format_lambda.h" />
     <ClInclude Include="include\common\locale\locale_string_format_map.h" />
-    <ClInclude Include="include\common\locale\locale_string_format_simple.h" />
     <ClInclude Include="include\common\locale\locale_system.h" />
     <ClInclude Include="include\common\log\log.h" />
     <ClInclude Include="include\common\log\log_enum.h" />
@@ -212,6 +209,7 @@
     <ClInclude Include="include\common\text\text_pre_vertex.h" />
     <ClInclude Include="include\common\text\text_run.h" />
     <ClInclude Include="include\common\tooltip\i_tooltip.h" />
+    <ClInclude Include="include\common\tooltip\tooltip_builder.h" />
     <ClInclude Include="include\common\tooltip\tooltip_link.h" />
     <ClInclude Include="include\common\tooltip\tooltip_text.h" />
     <ClInclude Include="include\common\ui\i_ui_input.h" />

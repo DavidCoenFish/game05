@@ -343,9 +343,6 @@
     <ClCompile Include="source\common\dag\threaded\i_dag_threaded_visitor.cpp">
       <Filter>souce\common\dag\threaded</Filter>
     </ClCompile>
-    <ClCompile Include="source\common\locale\locale_string_format_lambda.cpp">
-      <Filter>souce\common\locale</Filter>
-    </ClCompile>
     <ClCompile Include="source\common\locale\locale_enum.cpp">
       <Filter>souce\common\locale</Filter>
     </ClCompile>
@@ -356,9 +353,6 @@
       <Filter>souce\common\locale</Filter>
     </ClCompile>
     <ClCompile Include="source\common\locale\locale_system.cpp">
-      <Filter>souce\common\locale</Filter>
-    </ClCompile>
-    <ClCompile Include="source\common\locale\locale_string_format_simple.cpp">
       <Filter>souce\common\locale</Filter>
     </ClCompile>
     <ClCompile Include="source\common\locale\locale_string_format_map.cpp">
@@ -374,6 +368,9 @@
       <Filter>souce\common\tooltip</Filter>
     </ClCompile>
     <ClCompile Include="source\common\tooltip\i_tooltip.cpp">
+      <Filter>souce\common\tooltip</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common\tooltip\tooltip_builder.cpp">
       <Filter>souce\common\tooltip</Filter>
     </ClCompile>
   </ItemGroup>
@@ -753,12 +750,6 @@
     <ClInclude Include="include\common\locale\i_locale_string_format.h">
       <Filter>include\common\locale</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\locale\locale_string_format_simple.h">
-      <Filter>include\common\locale</Filter>
-    </ClInclude>
-    <ClInclude Include="include\common\locale\locale_string_format_lambda.h">
-      <Filter>include\common\locale</Filter>
-    </ClInclude>
     <ClInclude Include="include\common\locale\locale_string_format_map.h">
       <Filter>include\common\locale</Filter>
     </ClInclude>
@@ -772,6 +763,9 @@
       <Filter>include\common\tooltip</Filter>
     </ClInclude>
     <ClInclude Include="include\common\tooltip\i_tooltip.h">
+      <Filter>include\common\tooltip</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\tooltip\tooltip_builder.h">
       <Filter>include\common\tooltip</Filter>
     </ClInclude>
   </ItemGroup>

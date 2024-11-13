@@ -56,7 +56,7 @@
 #include <shared_mutex>
 #include <sstream>
 #include <string>
-//#include <variant>
+#include <variant>
 #include <vector>
 
 #ifdef _DEBUG

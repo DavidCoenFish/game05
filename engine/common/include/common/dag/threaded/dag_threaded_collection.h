@@ -6,8 +6,9 @@ class DagThreadedCollectionImplementation;
 class IDagThreadedNode;
 class IDagThreadedValue;
 class IDagThreadedVisitor;
-class GetTooltip;
+class ITooltip;
 class LocaleSystem;
+enum class LocaleISO_639_1;
 
 class DagThreadedCollection
 {

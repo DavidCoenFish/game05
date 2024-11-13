@@ -155,7 +155,7 @@ public:
 		return;
 	}
 
-	std::shared_ptr<ITooltip> GetTooltip(const DagThreadedCollection& in_collection, const NodeID in_node_id, const LocaleSystem& in_locale_system, const LocaleISO_639_1 in_locale)
+	std::shared_ptr<ITooltip> GetTooltip(const DagThreadedCollection& in_collection, const DagThreadedCollection::NodeID in_node_id, const LocaleSystem& in_locale_system, const LocaleISO_639_1 in_locale)
 	{
 		if (nullptr != in_node_id)
 		{
