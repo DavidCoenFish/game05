@@ -14,13 +14,15 @@
 
 namespace
 {
+	constexpr char s_locale_key_value[] = "slqsc_value";
+	constexpr char s_locale_key_self[] = "slqsc_self";
 	constexpr char s_locale_key_self_tooltip[] = "slqsc_self_tooltip";
 	constexpr char s_locale_key_species_giant_ant[] = "slqsc_species_giant_ant";
-	constexpr char s_locale_key_description_giant_ant[] = "slqsc_species_giant_ant";
+	constexpr char s_locale_key_description_giant_ant[] = "slqsc_description_giant_ant";
 	constexpr char s_locale_key_attack_mandibles[] = "slqsc_bestiary_attack_mandibles";
 
 	constexpr char s_locale_key_species_giant_spider[] = "slqsc_species_giant_spider";
-	constexpr char s_locale_key_description_giant_spider[] = "slqsc_species_giant_spider";
+	constexpr char s_locale_key_description_giant_spider[] = "slqsc_description_giant_spider";
 	constexpr char s_locale_key_attack_bite[] = "slqsc_bestiary_attack_bite";
 	constexpr char s_locale_key_damage_tolerance[] = "slqsc_damage_tolerance";
 	constexpr char s_locale_key_damage_tolerance_tooltip[] = "slqsc_damage_tolerance_tooltip";
@@ -92,15 +94,21 @@ namespace
 	{
 		auto name_key = in_dag_collection.CreateNodeVariable(
 			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TDisplayName),
-			DagThreadedHelper::CreateDagValue<std::string>(in_name_key)
+			DagThreadedHelper::CreateDagValue<std::string>(in_name_key),
+			DagThreaded::ValueChanged,
+			s_locale_key_value
 			);
 		auto species = in_dag_collection.CreateNodeVariable(
 			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TSpecies),
-			DagThreadedHelper::CreateDagValue<std::string>(in_species)
+			DagThreadedHelper::CreateDagValue<std::string>(in_species),
+			DagThreaded::ValueChanged,
+			s_locale_key_value
 			);
 		auto variation = in_dag_collection.CreateNodeVariable(
 			EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TVariation),
-			DagThreadedHelper::CreateDagValue<std::string>(in_variation)
+			DagThreadedHelper::CreateDagValue<std::string>(in_variation),
+			DagThreaded::ValueChanged,
+			s_locale_key_value
 			);
 
 		// or a calculate node so that the tooltip changes on input change
@@ -111,9 +119,9 @@ namespace
 				const std::vector< std::shared_ptr< IDagThreadedValue > >&
 			) -> std::shared_ptr< IDagThreadedValue >
 			{
-				return DagThreadedHelper::CreateDagValue<std::string>(0);
+				return DagThreadedHelper::CreateDagValue<std::string>("");
 			},
-			"",
+			s_locale_key_self,
 			s_locale_key_self_tooltip
 			);
 		in_dag_collection.AddNodeLinkStack(self, name_key);
@@ -626,17 +634,29 @@ private:
 void StaticLq::BestiaryPool::RegisterLocaleSystem(LocaleSystem& in_out_locale_system)
 {
 	const std::vector<LocaleSystem::Data> data = {
-		{s_locale_key_self_tooltip, "{Name} the {Species}, {TVariation}"},
-		{s_locale_key_damage_tolerance, "Damage Tolerance"},
-		{s_locale_key_damage_tolerance_tooltip, "{self} = {index.1} + {index.2}d{index.3}"},
+		{s_locale_key_value, "{_value}"},
+		{s_locale_key_self, "{DisplayName}"},
+		{s_locale_key_self_tooltip, "{DisplayName} the {Species}, {Variation}"},
+		{s_locale_key_damage_tolerance, "Damage Tolerance ({_value})"},
+		{s_locale_key_damage_tolerance_tooltip, "{_text} = {_i.1} + {_i.2}d{_i.3}"},
 
 		{s_locale_key_species_giant_ant, "Giant Ant"},
 		{s_locale_key_description_giant_ant, "giant ant description text"},
 		{s_locale_key_attack_mandibles, "mandibles"},
 
 		{s_locale_key_species_giant_spider, "Giant Spider"},
-		{s_locale_key_description_giant_ant, "giant spider description text"},
+		{s_locale_key_description_giant_spider, "giant spider description text"},
 		{s_locale_key_attack_bite, "bite"},
+
+		{s_key_giant_ant_worker, "worker"},
+		{s_key_giant_ant_warrior, "warrior"},
+		{s_key_giant_ant_queen, "giant_ant_queen"},
+		{s_key_giant_ant_dew_pot_worker, "giant_ant_dew_pot_worker"},
+		{s_key_giant_spider_average, "giant_spider_average"},
+		{s_key_giant_spider_below_average, "giant_spider_below_average"},
+		{s_key_giant_spider_above_average, "giant_spider_above_average"},
+		{s_key_giant_spider_exceptional, "giant_spider_exceptional"},
+
 		};
 
 	in_out_locale_system.Append(LocaleISO_639_1::Default, data);

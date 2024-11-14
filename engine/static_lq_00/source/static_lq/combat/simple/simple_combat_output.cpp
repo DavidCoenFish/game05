@@ -28,16 +28,15 @@ namespace
 	constexpr char s_locale_key_combatant_poisoned[] = "slqsc_combatant_poisoned"; 
 	constexpr char s_locale_key_combatant_poison_save[] = "slqsc_combatant_poison_save";
 
-
-	//class LocaleDataProvider : public ILocaleDataProvider
-	//{
-	//private:
-	//	/// for debug/ unittests. eventually, should be read from data
-	//	void Populate(LocaleSystem& in_out_locale_system, const LocaleISO_639_1 in_locale) const override
-	//	{
-	//		in_locale;
-	//	}
-	//};
+	const std::string GetTooltipText(const std::shared_ptr<ITooltip>& in_tooltip)
+	{
+		std::string result = {};
+		if (nullptr != in_tooltip)
+		{
+			result = in_tooltip->GetText();
+		}
+		return result;
+	}
 }
 
 /// for debug/ unittests. eventually, should be read from data
@@ -83,7 +82,7 @@ void StaticLq::SimpleCombatOutput::SetCombatStart()
 void StaticLq::SimpleCombatOutput::CombatantAdded(ICombatant& combatant, ICombatSide& side)
 {
 	std::map<std::string, std::string> data_map = {
-		{ "combatant", _locale_system->GetValue(combatant.GetDisplayName()) },
+		{ "combatant", GetTooltipText(combatant.GetSelfTooltip(*_locale_system, _locale_system->GetLocale())) },
 		{ "side", _locale_system->GetValue(side.GetDisplayName()) }
 	};
 	LocaleStringFormatMap format_map(data_map);
@@ -99,7 +98,7 @@ void StaticLq::SimpleCombatOutput::CombatantAdded(ICombatant& combatant, ICombat
 void StaticLq::SimpleCombatOutput::CombatantRemoved(ICombatant& combatant, ICombatSide& side)
 {
 	std::map<std::string, std::string> data_map = {
-		{ "combatant", _locale_system->GetValue(combatant.GetDisplayName()) },
+		{ "combatant", GetTooltipText(combatant.GetSelfTooltip(*_locale_system, _locale_system->GetLocale())) },
 		{ "side", _locale_system->GetValue(side.GetDisplayName()) }
 	};
 	LocaleStringFormatMap format_map(data_map);
@@ -133,7 +132,7 @@ void StaticLq::SimpleCombatOutput::CombatantSetMelleeInitiative(ICombatant& in_c
 	in_combatant; in_value;
 #if 0
 	std::map<std::string, std::string> data_map = {
-		{ "combatant", _locale_system->GetValue(in_combatant.GetDisplayName()) },
+		{ "combatant", GetTooltipText(combatant.GetSelfTooltip(*_locale_system, _locale_system->GetLocale())) },
 		{ "value", std::to_string(in_value) }
 	};
 	LocaleStringFormatMap format_map(data_map);
@@ -162,8 +161,8 @@ void StaticLq::SimpleCombatOutput::CombatantAttemptMelleeAttack(
 		return;
 	}
 	std::map<std::string, std::string> data_map = {
-		{ "combatant", _locale_system->GetValue(in_combatant_performing_action->GetDisplayName()) },
-		{ "target", _locale_system->GetValue(in_combatant_being_hit->GetDisplayName()) },
+		{ "combatant", GetTooltipText(in_combatant_performing_action->GetSelfTooltip(*_locale_system, _locale_system->GetLocale())) },
+		{ "target", GetTooltipText(in_combatant_being_hit->GetSelfTooltip(*_locale_system, _locale_system->GetLocale())) },
 		{ "attack", _locale_system->GetValue(in_attack) },
 		{ "attack_roll", std::to_string(in_attack_roll) },
 		{ "attack_bonus", std::to_string(in_attack_bonus) },
@@ -189,7 +188,7 @@ void StaticLq::SimpleCombatOutput::CombatantDamage(
 	)
 {
 	std::map<std::string, std::string> data_map = {
-		{ "combatant", _locale_system->GetValue(in_combatant_receive.GetDisplayName()) },
+		{ "combatant", GetTooltipText(in_combatant_receive.GetSelfTooltip(*_locale_system, _locale_system->GetLocale())) },
 		{ "health_points", std::to_string(in_health_points) },
 		{ "damage_tollerance", std::to_string(in_damage_tollerance) },
 		{ "physical_damage", std::to_string(in_physical_damage_delta) },
@@ -212,7 +211,7 @@ void StaticLq::SimpleCombatOutput::CombatantDied(
 	)
 {
 	std::map<std::string, std::string> data_map = {
-		{ "combatant", _locale_system->GetValue(in_combatant.GetDisplayName()) }
+		{ "combatant", GetTooltipText(in_combatant.GetSelfTooltip(*_locale_system, _locale_system->GetLocale())) },
 		};
 
 	LocaleStringFormatMap format_map(data_map);
@@ -234,7 +233,7 @@ void StaticLq::SimpleCombatOutput::CombatantPoisonSave(
 	)
 {
 	std::map<std::string, std::string> data_map = {
-		{ "combatant", _locale_system->GetValue(in_combatant.GetDisplayName()) },
+		{ "combatant", GetTooltipText(in_combatant.GetSelfTooltip(*_locale_system, _locale_system->GetLocale())) },
 		{ "risk", std::to_string(in_risk_after_save) },
 		{ "threashold", std::to_string(in_threashold) },
 		{ "roll", std::to_string(in_roll) },
@@ -258,7 +257,7 @@ void StaticLq::SimpleCombatOutput::CombatantPoisoned(
 	)
 {
 	std::map<std::string, std::string> data_map = {
-		{ "combatant", _locale_system->GetValue(in_combatant.GetDisplayName()) },
+		{ "combatant", GetTooltipText(in_combatant.GetSelfTooltip(*_locale_system, _locale_system->GetLocale())) },
 		{ "risk", std::to_string(in_risk) },
 		{ "turn", std::to_string(in_when.GetTurn()) },
 		{ "segment", std::to_string(in_when.GetSegment()) }

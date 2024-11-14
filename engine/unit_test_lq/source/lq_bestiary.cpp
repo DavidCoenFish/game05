@@ -23,6 +23,8 @@ namespace LqBestiary
 			std::shared_ptr<LocaleSystem> locale_system = std::make_shared<LocaleSystem>();
 			Assert::IsNotNull(locale_system.get());
 
+			StaticLq::BestiaryPool::RegisterLocaleSystem(*locale_system);
+
 			std::shared_ptr<StaticLq::NameSystem> name_system = std::make_shared<StaticLq::NameSystem>();
 			name_system->AddGenerator(StaticLq::NameSystem::GetKeyGiantAnt(), StaticLq::NameSystemGeneratorRandom::FactoryGeneratorGiantAnt());
 			
@@ -45,8 +47,20 @@ namespace LqBestiary
 				display_name = in_text;
 				return false;
 			});
-
+			display_name += "\n";
 			Logger::WriteMessage(display_name.c_str());
+
+			std::string tooltip_children_as_text = {};
+			self_tooltip->Visit([&tooltip_children_as_text](const std::string& in_text, const LocaleISO_639_1, const int32_t, const int32_t in_depth)->const bool{
+
+				if (1 == in_depth)
+				{
+					tooltip_children_as_text += in_text;
+				}
+				return true;
+			});
+			tooltip_children_as_text += "\n";
+			Logger::WriteMessage(tooltip_children_as_text.c_str());
 		}
 
 		TEST_METHOD(FactoryDefaultGiantSpider)

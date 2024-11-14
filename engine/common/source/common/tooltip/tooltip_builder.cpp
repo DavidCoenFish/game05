@@ -9,8 +9,9 @@
 
 namespace
 {
-	constexpr char s_locale_key_true[] = "c_dag_true";
-	constexpr char s_locale_key_false[] = "c_dag_false";
+	constexpr char s_locale_key_true[] = "c_ttb_true";
+	constexpr char s_locale_key_false[] = "c_ttb_false";
+	constexpr char s_locale_key_comma_seperator[] = "c_ttb_comma_seperator";
 
 	const std::string DealValue(ITooltipBuilderDataSource& in_data_source, const LocaleSystem& in_locale_system, const LocaleISO_639_1 in_locale)
 	{
@@ -32,7 +33,7 @@ namespace
 		}
 		else if (std::holds_alternative<std::string>(value))
 		{
-			return std::get<std::string>(value);
+			return in_locale_system.GetValue(in_locale, std::get<std::string>(value));
 		}
 		return std::string();
 	}
@@ -97,11 +98,7 @@ namespace
 			}
 			else
 			{
-				const std::shared_ptr<ITooltip> tooltip = _data_source.GetTooltip(in_token, in_locale_system, _locale);
-				if (nullptr != tooltip)
-				{
-					_text += tooltip->GetText();
-				}
+				_text += _data_source.GetText(in_token, in_locale_system, in_locale); 
 			}
 		}
 
@@ -174,11 +171,7 @@ namespace
 			}
 			else
 			{
-				const std::shared_ptr<ITooltip> tooltip = _data_source.GetTooltip(in_token, in_locale_system, in_locale);
-				if (nullptr != tooltip)
-				{
-					_children.push_back(tooltip->Clone(_verbosity));
-				}
+				_data_source.AppendChildren(_children, _verbosity, in_token, in_locale_system, in_locale); 
 			}
 		}
 
@@ -197,8 +190,14 @@ void TooltipBuilder::RegisterLocaleSystem(LocaleSystem& in_out_locale_system)
 	const std::vector<LocaleSystem::Data> data = {
 		{s_locale_key_true, "True"},
 		{s_locale_key_false, "False"},
+		{s_locale_key_comma_seperator, ", "},
 		};
 	in_out_locale_system.Append(LocaleISO_639_1::Default, data);
+}
+
+const std::string TooltipBuilder::GetLocaleKeyCommaSeperator()
+{
+	return s_locale_key_comma_seperator;
 }
 
 const std::shared_ptr<ITooltip> TooltipBuilder::BuildTooltip(

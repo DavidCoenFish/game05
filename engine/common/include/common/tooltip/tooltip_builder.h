@@ -22,6 +22,9 @@ _l.<key>		lookup locale system with key
 _c.<ISO_639_1>		change the language code, <ISO_639_1> should be a LocaleISO_639_1 code ["en", "zh-cn", "uk",...]
 _value			the value of the data source as a string
 _value_bool		the value of the data source as a true/ false string
+_s_all_comma	list every tooltip of items in the stack input, comma seperated
+_s.<x>			index to stack input tooltip
+_i.<x>			index to index input tooltip
 <x>				any other token is passed to the data source
 
 want to allow a verbosity value for tooltip sequence
@@ -54,14 +57,24 @@ class ITooltipBuilderDataSource
 public:
 	typedef std::variant<bool, int32_t, std::string> TValue;
 	virtual const TValue GetValue() = 0;
-	virtual const std::shared_ptr<ITooltip> GetTooltip(const std::string& in_key, const LocaleSystem& in_locale_system, 
+	virtual const std::string GetText(
+		const std::string& in_token, 
+		const LocaleSystem& in_locale_system, 
+		const LocaleISO_639_1 in_locale) = 0;
+	/// ideally would just return a tooltip, but if we want to list all the items on a calculate node stack input, then pass the child array and current verbosity
+	virtual void AppendChildren(
+		std::vector<std::shared_ptr<ITooltip>>& in_out_children,
+		const int in_clone_verbosity,
+		const std::string& in_token, 
+		const LocaleSystem& in_locale_system, 
 		const LocaleISO_639_1 in_locale) = 0;
 
 };
 
 namespace TooltipBuilder
 {
-	static void RegisterLocaleSystem(LocaleSystem& in_out_locale_system);
+	void RegisterLocaleSystem(LocaleSystem& in_out_locale_system);
+	const std::string GetLocaleKeyCommaSeperator();
 
 	/// in_data_source is not const as dag collection can do calculations on get value 
 	const std::shared_ptr<ITooltip> BuildTooltip(
