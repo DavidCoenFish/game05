@@ -3,7 +3,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
 	<DscBuildDir>$(ProjectDir)..\..\..\build\$(ProjectName)\$(Platform)\$(Configuration)\</DscBuildDir>
-	<DscIncludeDir>$(ProjectDir)..\..\..\engine\common\include\;$(ProjectDir)..\static_lq_00\include\;$(ProjectDir)source\</DscIncludeDir>
+	<DscIncludeDir>$(ProjectDir)..\..\..\engine\sdk\;$(ProjectDir)..\..\..\engine\common\include\;$(ProjectDir)..\static_lq_00\include\;$(ProjectDir)source\</DscIncludeDir>
   </PropertyGroup>
   <PropertyGroup>
 	<OutDir>$(DscBuildDir)output\</OutDir>
