@@ -5,53 +5,28 @@ VisualStudioVersion = 16.0.32602.291
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root_items", "root_items", "{3E632E09-36A9-4D11-ABDD-6C628C632CE6}"
 	ProjectSection(SolutionItems) = preProject
-		..\.gitignore = ..\.gitignore
-		..\backup_copy_e_drive.cmd = ..\backup_copy_e_drive.cmd
-		..\bugs.txt = ..\bugs.txt
-		..\cmd_here.cmd = ..\cmd_here.cmd
-		..\commit.cmd = ..\commit.cmd
-		..\notes.txt = ..\notes.txt
-		..\README.md = ..\README.md
-		..\reset.cmd = ..\reset.cmd
-		..\sync.cmd = ..\sync.cmd
-		..\todo.txt = ..\todo.txt
+		..\..\.gitignore = ..\..\.gitignore
+		..\..\backup_copy_e_drive.cmd = ..\..\backup_copy_e_drive.cmd
+		..\..\bugs.txt = ..\..\bugs.txt
+		..\..\cmd_here.cmd = ..\..\cmd_here.cmd
+		..\..\commit.cmd = ..\..\commit.cmd
+		..\..\notes.txt = ..\..\notes.txt
+		..\..\README.md = ..\..\README.md
+		..\..\reset.cmd = ..\..\reset.cmd
+		..\..\sync.cmd = ..\..\sync.cmd
+		..\..\todo.txt = ..\..\todo.txt
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common", "common\common.vcxproj", "{3DE01963-E730-4A3F-9D8A-76DC5A1F1683}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common", "..\..\engine\common\common.vcxproj", "{3DE01963-E730-4A3F-9D8A-76DC5A1F1683}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B4064DBC-E1BA-42ED-8E9B-FC82ED339576} = {B4064DBC-E1BA-42ED-8E9B-FC82ED339576}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "unit_test", "unit_test\unit_test.vcxproj", "{0B76C9D3-BA28-446A-B6C4-8A3D82C75506}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "unit_test", "..\..\engine\unit_test\unit_test.vcxproj", "{0B76C9D3-BA28-446A-B6C4-8A3D82C75506}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "version", "version\version.vcxproj", "{B4064DBC-E1BA-42ED-8E9B-FC82ED339576}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "version", "..\..\engine\version\version.vcxproj", "{B4064DBC-E1BA-42ED-8E9B-FC82ED339576}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution_items", "solution_items", "{5DF829E7-91A7-4FF5-A522-39B1F0EA0375}"
-	ProjectSection(SolutionItems) = preProject
-		cmd_here.cmd = cmd_here.cmd
-		commit.cmd = commit.cmd
-		doxygen_config.ini = doxygen_config.ini
-		engine.cmd = engine.cmd
-		mainpage.dox = mainpage.dox
-		notes.txt = notes.txt
-		test.cmd = test.cmd
-		test_then_commit.cmd = test_then_commit.cmd
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "design", "design", "{2C0B0486-D021-4003-A738-299429143C78}"
-	ProjectSection(SolutionItems) = preProject
-		..\design\rpg_legendary_quest_00.txt = ..\design\rpg_legendary_quest_00.txt
-		..\design\rts_mold_00.txt = ..\design\rts_mold_00.txt
-		..\design\sandbox_jank_00.txt = ..\design\sandbox_jank_00.txt
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "script", "script", "{F733BE00-72EC-45C3-9948-8D6E112ED327}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "hunts_goblins", "hunts_goblins", "{B4CBFE22-FB5E-4E18-A875-A9104C527B57}"
-	ProjectSection(SolutionItems) = preProject
-		..\script\hunts_goblins\draft00.txt = ..\script\hunts_goblins\draft00.txt
-		..\script\hunts_goblins\draft01.txt = ..\script\hunts_goblins\draft01.txt
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "application_lq_00", "application_lq_00\application_lq_00.vcxproj", "{90C3F554-F06B-4134-ABCB-F1D49F2524BB}"
 EndProject
@@ -70,6 +45,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{3DE01963-E730-4A3F-9D8A-76DC5A1F1683}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{3DE01963-E730-4A3F-9D8A-76DC5A1F1683}.Debug|Any CPU.Build.0 = Debug|x64
 		{3DE01963-E730-4A3F-9D8A-76DC5A1F1683}.Debug|x64.ActiveCfg = Debug|x64
 		{3DE01963-E730-4A3F-9D8A-76DC5A1F1683}.Debug|x64.Build.0 = Debug|x64
 		{3DE01963-E730-4A3F-9D8A-76DC5A1F1683}.Profile|Any CPU.ActiveCfg = Profile|x64
@@ -79,6 +55,7 @@ Global
 		{3DE01963-E730-4A3F-9D8A-76DC5A1F1683}.Release|x64.ActiveCfg = Release|x64
 		{3DE01963-E730-4A3F-9D8A-76DC5A1F1683}.Release|x64.Build.0 = Release|x64
 		{0B76C9D3-BA28-446A-B6C4-8A3D82C75506}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{0B76C9D3-BA28-446A-B6C4-8A3D82C75506}.Debug|Any CPU.Build.0 = Debug|x64
 		{0B76C9D3-BA28-446A-B6C4-8A3D82C75506}.Debug|x64.ActiveCfg = Debug|x64
 		{0B76C9D3-BA28-446A-B6C4-8A3D82C75506}.Debug|x64.Build.0 = Debug|x64
 		{0B76C9D3-BA28-446A-B6C4-8A3D82C75506}.Profile|Any CPU.ActiveCfg = Release|x64
@@ -88,7 +65,8 @@ Global
 		{0B76C9D3-BA28-446A-B6C4-8A3D82C75506}.Release|Any CPU.ActiveCfg = Release|x64
 		{0B76C9D3-BA28-446A-B6C4-8A3D82C75506}.Release|x64.ActiveCfg = Release|x64
 		{0B76C9D3-BA28-446A-B6C4-8A3D82C75506}.Release|x64.Build.0 = Release|x64
-		{B4064DBC-E1BA-42ED-8E9B-FC82ED339576}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{B4064DBC-E1BA-42ED-8E9B-FC82ED339576}.Debug|Any CPU.ActiveCfg = Release|x64
+		{B4064DBC-E1BA-42ED-8E9B-FC82ED339576}.Debug|Any CPU.Build.0 = Release|x64
 		{B4064DBC-E1BA-42ED-8E9B-FC82ED339576}.Debug|x64.ActiveCfg = Release|x64
 		{B4064DBC-E1BA-42ED-8E9B-FC82ED339576}.Debug|x64.Build.0 = Release|x64
 		{B4064DBC-E1BA-42ED-8E9B-FC82ED339576}.Profile|Any CPU.ActiveCfg = Release|x64
@@ -99,6 +77,7 @@ Global
 		{B4064DBC-E1BA-42ED-8E9B-FC82ED339576}.Release|x64.ActiveCfg = Release|x64
 		{B4064DBC-E1BA-42ED-8E9B-FC82ED339576}.Release|x64.Build.0 = Release|x64
 		{90C3F554-F06B-4134-ABCB-F1D49F2524BB}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{90C3F554-F06B-4134-ABCB-F1D49F2524BB}.Debug|Any CPU.Build.0 = Debug|x64
 		{90C3F554-F06B-4134-ABCB-F1D49F2524BB}.Debug|x64.ActiveCfg = Debug|x64
 		{90C3F554-F06B-4134-ABCB-F1D49F2524BB}.Debug|x64.Build.0 = Debug|x64
 		{90C3F554-F06B-4134-ABCB-F1D49F2524BB}.Profile|Any CPU.ActiveCfg = Debug|x64
@@ -109,6 +88,7 @@ Global
 		{90C3F554-F06B-4134-ABCB-F1D49F2524BB}.Release|x64.ActiveCfg = Release|x64
 		{90C3F554-F06B-4134-ABCB-F1D49F2524BB}.Release|x64.Build.0 = Release|x64
 		{99D2DC42-E150-9816-64D5-0E8BC12AFF3F}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{99D2DC42-E150-9816-64D5-0E8BC12AFF3F}.Debug|Any CPU.Build.0 = Debug|x64
 		{99D2DC42-E150-9816-64D5-0E8BC12AFF3F}.Debug|x64.ActiveCfg = Debug|x64
 		{99D2DC42-E150-9816-64D5-0E8BC12AFF3F}.Debug|x64.Build.0 = Debug|x64
 		{99D2DC42-E150-9816-64D5-0E8BC12AFF3F}.Profile|Any CPU.ActiveCfg = Debug|x64
@@ -119,6 +99,7 @@ Global
 		{99D2DC42-E150-9816-64D5-0E8BC12AFF3F}.Release|x64.ActiveCfg = Release|x64
 		{99D2DC42-E150-9816-64D5-0E8BC12AFF3F}.Release|x64.Build.0 = Release|x64
 		{0B76C9D3-BA28-446A-B699-8A3D82C75506}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{0B76C9D3-BA28-446A-B699-8A3D82C75506}.Debug|Any CPU.Build.0 = Debug|x64
 		{0B76C9D3-BA28-446A-B699-8A3D82C75506}.Debug|x64.ActiveCfg = Debug|x64
 		{0B76C9D3-BA28-446A-B699-8A3D82C75506}.Debug|x64.Build.0 = Debug|x64
 		{0B76C9D3-BA28-446A-B699-8A3D82C75506}.Profile|Any CPU.ActiveCfg = Debug|x64
@@ -131,11 +112,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{2C0B0486-D021-4003-A738-299429143C78} = {3E632E09-36A9-4D11-ABDD-6C628C632CE6}
-		{F733BE00-72EC-45C3-9948-8D6E112ED327} = {3E632E09-36A9-4D11-ABDD-6C628C632CE6}
-		{B4CBFE22-FB5E-4E18-A875-A9104C527B57} = {F733BE00-72EC-45C3-9948-8D6E112ED327}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {01849243-7DF1-40D0-80A9-36CDCC951EE5}

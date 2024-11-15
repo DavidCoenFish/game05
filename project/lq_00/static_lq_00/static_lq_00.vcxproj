@@ -159,12 +159,12 @@
     <ClInclude Include="source\static_lq\static_lq_pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\common\common.vcxproj">
-      <Project>{3de01963-e730-4a3f-9d8a-76dc5a1f1683}</Project>
-    </ProjectReference>
+    <Text Include="notes.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="notes.txt" />
+    <ProjectReference Include="..\..\..\engine\common\common.vcxproj">
+      <Project>{3de01963-e730-4a3f-9d8a-76dc5a1f1683}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

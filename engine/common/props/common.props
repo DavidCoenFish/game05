@@ -2,8 +2,8 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-	<DscBuildDir>$(SolutionDir)..\build\$(SolutionName)\$(ProjectName)\$(Platform)\$(Configuration)\</DscBuildDir>
-	<DscIncludeDir>$(SolutionDir)sdk\;$(SolutionDir)sdk\free_type\Include\;$(SolutionDir)sdk\harf_buzz\Include\;$(SolutionDir)sdk\pugixml\src\;$(projectDir)source\;$(projectDir)include\</DscIncludeDir>
+	<DscBuildDir>$(ProjectDir)..\..\build\$(ProjectName)\$(Platform)\$(Configuration)\</DscBuildDir>
+	<DscIncludeDir>$(ProjectDir)..\sdk;$(ProjectDir)..\sdk\free_type\Include\;$(ProjectDir)..\sdk\harf_buzz\Include\;$(ProjectDir)..\sdk\pugixml\src\;$(ProjectDir)source\;$(ProjectDir)include\</DscIncludeDir>
   </PropertyGroup>
   <PropertyGroup>
 	<OutDir>$(DscBuildDir)output\</OutDir>

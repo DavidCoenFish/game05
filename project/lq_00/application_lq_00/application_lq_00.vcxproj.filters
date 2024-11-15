@@ -53,6 +53,7 @@
     <None Include="script\util_search_replace.cmd">
       <Filter>script</Filter>
     </None>
+    <None Include=".gitignore" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="props">

@@ -20,7 +20,7 @@ Deadly 1d8 Damage, Lethargy
 */
 const int32_t ApplyToxin(int32_t& out_physical_damage_dice_count, int32_t& out_paralyzation_damage_dice_count, const int32_t in_current_dose, const int32_t in_risk_factor, StaticLq::ICombatant& in_target, const StaticLq::CombatTime& in_time, StaticLq::RandomSequence& in_out_random_sequence, StaticLq::ICombatOutput* in_output)
 {
-	in_output;
+	in_output; in_out_random_sequence; in_time; in_target; out_paralyzation_damage_dice_count;
 	const int32_t result = in_current_dose + in_risk_factor;
 	int32_t trace = in_current_dose;
 	while (trace < result)
@@ -66,7 +66,7 @@ effects don't wrap
 */
 const int32_t ApplyHallucinogen(int32_t& out_physical_damage_dice_count, int32_t& out_paralyzation_damage_dice_count, const int32_t in_current_dose, const int32_t in_risk_factor, StaticLq::ICombatant& in_target, const StaticLq::CombatTime& in_time, StaticLq::RandomSequence& in_out_random_sequence, StaticLq::ICombatOutput* in_output)
 {
-	in_output;
+	in_output; in_out_random_sequence; in_time; in_target; out_physical_damage_dice_count; out_paralyzation_damage_dice_count;
 	const int32_t result = in_current_dose + in_risk_factor;
 	if ((in_current_dose < 1) && (1 <= result))
 	{
@@ -122,7 +122,7 @@ Deadly 1d8 Damage, -1 PS
 */
 const int32_t ApplyKillingVenom(int32_t& out_physical_damage_dice_count, int32_t& out_paralyzation_damage_dice_count, const int32_t in_current_dose, const int32_t in_risk_factor, StaticLq::ICombatant& in_target, const StaticLq::CombatTime& in_time, StaticLq::RandomSequence& in_out_random_sequence, StaticLq::ICombatOutput* in_output)
 {
-	in_output;
+	in_output; in_out_random_sequence; in_time; in_target; out_paralyzation_damage_dice_count;
 	const int32_t result = in_current_dose + in_risk_factor;
 	int32_t trace = in_current_dose;
 	while (trace < result)
@@ -162,7 +162,7 @@ Deadly 1d8 Damage, -1 AG
 */
 const int32_t ApplyParalyzingVenom(int32_t& out_physical_damage_dice_count, int32_t& out_paralyzation_damage_dice_count, const int32_t in_current_dose, const int32_t in_risk_factor, StaticLq::ICombatant& in_target, const StaticLq::CombatTime& in_time, StaticLq::RandomSequence& in_out_random_sequence, StaticLq::ICombatOutput* in_output)
 {
-	in_output;
+	out_physical_damage_dice_count; in_output;
 	const int32_t result = in_current_dose + in_risk_factor;
 	int32_t trace = in_current_dose;
 	while (trace < result)

@@ -1,5 +1,8 @@
 *.exe
 
+# Git
+.git/
+
 # Python
 dist/
 __pycache__/

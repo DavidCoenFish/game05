@@ -1,13 +1,13 @@
 <Project>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>$(SolutionDir)..\build\$(SolutionName)\automatron\debug\bin\</OutputPath>
-    <BaseIntermediateOutputPath>$(SolutionDir)..\build\$(SolutionName)\automatron\debug\obj\</BaseIntermediateOutputPath>
+    <OutputPath>$(SolutionDir)..\build\$(ProjectName)\debug\bin\</OutputPath>
+    <BaseIntermediateOutputPath>$(SolutionDir)..\build\$(ProjectName)\debug\obj\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)\</IntermediateOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>$(SolutionDir)..\build\$(SolutionName)\automatron\release\bin\</OutputPath>
-    <BaseIntermediateOutputPath>$(SolutionDir)..\build\$(SolutionName)\automatron\release\obj\</BaseIntermediateOutputPath>
+    <OutputPath>$(SolutionDir)..\build\$(ProjectName)\release\bin\</OutputPath>
+    <BaseIntermediateOutputPath>$(SolutionDir)..\build\$(ProjectName)\release\obj\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)\</IntermediateOutputPath>
   </PropertyGroup>
 

@@ -59,7 +59,7 @@ const int StaticLq::SimpleCombatMonster::GetValue(const CombatEnum::CombatantVal
 
 const std::shared_ptr<ITooltip> StaticLq::SimpleCombatMonster::GetTooltip(const CombatEnum::CombatantValue in_key, const LocaleSystem& in_locale_system, const LocaleISO_639_1 in_locale)
 {
-	const std::string key = EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(StaticLq::CombatEnum::CombatantValue::TSelf);
+	const std::string key = EnumSoftBind<StaticLq::CombatEnum::CombatantValue>::EnumToString(in_key);
 	return _dag_collection->GetTooltip(_dag_collection->FindNode(key), in_locale_system, in_locale);
 }
 

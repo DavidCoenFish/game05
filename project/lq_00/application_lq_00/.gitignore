@@ -1,0 +1,3 @@
+# resource files are build output, and include the version string which may change each dirty build, and we don't want that marking the next build dirty
+*.rc
+

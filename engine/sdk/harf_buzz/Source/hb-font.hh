@@ -373,7 +373,7 @@ struct hb_font_t
 				 hb_codepoint_t *glyph)
   {
     *glyph = 0;
-    if (len == -1) len = strlen (name);
+    if (len == -1) len = static_cast<unsigned int>(strlen (name));
     return klass->get.f.glyph_from_name (this, user_data,
 					 name, len,
 					 glyph,
