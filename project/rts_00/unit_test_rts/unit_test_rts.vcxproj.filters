@@ -7,6 +7,9 @@
     <ClCompile Include="source\unit_test_rts_pch.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="source\rts_path_finder_tile_manager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="props">

@@ -2,12 +2,13 @@
 
 #include "static_rts/path_finder/i_path_finder_map_objserver.h"
 
-class PathFinderPath;
 class PathFinderTileManagerImplementation;
 class VectorShort2;
 
 namespace StaticRts
 {
+	class PathFinderPath;
+
 	/// cut the input map into a sersies of tiles of traversable [true,false] and watch for changes
 	/// as requires, calculate the flow regions, and use that to construct a path
 	/// tile manager and tiles have a change id? and on use of path intance, i needs to check if still valid?
@@ -21,13 +22,13 @@ namespace StaticRts
 		PathFinderTileManager(
 			const TIsMapDataTraversable in_is_data_traversable_function
 			);
+		~PathFinderTileManager();
 
 		// IPathFinderPath?
-		typedef PathFinderPath* PathID;
-
+		//typedef PathFinderPath* PathID;
 		//std::shared_ptr<PathFinderPath> MakePath(const VectorShort2& in_start, const VectorShort2& in_end);
-		const PathID MakePath(const VectorShort2& in_start, const VectorShort2& in_end);
-		void AdvancePath();
+		//const PathID MakePath(const VectorShort2& in_start, const VectorShort2& in_end);
+		//void AdvancePath();
 
 	private:
 		virtual void SetInitialData(
@@ -40,5 +41,6 @@ namespace StaticRts
 
 	private:
 		std::unique_ptr< PathFinderTileManagerImplementation > _implementation;
+
 	};
 };

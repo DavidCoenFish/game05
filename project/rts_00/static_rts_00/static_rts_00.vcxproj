@@ -85,6 +85,7 @@
     <ClCompile Include="source\static_rts\input_database.cpp" />
     <ClCompile Include="source\static_rts\path_finder\path_finder_map.cpp" />
     <ClCompile Include="source\static_rts\path_finder\path_finder_tile.cpp" />
+    <ClCompile Include="source\static_rts\path_finder\path_finder_tile_distance.cpp" />
     <ClCompile Include="source\static_rts\path_finder\path_finder_tile_manager.cpp" />
     <ClCompile Include="source\static_rts\snapshot.cpp" />
     <ClCompile Include="source\static_rts\snapshot_cache.cpp" />
@@ -104,6 +105,7 @@
     <ClInclude Include="include\static_rts\snapshot.h" />
     <ClInclude Include="include\static_rts\snapshot_cache.h" />
     <ClInclude Include="source\static_rts\path_finder\path_finder_tile.h" />
+    <ClInclude Include="source\static_rts\path_finder\path_finder_tile_distance.h" />
     <ClInclude Include="source\static_rts\static_rts_pch.h" />
   </ItemGroup>
   <ItemGroup>

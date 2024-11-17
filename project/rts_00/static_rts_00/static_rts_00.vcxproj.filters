@@ -53,6 +53,9 @@
     <ClCompile Include="source\static_rts\path_finder\path_finder_tile_manager.cpp">
       <Filter>source\static_rts\path_finder</Filter>
     </ClCompile>
+    <ClCompile Include="source\static_rts\path_finder\path_finder_tile_distance.cpp">
+      <Filter>source\static_rts\path_finder</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\static_rts\static_rts_pch.h">
@@ -87,6 +90,9 @@
     </ClInclude>
     <ClInclude Include="include\static_rts\path_finder\path_finder_path.h">
       <Filter>include\static_rts\path_finder</Filter>
+    </ClInclude>
+    <ClInclude Include="source\static_rts\path_finder\path_finder_tile_distance.h">
+      <Filter>source\static_rts\path_finder</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

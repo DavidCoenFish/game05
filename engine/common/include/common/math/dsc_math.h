@@ -23,4 +23,6 @@ namespace DscMath
 	/// map [0.0f ... 1.0f] -> [0 ... 255]
 	const int ConvertFloatToByte(const float in_value);
 
+	const int32_t IntCeilingDiv(const int32_t in_x, const int32_t in_y);
+
 }

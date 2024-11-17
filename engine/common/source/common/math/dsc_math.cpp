@@ -78,3 +78,9 @@ const int DscMath::ConvertFloatToByte(const float in_value)
 	return result;
 }
 
+//https://stackoverflow.com/questions/2745074/fast-ceiling-of-an-integer-division-in-c-c
+const int32_t DscMath::IntCeilingDiv(const int32_t in_x, const int32_t in_y)
+{
+	const int32_t result = (in_x/in_y) + ((in_x % in_y) != 0);
+	return result;
+}
