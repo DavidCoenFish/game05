@@ -9,7 +9,7 @@
 const char* const Build::GetBuildHost( void )
 {
    return 
-#include "..\..\version\output\build_host.txt"
+#include "..\..\..\..\engine\version\output\build_host.txt"
        ;
 }
 
@@ -41,34 +41,34 @@ const char* const Build::GetBuildTime(void)
 const char* const Build::GetBuildVersion(void)
 {
    return 
-#include "..\..\version\output\build_version.txt"
+#include "..\..\..\..\engine\version\output\build_version.txt"
        ;
 }
 
 const int Build::GetBuildVersionMajor()
 {
    return 
-#include "..\..\version\output\build_version_major.txt"
+#include "..\..\..\..\engine\version\output\build_version_major.txt"
       ;
 }
 
 const int Build::GetBuildVersionMinor()
 {
    return 
-#include "..\..\version\output\build_version_minor.txt"
+#include "..\..\..\..\engine\version\output\build_version_minor.txt"
       ;
 }
 
 const int Build::GetBuildVersionPatch()
 {
    return 
-#include "..\..\version\output\build_version_patch.txt"
+#include "..\..\..\..\engine\version\output\build_version_patch.txt"
       ;
 }
 const int Build::GetBuildVersionStore()
 {
    return 
-#include "..\..\version\output\build_version_store.txt"
+#include "..\..\..\..\engine\version\output\build_version_store.txt"
       ;
 }
 

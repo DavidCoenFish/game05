@@ -5,7 +5,7 @@ class InputDatabaseImplementation;
 class Snapshot;
 class SnapshotCache;
 
-namespace static_rts_00
+namespace StaticRts
 {
     /// snapshot has frame_id, and change_id
     /// snapshot cache is collection of snapshots valid for given change id

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace static_rts_00
+namespace StaticRts
 {
     /// is it wierd if we design for a map that may resize, new players added. 
     /// is moving around so much data per frame may be weird? even the map? (512x512 -> 64kb)

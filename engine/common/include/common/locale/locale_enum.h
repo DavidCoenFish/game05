@@ -37,9 +37,8 @@ enum class LocaleISO_639_1
 	Chamorro,
 	Chechen,
 	Chichewa,
-	// TODO: this is policically sensitive
-	Chinese_Peoples_Republic_of_China,
-	Chinese_Taiwan,
+	Chinese_Simplified,
+	Chinese_Traditional,
 	Old_Slavonic,
 	Chuvash,
 	Cornish,

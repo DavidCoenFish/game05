@@ -5,7 +5,7 @@ PUSHD %~dp0
 
 echo %time% %~nx0 %~1 %~2 %~3 %~4
 
-SET DATA_DIR=..\..\version\output\
+SET DATA_DIR=..\..\..\..\engine\version\output\
 
 SET BUILD_VERSION_FILE_PATH=%DATA_DIR%build_version.txt
 SET BUILD_VERSION_FILE_PATH_COMMA=%DATA_DIR%build_version_comma.txt

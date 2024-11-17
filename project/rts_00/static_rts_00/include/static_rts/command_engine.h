@@ -4,7 +4,7 @@ class CommandEngineImplementation;
 class InputDatabase;
 class Snapshot;
 
-namespace static_rts_00
+namespace StaticRts
 {
     class CommandEngine
     {

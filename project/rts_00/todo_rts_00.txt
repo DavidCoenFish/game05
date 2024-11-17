@@ -1,0 +1,19 @@
+- rts demo?
+    rts static lib
+        map
+        tile
+        path
+        input database
+            snapshot
+                entity list (position, health)
+                visibity map
+            snapshot cache
+            retroactive insert input
+            rebuild snapshot
+        draw snapshot
+    ui build factory from content, ref dag collection
+        ui to select units
+        ui to build building
+
+
+

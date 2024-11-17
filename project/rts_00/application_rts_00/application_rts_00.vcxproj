@@ -107,12 +107,15 @@
     <ClCompile Include="source\window_application\application_demo_00.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\common\common.vcxproj">
-      <Project>{3de01963-e730-4a3f-9d8a-76dc5a1f1683}</Project>
-    </ProjectReference>
+    <ResourceCompile Include="resources\application_rts_00.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="resources\application_rts_00.rc" />
+    <ProjectReference Include="..\..\..\engine\common\common.vcxproj">
+      <Project>{3de01963-e730-4a3f-9d8a-76dc5a1f1683}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\static_rts_00\static_rts_00.vcxproj">
+      <Project>{99d2dc42-e257-4576-9dd5-0e8bc12aff3f}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -4,7 +4,6 @@
 PUSHD %~dp0
 
 echo %time% %~nx0 %~1 %~2 %~3 %~4
-echo errorlevel:[%errorlevel%]
 
 SET DATA_DIR=..\..\..\..\engine\version\output\
 

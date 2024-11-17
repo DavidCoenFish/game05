@@ -1,5 +1,5 @@
-#include "static_rts_00/static_rts_pch.h"
-#include "static_rts_00/input_database.h"
+#include "static_rts/static_rts_pch.h"
+#include "static_rts/input_database.h"
 
 #include "common/util/vector_helper.h"
 
@@ -19,6 +19,8 @@ public:
         SnapshotCache& in_out_snapshot_cache
         )
     {
+        in_command_engine;
+        in_out_snapshot_cache;
         return nullptr;
     }
 
@@ -28,6 +30,9 @@ public:
         const int32_t in_frame_id
         )
     {
+        in_command_engine;
+        in_out_snapshot_cache;
+        in_frame_id;
         return nullptr;
     }
 
@@ -39,6 +44,12 @@ public:
         const int32_t in_data_size
         )
     {
+        in_frame_id;
+        in_player_id;
+        in_operation_id;
+        in_data;
+        in_data_size;
+
         return;
     }
 
@@ -59,7 +70,7 @@ private:
 };
 
 
-InputDatabase::InputDatabase(
+StaticRts::InputDatabase::InputDatabase(
     const uint8_t* const in_snapshot_init_data,
     const int32_t in_snapshot_init_data_size
     // const std::shared_ptr<InputDatabaseStream>& in_stream
@@ -71,12 +82,12 @@ InputDatabase::InputDatabase(
         );
 }
 
-InputDatabase::~InputDatabase()
+StaticRts::InputDatabase::~InputDatabase()
 {
     // Nop
 }
 
-std::shared_ptr<Snapshot> InputDatabase::MakeLattestSnapshot(
+std::shared_ptr<Snapshot> StaticRts::InputDatabase::MakeLattestSnapshot(
     const CommandEngine& in_command_engine, 
     SnapshotCache& in_out_snapshot_cache
     )
@@ -87,7 +98,7 @@ std::shared_ptr<Snapshot> InputDatabase::MakeLattestSnapshot(
         );
 }
 
-std::shared_ptr<Snapshot> InputDatabase::SeekSnapshot(
+std::shared_ptr<Snapshot> StaticRts::InputDatabase::SeekSnapshot(
     const CommandEngine& in_command_engine, 
     SnapshotCache& in_out_snapshot_cache,
     const int32_t in_frame_id
@@ -100,7 +111,7 @@ std::shared_ptr<Snapshot> InputDatabase::SeekSnapshot(
         );
 }
 
-void InputDatabase::AddInput(
+void StaticRts::InputDatabase::AddInput(
     const int32_t in_frame_id,
     const uint8_t in_player_id,
     const uint8_t in_operation_id,

@@ -5,6 +5,6 @@
 #include <CppUnitTest.h>
 
 #include <common/common.h>
-#include <static_lq/common.h>
+#include <static_rts/common.h>
 
 #endif //PCH_H

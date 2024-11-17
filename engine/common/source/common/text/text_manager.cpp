@@ -62,7 +62,7 @@ namespace
 			hb_language_from_string("ar", -1)
 		)},
 		{
-			LocaleISO_639_1::Chinese_Peoples_Republic_of_China,
+			LocaleISO_639_1::Chinese_Simplified,
 			std::make_shared<TextLocale>(
 			HB_DIRECTION_LTR, //HB_DIRECTION_TTB,
 			HB_SCRIPT_HAN,

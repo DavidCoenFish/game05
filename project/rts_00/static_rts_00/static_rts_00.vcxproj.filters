@@ -19,6 +19,9 @@
     <Filter Include="include\static_rts\path_finder">
       <UniqueIdentifier>{a5d2288f-5657-4b6b-a36e-09a4b175f6c8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\static_rts\path_finder">
+      <UniqueIdentifier>{05ffab5e-9a78-4590-a576-0fbf6aeba03c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="props\static_rts_00.props">
@@ -26,45 +29,60 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\static_rts\static_rts_pch.cpp">
-      <Filter>source\static_rts_00</Filter>
+    <ClCompile Include="source\static_rts\command_engine.cpp">
+      <Filter>source\static_rts</Filter>
     </ClCompile>
     <ClCompile Include="source\static_rts\input_database.cpp">
-      <Filter>source\static_rts_00</Filter>
-    </ClCompile>
-    <ClCompile Include="source\static_rts\snapshot_cache.cpp">
-      <Filter>source\static_rts_00</Filter>
+      <Filter>source\static_rts</Filter>
     </ClCompile>
     <ClCompile Include="source\static_rts\snapshot.cpp">
-      <Filter>source\static_rts_00</Filter>
+      <Filter>source\static_rts</Filter>
     </ClCompile>
-    <ClCompile Include="source\static_rts\command_engine.cpp">
-      <Filter>source\static_rts_00</Filter>
+    <ClCompile Include="source\static_rts\snapshot_cache.cpp">
+      <Filter>source\static_rts</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_rts\static_rts_pch.cpp">
+      <Filter>source\static_rts</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_rts\path_finder\path_finder_map.cpp">
+      <Filter>source\static_rts\path_finder</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_rts\path_finder\path_finder_tile.cpp">
+      <Filter>source\static_rts\path_finder</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_rts\path_finder\path_finder_tile_manager.cpp">
+      <Filter>source\static_rts\path_finder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\static_rts\static_rts_pch.h">
-      <Filter>source\static_rts_00</Filter>
-    </ClInclude>
-    <ClInclude Include="include\static_rts\input_database.h">
-      <Filter>include\static_rts_00</Filter>
-    </ClInclude>
-    <ClInclude Include="include\static_rts\command_engine.h">
-      <Filter>include\static_rts_00</Filter>
-    </ClInclude>
-    <ClInclude Include="include\static_rts\snapshot.h">
-      <Filter>include\static_rts_00</Filter>
+      <Filter>source\static_rts</Filter>
     </ClInclude>
     <ClInclude Include="include\static_rts\snapshot_cache.h">
-      <Filter>include\static_rts_00</Filter>
+      <Filter>include\static_rts</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_rts\command_engine.h">
+      <Filter>include\static_rts</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_rts\input_database.h">
+      <Filter>include\static_rts</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_rts\snapshot.h">
+      <Filter>include\static_rts</Filter>
     </ClInclude>
     <ClInclude Include="include\static_rts\path_finder\path_finder_map.h">
       <Filter>include\static_rts\path_finder</Filter>
     </ClInclude>
-    <ClInclude Include="include\static_rts\path_finder\path_finder_tile.h">
+    <ClInclude Include="include\static_rts\common.h">
+      <Filter>include\static_rts</Filter>
+    </ClInclude>
+    <ClInclude Include="source\static_rts\path_finder\path_finder_tile.h">
+      <Filter>source\static_rts\path_finder</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_rts\path_finder\path_finder_tile_manager.h">
       <Filter>include\static_rts\path_finder</Filter>
     </ClInclude>
-    <ClInclude Include="include\static_rts\path_finder\path_finder_math.h">
+    <ClInclude Include="include\static_rts\path_finder\i_path_finder_map_objserver.h">
       <Filter>include\static_rts\path_finder</Filter>
     </ClInclude>
   </ItemGroup>

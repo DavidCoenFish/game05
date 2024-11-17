@@ -3,7 +3,7 @@
 class Snapshot;
 class SnapshotCacheImplementation;
 
-namespace static_rts_00
+namespace StaticRts
 {
     class SnapshotCache
     {

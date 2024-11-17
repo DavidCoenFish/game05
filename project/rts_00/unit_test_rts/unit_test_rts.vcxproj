@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\rts_path.cpp" />
+    <ClCompile Include="source\rts_path_finder_map.cpp" />
     <ClCompile Include="source\unit_test_rts_pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -21,15 +21,15 @@
     <ClInclude Include="source\unit_test_rts_pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\common\common.vcxproj">
-      <Project>{3de01963-e730-4a47-9d8a-76dc5a1f1683}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\static_rts_00\static_rts_00.vcxproj">
-      <Project>{99d2dc42-e150-9816-64d5-0e8bc12aff3f}</Project>
-    </ProjectReference>
+    <None Include="props\unit_test_rts.props" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="props\unit_test_rts.props" />
+    <ProjectReference Include="..\..\..\engine\common\common.vcxproj">
+      <Project>{3de01963-e730-4a3f-9d8a-76dc5a1f1683}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\static_rts_00\static_rts_00.vcxproj">
+      <Project>{99d2dc42-e257-4576-9dd5-0e8bc12aff3f}</Project>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
