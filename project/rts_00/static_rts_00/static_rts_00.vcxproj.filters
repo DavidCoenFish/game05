@@ -85,5 +85,8 @@
     <ClInclude Include="include\static_rts\path_finder\i_path_finder_map_objserver.h">
       <Filter>include\static_rts\path_finder</Filter>
     </ClInclude>
+    <ClInclude Include="include\static_rts\path_finder\path_finder_path.h">
+      <Filter>include\static_rts\path_finder</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

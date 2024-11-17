@@ -31,14 +31,24 @@ namespace StaticRts
 		const uint8_t GetCell(const VectorShort2& in_location) const;
 		void SetCell(const VectorShort2& in_location, const uint8_t in_data);
 
-		//void AddChangeCallback(const TMapChangeCallback& in_callback, const uint8_t in_dirty_mask = 0xFF);
+#if 0
+		void AddChangeCallback(const TMapChangeCallback& in_callback, const uint8_t in_dirty_mask = 0xFF);
+#elif 0
+		/// we did this in the DagCollection, but here we don't know all of the observers functionality in the PathMap
+		/// dont want to end up with a whole heap of PathFinderMap::DoTheThingOnAObserver(ObserverID)
+		typedef IPathFinderMapObserver* ObserverID;
+		const ObserverID AddObserver(const std::shared_ptr<IPathFinderMapObserver>& in_observer, const uint8_t in_dirty_mask = 0xFF);
+		void RemoveObserver(const ObserverID in_observer);
+#else
 		void AddObserver(const std::shared_ptr<IPathFinderMapObserver>& in_observer, const uint8_t in_dirty_mask = 0xFF);
 		void RemoveObserver(IPathFinderMapObserver* const in_observer);
-
+#endif
 		const int GetWidth() const { return _width; }
 		const int GetHeight() const { return _height; }
 
-	private:
+		/// how to get the initial map data into observer? not just the changed?
+		/// const uint8_t* const GetData() const;
+
 		/// return true for being a valid offset?
 		static const bool MakeOffset(
 			int32_t& out_offset,
@@ -46,7 +56,6 @@ namespace StaticRts
 			const int32_t in_height,
 			const VectorShort2& in_location
 			);
-
 	private:
 		const int _width;
 		const int _height;

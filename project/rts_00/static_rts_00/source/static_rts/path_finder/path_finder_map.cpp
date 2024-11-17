@@ -60,6 +60,8 @@ void StaticRts::PathFinderMap::SetCell(const VectorShort2& in_location, const ui
 
 void StaticRts::PathFinderMap::AddObserver(const std::shared_ptr<IPathFinderMapObserver>& in_observer, const uint8_t in_dirty_mask)
 {
+	DSC_ASSERT(nullptr != in_observer, "invalid param");
+	in_observer->SetInitialData(_width, _height, _data);
 	_dirty_mask_observer_array.push_back(std::pair<uint8_t, IPathFinderMapObserver*>(in_dirty_mask, in_observer.get()));
 	_observer_array.push_back(in_observer);
 }
