@@ -30,6 +30,10 @@ namespace StaticRts
 		//const PathID MakePath(const VectorShort2& in_start, const VectorShort2& in_end);
 		//void AdvancePath();
 
+		/// return true if point a and b are in the same region
+		/// returns false if a or b are invalid locations (non traversable)
+		const bool IsSameRegion(const VectorShort2& in_a, const VectorShort2& in_b);
+
 	private:
 		virtual void SetInitialData(
 			const int32_t in_width,

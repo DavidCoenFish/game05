@@ -23,8 +23,9 @@ namespace StaticRts
 		/// could just pass in raw poointer to interface and have a AddObserver. RemoveObserver?
 		//typedef std::function<void(const VectorShort2& in_location, const uint8_t in_data)> TMapChangeCallback;
 
-		PathFinderMap(const int in_width,
-			const int in_height,
+		PathFinderMap(
+			const int32_t in_width,
+			const int32_t in_height,
 			const uint8_t in_invalid_cell_data = 0,
 			const std::vector<uint8_t>& in_data = {}
 			);
@@ -43,8 +44,8 @@ namespace StaticRts
 		void AddObserver(const std::shared_ptr<IPathFinderMapObserver>& in_observer, const uint8_t in_dirty_mask = 0xFF);
 		void RemoveObserver(IPathFinderMapObserver* const in_observer);
 #endif
-		const int GetWidth() const { return _width; }
-		const int GetHeight() const { return _height; }
+		const int32_t GetWidth() const { return _width; }
+		const int32_t GetHeight() const { return _height; }
 
 		/// how to get the initial map data into observer? not just the changed?
 		/// const uint8_t* const GetData() const;
@@ -57,8 +58,8 @@ namespace StaticRts
 			const VectorShort2& in_location
 			);
 	private:
-		const int _width;
-		const int _height;
+		const int32_t _width;
+		const int32_t _height;
 		const uint8_t _invalid_cell_data;
 		std::vector<uint8_t> _data;
 

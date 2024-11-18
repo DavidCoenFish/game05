@@ -6,8 +6,8 @@
 #include "common/macro.h"
 
 StaticRts::PathFinderMap::PathFinderMap(
-	const int in_width,
-	const int in_height,
+	const int32_t in_width,
+	const int32_t in_height,
 	const uint8_t in_invalid_cell_data,
 	const std::vector<uint8_t>& in_data
 	)

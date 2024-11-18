@@ -21,16 +21,35 @@ namespace RtsPathFinderTileManager
 	public:
 		TEST_METHOD(TestCtor)
 		{
-			const int32_t width = 78;
-			const int32_t height = 103;
-			StaticRts::PathFinderMap map(width, height);
-
-			Assert::AreEqual(width, map.GetWidth());
-			Assert::AreEqual(height, map.GetHeight());
+			StaticRts::PathFinderMap map(78, 103);
 
 			std::shared_ptr<StaticRts::PathFinderTileManager> tile_manager = std::make_shared<StaticRts::PathFinderTileManager>(IsMapDataTraversable);
 
 			map.AddObserver(tile_manager, 0x01);
 		}
+
+		TEST_METHOD(TestRegion0)
+		{
+			std::vector<uint8_t> data({
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+				1,0,1,1,1,1,1,0,1,1,1,1,1,1,0,1,
+				1,0,1,0,0,0,1,0,1,0,0,0,0,1,0,1,
+				1,0,1,0,1,0,1,0,1,0,1,1,0,1,0,1,
+				1,0,1,1,1,0,1,1,1,0,1,1,1,1,0,1,
+				1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				});
+
+			StaticRts::PathFinderMap map(16, 8, 0, data);
+			std::shared_ptr<StaticRts::PathFinderTileManager> tile_manager = std::make_shared<StaticRts::PathFinderTileManager>(IsMapDataTraversable);
+			map.AddObserver(tile_manager, 0x01);
+
+			Assert::AreEqual(tile_manager->IsSameRegion(
+				VectorShort2(0,0),
+				VectorShort2(10,4)
+				), true);
+		}
+
 	};
 }

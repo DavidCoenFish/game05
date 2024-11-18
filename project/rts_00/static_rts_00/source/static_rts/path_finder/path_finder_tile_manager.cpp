@@ -64,7 +64,38 @@ public:
 		const int32_t tile_offset = CalculateTileOffset(x, y);
 
 		const bool traversable = (*_is_data_traversable_function)(in_data);
-		_tile_array[tile_index].SetTraversable(traversable, tile_offset);
+		if (true == _tile_array[tile_index].SetTraversable(traversable, tile_offset))
+		{
+			_tile_manager_change_id += 1;
+		}
+	}
+
+	const bool IsSameRegion(const VectorShort2& in_a, const VectorShort2& in_b)
+	{
+		const int32_t region_id_a = GetRegionId(in_a);
+		const int32_t region_id_b = GetRegionId(in_b);
+		if ((0 == region_id_a) || (0 == region_id_b))
+		{
+			return false;
+		}
+		return (region_id_a == region_id_b);
+	}
+
+	const int32_t GetRegionId(const VectorShort2& in_location)
+	{
+		const int32_t x = in_location.GetX();
+		const int32_t y = in_location.GetY();
+		const int32_t tile_index = CalculateTileIndex(x, y, _tile_width);
+		const int32_t tile_offset = CalculateTileOffset(x, y);
+
+		const int8_t sub_region = _tile_array[tile_index].GetSubRegionId(tile_offset);
+		if (0 == sub_region)
+		{
+			return 0;
+		}
+		//const int32_t tile_sub_region_key = MakeSubRegionKey(tile_index, sub_region);
+
+		return 0;
 	}
 
 private:
@@ -73,6 +104,7 @@ private:
 	int32_t _tile_width = 0;
 	int32_t _tile_height = 0;
 	std::vector<StaticRts::PathFinderTile> _tile_array = {};
+	int32_t _tile_manager_change_id = 0;
 
 };
 
@@ -86,6 +118,11 @@ StaticRts::PathFinderTileManager::PathFinderTileManager(
 StaticRts::PathFinderTileManager::~PathFinderTileManager()
 {
 	// nop
+}
+
+const bool StaticRts::PathFinderTileManager::IsSameRegion(const VectorShort2& in_a, const VectorShort2& in_b)
+{
+	return _implementation->IsSameRegion(in_a, in_b);
 }
 
 void StaticRts::PathFinderTileManager::SetInitialData(
