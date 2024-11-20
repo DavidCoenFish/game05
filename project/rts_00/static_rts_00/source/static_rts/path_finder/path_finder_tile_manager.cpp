@@ -72,16 +72,33 @@ public:
 
 	const bool IsSameRegion(const VectorShort2& in_a, const VectorShort2& in_b)
 	{
-		const int32_t region_id_a = GetRegionId(in_a);
-		const int32_t region_id_b = GetRegionId(in_b);
-		if ((0 == region_id_a) || (0 == region_id_b))
+		int32_t tile_index_a = 0;
+		uint8_t tile_sub_region_id_a = 0;
+		if (false == GetTileSubRegionId(tile_index_a, tile_sub_region_id_a, in_a))
 		{
 			return false;
 		}
-		return (region_id_a == region_id_b);
+		int32_t tile_index_b = 0;
+		uint8_t tile_sub_region_id_b = 0;
+		if (false == GetTileSubRegionId(tile_index_b, tile_sub_region_id_b, in_b))
+		{
+			return false;
+		}
+
+		// easy case, both locations on the same tile and subregion
+		if ((tile_index_a == tile_index_b) && (tile_sub_region_id_a == tile_sub_region_id_b))
+		{
+			return true;
+		}
+
+		// todo: do the regions end up touching
+		// region_id = _region_manager->CalculateRegion(tile_index_a, tile_sub_region_id_a, _tile_manager_change_id, _tile_width, _tile_height, _tile_array);
+		// if (true == RegionContainsSubRegion(region_id, tile_index_b, tile_sub_region_id_b))
+
+		return true;
 	}
 
-	const int32_t GetRegionId(const VectorShort2& in_location)
+	const bool GetTileSubRegionId(int32_t& out_tile_index, uint8_t& out_tile_sub_region_id, const VectorShort2& in_location)
 	{
 		const int32_t x = in_location.GetX();
 		const int32_t y = in_location.GetY();
@@ -91,11 +108,13 @@ public:
 		const int8_t sub_region = _tile_array[tile_index].GetSubRegionId(tile_offset);
 		if (0 == sub_region)
 		{
-			return 0;
+			return false;
 		}
-		//const int32_t tile_sub_region_key = MakeSubRegionKey(tile_index, sub_region);
 
-		return 0;
+		out_tile_index = tile_index;
+		out_tile_sub_region_id = sub_region;
+
+		return true;
 	}
 
 private:

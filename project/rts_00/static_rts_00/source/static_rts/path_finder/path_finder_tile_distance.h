@@ -13,8 +13,9 @@ namespace StaticRts
 			const int32_t in_offset
 			);
 
-		const bool IsPointAccessable(const VectorShort2& in_location);
-		const uint8_t GetSubRegionId(const VectorShort2& in_location);
+		//const bool IsPointAccessable(const VectorShort2& in_location);
+		//const bool IsPointAccessable(const int32_t in_offset);
+		//const uint8_t GetSubRegionId(const VectorShort2& in_location);
 
 	private:
 		void FloodFillRegion(const int32_t in_depth, 
