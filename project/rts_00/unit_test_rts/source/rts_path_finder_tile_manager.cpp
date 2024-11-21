@@ -31,17 +31,17 @@ namespace RtsPathFinderTileManager
 		TEST_METHOD(TestRegion0)
 		{
 			std::vector<uint8_t> data({
-				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-				1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-				1,0,1,1,1,1,1,0,1,1,1,1,1,1,0,1,
-				1,0,1,0,0,0,1,0,1,0,0,0,0,1,0,1,
-				1,0,1,0,1,0,1,0,1,0,1,1,0,1,0,1,
-				1,0,1,1,1,0,1,1,1,0,1,1,1,1,0,1,
-				1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,
-				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1, 1,1,1,1,0,1,1,1, 1,1,1,1,0,1,1,1, 1,1,1,1,1,1,1,1,
+				1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,1,
+				1,0,1,1,1,1,1,0, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,0,1,
+				1,0,1,0,0,0,1,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,1,0,1,
+				1,0,1,0,1,0,1,0, 0,1,1,1,1,1,1,0, 0,1,1,1,1,1,1,0, 1,0,1,1,0,1,0,1,
+				1,0,1,1,1,0,1,1, 1,1,0,1,1,0,1,1, 1,1,0,1,1,0,1,1, 1,0,1,1,1,1,0,1,
+				1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,1,
+				1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,
 				});
 
-			StaticRts::PathFinderMap map(16, 8, 0, data);
+			StaticRts::PathFinderMap map(32, 8, 0, data);
 			std::shared_ptr<StaticRts::PathFinderTileManager> tile_manager = std::make_shared<StaticRts::PathFinderTileManager>(IsMapDataTraversable);
 			map.AddObserver(tile_manager, 0x01);
 
@@ -49,6 +49,16 @@ namespace RtsPathFinderTileManager
 				VectorShort2(0,0),
 				VectorShort2(10,4)
 				), true);
+
+			Assert::AreEqual(tile_manager->IsSameRegion(
+				VectorShort2(10,4),
+				VectorShort2(0,0)
+				), true);
+
+			Assert::AreEqual(tile_manager->IsSameRegion(
+				VectorShort2(10,4),
+				VectorShort2(17,0)
+				), false);
 		}
 
 	};

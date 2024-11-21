@@ -6,7 +6,20 @@
 
 StaticRts::PathFinderTile::PathFinderTile()
 {
-	_tile_region = std::make_unique<PathFinderTileRegion>();
+	_tile_region = std::make_unique<StaticRts::PathFinderTileRegion>();
+}
+
+StaticRts::PathFinderTile::~PathFinderTile()
+{
+	// Nop
+}
+
+StaticRts::PathFinderTile::PathFinderTile(const PathFinderTile& in_source)
+{
+	_tile_region = std::make_unique<StaticRts::PathFinderTileRegion>();
+	_tile_change_id = in_source._tile_change_id;
+	_traversable_map = in_source._traversable_map;
+	_distance_array = in_source._distance_array;
 }
 
 const bool StaticRts::PathFinderTile::SetTraversable(const bool in_traversable, const int32_t in_offset)
@@ -33,3 +46,11 @@ const uint8_t StaticRts::PathFinderTile::GetSubRegionId(const int32_t in_offset)
 	return id;
 }
 
+void StaticRts::PathFinderTile::VisitRegionTouchingLocation(
+	const std::function<void(const VectorShort2& in_offset)>& in_callback, 
+	const uint8_t in_tile_sub_region_id,
+	const VectorShort2& in_origin
+	) 
+{
+	_tile_region->VisitRegionTouchingLocation(in_callback, in_tile_sub_region_id, in_origin);
+}

@@ -44,7 +44,7 @@ namespace StaticRts
 		virtual void OnChange(const VectorShort2& in_location, const uint8_t in_data) override;
 
 	private:
-		std::unique_ptr< PathFinderTileManagerImplementation > _implementation;
+		std::unique_ptr<PathFinderTileManagerImplementation> _implementation;
 
 	};
 };

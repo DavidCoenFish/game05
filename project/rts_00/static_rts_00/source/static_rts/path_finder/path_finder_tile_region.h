@@ -37,18 +37,23 @@ namespace StaticRts
 		//	std::vector<uint8_t> _touching_y_pos = {};
 		//};
 
-		/// return null if not in region, assumses RefreashRegionMap has been call.
+		/// return 0 if not in region, assumses RefreashRegionMap has been call.
 		/// could pass param of RefreashRegionMap and call it enternally to ensure that it is called?
 		/// in offset is indexs of the 8x8 data array (only use uint8_t when packing data, else try to work with int?)
 		const uint8_t GetRegionID(
 			const int32_t in_offset
-			);
+			) const;
 
-		const uint32_t GetRegionMask(
+		const uint64_t GetRegionMask(
 			const uint8_t in_id
-			);
+			) const;
 
-		void VisitRegionTouchingLocation(const std::function<void(const VectorShort2& in_offset)>& in_callback, const uint32_t in_region_mask, const VectorShort2& in_origin);
+		/// invoke the callback with the location that the given region touches, outside our tile
+		void VisitRegionTouchingLocation(
+			const std::function<void(const VectorShort2& in_offset)>& in_callback, 
+			const uint8_t in_tile_sub_region_id,
+			const VectorShort2& in_origin
+			) const;
 
 	private:
 		const bool PaintRegion(
@@ -63,17 +68,18 @@ namespace StaticRts
 			const std::bitset<256>& in_traversable_map
 			);
 
-		const uint32_t CalculateRegionMask(const uint8_t in_region_trace) const;
+		const uint64_t CalculateRegionMask(const uint8_t in_region_trace) const;
 
 	private:
 		/// the change id of the tile we generated our region map against
 		int32_t _tile_change_id = 0;
 
 		/// paint a region id (region index + 1) on each traversable cell of the tile
+		/// 16 x 16 = 256
 		std::array<uint8_t, 256> _region_map = {};
 
-		/// max size 128? keep a mask of the open tile border cells each region touches
-		std::vector<uint32_t> _region_mask_array = {};
+		/// max size 128? (max how many disticts regions can fit on a 16x16) keep a mask of the open tile border cells each region touches
+		std::vector<uint64_t> _region_mask_array = {};
 
 	};
 };

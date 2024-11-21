@@ -14,6 +14,7 @@ namespace StaticRts
 	/// bit 4 - true, blocked by building / destructable terrain
 	/// bit 5 - true, blocked by map [map script disabled area?]
 	/// would it be fun to allow the out of bounds data (invalid_cell_data) to allow flight?
+	/// alternative could be a [can see, has seen, always visible, minimap only visible]
 	class PathFinderMap
 	{
 	public:
