@@ -1,5 +1,5 @@
 	summary:
-	Act 1 Warcamp
+	Act 1 Warcamp (reorder? S001, <montage return to camp>  S003, S002, S004?)
 A001_S001 ambush [chief, complains], group of goblins ambush two adventures
 A001_S002 warcamp [teller, chief], group goblins return to camp, tellers vision
 A001_S003 graveyard [chief, complains]
@@ -33,8 +33,8 @@ A002_S005 enter brassmoon [fumbles, guards]
 //A002_S005 zombie orks 2 
 
 	random:
-is the broken sword that complains uses, and the guard and tip chief has, the sword that killed chief kills-a-werebear? only metal in camp? other than thaco's weapon (which he could be hiding)
-all other equipment is stone/ wood. potato sacks converted to cloths [pants], some palm frons weaving, feathers.
+is the broken sword that complains uses, and the guard and tip chief has, the sword that killed chief kills-a-werebear? only metal in camp? other than thaco's weapon (which he could be hiding) they hide the sword in cheif kills-a-werebear?
+all other equipment is stone/ wood. potato sacks converted to clothes [pants], some palm frons weaving, feathers.
 delay using complain's name untill the minmax/complains of names payoff
 not that many goblins:?
 [chief, complains, thaco, fumbles, big ears, one eye, dies horibly, teller, red shirt, yeet, 2 other killed by drow mage which may include yeet
@@ -48,7 +48,7 @@ magic missile from blowing vape ring
 
 
 	A001_S001 ambush [chief, complains], group of goblins ambush two adventures
-	//open scubland
+	//open scrubland
 	//compains has broken katana, no guard
 	//chief has the katana tip set as a spear tip, the katana guard as eyepatch
 <chief directing two goblins behind a bush, pushing one lower>
@@ -58,11 +58,10 @@ magic missile from blowing vape ring
 <over shoulder mid chief with fighter charging, other goblins rise in ambush to throw spears (aoketol throwing sticks?) archer gets one snap shot off into red shirt's chest, 
 <archer takes 4 of the 5 remaining spears in torso, falls, large red text "-5" above head
 <fighter hesitates, swipes clumsily at neaby goblin knocking him into air, before resuming to charge chief
-<chief planting butt of spear into ground ready to take charge
-<fighter passes complains, complains lunges up and stabs thigh from behind, fighte starts to fall/ turn to deal with complains
-<chief guides spear to fighters throght as he falls, stands over to give killing blow to thashing fighter
+<chief planting butt of spear into ground ready to take charge, (cheif stepping on the decorative feathers?)
+<fighter passes complains, complains lunges up and stabs thigh from behind, fighter starts to fall/ turn to deal with complains
+<chief guides spear through fighters as he falls, fighter collapses/ pulling out spear, cheif stands over to give killing blow to thashing fallen fighter
 <title splash, "Hunts Goblins"
-
 
 	A001_S002 warcamp [teller, chief], group goblins return to camp, tellers vision
 	//enter camp, a few goblins working, weaving, knapping, making rope [dies hoibly], working on wood trapdoors [big ears, one eye] 
@@ -91,7 +90,7 @@ beware the dwarf, beware kore, beware the white terror, when love turns to hate 
 	A001_S003 graveyard [chief, complains]
 	// introduce magic sword in treasure chest, chief father's sword?
 	// chief's uncertainty, self doubt at being chief
-	// chief carving a totem pole of red shit's face, lots of totem poles in background, some with many faces
+	// chief carving a totem pole of red shirt's face, lots of totem poles in background, some with many faces
 	// lots of goblin bones
 	// one stone statue, chief's father kills-a-werebear with representation of the magic short sword, or the actual short sword?
 complains: did you hear how that human screamed, ahhhh. 

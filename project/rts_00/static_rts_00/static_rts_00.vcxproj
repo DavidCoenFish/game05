@@ -100,7 +100,7 @@
     <ClInclude Include="include\static_rts\command_engine.h" />
     <ClInclude Include="include\static_rts\common.h" />
     <ClInclude Include="include\static_rts\input_database.h" />
-    <ClInclude Include="include\static_rts\path_finder\i_path_finder_map_objserver.h" />
+    <ClInclude Include="include\static_rts\path_finder\i_path_finder_map_observer.h" />
     <ClInclude Include="include\static_rts\path_finder\path_finder_map.h" />
     <ClInclude Include="include\static_rts\path_finder\path_finder_path.h" />
     <ClInclude Include="include\static_rts\path_finder\path_finder_tile_manager.h" />

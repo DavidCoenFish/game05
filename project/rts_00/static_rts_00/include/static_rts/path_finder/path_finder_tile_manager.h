@@ -1,6 +1,6 @@
 #pragma once
 
-#include "static_rts/path_finder/i_path_finder_map_objserver.h"
+#include "static_rts/path_finder/i_path_finder_map_observer.h"
 
 class PathFinderTileManagerImplementation;
 class VectorShort2;

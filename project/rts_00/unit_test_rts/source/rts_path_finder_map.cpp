@@ -1,6 +1,6 @@
 #include "unit_test_rts_pch.h"
 #include "static_rts/path_finder/path_finder_map.h"
-#include "static_rts/path_finder/i_path_finder_map_objserver.h"
+#include "static_rts/path_finder/i_path_finder_map_observer.h"
 
 #include "common/math/vector_short2.h"
 
