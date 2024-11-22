@@ -28,6 +28,12 @@ public:
 		const uint8_t in_tile_sub_region_id,
 		const VectorShort2& in_origin
 		);
+	void InitialisePath(
+		StaticRts::IPathFinderPath& in_path, 
+		const VectorShort2& in_current_location, 
+		const VectorShort2& in_target_location
+		);
+	const bool RefreashPath(StaticRts::IPathFinderPath& in_path);
 
 private:
 	StaticRts::PathFinderTileManager::TIsMapDataTraversable _is_data_traversable_function = nullptr;
@@ -217,6 +223,32 @@ void PathFinderTileManagerImplementation::VisitRegionTouchingLocation(
 		);
 }
 
+void PathFinderTileManagerImplementation::InitialisePath(
+	StaticRts::IPathFinderPath& in_path, 
+	const VectorShort2& in_current_location, 
+	const VectorShort2& in_target_location
+	)
+{
+	if (in_current_location == in_target_location)
+	{
+		// presume the caller wants something, though me may not do much
+		// todo: still make an almost empty IPathFinderPathData?
+		return;
+	}
+
+	const bool same_region = IsSameRegion(in_current_location, in_target_location);
+	if (true == same_region)
+	{
+	}
+	else
+	{
+	}
+}
+
+const bool PathFinderTileManagerImplementation::RefreashPath(StaticRts::IPathFinderPath& in_path)
+{
+}
+
 StaticRts::PathFinderTileManager::PathFinderTileManager(
 	const TIsMapDataTraversable in_is_data_traversable_function
 	)
@@ -229,11 +261,6 @@ StaticRts::PathFinderTileManager::~PathFinderTileManager()
 	// nop
 }
 
-const bool StaticRts::PathFinderTileManager::IsSameRegion(const VectorShort2& in_a, const VectorShort2& in_b)
-{
-	return _implementation->IsSameRegion(in_a, in_b);
-}
-
 void StaticRts::PathFinderTileManager::SetInitialData(
 	const int32_t in_width,
 	const int32_t in_height,
@@ -243,9 +270,29 @@ void StaticRts::PathFinderTileManager::SetInitialData(
 	_implementation->SetInitialData(in_width, in_height, in_data);
 }
 
+void StaticRts::PathFinderTileManager::InitialisePath(
+	IPathFinderPath& in_path, 
+	const VectorShort2& in_current_location, 
+	const VectorShort2& in_target_location
+	)
+{
+	_implementation->InitialisePath(in_path, in_current_location, in_target_location);
+	return;
+}
+
+/// update (also allow implimentation to advance location on) the path, return false if path traversal finished
+const bool StaticRts::PathFinderTileManager::RefreashPath(IPathFinderPath& in_path)
+{
+	return _implementation->RefreashPath(in_path);
+}
+
 void StaticRts::PathFinderTileManager::OnChange(const VectorShort2& in_location, const uint8_t in_data)
 {
 	_implementation->OnChange(in_location, in_data);
 }
 
+const bool StaticRts::PathFinderTileManager::IsSameRegion(const VectorShort2& in_a, const VectorShort2& in_b)
+{
+	return _implementation->IsSameRegion(in_a, in_b);
+}
 

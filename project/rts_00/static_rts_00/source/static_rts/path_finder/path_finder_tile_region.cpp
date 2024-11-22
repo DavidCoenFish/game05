@@ -55,7 +55,7 @@ const uint64_t StaticRts::PathFinderTileRegion::GetRegionMask(
 }
 
 void StaticRts::PathFinderTileRegion::VisitRegionTouchingLocation(
-	const std::function<void(const VectorShort2& in_offset)>& in_callback, 
+	const std::function<void(const VectorShort2& in_location)>& in_callback, 
 	const uint8_t in_tile_sub_region_id,
 	const VectorShort2& in_origin
 	) const
@@ -118,6 +118,29 @@ void StaticRts::PathFinderTileRegion::VisitRegionTouchingLocation(
 	}
 }
 
+void StaticRts::PathFinderTileRegion::VisitRegionLocation(
+	const std::function<void(const VectorShort2& in_location)>& in_callback, 
+	const uint8_t in_tile_sub_region_id,	
+	const VectorShort2& in_origin
+	) const
+{
+	int32_t trace = 0;
+	for (const uint8_t item : _region_map)
+	{
+		if (in_tile_sub_region_id == item)
+		{
+			const int32_t x = trace % 16;
+			const int32_t y = trace / 16;
+			in_callback(VectorShort2(
+				static_cast<int16_t>(x + in_origin.GetX()),
+				static_cast<int16_t>(y + in_origin.GetY())
+				));
+
+		}
+		trace += 1;
+	}
+}
+
 const bool StaticRts::PathFinderTileRegion::PaintRegion(
 	const uint8_t in_region_trace, 
 	const int32_t in_offset, 
@@ -158,8 +181,8 @@ void StaticRts::PathFinderTileRegion::FloodFill(
 	// WARNING, 1 based index to _region_mask_array, don't want to use 0 baseded as the 0 index clashes with cleared to zero data
 	_region_map[in_offset] = in_region_trace + 1;
 
-	int32_t x = in_offset % 16;
-	int32_t y = in_offset / 16;
+	const int32_t x = in_offset % 16;
+	const int32_t y = in_offset / 16;
 	if (0 <= x - 1)
 	{
 		FloodFill(in_region_trace, x - 1 + (y * 16), in_traversable_map);

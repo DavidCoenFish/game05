@@ -20,8 +20,16 @@ namespace StaticRts
 		const bool SetTraversable(const bool in_traversable, const int32_t in_offset);
 
 		const uint8_t GetSubRegionId(const int32_t in_offset);
+		/// visit the location the given region touches on other tiles
 		void VisitRegionTouchingLocation(
-			const std::function<void(const VectorShort2& in_offset)>& in_callback, 
+			const std::function<void(const VectorShort2& in_location)>& in_callback, 
+			const uint8_t in_tile_sub_region_id,	
+			const VectorShort2& in_origin
+			);
+
+		/// visit all the location inside the region on our tile
+		void VisitRegionLocation(
+			const std::function<void(const VectorShort2& in_location)>& in_callback, 
 			const uint8_t in_tile_sub_region_id,	
 			const VectorShort2& in_origin
 			);

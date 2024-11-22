@@ -7,7 +7,7 @@ class VectorShort2;
 
 namespace StaticRts
 {
-	class PathFinderPath;
+	class IPathFinderPath;
 
 	/// cut the input map into a sersies of tiles of traversable [true,false] and watch for changes
 	/// as requires, calculate the flow regions, and use that to construct a path
@@ -24,15 +24,20 @@ namespace StaticRts
 			);
 		~PathFinderTileManager();
 
-		// IPathFinderPath?
-		//typedef PathFinderPath* PathID;
-		//std::shared_ptr<PathFinderPath> MakePath(const VectorShort2& in_start, const VectorShort2& in_end);
-		//const PathID MakePath(const VectorShort2& in_start, const VectorShort2& in_end);
-		//void AdvancePath();
-
 		/// return true if point a and b are in the same region
 		/// returns false if a or b are invalid locations (non traversable)
 		const bool IsSameRegion(const VectorShort2& in_a, const VectorShort2& in_b);
+
+		/// we may not actually be able to reach the target location, and path may need to be recalculated after map change, but after initialsation,
+		/// the RefreashPath should deal with that. create a new path object and call InitialisePath for target change? else allow IPathFinderPath to reset? or just call InitialisePath again?
+		void InitialisePath(
+			IPathFinderPath& in_path, 
+			const VectorShort2& in_current_location, 
+			const VectorShort2& in_target_location
+			);
+
+		/// update (also allow implimentation to advance location on) the path, return false if path traversal finished
+		const bool RefreashPath(IPathFinderPath& in_path);
 
 	private:
 		virtual void SetInitialData(

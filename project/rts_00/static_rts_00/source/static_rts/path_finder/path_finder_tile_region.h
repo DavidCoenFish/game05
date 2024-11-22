@@ -50,8 +50,15 @@ namespace StaticRts
 
 		/// invoke the callback with the location that the given region touches, outside our tile
 		void VisitRegionTouchingLocation(
-			const std::function<void(const VectorShort2& in_offset)>& in_callback, 
+			const std::function<void(const VectorShort2& in_location)>& in_callback, 
 			const uint8_t in_tile_sub_region_id,
+			const VectorShort2& in_origin
+			) const;
+
+		/// visit all the location inside the region on our tile
+		void VisitRegionLocation(
+			const std::function<void(const VectorShort2& in_location)>& in_callback, 
+			const uint8_t in_tile_sub_region_id,	
 			const VectorShort2& in_origin
 			) const;
 
