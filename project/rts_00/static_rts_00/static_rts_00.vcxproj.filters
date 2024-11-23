@@ -65,6 +65,9 @@
     <ClCompile Include="source\static_rts\path_finder\path_finder_path_data.cpp">
       <Filter>source\static_rts\path_finder</Filter>
     </ClCompile>
+    <ClCompile Include="source\static_rts\path_finder\path_finder_path_data_coincident.cpp">
+      <Filter>source\static_rts\path_finder</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\static_rts\static_rts_pch.h">
@@ -94,9 +97,6 @@
     <ClInclude Include="include\static_rts\path_finder\path_finder_tile_manager.h">
       <Filter>include\static_rts\path_finder</Filter>
     </ClInclude>
-    <ClInclude Include="include\static_rts\path_finder\path_finder_path.h">
-      <Filter>include\static_rts\path_finder</Filter>
-    </ClInclude>
     <ClInclude Include="source\static_rts\path_finder\path_finder_tile_distance.h">
       <Filter>source\static_rts\path_finder</Filter>
     </ClInclude>
@@ -113,6 +113,9 @@
       <Filter>include\static_rts\path_finder</Filter>
     </ClInclude>
     <ClInclude Include="source\static_rts\path_finder\path_finder_path_data.h">
+      <Filter>source\static_rts\path_finder</Filter>
+    </ClInclude>
+    <ClInclude Include="source\static_rts\path_finder\path_finder_path_data_coincident.h">
       <Filter>source\static_rts\path_finder</Filter>
     </ClInclude>
   </ItemGroup>

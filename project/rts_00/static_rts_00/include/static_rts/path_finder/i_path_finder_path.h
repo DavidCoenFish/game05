@@ -45,14 +45,10 @@ namespace StaticRts
 	class IPathFinderPath
 	{
 	public:
-		//virtual const int32_t GetTileManagerChangeId() const = 0;
-		//virtual const VectorShort2 GetCurrentLocation() const = 0;
-		//virtual const VectorShort2 GetTargetLocation() const = 0;
-
 		/// IPathFinderPathData has been updated to be valid for current state of path finder data, and ready for IPathFinderPath use
 		/// return false when path traversal finished
-		/// could pass in IPathFinderPathData& in_path_data, but IPathFinderPath is already being asked to own it
-		virtual const bool Update() = 0;
+		/// could pass in IPathFinderPathData& in_path_data to make it explicit that it is now avaliable for use, but IPathFinderPath is already being asked to own it
+		virtual const bool Update(IPathFinderPathData& in_path_data) = 0;
 		/// use IPathFinderPath to hold PathFinder system's data
 		virtual void SetPathData(const std::shared_ptr<IPathFinderPathData>& in_path_data) = 0;
 		virtual IPathFinderPathData& GetPathData() = 0;

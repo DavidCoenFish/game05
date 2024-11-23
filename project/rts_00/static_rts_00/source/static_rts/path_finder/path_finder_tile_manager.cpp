@@ -4,9 +4,11 @@
 #include "common/macro.h"
 #include "common/math/dsc_math.h"
 #include "common/math/vector_short2.h"
+#include "static_rts/path_finder/i_path_finder_path.h"
 #include "static_rts/path_finder/path_finder_tile.h"
 #include "static_rts/path_finder/path_finder_region_manager.h"
-
+#include "static_rts/path_finder/path_finder_path_data_coincident.h"
+#include "static_rts/path_finder/path_finder_path_data.h"
 
 class PathFinderTileManagerImplementation
 {
@@ -43,9 +45,7 @@ private:
 	std::vector<StaticRts::PathFinderTile> _tile_array = {};
 	int32_t _tile_manager_change_id = 0;
 
-	
 	std::unique_ptr<StaticRts::PathFinderRegionManager> _region_manager;
-
 };
 
 
@@ -231,17 +231,32 @@ void PathFinderTileManagerImplementation::InitialisePath(
 {
 	if (in_current_location == in_target_location)
 	{
-		// presume the caller wants something, though me may not do much
-		// todo: still make an almost empty IPathFinderPathData?
+		// presume the caller wants something, though me may not do much when the start and end are the same cell/location
+		in_path.SetPathData(std::make_shared<StaticRts::PathFinderPathDataCoincident>(in_current_location));
 		return;
 	}
 
 	const bool same_region = IsSameRegion(in_current_location, in_target_location);
 	if (true == same_region)
 	{
+		// find the shortest path to the target
+		int32_t tile_index = 0;
+		uint8_t tile_sub_region_id = 0;
+		if (false == GetTileSubRegionId(tile_index, tile_sub_region_id, in_current_location))
+		{
+			in_path.SetPathData(nullptr);
+			return;
+		}
+
+		PathFinderRegionDataSource data_source(*this);
+		const int32_t region_id = _region_manager->CalculateRegion(tile_index, tile_sub_region_id, _tile_manager_change_id, _tile_width, _tile_height, data_source);
+
+
+
 	}
 	else
 	{
+		// find the dest point nearest to the target
 	}
 }
 

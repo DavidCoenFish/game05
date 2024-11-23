@@ -4,6 +4,7 @@ class VectorShort2;
 
 namespace StaticRts
 {
+	/// didn't want the child to know the details of the parent's implimentation, so use an interface
 	class IPathFinderRegionDataSource 
 	{
 	public:
@@ -59,7 +60,6 @@ namespace StaticRts
 		/// the change id of the tile manager we generated our region map against
 		int32_t _tile_manager_change_id = 0;
 
-#if 1
 		/// what is the id of the region that the <tile index, tile sub region id> map to
 		std::map<int32_t, int32_t> _map_tile_sub_region_id_to_region_id = {}; 
 
@@ -70,10 +70,6 @@ namespace StaticRts
 		};
 		/// could be shared_ptr<Data>, 
 		std::vector<Data> _region_array = {};
-#else
-		std::vector<std::shared_ptr<Data>> _region_array = {};
-		std::multimap<>? std::bimap<>?
-#endif
 
 	};
 };

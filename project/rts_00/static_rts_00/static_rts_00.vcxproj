@@ -85,6 +85,7 @@
     <ClCompile Include="source\static_rts\input_database.cpp" />
     <ClCompile Include="source\static_rts\path_finder\path_finder_map.cpp" />
     <ClCompile Include="source\static_rts\path_finder\path_finder_path_data.cpp" />
+    <ClCompile Include="source\static_rts\path_finder\path_finder_path_data_coincident.cpp" />
     <ClCompile Include="source\static_rts\path_finder\path_finder_region_manager.cpp" />
     <ClCompile Include="source\static_rts\path_finder\path_finder_tile.cpp" />
     <ClCompile Include="source\static_rts\path_finder\path_finder_tile_distance.cpp" />
@@ -104,11 +105,11 @@
     <ClInclude Include="include\static_rts\path_finder\i_path_finder_map_observer.h" />
     <ClInclude Include="include\static_rts\path_finder\i_path_finder_path.h" />
     <ClInclude Include="include\static_rts\path_finder\path_finder_map.h" />
-    <ClInclude Include="include\static_rts\path_finder\path_finder_path.h" />
     <ClInclude Include="include\static_rts\path_finder\path_finder_tile_manager.h" />
     <ClInclude Include="include\static_rts\snapshot.h" />
     <ClInclude Include="include\static_rts\snapshot_cache.h" />
     <ClInclude Include="source\static_rts\path_finder\path_finder_path_data.h" />
+    <ClInclude Include="source\static_rts\path_finder\path_finder_path_data_coincident.h" />
     <ClInclude Include="source\static_rts\path_finder\path_finder_region_manager.h" />
     <ClInclude Include="source\static_rts\path_finder\path_finder_tile.h" />
     <ClInclude Include="source\static_rts\path_finder\path_finder_tile_distance.h" />
