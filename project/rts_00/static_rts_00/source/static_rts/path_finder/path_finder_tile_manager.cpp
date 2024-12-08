@@ -162,8 +162,7 @@ const bool PathFinderTileManagerImplementation::IsSameRegion(const VectorShort2&
 
 	PathFinderRegionDataSource data_source(*this);
 
-	// todo: do the regions end up touching
-	//const int32_t region_id = _region_manager->CalculateRegion(tile_index_a, tile_sub_region_id_a, _tile_manager_change_id, _tile_width, _tile_height, _tile_array);
+	// do the regions end up touching
 	const int32_t region_id = _region_manager->CalculateRegion(tile_index_a, tile_sub_region_id_a, _tile_manager_change_id, _tile_width, _tile_height, data_source);
 	if (true == _region_manager->RegionContainsSubRegion(region_id, tile_index_b, tile_sub_region_id_b))
 	{

@@ -1,0 +1,26 @@
+C:\development\showntell\webengine\webglengine\www\javascript\legendaryquest\rules\data.js
+C:\development\ancient-code-2\webengine\webglengine\www\javascript\legendaryquest\combat.js
+
+C:\development\chica\documentengine\unittests\documentmanagerlocalehelper.js
+Test.DealTest(name + "tooltipData", JSON.stringify(tooltipData), "{\"text\":\"4\",\"tooltip\":[\"Level(4) = (1 + Ceiling(Log((1 + Floor((Experence points(100) / 25))))))\"]}");
+
+Level(4) = (1 + Ceiling(Log((1 + Floor((Experence points(100) / 25))))))\"]}
+
+say i had a calculate node, named "foo" which was the sum of two inputs, "bar", "meow"
+"foo(7) = bar(3) + meow(4)", where bar(3) is a link to bar tooltip, if a calculate, and meow(4) a link to 
+
+
+for node foo
+DagNode::GetTooltipName() "foo"
+DagNode::GetTooltipText() "foo(7)"
+DagNode::GetTooltipBody() "foo(7) = bar(3) + meow(4)"
+
+for node bar
+DagNode::GetTooltipName() "bar"
+DagNode::GetTooltipText() "bar(3)"
+DagNode::GetTooltipBody() "" // node was a value
+
+for node meow
+DagNode::GetTooltipName() "meow"
+DagNode::GetTooltipText() "meow(4)"
+DagNode::GetTooltipBody() "meow(4) = fred(2) * barney(2)" // node was a calculate
