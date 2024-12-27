@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="source\static_character\static_character_pch.cpp">
+      <Filter>source\static_character</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\static_character\static_character_pch.h">
+      <Filter>source\static_character</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{e1aa87e1-310a-4463-9cec-c6bcf19dc23e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="props">
+      <UniqueIdentifier>{dba37b23-5319-46dd-b748-51cd89ac5934}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{cc886b6e-0cf0-42c5-9f49-9ef38f455667}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\static_character">
+      <UniqueIdentifier>{32da0a5f-371c-4b42-a606-e0b075de215f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\static_character">
+      <UniqueIdentifier>{8e06a6a2-ed08-4279-bf77-dcafc32c185a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="props\static_character_00.props">
+      <Filter>props</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="notes.txt" />
+  </ItemGroup>
+</Project>
