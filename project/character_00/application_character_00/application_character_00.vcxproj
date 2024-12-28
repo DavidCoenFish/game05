@@ -87,6 +87,10 @@
     <CopyFileToFolders Include="task\demo_00\application.json">
       <FileType>Document</FileType>
     </CopyFileToFolders>
+    <None Include="shader\polar.hlsli" />
+    <None Include="shader\polar_util.hlsli" />
+    <None Include="shader\ray_ray.hlsli" />
+    <None Include="shader\screen_quad_interpolant.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\application_character_00.ico" />
@@ -96,6 +100,10 @@
     <ClInclude Include="source\application_character_00_pch.h" />
     <ClInclude Include="source\build.h" />
     <ClInclude Include="source\host_define.h" />
+    <ClInclude Include="source\scene_component\scene_component_background.h" />
+    <ClInclude Include="source\scene_component\scene_component_camera_ray.h" />
+    <ClInclude Include="source\scene_component\scene_component_grid.h" />
+    <ClInclude Include="source\scene_component\scene_component_screen_quad.h" />
     <ClInclude Include="source\window_application\application_demo_00.h" />
   </ItemGroup>
   <ItemGroup>
@@ -105,6 +113,10 @@
     </ClCompile>
     <ClCompile Include="source\build.cpp" />
     <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\scene_component\scene_component_background.cpp" />
+    <ClCompile Include="source\scene_component\scene_component_camera_ray.cpp" />
+    <ClCompile Include="source\scene_component\scene_component_grid.cpp" />
+    <ClCompile Include="source\scene_component\scene_component_screen_quad.cpp" />
     <ClCompile Include="source\window_application\application_demo_00.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -117,6 +129,24 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\application_character_00.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shader\screen_quad_pixel_background.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="shader\screen_quad_pixel_camera_ray.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="shader\screen_quad_pixel_grid.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="shader\screen_quad_vertex.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
