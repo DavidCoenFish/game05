@@ -102,6 +102,7 @@
     <ClInclude Include="source\host_define.h" />
     <ClInclude Include="source\scene_component\scene_component_background.h" />
     <ClInclude Include="source\scene_component\scene_component_camera_ray.h" />
+    <ClInclude Include="source\scene_component\scene_component_disk.h" />
     <ClInclude Include="source\scene_component\scene_component_grid.h" />
     <ClInclude Include="source\scene_component\scene_component_screen_quad.h" />
     <ClInclude Include="source\window_application\application_demo_00.h" />
@@ -115,6 +116,7 @@
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\scene_component\scene_component_background.cpp" />
     <ClCompile Include="source\scene_component\scene_component_camera_ray.cpp" />
+    <ClCompile Include="source\scene_component\scene_component_disk.cpp" />
     <ClCompile Include="source\scene_component\scene_component_grid.cpp" />
     <ClCompile Include="source\scene_component\scene_component_screen_quad.cpp" />
     <ClCompile Include="source\window_application\application_demo_00.cpp" />
@@ -139,7 +141,19 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="shader\screen_quad_pixel_disk.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="shader\screen_quad_pixel_grid.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="shader\screen_quad_pixel_line.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="shader\screen_quad_pixel_sphere.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
     </FxCompile>
