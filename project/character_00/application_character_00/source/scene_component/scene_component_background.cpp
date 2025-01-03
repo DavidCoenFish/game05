@@ -24,6 +24,8 @@ struct ConstantBufferSky
     float _pad2;
     VectorFloat3 _ground_colour_horizon;
     float _pad3;
+    VectorFloat3 _fog_colour;
+    float _pad4;
 
 };
 
@@ -123,6 +125,7 @@ void SceneComponentBackground::Draw(
 
         buffer_background_sky._ground_colour_pole = VectorFloat3(0.91f, 0.737f, 0.259f);
         buffer_background_sky._ground_colour_horizon = VectorFloat3(0.365f, 0.216f, 0.0f);
+		buffer_background_sky._fog_colour = VectorFloat3(0.6f, 0.6f, 0.6f);
 
         in_draw_system_frame->SetShader(_shader_background, _shader_background_constant_buffer);
         in_draw_system_frame->Draw(in_screen_quad);

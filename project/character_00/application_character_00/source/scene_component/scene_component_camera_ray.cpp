@@ -239,7 +239,7 @@ void SceneComponentCameraRay::Update(
             );
     }
 
-    //LOG_CONSOLE("SceneComponentCameraRay::Update _constant_buffer._camera_pos[%f, %f, %f]", _constant_buffer._camera_pos[0], _constant_buffer._camera_pos[1], _constant_buffer._camera_pos[2]);
+    //maLOG_CONSOLE("SceneComponentCameraRay::Update _constant_buffer._camera_pos[%f, %f, %f]", _constant_buffer._camera_pos[0], _constant_buffer._camera_pos[1], _constant_buffer._camera_pos[2]);
 }
 
 void SceneComponentCameraRay::OnWindowSizeChanged(
