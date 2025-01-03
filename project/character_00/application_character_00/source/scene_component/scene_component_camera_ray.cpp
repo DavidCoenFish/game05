@@ -10,6 +10,7 @@
 #include "common/draw_system/shader/shader_resource.h"
 #include "common/draw_system/shader/shader_pipeline_state_data.h"
 #include "common/file_system/file_system.h"
+#include "common/log/log.h"
 #include "common/math/angle.h"
 #include "common/math/quaternion_float.h"
 #include "common/math/matrix_float33.h"
@@ -27,7 +28,8 @@ std::shared_ptr<SceneComponentCameraRay> SceneComponentCameraRay::Factory(
     DrawSystem* const in_draw_system,
     ID3D12GraphicsCommandList* const in_command_list,
     const std::vector<D3D12_INPUT_ELEMENT_DESC>& in_input_element_desc_array,
-    const std::filesystem::path& in_root_path
+    const std::filesystem::path& in_root_path,
+    const VectorFloat3& in_initial_camera_pos 
     )
 {
     const std::vector<RenderTargetFormatData> target_format_data_array({
@@ -80,17 +82,19 @@ std::shared_ptr<SceneComponentCameraRay> SceneComponentCameraRay::Factory(
     return std::make_shared<SceneComponentCameraRay>(
         shader_camera_ray,
         shader_camera_ray_constant_buffer,
-        render_target_texture
+        render_target_texture,
+		in_initial_camera_pos
         );
 }
 
 SceneComponentCameraRay::SceneComponentCameraRay(
     const std::shared_ptr<Shader>& in_shader_camera_ray,
     const std::shared_ptr<ShaderConstantBuffer>& in_shader_camera_ray_constant_buffer,
-    const std::shared_ptr<RenderTargetTexture>& in_render_target_texture
+    const std::shared_ptr<RenderTargetTexture>& in_render_target_texture,
+	const VectorFloat3& in_initial_camera_pos
     )
     : _constant_buffer({
-        s_camera_pos,
+        in_initial_camera_pos,
         0.0f, // fov horizontal
         s_camera_at,
         Angle::DegToRadian(145.0f), // fov vertical
@@ -131,8 +135,6 @@ void SceneComponentCameraRay::Update(
     // camera pos update
     {
         const auto camera_right = Cross(_constant_buffer._camera_at, _constant_buffer._camera_up);
-
-        //LOG_MESSAGE("ApplicationMultiLineCompute::Update %f %f %f", _camera_pos[0], _camera_pos[1], _camera_pos[2]);
 
         if (true == _input_q)
         {
@@ -236,6 +238,8 @@ void SceneComponentCameraRay::Update(
             nullptr
             );
     }
+
+    //LOG_CONSOLE("SceneComponentCameraRay::Update _constant_buffer._camera_pos[%f, %f, %f]", _constant_buffer._camera_pos[0], _constant_buffer._camera_pos[1], _constant_buffer._camera_pos[2]);
 }
 
 void SceneComponentCameraRay::OnWindowSizeChanged(

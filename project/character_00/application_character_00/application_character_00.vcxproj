@@ -105,6 +105,7 @@
     <ClInclude Include="source\scene_component\scene_component_disk.h" />
     <ClInclude Include="source\scene_component\scene_component_grid.h" />
     <ClInclude Include="source\scene_component\scene_component_screen_quad.h" />
+    <ClInclude Include="source\scene_component\scene_component_sphere.h" />
     <ClInclude Include="source\window_application\application_demo_00.h" />
   </ItemGroup>
   <ItemGroup>
@@ -119,6 +120,7 @@
     <ClCompile Include="source\scene_component\scene_component_disk.cpp" />
     <ClCompile Include="source\scene_component\scene_component_grid.cpp" />
     <ClCompile Include="source\scene_component\scene_component_screen_quad.cpp" />
+    <ClCompile Include="source\scene_component\scene_component_sphere.cpp" />
     <ClCompile Include="source\window_application\application_demo_00.cpp" />
   </ItemGroup>
   <ItemGroup>

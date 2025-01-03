@@ -12,6 +12,7 @@ Pixel main( Interpolant in_input )
 
     float3 world_eye_ray = MakeWorldEyeRay(float2(
         (in_input._uv.x * 2.0) - 1.0,
+        //(in_input._uv.y * 2.0) - 1.0
         ((1.0 - in_input._uv.y) * 2.0) - 1.0
         ));
 

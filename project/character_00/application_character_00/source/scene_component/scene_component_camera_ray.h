@@ -37,13 +37,15 @@ public:
         DrawSystem* const in_draw_system,
         ID3D12GraphicsCommandList* const in_command_list,
         const std::vector<D3D12_INPUT_ELEMENT_DESC>& in_input_element_desc_array,
-        const std::filesystem::path& in_root_path
+        const std::filesystem::path& in_root_path,
+		const VectorFloat3& in_initial_camera_pos = VectorFloat3()
         );
 
     SceneComponentCameraRay(
         const std::shared_ptr<Shader>& in_shader_camera_ray,
         const std::shared_ptr<ShaderConstantBuffer>& in_shader_camera_ray_constant_buffer,
-        const std::shared_ptr<RenderTargetTexture>& in_render_target_texture
+        const std::shared_ptr<RenderTargetTexture>& in_render_target_texture,
+		const VectorFloat3& in_initial_camera_pos = VectorFloat3()
         );
 
     ~SceneComponentCameraRay();
