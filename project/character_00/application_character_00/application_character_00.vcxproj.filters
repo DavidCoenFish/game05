@@ -31,6 +31,9 @@
     <ClCompile Include="source\scene_component\scene_component_sphere.cpp">
       <Filter>source\scene_component</Filter>
     </ClCompile>
+    <ClCompile Include="source\scene_component\scene_component_line.cpp">
+      <Filter>source\scene_component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resources\resource.h">
@@ -64,6 +67,9 @@
       <Filter>source\scene_component</Filter>
     </ClInclude>
     <ClInclude Include="source\scene_component\scene_component_sphere.h">
+      <Filter>source\scene_component</Filter>
+    </ClInclude>
+    <ClInclude Include="source\scene_component\scene_component_line.h">
       <Filter>source\scene_component</Filter>
     </ClInclude>
   </ItemGroup>

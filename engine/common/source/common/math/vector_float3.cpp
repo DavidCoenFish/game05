@@ -150,5 +150,13 @@ const VectorFloat3 operator* (const float in_lhs, const VectorFloat3& in_rhs)
 		);
 }
 
+const VectorFloat3 operator/ (const VectorFloat3& in_lhs, const float in_rhs)
+{
+	return VectorFloat3(
+		in_lhs._data[0] / in_rhs,
+		in_lhs._data[1] / in_rhs,
+		in_lhs._data[2] / in_rhs
+		);
+}
 
 

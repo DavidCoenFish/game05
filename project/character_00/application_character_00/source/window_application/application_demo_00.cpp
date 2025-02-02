@@ -19,6 +19,7 @@
 #include "scene_component/scene_component_grid.h"
 #include "scene_component/scene_component_screen_quad.h"
 #include "scene_component/scene_component_sphere.h"
+#include "scene_component/scene_component_line.h"
 
 IWindowApplication* const ApplicationDemo00::Factory(
 	const HWND in_hwnd,
@@ -99,7 +100,7 @@ ApplicationDemo00::ApplicationDemo00(
             in_application_param._root_path,
             _draw_resources->_camera_ray->GetHeapWrapperCameraRay(),
 			VectorFloat4(0.0f, 1.0f, 0.0f, 0.5f),
-			VectorFloat4(3.0f, 0.0f, 2.0f, 0.5f)
+			VectorFloat4(2.0f, 0.0f, 0.0f, 1.0f)
 			);
         _draw_resources->_sphere_1 = SceneComponentSphere::Factory(
             _draw_system.get(),
@@ -109,6 +110,18 @@ ApplicationDemo00::ApplicationDemo00(
             _draw_resources->_camera_ray->GetHeapWrapperCameraRay(),
 			VectorFloat4(0.0f, 0.0f, 1.0f, 0.5f),
 			VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f)
+			);
+
+        _draw_resources->_line_0 = SceneComponentLine::Factory(
+            _draw_system.get(),
+            command_list->GetCommandList(),
+            SceneComponentScreenQuad::GetInputElementDescArray(),
+            in_application_param._root_path,
+            _draw_resources->_camera_ray->GetHeapWrapperCameraRay(),
+			VectorFloat3(0.0f, 0.0f, 1.0f),
+			VectorFloat3(2.0f, 0.0f, 1.0f),
+			VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
+			4.0f
 			);
 
 	}
@@ -203,6 +216,15 @@ void ApplicationDemo00::Update()
                 );
         }
 
+        if (_draw_resources->_line_0 && _draw_resources->_camera_ray && screen_quad)
+        {
+            _draw_resources->_line_0->Draw(
+                _draw_system.get(),
+                frame.get(),
+                screen_quad,
+                _draw_resources->_camera_ray->GetConstantBufferB0()
+                );
+        }
 	}
 }
 

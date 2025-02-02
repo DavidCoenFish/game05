@@ -31,6 +31,7 @@ public:
 	friend const VectorFloat3 operator- (const VectorFloat3& in_lhs, const VectorFloat3& in_rhs);
 	friend const VectorFloat3 operator* (const VectorFloat3& in_lhs, const float in_rhs);
 	friend const VectorFloat3 operator* (const float in_lhs, const VectorFloat3& in_rhs);
+	friend const VectorFloat3 operator/ (const VectorFloat3& in_lhs, const float in_rhs);
 
 private:
 	enum Index
@@ -59,3 +60,4 @@ const VectorFloat3 operator+ (const VectorFloat3& in_lhs, const VectorFloat3& in
 const VectorFloat3 operator- (const VectorFloat3& in_lhs, const VectorFloat3& in_rhs);
 const VectorFloat3 operator* (const VectorFloat3& in_lhs, const float in_rhs);
 const VectorFloat3 operator* (const float in_lhs, const VectorFloat3& in_rhs);
+const VectorFloat3 operator/ (const VectorFloat3& in_lhs, const float in_rhs);

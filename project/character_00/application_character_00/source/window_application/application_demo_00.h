@@ -9,6 +9,7 @@ class SceneComponentDisk;
 class SceneComponentGrid;
 class SceneComponentScreenQuad;
 class SceneComponentSphere;
+class SceneComponentLine;
 class Shader;
 class Timer;
 
@@ -52,6 +53,9 @@ private:
         std::shared_ptr<SceneComponentDisk> _disk;
         std::shared_ptr<SceneComponentSphere> _sphere_0;
         std::shared_ptr<SceneComponentSphere> _sphere_1;
+        std::shared_ptr<SceneComponentLine> _line_0;
+        std::shared_ptr<SceneComponentLine> _line_1;
+		
 	};
     std::unique_ptr<DrawResources> _draw_resources;
 

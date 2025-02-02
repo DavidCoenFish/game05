@@ -2,6 +2,7 @@
 
 #include "common/math/dsc_math.h"
 #include "common/math/vector_float4.h"
+#include "common/math/vector_float3.h"
 #include "common/macro.h"
 
 const bool DscMath::AlmostEqual(const float in_lhs, const float in_rhs, const float in_epsilon)
@@ -20,6 +21,25 @@ const float DscMath::ApproximateDistance(const float in_dx, const float in_dy)
 	}
 
 	return (0.41f * dy) + (0.941246f * dx);
+}
+
+const float DscMath::Length(const VectorFloat3& in_value)
+{
+	float temp = Dot(in_value, in_value);
+	if (temp != 0.0f)
+	{
+		temp = sqrt(temp);
+	}
+	return temp;
+}
+
+const VectorFloat3 DscMath::Normal(const VectorFloat3& in_value, const float in_length)
+{
+	if (0.0f == in_length)
+	{
+		return VectorFloat3(1.0f, 0.0f, 0.0f);
+	}
+	return in_value * (1.0f / in_length);
 }
 
 const int DscMath::ScaleInt(const int in_value, const float in_scale)
