@@ -52,3 +52,39 @@ float2 CalculateDistance(float in_t1, float in_t2, float3 in_p1, float3 in_d1, f
 
     return result;
 }
+
+
+/*
+	https://stackoverflow.com/questions/2316490/the-algorithm-to-find-the-point-of-intersection-of-two-3d-line-segment/10288710#10288710
+
+	result[0] != 0.0 if result valid
+	result[1] distance along ray A of the nearest point between rays
+	result[2] distance along ray B of the nearest point between rays
+*/
+//float3 IntersectRayRay(float3 in_a_pos, float3 in_a_norm, float3 in_b_pos, float3 in_b_norm)
+//{
+//	float3 result = float3(0.0, 0.0, 0.0);
+//	float3 c = float3(in_b_pos.x - in_a_pos.x, in_b_pos.y - in_a_pos.y, in_b_pos.z - in_a_pos.z);
+//	//~a.~b	~b.~c	~a.~c	~a.~a	~b.~b
+//	float ab = dot(in_a_norm, in_b_norm);
+//	float bc = dot(in_b_norm, c);
+//	float ac = dot(in_a_norm, c);
+//	float aa = dot(in_a_norm, in_a_norm);
+//	float bb = dot(in_b_norm, in_b_norm);
+//
+//	//D=A + ~a * ((-(~a.~b)(~b.~c) + (~a.~c)(~b.~b))/((~a.~a)(~b.~b)-(~a.~b)(~a.~b))
+//	//E=B + ~b((~a.~b)(~a.~c)-(~b.~c)(~a.~a))/((~a.~a)(~b.~b)-(~a.~b)(~a.~b))
+//	float denominator = (aa * bb) - (ab * ab); 
+//	if (0.0 == denominator)
+//	{
+//		return result;
+//	}
+//
+//	result[0] = 1.0;
+//	result[1] = ((ac * bb) - (ab * bc)) / denominator;
+//	result[2] = ((ab * ac) - (bc * aa)) / denominator;
+//
+//	return result;
+//}
+
+

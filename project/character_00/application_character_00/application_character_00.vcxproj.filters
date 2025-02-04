@@ -175,5 +175,8 @@
     <FxCompile Include="shader\screen_quad_pixel_disk.hlsl">
       <Filter>shader</Filter>
     </FxCompile>
+    <FxCompile Include="shader\screen_quad_pixel_circle.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
