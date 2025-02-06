@@ -41,7 +41,7 @@ Pixel main( Interpolant in_input )
 
 		float coverage = saturate(_circle_normal_thickness.w - pixel_distance);
 
-		result._color = _ray_color * coverage;
+		result._color = _color * coverage;
 	}
 	else
 	{

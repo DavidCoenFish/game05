@@ -105,6 +105,7 @@
     <ClInclude Include="source\scene_component\scene_component_disk.h" />
     <ClInclude Include="source\scene_component\scene_component_grid.h" />
     <ClInclude Include="source\scene_component\scene_component_line.h" />
+    <ClInclude Include="source\scene_component\scene_component_line_disk.h" />
     <ClInclude Include="source\scene_component\scene_component_screen_quad.h" />
     <ClInclude Include="source\scene_component\scene_component_sphere.h" />
     <ClInclude Include="source\window_application\application_demo_00.h" />
@@ -121,6 +122,7 @@
     <ClCompile Include="source\scene_component\scene_component_disk.cpp" />
     <ClCompile Include="source\scene_component\scene_component_grid.cpp" />
     <ClCompile Include="source\scene_component\scene_component_line.cpp" />
+    <ClCompile Include="source\scene_component\scene_component_line_disk.cpp" />
     <ClCompile Include="source\scene_component\scene_component_screen_quad.cpp" />
     <ClCompile Include="source\scene_component\scene_component_sphere.cpp" />
     <ClCompile Include="source\window_application\application_demo_00.cpp" />
@@ -149,7 +151,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="shader\screen_quad_pixel_circle.hlsl">
+    <FxCompile Include="shader\screen_quad_pixel_line_disk.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
