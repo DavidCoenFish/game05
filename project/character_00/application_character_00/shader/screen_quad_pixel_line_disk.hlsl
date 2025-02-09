@@ -23,14 +23,13 @@ Pixel main( Interpolant in_input )
 
     float3 world_eye_ray = g_texture0.Sample(g_sampler_state, in_input._uv).xyz;
     float3 camera_pos = GetCameraPos() - _circle_pos_radius.xyz;
-	//float t = dot(_circle_normal_thickness.xyz, camera_pos);
 
 	//https://stackoverflow.com/questions/23975555/how-to-calculate-a-ray-plane-intersection
 	float denom = dot(world_eye_ray, _circle_normal_thickness.xyz);
 	float t = 0.0;
 	if (0.0001 < abs(denom))
 	{
-		t = dot(_circle_normal_thickness.xyz, camera_pos);
+		t = -1.0 * dot(_circle_normal_thickness.xyz, camera_pos) / denom;
 	}
 
 	if (0.0f < t)
@@ -47,8 +46,6 @@ Pixel main( Interpolant in_input )
 	{
 		discard;
 	}
-
-    result._color = float4(0.0f, 0.0f, 0.0f, 0.0f);
 
     return result;
 }
