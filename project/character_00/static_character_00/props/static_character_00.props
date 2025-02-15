@@ -6,23 +6,26 @@
     <DscIncludeDir>$(ProjectDir)..\..\..\engine\sdk;$(ProjectDir)..\..\..\engine\common\include\;$(ProjectDir)source\;$(ProjectDir)include\</DscIncludeDir>
   </PropertyGroup>
   <PropertyGroup>
-	<OutDir>$(DscBuildDir)output\</OutDir>
-	<IntDir>$(DscBuildDir)intermediate\</IntDir>
+    <OutDir>$(DscBuildDir)output\</OutDir>
+    <IntDir>$(DscBuildDir)intermediate\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup>
-	<ClCompile>
-	  <AdditionalIncludeDirectories>$(DscIncludeDir);$(IncludePath)</AdditionalIncludeDirectories>
-	  <PrecompiledHeader>Use</PrecompiledHeader>
-	  <PrecompiledHeaderFile>static_character\static_character_pch.h</PrecompiledHeaderFile>
-	  <LanguageStandard>stdcpp17</LanguageStandard>
-	</ClCompile>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(DscIncludeDir);$(IncludePath)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>static_character\static_character_pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <FxCompile>
+      <ObjectFileOutput>$(OutDir)shader/%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-	<BuildMacro Include="DscBuildDir">
-	  <Value>$(DscBuildDir)</Value>
-	</BuildMacro>
-	<BuildMacro Include="DscIncludeDir">
-	  <Value>$(DscIncludeDir)</Value>
-	</BuildMacro>
+    <BuildMacro Include="DscBuildDir">
+      <Value>$(DscBuildDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="DscIncludeDir">
+      <Value>$(DscIncludeDir)</Value>
+    </BuildMacro>
   </ItemGroup>
 </Project>

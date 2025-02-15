@@ -2,16 +2,10 @@
 #include "common/window/i_window_application.h"
 
 class DrawSystem;
-class GeometryGeneric;
-class SceneComponentBackground;
-class SceneComponentCameraRay;
-class SceneComponentDisk;
-class SceneComponentGrid;
 class SceneComponentScreenQuad;
-class SceneComponentSphere;
-class SceneComponentLine;
-class SceneComponentLineDisk;
-class Shader;
+class SceneComponentCameraRay;
+class SceneComponentBackground;
+class SceneComponentGrid;
 class Timer;
 
 class ApplicationDemo00 : public IWindowApplication
@@ -51,15 +45,6 @@ private:
         std::shared_ptr<SceneComponentCameraRay> _camera_ray;
         std::shared_ptr<SceneComponentBackground> _background;
         std::shared_ptr<SceneComponentGrid> _grid;
-        std::shared_ptr<SceneComponentDisk> _disk;
-        std::shared_ptr<SceneComponentSphere> _sphere_0;
-        std::shared_ptr<SceneComponentSphere> _sphere_1;
-        std::shared_ptr<SceneComponentLine> _line_0;
-        std::shared_ptr<SceneComponentLine> _line_1;
-        std::shared_ptr<SceneComponentLineDisk> _line_disk_0;
-        std::shared_ptr<SceneComponentLineDisk> _line_disk_1;
-		
-		
 	};
     std::unique_ptr<DrawResources> _draw_resources;
 

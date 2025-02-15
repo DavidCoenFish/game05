@@ -4,10 +4,70 @@
     <ClCompile Include="source\static_character\static_character_pch.cpp">
       <Filter>source\static_character</Filter>
     </ClCompile>
+    <ClCompile Include="source\static_character\scene_component\scene_component_background.cpp">
+      <Filter>source\static_character\scene_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_character\scene_component\scene_component_camera_ray.cpp">
+      <Filter>source\static_character\scene_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_character\scene_component\scene_component_disk.cpp">
+      <Filter>source\static_character\scene_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_character\scene_component\scene_component_generic_skeleton_debug.cpp">
+      <Filter>source\static_character\scene_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_character\scene_component\scene_component_grid.cpp">
+      <Filter>source\static_character\scene_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_character\scene_component\scene_component_line.cpp">
+      <Filter>source\static_character\scene_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_character\scene_component\scene_component_line_disk.cpp">
+      <Filter>source\static_character\scene_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_character\scene_component\scene_component_line_spline.cpp">
+      <Filter>source\static_character\scene_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_character\scene_component\scene_component_screen_quad.cpp">
+      <Filter>source\static_character\scene_component</Filter>
+    </ClCompile>
+    <ClCompile Include="source\static_character\scene_component\scene_component_sphere.cpp">
+      <Filter>source\static_character\scene_component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\static_character\static_character_pch.h">
       <Filter>source\static_character</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_character\scene_component\scene_component_camera_ray.h">
+      <Filter>include\static_character\scene_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_character\scene_component\scene_component_disk.h">
+      <Filter>include\static_character\scene_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_character\scene_component\scene_component_generic_skeleton_debug.h">
+      <Filter>include\static_character\scene_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_character\scene_component\scene_component_grid.h">
+      <Filter>include\static_character\scene_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_character\scene_component\scene_component_line.h">
+      <Filter>include\static_character\scene_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_character\scene_component\scene_component_line_disk.h">
+      <Filter>include\static_character\scene_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_character\scene_component\scene_component_line_spline.h">
+      <Filter>include\static_character\scene_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_character\scene_component\scene_component_screen_quad.h">
+      <Filter>include\static_character\scene_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_character\scene_component\scene_component_sphere.h">
+      <Filter>include\static_character\scene_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\static_character\scene_component\scene_component_background.h">
+      <Filter>include\static_character\scene_component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -26,13 +86,60 @@
     <Filter Include="source\static_character">
       <UniqueIdentifier>{8e06a6a2-ed08-4279-bf77-dcafc32c185a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\static_character\scene_component">
+      <UniqueIdentifier>{6078d91d-a5a1-40ad-aa24-e49af4b9112c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\static_character\scene_component">
+      <UniqueIdentifier>{de16d8c2-eaa9-474e-a926-f2428cb0457c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{d018c1b0-fad1-42a7-af55-b1f17f26413e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="props\static_character_00.props">
       <Filter>props</Filter>
     </None>
+    <None Include="shader\ray_ray.hlsli">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\screen_quad_interpolant.hlsli">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\polar.hlsli">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\polar_util.hlsli">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="notes.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shader\screen_quad_pixel_background.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\screen_quad_pixel_camera_ray.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\screen_quad_pixel_disk.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\screen_quad_pixel_grid.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\screen_quad_pixel_line.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\screen_quad_pixel_line_disk.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\screen_quad_pixel_sphere.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\screen_quad_vertex.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

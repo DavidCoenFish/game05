@@ -13,30 +13,6 @@
     <ClCompile Include="source\application_character_00_pch.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="source\scene_component\scene_component_grid.cpp">
-      <Filter>source\scene_component</Filter>
-    </ClCompile>
-    <ClCompile Include="source\scene_component\scene_component_screen_quad.cpp">
-      <Filter>source\scene_component</Filter>
-    </ClCompile>
-    <ClCompile Include="source\scene_component\scene_component_camera_ray.cpp">
-      <Filter>source\scene_component</Filter>
-    </ClCompile>
-    <ClCompile Include="source\scene_component\scene_component_background.cpp">
-      <Filter>source\scene_component</Filter>
-    </ClCompile>
-    <ClCompile Include="source\scene_component\scene_component_disk.cpp">
-      <Filter>source\scene_component</Filter>
-    </ClCompile>
-    <ClCompile Include="source\scene_component\scene_component_sphere.cpp">
-      <Filter>source\scene_component</Filter>
-    </ClCompile>
-    <ClCompile Include="source\scene_component\scene_component_line.cpp">
-      <Filter>source\scene_component</Filter>
-    </ClCompile>
-    <ClCompile Include="source\scene_component\scene_component_line_disk.cpp">
-      <Filter>source\scene_component</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resources\resource.h">
@@ -53,30 +29,6 @@
     </ClInclude>
     <ClInclude Include="source\application_character_00_pch.h">
       <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="source\scene_component\scene_component_grid.h">
-      <Filter>source\scene_component</Filter>
-    </ClInclude>
-    <ClInclude Include="source\scene_component\scene_component_screen_quad.h">
-      <Filter>source\scene_component</Filter>
-    </ClInclude>
-    <ClInclude Include="source\scene_component\scene_component_camera_ray.h">
-      <Filter>source\scene_component</Filter>
-    </ClInclude>
-    <ClInclude Include="source\scene_component\scene_component_background.h">
-      <Filter>source\scene_component</Filter>
-    </ClInclude>
-    <ClInclude Include="source\scene_component\scene_component_disk.h">
-      <Filter>source\scene_component</Filter>
-    </ClInclude>
-    <ClInclude Include="source\scene_component\scene_component_sphere.h">
-      <Filter>source\scene_component</Filter>
-    </ClInclude>
-    <ClInclude Include="source\scene_component\scene_component_line.h">
-      <Filter>source\scene_component</Filter>
-    </ClInclude>
-    <ClInclude Include="source\scene_component\scene_component_line_disk.h">
-      <Filter>source\scene_component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -102,17 +54,8 @@
       <Filter>script</Filter>
     </None>
     <None Include=".gitignore" />
-    <None Include="shader\ray_ray.hlsli">
-      <Filter>shader</Filter>
-    </None>
-    <None Include="shader\screen_quad_interpolant.hlsli">
-      <Filter>shader</Filter>
-    </None>
-    <None Include="shader\polar.hlsli">
-      <Filter>shader</Filter>
-    </None>
-    <None Include="shader\polar_util.hlsli">
-      <Filter>shader</Filter>
+    <None Include="script\util_stage_shaders.cmd">
+      <Filter>script</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -137,12 +80,6 @@
     <Filter Include="source\window_application">
       <UniqueIdentifier>{7236b999-a2c5-419f-a3cc-e2ef1315e1b4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\scene_component">
-      <UniqueIdentifier>{1c2e0752-e1e8-4aa2-a9fc-782f66db2afa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shader">
-      <UniqueIdentifier>{e71a9da2-69f7-439d-995c-3d5df5ec4af2}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\application_character_00.ico">
@@ -158,31 +95,5 @@
     <CopyFileToFolders Include="task\demo_00\application.json">
       <Filter>task\demo_00</Filter>
     </CopyFileToFolders>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="shader\screen_quad_pixel_camera_ray.hlsl">
-      <Filter>shader</Filter>
-    </FxCompile>
-    <FxCompile Include="shader\screen_quad_pixel_grid.hlsl">
-      <Filter>shader</Filter>
-    </FxCompile>
-    <FxCompile Include="shader\screen_quad_vertex.hlsl">
-      <Filter>shader</Filter>
-    </FxCompile>
-    <FxCompile Include="shader\screen_quad_pixel_background.hlsl">
-      <Filter>shader</Filter>
-    </FxCompile>
-    <FxCompile Include="shader\screen_quad_pixel_sphere.hlsl">
-      <Filter>shader</Filter>
-    </FxCompile>
-    <FxCompile Include="shader\screen_quad_pixel_line.hlsl">
-      <Filter>shader</Filter>
-    </FxCompile>
-    <FxCompile Include="shader\screen_quad_pixel_disk.hlsl">
-      <Filter>shader</Filter>
-    </FxCompile>
-    <FxCompile Include="shader\screen_quad_pixel_line_disk.hlsl">
-      <Filter>shader</Filter>
-    </FxCompile>
   </ItemGroup>
 </Project>

@@ -3,11 +3,12 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
 	<DscBuildDir>$(ProjectDir)..\..\..\build\$(SolutionName)\$(ProjectName)\$(Platform)\$(Configuration)\</DscBuildDir>
-	<DscIncludeDir>$(ProjectDir)..\..\..\engine\sdk\;$(ProjectDir)..\..\..\engine\common\include\;$(ProjectDir)..\static_character_00\include\;$(ProjectDir)source\</DscIncludeDir>
-  </PropertyGroup>
+    <DscIncludeDir>$(ProjectDir)..\..\..\engine\sdk\;$(ProjectDir)..\..\..\engine\common\include\;$(ProjectDir)..\static_character_00\include\;$(ProjectDir)source\</DscIncludeDir>
+    <DscStaticCharacterBuildDir>$(ProjectDir)..\..\..\build\$(SolutionName)\static_character_00\$(Platform)\$(Configuration)\output\</DscStaticCharacterBuildDir>
+    </PropertyGroup>
   <PropertyGroup>
 	<OutDir>$(DscBuildDir)output\</OutDir>
-	<IntDir>$(DscBuildDir)intermediate\</IntDir>
+      <IntDir>$(DscBuildDir)intermediate\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup>
 	<ClCompile>
@@ -21,15 +22,12 @@
 	  <LanguageStandard>stdcpp17</LanguageStandard>
 	  <AdditionalUsingDirectories>%WindowsSdkDir\Include%WindowsSDKVersion%\um;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
 	</ClCompile>
-	<FxCompile>
-	  <ObjectFileOutput>$(OutDirFullPath)%(RelativeDir)%(Filename).cso</ObjectFileOutput>
-	</FxCompile>
 	<CopyFileToFolders />
 	<CopyFileToFolders>
 	  <DestinationFolders>$(OutDirFullPath)%(RelativeDir)</DestinationFolders>
 	</CopyFileToFolders>
 	<PreBuildEvent>
-	  <Command>$(ProjectDir)script\prebuild.cmd "$(Configuration)" "$(Platform)" 0 0 "$(ProjectName)" "$(TargetName)"</Command>
+	  <Command>$(ProjectDir)script\prebuild.cmd "$(DscStaticCharacterBuildDir)" "$(DscBuildDir)output\"</Command>
 	</PreBuildEvent>
 	<Link>
 	  <AdditionalLibraryDirectories>%WindowsSdkDir%\Lib%WindowsSDKVersion%\\um\arch;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

@@ -13,14 +13,10 @@
 #include "common/util/vector_helper.h"
 #include "common/window/window_application_param.h"
 
-#include "scene_component/scene_component_background.h"
-#include "scene_component/scene_component_camera_ray.h"
-#include "scene_component/scene_component_disk.h"
-#include "scene_component/scene_component_grid.h"
-#include "scene_component/scene_component_screen_quad.h"
-#include "scene_component/scene_component_sphere.h"
-#include "scene_component/scene_component_line.h"
-#include "scene_component/scene_component_line_disk.h"
+#include "static_character/scene_component/scene_component_background.h"
+#include "static_character/scene_component/scene_component_camera_ray.h"
+#include "static_character/scene_component/scene_component_grid.h"
+#include "static_character/scene_component/scene_component_screen_quad.h"
 
 IWindowApplication* const ApplicationDemo00::Factory(
 	const HWND in_hwnd,
@@ -82,62 +78,6 @@ ApplicationDemo00::ApplicationDemo00(
             in_application_param._root_path,
             _draw_resources->_camera_ray->GetHeapWrapperCameraRay()
             );
-
-        _draw_resources->_disk = SceneComponentDisk::Factory(
-            _draw_system.get(),
-            command_list->GetCommandList(),
-            SceneComponentScreenQuad::GetInputElementDescArray(),
-            in_application_param._root_path,
-            _draw_resources->_camera_ray->GetHeapWrapperCameraRay(),
-			VectorFloat4(1.0f, 0.0f, 0.0f, 0.5f),
-			//VectorFloat3(0.0f, 0.0f, 1.0f) 
-			VectorFloat3(3.0f, 2.0f, 1.0f)
-			);
-
-        _draw_resources->_sphere_0 = SceneComponentSphere::Factory(
-            _draw_system.get(),
-            command_list->GetCommandList(),
-            SceneComponentScreenQuad::GetInputElementDescArray(),
-            in_application_param._root_path,
-            _draw_resources->_camera_ray->GetHeapWrapperCameraRay(),
-			VectorFloat4(0.0f, 1.0f, 0.0f, 0.5f),
-			VectorFloat4(2.0f, 0.0f, 0.0f, 1.0f)
-			);
-        _draw_resources->_sphere_1 = SceneComponentSphere::Factory(
-            _draw_system.get(),
-            command_list->GetCommandList(),
-            SceneComponentScreenQuad::GetInputElementDescArray(),
-            in_application_param._root_path,
-            _draw_resources->_camera_ray->GetHeapWrapperCameraRay(),
-			VectorFloat4(0.0f, 0.0f, 1.0f, 0.5f),
-			VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f)
-			);
-
-        _draw_resources->_line_0 = SceneComponentLine::Factory(
-            _draw_system.get(),
-            command_list->GetCommandList(),
-            SceneComponentScreenQuad::GetInputElementDescArray(),
-            in_application_param._root_path,
-            _draw_resources->_camera_ray->GetHeapWrapperCameraRay(),
-			VectorFloat3(0.0f, 0.0f, 0.0f),
-			VectorFloat3(0.0f, 1.0f, 0.0f),
-			VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-			4.0f
-			);
-
-		_draw_resources->_line_disk_0 = SceneComponentLineDisk::Factory(
-            _draw_system.get(),
-            command_list->GetCommandList(),
-            SceneComponentScreenQuad::GetInputElementDescArray(),
-            in_application_param._root_path,
-            _draw_resources->_camera_ray->GetHeapWrapperCameraRay(),
-			VectorFloat3(0.0f, 0.0f, 0.0f),
-			0.5f,
-			VectorFloat3(0.0f, 1.0f, 0.0f),
-			VectorFloat4(0.0f, 0.0f, 0.0f, 1.0f),
-			4.0f
-			);
-
 	}
 
     _timer = std::make_unique<Timer>();
@@ -199,68 +139,6 @@ void ApplicationDemo00::Update()
                 _draw_resources->_camera_ray->GetConstantBufferB0()
                 );
         }
-//#if 1
-//        if (_draw_resources->_disk && _draw_resources->_camera_ray && screen_quad)
-//        {
-//            _draw_resources->_disk->Draw(
-//                _draw_system.get(),
-//                frame.get(),
-//                screen_quad,
-//                _draw_resources->_camera_ray->GetConstantBufferB0()
-//                );
-//        }
-//#endif
-//        if (_draw_resources->_sphere_0 && _draw_resources->_camera_ray && screen_quad)
-//        {
-//            _draw_resources->_sphere_0->Draw(
-//                _draw_system.get(),
-//                frame.get(),
-//                screen_quad,
-//                _draw_resources->_camera_ray->GetConstantBufferB0()
-//                );
-//        }
-//
-//        if (_draw_resources->_sphere_1 && _draw_resources->_camera_ray && screen_quad)
-//        {
-//            _draw_resources->_sphere_1->Draw(
-//                _draw_system.get(),
-//                frame.get(),
-//                screen_quad,
-//                _draw_resources->_camera_ray->GetConstantBufferB0()
-//                );
-//        }
-//
-        if (_draw_resources->_line_0 && _draw_resources->_camera_ray && screen_quad)
-        {
-            _draw_resources->_line_0->Draw(
-                _draw_system.get(),
-                frame.get(),
-                screen_quad,
-                _draw_resources->_camera_ray->GetConstantBufferB0()
-                );
-        }
-
-        if (_draw_resources->_line_disk_0 && _draw_resources->_camera_ray && screen_quad)
-        {
-            _draw_resources->_line_disk_0->Draw(
-                _draw_system.get(),
-                frame.get(),
-                screen_quad,
-                _draw_resources->_camera_ray->GetConstantBufferB0()
-                );
-        }
-
-        if (_draw_resources->_line_disk_1 && _draw_resources->_camera_ray && screen_quad)
-        {
-            _draw_resources->_line_disk_1->Draw(
-                _draw_system.get(),
-                frame.get(),
-                screen_quad,
-                _draw_resources->_camera_ray->GetConstantBufferB0()
-                );
-        }
-
-		
 	}
 }
 

@@ -1,9 +1,9 @@
-::prebuild_xbox.cmd <1:Project config> <2:Project platform> <3:Major version> <4:Minor version> <5:ProjectName> <6:TargetName>
+::prebuild.cmd <1:static character build output dir> <2:output dir>
 
 ::@ECHO OFF
 PUSHD %~dp0
 
-echo %time% %~nx0 %~1 %~2 %~3 %~4
+echo %time% %~nx0 %~1 %~2
 
 SET DATA_DIR=..\..\..\..\engine\version\output\
 
@@ -26,6 +26,13 @@ call util_make_resource.cmd "%BUILD_VERSION_FILE_PATH%"
 if %errorlevel% NEQ 0 (
    exit /b %ERRORLEVEL%
    )
+
+::echo call util_stage_shaders.cmd "%~1" "%~2"
+call util_stage_shaders.cmd "%~1" "%~2"
+if %errorlevel% GEQ 8 (
+   exit /b %ERRORLEVEL%
+   )
+
 
 echo %time% %~nx0 finished
 

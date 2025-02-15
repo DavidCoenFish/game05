@@ -1,6 +1,6 @@
-#include "application_character_00_pch.h"
-#include "scene_component/scene_component_grid.h"
-#include "scene_component/scene_component_camera_ray.h"
+#include "static_character/static_character_pch.h"
+#include "static_character/scene_component/scene_component_grid.h"
+#include "static_character/scene_component/scene_component_camera_ray.h"
 
 #include "common/file_system/file_system.h"
 #include "common/math/angle.h"

@@ -1,5 +1,5 @@
-#include "application_character_00_pch.h"
-#include "scene_component/scene_component_screen_quad.h"
+#include "static_character/static_character_pch.h"
+#include "static_character/scene_component/scene_component_screen_quad.h"
 
 #include "common/draw_system/draw_system.h"
 #include "common/draw_system/geometry/geometry_generic.h"

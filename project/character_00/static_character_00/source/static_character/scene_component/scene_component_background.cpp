@@ -1,7 +1,7 @@
-#include "application_character_00_pch.h"
-#include "scene_component/scene_component_background.h"
+#include "static_character/static_character_pch.h"
+#include "static_character/scene_component/scene_component_background.h"
 
-#include "scene_component/scene_component_camera_ray.h"
+#include "static_character/scene_component/scene_component_camera_ray.h"
 
 #include "common/file_system/file_system.h"
 #include "common/math/angle.h"
@@ -107,7 +107,7 @@ void SceneComponentBackground::Draw(
     DrawSystem* const in_draw_system,
     DrawSystemFrame* const in_draw_system_frame,
     const std::shared_ptr<GeometryGeneric>& in_screen_quad,
-    const CameraConstantBufferB0& in_camera_constant_buffer
+    const CameraConstantBufferB0& /*in_camera_constant_buffer*/
     )
 {
     in_draw_system_frame->SetRenderTarget(
