@@ -15,24 +15,23 @@ SET BUILD_VERSION_FILE_PATH_2=%DATA_DIR%build_version_patch.txt
 SET BUILD_VERSION_FILE_PATH_3=%DATA_DIR%build_version_store.txt
 SET HOST_DEFINE_FILE_PATH=..\source\host_define.h
 
-::echo call util_make_host_define.cmd "%HOST_DEFINE_FILE_PATH%"
 call util_make_host_define.cmd "%HOST_DEFINE_FILE_PATH%"
 if %errorlevel% NEQ 0 (
+   echo Error util_make_host_define.cmd "%HOST_DEFINE_FILE_PATH%"
    exit /b %ERRORLEVEL%
    )
 
-::echo call util_make_resource.cmd "%BUILD_VERSION_FILE_PATH%"
 call util_make_resource.cmd "%BUILD_VERSION_FILE_PATH%"
 if %errorlevel% NEQ 0 (
+   echo Error util_make_resource.cmd "%BUILD_VERSION_FILE_PATH%"
    exit /b %ERRORLEVEL%
    )
 
-::echo call util_stage_shaders.cmd "%~1" "%~2"
 call util_stage_shaders.cmd "%~1" "%~2"
-if %errorlevel% GEQ 8 (
+if %errorlevel% NEQ 0 (
+   echo Error util_stage_shaders.cmd "%~1" "%~2"
    exit /b %ERRORLEVEL%
    )
-
 
 echo %time% %~nx0 finished
 

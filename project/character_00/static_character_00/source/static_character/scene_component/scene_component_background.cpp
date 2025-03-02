@@ -40,11 +40,11 @@ std::shared_ptr<SceneComponentBackground> SceneComponentBackground::Factory(
     std::shared_ptr<Shader> shader_background;
     std::shared_ptr<ShaderConstantBuffer> shader_background_constant_buffer;
 
-    auto vertex_shader_data = FileSystem::SyncReadFile(in_root_path / "shader" / "screen_quad_vertex.cso");
+    auto vertex_shader_data = FileSystem::SyncReadFile(in_root_path / "shader" / "static_character_00" / "screen_quad_vertex.cso");
 
     // Shader background
     {
-        auto pixel_shader_data = FileSystem::SyncReadFile(in_root_path / "shader" / "screen_quad_pixel_background.cso");
+        auto pixel_shader_data = FileSystem::SyncReadFile(in_root_path / "shader" / "static_character_00" / "screen_quad_pixel_background.cso");
         std::vector < DXGI_FORMAT > render_target_format;
         render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
         ShaderPipelineStateData shader_pipeline_state_data(

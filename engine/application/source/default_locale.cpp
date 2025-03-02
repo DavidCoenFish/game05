@@ -351,7 +351,7 @@ void DefaultLocale::Populate(
     // zh-cn
     {
         in_locale_system.Append(
-            LocaleISO_639_1::Chinese_Peoples_Republic_of_China,
+            LocaleISO_639_1::Chinese_Simplified,
             std::vector<LocaleSystem::Data>({
                 {"en","\xe8""\x8b""\xb1""\xe8""\xaf""\xad"},
                 {"es","\xe8""\xa5""\xbf""\xe7""\x8f""\xad""\xe7""\x89""\x99""\xe8""\xaf""\xad"},
@@ -382,7 +382,7 @@ void DefaultLocale::Populate(
     // zh-tw
     {
         in_locale_system.Append(
-            LocaleISO_639_1::Chinese_Taiwan,
+            LocaleISO_639_1::Chinese_Traditional,
             std::vector<LocaleSystem::Data>({
                 {"en","\xe8""\x8b""\xb1""\xe8""\xaa""\x9e"},
                 {"es","\xe8""\xa5""\xbf""\xe7""\x8f""\xad""\xe7""\x89""\x99""\xe8""\xaa""\x9e"},

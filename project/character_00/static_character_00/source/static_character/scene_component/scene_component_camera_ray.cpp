@@ -44,8 +44,9 @@ std::shared_ptr<SceneComponentCameraRay> SceneComponentCameraRay::Factory(
         true
         );
 
-    auto vertex_shader_data = FileSystem::SyncReadFile(in_root_path / "shader" / "screen_quad_vertex.cso");
-    auto pixel_shader_data = FileSystem::SyncReadFile(in_root_path / "shader" / "screen_quad_pixel_camera_ray.cso");
+    //auto vertex_shader_data = FileSystem::SyncReadFile(in_root_path / "shader" / "static_character_00" / "screen_quad_vertex.cso");
+    auto vertex_shader_data = FileSystem::SyncReadFile("./shader/static_character_00/screen_quad_vertex.cso");
+    auto pixel_shader_data = FileSystem::SyncReadFile("./shader/static_character_00/screen_quad_pixel_camera_ray.cso");
     std::vector < DXGI_FORMAT > render_target_format;
     render_target_format.push_back(DXGI_FORMAT_R32G32B32A32_FLOAT);
     ShaderPipelineStateData shader_pipeline_state_data(

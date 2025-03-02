@@ -9,7 +9,14 @@ PUSHD %~dp0
 echo %~nx0 %~1 %~2
 
 ::XCOPY "%~1Shader" "%~2Shader" /S /I /Y
-ROBOCOPY "%~1Shader" "%~2Shader" /MIR /NJH /NJS /NP
+ROBOCOPY "%~1shader/static_character_00" "%~2shader/static_character_00" /MIR /NJH /NJS /NP
+
+if %errorlevel% GTR 8 (
+   echo ROBOCOPY "%~1shader/static_character_00" "%~2shader/static_character_00" /MIR /NJH /NJS /NP
+   echo errorlevel: %errorlevel%
+   exit /b 1
+   )
+
 
 POPD
-exit /b %ERRORLEVEL%
+exit /b 0

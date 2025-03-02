@@ -50,17 +50,17 @@ ApplicationDemo00::ApplicationDemo00(
         _draw_resources = std::make_unique<DrawResources>();
         auto command_list = _draw_system->CreateCustomCommandList();
 
-        _draw_resources->_screen_quad = SceneComponentScreenQuad::Factory(
-            _draw_system.get(),
-            command_list->GetCommandList()
-            );
+         _draw_resources->_screen_quad = SceneComponentScreenQuad::Factory(
+             _draw_system.get(),
+             command_list->GetCommandList()
+             );
 
         _draw_resources->_camera_ray = SceneComponentCameraRay::Factory(
             _draw_system.get(),
             command_list->GetCommandList(),
             SceneComponentScreenQuad::GetInputElementDescArray(),
             in_application_param._root_path,
-			VectorFloat3(0.0f, 1.0f, 0.0)
+            VectorFloat3(0.0f, 1.0f, 0.0)
             );
 
         _draw_resources->_background = SceneComponentBackground::Factory(

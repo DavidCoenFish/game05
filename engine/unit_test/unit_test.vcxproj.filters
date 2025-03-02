@@ -1,38 +1,58 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-	<Filter Include="source">
-	  <UniqueIdentifier>{54d83fb8-d7c0-4db4-ac78-3ebb15ac2a86}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="props">
-	  <UniqueIdentifier>{ce011f48-e490-4a22-9393-8ed33441e881}</UniqueIdentifier>
-	</Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{54d83fb8-d7c0-4db4-ac78-3ebb15ac2a86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="props">
+      <UniqueIdentifier>{ce011f48-e490-4a22-9393-8ed33441e881}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{826966e6-438d-40b1-a528-3cbda57254ff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-	<ClCompile Include="source\unit_test_pch.cpp">
-	  <Filter>source</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common_dag_threaded.cpp">
-	  <Filter>source</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common_math_vector_float3.cpp">
-	  <Filter>source</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common_ui_screen_space.cpp">
-	  <Filter>source</Filter>
-	</ClCompile>
-	<ClCompile Include="source\common_locale_system.cpp">
-	  <Filter>source</Filter>
-	</ClCompile>
+    <ClCompile Include="source\unit_test_pch.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common_dag_threaded.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common_math_vector_float3.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common_ui_screen_space.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common_locale_system.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\std_ifstream.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common_file_system.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-	<ClInclude Include="source\unit_test_pch.h">
-	  <Filter>source</Filter>
-	</ClInclude>
+    <ClInclude Include="source\unit_test_pch.h">
+      <Filter>source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-	<None Include="props\unit_test.props">
-	  <Filter>props</Filter>
-	</None>
+    <None Include="props\unit_test.props">
+      <Filter>props</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="data\test.txt">
+      <Filter>data</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="data\screen_quad_vertex.cso">
+      <Filter>data</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="data\screen_quad_vertex_012345678901234567890123456789012345678901234567890.cso">
+      <Filter>data</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>

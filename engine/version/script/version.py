@@ -142,6 +142,7 @@ def TraversData(outputFileList, folderPath, gitIgnoreOrNull, relativePathSplit, 
 def WriteStringToFile(filePath, stringData):
 	"""! Write a string to the given file path
 	"""
+	os.makedirs(os.path.dirname(filePath), exist_ok=True)
 	file = open(filePath, "w")
 	file.write(stringData)
 	file.close()

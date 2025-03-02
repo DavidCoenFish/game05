@@ -50,7 +50,7 @@ public:
 		{
 			Log::AddConsole("Warning: dtor of log with %d log messages not consumed", (int)_list_messages.size());
 		}
-		assert(0 == _list_messages.size());
+		//assert(0 == _list_messages.size());
 	}
 	void AddMessage(const LogTopic in_topic, const std::string& in_message)
 	{

@@ -53,10 +53,10 @@ std::shared_ptr<SceneComponentLine> SceneComponentLine::Factory(
     std::shared_ptr<Shader> shader_line;
     std::shared_ptr<ShaderConstantBuffer> shader_line_constant_buffer;
 
-    auto vertex_shader_data = FileSystem::SyncReadFile(in_root_path / "shader" / "screen_quad_vertex.cso");
+    auto vertex_shader_data = FileSystem::SyncReadFile(in_root_path / "shader" / "static_character_00" / "screen_quad_vertex.cso");
 
     {
-        auto pixel_shader_data = FileSystem::SyncReadFile(in_root_path / "shader" / "screen_quad_pixel_line.cso");
+        auto pixel_shader_data = FileSystem::SyncReadFile(in_root_path / "shader" / "static_character_00" / "screen_quad_pixel_line.cso");
         std::vector < DXGI_FORMAT > render_target_format;
         render_target_format.push_back(DXGI_FORMAT_B8G8R8A8_UNORM);
         const auto blend_desc = ShaderPipelineStateData::FactoryBlendDescAlphaPremultiplied();

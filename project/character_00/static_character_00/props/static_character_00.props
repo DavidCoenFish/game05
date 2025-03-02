@@ -17,7 +17,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <FxCompile>
-      <ObjectFileOutput>$(OutDir)shader/%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput>$(OutDir)shader/$(ProjectName)/%(Filename).cso</ObjectFileOutput>
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>

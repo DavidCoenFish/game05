@@ -19,8 +19,6 @@ cbuffer ConstantBufferCircle : register(b1)
 
 Pixel main( Interpolant in_input )
 {
-    Pixel result;
-
     float3 world_eye_ray = g_texture0.Sample(g_sampler_state, in_input._uv).xyz;
     float3 camera_pos = GetCameraPos() - _circle_pos_radius.xyz;
 
@@ -32,6 +30,12 @@ Pixel main( Interpolant in_input )
 		t = -1.0 * dot(_circle_normal_thickness.xyz, camera_pos) / denom;
 	}
 
+	if (t <= 0.0f)
+	{
+		discard;
+	}
+
+	Pixel result;
 	if (0.0f < t)
 	{
 		float3 intersection_on_cirlce_plane = camera_pos + (world_eye_ray * t);
@@ -41,10 +45,6 @@ Pixel main( Interpolant in_input )
 		float coverage = saturate(_circle_normal_thickness.w - pixel_distance);
 
 		result._color = _color * coverage;
-	}
-	else
-	{
-		discard;
 	}
 
     return result;

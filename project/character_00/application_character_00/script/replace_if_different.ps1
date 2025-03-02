@@ -1,3 +1,6 @@
+#as admin in powershell
+# Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+
 $destination=$args[0]
 $source=$args[1]
 
