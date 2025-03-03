@@ -57,6 +57,20 @@ const float VectorFloat4::GetW() const
 	return _data[Index::W];
 }
 
+void VectorFloat4::Set(
+	const float in_x,
+	const float in_y,
+	const float in_z,
+	const float in_w
+	)
+{
+	_data[Index::X] = in_x;
+	_data[Index::Y] = in_y;
+	_data[Index::Z] = in_z;
+	_data[Index::W] = in_w;
+	return;
+}
+
 const bool VectorFloat4::operator==(const VectorFloat4& in_rhs) const
 {
 	for (int index = 0; index < Index::Count;++ index)
@@ -84,6 +98,7 @@ VectorFloat4& VectorFloat4::operator=(const VectorFloat4& in_rhs)
 	return (*this);
 }
 
+/*
 const bool VectorFloat4::Inside(
 	const VectorFloat2& in_value
 	) const
@@ -93,3 +108,4 @@ const bool VectorFloat4::Inside(
 			(in_value[0] < _data[2]) &&
 			(in_value[1] < _data[3]));
 }
+*/

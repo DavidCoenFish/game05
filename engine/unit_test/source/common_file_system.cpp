@@ -57,13 +57,14 @@ namespace CommonFileSystem
 		//	Log::RunningUintTest();
 		//}
 
-		//TEST_METHOD(SyncReadFileA)
-		//{
-		//	FileSystem::TFileData data = FileSystem::SyncReadFile("G:/development/game05/build/character_00/application_character_00/x64/Debug/output/shader/static_character_00/screen_quad_vertex.cso");
-		//	Assert::IsNotNull(data.get());
-		//	Assert::IsTrue(0 != data->size());
-		//	Log::RunningUintTest();
-		//}
+		TEST_METHOD(SyncReadFileA)
+		{
+													 			// G:\development\game05\build\character_00\application_character_00\x64\Debug\output\shader\static_character_00\screen_quad_vertex.cso
+			FileSystem::TFileData data = FileSystem::SyncReadFile("G:/development/game05/build/character_00/application_character_00/x64/Debug/output/shader/static_character_00/screen_quad_vertex.cso");
+			Assert::IsNotNull(data.get());
+			Assert::IsTrue(0 != data->size());
+			Log::RunningUintTest();
+		}
 
 	};
 }

@@ -119,10 +119,6 @@ void SceneComponentLineDisk::Draw(
     const CameraConstantBufferB0& in_camera_constant_buffer
     )
 {
-    in_draw_system_frame->SetRenderTarget(
-        in_draw_system->GetRenderTargetBackBuffer()
-        );
-
     if ((nullptr != _shader_line) && (nullptr != _shader_line_constant_buffer))
     {
         _shader_line_constant_buffer->GetConstant<CameraConstantBufferB0>(0) = in_camera_constant_buffer;

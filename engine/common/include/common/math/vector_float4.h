@@ -22,14 +22,20 @@ public:
 	const float GetY() const;
 	const float GetZ() const;
 	const float GetW() const;
+	void Set(
+		const float in_x,
+		const float in_y,
+		const float in_z,
+		const float in_w
+		);
 	const bool operator==(const VectorFloat4& in_rhs) const;
 	const bool operator!=(const VectorFloat4& in_rhs) const;
 	VectorFloat4& operator=(const VectorFloat4& in_rhs);
 
 	// Move to DscMath?
-	const bool Inside(
-		const VectorFloat2& in_value
-		) const;
+	//const bool Inside(
+	//	const VectorFloat2& in_value
+	//	) const;
 
 private:
 	enum Index

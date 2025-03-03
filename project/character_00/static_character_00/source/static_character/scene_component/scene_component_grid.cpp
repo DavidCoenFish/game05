@@ -96,10 +96,6 @@ void SceneComponentGrid::Draw(
     const CameraConstantBufferB0& in_camera_constant_buffer
     )
 {
-    in_draw_system_frame->SetRenderTarget(
-        in_draw_system->GetRenderTargetBackBuffer()
-        );
-
     // Draw Grid
 #if 1
     if ((nullptr != _shader_grid) && (nullptr != _shader_grid_constant_buffer))

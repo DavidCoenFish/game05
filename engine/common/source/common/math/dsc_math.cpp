@@ -1,8 +1,9 @@
 #include "common/common_pch.h"
 
 #include "common/math/dsc_math.h"
-#include "common/math/vector_float4.h"
+#include "common/math/vector_float2.h"
 #include "common/math/vector_float3.h"
+#include "common/math/vector_float4.h"
 #include "common/macro.h"
 
 const bool DscMath::AlmostEqual(const float in_lhs, const float in_rhs, const float in_epsilon)
@@ -104,3 +105,16 @@ const int32_t DscMath::IntCeilingDiv(const int32_t in_x, const int32_t in_y)
 	const int32_t result = (in_x/in_y) + ((in_x % in_y) != 0);
 	return result;
 }
+
+const bool DscMath::InsideBounds(
+	const VectorFloat4& in_bounds,
+	const VectorFloat2& in_needle
+)
+{
+	return ((in_bounds[0] <= in_needle[0]) &&
+		(in_bounds[1] <= in_needle[1]) &&
+		(in_needle[0] < in_bounds[2]) &&
+		(in_needle[1] < in_bounds[3]));
+
+}
+

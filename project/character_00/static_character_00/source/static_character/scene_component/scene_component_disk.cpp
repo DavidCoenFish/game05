@@ -116,10 +116,6 @@ void SceneComponentDisk::Draw(
     const CameraConstantBufferB0& in_camera_constant_buffer
     )
 {
-    in_draw_system_frame->SetRenderTarget(
-        in_draw_system->GetRenderTargetBackBuffer()
-        );
-
     if ((nullptr != _shader_disk) && (nullptr != _shader_disk_constant_buffer))
     {
         _shader_disk_constant_buffer->GetConstant<CameraConstantBufferB0>(0) = in_camera_constant_buffer;

@@ -110,10 +110,6 @@ void SceneComponentBackground::Draw(
     const CameraConstantBufferB0& /*in_camera_constant_buffer*/
     )
 {
-    in_draw_system_frame->SetRenderTarget(
-        in_draw_system->GetRenderTargetBackBuffer()
-        );
-
     // Draw background
 #if 1
     if ((nullptr != _shader_background) && (nullptr != _shader_background_constant_buffer))

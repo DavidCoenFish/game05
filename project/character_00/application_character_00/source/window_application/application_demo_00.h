@@ -8,6 +8,8 @@ class SceneComponentBackground;
 class SceneComponentGrid;
 class Timer;
 
+class SceneComponentLineSpline;
+
 class ApplicationDemo00 : public IWindowApplication
 {
 public:
@@ -44,7 +46,11 @@ private:
         std::shared_ptr<SceneComponentScreenQuad> _screen_quad;
         std::shared_ptr<SceneComponentCameraRay> _camera_ray;
         std::shared_ptr<SceneComponentBackground> _background;
-        std::shared_ptr<SceneComponentGrid> _grid;
+		std::shared_ptr<SceneComponentGrid> _grid;
+
+		std::shared_ptr<SceneComponentLineSpline> _line_spline;
+
+		
 	};
     std::unique_ptr<DrawResources> _draw_resources;
 

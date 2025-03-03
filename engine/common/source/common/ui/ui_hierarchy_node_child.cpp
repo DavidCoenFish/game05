@@ -6,6 +6,7 @@
 #include "common/draw_system/shader/shader.h"
 #include "common/draw_system/shader/shader_constant_buffer.h"
 #include "common/log/log.h"
+#include "common/math/dsc_math.h"
 #include "common/ui/i_ui_input.h"
 #include "common/ui/i_ui_model.h"
 #include "common/ui/ui_component/ui_component_canvas.h"
@@ -464,7 +465,8 @@ void UIHierarchyNodeChild::DealInput(
 	{
 		for (auto& touch : in_input_state.GetTouchArray())
 		{
-			const bool local_inside = _screen_space->GetClipRef().Inside(touch._touch_pos_current);
+			const bool local_inside =
+				DscMath::InsideBounds(_screen_space->GetClipRef(), touch._touch_pos_current);
 
 			if ((true == in_parent_inside) && 
 				(true == local_inside))
@@ -492,7 +494,7 @@ void UIHierarchyNodeChild::DealInput(
 		for (auto& touch : in_input_state.GetTouchArray())
 		{
 			std::string tooltip;
-			const bool local_inside = _screen_space->GetClipRef().Inside(touch._touch_pos_current);
+			const bool local_inside = DscMath::InsideBounds(_screen_space->GetClipRef(), touch._touch_pos_current);
 
 			if ((true == in_parent_inside) && 
 				(true == local_inside))

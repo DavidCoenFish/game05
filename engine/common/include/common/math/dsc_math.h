@@ -1,5 +1,6 @@
 #pragma once
 
+class VectorFloat2;
 class VectorFloat3;
 class VectorFloat4;
 
@@ -27,5 +28,11 @@ namespace DscMath
 	const int ConvertFloatToByte(const float in_value);
 
 	const int32_t IntCeilingDiv(const int32_t in_x, const int32_t in_y);
+
+	const bool InsideBounds(
+		const VectorFloat4& in_bounds,
+		const VectorFloat2& in_needle
+		);
+
 
 }
